@@ -1,6 +1,10 @@
-# Host-project-local overlays and helper checkout state
-project/
-upstream/
+# Host-project-local overlays. Never publish current host-project context.
+/project/
+/project/**
+
+# Local helper checkout state. Never publish old helper sync trees.
+/upstream/
+/upstream/**
 
 # Common local noise
 .DS_Store
