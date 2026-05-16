@@ -48,3 +48,6 @@ agent policy stored in overlays.
    - Confirm that no reusable workflow was buried inside a repo-specific
      overlay.
    - Confirm that the updated tree is reflected in `.agents/SUMMARY.md`.
+   - Confirm that any new branch or commit examples follow the
+     `[fix|feat]-[description]` and `fix(docs): ...` / `feat(docs): ...`
+     contract.

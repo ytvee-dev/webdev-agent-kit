@@ -80,16 +80,21 @@ If `origin/main` does not exist yet and the user explicitly asks only for a
 branch push, use the push-only fallback:
 
 1. compute the same eligible bundle change set
-2. create `docs/webdev-assistant-YYYYMMDD-HHMMSS`
+2. create a branch in the form `[fix|feat]-[description]`
 3. commit and push the branch
 4. report that no PR was created because `main` does not exist yet
 
 ### Required naming
 
-- branch: `docs/webdev-assistant-YYYYMMDD-HHMMSS`
-- commit: `docs(agent): sync generic assistant bundle`
-- PR title: `docs(agent): sync generic assistant bundle`
+- branch: `[fix|feat]-[description]`
+- branch `description`: 1-3 lowercase kebab-case words that summarize the
+  grouped documentation commits
+- commit: `fix(docs): <short description>` or `feat(docs): <short description>`
+- PR title: reuse the same tag and core description as the commit subject
 - PR base: `main`
+- do not use numbers, timestamps, ticket ids, repo names, or placeholders such
+  as `webdev`, `assistant`, or `bundle` in branch names unless the word is the
+  real subject of the change
 
 ### Required preflight
 

@@ -64,6 +64,17 @@ not need to name a skill explicitly.
 - Publishable checkout-root bundle content inside `.agents/` is limited to
   `AGENTS.md`, `SUMMARY.md`, `common/**`, `skills/**`, `README.md`, and
   `.gitignore`.
+- For `.agents/` documentation git work, use branch names in the form
+  `[fix|feat]-[description]`.
+- Keep `description` to 1-3 lowercase kebab-case words that summarize the
+  grouped documentation commits.
+- Do not use numbers, timestamps, ticket ids, repo names, or placeholders such
+  as `webdev`, `assistant`, or `bundle` in `.agents/` documentation branch
+  names unless the word is the real subject of the change.
+- When committing publishable documentation changes in `.agents/`, use
+  `fix(docs): <short description>` or `feat(docs): <short description>`.
+- Reuse the same core description in the branch name, commit subject, and PR
+  title when `webdev-assistant-sync` opens a PR.
 - Never publish `project/**`, old helper paths such as `upstream/**`, source
   code, or other host-project files to `webdev-assistant`.
 - Use `webdev-assistant-sync` for bundle sync and publication tasks.

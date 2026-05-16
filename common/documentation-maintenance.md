@@ -41,6 +41,22 @@ Before changing bundle documentation:
   or any file outside the nested `.agents/` repo surface
   to the shared `webdev-assistant` repository.
 
+## Git naming rules
+
+- When a documentation task in `.agents/` includes branch or commit work, use
+  branch names in the form `[fix|feat]-[description]`.
+- Keep `description` to 1-3 lowercase kebab-case words that summarize the
+  grouped documentation commits.
+- Do not use numbers, timestamps, ticket ids, repo names, or placeholders such
+  as `webdev`, `assistant`, or `bundle` in documentation branch names unless
+  the word is the real subject of the change.
+- Use `feat` for additive documentation or skill behavior and `fix` for
+  corrections, clarifications, or drift repair.
+- For documentation commits, use `fix(docs): <short description>` or
+  `feat(docs): <short description>`.
+- Reuse the same core description across the branch name, commit subject, and
+  PR title when the task creates a PR.
+
 ## Scope checklist
 
 - Check whether `AGENTS.md` must change.
