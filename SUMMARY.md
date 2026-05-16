@@ -83,6 +83,9 @@ overlays.
 
 ## Navigation rules
 
+- Prefer filesystem MCP tools for reading file contents and directory
+  structure. Use shell commands for search, git state, diffs, and executable
+  checks when command output itself is needed.
 - Treat `.agents/common/**` as upstream-managed reusable bundle docs.
 - Treat `.agents/project/**` as repo-specific facts and policy overlays.
 - Treat `.agents/skills/**` as reusable workflows and reference material.

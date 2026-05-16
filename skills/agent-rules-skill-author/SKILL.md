@@ -47,6 +47,9 @@ that policy.
   for it.
 - Prefer MCP tools, current repo documentation, and targeted lookup indexes
   before broad repo scanning.
+- Prefer filesystem MCP tools for reading file contents and directory structure
+  when they are available. Use shell commands for search, git state, diffs,
+  formatting, or executable validation output.
 - Do not invent missing requirements, architecture, or implementation details;
   search narrowly and then ask the user.
 - Keep instructions strict, testable, and free of vague qualifiers such as

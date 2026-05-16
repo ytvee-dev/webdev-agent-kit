@@ -11,6 +11,9 @@ agent policy stored in overlays.
       `.agents/project`, `.agents/skills`, the nested `.agents` git repo
       contract, or
       `.agents/SUMMARY.md`.
+    - Prefer filesystem MCP reads for file contents and directory structure;
+      reserve shell commands for search, git state, diffs, formatting, and
+      executable validation.
 2. Impact analysis.
     - List every directly affected file.
     - Check related common docs, project overlays, path indexes, nested-repo

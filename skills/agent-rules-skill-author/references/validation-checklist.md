@@ -6,6 +6,9 @@ Use this checklist before and after editing repo-local agent rules or skills.
 
 - Trigger surface is explicit and narrow enough to avoid unrelated invocations.
 - No conflict exists with current `AGENTS.md` policy.
+- Documentation file contents and directory structure were inspected through
+  filesystem MCP when available, with shell reserved for search, git state,
+  diffs, formatting, or executable validation.
 - The target layer is correct: `AGENTS.md`, `.agents/common`, `.agents/project`, or
   `.agents/skills`.
 - `SKILL.md` stays procedural and compact.
