@@ -1,113 +1,140 @@
 # webdev-assistant
 
-Reusable agent rules and skills for React, Next.js, TypeScript, CSS Modules,
-and agent-documentation workflows.
+Переиспользуемый набор правил и навыков для агентов, которые работают с
+React, Next.js, TypeScript, CSS Modules и документацией самого набора.
 
-## Start Here
+## С чего начать
 
-- The canonical policy is `.agents/AGENTS.md`.
-- The host-root `AGENTS.md` is only a stable pointer to `.agents/AGENTS.md`.
-- Do not mirror `.agents/AGENTS.md` into the host-root `AGENTS.md`.
-- Use `.agents/SUMMARY.md` to find the right skill, common rule, or project
-  overlay.
+- Канонические правила находятся в `.agents/AGENTS.md`.
+- Корневой `AGENTS.md` в проекте только указывает на `.agents/AGENTS.md`.
+- Не копируйте содержимое `.agents/AGENTS.md` в корневой `AGENTS.md`.
+- Используйте `.agents/SUMMARY.md`, чтобы быстро найти нужный навык, общий
+  документ или локальное описание проекта.
 
-## What Lives Here
+## Что лежит в `.agents`
 
-- `AGENTS.md` - canonical bundle policy for agents.
-- `SUMMARY.md` - map of docs, skills, overlays, and reading order.
-- `common/**` - reusable rules that can be published upstream.
-- `skills/**` - reusable workflows agents should load for matching tasks.
-- `project/**` - local host-project facts. This directory is ignored and must
-  not be published upstream.
-- `.gitignore` - keeps local-only overlay files out of upstream publication.
+- `AGENTS.md` - главные публикуемые правила набора.
+- `SUMMARY.md` - карта документов, навыков, локальных описаний и порядка
+  чтения.
+- `common/**` - общие переиспользуемые правила для публикации во внешний
+  репозиторий.
+- `skills/**` - переиспользуемые рабочие процессы, которые агент загружает для
+  конкретной задачи.
+- `project/**` - локальные факты текущего проекта. Этот каталог игнорируется и
+  не публикуется во внешний репозиторий.
+- `.gitignore` - защищает локальные описания проекта от публикации.
 
-## How To Use
+## Как использовать
 
-1. Read the host-root `AGENTS.md`.
-2. Follow its pointer to `.agents/AGENTS.md`.
-3. Use `.agents/SUMMARY.md` to choose the relevant skill.
-4. Read only the common docs, project overlays, and source files needed for the
-   task.
-5. For implementation work, finish with `frontend-review-and-fix`.
-6. For documentation changes, check whether this README must be updated.
+1. Прочитайте корневой `AGENTS.md`.
+2. Перейдите по его указанию к `.agents/AGENTS.md`.
+3. По `.agents/SUMMARY.md` выберите навык, который подходит к задаче.
+4. Читайте только те `common/**`, `project/**`, справочные файлы и исходные
+   файлы, которые нужны для текущей работы.
+5. Для реализации в React или Next.js начинайте с `webapp-task-protocol`.
+6. Для финальной проверки реализации используйте `frontend-review-and-fix`.
+7. Для изменений документации проверьте, нужно ли обновить этот README.
 
-## Key Skills
+## Главные навыки
 
-- `webapp-task-protocol` - classify React or Next.js work and choose the skill
-  chain.
-- `nextjs-app-router` - App Router routes, layouts, metadata, and boundaries.
-- `react-component-workflow` - components, hooks, props, state, and UI behavior.
-- `redux-state-workflow` - Redux, selectors, typed hooks, and shared client
-  state.
-- `frontend-typescript-rules` - strict TypeScript and safe refactors.
-- `boundary-input-validation` - boundary parsing without new dependencies.
-- `frontend-review-and-fix` - review pass and verification.
-- `agent-rules-skill-author` - maintain agent policy, common docs, overlays,
-  and skill packages.
-- `readme-maintainer` - keep this README accurate, concise, and user-facing.
-- `webdev-assistant-sync` - sync or publish the shared bundle through the
-  nested `.agents` repository.
+- `webapp-task-protocol` - классификация задачи React/Next.js и выбор цепочки
+  навыков.
+- `nextjs-app-router` - маршруты App Router, макеты, метаданные и границы
+  клиент/сервер.
+- `react-component-workflow` - компоненты, свойства, хуки, состояние и
+  поведение интерфейса.
+- `redux-state-workflow` - Redux, селекторы, типизированные хуки и общее
+  клиентское состояние.
+- `frontend-typescript-rules` - строгий TypeScript и безопасные изменения.
+- `boundary-input-validation` - валидация входных данных без новых
+  зависимостей.
+- `frontend-review-and-fix` - финальная проверка, регрессионные проверки и
+  верификация.
+- `agent-rules-skill-author` - поддержка правил агентов, общих документов,
+  локальных описаний и пакетов навыков.
+- `readme-maintainer` - поддержка этого README в точном, кратком и
+  человекопонятном состоянии.
+- `webdev-assistant-sync` - синхронизация и публикация общего набора через
+  вложенный репозиторий `.agents`.
 
-See `.agents/SUMMARY.md` for the full skill list.
+Полный список навыков смотрите в `.agents/SUMMARY.md`.
 
-## Local-Only Project Context
+## Локальный контекст проекта
 
-Keep host-project facts in `.agents/project/**`.
+Факты конкретного проекта храните только в `.agents/project/**`.
 
-Examples:
+Туда относятся:
 
-- framework and dependency facts
-- route and component path indexes
-- styling conventions
-- local verification commands
-- project-specific approved patterns and anti-patterns
+- стек и версии зависимостей;
+- карта маршрутов, компонентов и серверных участков;
+- правила стилей и токены;
+- локальные команды проверки;
+- проектные разрешенные паттерны и анти-паттерны.
 
-Do not move these facts into `AGENTS.md`, `common/**`, `skills/**`, or this
-README unless they are generic and reusable.
+Не переносите эти факты в `AGENTS.md`, `common/**`, `skills/**` или этот
+README, если правило не является общим и переиспользуемым.
 
-## Sync From Upstream
+## Синхронизация с внешним репозиторием
 
-Use `webdev-assistant-sync` in sync-down mode.
+Для получения изменений из внешнего репозитория используйте
+`webdev-assistant-sync` в режиме `sync-down`.
 
-Rules:
+Правила:
 
-- Run git commands only inside `.agents`.
-- Keep `project/**` untouched.
-- Keep the host-root `AGENTS.md` as a stable pointer.
-- Re-run markdown validation after sync.
+- Выполняйте git-команды только внутри `.agents`.
+- Не трогайте `project/**`.
+- Корневой `AGENTS.md` должен оставаться стабильным указателем.
+- После синхронизации повторите проверку Markdown.
 
-## Publish Upstream
+## Публикация во внешний репозиторий
 
-Use `webdev-assistant-sync` in publish-up mode.
+Для публикации во внешний репозиторий используйте `webdev-assistant-sync` в
+режиме `publish-up`.
 
-Rules:
+Публиковать можно только эти пути внутри `.agents`:
 
-- Publish only `AGENTS.md`, `SUMMARY.md`, `common/**`, `skills/**`,
-  `README.md`, and `.gitignore` from inside `.agents`.
-- Never publish `project/**`, `upstream/**`, application source, tests, configs,
-  or host-project files.
-- Keep local work on `.agents` `main`.
-- Commit publishable documentation changes locally on `main`.
-- Never push local `main` directly.
-- Create a short-lived `[fix|feat]-[description]` branch only for push and PR.
-- Open the PR to `main` through the GitHub connector.
-- Return the local `.agents` checkout to `main`.
+- `AGENTS.md`
+- `SUMMARY.md`
+- `common/**`
+- `skills/**`
+- `README.md`
+- `.gitignore`
 
-Commit and PR naming:
+Нельзя публиковать `project/**`, `upstream/**`, исходный код приложения, тесты,
+конфиги и любые файлы принимающего проекта.
 
-- branch: `[fix|feat]-[description]`
-- commit: `fix(docs): <short description>` or
+Обязательный порядок работы с git:
+
+1. Работайте локально на `.agents` `main`.
+2. Коммитьте публикуемые изменения документации локально на `main`.
+3. Не пушьте локальный `main` напрямую.
+4. Перед публикацией выполните `git pull --rebase origin main` внутри
+   `.agents`.
+5. Создайте короткоживущую ветку `[fix|feat]-[description]`.
+6. Запушьте эту ветку и откройте PR в `main`.
+7. Верните локальную рабочую копию `.agents` на `main`.
+
+Форматы имен:
+
+- ветка: `[fix|feat]-[description]`
+- коммит: `fix(docs): <short description>` или
   `feat(docs): <short description>`
-- PR title: same tag and core description as the commit
+- заголовок PR: тот же тип и то же ядро описания, что в теме коммита
 
-## README Maintenance
+## Поддержка README
 
-After any `.agents` documentation change, use `readme-maintainer` or apply the
-same check manually:
+После любого изменения документации в `.agents` используйте `readme-maintainer`
+или выполните такую же проверку вручную.
 
-- Does a user-facing workflow, path, skill list, or policy pointer change?
-- Would a user know how to use the bundle from this README?
-- Is anything stale, duplicated, or too detailed?
+Обновите этот README в той же задаче, если изменились:
 
-If the answer requires user-visible guidance, update this README in the same
-task.
+- пользовательский рабочий процесс;
+- список или назначение навыков;
+- публикуемые или локальные пути;
+- указатель на канонические правила;
+- правила sync-down, publish-up, branch, commit или PR.
+
+README должен отвечать на практический вопрос пользователя: как пользоваться
+набором и какие файлы нельзя трогать или публиковать. Не превращайте его в
+полный свод правил; детали должны оставаться в `.agents/AGENTS.md`,
+`.agents/SUMMARY.md` и профильных навыках.
