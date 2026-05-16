@@ -1,120 +1,113 @@
 # webdev-assistant
 
-Shared upstream repository for the reusable `AGENTS.md` + `.agents/` bundle.
+Reusable agent rules and skills for React, Next.js, TypeScript, CSS Modules,
+and agent-documentation workflows.
 
-## Purpose
+## Start Here
 
-This nested repository stores only generic agent-bundle documentation and
-reusable skill workflows that can be embedded into many different host
-projects.
+- The canonical policy is `.agents/AGENTS.md`.
+- The host-root `AGENTS.md` is only a stable pointer to `.agents/AGENTS.md`.
+- Do not mirror `.agents/AGENTS.md` into the host-root `AGENTS.md`.
+- Use `.agents/SUMMARY.md` to find the right skill, common rule, or project
+  overlay.
 
-Host-project facts must stay local and must not be published here.
+## What Lives Here
 
-## Publishable scope
+- `AGENTS.md` - canonical bundle policy for agents.
+- `SUMMARY.md` - map of docs, skills, overlays, and reading order.
+- `common/**` - reusable rules that can be published upstream.
+- `skills/**` - reusable workflows agents should load for matching tasks.
+- `project/**` - local host-project facts. This directory is ignored and must
+  not be published upstream.
+- `.gitignore` - keeps local-only overlay files out of upstream publication.
 
-This repository is expected to contain:
+## How To Use
 
-- `AGENTS.md`
-- `SUMMARY.md`
-- `common/**`
-- `skills/**`
-- this `README.md`
-- `.gitignore`
+1. Read the host-root `AGENTS.md`.
+2. Follow its pointer to `.agents/AGENTS.md`.
+3. Use `.agents/SUMMARY.md` to choose the relevant skill.
+4. Read only the common docs, project overlays, and source files needed for the
+   task.
+5. For implementation work, finish with `frontend-review-and-fix`.
+6. For documentation changes, check whether this README must be updated.
 
-## Never publish
+## Key Skills
 
-Do not publish any host-project-only content here, including:
+- `webapp-task-protocol` - classify React or Next.js work and choose the skill
+  chain.
+- `nextjs-app-router` - App Router routes, layouts, metadata, and boundaries.
+- `react-component-workflow` - components, hooks, props, state, and UI behavior.
+- `redux-state-workflow` - Redux, selectors, typed hooks, and shared client
+  state.
+- `frontend-typescript-rules` - strict TypeScript and safe refactors.
+- `boundary-input-validation` - boundary parsing without new dependencies.
+- `frontend-review-and-fix` - review pass and verification.
+- `agent-rules-skill-author` - maintain agent policy, common docs, overlays,
+  and skill packages.
+- `readme-maintainer` - keep this README accurate, concise, and user-facing.
+- `webdev-assistant-sync` - sync or publish the shared bundle through the
+  nested `.agents` repository.
 
-- `project/**`
-- old helper folders such as `upstream/**`
-- application source code
-- application tests
-- application configs
-- host repository root `README.md`
-- any local project examples or stack facts
+See `.agents/SUMMARY.md` for the full skill list.
 
-## Local workflow
+## Local-Only Project Context
 
-The canonical local checkout path is:
+Keep host-project facts in `.agents/project/**`.
 
-```text
-.agents/
-```
+Examples:
 
-All upstream git commands must run only inside that checkout and must always
-use:
+- framework and dependency facts
+- route and component path indexes
+- styling conventions
+- local verification commands
+- project-specific approved patterns and anti-patterns
 
-```text
-git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> ...
-```
+Do not move these facts into `AGENTS.md`, `common/**`, `skills/**`, or this
+README unless they are generic and reusable.
 
-Do not run publication git commands from the host project repository root.
+## Sync From Upstream
 
-## Root AGENTS Mirror
+Use `webdev-assistant-sync` in sync-down mode.
 
-- `AGENTS.md` inside this nested repo is the canonical publishable policy file.
-- `../AGENTS.md` in the host project root is a synchronized mirror of this file.
-- Bundle sync must keep those two files aligned.
+Rules:
 
-## Sync Down
+- Run git commands only inside `.agents`.
+- Keep `project/**` untouched.
+- Keep the host-root `AGENTS.md` as a stable pointer.
+- Re-run markdown validation after sync.
 
-Use the `webdev-assistant-sync` skill in `sync-down` mode to:
+## Publish Upstream
 
-1. refresh the upstream checkout from `origin/main`
-2. update tracked publishable files directly inside `.agents/`
-3. mirror `.agents/AGENTS.md` to the host project root `AGENTS.md`
-4. leave `project/**` and other local-only files untouched
+Use `webdev-assistant-sync` in publish-up mode.
 
-## Publish Up
+Rules:
 
-Use the `webdev-assistant-sync` skill in `publish-up` mode to:
+- Publish only `AGENTS.md`, `SUMMARY.md`, `common/**`, `skills/**`,
+  `README.md`, and `.gitignore` from inside `.agents`.
+- Never publish `project/**`, `upstream/**`, application source, tests, configs,
+  or host-project files.
+- Keep local work on `.agents` `main`.
+- Commit publishable documentation changes locally on `main`.
+- Never push local `main` directly.
+- Create a short-lived `[fix|feat]-[description]` branch only for push and PR.
+- Open the PR to `main` through the GitHub connector.
+- Return the local `.agents` checkout to `main`.
 
-1. refresh upstream `main`
-2. compute the eligible bundle change set from this nested checkout
-3. keep `project/**` and other local-only files out of the staged change set
-4. create a new branch from refreshed `main`
-5. commit and push
-6. open a PR to `main` through the GitHub connector
-
-If `origin/main` does not exist yet and the user explicitly asks only for a
-branch push, use the push-only fallback:
-
-1. compute the same eligible bundle change set
-2. create a branch in the form `[fix|feat]-[description]`
-3. commit and push the branch
-4. report that no PR was created because `main` does not exist yet
-
-### Required naming
+Commit and PR naming:
 
 - branch: `[fix|feat]-[description]`
-- branch `description`: 1-3 lowercase kebab-case words that summarize the
-  grouped documentation commits
-- commit: `fix(docs): <short description>` or `feat(docs): <short description>`
-- PR title: reuse the same tag and core description as the commit subject
-- PR base: `main`
-- do not use numbers, timestamps, ticket ids, repo names, or placeholders such
-  as `webdev`, `assistant`, or `bundle` in branch names unless the word is the
-  real subject of the change
+- commit: `fix(docs): <short description>` or
+  `feat(docs): <short description>`
+- PR title: same tag and core description as the commit
 
-### Required preflight
+## README Maintenance
 
-- `origin/main` must exist
-- GitHub connector must be available for PR creation
-- if `origin/main` is missing, stop and report the preflight failure instead of
-  inventing a bootstrap flow
+After any `.agents` documentation change, use `readme-maintainer` or apply the
+same check manually:
 
-### Explicit fallback exception
+- Does a user-facing workflow, path, skill list, or policy pointer change?
+- Would a user know how to use the bundle from this README?
+- Is anything stale, duplicated, or too detailed?
 
-- if `origin/main` is missing and the user explicitly requests branch-only
-  publication without a PR, the skill may create and push a fallback branch
-  instead of stopping
-
-## Maintenance rule
-
-Whenever bundle structure, cross-links, or skill routing changes, update:
-
-- `AGENTS.md`
-- `SUMMARY.md`
-- relevant `common/**`
-- relevant `skills/**`
-- this `README.md` when the upstream management contract changed
+If the answer requires user-visible guidance, update this README in the same
+task.

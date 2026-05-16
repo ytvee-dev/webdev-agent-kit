@@ -1,13 +1,14 @@
 # AGENTS.md
 
-This file is the generic repo-wide entrypoint for the embedded `AGENTS.md` +
-`.agents/` bundle. The canonical publishable copy lives at `.agents/AGENTS.md`,
-and the host-project root `AGENTS.md` must stay synchronized with it.
+This file is the canonical policy entrypoint for the embedded `.agents/`
+bundle. The host-project root `AGENTS.md` is only a stable pointer to this file,
+not a synchronized copy.
 
 ## Bundle Model
 
-- `AGENTS.md` holds generic bundle policy, precedence, and skill discovery.
-- `.agents/AGENTS.md` is the canonical publishable copy of this policy file.
+- The host-root `AGENTS.md` holds only the stable pointer to
+  `.agents/AGENTS.md`.
+- `.agents/AGENTS.md` is the canonical publishable policy file.
 - `.agents/common/**` holds reusable shared rules that may be published to the
   shared `webdev-assistant` repository.
 - `.agents/project/**` holds host-repo facts, examples, overlays, and local
@@ -18,6 +19,8 @@ and the host-project root `AGENTS.md` must stay synchronized with it.
   `git@github.com:ytvee-dev/webdev-assistant.git` repository.
 - `.agents/project/**` is intentionally local-only inside that nested checkout
   and must never be published upstream.
+- Changes inside `.agents/` do not require updating the host-root `AGENTS.md`
+  unless the canonical policy path itself changes.
 
 ## Inspect First
 
@@ -73,10 +76,29 @@ not need to name a skill explicitly.
   names unless the word is the real subject of the change.
 - When committing publishable documentation changes in `.agents/`, use
   `fix(docs): <short description>` or `feat(docs): <short description>`.
+- Keep the local `.agents/` checkout on `main` by default; treat feature
+  branches as push/PR transport only.
+- Commit publishable documentation changes locally on `main`.
+- Do not create a publication branch, push, open a PR, or report publication
+  success while eligible publishable documentation changes remain uncommitted.
+- After committing publishable documentation, verify that eligible publishable
+  paths have no remaining staged or unstaged changes before continuing.
+- Do not switch `.agents/` branches while uncommitted or unmerged changes are
+  present; resolve, commit, or stop and report the exact paths first.
+- Stage and commit only eligible publishable paths before creating a push
+  branch.
+- Never push local `main` directly to `origin`.
+- Before pushing a documentation branch, run `git pull --rebase origin main`
+  while on local `main`.
+- After that pull, create the new `[fix|feat]-[description]` branch from local
+  `main`, push it, open the PR to `main`, and then return the local checkout to
+  `main`.
 - Reuse the same core description in the branch name, commit subject, and PR
   title when `webdev-assistant-sync` opens a PR.
 - Never publish `project/**`, old helper paths such as `upstream/**`, source
   code, or other host-project files to `webdev-assistant`.
+- Do not mirror `.agents/AGENTS.md` into the host-root `AGENTS.md`; keep the
+  root file as a stable pointer.
 - Use `webdev-assistant-sync` for bundle sync and publication tasks.
 - Do not run git publication commands from the host project repository root; run
   them only inside the nested `.agents/` git repository.
@@ -91,6 +113,7 @@ not need to name a skill explicitly.
 - Boundary validation without new dependencies -> `boundary-input-validation`
 - Review pass and verification -> `frontend-review-and-fix`
 - Agent rules and skill authoring -> `agent-rules-skill-author`
+- Human-facing `.agents/README.md` maintenance -> `readme-maintainer`
 - Bundle sync and upstream publication -> `webdev-assistant-sync`
 - Screenshot-based design inspection -> `screenshot-design-inspector`
 - Architecture planning from user specs -> `architecture-from-spec`

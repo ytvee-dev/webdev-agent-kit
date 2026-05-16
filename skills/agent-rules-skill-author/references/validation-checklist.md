@@ -15,8 +15,18 @@ Use this checklist before and after editing repo-local agent rules or skills.
   maintenance changed.
 - Any `.agents/` documentation branch or commit examples follow the
   `[fix|feat]-[description]` and `fix(docs): ...` / `feat(docs): ...` contract.
+- Any `.agents/` documentation gitflow examples keep local work on `main`,
+  commit only eligible publishable paths, branch only for push/PR, and return
+  the local checkout to `main`.
+- Publication workflows include a commit gate: no branch, push, PR, or success
+  report may happen while eligible publishable documentation changes remain
+  uncommitted.
+- Branch switching examples include a dirty-tree and unmerged path guard.
 - Removed skill names, stale paths, and outdated references were searched across
   `.agents`.
+- `.agents/README.md` was updated or explicitly checked when documentation
+  changes affected user-facing workflow, skill lists, path policy, or
+  sync/publication instructions.
 - No auxiliary docs such as `README.md` or `CHANGELOG.md` were added to the
   skill package.
 - `agents/openai.yaml` matches the skill trigger and intent.
