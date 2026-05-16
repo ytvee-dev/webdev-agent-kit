@@ -7,6 +7,21 @@ If `origin/main` exists, use the normal PR flow below.
 If `origin/main` is missing, use the fallback only when the user explicitly asks
 for branch+push without a PR.
 
+## Naming contract
+
+- Branch names must use `[fix|feat]-[description]`.
+- `description` must be 1-3 lowercase kebab-case words that summarize the
+  grouped documentation commits.
+- Do not use numbers, timestamps, ticket ids, repo names, or placeholders such
+  as `webdev`, `assistant`, or `bundle` in the branch name unless the word is
+  the real subject of the change.
+- Use `feat` for additive documentation or skill behavior and `fix` for
+  corrections, clarifications, or drift repair.
+- Documentation commit subjects must use
+  `fix(docs): <short description>` or `feat(docs): <short description>`.
+- Reuse the same core description across the branch name, commit subject, and
+  PR title.
+
 ## Eligibility rules
 
 Only these checkout-root paths inside `.agents/` are eligible for publication:
@@ -43,19 +58,19 @@ git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -B main origin/m
 7. Create the branch from refreshed `main`:
 
 ```powershell
-git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b docs/webdev-assistant-YYYYMMDD-HHMMSS
+git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b <TAG>-<DESCRIPTION>
 ```
 
 8. Commit with:
 
 ```text
-docs(agent): sync generic assistant bundle
+<TAG>(docs): <short description>
 ```
 
 9. Push the branch to `origin`.
 10. Create the PR through the GitHub connector with:
    - base: `main`
-   - title: `docs(agent): sync generic assistant bundle`
+   - title: `<TAG>(docs): <short description>`
 11. If the connector is missing, request it and stop instead of faking a PR URL
     or switching to `gh`.
 
@@ -78,20 +93,20 @@ Use this fallback only when:
 6. Create the branch:
 
 ```powershell
-git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b docs/webdev-assistant-YYYYMMDD-HHMMSS
+git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b <TAG>-<DESCRIPTION>
 ```
 
 7. If branch creation from the current checkout fails because the repo has no
    commits yet, create an orphan branch instead:
 
 ```powershell
-git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout --orphan docs/webdev-assistant-YYYYMMDD-HHMMSS
+git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout --orphan <TAG>-<DESCRIPTION>
 ```
 
 8. Commit with:
 
 ```text
-docs(agent): sync generic assistant bundle
+<TAG>(docs): <short description>
 ```
 
 9. Push the branch to `origin`.

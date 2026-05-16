@@ -61,6 +61,8 @@ that policy.
   docs into generic reusable playbooks.
 - Keep `.agents/skills/*` reusable and procedural; do not hardcode incidental
   repo facts that belong in overlays.
+- When a task includes committing or branching `.agents/` documentation, follow
+  the git naming contract in `.agents/common/documentation-maintenance.md`.
 - Keep `.agents/` as the nested shared-bundle repo and keep
   `.agents/project/**` local-only inside it.
 - Keep `.agents/AGENTS.md` synchronized with the repository root `AGENTS.md`.

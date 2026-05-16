@@ -13,6 +13,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - No changed files exist outside `.agents/` except the repository root
   `AGENTS.md` when repo-wide policy, skill discovery, or upstream bundle
   maintenance changed.
+- Any `.agents/` documentation branch or commit examples follow the
+  `[fix|feat]-[description]` and `fix(docs): ...` / `feat(docs): ...` contract.
 - Removed skill names, stale paths, and outdated references were searched across
   `.agents`.
 - No auxiliary docs such as `README.md` or `CHANGELOG.md` were added to the

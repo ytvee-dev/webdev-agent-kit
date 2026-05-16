@@ -41,6 +41,16 @@ Before acting:
   `SUMMARY.md`, `common/**`, `skills/**`, `README.md`, and `.gitignore`.
 - `.agents/AGENTS.md` is the canonical publishable copy; the host repository
   root `AGENTS.md` must stay synchronized with it.
+- For documentation publication, use branch names in the form
+  `[fix|feat]-[description]`.
+- Keep `description` to 1-3 lowercase kebab-case words that summarize the
+  grouped documentation commits.
+- Do not use numbers, timestamps, ticket ids, repo names, or placeholders such
+  as `webdev`, `assistant`, or `bundle` in publication branch names unless the
+  word is the real subject of the change.
+- Use `fix(docs): <short description>` or `feat(docs): <short description>` for
+  documentation commits and reuse the same core description in the branch name
+  and PR title.
 - All git commands for the upstream checkout must use
   `git -c safe.directory=<absolute-upstream-path> -C <absolute-upstream-path> ...`.
 - For `publish-up`, GitHub connector access is mandatory for PR creation.
