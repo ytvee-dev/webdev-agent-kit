@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Webapp Task Protocol'
+    short_description: 'Classify webapp work and choose the correct skill chain'
+    default_prompt: 'Use $webapp-task-protocol to route this task before implementation.'
+policy:
+    allow_implicit_invocation: true

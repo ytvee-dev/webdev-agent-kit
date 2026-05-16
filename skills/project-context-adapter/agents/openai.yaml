@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Project Context Adapter'
+    short_description: 'Manual repo overlay refresh without editing core skills'
+    default_prompt: 'Use $project-context-adapter to refresh .agents/project for the current repo.'
+policy:
+    allow_implicit_invocation: true

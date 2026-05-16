@@ -1,0 +1,23 @@
+# Extraction Checklist
+
+- Framework and router model
+- React version and rendering model
+- Project type: `frontend-only` or `fullstack`
+- Styling system and token sources
+- Validation libraries
+- Verification commands
+- Shared architecture patterns
+- Local anti-patterns
+- Figma implementation constraints
+- Current code paths and modules after recent code changes
+- Framework-specific lookup indexes for:
+  - styles and themes
+  - components
+  - business logic
+  - SEO
+  - utilities
+  - server components
+  - client components
+  - routing, layouts, and metadata
+  - content and data
+  - analytics and integrations

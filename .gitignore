@@ -1,0 +1,12 @@
+# Host-project-local overlays and helper checkout state
+project/
+upstream/
+
+# Common local noise
+.DS_Store
+Thumbs.db
+.vscode/
+node_modules/
+.next/
+dist/
+coverage/

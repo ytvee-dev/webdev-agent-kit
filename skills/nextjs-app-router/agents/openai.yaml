@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Next.js App Router'
+    short_description: 'Generic guidance for Next.js App Router work'
+    default_prompt: 'Use $nextjs-app-router for route, layout, metadata, or App Router work.'
+policy:
+    allow_implicit_invocation: true

@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Frontend Security Inspector'
+    short_description: 'Manual security audit workflow for React and Next.js apps'
+    default_prompt: 'Use $frontend-security-inspector to audit this app for security issues.'
+policy:
+    allow_implicit_invocation: true

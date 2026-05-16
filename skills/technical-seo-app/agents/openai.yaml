@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Technical SEO App'
+    short_description: 'Manual technical SEO audit and remediation workflow'
+    default_prompt: 'Use $technical-seo-app to audit technical SEO for this application.'
+policy:
+    allow_implicit_invocation: true

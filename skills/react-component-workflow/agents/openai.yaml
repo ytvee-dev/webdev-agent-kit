@@ -1,0 +1,6 @@
+interface:
+    display_name: 'React Component Workflow'
+    short_description: 'Generic guidance for component architecture and implementation'
+    default_prompt: 'Use $react-component-workflow for component-heavy React work.'
+policy:
+    allow_implicit_invocation: true

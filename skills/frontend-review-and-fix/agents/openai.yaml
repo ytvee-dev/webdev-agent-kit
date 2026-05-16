@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Frontend Review and Fix'
+    short_description: 'Final review pass and verification workflow'
+    default_prompt: 'Use $frontend-review-and-fix after implementation or for review-oriented work.'
+policy:
+    allow_implicit_invocation: true

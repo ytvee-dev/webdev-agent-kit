@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Frontend TypeScript Rules'
+    short_description: 'Strict typing rules for React and Next.js code'
+    default_prompt: 'Use $frontend-typescript-rules to enforce strict TypeScript patterns.'
+policy:
+    allow_implicit_invocation: true
