@@ -1,144 +1,771 @@
 # webdev-assistant
 
-Переиспользуемый набор правил и навыков для агентов, которые работают с
-React, Next.js, TypeScript, CSS Modules и документацией самого набора.
+`webdev-assistant` - это общий набор инструкций, проектных overlays и навыков
+для работы OpenAI Codex с React, Next.js, TypeScript, CSS Modules и
+документацией самого набора.
 
-## С чего начать
+Эта документация описывает именно использование набора через официальный
+OpenAI Codex IDE extension в VS Code. Она не является инструкцией для Cursor,
+Roo, Cline, Claude Code, Copilot, Continue или других агентных систем. Другие
+инструменты могут читать Markdown-файлы, но routing skills,
+`agents/openai.yaml`, implicit invocation, MCP/connectors и рабочие соглашения
+здесь рассчитаны на Codex.
 
-- Канонические правила находятся в `.agents/AGENTS.md`.
-- Корневой `AGENTS.md` в проекте только указывает на `.agents/AGENTS.md`.
-- Не копируйте содержимое `.agents/AGENTS.md` в корневой `AGENTS.md`.
-- Используйте `.agents/SUMMARY.md`, чтобы быстро найти нужный навык, общий
-  документ или локальное описание проекта.
+Официальные справочные страницы:
 
-## Что лежит в `.agents`
+- Codex IDE extension: <https://developers.openai.com/codex/ide>
+- Codex IDE settings: <https://developers.openai.com/codex/ide/settings>
+- Codex skills: <https://developers.openai.com/codex/skills>
+- `AGENTS.md` discovery: <https://developers.openai.com/codex/guides/agents-md>
 
-- `AGENTS.md` - главные публикуемые правила набора.
-- `SUMMARY.md` - карта документов, навыков, локальных описаний и порядка
-  чтения.
-- `common/**` - общие переиспользуемые правила для публикации во внешний
-  репозиторий.
-- `skills/**` - переиспользуемые рабочие процессы, которые агент загружает для
-  конкретной задачи.
-- `project/**` - локальные факты текущего проекта. Этот каталог игнорируется и
-  не публикуется во внешний репозиторий.
-- `.gitignore` - защищает локальные описания проекта от публикации.
+## Модель подключения
 
-## Как использовать
+В принимающем проекте этот набор подключается как вложенный checkout
+`.agents/`:
 
-1. Прочитайте корневой `AGENTS.md`.
-2. Перейдите по его указанию к `.agents/AGENTS.md`.
-3. По `.agents/SUMMARY.md` выберите навык, который подходит к задаче.
-4. Читайте только те `common/**`, `project/**`, справочные файлы и исходные
-   файлы, которые нужны для текущей работы.
-5. Для чтения файлов и структуры каталогов используйте filesystem MCP, если он
-   доступен для нужного пути.
-6. Консоль используйте для поиска, git-состояния, diff, форматирования и
-   проверочных команд.
-7. Для реализации в React или Next.js начинайте с `webapp-task-protocol`.
-8. Для финальной проверки реализации используйте `frontend-review-and-fix`.
-9. Для изменений документации проверьте, нужно ли обновить этот README.
+```text
+host-project/
+├─ AGENTS.md
+├─ .agents/
+│  ├─ AGENTS.md
+│  ├─ SUMMARY.md
+│  ├─ README.md
+│  ├─ common/
+│  ├─ skills/
+│  ├─ project/
+│  └─ .gitignore
+└─ src/...
+```
 
-## Главные навыки
+Корневой `AGENTS.md` принимающего проекта должен быть стабильным указателем на
+`.agents/AGENTS.md`. Он не должен копировать содержимое `.agents/AGENTS.md`.
 
-- `webapp-task-protocol` - классификация задачи React/Next.js и выбор цепочки
-  навыков.
-- `nextjs-app-router` - маршруты App Router, макеты, метаданные и границы
-  клиент/сервер.
-- `react-component-workflow` - компоненты, свойства, хуки, состояние и
-  поведение интерфейса.
-- `redux-state-workflow` - Redux, селекторы, типизированные хуки и общее
-  клиентское состояние.
-- `frontend-typescript-rules` - строгий TypeScript и безопасные изменения.
-- `boundary-input-validation` - валидация входных данных без новых
-  зависимостей.
-- `frontend-review-and-fix` - финальная проверка, регрессионные проверки и
-  верификация.
-- `agent-rules-skill-author` - поддержка правил агентов, общих документов,
-  локальных описаний и пакетов навыков.
-- `readme-maintainer` - поддержка этого README в точном, кратком и
-  человекопонятном состоянии.
-- `webdev-assistant-sync` - синхронизация и публикация общего набора через
-  вложенный репозиторий `.agents`.
+`.agents/` одновременно является локальным checkout репозитория
+`git@github.com:ytvee-dev/webdev-assistant.git`. Внутри upstream-репозитория
+эти же файлы лежат в корне, но в принимающем проекте они доступны через
+`.agents/<path>`.
 
-Полный список навыков смотрите в `.agents/SUMMARY.md`.
+## Архитектура `.agents/`
 
-## Локальный контекст проекта
+### `AGENTS.md`
 
-Факты конкретного проекта храните только в `.agents/project/**`.
+Главная политика набора. В ней закреплены:
 
-Туда относятся:
+- модель вложенного bundle;
+- порядок чтения;
+- общие правила работы;
+- правила публикации upstream;
+- карта навыков;
+- список общих документов;
+- список локальных project overlays.
 
-- стек и версии зависимостей;
-- карта маршрутов, компонентов и серверных участков;
-- правила стилей и токены;
-- локальные команды проверки;
-- проектные разрешенные паттерны и анти-паттерны.
+Это канонический publishable policy file. Если правило в README и
+`.agents/AGENTS.md` расходится, реализацию нужно привести к `.agents/AGENTS.md`,
+а README обновить.
 
-Не переносите эти факты в `AGENTS.md`, `common/**`, `skills/**` или этот
-README, если правило не является общим и переиспользуемым.
+### `SUMMARY.md`
 
-## Синхронизация с внешним репозиторием
+Навигационная карта набора. Она отвечает на вопросы:
 
-Для получения изменений из внешнего репозитория используйте
-`webdev-assistant-sync` в режиме `sync-down`.
+- какие common docs существуют;
+- какие project overlays ожидаются;
+- какие skills есть;
+- какой общий порядок чтения;
+- какие пути publishable, а какие local-only;
+- какие skill chains выбирать для типовых задач.
+
+README может объяснять назначение этих частей, но актуальный список skills и
+overlays должен сверяться с `SUMMARY.md`.
+
+### `common/**`
+
+Общие publishable правила, которые можно переносить между принимающими
+проектами:
+
+- `common/approved-patterns.md` - общие разрешенные паттерны реализации;
+- `common/anti-patterns.md` - общие запрещенные направления;
+- `common/documentation-maintenance.md` - правила изменения документации,
+  слоев и sync-контракта.
+
+В `common/**` нельзя помещать факты конкретного проекта: реальные пути
+приложения, версии зависимостей, локальные исключения, локальные команды,
+локальные токены или архитектурные детали конкретного продукта.
+
+### `project/**`
+
+Локальный контекст принимающего проекта. Этот каталог нужен, чтобы Codex не
+сканировал весь репозиторий заново перед каждой задачей.
+
+Ожидаемые overlays:
+
+- `project/stack-profile.md` - стек, runtime, tooling, state-management;
+- `project/architecture-map.md` - маршруты, shared code, client/server zones;
+- `project/styling-profile.md` - styling system, tokens, conventions;
+- `project/verification-profile.md` - команды проверки и порядок запуска;
+- `project/approved-patterns.md` - локальные разрешенные паттерны;
+- `project/anti-patterns.md` - локальные анти-паттерны и исключения;
+- `project/figma-profile.md` - правила design-to-code;
+- `project/react/path-index.md` - lookup index для React/client работы;
+- `project/next/path-index.md` - lookup index для Next.js App Router.
+
+`project/**` всегда local-only. Его нельзя публиковать upstream.
+
+### `skills/**`
+
+Переиспользуемые workflows для Codex. Skill - это папка с обязательным
+`SKILL.md` и дополнительными ресурсами:
+
+```text
+skills/<skill-name>/
+├─ SKILL.md
+├─ agents/openai.yaml
+├─ references/
+├─ scripts/
+└─ assets/
+```
+
+`SKILL.md` должен описывать, когда skill включается, что прочитать, какой
+workflow выполнить и как проверить результат. Подробные чеклисты, варианты,
+таблицы и справочные материалы выносятся в `references/`. Скрипты добавляются
+только для повторяемой или хрупкой работы, где нужен детерминированный
+инструмент.
+
+### `.gitignore`
+
+Защищает local-only paths и служебный шум во вложенном checkout. В частности,
+`project/**` и старые helper trees вроде `upstream/**` не должны попадать в
+публикацию.
+
+## Как Codex читает инструкции
+
+Codex собирает инструкции слоями:
+
+1. Глобальные инструкции пользователя из Codex home.
+2. Project-level `AGENTS.md` от корня workspace вниз к текущей директории.
+3. Более близкие инструкции имеют приоритет над более дальними.
+4. Repo-local skills подбираются отдельно по имени, описанию и user intent.
+
+В этом проекте порядок для агента такой:
+
+1. Прочитать корневой `AGENTS.md`.
+2. Перейти к `.agents/AGENTS.md`.
+3. Прочитать `.agents/SUMMARY.md`.
+4. Выбрать relevant skill по prompt и repo context.
+5. Прочитать нужные `common/**`, `project/**`, references и affected source
+   files.
+
+Пользователь не обязан явно писать `$skill-name`. Если prompt совпадает с
+описанием skill, Codex должен выбрать skill сам.
+
+## Что должно быть настроено в VS Code
+
+Минимальная рабочая конфигурация:
+
+1. Установлен официальный OpenAI Codex IDE extension из Visual Studio Code
+   Marketplace.
+2. Пользователь вошел через ChatGPT account или API key.
+3. В VS Code открыт корень принимающего проекта, где есть корневой `AGENTS.md`
+   и каталог `.agents/`.
+4. `.agents/skills/**` находится внутри workspace, чтобы Codex мог обнаружить
+   repo-scoped skills.
+5. В проекте сохранена структура `.agents/AGENTS.md`, `.agents/SUMMARY.md`,
+   `.agents/common/**`, `.agents/skills/**`, `.agents/project/**`.
+6. Shell доступен для search, git state, diff, formatting и verification
+   commands.
+
+Дополнительные возможности:
+
+- GitHub connector нужен для `webdev-assistant-sync publish-up`, потому что PR
+  должен создаваться через connector.
+- Figma capability нужна для задач с Figma URL и design implementation.
+- Filesystem MCP желателен для чтения файлов и структуры каталогов; правила
+  набора предпочитают MCP file reads, когда инструмент доступен.
+- WSL нужен только если проект и tooling живут в WSL. В этом случае Codex в VS
+  Code должен запускаться в той же среде, где находятся зависимости и команды
+  проекта.
+
+Модель, approvals, sandbox и некоторые настройки Codex управляются настройками
+Codex/IDE extension и конфигурацией Codex, а не файлами этого bundle. README
+фиксирует только требования, которые важны для корректного чтения `.agents`.
+
+## Навыки
+
+### `webapp-task-protocol`
+
+Базовый routing skill для React/Next.js задач. Используется для feature,
+refactor, bugfix, review, audit и design implementation.
+
+Что делает:
+
+- классифицирует задачу;
+- определяет project type: `frontend-only` или `fullstack`;
+- выбирает skill chain;
+- требует inspect -> plan -> implement -> verify;
+- направляет агента к path indexes и overlays до широкого поиска.
+
+### `nextjs-app-router`
+
+Используется для App Router routes, layouts, metadata, dynamic segments,
+loading/error states и server/client boundaries.
+
+Ключевые правила:
+
+- держать route special files тонкими;
+- выбирать server/client boundary осознанно;
+- не импортировать server-only логику в client code;
+- учитывать metadata, canonical, robots, sitemap и route-level UX states;
+- после structural route changes проверять, нужны ли updates в
+  `.agents/project/next/path-index.md`.
+
+### `react-component-workflow`
+
+Используется для компонентов, props/state flow, hooks, rendering logic,
+client UI и reusable behavior.
+
+Ключевые правила:
+
+- делать компоненты небольшими и сфокусированными;
+- держать data flow явным;
+- хранить state на минимальном нужном уровне;
+- использовать effects только для настоящих side effects;
+- учитывать reactive identity context/store/custom hooks;
+- добавлять `redux-state-workflow`, если затронут shared state.
+
+### `redux-state-workflow`
+
+Используется для Redux, Redux Toolkit, selectors, typed hooks, providers и
+store-like shared state.
+
+Ключевые правила:
+
+- сначала доказать, что state действительно shared;
+- не добавлять Redux в проект, где его нет, без архитектурного решения;
+- держать shared state serializable и минимальным;
+- не использовать Redux как transport/fetch/business layer;
+- предпочитать узкие selectors и stable references.
+
+### `frontend-typescript-rules`
+
+Используется при TypeScript refactors, exported APIs, public helpers,
+components и safe narrowing.
+
+Ключевые правила:
+
+- сохранять strict typing;
+- не использовать `any` и `@ts-ignore`;
+- использовать `import type` для type-only imports;
+- переиспользовать существующие schemas/helpers/types;
+- добавлять explicit return types для exported functions, когда это повышает
+  ясность.
+
+### `boundary-input-validation`
+
+Используется для untrusted input: user input, route params, search params,
+external data, files и public entry points.
+
+Ключевые правила:
+
+- валидировать на boundary;
+- не размазывать fallback coercion downstream;
+- сначала искать существующие helpers/dependencies;
+- не добавлять validation library без явного approval.
+
+### `frontend-review-and-fix`
+
+Используется после реализации или когда пользователь просит review/follow-up
+fixes.
+
+Ключевые правила:
+
+- сначала искать bugs, regressions, лишние abstraction и risk;
+- запускать verification из `.agents/project/verification-profile.md`;
+- проверять, нужны ли updates в `.agents/project/**`;
+- для security/SEO поверхностей рекомендовать профильный audit.
+
+### `project-context-adapter`
+
+Используется, когда изменились факты проекта или path indexes устарели.
+
+Что обновляет:
+
+- `stack-profile.md`;
+- `architecture-map.md`;
+- `styling-profile.md`;
+- `verification-profile.md`;
+- `approved-patterns.md`;
+- `anti-patterns.md`;
+- `figma-profile.md`;
+- `react/path-index.md`;
+- `next/path-index.md`.
+
+Этот skill редактирует только `.agents/project/**`.
+
+### `agent-rules-skill-author`
+
+Используется для `AGENTS.md`, `.agents/common/**`, `.agents/project/**`,
+`.agents/skills/**`, skill authoring и agent policy.
+
+Ключевые правила:
+
+- сначала выбрать слой: repo policy, common docs, project overlay или skill;
+- не смешивать reusable policy и project facts;
+- при создании skills определить trigger surface, should/should-not prompts,
+  source-backed workflow и validation gates;
+- держать `SKILL.md` lean, details выносить в `references/`;
+- синхронизировать `agents/openai.yaml` с intent skill.
+
+### `readme-maintainer`
+
+Используется для аудита и поддержки `.agents/README.md`.
+
+После текущего обновления его задача - держать README подробным, точным и
+структурированным, если README является пользовательским справочником по
+bundle. Он не должен превращать README в маркетинговый текст или склад
+локальных project facts.
+
+### `webdev-assistant-sync`
+
+Используется для `sync-down`, `publish-up` и fallback branch push в upstream
+`git@github.com:ytvee-dev/webdev-assistant.git`.
+
+Ключевые правила:
+
+- git publication commands выполнять только внутри `.agents`;
+- не публиковать `project/**`, `upstream/**` и host-project files;
+- коммитить publishable docs на local `.agents/main`;
+- не пушить local `main` напрямую;
+- перед publication branch делать `pull --rebase origin main`;
+- создавать ветку `[fix|feat]-[description]`;
+- открывать PR через GitHub connector;
+- возвращать checkout на `main`.
+
+### `technical-seo-app`
+
+Используется для metadata, canonical URLs, robots, sitemap, crawlability,
+Open Graph и structured data.
+
+По умолчанию это audit-first skill: сначала report, затем fixes только если
+пользователь явно попросил применить изменения.
+
+### `frontend-security-inspector`
+
+Используется для secrets, auth/session, public entry points, unsafe data,
+environment exposure и client/server boundary risks.
+
+По умолчанию это audit-first skill: сначала structured findings report, затем
+remediation только по отдельному запросу.
+
+### `screenshot-design-inspector`
+
+Используется, когда design implementation начинается со screenshots или когда
+Figma access недоступен.
+
+Извлекает typography, spacing, colors, hierarchy, breakpoints и confidence
+level. Screenshot-derived values считаются менее надежными, чем Figma data.
+
+### `architecture-from-spec`
+
+Используется, когда пользователь дает specification, technical assignment или
+large refactor brief и хочет architecture guidance.
+
+Сначала извлекает требования, затем предлагает recommended architecture path и
+ограниченные alternatives без выдумывания недостающих constraints.
+
+## Основные цепочки навыков
+
+### Feature / refactor / bugfix
+
+```text
+webapp-task-protocol
+-> nextjs-app-router и/или react-component-workflow
+-> redux-state-workflow, если затронут shared state
+-> frontend-typescript-rules, если затронуты типы
+-> boundary-input-validation, если есть boundary input
+-> frontend-review-and-fix
+-> project-context-adapter, если изменился project context
+```
+
+### Review
+
+```text
+webapp-task-protocol
+-> frontend-review-and-fix
+```
+
+Review начинается с findings: bugs, regressions, risks, missing tests. Summary
+идет после findings.
+
+### SEO
+
+```text
+technical-seo-app
+```
+
+Если пользователь просит только проверить, skill не применяет fixes. Если
+пользователь просит применить, после report можно переходить к implementation.
+
+### Security
+
+```text
+frontend-security-inspector
+```
+
+Security work начинается с structured report: severity, affected area, evidence,
+remediation, follow-up verification.
+
+### Design / Figma
+
+```text
+Figma capability
+-> nextjs-app-router и/или react-component-workflow
+-> screenshot-design-inspector, если Figma недоступна
+```
+
+Figma URL или design implementation request сначала идет через Figma capability.
+Screenshots - fallback, не основной источник.
+
+### Agent rules / skills / docs
+
+```text
+agent-rules-skill-author
+-> readme-maintainer, если меняется README или user-facing workflow
+-> webdev-assistant-sync, если нужен sync-down или publish-up
+```
+
+### Bundle sync / publication
+
+```text
+webdev-assistant-sync
+```
+
+Этот skill обслуживает nested `.agents` checkout и upstream PR workflow. Host
+repo root не используется для upstream publication commands.
+
+## Правила и запреты
+
+### Общие запреты
+
+- Не взаимодействовать с production systems, production data или live production
+  environments.
+- Не устанавливать packages и не менять shared tokens без явного approval.
+- Не добавлять архитектуру, API contracts или behavior, которых нет в prompt или
+  repo facts.
+- Не делать unrelated refactors.
+- Не дублировать существующие helpers/components/selectors/modules до поиска
+  текущих решений.
+- Не добавлять comments без запроса или реальной safety need.
+- Не писать feature tests без явного запроса, если repo convention этого не
+  требует.
+
+### React / Next.js
+
+- Не использовать `useEffect` для логики, которая может быть render-time,
+  memoized или event-handler logic.
+- Не использовать `useCallback` по умолчанию.
+- Не использовать `void someFunc()`.
+- Не использовать `let isCancelled = false`; prefer `AbortController`.
+- Не строить JSX в `renderSomething` variables, если component extraction
+  яснее.
+- Не импортировать server-only modules в client code.
+- Не fetch own route handlers из server-side code, если есть direct module
+  call.
+
+### TypeScript
+
+- Не использовать `any`.
+- Не использовать `@ts-ignore`, кроме явно обоснованных крайних случаев.
+- Не делать unsafe double casts.
+- Не клонировать параллельные types, если есть shared types/schemas/helpers.
+
+### State management
+
+- Не переносить local-only UI state в Redux/context/store без shared ownership.
+- Не использовать Redux как transport layer или место тяжелой business logic.
+- Не подписываться на broad store/context objects, если нужен узкий selector.
+- Не возвращать fresh objects/arrays из non-memoized selectors без stability
+  strategy.
+
+### Documentation / `.agents`
+
+- Не публиковать `.agents/project/**`.
+- Не публиковать `upstream/**`.
+- Не зеркалить `.agents/AGENTS.md` в host-root `AGENTS.md`.
+- Не менять host-root `README.md`, если пользователь явно не попросил.
+- Не добавлять `README.md`, `CHANGELOG.md`, `QUICK_REFERENCE.md` внутрь skill
+  packages.
+- Не смешивать host-project facts с reusable skills и common docs.
+
+## Publishable и local-only paths
+
+Publishable paths внутри checkout root `.agents/`:
+
+```text
+AGENTS.md
+SUMMARY.md
+common/**
+skills/**
+README.md
+.gitignore
+```
+
+Local-only paths:
+
+```text
+project/**
+upstream/**
+application source code
+tests
+configs
+build outputs
+host-project files
+```
+
+Если файл не входит в publishable list, его нельзя включать в upstream PR.
+
+## Sync-down и publish-up
+
+### `sync-down`
+
+Используется, чтобы подтянуть shared bundle из upstream в текущий принимающий
+проект.
+
+Основные правила:
+
+- работать только во вложенном `.agents`;
+- не трогать `project/**`;
+- не менять host-root pointer без причины;
+- после sync проверить Markdown и relevant docs.
+
+### `publish-up`
+
+Используется, чтобы опубликовать generic bundle changes upstream.
+
+Порядок:
+
+1. Убедиться, что `.agents/.git` существует.
+2. Проверить remote `git@github.com:ytvee-dev/webdev-assistant.git`.
+3. Проверить, что `origin/main` существует.
+4. Проверить working tree и unmerged paths.
+5. Работать на local `.agents/main`.
+6. Stage only publishable paths.
+7. Commit на local `main` с `fix(docs): ...` или `feat(docs): ...`.
+8. Проверить, что eligible publishable changes не остались unstaged/staged.
+9. `pull --rebase origin main`.
+10. Создать ветку `[fix|feat]-[description]`.
+11. Push branch.
+12. Создать PR через GitHub connector.
+13. Вернуть локальный checkout на `main`.
+
+Local `.agents/main` напрямую не пушится.
+
+## Неявные правила, которые агент слушает
+
+### Skill selection prompt-driven
+
+Пользователь не обязан писать `$skill-name`. Codex должен сам выбрать skill по
+prompt, frontmatter `description`, repo context и touched area.
+
+Явный вызов полезен, когда нужно снять неопределенность:
+
+```text
+$webapp-task-protocol реализуй feature ...
+$technical-seo-app проверь metadata ...
+$frontend-security-inspector проведи security audit ...
+$agent-rules-skill-author создай skill ...
+$webdev-assistant-sync publish-up ...
+```
+
+### Indexes before broad search
+
+Если существуют path indexes, агент сначала читает их:
+
+- route/layout/metadata work -> `.agents/project/next/path-index.md`;
+- component/hooks/client UI work -> `.agents/project/react/path-index.md`;
+- stack facts -> `.agents/project/stack-profile.md`;
+- architecture/data flow -> `.agents/project/architecture-map.md`;
+- styling -> `.agents/project/styling-profile.md`;
+- verification -> `.agents/project/verification-profile.md`.
+
+Широкий repo search используется после targeted docs и indexes.
+
+### Project overlays refresh
+
+Если реализация изменила routes, components, helpers, styling tokens,
+verification commands или project structure, агент должен проверить, нужно ли
+обновить `.agents/project/**`. Пользователь не обязан просить это отдельно.
+
+### Audit skills report-first
+
+SEO и security skills сначала дают report. Они не должны автоматически
+применять изменения, если пользователь попросил только проверить.
+
+### Figma first, screenshots fallback
+
+Если prompt содержит Figma URL или design implementation request, сначала
+используется Figma capability. Если Figma недоступна, агент просит screenshots
+и подключает `screenshot-design-inspector`.
+
+### Official docs for changing external behavior
+
+Если задача зависит от текущего поведения OpenAI, Next.js, Vercel, GitHub,
+Figma или другой внешней системы, агент должен свериться с официальной
+документацией или configured docs MCP, а не полагаться на память.
+
+## Как управлять skills
+
+### Когда создавать новый skill
+
+Новый skill нужен, если у задачи есть:
+
+- отдельный trigger surface;
+- отдельный reusable workflow;
+- повторяемые constraints;
+- набор references/scripts/assets, который будет использоваться многократно.
+
+Новый skill не нужен, если достаточно:
+
+- уточнить trigger существующего skill;
+- добавить missing rule;
+- обновить reference;
+- добавить project-specific fact в `.agents/project/**`;
+- добавить reusable rule в `.agents/common/**`.
+
+### Что писать в `SKILL.md`
+
+Frontmatter:
+
+```yaml
+---
+name: skill-name
+description: Use when ...
+---
+```
 
 Правила:
 
-- Выполняйте git-команды только внутри `.agents`.
-- Не трогайте `project/**`.
-- Корневой `AGENTS.md` должен оставаться стабильным указателем.
-- После синхронизации повторите проверку Markdown.
+- `name` - lowercase hyphen-case;
+- `description` - основной trigger surface;
+- в `description` должны быть user intent, verbs, artifacts и граница
+  применения;
+- body должен быть procedural: purpose, context, workflow, rules, validation,
+  reference map;
+- body не должен переобъяснять весь домен.
 
-## Публикация во внешний репозиторий
+### Что писать в `references/`
 
-Для публикации во внешний репозиторий используйте `webdev-assistant-sync` в
-режиме `publish-up`.
+`references/` подходит для:
 
-Публиковать можно только эти пути внутри `.agents`:
+- длинных checklist;
+- detailed examples;
+- variants;
+- schemas/API notes;
+- source-backed guidance;
+- quality rubrics.
 
-- `AGENTS.md`
-- `SUMMARY.md`
-- `common/**`
-- `skills/**`
-- `README.md`
-- `.gitignore`
+Reference должен быть связан из `SKILL.md`, иначе агент может о нем не узнать.
 
-Нельзя публиковать `project/**`, `upstream/**`, исходный код приложения, тесты,
-конфиги и любые файлы принимающего проекта.
+### Когда добавлять `scripts/`
 
-Обязательный порядок работы с git:
+`scripts/` нужен, когда workflow:
 
-1. Работайте локально на `.agents` `main`.
-2. Коммитьте публикуемые изменения документации локально на `main`.
-3. Не пушьте локальный `main` напрямую.
-4. Перед публикацией выполните `git pull --rebase origin main` внутри
-   `.agents`.
-5. Создайте короткоживущую ветку `[fix|feat]-[description]`.
-6. Запушьте эту ветку и откройте PR в `main`.
-7. Верните локальную рабочую копию `.agents` на `main`.
+- повторяемый;
+- хрупкий;
+- требует deterministic output;
+- часто переписывается вручную;
+- удобнее проверяется командой.
 
-Форматы имен:
+Скрипты должны быть неинтерактивными, давать понятные ошибки и иметь понятный
+интерфейс запуска.
 
-- ветка: `[fix|feat]-[description]`
-- коммит: `fix(docs): <short description>` или
-  `feat(docs): <short description>`
-- заголовок PR: тот же тип и то же ядро описания, что в теме коммита
+### Когда добавлять `assets/`
 
-## Поддержка README
+`assets/` нужен для шаблонов и ресурсов, которые агент использует в output:
 
-После любого изменения документации в `.agents` используйте `readme-maintainer`
-или выполните такую же проверку вручную.
+- starter files;
+- templates;
+- images/icons/fonts;
+- structured boilerplate.
 
-Обновите этот README в той же задаче, если изменились:
+Инструкции, которые агент должен читать, не должны жить только в `assets/`.
 
-- пользовательский рабочий процесс;
-- список или назначение навыков;
-- публикуемые или локальные пути;
-- указатель на канонические правила;
-- правила sync-down, publish-up, branch, commit или PR.
+### Что писать в `agents/openai.yaml`
 
-README должен отвечать на практический вопрос пользователя: как пользоваться
-набором и какие файлы нельзя трогать или публиковать. Не превращайте его в
-полный свод правил; детали должны оставаться в `.agents/AGENTS.md`,
-`.agents/SUMMARY.md` и профильных навыках.
+Фактический формат в этом bundle:
+
+```yaml
+interface:
+  display_name: 'Human Readable Skill Name'
+  short_description: 'Short workflow description'
+  default_prompt: 'Use $skill-name to ...'
+policy:
+  allow_implicit_invocation: true
+```
+
+`allow_implicit_invocation: true` означает, что skill может включаться по user
+intent без явного `$skill-name`. Если поставить `false`, skill остается доступен
+для явного вызова, но не должен выбираться автоматически.
+
+`agents/openai.yaml` нужно обновлять вместе с `SKILL.md`, если меняется trigger,
+scope или default prompt.
+
+## Maintenance checklist
+
+### Перед изменением кода
+
+1. Прочитать root `AGENTS.md`.
+2. Прочитать `.agents/AGENTS.md`.
+3. Прочитать `.agents/SUMMARY.md`.
+4. Выбрать relevant skill.
+5. Прочитать relevant common docs и project overlays.
+6. Прочитать affected source/config files.
+7. Сделать минимальную scoped правку.
+8. Запустить relevant verification.
+9. Проверить, нужны ли updates в `.agents/project/**`.
+
+### Перед изменением `.agents` docs
+
+1. Выбрать слой: `AGENTS.md`, `common/**`, `project/**`, `skills/**`,
+   `README.md`.
+2. Проверить соседние rules и skill chains.
+3. Не смешивать reusable docs и project facts.
+4. Обновить cross-links и `SUMMARY.md`, если изменилась структура или routing.
+5. Обновить README, если изменились user-facing workflow, paths, skill list или
+   publication rules.
+6. Запустить Markdown/Prettier check.
+
+### Перед публикацией upstream
+
+1. Работать только внутри `.agents`.
+2. Убедиться, что `project/**` не staged.
+3. Commit publishable docs на local `main`.
+4. Не пушить local `main`.
+5. Rebase на `origin/main`.
+6. Создать `fix-*` или `feat-*` branch.
+7. Push branch.
+8. Создать PR через GitHub connector.
+9. Вернуться на local `main`.
+
+## Как поддерживать этот README
+
+README должен быть подробным техническим справочником по bundle, если он
+отвечает на вопросы:
+
+- что такое `.agents`;
+- какие правила и skills есть;
+- как Codex выбирает инструкции;
+- что настроить в VS Code;
+- какие paths publishable/local-only;
+- как делать sync и publication;
+- какие запреты важно знать до работы.
+
+README не должен содержать:
+
+- host-project facts;
+- маркетинговый текст;
+- историю изменений;
+- дословную копию всех references;
+- инструкции для не-Codex агентных систем;
+- публикацию local-only paths.
+
+Если меняются skill list, routing, sync/publication policy, canonical path,
+README должен обновляться в той же задаче.

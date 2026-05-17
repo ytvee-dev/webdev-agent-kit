@@ -59,7 +59,7 @@ overlays.
   policy, including skill-quality rubric guidance for trigger precision,
   source-backed workflows, progressive disclosure, and validation
 - `skills/readme-maintainer` - audit agent documentation and keep
-  `.agents/README.md` concise, accurate, and user-facing
+  `.agents/README.md` structured, accurate, and user-facing
 - `skills/webdev-assistant-sync` - sync the shared bundle with the upstream
   `webdev-assistant` repository while keeping local work on `main`, using
   short-lived PR branches for publication, or pushing a fallback branch when

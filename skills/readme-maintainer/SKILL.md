@@ -1,14 +1,19 @@
 ---
 name: readme-maintainer
-description: Use when auditing `.agents/` documentation, agent rules, skills, summaries, sync policy, or user-facing onboarding docs, and when deciding whether `.agents/README.md` must be updated. Produces a concise, human-readable README for users with the main usage instructions and no filler.
+description: Use when auditing `.agents/` documentation, agent rules, skills, summaries, sync policy, or user-facing onboarding docs, and when deciding whether `.agents/README.md` must be updated. Produces a structured, accurate, human-readable README that can be detailed when it is the user-facing bundle reference.
 ---
 
 # README Maintainer
 
 ## Purpose
 
-Keep `.agents/README.md` accurate, concise, and useful for a human user who
+Keep `.agents/README.md` accurate, structured, and useful for a human user who
 needs to understand how to use the agent bundle.
+
+The README may be detailed when it is the user-facing reference for bundle
+architecture, skills, setup, sync/publication, and operational rules. Do not
+force it back to a short quickstart when the requested purpose is a full bundle
+guide.
 
 ## Required Context
 
@@ -36,16 +41,21 @@ Before editing `.agents/README.md`:
 ## README Writing Rules
 
 - Write for a human user, not for an internal implementation note.
-- Keep the README short, direct, and operational.
+- Keep the README direct, technical, and operational.
 - Put the most important usage instructions near the top.
-- Prefer concrete sections: purpose, how to use, what to edit, what not to
-  publish, sync/publish workflow, maintenance checks.
-- Do not include marketing language, history, vague explanations, or repeated
-  policy text copied from other docs.
+- Prefer concrete sections: purpose, scope, architecture, skills, setup,
+  implicit rules, prohibited actions, publishable paths, sync/publish workflow,
+  and maintenance checks.
+- Include enough detail for a user to understand the bundle without opening
+  every skill, but do not paste full reference files or every checklist.
+- Do not include marketing language, history, vague explanations, emotional
+  phrasing, or uncontrolled copies of every rule.
 - Do not include host-project stack facts in `.agents/README.md`; keep those in
   `.agents/project/**`.
-- Do not turn README into a full rulebook. Link users to `.agents/AGENTS.md`,
-  `.agents/SUMMARY.md`, and specific skills for details.
+- Keep README aligned with `.agents/AGENTS.md`, `.agents/SUMMARY.md`, and the
+  actual skill folders. Link users to specific skills for deeper procedure.
+- When showing `agents/openai.yaml`, use the actual bundle shape with
+  `interface:` and `policy:`.
 
 ## Update Decision
 
@@ -57,6 +67,7 @@ Update `.agents/README.md` when a documentation change affects any of these:
 - reading order or onboarding flow
 - sync-down, publish-up, PR, branch, or commit workflow
 - instructions a user needs before asking an agent to work in the repo
+- VS Code/Codex setup expectations for this bundle
 
 Skip README edits only when the change is purely internal and no user-facing
 instruction, workflow, path, or skill list changes.
@@ -72,4 +83,6 @@ Before finishing:
    host-root `AGENTS.md`.
 4. Verify every referenced path exists or is intentionally described as a
    pattern.
-5. Run markdown formatting validation for the changed docs.
+5. Verify examples match actual bundle conventions, especially
+   `agents/openai.yaml`.
+6. Run markdown formatting validation for the changed docs.
