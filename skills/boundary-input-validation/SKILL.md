@@ -1,6 +1,25 @@
----
+﻿---
 name: boundary-input-validation
 description: Use when validating untrusted or boundary input in React or Next.js work without introducing new dependencies. Prefer existing project utilities, explicit parsing, and built-in TypeScript-safe guards before proposing package installs.
+id: 'agents.skills.boundary-input-validation.skill'
+title: 'Boundary Input Validation'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'boundary-input-validation'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/validation'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/boundary-input-validation/references/no-new-deps-policy|No New Dependencies Policy]]'
+    - '[[skills/boundary-input-validation/references/validation-patterns|Validation Patterns]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Boundary Input Validation

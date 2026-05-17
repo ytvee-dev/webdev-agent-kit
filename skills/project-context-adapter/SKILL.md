@@ -1,8 +1,30 @@
----
+﻿---
 name: project-context-adapter
 description: Use when repo-local project overlays or framework path indexes need
     refresh so the current project can be navigated and implemented without
     scanning the whole repo.
+id: 'agents.skills.project-context-adapter.skill'
+title: 'Project Context Adapter'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'project-context-adapter'
+tags:
+    - 'agents/skill-package'
+    - 'agents/project-context'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
+    - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
+    - '[[project/stack-profile|Stack Profile]]'
+    - '[[project/react/path-index|React Path Index]]'
+    - '[[project/next/path-index|Next Path Index]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Project Context Adapter

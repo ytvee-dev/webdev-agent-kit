@@ -1,3 +1,23 @@
+﻿---
+id: 'agents.common.anti-patterns'
+title: 'Common Anti-Patterns'
+doc_type: 'common-rule'
+layer: 'common'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/common'
+    - 'docs/policy'
+parent:
+    - '[[AGENTS|Canonical Agent Policy]]'
+related:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+depends_on:
+    []
+---
+
 # Common Anti-Patterns
 
 Purpose: define bundle-wide pitfalls that should not be published as local

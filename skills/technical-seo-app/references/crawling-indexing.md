@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.technical-seo-app.references.crawling-indexing'
+title: 'Crawling and Indexing'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'technical-seo-app'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/seo'
+    - 'agents/reference'
+parent:
+    - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
+related:
+    []
+depends_on:
+    - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
+---
+
 # Crawling and Indexing
 
 ## General checks

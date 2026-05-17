@@ -1,6 +1,24 @@
----
+﻿---
 name: readme-maintainer
 description: Use when auditing `.agents/` documentation, agent rules, skills, summaries, sync policy, or user-facing onboarding docs, and when deciding whether `.agents/README.md` must be updated. Produces a structured, accurate, human-readable README that can be detailed when it is the user-facing bundle reference.
+id: 'agents.skills.readme-maintainer.skill'
+title: 'README Maintainer'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'readme-maintainer'
+tags:
+    - 'agents/skill-package'
+    - 'docs/readme'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[README|webdev-assistant README]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # README Maintainer

@@ -1,6 +1,31 @@
----
+﻿---
 name: agent-rules-skill-author
 description: Use when creating, evaluating, or editing repo-local agent rules, AGENTS.md policy, .agents/common bundle docs, .agents/project overlay docs, or .agents/skills packages. Use for precise skill authoring: trigger accuracy, source-backed instructions, progressive disclosure, validation, and package hygiene. Keep generic publishable policy in AGENTS.md and .agents/common, factual host-repo overlays inside .agents/project, and reusable workflows inside .agents/skills.
+id: 'agents.skills.agent-rules-skill-author.skill'
+title: 'Agent Rules And Skill Author'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'agent-rules-skill-author'
+tags:
+    - 'agents/skill-package'
+    - 'agents/authoring'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/agent-rules-skill-author/references/documentation-maintenance|Documentation Maintenance Workflow]]'
+    - '[[skills/agent-rules-skill-author/references/rules-writing|Rules Writing]]'
+    - '[[skills/agent-rules-skill-author/references/skill-design|Skill Design]]'
+    - '[[skills/agent-rules-skill-author/references/skill-quality-rubric|Skill Quality Rubric]]'
+    - '[[skills/agent-rules-skill-author/references/source-backed-prompting|Source-Backed Prompting]]'
+    - '[[skills/agent-rules-skill-author/references/trigger-and-metadata|Trigger And Metadata]]'
+    - '[[skills/agent-rules-skill-author/references/validation-checklist|Validation Checklist]]'
+    - '[[common/documentation-maintenance|Documentation Maintenance]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Agent Rules And Skill Author
@@ -113,6 +138,9 @@ imprecise or inconsistent results.
   overlays and skills for missing references.
 - Keep `SKILL.md` lean. Move detailed checklists, examples, and design notes
   into `references/`.
+- Keep graph frontmatter current on every Markdown file in `.agents/**`. For
+  `SKILL.md`, preserve Codex-critical `name` and `description` as the first
+  frontmatter fields before `id`, `title`, `doc_type`, links, and tags.
 - Write instructions in imperative form with short rule blocks and checklists.
 - Prefer one explicit rule over several overlapping softer rules.
 - Keep skill selection prompt-driven. The user should not need to name a skill
@@ -131,6 +159,9 @@ imprecise or inconsistent results.
   and intent.
 - Put "when to use" logic in frontmatter `description`; use the body for
   workflow and constraints.
+- Add graph metadata to new Markdown files, link references/assets back to the
+  owning `SKILL.md`, and use `.agents`-relative Obsidian wikilinks in
+  `parent`, `related`, and `depends_on`.
 
 ## Validation workflow
 
@@ -147,7 +178,9 @@ imprecise or inconsistent results.
    repository root `AGENTS.md`.
 8. Search `.agents` for removed skill names, stale paths, and outdated
    references after editing or deleting agent docs.
-9. Run the repo validation step appropriate for markdown and skills changes.
+9. Check graph frontmatter coverage and link validity for changed Markdown
+   files.
+10. Run the repo validation step appropriate for markdown and skills changes.
 
 ## Reference map
 

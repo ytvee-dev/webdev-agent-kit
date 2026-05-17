@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.webdev-assistant-sync.references.git-preflight'
+title: 'Git Preflight'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webdev-assistant-sync'
+tags:
+    - 'agents/skill-package'
+    - 'agents/sync'
+    - 'agents/reference'
+parent:
+    - '[[skills/webdev-assistant-sync/SKILL|Webdev Assistant Sync]]'
+related:
+    []
+depends_on:
+    - '[[skills/webdev-assistant-sync/SKILL|Webdev Assistant Sync]]'
+---
+
 # Git Preflight
 
 Run this preflight before `sync-down` or `publish-up`.

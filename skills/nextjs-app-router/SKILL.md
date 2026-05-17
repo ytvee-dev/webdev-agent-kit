@@ -1,7 +1,30 @@
----
+﻿---
 name: nextjs-app-router
 description: Use when working on Next.js App Router routes, layouts, metadata,
     server/client boundaries, dynamic segments, and route-level UX states.
+id: 'agents.skills.nextjs-app-router.skill'
+title: 'Next.js App Router'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'nextjs-app-router'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/nextjs'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/nextjs-app-router/references/anti-patterns|Anti-Patterns]]'
+    - '[[skills/nextjs-app-router/references/figma-implementation|Figma Implementation]]'
+    - '[[skills/nextjs-app-router/references/metadata-patterns|Metadata Patterns]]'
+    - '[[skills/nextjs-app-router/references/route-patterns|Route Patterns]]'
+    - '[[skills/nextjs-app-router/references/server-client-boundaries|Server/Client Boundaries]]'
+    - '[[skills/nextjs-app-router/references/tooling-and-prompting|Tooling And Prompting]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Next.js App Router

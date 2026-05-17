@@ -1,3 +1,23 @@
+﻿---
+id: 'agents.common.documentation-maintenance'
+title: 'Documentation Maintenance'
+doc_type: 'common-rule'
+layer: 'common'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/common'
+    - 'docs/policy'
+parent:
+    - '[[AGENTS|Canonical Agent Policy]]'
+related:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+depends_on:
+    []
+---
+
 # Documentation Maintenance
 
 Purpose: define bundle-wide rules for changing `AGENTS.md`, `.agents/common/**`,
@@ -23,6 +43,12 @@ search, git state, diffs, formatting, or other command output.
 - Keep host-repo facts, local examples, and project-specific addenda in
   `.agents/project/**`.
 - Keep reusable workflows in `.agents/skills/**`.
+- Keep every Markdown document in `.agents/**` graph-linkable with YAML
+  frontmatter: `id`, `title`, `doc_type`, `layer`, `status`, `publishable`,
+  `local_only`, `tags`, and Obsidian wikilinks for `parent`, `related`, and
+  `depends_on`.
+- In `SKILL.md`, keep Codex-critical `name` and `description` first in
+  frontmatter before graph metadata.
 - Keep the nested bundle git checkout rooted at `.agents/`.
 - Keep `.agents/AGENTS.md` as the canonical publishable policy copy.
 - Keep the repository root `AGENTS.md` as a stable pointer to
@@ -41,6 +67,9 @@ search, git state, diffs, formatting, or other command output.
 - If a documentation change affects user-facing workflow, skill lists, path
   policy, or sync/publication instructions, update `.agents/README.md` in the
   same task.
+- If adding or renaming a Markdown file in `.agents/**`, add or update graph
+  frontmatter and use wikilinks relative to `.agents` as the Obsidian vault
+  root.
 - If a new approved pattern or anti-pattern is added, decide whether it belongs
   in `.agents/common/**` or only in `.agents/project/**`.
 - If a task reveals documentation drift, fix it in the same task instead of
@@ -93,3 +122,4 @@ search, git state, diffs, formatting, or other command output.
 - Check whether `.agents/project/**` local addenda must change.
 - Check whether `.agents/skills/**` or skill-routing references must change.
 - Check whether `.agents/.gitignore` must change.
+- Check whether graph frontmatter links must change.

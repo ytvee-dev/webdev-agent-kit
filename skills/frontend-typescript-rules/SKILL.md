@@ -1,7 +1,27 @@
----
+﻿---
 name: frontend-typescript-rules
 description: Use when enforcing strict TypeScript, exported API typing, safe
     narrowing, and maintainable refactors in React or Next.js codebases.
+id: 'agents.skills.frontend-typescript-rules.skill'
+title: 'Frontend TypeScript Rules'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-typescript-rules'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/typescript'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/frontend-typescript-rules/references/anti-patterns|Anti-Patterns]]'
+    - '[[skills/frontend-typescript-rules/references/ts-rules|TypeScript Rules]]'
+    - '[[skills/frontend-typescript-rules/references/typing-patterns|Typing Patterns]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Frontend TypeScript Rules

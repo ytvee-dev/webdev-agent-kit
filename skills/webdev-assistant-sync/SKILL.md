@@ -1,6 +1,27 @@
----
+﻿---
 name: webdev-assistant-sync
 description: Use when syncing the shared agent bundle from or to `git@github.com:ytvee-dev/webdev-assistant.git`, including `sync-down`, `publish-up` through a new branch and GitHub PR, or an explicit branch-push fallback when upstream `main` does not exist yet.
+id: 'agents.skills.webdev-assistant-sync.skill'
+title: 'Webdev Assistant Sync'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webdev-assistant-sync'
+tags:
+    - 'agents/skill-package'
+    - 'agents/sync'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/webdev-assistant-sync/references/git-preflight|Git Preflight]]'
+    - '[[skills/webdev-assistant-sync/references/path-contract|Path Contract]]'
+    - '[[skills/webdev-assistant-sync/references/publish-up|Publish Up]]'
+    - '[[skills/webdev-assistant-sync/references/sync-down|Sync Down]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Webdev Assistant Sync

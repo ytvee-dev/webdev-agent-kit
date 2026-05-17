@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.frontend-review-and-fix.references.verification-steps'
+title: 'Verification Steps'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-review-and-fix'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/review'
+    - 'agents/reference'
+parent:
+    - '[[skills/frontend-review-and-fix/SKILL|Frontend Review and Fix]]'
+related:
+    []
+depends_on:
+    - '[[skills/frontend-review-and-fix/SKILL|Frontend Review and Fix]]'
+---
+
 # Verification Steps
 
 Start from `.agents/project/verification-profile.md` for the exact commands.

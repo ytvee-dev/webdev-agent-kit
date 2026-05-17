@@ -1,6 +1,26 @@
----
+﻿---
 name: screenshot-design-inspector
 description: Use when design implementation starts from screenshots, or when Figma MCP access fails and the user can provide screenshots. Inspect desktop, tablet, and mobile screenshots to extract typography, color, spacing, and breakpoint intent without inventing missing design data.
+id: 'agents.skills.screenshot-design-inspector.skill'
+title: 'Screenshot Design Inspector'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'screenshot-design-inspector'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/design'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/screenshot-design-inspector/references/device-mapping|Device Mapping]]'
+    - '[[skills/screenshot-design-inspector/references/extraction-checklist|Extraction Checklist]]'
+    - '[[skills/screenshot-design-inspector/references/figma-ui-reading|Figma UI Reading]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Screenshot Design Inspector

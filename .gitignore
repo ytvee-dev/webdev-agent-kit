@@ -10,7 +10,10 @@
 .DS_Store
 Thumbs.db
 .vscode/
+.obsidian/
+.obsidian/**
 node_modules/
 .next/
 dist/
 coverage/
+.obsidian

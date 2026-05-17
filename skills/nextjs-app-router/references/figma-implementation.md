@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.nextjs-app-router.references.figma-implementation'
+title: 'Figma Implementation'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'nextjs-app-router'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/nextjs'
+    - 'agents/reference'
+parent:
+    - '[[skills/nextjs-app-router/SKILL|Next.js App Router]]'
+related:
+    []
+depends_on:
+    - '[[skills/nextjs-app-router/SKILL|Next.js App Router]]'
+---
+
 # Figma Implementation
 
 - Inspect the design in Figma before writing UI code.

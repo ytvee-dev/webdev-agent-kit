@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.agents'
+title: 'AGENTS.md'
+doc_type: 'policy'
+layer: 'bundle'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/policy'
+    - 'docs/entrypoint'
+parent:
+    []
+related:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[README|webdev-assistant README]]'
+    - '[[common/documentation-maintenance|Documentation Maintenance]]'
+depends_on:
+    []
+---
+
 # AGENTS.md
 
 This file is the canonical policy entrypoint for the embedded `.agents/`

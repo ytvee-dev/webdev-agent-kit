@@ -1,7 +1,26 @@
----
+﻿---
 name: frontend-review-and-fix
 description: Use for a final review pass after implementation, or when the user
     asks for review-oriented fixes, regression checks, and verification.
+id: 'agents.skills.frontend-review-and-fix.skill'
+title: 'Frontend Review and Fix'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-review-and-fix'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/review'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/frontend-review-and-fix/references/review-checklist|Review Checklist]]'
+    - '[[skills/frontend-review-and-fix/references/verification-steps|Verification Steps]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Frontend Review and Fix

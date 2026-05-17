@@ -1,6 +1,27 @@
----
+﻿---
 name: project-onboarding-adapter
 description: Use when the user asks Codex to adapt to a new project, initialize or refresh Codex project context, connect `.agents`, create the host-root `AGENTS.md` pointer, or analyze the repository before writing `.agents/project/**`. Triggers include "адаптируйся", "адаптируй проект", "подключи .agents", "обнови контекст проекта", and "initialize Codex project context". This skill is Plan Mode only.
+id: 'agents.skills.project-onboarding-adapter.skill'
+title: 'Project Onboarding Adapter'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'project-onboarding-adapter'
+tags:
+    - 'agents/skill-package'
+    - 'agents/onboarding'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/project-onboarding-adapter/references/adaptation-checklist|Adaptation Checklist]]'
+    - '[[skills/project-onboarding-adapter/references/path-audit-checklist|Path Audit Checklist]]'
+    - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
+    - '[[project/stack-profile|Stack Profile]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Project Onboarding Adapter

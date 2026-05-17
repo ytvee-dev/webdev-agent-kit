@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.redux-state-workflow.references.state-patterns'
+title: 'State Patterns'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'redux-state-workflow'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/state'
+    - 'agents/reference'
+parent:
+    - '[[skills/redux-state-workflow/SKILL|Redux State Workflow]]'
+related:
+    []
+depends_on:
+    - '[[skills/redux-state-workflow/SKILL|Redux State Workflow]]'
+---
+
 # State Patterns
 
 ## Deciding local vs shared state

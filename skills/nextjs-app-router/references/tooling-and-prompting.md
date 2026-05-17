@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.nextjs-app-router.references.tooling-and-prompting'
+title: 'Tooling And Prompting'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'nextjs-app-router'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/nextjs'
+    - 'agents/reference'
+parent:
+    - '[[skills/nextjs-app-router/SKILL|Next.js App Router]]'
+related:
+    []
+depends_on:
+    - '[[skills/nextjs-app-router/SKILL|Next.js App Router]]'
+---
+
 # Tooling And Prompting
 
 - Prefer MCP tools and framework indexes before broad repo scanning whenever the
