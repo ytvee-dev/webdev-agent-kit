@@ -9,6 +9,9 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
 - Write `description` as the primary trigger surface: what the skill does and
   when to use it.
 - Mention concrete task shapes in the description, not only broad topics.
+- Keep `description` non-empty and under 1024 characters.
+- Front-load the most important trigger words because long skill lists may
+  shorten descriptions before matching.
 
 ## Trigger writing
 
@@ -16,6 +19,21 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
   `skills`, `AGENTS.md`, `.agents/project`, `.agents/skills`.
 - Mention the target boundary when it matters, such as `inside .agents/`.
 - Avoid vague triggers that could accidentally match unrelated app work.
+- Describe user intent instead of internal implementation. Say when the user
+  needs the workflow, not only what files the skill contains.
+- Include near-miss exclusions when keywords overlap with unrelated work.
+
+## Trigger evals
+
+Before finalizing trigger wording for a new or broadened skill:
+
+- Write realistic should-trigger prompts that vary phrasing, explicitness,
+  detail, and complexity.
+- Write near-miss should-not-trigger prompts that share keywords but require a
+  different workflow.
+- Confirm explicit invocation still works through `$skill-name`.
+- Confirm implicit invocation is appropriate before keeping
+  `allow_implicit_invocation: true`.
 
 ## UI metadata
 

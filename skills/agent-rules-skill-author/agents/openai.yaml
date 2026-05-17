@@ -1,6 +1,6 @@
 interface:
     display_name: 'Agent Rules And Skill Author'
-    short_description: 'Author repo-local agent rules, overlays, and skill packages'
-    default_prompt: 'Use $agent-rules-skill-author to create or revise repo-local agent rules and skills inside .agents/.'
+    short_description: 'Author and evaluate precise repo-local agent rules and skills'
+    default_prompt: 'Use $agent-rules-skill-author to create, evaluate, or revise repo-local agent rules and skills inside .agents/.'
 policy:
     allow_implicit_invocation: true

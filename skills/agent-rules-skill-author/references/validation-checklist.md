@@ -5,6 +5,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
 ## Before saving
 
 - Trigger surface is explicit and narrow enough to avoid unrelated invocations.
+- Trigger wording has at least one realistic should-trigger and one near-miss
+  should-not-trigger prompt when the boundary is non-obvious.
 - No conflict exists with current `AGENTS.md` policy.
 - Documentation file contents and directory structure were inspected through
   filesystem MCP when available, with shell reserved for search, git state,
@@ -12,6 +14,10 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - The target layer is correct: `AGENTS.md`, `.agents/common`, `.agents/project`, or
   `.agents/skills`.
 - `SKILL.md` stays procedural and compact.
+- Skill instructions are grounded in source material, real examples, or known
+  failure modes rather than generic advice.
+- Inputs, outputs, defaults, failure modes, and validation gates are explicit
+  for fragile workflows.
 - Every referenced file exists and is linked from `SKILL.md`.
 - No changed files exist outside `.agents/` except the repository root
   `AGENTS.md` when repo-wide policy, skill discovery, or upstream bundle
@@ -37,8 +43,13 @@ Use this checklist before and after editing repo-local agent rules or skills.
 ## After saving
 
 - Re-read the package as if another agent will use it cold.
+- Confirm frontmatter alone explains when the skill should load.
 - Check that prohibitions, exceptions, and precedence are explicit.
 - Check that the workflow leaves no hidden implementation decisions.
 - Check that repo-specific facts remain in overlays rather than reusable skill
   text.
+- Check that references are loaded by clear conditions, not by vague
+  directory-level pointers.
+- Check that output-quality assertions or manual review criteria would catch
+  shallow compliance.
 - Run `npx prettier --check .` for markdown and skill-only changes.

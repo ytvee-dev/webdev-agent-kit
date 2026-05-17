@@ -15,6 +15,17 @@ one.
   generic publishable rule, anti-pattern, or approved-pattern policy rather than
   a workflow.
 
+## Ground the design
+
+- Start from concrete task examples, user corrections, real failure modes,
+  existing docs, schemas, APIs, or review feedback.
+- For external products or APIs, verify current behavior from official docs or
+  configured docs MCP tools before encoding instructions.
+- Define the reusable workflow the skill adds. Do not create a skill for advice
+  the agent can already apply reliably without extra context.
+- Capture the decision points an implementing agent must not guess: audience,
+  inputs, outputs, defaults, compatibility boundaries, and verification.
+
 ## Choose the degree of freedom
 
 - Use high freedom when multiple implementations are valid and the skill mainly
@@ -23,6 +34,9 @@ one.
   still expected.
 - Use low freedom when the workflow is fragile, repetitive, or easy to get
   wrong without explicit steps.
+- Mix degrees of freedom inside one skill when needed: keep judgment-heavy
+  review guidance flexible, but make stateful commands, publication flows, and
+  validators exact.
 
 ## Keep the package lean
 
@@ -41,3 +55,5 @@ Before finalizing a skill, ask:
   domain?
 - Are repo-specific facts kept in overlays rather than buried in the skill?
 - Does the package avoid hidden decisions for the implementing agent?
+- Does the skill name realistic should-trigger and should-not-trigger prompts?
+- Does the workflow include a validation path proportional to the task risk?

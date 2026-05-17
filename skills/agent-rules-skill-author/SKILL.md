@@ -1,6 +1,6 @@
 ---
 name: agent-rules-skill-author
-description: Use when creating or editing repo-local agent rules, AGENTS.md policy, .agents/common bundle docs, .agents/project overlay docs, or .agents/skills packages. Keep generic publishable policy in AGENTS.md and .agents/common, keep factual host-repo overlays inside .agents/project, and keep reusable workflows inside .agents/skills.
+description: Use when creating, evaluating, or editing repo-local agent rules, AGENTS.md policy, .agents/common bundle docs, .agents/project overlay docs, or .agents/skills packages. Use for precise skill authoring: trigger accuracy, source-backed instructions, progressive disclosure, validation, and package hygiene. Keep generic publishable policy in AGENTS.md and .agents/common, factual host-repo overlays inside .agents/project, and reusable workflows inside .agents/skills.
 ---
 
 # Agent Rules And Skill Author
@@ -37,6 +37,36 @@ Choose the target layer before editing:
 If a rule is repo-specific, keep it out of `AGENTS.md`, `.agents/common`, and
 reusable skills unless the user explicitly wants the reusable bundle to encode
 that policy.
+
+## Skill authoring quality pass
+
+Before creating or materially changing a skill package:
+
+1. Define concrete user intents the skill must handle, including at least one
+   realistic should-trigger prompt and one near-miss should-not-trigger prompt
+   when the trigger boundary is not obvious.
+2. Decide the correct intervention: edit an existing skill, create a new skill,
+   update `.agents/common`, or update `.agents/project`. Do not create a new
+   skill when a focused reference or trigger fix is enough.
+3. Ground the workflow in source material: existing repo docs, real task
+   traces, official product docs, schemas, APIs, or user-provided examples.
+   Avoid generic best-practice prose that does not change agent behavior.
+4. Calibrate specificity to risk. Use flexible guidance for judgment-heavy
+   work, explicit ordered steps for fragile workflows, and scripts only when
+   repeatability or deterministic validation is worth the extra package weight.
+5. Specify the inputs, outputs, defaults, failure modes, and validation gates an
+   implementing agent needs. For ambiguous requirements, ask the user instead
+   of hiding a decision inside the skill.
+6. Keep `SKILL.md` focused on trigger, workflow, defaults, and gotchas. Move
+   detailed examples, rubrics, and optional variants into linked
+   `references/`.
+7. Run a cold-read check: another agent with only the frontmatter and the
+   linked files must know when to use the skill, what to do, when to stop, and
+   how to verify the result.
+
+Read `references/skill-quality-rubric.md` when creating a new skill, making a
+skill broader, changing trigger behavior, or improving a skill that produced
+imprecise or inconsistent results.
 
 ## Core rules
 
@@ -110,17 +140,20 @@ that policy.
    reusable skill.
 3. Check that the trigger surface, prohibitions, and exceptions are explicit.
 4. Check that new references are linked from `SKILL.md` and actually exist.
-5. Check that `.agents/SUMMARY.md` reflects any new or renamed files.
-6. Check that every changed file is either inside `.agents/` or is the
+5. For skill changes, check the quality pass: concrete intents, source-backed
+   workflow, right resource split, and validation gates.
+6. Check that `.agents/SUMMARY.md` reflects any new or renamed files.
+7. Check that every changed file is either inside `.agents/` or is the
    repository root `AGENTS.md`.
-7. Search `.agents` for removed skill names, stale paths, and outdated
+8. Search `.agents` for removed skill names, stale paths, and outdated
    references after editing or deleting agent docs.
-8. Run the repo validation step appropriate for markdown and skills changes.
+9. Run the repo validation step appropriate for markdown and skills changes.
 
 ## Reference map
 
 - `references/rules-writing.md`
 - `references/skill-design.md`
+- `references/skill-quality-rubric.md`
 - `references/trigger-and-metadata.md`
 - `references/validation-checklist.md`
 - `references/source-backed-prompting.md`
