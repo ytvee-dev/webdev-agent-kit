@@ -53,6 +53,9 @@ overlays.
   dependencies
 - `skills/frontend-review-and-fix` - final review, regression checks, and
   verification
+- `skills/project-onboarding-adapter` - Plan Mode-only first-time host project
+  adaptation planning, root `AGENTS.md` pointer setup, `.agents/project/**`
+  overlay planning, and bundle path audit
 - `skills/project-context-adapter` - refresh repo overlays after structure
   drift
 - `skills/agent-rules-skill-author` - maintain `.agents/` and repo-local agent
@@ -95,6 +98,9 @@ overlays.
   publishable shared-bundle surface.
 - When a task changes project facts or reveals documentation drift, update the
   relevant `.agents/project/**` files in the same task.
+- When a task asks the agent to adapt to a new project, initialize Codex
+  project context, connect `.agents`, or create the host-root `AGENTS.md`
+  pointer, use `project-onboarding-adapter`; it only works in Plan Mode.
 - When a task changes publishable bundle structure, cross-links, skill names,
   or reading order, update this file in the same task.
 - When a task changes user-facing agent workflow, skill lists, path policy, or

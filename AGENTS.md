@@ -117,6 +117,8 @@ not need to name a skill explicitly.
 - TypeScript rules and safe refactors -> `frontend-typescript-rules`
 - Boundary validation without new dependencies -> `boundary-input-validation`
 - Review pass and verification -> `frontend-review-and-fix`
+- First-time host project adaptation and `.agents/project/**` planning ->
+  `project-onboarding-adapter`
 - Agent rules and skill authoring -> `agent-rules-skill-author`
 - Human-facing `.agents/README.md` maintenance -> `readme-maintainer`
 - Bundle sync and upstream publication -> `webdev-assistant-sync`
