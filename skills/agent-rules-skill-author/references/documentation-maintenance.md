@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.agent-rules-skill-author.references.documentation-maintenance'
+title: 'Documentation Maintenance Workflow'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'agent-rules-skill-author'
+tags:
+    - 'agents/skill-package'
+    - 'agents/authoring'
+    - 'agents/reference'
+parent:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+related:
+    []
+depends_on:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+---
+
 # Documentation Maintenance Workflow
 
 Use this workflow when the task changes `.agents/`, a skill package, or repo

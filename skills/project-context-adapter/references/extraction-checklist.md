@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.project-context-adapter.references.extraction-checklist'
+title: 'Extraction Checklist'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'project-context-adapter'
+tags:
+    - 'agents/skill-package'
+    - 'agents/project-context'
+    - 'agents/reference'
+parent:
+    - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
+related:
+    []
+depends_on:
+    - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
+---
+
 # Extraction Checklist
 
 - Framework and router model

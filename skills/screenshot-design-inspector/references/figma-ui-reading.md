@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.screenshot-design-inspector.references.figma-ui-reading'
+title: 'Figma UI Reading'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'screenshot-design-inspector'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/design'
+    - 'agents/reference'
+parent:
+    - '[[skills/screenshot-design-inspector/SKILL|Screenshot Design Inspector]]'
+related:
+    []
+depends_on:
+    - '[[skills/screenshot-design-inspector/SKILL|Screenshot Design Inspector]]'
+---
+
 # Figma UI Reading
 
 Use this reference when Figma MCP or screenshots expose Figma-like UI labels.

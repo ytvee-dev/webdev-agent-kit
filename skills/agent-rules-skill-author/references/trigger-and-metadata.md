@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.agent-rules-skill-author.references.trigger-and-metadata'
+title: 'Trigger And Metadata'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'agent-rules-skill-author'
+tags:
+    - 'agents/skill-package'
+    - 'agents/authoring'
+    - 'agents/reference'
+parent:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+related:
+    []
+depends_on:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+---
+
 # Trigger And Metadata
 
 Use this guide when writing skill frontmatter and `agents/openai.yaml`.

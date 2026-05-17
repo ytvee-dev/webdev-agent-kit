@@ -1,7 +1,26 @@
----
+﻿---
 name: frontend-review-and-fix
 description: Use for a final review pass after implementation, or when the user
     asks for review-oriented fixes, regression checks, and verification.
+id: 'agents.skills.frontend-review-and-fix.skill'
+title: 'Frontend Review and Fix'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-review-and-fix'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/review'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/frontend-review-and-fix/references/review-checklist|Review Checklist]]'
+    - '[[skills/frontend-review-and-fix/references/verification-steps|Verification Steps]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Frontend Review and Fix
@@ -35,6 +54,9 @@ description: Use for a final review pass after implementation, or when the user
   policies before suggesting follow-up work.
 - Check whether code changes require updates to `.agents/project/**`; if they
   do, route the update through `project-context-adapter` before closing the task.
+- When review or follow-up fixes update `.agents/project/**`, verify those
+  overlays keep graph frontmatter, local-only flags, and current links to the
+  relevant context and framework skills.
 
 ## Reference map
 

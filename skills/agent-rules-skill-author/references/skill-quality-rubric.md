@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.agent-rules-skill-author.references.skill-quality-rubric'
+title: 'Skill Quality Rubric'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'agent-rules-skill-author'
+tags:
+    - 'agents/skill-package'
+    - 'agents/authoring'
+    - 'agents/reference'
+parent:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+related:
+    []
+depends_on:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+---
+
 # Skill Quality Rubric
 
 Use this rubric when creating a new skill, widening a skill, changing trigger

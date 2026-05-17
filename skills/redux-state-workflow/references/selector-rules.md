@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.redux-state-workflow.references.selector-rules'
+title: 'Selector Rules'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'redux-state-workflow'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/state'
+    - 'agents/reference'
+parent:
+    - '[[skills/redux-state-workflow/SKILL|Redux State Workflow]]'
+related:
+    []
+depends_on:
+    - '[[skills/redux-state-workflow/SKILL|Redux State Workflow]]'
+---
+
 # Selector Rules
 
 ## Subscription shape

@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.react-component-workflow.references.hooks-rules'
+title: 'Hooks Rules'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'react-component-workflow'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/react'
+    - 'agents/reference'
+parent:
+    - '[[skills/react-component-workflow/SKILL|React Component Workflow]]'
+related:
+    []
+depends_on:
+    - '[[skills/react-component-workflow/SKILL|React Component Workflow]]'
+---
+
 # Hooks Rules
 
 ## General rules

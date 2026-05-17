@@ -1,8 +1,29 @@
----
+﻿---
 name: webapp-task-protocol
 description: Use to classify React and Next.js application tasks, detect project
     type, choose the right skill chain from the user prompt and repo context,
     and enforce inspect -> plan -> implement -> verify.
+id: 'agents.skills.webapp-task-protocol.skill'
+title: 'Webapp Task Protocol'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webapp-task-protocol'
+tags:
+    - 'agents/skill-package'
+    - 'agents/routing'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/webapp-task-protocol/references/classification-rules|Classification Rules]]'
+    - '[[skills/webapp-task-protocol/references/task-routing|Task Routing]]'
+    - '[[skills/react-component-workflow/SKILL|React Component Workflow]]'
+    - '[[skills/nextjs-app-router/SKILL|Nextjs App Router]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Webapp Task Protocol

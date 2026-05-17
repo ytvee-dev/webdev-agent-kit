@@ -1,6 +1,25 @@
----
+﻿---
 name: architecture-from-spec
 description: Use when the user provides a specification, technical assignment, or large refactor brief and wants source-backed React or Next.js architecture guidance for the current project or a new project. Extract requirements first, then propose one recommended architecture path plus bounded alternatives without inventing missing constraints.
+id: 'agents.skills.architecture-from-spec.skill'
+title: 'Architecture From Spec'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'architecture-from-spec'
+tags:
+    - 'agents/skill-package'
+    - 'architecture/spec'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/architecture-from-spec/references/source-map|Source Map]]'
+    - '[[skills/architecture-from-spec/references/spec-extraction|Spec Extraction]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Architecture From Spec

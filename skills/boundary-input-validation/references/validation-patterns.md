@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.boundary-input-validation.references.validation-patterns'
+title: 'Validation Patterns'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'boundary-input-validation'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/validation'
+    - 'agents/reference'
+parent:
+    - '[[skills/boundary-input-validation/SKILL|Boundary Input Validation]]'
+related:
+    []
+depends_on:
+    - '[[skills/boundary-input-validation/SKILL|Boundary Input Validation]]'
+---
+
 # Validation Patterns
 
 - Validate as close to the input boundary as possible.

@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.architecture-from-spec.references.source-map'
+title: 'Source Map'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'architecture-from-spec'
+tags:
+    - 'agents/skill-package'
+    - 'architecture/spec'
+    - 'agents/reference'
+parent:
+    - '[[skills/architecture-from-spec/SKILL|Architecture From Spec]]'
+related:
+    []
+depends_on:
+    - '[[skills/architecture-from-spec/SKILL|Architecture From Spec]]'
+---
+
 # Source Map
 
 Use current primary sources when the recommendation depends on framework or

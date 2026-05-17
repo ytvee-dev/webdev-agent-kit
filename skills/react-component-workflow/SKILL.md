@@ -1,7 +1,29 @@
----
+﻿---
 name: react-component-workflow
 description: Use when working on React component structure, props and state
     flow, hooks discipline, rendering logic, and reusable UI behavior.
+id: 'agents.skills.react-component-workflow.skill'
+title: 'React Component Workflow'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'react-component-workflow'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/react'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/react-component-workflow/references/anti-patterns|Anti-Patterns]]'
+    - '[[skills/react-component-workflow/references/component-patterns|Component Patterns]]'
+    - '[[skills/react-component-workflow/references/figma-implementation|Figma Implementation]]'
+    - '[[skills/react-component-workflow/references/hooks-rules|Hooks Rules]]'
+    - '[[skills/react-component-workflow/references/tooling-and-prompting|Tooling And Prompting]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # React Component Workflow

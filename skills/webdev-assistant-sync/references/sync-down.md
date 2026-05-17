@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.webdev-assistant-sync.references.sync-down'
+title: 'Sync Down'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webdev-assistant-sync'
+tags:
+    - 'agents/skill-package'
+    - 'agents/sync'
+    - 'agents/reference'
+parent:
+    - '[[skills/webdev-assistant-sync/SKILL|Webdev Assistant Sync]]'
+related:
+    []
+depends_on:
+    - '[[skills/webdev-assistant-sync/SKILL|Webdev Assistant Sync]]'
+---
+
 # Sync Down
 
 Use this flow when the user wants local bundle updates from upstream.

@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.project-onboarding-adapter.references.adaptation-checklist'
+title: 'Adaptation Checklist'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'project-onboarding-adapter'
+tags:
+    - 'agents/skill-package'
+    - 'agents/onboarding'
+    - 'agents/reference'
+parent:
+    - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
+related:
+    []
+depends_on:
+    - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
+---
+
 # Adaptation Checklist
 
 Use this checklist in Plan Mode to build the project adaptation plan. Do not

@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.frontend-security-inspector.references.security-checklist-react'
+title: 'React Security Checklist'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-security-inspector'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/security'
+    - 'agents/reference'
+parent:
+    - '[[skills/frontend-security-inspector/SKILL|Frontend Security Inspector]]'
+related:
+    []
+depends_on:
+    - '[[skills/frontend-security-inspector/SKILL|Frontend Security Inspector]]'
+---
+
 # React Security Checklist
 
 ## Unsafe rendering

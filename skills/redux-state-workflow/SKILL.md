@@ -1,8 +1,28 @@
----
+﻿---
 name: redux-state-workflow
 description: Use when working on Redux, Redux Toolkit, React Redux selectors,
     typed store hooks, or other shared client-state changes that behave like a
     store layer.
+id: 'agents.skills.redux-state-workflow.skill'
+title: 'Redux State Workflow'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'redux-state-workflow'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/state'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/redux-state-workflow/references/anti-patterns|Anti-Patterns]]'
+    - '[[skills/redux-state-workflow/references/selector-rules|Selector Rules]]'
+    - '[[skills/redux-state-workflow/references/state-patterns|State Patterns]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Redux State Workflow

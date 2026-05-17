@@ -1,6 +1,27 @@
----
+﻿---
 name: webdev-assistant-sync
 description: Use when syncing the shared agent bundle from or to `git@github.com:ytvee-dev/webdev-assistant.git`, including `sync-down`, `publish-up` through a new branch and GitHub PR, or an explicit branch-push fallback when upstream `main` does not exist yet.
+id: 'agents.skills.webdev-assistant-sync.skill'
+title: 'Webdev Assistant Sync'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webdev-assistant-sync'
+tags:
+    - 'agents/skill-package'
+    - 'agents/sync'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/webdev-assistant-sync/references/git-preflight|Git Preflight]]'
+    - '[[skills/webdev-assistant-sync/references/path-contract|Path Contract]]'
+    - '[[skills/webdev-assistant-sync/references/publish-up|Publish Up]]'
+    - '[[skills/webdev-assistant-sync/references/sync-down|Sync Down]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Webdev Assistant Sync
@@ -39,6 +60,9 @@ Before acting:
   or configuration.
 - Publishable checkout-root bundle content is limited to `AGENTS.md`,
   `SUMMARY.md`, `common/**`, `skills/**`, `README.md`, and `.gitignore`.
+- Publishable Markdown files must keep graph frontmatter valid before commit or
+  publication. Local-only `.agents/project/**` and `.agents/.obsidian/**` must
+  never be staged.
 - `.agents/AGENTS.md` is the canonical publishable policy file; the host
   repository root `AGENTS.md` is a stable pointer to it, not a synchronized
   copy.
@@ -59,6 +83,9 @@ Before acting:
   success while eligible publishable documentation changes remain uncommitted.
 - After committing publishable documentation, verify that eligible publishable
   paths have no remaining staged or unstaged changes before continuing.
+- Before committing or publishing Markdown changes, verify every staged
+  publishable Markdown file starts with frontmatter and keeps `SKILL.md`
+  `name`/`description` first.
 - Do not switch `.agents/` branches while uncommitted or unmerged changes are
   present; resolve, commit, or stop and report the exact paths first.
 - Stage and commit only eligible publishable paths before creating a push

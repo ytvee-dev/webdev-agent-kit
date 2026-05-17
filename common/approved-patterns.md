@@ -1,3 +1,23 @@
+﻿---
+id: 'agents.common.approved-patterns'
+title: 'Approved Patterns'
+doc_type: 'common-rule'
+layer: 'common'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/common'
+    - 'docs/policy'
+parent:
+    - '[[AGENTS|Canonical Agent Policy]]'
+related:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+depends_on:
+    []
+---
+
 # Approved Patterns
 
 Purpose: record bundle-wide implementation patterns that are safe to reuse

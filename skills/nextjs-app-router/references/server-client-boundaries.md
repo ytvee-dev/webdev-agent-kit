@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.nextjs-app-router.references.server-client-boundaries'
+title: 'Server/Client Boundaries'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'nextjs-app-router'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/nextjs'
+    - 'agents/reference'
+parent:
+    - '[[skills/nextjs-app-router/SKILL|Next.js App Router]]'
+related:
+    []
+depends_on:
+    - '[[skills/nextjs-app-router/SKILL|Next.js App Router]]'
+---
+
 # Server/Client Boundaries
 
 ## Default: server-first

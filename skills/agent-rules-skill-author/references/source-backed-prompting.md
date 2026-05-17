@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.agent-rules-skill-author.references.source-backed-prompting'
+title: 'Source-Backed Prompting'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'agent-rules-skill-author'
+tags:
+    - 'agents/skill-package'
+    - 'agents/authoring'
+    - 'agents/reference'
+parent:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+related:
+    []
+depends_on:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+---
+
 # Source-Backed Prompting
 
 Use these sources when shaping agent rules, skill triggers, or workflow

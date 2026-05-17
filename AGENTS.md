@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.agents'
+title: 'AGENTS.md'
+doc_type: 'policy'
+layer: 'bundle'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/policy'
+    - 'docs/entrypoint'
+parent:
+    []
+related:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[README|webdev-assistant README]]'
+    - '[[common/documentation-maintenance|Documentation Maintenance]]'
+depends_on:
+    []
+---
+
 # AGENTS.md
 
 This file is the canonical policy entrypoint for the embedded `.agents/`
@@ -46,6 +67,9 @@ not need to name a skill explicitly.
   notes.
 - After changing host code or documentation structure, update the relevant local
   `.agents/project/**` overlays in the same task.
+- Every Markdown file in `.agents/**` must keep graph frontmatter current.
+  Treat it as navigation metadata only; workflow instructions belong in the
+  document body.
 
 ## Generic Workflow Rules
 

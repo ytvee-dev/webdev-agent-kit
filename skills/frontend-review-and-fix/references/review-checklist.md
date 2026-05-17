@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.frontend-review-and-fix.references.review-checklist'
+title: 'Review Checklist'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-review-and-fix'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/review'
+    - 'agents/reference'
+parent:
+    - '[[skills/frontend-review-and-fix/SKILL|Frontend Review and Fix]]'
+related:
+    []
+depends_on:
+    - '[[skills/frontend-review-and-fix/SKILL|Frontend Review and Fix]]'
+---
+
 # Review Checklist
 
 ## Code quality

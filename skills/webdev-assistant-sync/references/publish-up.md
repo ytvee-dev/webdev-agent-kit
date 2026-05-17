@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.webdev-assistant-sync.references.publish-up'
+title: 'Publish Up'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webdev-assistant-sync'
+tags:
+    - 'agents/skill-package'
+    - 'agents/sync'
+    - 'agents/reference'
+parent:
+    - '[[skills/webdev-assistant-sync/SKILL|Webdev Assistant Sync]]'
+related:
+    []
+depends_on:
+    - '[[skills/webdev-assistant-sync/SKILL|Webdev Assistant Sync]]'
+---
+
 # Publish Up
 
 Use this flow when the user wants to publish generic bundle changes back to
@@ -88,13 +109,19 @@ git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> diff --cached --check
 
 9. If staged local-only paths are listed, unstage them, stop, and report the
    paths. Never commit `project/**`, `upstream/**`, or host-project files.
-10. Commit on local `main` with the shared naming contract:
+10. Verify staged Markdown frontmatter before committing:
+    - every staged `*.md` starts with `---`;
+    - every staged `skills/*/SKILL.md` keeps `name` and `description` as the
+      first frontmatter fields;
+    - frontmatter links are metadata only and do not replace body workflow
+      instructions.
+11. Commit on local `main` with the shared naming contract:
 
 ```powershell
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> commit -m "<TAG>(docs): <short description>"
 ```
 
-11. Verify that the commit captured every eligible publishable documentation
+12. Verify that the commit captured every eligible publishable documentation
     change:
 
 ```powershell
@@ -109,7 +136,7 @@ uncommitted.
 
 ### Phase 2: Publish Through A PR Branch
 
-12. Rebase the local publication commit on the latest `origin/main`:
+13. Rebase the local publication commit on the latest `origin/main`:
 
 ```powershell
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> fetch origin main
@@ -118,27 +145,27 @@ git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> pull --rebase origin main
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> rev-list --left-right --count origin/main...main
 ```
 
-13. If local `main` is not ahead of `origin/main` after the publication commit,
+14. If local `main` is not ahead of `origin/main` after the publication commit,
     stop and report `nothing to publish`.
-14. If local `main` has ahead commits that are not part of the current
+15. If local `main` has ahead commits that are not part of the current
     publication, stop and report them instead of creating a mixed PR.
-15. Re-run the eligible publishable path check from step 11. If any eligible
+16. Re-run the eligible publishable path check from step 12. If any eligible
     path is listed, stop and commit it on local `main` before continuing.
-16. Confirm the branch name does not already exist locally or remotely. If it
+17. Confirm the branch name does not already exist locally or remotely. If it
     exists, choose a new `[fix|feat]-[description]` before continuing.
-17. Create the branch from local `main`:
+18. Create the branch from local `main`:
 
 ```powershell
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b <TAG>-<DESCRIPTION>
 ```
 
-18. Push the branch to `origin`.
-19. Create the PR through the GitHub connector with base `main` and title
+19. Push the branch to `origin`.
+20. Create the PR through the GitHub connector with base `main` and title
     `<TAG>(docs): <short description>`.
 
-20. If the connector is missing, request it and stop instead of faking a PR URL
+21. If the connector is missing, request it and stop instead of faking a PR URL
     or switching to `gh`.
-21. Return the local checkout to `main`:
+22. Return the local checkout to `main`:
 
 ```powershell
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout main
@@ -170,23 +197,25 @@ git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout --orphan <TAG>-<
 7. Stage only eligible publishable paths with the same staging commands from
    Phase 1, and keep `project/**` and other local-only paths out of the staged
    change set.
-8. Commit with the shared naming contract:
+8. Verify staged Markdown frontmatter with the same checks as the normal PR
+   flow.
+9. Commit with the shared naming contract:
 
 ```powershell
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> commit -m "<TAG>(docs): <short description>"
 ```
 
-9. Run the eligible publishable path check from the normal flow. If any
+10. Run the eligible publishable path check from the normal flow. If any
    eligible path remains staged or unstaged, stop and commit it before pushing.
-10. Create the branch from local `main` when local `main` exists:
+11. Create the branch from local `main` when local `main` exists:
 
 ```powershell
 git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b <TAG>-<DESCRIPTION>
 ```
 
-11. Push the branch to `origin`.
-12. Return the local checkout to `main` when that branch exists locally.
-13. Report the pushed branch name explicitly and state that no PR was created
+12. Push the branch to `origin`.
+13. Return the local checkout to `main` when that branch exists locally.
+14. Report the pushed branch name explicitly and state that no PR was created
     because `origin/main` does not exist yet.
 
 ## Required outcome
@@ -196,6 +225,8 @@ git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> checkout -b <TAG>-<DESCRI
   `git pull --rebase origin main`.
 - Branch creation, push, PR creation, and publication success reporting are
   blocked until every eligible publishable documentation change is committed.
+- Markdown publication includes valid graph frontmatter; frontmatter remains
+  navigation metadata and body text remains the source of workflow rules.
 - Skipped local-only paths are reported explicitly when they exist.
 - In fallback mode, the branch is pushed without PR creation and the missing
   `origin/main` constraint is reported explicitly.

@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.frontend-typescript-rules.references.anti-patterns'
+title: 'Anti-Patterns'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'frontend-typescript-rules'
+tags:
+    - 'agents/skill-package'
+    - 'frontend/typescript'
+    - 'agents/reference'
+parent:
+    - '[[skills/frontend-typescript-rules/SKILL|Frontend TypeScript Rules]]'
+related:
+    []
+depends_on:
+    - '[[skills/frontend-typescript-rules/SKILL|Frontend TypeScript Rules]]'
+---
+
 # Anti-Patterns
 
 - `any`

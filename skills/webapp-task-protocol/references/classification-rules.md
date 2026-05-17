@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.webapp-task-protocol.references.classification-rules'
+title: 'Classification Rules'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webapp-task-protocol'
+tags:
+    - 'agents/skill-package'
+    - 'agents/routing'
+    - 'agents/reference'
+parent:
+    - '[[skills/webapp-task-protocol/SKILL|Webapp Task Protocol]]'
+related:
+    []
+depends_on:
+    - '[[skills/webapp-task-protocol/SKILL|Webapp Task Protocol]]'
+---
+
 # Classification Rules
 
 ## Project type

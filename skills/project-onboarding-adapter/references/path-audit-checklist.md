@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.project-onboarding-adapter.references.path-audit-checklist'
+title: 'Path Audit Checklist'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'project-onboarding-adapter'
+tags:
+    - 'agents/skill-package'
+    - 'agents/onboarding'
+    - 'agents/reference'
+parent:
+    - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
+related:
+    []
+depends_on:
+    - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
+---
+
 # Path Audit Checklist
 
 Use this checklist in Plan Mode to verify that `.agents` docs and skills refer

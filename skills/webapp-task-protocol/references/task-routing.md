@@ -1,3 +1,24 @@
+﻿---
+id: 'agents.skills.webapp-task-protocol.references.task-routing'
+title: 'Task Routing'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'webapp-task-protocol'
+tags:
+    - 'agents/skill-package'
+    - 'agents/routing'
+    - 'agents/reference'
+parent:
+    - '[[skills/webapp-task-protocol/SKILL|Webapp Task Protocol]]'
+related:
+    []
+depends_on:
+    - '[[skills/webapp-task-protocol/SKILL|Webapp Task Protocol]]'
+---
+
 # Task Routing
 
 ## Recommended chains

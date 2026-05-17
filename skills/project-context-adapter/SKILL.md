@@ -1,8 +1,30 @@
----
+﻿---
 name: project-context-adapter
 description: Use when repo-local project overlays or framework path indexes need
     refresh so the current project can be navigated and implemented without
     scanning the whole repo.
+id: 'agents.skills.project-context-adapter.skill'
+title: 'Project Context Adapter'
+doc_type: 'skill'
+layer: 'skill'
+status: 'active'
+publishable: true
+local_only: false
+skill: 'project-context-adapter'
+tags:
+    - 'agents/skill-package'
+    - 'agents/project-context'
+    - 'agents/skill'
+parent:
+    - '[[SUMMARY|Agent Documentation Summary]]'
+related:
+    - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
+    - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
+    - '[[project/stack-profile|Stack Profile]]'
+    - '[[project/react/path-index|React Path Index]]'
+    - '[[project/next/path-index|Next Path Index]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
 ---
 
 # Project Context Adapter
@@ -27,8 +49,11 @@ details inside the skills themselves.
     - framework-specific lookup paths by request type
     - current source paths after code changes
 3. Update only `.agents/project/**`.
-4. Do not rewrite core reusable skills for repo-specific details.
-5. Verify every updated project doc against the actual code and modules before
+4. Update graph frontmatter on every changed overlay, including
+   `publishable: false`, `local_only: true`, current `tags`, and links to the
+   relevant context, onboarding, routing, and framework skills.
+5. Do not rewrite core reusable skills for repo-specific details.
+6. Verify every updated project doc against the actual code and modules before
    treating it as current.
 
 ## Outputs
@@ -42,6 +67,9 @@ details inside the skills themselves.
 - `figma-profile.md`
 - `react/path-index.md`
 - `next/path-index.md`
+
+Each output Markdown file must keep graph frontmatter current. Path indexes
+must link back to the relevant framework skill and to the project context skill.
 
 ## Reference map
 

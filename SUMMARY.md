@@ -1,8 +1,35 @@
+﻿---
+id: 'agents.summary'
+title: 'Agent Documentation Summary'
+doc_type: 'summary'
+layer: 'bundle'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/summary'
+    - 'docs/navigation'
+parent:
+    - '[[AGENTS|Canonical Agent Policy]]'
+related:
+    - '[[README|webdev-assistant README]]'
+depends_on:
+    []
+---
+
 # Agent Documentation Summary
 
 Purpose: explain the current `.agents/` tree, reading order, and the split
 between upstream-managed bundle docs, reusable workflows, and host-project
 overlays.
+
+All Markdown files under `.agents/` carry graph frontmatter for Obsidian-style
+navigation. Treat `.agents` as the vault root when reading `parent`, `related`,
+and `depends_on` wikilinks.
+
+Graph frontmatter is required metadata, not a replacement for document body
+instructions. New or changed Markdown files must update frontmatter links in
+the same task.
 
 ## Reading order
 
@@ -82,6 +109,8 @@ overlays.
   `.agents/AGENTS.md`, not a synchronized mirror
 - `.agents/README.md` and `.agents/.gitignore` belong to the shared bundle repo
 - `.agents/project/**` stays local-only inside the nested checkout
+- `.agents/.obsidian/**` stores local Obsidian vault settings and is not
+  publishable
 - changes inside `.agents/` do not require updating the host-root `AGENTS.md`
   unless the canonical policy path itself changes
 
@@ -103,6 +132,11 @@ overlays.
   pointer, use `project-onboarding-adapter`; it only works in Plan Mode.
 - When a task changes publishable bundle structure, cross-links, skill names,
   or reading order, update this file in the same task.
+- When a task adds, renames, or moves Markdown files, update graph frontmatter
+  and Obsidian wikilinks in the same task.
+- When project onboarding, project context refresh, README maintenance,
+  sync-down drift repair, or skill authoring changes Markdown docs, update
+  graph frontmatter and keep workflow instructions in the body.
 - When a task changes user-facing agent workflow, skill lists, path policy, or
   sync/publication instructions, update `.agents/README.md` in the same task.
 - When shared client state, selectors, or Redux are in scope, include
