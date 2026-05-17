@@ -27,6 +27,10 @@ All Markdown files under `.agents/` carry graph frontmatter for Obsidian-style
 navigation. Treat `.agents` as the vault root when reading `parent`, `related`,
 and `depends_on` wikilinks.
 
+Graph frontmatter is required metadata, not a replacement for document body
+instructions. New or changed Markdown files must update frontmatter links in
+the same task.
+
 ## Reading order
 
 1. Start with `AGENTS.md`.
@@ -130,6 +134,9 @@ and `depends_on` wikilinks.
   or reading order, update this file in the same task.
 - When a task adds, renames, or moves Markdown files, update graph frontmatter
   and Obsidian wikilinks in the same task.
+- When project onboarding, project context refresh, README maintenance,
+  sync-down drift repair, or skill authoring changes Markdown docs, update
+  graph frontmatter and keep workflow instructions in the body.
 - When a task changes user-facing agent workflow, skill lists, path policy, or
   sync/publication instructions, update `.agents/README.md` in the same task.
 - When shared client state, selectors, or Redux are in scope, include

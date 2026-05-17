@@ -60,6 +60,9 @@ Before acting:
   or configuration.
 - Publishable checkout-root bundle content is limited to `AGENTS.md`,
   `SUMMARY.md`, `common/**`, `skills/**`, `README.md`, and `.gitignore`.
+- Publishable Markdown files must keep graph frontmatter valid before commit or
+  publication. Local-only `.agents/project/**` and `.agents/.obsidian/**` must
+  never be staged.
 - `.agents/AGENTS.md` is the canonical publishable policy file; the host
   repository root `AGENTS.md` is a stable pointer to it, not a synchronized
   copy.
@@ -80,6 +83,9 @@ Before acting:
   success while eligible publishable documentation changes remain uncommitted.
 - After committing publishable documentation, verify that eligible publishable
   paths have no remaining staged or unstaged changes before continuing.
+- Before committing or publishing Markdown changes, verify every staged
+  publishable Markdown file starts with frontmatter and keeps `SKILL.md`
+  `name`/`description` first.
 - Do not switch `.agents/` branches while uncommitted or unmerged changes are
   present; resolve, commit, or stop and report the exact paths first.
 - Stage and commit only eligible publishable paths before creating a push

@@ -49,8 +49,11 @@ details inside the skills themselves.
     - framework-specific lookup paths by request type
     - current source paths after code changes
 3. Update only `.agents/project/**`.
-4. Do not rewrite core reusable skills for repo-specific details.
-5. Verify every updated project doc against the actual code and modules before
+4. Update graph frontmatter on every changed overlay, including
+   `publishable: false`, `local_only: true`, current `tags`, and links to the
+   relevant context, onboarding, routing, and framework skills.
+5. Do not rewrite core reusable skills for repo-specific details.
+6. Verify every updated project doc against the actual code and modules before
    treating it as current.
 
 ## Outputs
@@ -64,6 +67,9 @@ details inside the skills themselves.
 - `figma-profile.md`
 - `react/path-index.md`
 - `next/path-index.md`
+
+Each output Markdown file must keep graph frontmatter current. Path indexes
+must link back to the relevant framework skill and to the project context skill.
 
 ## Reference map
 

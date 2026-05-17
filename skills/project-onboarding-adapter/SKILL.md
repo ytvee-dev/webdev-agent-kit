@@ -92,7 +92,9 @@ When Plan Mode is active:
 6. Use `references/adaptation-checklist.md` to collect project facts.
 7. Use `references/path-audit-checklist.md` to find missing, stale, or
    template-only paths in bundle docs and skill reference maps.
-8. Produce a complete adaptation plan. Do not edit files in Plan Mode.
+8. Include graph frontmatter and Obsidian link updates for every planned
+   `.agents/project/**` overlay and any publishable docs whose links drifted.
+9. Produce a complete adaptation plan. Do not edit files in Plan Mode.
 
 ## Required Plan Contents
 
@@ -108,6 +110,8 @@ The adaptation plan must include:
 - path drift findings across `.agents/AGENTS.md`, `.agents/SUMMARY.md`,
   `.agents/README.md`, `.agents/common/**`, `.agents/skills/**`, and
   `.agents/project/**`;
+- graph frontmatter and wikilink updates needed after adaptation, including
+  `publishable: false` and `local_only: true` for `.agents/project/**`;
 - explicit exclusions for generated, vendor, build, cache, and local-only
   paths;
 - verification commands to run after implementation;
@@ -125,6 +129,8 @@ agent should:
 - keep `.agents/AGENTS.md` canonical and never mirror it into the host-root
   `AGENTS.md`;
 - write factual repo-specific context into `.agents/project/**`;
+- create or update graph frontmatter and `.agents`-relative Obsidian wikilinks
+  for every changed Markdown overlay;
 - keep reusable instructions in `.agents/common/**` and `.agents/skills/**`;
 - avoid generated, vendor, build, cache, production, and secret-bearing paths;
 - run the verification commands listed in the plan.
@@ -136,6 +142,8 @@ Before finishing the Plan Mode response, verify:
 - the response is a plan only and contains no applied changes;
 - root pointer handling is explicit;
 - every expected `.agents/project/**` overlay is accounted for;
+- planned overlays include graph frontmatter and current links to relevant
+  context skills;
 - path audit results distinguish real missing paths from documented templates;
 - no host-project facts are planned for publishable bundle docs;
 - the plan names relevant verification commands or states why none were found.

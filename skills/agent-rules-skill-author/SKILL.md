@@ -85,7 +85,14 @@ Before creating or materially changing a skill package:
 6. Keep `SKILL.md` focused on trigger, workflow, defaults, and gotchas. Move
    detailed examples, rubrics, and optional variants into linked
    `references/`.
-7. Run a cold-read check: another agent with only the frontmatter and the
+7. Add graph frontmatter to every new Markdown file. In `SKILL.md`, keep
+   `name` and `description` first, then add `id`, `title`, `doc_type`,
+   `layer`, `status`, `publishable`, `local_only`, `skill`, `tags`, `parent`,
+   `related`, and `depends_on`.
+8. Link each new reference or asset back to the owning `SKILL.md`, and update
+   the owning skill's `related` links. If the skill changes routing, update
+   graph links in `SUMMARY.md`, `README.md`, and neighboring skills.
+9. Run a cold-read check: another agent with only the frontmatter and the
    linked files must know when to use the skill, what to do, when to stop, and
    how to verify the result.
 
@@ -141,6 +148,9 @@ imprecise or inconsistent results.
 - Keep graph frontmatter current on every Markdown file in `.agents/**`. For
   `SKILL.md`, preserve Codex-critical `name` and `description` as the first
   frontmatter fields before `id`, `title`, `doc_type`, links, and tags.
+- Treat graph frontmatter as navigation metadata. Do not put binding workflow
+  steps, hidden policy, or long operational instructions into frontmatter; put
+  them in the document body.
 - Write instructions in imperative form with short rule blocks and checklists.
 - Prefer one explicit rule over several overlapping softer rules.
 - Keep skill selection prompt-driven. The user should not need to name a skill
@@ -162,6 +172,8 @@ imprecise or inconsistent results.
 - Add graph metadata to new Markdown files, link references/assets back to the
   owning `SKILL.md`, and use `.agents`-relative Obsidian wikilinks in
   `parent`, `related`, and `depends_on`.
+- Update graph links when skill names, reference files, assets, routing,
+  ownership, publishable/local-only status, or related workflows change.
 
 ## Validation workflow
 

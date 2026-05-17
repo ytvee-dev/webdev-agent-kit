@@ -67,6 +67,9 @@ not need to name a skill explicitly.
   notes.
 - After changing host code or documentation structure, update the relevant local
   `.agents/project/**` overlays in the same task.
+- Every Markdown file in `.agents/**` must keep graph frontmatter current.
+  Treat it as navigation metadata only; workflow instructions belong in the
+  document body.
 
 ## Generic Workflow Rules
 

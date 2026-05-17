@@ -54,6 +54,9 @@ depends_on:
   policies before suggesting follow-up work.
 - Check whether code changes require updates to `.agents/project/**`; if they
   do, route the update through `project-context-adapter` before closing the task.
+- When review or follow-up fixes update `.agents/project/**`, verify those
+  overlays keep graph frontmatter, local-only flags, and current links to the
+  relevant context and framework skills.
 
 ## Reference map
 

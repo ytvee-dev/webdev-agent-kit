@@ -50,6 +50,9 @@ Before editing `.agents/README.md`:
   user-facing workflows.
 - Check whether skill names, trigger intent, reading order, publish/sync rules,
   and root `AGENTS.md` behavior changed.
+- Check whether graph frontmatter links for `README.md`, `SUMMARY.md`,
+  `AGENTS.md`, and affected skills still describe the current documentation
+  graph.
 - Check whether `.agents/README.md` still answers the practical user questions:
   what this bundle is, where canonical rules live, how to use skills, what is
   local-only, how sync/publication works, and which files not to edit.
@@ -72,6 +75,8 @@ Before editing `.agents/README.md`:
   `.agents/project/**`.
 - Keep README aligned with `.agents/AGENTS.md`, `.agents/SUMMARY.md`, and the
   actual skill folders. Link users to specific skills for deeper procedure.
+- Keep README graph frontmatter current. Frontmatter is navigation metadata,
+  not a replacement for user-facing README text.
 - When showing `agents/openai.yaml`, use the actual bundle shape with
   `interface:` and `policy:`.
 
@@ -103,4 +108,6 @@ Before finishing:
    pattern.
 5. Verify examples match actual bundle conventions, especially
    `agents/openai.yaml`.
-6. Run markdown formatting validation for the changed docs.
+6. Verify README graph frontmatter and central links still point to existing
+   `.agents` documents.
+7. Run markdown formatting validation for the changed docs.

@@ -49,6 +49,8 @@ search, git state, diffs, formatting, or other command output.
   `depends_on`.
 - In `SKILL.md`, keep Codex-critical `name` and `description` first in
   frontmatter before graph metadata.
+- Treat graph frontmatter as navigation metadata, not executable workflow
+  instructions. Binding rules and procedures must stay in the document body.
 - Keep the nested bundle git checkout rooted at `.agents/`.
 - Keep `.agents/AGENTS.md` as the canonical publishable policy copy.
 - Keep the repository root `AGENTS.md` as a stable pointer to
@@ -70,6 +72,13 @@ search, git state, diffs, formatting, or other command output.
 - If adding or renaming a Markdown file in `.agents/**`, add or update graph
   frontmatter and use wikilinks relative to `.agents` as the Obsidian vault
   root.
+- Update graph frontmatter links when a document is created, deleted, renamed,
+  moved, retitled, changes purpose, changes `doc_type`, changes
+  publishable/local-only status, joins or leaves a skill chain, or changes its
+  owning skill.
+- Update graph frontmatter links after project onboarding, project overlay
+  refresh, sync-down drift repair, README maintenance, and any skill authoring
+  task that adds or changes references, assets, routing, or related skills.
 - If a new approved pattern or anti-pattern is added, decide whether it belongs
   in `.agents/common/**` or only in `.agents/project/**`.
 - If a task reveals documentation drift, fix it in the same task instead of
