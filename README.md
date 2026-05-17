@@ -300,6 +300,29 @@ fixes.
 
 Этот skill редактирует только `.agents/project/**`.
 
+### `project-onboarding-adapter`
+
+Используется для первичной адаптации `webdev-assistant` в новом проекте:
+`адаптируйся`, `адаптируй проект`, `подключи .agents`,
+`обнови контекст проекта`, `initialize Codex project context`.
+
+Skill работает только в Plan Mode. Если пользователь вызывает его в обычном
+режиме, агент должен коротко ответить:
+
+```text
+Этот навык работает только в Plan Mode. Включите Plan Mode и повторите: "адаптируйся".
+```
+
+В Plan Mode skill не меняет файлы. Он анализирует host project, проверяет
+root `AGENTS.md`, планирует заполнение `.agents/project/**`, сверяет пути в
+`.agents` docs и skills, затем выдает decision-complete план адаптации.
+Выполнение начинается отдельным запросом после выхода из Plan Mode.
+
+Отличие от `project-context-adapter`: `project-onboarding-adapter` отвечает за
+первичное подключение проекта, root pointer и полный path/rules audit, а
+`project-context-adapter` обновляет уже существующие overlays после drift или
+изменений в коде.
+
 ### `agent-rules-skill-author`
 
 Используется для `AGENTS.md`, `.agents/common/**`, `.agents/project/**`,
@@ -431,6 +454,17 @@ agent-rules-skill-author
 -> readme-maintainer, если меняется README или user-facing workflow
 -> webdev-assistant-sync, если нужен sync-down или publish-up
 ```
+
+### Project onboarding
+
+```text
+project-onboarding-adapter
+-> project-context-adapter, когда пользователь позже попросит выполнить план
+-> agent-rules-skill-author, если plan audit нашел drift в reusable bundle docs
+```
+
+Этот workflow доступен только в Plan Mode. В обычном режиме агент не должен
+читать весь проект или начинать адаптацию.
 
 ### Bundle sync / publication
 
@@ -572,6 +606,7 @@ $webapp-task-protocol реализуй feature ...
 $technical-seo-app проверь metadata ...
 $frontend-security-inspector проведи security audit ...
 $agent-rules-skill-author создай skill ...
+$project-onboarding-adapter адаптируйся ...
 $webdev-assistant-sync publish-up ...
 ```
 

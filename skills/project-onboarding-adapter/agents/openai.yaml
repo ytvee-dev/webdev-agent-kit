@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Project Onboarding Adapter'
+    short_description: 'Plan first-time .agents adaptation for a new project'
+    default_prompt: 'Use $project-onboarding-adapter to plan adaptation of this project for the shared .agents bundle.'
+policy:
+    allow_implicit_invocation: true
