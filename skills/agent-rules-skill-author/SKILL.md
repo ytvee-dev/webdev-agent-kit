@@ -63,10 +63,17 @@ that policy.
   repo facts that belong in overlays.
 - When a task includes committing or branching `.agents/` documentation, follow
   the git naming contract in `.agents/common/documentation-maintenance.md`.
+- When a task includes `.agents/` documentation gitflow, keep local work on
+  `main`, commit only eligible publishable paths, create a new branch only for
+  push/PR, and return the local checkout to `main` afterward.
 - Keep `.agents/` as the nested shared-bundle repo and keep
   `.agents/project/**` local-only inside it.
-- Keep `.agents/AGENTS.md` synchronized with the repository root `AGENTS.md`.
+- Keep `.agents/AGENTS.md` as canonical policy and keep the repository root
+  `AGENTS.md` as a stable pointer, not a synchronized mirror.
 - If `.agents/` structure changes, update `.agents/SUMMARY.md` in the same task.
+- If documentation changes affect user-facing workflow, skill lists, path
+  policy, or sync/publication instructions, update `.agents/README.md` in the
+  same task using `readme-maintainer`.
 - If a new skill changes how tasks should be routed, update the relevant
   path-index or skill-routing docs in the same task.
 - If a new approved pattern or anti-pattern is added, inspect the related

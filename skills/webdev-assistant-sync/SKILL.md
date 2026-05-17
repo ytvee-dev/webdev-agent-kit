@@ -26,8 +26,8 @@ Before acting:
 4. Read `references/path-contract.md`.
 5. Read `references/git-preflight.md`.
 6. Read the workflow reference for the requested mode:
-   - `references/sync-down.md`
-   - `references/publish-up.md`
+    - `references/sync-down.md`
+    - `references/publish-up.md`
 
 ## Core rules
 
@@ -39,8 +39,9 @@ Before acting:
   or configuration.
 - Publishable checkout-root bundle content is limited to `AGENTS.md`,
   `SUMMARY.md`, `common/**`, `skills/**`, `README.md`, and `.gitignore`.
-- `.agents/AGENTS.md` is the canonical publishable copy; the host repository
-  root `AGENTS.md` must stay synchronized with it.
+- `.agents/AGENTS.md` is the canonical publishable policy file; the host
+  repository root `AGENTS.md` is a stable pointer to it, not a synchronized
+  copy.
 - For documentation publication, use branch names in the form
   `[fix|feat]-[description]`.
 - Keep `description` to 1-3 lowercase kebab-case words that summarize the
@@ -51,6 +52,25 @@ Before acting:
 - Use `fix(docs): <short description>` or `feat(docs): <short description>` for
   documentation commits and reuse the same core description in the branch name
   and PR title.
+- Keep the local `.agents/` checkout on `main` by default; treat feature
+  branches as push/PR transport only.
+- Commit publishable documentation changes locally on `main`.
+- Do not create a publication branch, push, open a PR, or report publication
+  success while eligible publishable documentation changes remain uncommitted.
+- After committing publishable documentation, verify that eligible publishable
+  paths have no remaining staged or unstaged changes before continuing.
+- Do not switch `.agents/` branches while uncommitted or unmerged changes are
+  present; resolve, commit, or stop and report the exact paths first.
+- Stage and commit only eligible publishable paths before creating a push
+  branch.
+- Do not mirror `.agents/AGENTS.md` into the host-root `AGENTS.md`; update the
+  root pointer only when the canonical policy path changes.
+- Never push local `main` directly to `origin`.
+- Before pushing a publication branch, run `git pull --rebase origin main`
+  while on local `main`.
+- After that pull, create the new `[fix|feat]-[description]` branch from local
+  `main`, push it, create the PR to `main`, and then return the local checkout
+  to `main`.
 - All git commands for the upstream checkout must use
   `git -c safe.directory=<absolute-upstream-path> -C <absolute-upstream-path> ...`.
 - For `publish-up`, GitHub connector access is mandatory for PR creation.
@@ -68,11 +88,11 @@ Before acting:
 ## Trigger expectations
 
 - Load this skill for prompts such as:
-  - “создай PR в webdev-assistant”
-  - “опубликуй shared rules upstream”
-  - “запушь generic skill changes в assistant repo”
-  - “просто закомить и запушь ветку в webdev-assistant”
-  - “подтяни обновления webdev-assistant в текущий проект”
+    - “создай PR в webdev-assistant”
+    - “опубликуй shared rules upstream”
+    - “запушь generic skill changes в assistant repo”
+    - “просто закомить и запушь ветку в webdev-assistant”
+    - “подтяни обновления webdev-assistant в текущий проект”
 - Use `sync-down` when the user wants local bundle updates from upstream.
 - Use `publish-up` when the user wants to publish generic bundle changes back to
   upstream.

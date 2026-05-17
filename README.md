@@ -1,120 +1,140 @@
 # webdev-assistant
 
-Shared upstream repository for the reusable `AGENTS.md` + `.agents/` bundle.
+Переиспользуемый набор правил и навыков для агентов, которые работают с
+React, Next.js, TypeScript, CSS Modules и документацией самого набора.
 
-## Purpose
+## С чего начать
 
-This nested repository stores only generic agent-bundle documentation and
-reusable skill workflows that can be embedded into many different host
-projects.
+- Канонические правила находятся в `.agents/AGENTS.md`.
+- Корневой `AGENTS.md` в проекте только указывает на `.agents/AGENTS.md`.
+- Не копируйте содержимое `.agents/AGENTS.md` в корневой `AGENTS.md`.
+- Используйте `.agents/SUMMARY.md`, чтобы быстро найти нужный навык, общий
+  документ или локальное описание проекта.
 
-Host-project facts must stay local and must not be published here.
+## Что лежит в `.agents`
 
-## Publishable scope
+- `AGENTS.md` - главные публикуемые правила набора.
+- `SUMMARY.md` - карта документов, навыков, локальных описаний и порядка
+  чтения.
+- `common/**` - общие переиспользуемые правила для публикации во внешний
+  репозиторий.
+- `skills/**` - переиспользуемые рабочие процессы, которые агент загружает для
+  конкретной задачи.
+- `project/**` - локальные факты текущего проекта. Этот каталог игнорируется и
+  не публикуется во внешний репозиторий.
+- `.gitignore` - защищает локальные описания проекта от публикации.
 
-This repository is expected to contain:
+## Как использовать
+
+1. Прочитайте корневой `AGENTS.md`.
+2. Перейдите по его указанию к `.agents/AGENTS.md`.
+3. По `.agents/SUMMARY.md` выберите навык, который подходит к задаче.
+4. Читайте только те `common/**`, `project/**`, справочные файлы и исходные
+   файлы, которые нужны для текущей работы.
+5. Для реализации в React или Next.js начинайте с `webapp-task-protocol`.
+6. Для финальной проверки реализации используйте `frontend-review-and-fix`.
+7. Для изменений документации проверьте, нужно ли обновить этот README.
+
+## Главные навыки
+
+- `webapp-task-protocol` - классификация задачи React/Next.js и выбор цепочки
+  навыков.
+- `nextjs-app-router` - маршруты App Router, макеты, метаданные и границы
+  клиент/сервер.
+- `react-component-workflow` - компоненты, свойства, хуки, состояние и
+  поведение интерфейса.
+- `redux-state-workflow` - Redux, селекторы, типизированные хуки и общее
+  клиентское состояние.
+- `frontend-typescript-rules` - строгий TypeScript и безопасные изменения.
+- `boundary-input-validation` - валидация входных данных без новых
+  зависимостей.
+- `frontend-review-and-fix` - финальная проверка, регрессионные проверки и
+  верификация.
+- `agent-rules-skill-author` - поддержка правил агентов, общих документов,
+  локальных описаний и пакетов навыков.
+- `readme-maintainer` - поддержка этого README в точном, кратком и
+  человекопонятном состоянии.
+- `webdev-assistant-sync` - синхронизация и публикация общего набора через
+  вложенный репозиторий `.agents`.
+
+Полный список навыков смотрите в `.agents/SUMMARY.md`.
+
+## Локальный контекст проекта
+
+Факты конкретного проекта храните только в `.agents/project/**`.
+
+Туда относятся:
+
+- стек и версии зависимостей;
+- карта маршрутов, компонентов и серверных участков;
+- правила стилей и токены;
+- локальные команды проверки;
+- проектные разрешенные паттерны и анти-паттерны.
+
+Не переносите эти факты в `AGENTS.md`, `common/**`, `skills/**` или этот
+README, если правило не является общим и переиспользуемым.
+
+## Синхронизация с внешним репозиторием
+
+Для получения изменений из внешнего репозитория используйте
+`webdev-assistant-sync` в режиме `sync-down`.
+
+Правила:
+
+- Выполняйте git-команды только внутри `.agents`.
+- Не трогайте `project/**`.
+- Корневой `AGENTS.md` должен оставаться стабильным указателем.
+- После синхронизации повторите проверку Markdown.
+
+## Публикация во внешний репозиторий
+
+Для публикации во внешний репозиторий используйте `webdev-assistant-sync` в
+режиме `publish-up`.
+
+Публиковать можно только эти пути внутри `.agents`:
 
 - `AGENTS.md`
 - `SUMMARY.md`
 - `common/**`
 - `skills/**`
-- this `README.md`
+- `README.md`
 - `.gitignore`
 
-## Never publish
+Нельзя публиковать `project/**`, `upstream/**`, исходный код приложения, тесты,
+конфиги и любые файлы принимающего проекта.
 
-Do not publish any host-project-only content here, including:
+Обязательный порядок работы с git:
 
-- `project/**`
-- old helper folders such as `upstream/**`
-- application source code
-- application tests
-- application configs
-- host repository root `README.md`
-- any local project examples or stack facts
+1. Работайте локально на `.agents` `main`.
+2. Коммитьте публикуемые изменения документации локально на `main`.
+3. Не пушьте локальный `main` напрямую.
+4. Перед публикацией выполните `git pull --rebase origin main` внутри
+   `.agents`.
+5. Создайте короткоживущую ветку `[fix|feat]-[description]`.
+6. Запушьте эту ветку и откройте PR в `main`.
+7. Верните локальную рабочую копию `.agents` на `main`.
 
-## Local workflow
+Форматы имен:
 
-The canonical local checkout path is:
+- ветка: `[fix|feat]-[description]`
+- коммит: `fix(docs): <short description>` или
+  `feat(docs): <short description>`
+- заголовок PR: тот же тип и то же ядро описания, что в теме коммита
 
-```text
-.agents/
-```
+## Поддержка README
 
-All upstream git commands must run only inside that checkout and must always
-use:
+После любого изменения документации в `.agents` используйте `readme-maintainer`
+или выполните такую же проверку вручную.
 
-```text
-git -c safe.directory=<ABS_UPSTREAM> -C <ABS_UPSTREAM> ...
-```
+Обновите этот README в той же задаче, если изменились:
 
-Do not run publication git commands from the host project repository root.
+- пользовательский рабочий процесс;
+- список или назначение навыков;
+- публикуемые или локальные пути;
+- указатель на канонические правила;
+- правила sync-down, publish-up, branch, commit или PR.
 
-## Root AGENTS Mirror
-
-- `AGENTS.md` inside this nested repo is the canonical publishable policy file.
-- `../AGENTS.md` in the host project root is a synchronized mirror of this file.
-- Bundle sync must keep those two files aligned.
-
-## Sync Down
-
-Use the `webdev-assistant-sync` skill in `sync-down` mode to:
-
-1. refresh the upstream checkout from `origin/main`
-2. update tracked publishable files directly inside `.agents/`
-3. mirror `.agents/AGENTS.md` to the host project root `AGENTS.md`
-4. leave `project/**` and other local-only files untouched
-
-## Publish Up
-
-Use the `webdev-assistant-sync` skill in `publish-up` mode to:
-
-1. refresh upstream `main`
-2. compute the eligible bundle change set from this nested checkout
-3. keep `project/**` and other local-only files out of the staged change set
-4. create a new branch from refreshed `main`
-5. commit and push
-6. open a PR to `main` through the GitHub connector
-
-If `origin/main` does not exist yet and the user explicitly asks only for a
-branch push, use the push-only fallback:
-
-1. compute the same eligible bundle change set
-2. create a branch in the form `[fix|feat]-[description]`
-3. commit and push the branch
-4. report that no PR was created because `main` does not exist yet
-
-### Required naming
-
-- branch: `[fix|feat]-[description]`
-- branch `description`: 1-3 lowercase kebab-case words that summarize the
-  grouped documentation commits
-- commit: `fix(docs): <short description>` or `feat(docs): <short description>`
-- PR title: reuse the same tag and core description as the commit subject
-- PR base: `main`
-- do not use numbers, timestamps, ticket ids, repo names, or placeholders such
-  as `webdev`, `assistant`, or `bundle` in branch names unless the word is the
-  real subject of the change
-
-### Required preflight
-
-- `origin/main` must exist
-- GitHub connector must be available for PR creation
-- if `origin/main` is missing, stop and report the preflight failure instead of
-  inventing a bootstrap flow
-
-### Explicit fallback exception
-
-- if `origin/main` is missing and the user explicitly requests branch-only
-  publication without a PR, the skill may create and push a fallback branch
-  instead of stopping
-
-## Maintenance rule
-
-Whenever bundle structure, cross-links, or skill routing changes, update:
-
-- `AGENTS.md`
-- `SUMMARY.md`
-- relevant `common/**`
-- relevant `skills/**`
-- this `README.md` when the upstream management contract changed
+README должен отвечать на практический вопрос пользователя: как пользоваться
+набором и какие файлы нельзя трогать или публиковать. Не превращайте его в
+полный свод правил; детали должны оставаться в `.agents/AGENTS.md`,
+`.agents/SUMMARY.md` и профильных навыках.
