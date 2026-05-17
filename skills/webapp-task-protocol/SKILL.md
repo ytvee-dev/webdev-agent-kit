@@ -20,16 +20,16 @@ description: Use to classify React and Next.js application tasks, detect project
 
 1. Read `AGENTS.md`.
 2. Read framework indexes and overlay files based on task type:
-   - Always: `.agents/project/stack-profile.md`
-   - Implementation or refactor work: `.agents/common/approved-patterns.md`
-   - Implementation or refactor work with local addenda: `.agents/project/approved-patterns.md`
-   - Routing / layout / metadata / server-client work: `.agents/project/next/path-index.md`
-   - Component / hooks / client UI work: `.agents/project/react/path-index.md`
-   - Routing / architecture overview: `.agents/project/architecture-map.md`
-   - Styling or design-driven work: `.agents/project/styling-profile.md`
-   - Figma URL present: `.agents/project/figma-profile.md`
-   - Any implementation work: `.agents/common/anti-patterns.md`
-   - Local implementation exceptions or addenda: `.agents/project/anti-patterns.md`
+    - Always: `.agents/project/stack-profile.md`
+    - Implementation or refactor work: `.agents/common/approved-patterns.md`
+    - Implementation or refactor work with local addenda: `.agents/project/approved-patterns.md`
+    - Routing / layout / metadata / server-client work: `.agents/project/next/path-index.md`
+    - Component / hooks / client UI work: `.agents/project/react/path-index.md`
+    - Routing / architecture overview: `.agents/project/architecture-map.md`
+    - Styling or design-driven work: `.agents/project/styling-profile.md`
+    - Figma URL present: `.agents/project/figma-profile.md`
+    - Any implementation work: `.agents/common/anti-patterns.md`
+    - Local implementation exceptions or addenda: `.agents/project/anti-patterns.md`
 3. Read the affected source files and configuration files.
 4. Then choose the skill chain.
 
@@ -39,6 +39,9 @@ description: Use to classify React and Next.js application tasks, detect project
   to name a skill explicitly.
 - Prefer MCP tools and project indexes before broad repo scanning when the
   required tool or context is available.
+- Prefer filesystem MCP tools for reading file contents and directory structure
+  when available. Use shell commands for targeted search, git state, diffs, and
+  verification output.
 - Use this lookup fallback order: framework index -> targeted repo search ->
   user clarification.
 - Run an initial scan on the first substantive request and a delta scan on later

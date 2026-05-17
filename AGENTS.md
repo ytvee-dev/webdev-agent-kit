@@ -51,6 +51,11 @@ not need to name a skill explicitly.
 
 - Prefer MCP tools and repo-local documentation over broad guesswork whenever
   the required tool or context is available.
+- For file inspection, prefer filesystem MCP tools such as `read_text_file`,
+  `read_multiple_files`, `list_directory`, and `directory_tree` when they are
+  available for the target path. Use shell file reads only when filesystem MCP
+  access is unavailable, blocked, or when command output is the source of truth
+  for the task.
 - Prefer solutions that do not require installing new packages.
 - Before proposing or installing a package, check whether it already exists in
   the host repo and get explicit user approval before installation.

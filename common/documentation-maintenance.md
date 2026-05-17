@@ -13,6 +13,10 @@ Before changing bundle documentation:
 3. Read the affected `.agents/common/**`, `.agents/skills/**`, and
    `.agents/project/**` files.
 
+Use filesystem MCP read tools for documentation file contents and directory
+structure whenever they can access the target paths. Use shell commands only for
+search, git state, diffs, formatting, or other command output.
+
 ## Layer rules
 
 - Keep bundle-wide reusable rules in `.agents/common/**`.

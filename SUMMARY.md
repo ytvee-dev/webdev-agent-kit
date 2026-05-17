@@ -56,7 +56,8 @@ overlays.
 - `skills/project-context-adapter` - refresh repo overlays after structure
   drift
 - `skills/agent-rules-skill-author` - maintain `.agents/` and repo-local agent
-  policy
+  policy, including skill-quality rubric guidance for trigger precision,
+  source-backed workflows, progressive disclosure, and validation
 - `skills/readme-maintainer` - audit agent documentation and keep
   `.agents/README.md` concise, accurate, and user-facing
 - `skills/webdev-assistant-sync` - sync the shared bundle with the upstream
@@ -83,6 +84,9 @@ overlays.
 
 ## Navigation rules
 
+- Prefer filesystem MCP tools for reading file contents and directory
+  structure. Use shell commands for search, git state, diffs, and executable
+  checks when command output itself is needed.
 - Treat `.agents/common/**` as upstream-managed reusable bundle docs.
 - Treat `.agents/project/**` as repo-specific facts and policy overlays.
 - Treat `.agents/skills/**` as reusable workflows and reference material.
