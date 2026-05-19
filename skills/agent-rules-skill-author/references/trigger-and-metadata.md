@@ -23,9 +23,24 @@ depends_on:
 
 Use this guide when writing skill frontmatter and `agents/openai.yaml`.
 
+## Section Map
+
+- `Native versus local metadata` and `Frontmatter` for trigger contract shape.
+- `Trigger writing` and `Trigger evals` for matching quality.
+- `UI metadata` and `Metadata sync checklist` for `agents/openai.yaml` and
+  invocation policy.
+
+## Native versus local metadata
+
+- Native Codex trigger metadata is `name` plus `description`.
+- This bundle adds graph metadata after those native fields.
+- Keep `name` and `description` first so the native contract stays obvious.
+- Do not describe `.agents` graph fields as if Codex required them for
+  triggering. They are local navigation metadata.
+
 ## Frontmatter
 
-- Keep only `name` and `description`.
+- Keep native trigger information in `name` and `description`.
 - Use lowercase hyphen-case for `name`.
 - Write `description` as the primary trigger surface: what the skill does and
   when to use it.
@@ -37,6 +52,12 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
   shorten descriptions before matching.
 - Keep descriptions dense and informative. Codex includes skill descriptions in
   the initial skills list budget, so marketing phrasing wastes scarce context.
+- If the skill is `.agents`-specific, say so in the trigger wording or the
+  body instead of implying generic portability.
+- For `.agents` skills, append graph metadata after `name` and `description`
+  instead of replacing the native contract.
+- `metadata.short-description` is an official system-skill pattern for UI help,
+  not a trigger field. Use it only when it adds value.
 
 ## Trigger writing
 
@@ -68,16 +89,27 @@ Before finalizing trigger wording for a new or broadened skill:
 
 - Keep `display_name` human-readable and close to the skill title.
 - Keep `short_description` compact and specific.
+- Keep `short_description` within 25-64 characters.
 - Write `default_prompt` as a direct invocation sentence using `$skill-name`.
 - Keep `allow_implicit_invocation` aligned with prompt-driven skill selection.
   If a skill should run from user intent, set it to `true` and avoid manual-only
   language in `SKILL.md`.
+- Treat `icon_small`, `icon_large`, and `brand_color` as optional UI fields.
+- Use `dependencies.tools` when the skill depends on MCP servers or another
+  explicit tool contract. Keep dependency metadata factual and narrow.
+- Prefer `scripts/generate_openai_yaml.py` when regenerating `.agents`
+  `openai.yaml` files so quoting, length checks, and preserved policy fields
+  stay consistent.
 
 ## Metadata sync checklist
 
+- If the package is `.agents`-compatible, make that scope visible enough that a
+  reader will not mistake it for a strict native-portable skill.
 - `description` and `default_prompt` should point at the same workflow.
 - `short_description` should not promise more than the skill actually covers.
 - If the skill becomes broader or narrower, update both `SKILL.md` and
   `agents/openai.yaml` in the same change.
 - When trigger wording changes, refresh the trigger eval examples in the same
   pass so the boundary stays testable.
+- If `dependencies.tools` is present, keep it aligned with the real MCP or
+  connector dependency instead of speculative future tooling.

@@ -370,15 +370,26 @@ root `AGENTS.md`, планирует заполнение `.agents/project/**`, 
 Ключевые правила:
 
 - сначала выбрать слой: repo policy, common docs, project overlay или skill;
+- по умолчанию создавать и чинить именно `.agents`-compatible skills, а не
+  generic portable OpenAI skills;
+- strict native-portable OpenAI skill authoring включать только по явному
+  запросу на portability outside `.agents/`;
 - не смешивать reusable policy и project facts;
 - при создании skills сначала извлекать workflow из чата, repo docs, task
   traces и user corrections, а не писать skill с нуля по догадке;
+- различать native Codex contract и локальное `.agents` расширение: `name` и
+  `description` - trigger contract, graph fields - navigation metadata;
+- для новых `.agents` skills использовать local toolkit, если он подходит:
+  `init_agent_skill.py`, `generate_openai_yaml.py`, `validate_agent_skill.py`;
 - делать и trigger evals, и 2-3 realistic workflow evals, а не ограничиваться
   только frontmatter;
 - при создании skills определить trigger surface, should/should-not prompts,
   output shape, source-backed workflow и validation gates;
 - исправлять skill по reusable причинам, а не подгонять его под один prompt;
 - держать `SKILL.md` lean, details выносить в `references/`;
+- для длинных references добавлять TOC или section map near the top;
+- в `SKILL.md` не просто перечислять references, а явно писать, когда какой
+  reference читать;
 - синхронизировать `agents/openai.yaml` с intent skill.
 
 ### `readme-maintainer`
@@ -735,8 +746,9 @@ description: Use when ...
   initial skills list budget Codex;
 - для trigger quality нужны realistic should-trigger и near-miss
   should-not-trigger prompts;
-- после `description` должны идти graph metadata fields и связи с owning docs,
-  references/assets и related workflows;
+- native Codex contract - это `name` и `description`;
+- после них в этом bundle идут graph metadata fields и связи с owning docs,
+  references/assets и related workflows как локальное расширение;
 - body должен быть procedural: purpose, context, workflow, rules, validation,
   reference map;
 - body не должен переобъяснять весь домен.
@@ -771,6 +783,13 @@ instruction-only.
 Скрипты должны быть неинтерактивными, давать понятные ошибки и иметь понятный
 интерфейс запуска.
 
+Для `.agents` skill authoring есть локальный toolkit:
+
+- `scripts/init_agent_skill.py` - создать новый `.agents` skill package;
+- `scripts/generate_openai_yaml.py` - собрать или обновить `agents/openai.yaml`;
+- `scripts/validate_agent_skill.py` - проверить native constraints и локальные
+  `.agents` расширения.
+
 ### Когда добавлять `assets/`
 
 `assets/` нужен для шаблонов и ресурсов, которые агент использует в output:
@@ -784,20 +803,41 @@ instruction-only.
 
 ### Что писать в `agents/openai.yaml`
 
-Фактический формат в этом bundle:
+Фактический `.agents`-совместимый формат:
 
 ```yaml
 interface:
-  display_name: 'Human Readable Skill Name'
-  short_description: 'Short workflow description'
-  default_prompt: 'Use $skill-name to ...'
+  display_name: "Human Readable Skill Name"
+  short_description: "Short workflow description"
+  default_prompt: "Use $skill-name to ..."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#3B82F6"
 policy:
   allow_implicit_invocation: true
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "github"
+      description: "GitHub MCP server"
+      transport: "streamable_http"
+      url: "https://api.githubcopilot.com/mcp/"
 ```
 
 `allow_implicit_invocation: true` означает, что skill может включаться по user
 intent без явного `$skill-name`. Если поставить `false`, skill остается доступен
 для явного вызова, но не должен выбираться автоматически.
+
+Правила:
+
+- `display_name` - человекочитаемое название;
+- `short_description` - 25-64 characters;
+- `default_prompt`, если задан, должен содержать `$skill-name`;
+- icons и `brand_color` добавляются только когда реально нужны;
+- `dependencies.tools` нужен для фактических MCP/connector dependencies, а не
+  "на будущее";
+- для генерации или регенерации в этом bundle использовать
+  `scripts/generate_openai_yaml.py`.
 
 `agents/openai.yaml` нужно обновлять вместе с `SKILL.md`, если меняется trigger,
 scope или default prompt.

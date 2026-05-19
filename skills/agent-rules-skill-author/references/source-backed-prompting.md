@@ -25,6 +25,7 @@ Use these sources when shaping agent rules, skill triggers, or workflow
 instructions:
 
 - OpenAI Codex Agent Skills: https://developers.openai.com/codex/skills
+- OpenAI AGENTS guide: https://developers.openai.com/codex/guides/agents-md
 - OpenAI Codex Best Practices: https://developers.openai.com/codex/learn/best-practices
 - OpenAI Prompting: https://platform.openai.com/docs/guides/prompting
 - OpenAI Prompt Engineering: https://platform.openai.com/docs/guides/prompt-engineering
@@ -32,6 +33,12 @@ instructions:
 - OpenAI Docs MCP: https://developers.openai.com/learn/docs-mcp
 - OpenAI Reasoning Best Practices: https://developers.openai.com/api/docs/guides/reasoning-best-practices
 - OpenAI Agents Guidance: https://developers.openai.com/api/docs/guides/agents
+- Local OpenAI system skills:
+  - `codex-skills/skills/.system/skill-creator`
+  - `codex-skills/skills/.system/openai-docs`
+  - `codex-skills/skills/.system/skill-installer`
+- Agent Skills Specification and related third-party material only as secondary
+  context after OpenAI-native sources are exhausted
 - Agent Skills Specification: https://agentskills.io/specification
 - Agent Skills Best Practices: https://agentskills.io/skill-creation/best-practices
 - Agent Skills Description Optimization: https://agentskills.io/skill-creation/optimizing-descriptions
@@ -54,9 +61,18 @@ instructions:
 - Prefer eval-minded iteration over speculative prompt wording.
 - Keep missing requirements explicit and ask the user instead of guessing.
 
-## Transferable vs non-transferable ideas
+## OpenAI-first transfer rules
 
-Transferable to Codex skill authoring:
+- Treat the official OpenAI system `skill-creator` as the primary local model
+  for scaffolding, validation, `openai.yaml`, and resource packaging.
+- Treat Claude-oriented skill-creator patterns only as historical comparison,
+  not as the contract another `.agents` skill should inherit.
+- Reusable local scripts are acceptable when they implement Codex-compatible
+  scaffolding or validation without introducing a foreign workflow contract.
+- Keep local `.agents` extensions clearly separated from the native Codex skill
+  contract so another agent can tell what is required versus bundle-specific.
+
+Useful ideas that transfer into `.agents` skill authoring:
 
 - progressive disclosure between frontmatter, `SKILL.md`, and optional
   references;
@@ -66,12 +82,6 @@ Transferable to Codex skill authoring:
 - trace review, not just output review, when refining instructions;
 - moving repeated deterministic helper work into `scripts/` or `assets/` only
   when repetition and stability justify the extra package weight.
-
-Do not treat these Claude-specific ideas as part of the Codex contract:
-
-- Claude-only runners, viewers, or browser review flows;
-- `claude -p` or other Claude CLI loops;
-- packaging or distribution flows that assume Claude-specific formats or tools.
 
 For skill structure, discovery, and metadata, keep official OpenAI Codex docs
 as the primary source of truth.

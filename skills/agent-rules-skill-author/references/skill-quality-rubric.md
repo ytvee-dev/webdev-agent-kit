@@ -25,6 +25,16 @@ Use this rubric when creating a new skill, widening a skill, changing trigger
 behavior, or repairing a skill that produced vague, inconsistent, or
 over-broad results.
 
+## Section Map
+
+- `Source grounding` and `Trigger precision` for deciding what belongs in the
+  trigger contract.
+- `Instruction quality` and `Structure fit` for workflow clarity and package
+  shape.
+- `Resource choice` and `Evaluation` for progressive disclosure and test design.
+- `Anti-overfitting`, `Reusable automation heuristic`, and `Final quality gate`
+  for revision and final acceptance.
+
 ## Source grounding
 
 - Start from real task examples, user corrections, repo docs, runbooks, API
@@ -69,6 +79,21 @@ over-broad results.
 - Do not hide product decisions in the skill. Ask the user when success
   criteria, audience, boundaries, or risk tolerance would materially change the
   implementation.
+
+## Structure fit
+
+- Match the package shape to the actual workflow: workflow-based, task-based,
+  reference-based, or capabilities-based.
+- Match the compatibility story to the package shape: `.agents`-compatible
+  bundle skills may include local graph metadata; strict native-portable skills
+  may not.
+- Keep `SKILL.md` focused on the dominant pattern and route to references when
+  details differ by domain or mode.
+- Treat 500 body lines as a warning threshold. If the body is heading toward a
+  reference dump, split it before it becomes harder to trigger, read, and
+  maintain.
+- For reference files longer than 100 lines, add a table of contents or another
+  clear section map so an agent can preview the file's scope quickly.
 
 ## Resource choice
 
@@ -133,6 +158,8 @@ over-broad results.
 Before finishing, confirm:
 
 - frontmatter alone tells another agent when to load the skill;
+- the package clearly states whether it is `.agents`-compatible or strict
+  native-portable;
 - body instructions explain what to do without re-teaching the whole domain;
 - all referenced files exist and are loaded only when useful;
 - repo-specific facts stay in `.agents/project`, not reusable skill text;

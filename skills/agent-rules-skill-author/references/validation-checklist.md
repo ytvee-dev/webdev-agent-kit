@@ -23,9 +23,18 @@ depends_on:
 
 Use this checklist before and after editing repo-local agent rules or skills.
 
+## Section Map
+
+- `Before saving` for structural, trigger, portability, and packaging checks.
+- `After saving` for cold-read review, reference routing, and final validation
+  commands.
+
 ## Before saving
 
+- SKILL.md frontmatter exists and uses a YAML mapping shape.
 - Trigger surface is explicit and narrow enough to avoid unrelated invocations.
+- The package clearly states whether it is `.agents`-compatible or strict
+  native-portable.
 - Trigger wording has at least one realistic should-trigger and one near-miss
   should-not-trigger prompt when the boundary is non-obvious.
 - No conflict exists with current `AGENTS.md` policy.
@@ -39,15 +48,27 @@ Use this checklist before and after editing repo-local agent rules or skills.
   failure modes rather than generic advice.
 - There are 2-3 realistic workflow prompts ready for a sanity check when the
   skill or its workflow changed materially.
+- `name` uses lowercase letters, digits, and hyphens only, with no leading,
+  trailing, or repeated hyphens, and stays within 64 characters.
 - Inputs, outputs, defaults, failure modes, and validation gates are explicit
   for fragile workflows.
+- `description` is a string, avoids angle brackets, and stays within 1024
+  characters.
 - Expected output format or report shape is explicit when output structure
   matters.
 - The validation model fits the workflow: objective checks for objective work,
   human review criteria for judgment-heavy work.
 - The choice between instruction-only, `references/`, and `scripts/` is
   justified by repeatability and risk rather than habit.
+- For `.agents` skills, `name` and `description` stay first, and graph metadata
+  is treated as a local extension after the native contract.
 - Every referenced file exists and is linked from `SKILL.md`.
+- References longer than 100 lines have a table of contents or another clear
+  section map near the top.
+- `agents/openai.yaml` exists, is parseable, and aligns with the skill intent.
+- `interface.short_description` stays within 25-64 characters.
+- If `interface.default_prompt` is present, it mentions `$skill-name`.
+- If `dependencies.tools` is present, it documents real tool dependencies.
 - No changed files exist outside `.agents/` except the repository root
   `AGENTS.md` when repo-wide policy, skill discovery, or upstream bundle
   maintenance changed.
@@ -87,4 +108,6 @@ Use this checklist before and after editing repo-local agent rules or skills.
   shallow compliance.
 - Check that no Claude-specific runner, viewer, packaging, or CLI dependency
   became a hidden requirement for the workflow.
+- Run `python scripts/validate_agent_skill.py <skill-dir>` for new or materially
+  changed `.agents` skills.
 - Run `npx prettier --check .` for markdown and skill-only changes.
