@@ -81,6 +81,8 @@ the same task.
   dependencies
 - `skills/frontend-review-and-fix` - final review, regression checks, and
   verification
+- `skills/playwright-interactive` - interactive browser QA for local web apps
+  with Playwright, screenshots, console/runtime checks, and viewport fit checks
 - `skills/project-onboarding-adapter` - Plan Mode-only first-time host project
   adaptation planning, root `AGENTS.md` pointer setup, `.agents/project/**`
   overlay planning, and bundle path audit

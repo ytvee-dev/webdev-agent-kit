@@ -17,6 +17,7 @@ parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
     - '[[skills/frontend-review-and-fix/references/browser-verification|Browser Verification]]'
+    - '[[skills/playwright-interactive/SKILL|Playwright Interactive]]'
     - '[[skills/frontend-review-and-fix/references/review-checklist|Review Checklist]]'
     - '[[skills/frontend-review-and-fix/references/verification-steps|Verification Steps]]'
 depends_on:
@@ -50,6 +51,9 @@ depends_on:
 - Use browser verification when UI behavior, rendering, responsive layout,
   hydration, console errors, screenshots, or interaction flows are part of the
   touched surface.
+- Use `playwright-interactive` when browser verification needs persistent
+  interaction, screenshot evidence, desktop/mobile viewport checks, or
+  console/runtime inspection.
 - Recommend manual SEO or security audits when the change enters those domains.
 - When the change touches store, context, selectors, or provider wiring, review
   reactive identity, subscription width, and shared-state layering explicitly.

@@ -15,7 +15,7 @@ tags:
 parent:
     - '[[skills/frontend-review-and-fix/SKILL|Frontend Review and Fix]]'
 related:
-    []
+    - '[[skills/playwright-interactive/SKILL|Playwright Interactive]]'
 depends_on:
     - '[[skills/frontend-review-and-fix/SKILL|Frontend Review and Fix]]'
 ---
@@ -25,6 +25,9 @@ depends_on:
 Use this reference when the touched surface includes rendered UI, interaction,
 hydration, responsive layout, browser-only APIs, canvas, animation, or console
 errors. It complements the commands in `.agents/project/verification-profile.md`.
+Use `playwright-interactive` when verification needs persistent browser
+interaction, screenshot evidence, desktop/mobile viewport checks, or
+console/runtime inspection.
 
 ## Decision tree
 
@@ -32,6 +35,8 @@ errors. It complements the commands in `.agents/project/verification-profile.md`
   verify key selectors and screenshots.
 - Dynamic React app: wait for the page to finish rendering before inspecting the
   DOM or taking screenshots.
+- Interactive or visual QA: load `playwright-interactive` and build a QA
+  inventory before testing.
 - Existing dev server: use the running URL.
 - No dev server: start the repo's normal local server only when browser
   verification is needed, then stop it before finishing.

@@ -333,6 +333,27 @@ fixes.
 - проверять, нужны ли updates в `.agents/project/**`;
 - для security/SEO поверхностей рекомендовать профильный audit.
 
+### `playwright-interactive`
+
+Используется для interactive browser QA локальных web apps через Playwright:
+проверка rendered UI, interaction flows, screenshots, desktop/mobile viewports,
+viewport fit, console/runtime errors и browser-only behavior.
+
+Ключевые правила:
+
+- перед browser pass составлять QA inventory из требований, реализованных
+  user-visible behaviors и claims для final response;
+- держать dev server и Playwright session persistent, переиспользуя browser
+  handles между итерациями;
+- проверять functional QA и visual QA отдельными проходами;
+- использовать screenshot evidence для responsive layout, canvas, visual polish
+  и coordinate-based follow-up;
+- проверять viewport fit для app-like shells, tools, dashboards, editors,
+  games и fixed layouts;
+- не устанавливать Playwright, browser binaries или Electron dependencies без
+  explicit approval;
+- не использовать production systems, production data или production URLs.
+
 ### `project-context-adapter`
 
 Используется, когда изменились факты проекта или path indexes устарели.
@@ -482,6 +503,7 @@ webapp-task-protocol
 ```text
 webapp-task-protocol
 -> frontend-review-and-fix
+-> playwright-interactive, если review требует browser QA, screenshots или viewport checks
 ```
 
 Review начинается с findings: bugs, regressions, risks, missing tests. Summary
