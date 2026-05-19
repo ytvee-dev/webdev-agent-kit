@@ -54,8 +54,24 @@ Choose `react-component-workflow` when the task is primarily:
 - component decomposition
 - props and state flow
 - hooks discipline
+- strict TypeScript for component contracts
 - client-side rendering logic
 - reusable UI behavior outside routing concerns
+
+Choose `react-state-workflow` when the task touches:
+
+- context providers or consumers
+- Redux or Redux Toolkit
+- selectors, typed store hooks, and provider wiring
+- store-like reactive hooks and subscription stability
+- deciding whether state should be local, lifted, context-owned, or store-owned
+
+Choose `frontend-design-workflow` when the task is primarily:
+
+- visual UI design, styling polish, typography, color, spacing, or motion
+- Figma or screenshot implementation
+- responsive design behavior
+- canvas, generative, or web-art UI explicitly requested by the user
 
 ## Overlapping domains
 
@@ -67,6 +83,8 @@ sequentially — do not pick just one:
 2. `react-component-workflow` second — component architecture, props flow,
    and hooks within those boundaries.
 
-Add `frontend-typescript-rules` whenever the task touches types. Add
-`boundary-input-validation` whenever the task touches boundary validation or
-untrusted input, regardless of which domain skill is active.
+Add `frontend-design-workflow` when visual implementation or design fidelity is
+part of the task. Add `react-state-workflow` when context, Redux, selectors, or
+shared client state are part of the task. Add `boundary-input-validation`
+whenever the task touches boundary validation or untrusted input, regardless of
+which domain skill is active.

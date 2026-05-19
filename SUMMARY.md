@@ -71,11 +71,12 @@ the same task.
 - `skills/webapp-task-protocol` - classify the task and choose the skill chain
 - `skills/nextjs-app-router` - App Router routes, layouts, metadata, and
   boundaries
-- `skills/react-component-workflow` - component structure, props, state, and
-  hooks
-- `skills/redux-state-workflow` - Redux, selectors, typed store hooks, and
-  shared state
-- `skills/frontend-typescript-rules` - strict typing and safe refactors
+- `skills/react-component-workflow` - component structure, props, hooks, strict
+  TypeScript, rendering logic, and reusable React UI behavior
+- `skills/react-state-workflow` - React shared state, context, Redux,
+  selectors, typed store hooks, and store-like reactive hooks
+- `skills/frontend-design-workflow` - visual design, Figma/screenshot
+  translation, responsive polish, and explicit canvas/generative UI work
 - `skills/boundary-input-validation` - boundary parsing without new
   dependencies
 - `skills/frontend-review-and-fix` - final review, regression checks, and
@@ -96,7 +97,8 @@ the same task.
   `webdev-assistant` repository while keeping local work on `main`, using
   short-lived PR branches for publication, or pushing a fallback branch when
   `main` does not exist yet
-- `skills/frontend-security-inspector` - security-focused review
+- `skills/frontend-security-inspector` - security-focused review, secure
+  coding, and threat modeling for React and Next.js surfaces
 - `skills/technical-seo-app` - technical SEO review and fixes
 - `skills/screenshot-design-inspector` - screenshot-first design extraction
 - `skills/architecture-from-spec` - architecture planning from a user
@@ -141,8 +143,8 @@ the same task.
   graph frontmatter and keep workflow instructions in the body.
 - When a task changes user-facing agent workflow, skill lists, path policy, or
   sync/publication instructions, update `.agents/README.md` in the same task.
-- When shared client state, selectors, or Redux are in scope, include
-  `redux-state-workflow` alongside the React or Next.js skill chain instead of
+- When shared client state, selectors, context, or Redux are in scope, include
+  `react-state-workflow` alongside the React or Next.js skill chain instead of
   relying on component guidance alone.
 - When a task is about syncing or publishing the bundle itself, use
   `webdev-assistant-sync`.

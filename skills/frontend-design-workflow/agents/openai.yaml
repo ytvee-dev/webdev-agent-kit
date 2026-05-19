@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Frontend Design Workflow'
+    short_description: 'React visual design, Figma, responsive polish'
+    default_prompt: 'Use $frontend-design-workflow for visual UI design or design-to-code work.'
+policy:
+    allow_implicit_invocation: true

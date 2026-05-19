@@ -1,7 +1,6 @@
 ﻿---
 name: nextjs-app-router
-description: Use when working on Next.js App Router routes, layouts, metadata,
-    server/client boundaries, dynamic segments, and route-level UX states.
+description: Use when working on Next.js App Router routes, layouts, metadata, server/client boundaries, dynamic segments, and route-level UX states.
 id: 'agents.skills.nextjs-app-router.skill'
 title: 'Next.js App Router'
 doc_type: 'skill'
@@ -22,7 +21,6 @@ related:
     - '[[skills/nextjs-app-router/references/metadata-patterns|Metadata Patterns]]'
     - '[[skills/nextjs-app-router/references/route-patterns|Route Patterns]]'
     - '[[skills/nextjs-app-router/references/server-client-boundaries|Server/Client Boundaries]]'
-    - '[[skills/nextjs-app-router/references/tooling-and-prompting|Tooling And Prompting]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
 ---
@@ -83,4 +81,3 @@ When a task starts from a Figma URL:
 - `references/metadata-patterns.md`
 - `references/anti-patterns.md`
 - `references/figma-implementation.md`
-- `references/tooling-and-prompting.md`

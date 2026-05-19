@@ -1,6 +1,6 @@
 interface:
     display_name: 'Architecture From Spec'
-    short_description: 'Turn a user specification into source-backed architecture guidance'
-    default_prompt: 'Use $architecture-from-spec when the user provides a spec or large refactor brief and wants architecture guidance.'
+    short_description: 'React architecture from specs and refactor briefs'
+    default_prompt: 'Use $architecture-from-spec when the user provides a React/frontend spec or large refactor brief.'
 policy:
     allow_implicit_invocation: true

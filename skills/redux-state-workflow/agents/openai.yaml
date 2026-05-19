@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Redux State Workflow'
-    short_description: 'Shared-state guidance for Redux, selectors, and store consumers'
-    default_prompt: 'Use $redux-state-workflow for Redux, selectors, or store-like shared-state work.'
-policy:
-    allow_implicit_invocation: true

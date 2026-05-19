@@ -1,7 +1,6 @@
 ﻿---
 name: frontend-review-and-fix
-description: Use for a final review pass after implementation, or when the user
-    asks for review-oriented fixes, regression checks, and verification.
+description: Use for a final review pass after implementation, or when the user asks for review-oriented fixes, regression checks, browser verification, and project verification in React or Next.js work.
 id: 'agents.skills.frontend-review-and-fix.skill'
 title: 'Frontend Review and Fix'
 doc_type: 'skill'
@@ -17,6 +16,7 @@ tags:
 parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
+    - '[[skills/frontend-review-and-fix/references/browser-verification|Browser Verification]]'
     - '[[skills/frontend-review-and-fix/references/review-checklist|Review Checklist]]'
     - '[[skills/frontend-review-and-fix/references/verification-steps|Verification Steps]]'
 depends_on:
@@ -47,6 +47,9 @@ depends_on:
 - Look for regressions, smells, and unnecessary abstraction first.
 - Prefer minimal, targeted follow-up fixes.
 - Run the relevant verification commands from the project overlay.
+- Use browser verification when UI behavior, rendering, responsive layout,
+  hydration, console errors, screenshots, or interaction flows are part of the
+  touched surface.
 - Recommend manual SEO or security audits when the change enters those domains.
 - When the change touches store, context, selectors, or provider wiring, review
   reactive identity, subscription width, and shared-state layering explicitly.
@@ -60,5 +63,6 @@ depends_on:
 
 ## Reference map
 
+- `references/browser-verification.md`
 - `references/review-checklist.md`
 - `references/verification-steps.md`

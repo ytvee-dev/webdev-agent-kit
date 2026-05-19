@@ -29,13 +29,13 @@ depends_on:
 2. Domain skill(s):
     - `nextjs-app-router` — routing, layouts, file conventions, server/client boundaries
     - `react-component-workflow` — component architecture, props, state, hooks
-    - `redux-state-workflow` — Redux, selectors, typed hooks, and shared client state
+    - `react-state-workflow` — context, Redux, selectors, typed hooks, and shared client state
+    - `frontend-design-workflow` — visual design, Figma, screenshots, responsive polish
     - Use both when the task spans routing AND component concerns (see `classification-rules.md`)
-    - Use `redux-state-workflow` alongside the React or Next skill when the task
+    - Use `react-state-workflow` alongside the React or Next skill when the task
       changes store shape, selectors, provider wiring, or store consumers
-3. Add `frontend-typescript-rules` when typing or refactors matter
-4. Add `boundary-input-validation` when boundary input is parsed or validated
-5. Finish with `frontend-review-and-fix`
+3. Add `boundary-input-validation` when boundary input is parsed or validated
+4. Finish with `frontend-review-and-fix`
 
 ### Cross-domain feature
 
@@ -44,9 +44,10 @@ When a feature requires new routes AND new component architecture:
 1. `webapp-task-protocol`
 2. `nextjs-app-router` — establish route structure and boundaries
 3. `react-component-workflow` — implement component internals
-4. Add `redux-state-workflow` when shared client state is part of the feature
-5. Add `frontend-typescript-rules` and `boundary-input-validation` as needed
-6. `frontend-review-and-fix`
+4. Add `react-state-workflow` when shared client state is part of the feature
+5. Add `frontend-design-workflow` when visual design or responsive polish is part of the feature
+6. Add `boundary-input-validation` as needed
+7. `frontend-review-and-fix`
 
 ### Review request
 
@@ -60,6 +61,12 @@ When a feature requires new routes AND new component architecture:
 ### Security request
 
 1. `frontend-security-inspector`
+
+### Design request
+
+1. `frontend-design-workflow`
+2. `react-component-workflow` or `nextjs-app-router` as needed for implementation
+3. `screenshot-design-inspector` when Figma access is unavailable and screenshots are the source
 
 ### Repo refresh request
 

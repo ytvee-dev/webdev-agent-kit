@@ -136,9 +136,12 @@ not need to name a skill explicitly.
 
 - Task classification and workflow routing -> `webapp-task-protocol`
 - Next.js App Router work -> `nextjs-app-router`
-- React component architecture and implementation -> `react-component-workflow`
-- Redux and shared client-state work -> `redux-state-workflow`
-- TypeScript rules and safe refactors -> `frontend-typescript-rules`
+- React component architecture, strict TypeScript, and implementation ->
+  `react-component-workflow`
+- React shared state, context, Redux, selectors, and store-like hooks ->
+  `react-state-workflow`
+- Visual design, Figma/screenshot translation, responsive polish, and
+  generative UI -> `frontend-design-workflow`
 - Boundary validation without new dependencies -> `boundary-input-validation`
 - Review pass and verification -> `frontend-review-and-fix`
 - First-time host project adaptation and `.agents/project/**` planning ->

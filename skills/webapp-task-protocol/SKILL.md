@@ -1,8 +1,6 @@
 ﻿---
 name: webapp-task-protocol
-description: Use to classify React and Next.js application tasks, detect project
-    type, choose the right skill chain from the user prompt and repo context,
-    and enforce inspect -> plan -> implement -> verify.
+description: Use as the single router for React-first frontend tasks. Classify React and Next.js feature, bugfix, refactor, review, audit, design, and architecture work; detect project type; choose the skill chain from the user prompt and repo context; and enforce inspect, plan, implement, verify.
 id: 'agents.skills.webapp-task-protocol.skill'
 title: 'Webapp Task Protocol'
 doc_type: 'skill'
@@ -21,6 +19,8 @@ related:
     - '[[skills/webapp-task-protocol/references/classification-rules|Classification Rules]]'
     - '[[skills/webapp-task-protocol/references/task-routing|Task Routing]]'
     - '[[skills/react-component-workflow/SKILL|React Component Workflow]]'
+    - '[[skills/react-state-workflow/SKILL|React State Workflow]]'
+    - '[[skills/frontend-design-workflow/SKILL|Frontend Design Workflow]]'
     - '[[skills/nextjs-app-router/SKILL|Nextjs App Router]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
@@ -36,6 +36,7 @@ depends_on:
 - Code review or follow-up fixes
 - SEO or security audits
 - Design implementation tasks that may start from a Figma URL
+- Architecture or large-refactor briefs for React/frontend work
 
 ## Required context order
 
@@ -78,12 +79,14 @@ depends_on:
 2. Detect the framework boundary:
     - Next.js routing/layout/metadata/server-client work -> `nextjs-app-router`
     - React component/state/hooks work -> `react-component-workflow`
-    - Redux, selectors, or shared client-state work -> `redux-state-workflow`
+    - Context, Redux, selectors, providers, or shared client-state work ->
+      `react-state-workflow`
+    - Visual design, Figma, screenshots, responsive polish, or canvas/generative
+      UI -> `frontend-design-workflow`
 3. Detect the project type:
     - `frontend-only`
     - `fullstack`
 4. Add cross-cutting skills as needed:
-    - `frontend-typescript-rules`
     - `boundary-input-validation`
 5. End implementation work with `frontend-review-and-fix`.
 6. If implementation changes project structure, routes, components, helpers,
@@ -103,7 +106,7 @@ depends_on:
 - Use `screenshot-design-inspector` when Figma access is unavailable and the
   user provides or can provide screenshots.
 - Use `architecture-from-spec` when the user provides a new-project or
-  large-refactor specification and wants architecture guidance.
+  large-refactor React/frontend specification and wants architecture guidance.
 
 ## Figma trigger
 
@@ -114,7 +117,8 @@ request:
 2. Read `.agents/project/figma-profile.md`.
 3. If Figma access fails, ask the user for screenshots and switch to
    `screenshot-design-inspector`.
-4. Continue implementation with the appropriate domain skill.
+4. Continue implementation with `frontend-design-workflow` plus the appropriate
+   React or Next.js domain skill.
 
 ## Reference map
 

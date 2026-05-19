@@ -21,6 +21,10 @@ depends_on:
 
 # Next.js Security Checklist
 
+Use this checklist for App Router Route Handlers, Server Actions, Server
+Components, Proxy/Middleware, route params, cookies, headers, redirects, and
+client/server data boundaries.
+
 ## Server/client boundary
 
 - Confirm sensitive server-only code stays off the client — use `import 'server-only'`
@@ -28,6 +32,13 @@ depends_on:
 - Check public entry points such as Route Handlers and Server Actions.
 - Verify auth and authorization are enforced close to the data boundary, not
   only in UI conditional rendering.
+- Do not pass secrets, privileged objects, or sensitive server-derived values to
+  Client Component props, context, or serialized responses.
+- Treat `params`, `searchParams`, `headers()`, `cookies()`, request bodies, and
+  form data as untrusted runtime input.
+- In modern App Router code, confirm request-time APIs such as `cookies()`,
+  `headers()`, `params`, and `searchParams` are used according to the current
+  official docs for the project's Next.js version.
 
 ## Environment variables
 
@@ -42,12 +53,17 @@ depends_on:
 
 - Review all `redirect()` calls. If the redirect target includes user-supplied
   input, validate and allowlist the destination to prevent open redirects.
+- Review `NextResponse.redirect`, `window.location`, and callback URL handling
+  with the same rule.
 
 ## HTTP headers
 
 - Verify security-relevant response headers are configured: `Content-Security-Policy`,
   `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`.
 - Check headers in `next.config.ts` under the `headers()` export.
+- If headers are set by hosting, CDN, or reverse proxy, report the control as
+  not visible in app code and require runtime verification instead of assuming
+  it exists.
 
 ## Server Actions
 
@@ -56,3 +72,25 @@ depends_on:
 - Validate and sanitize all inputs to Server Actions before processing, using
   the project's approved boundary-validation approach rather than inventing a
   new dependency by default.
+- Treat Server Actions as network-invoked mutation endpoints for authorization,
+  validation, rate limiting, and abuse review.
+
+## Route Handlers and data access
+
+- Validate request body size, content type, route params, query params, and
+  external webhook payloads at the boundary.
+- Avoid building SQL, command strings, file paths, or outbound URLs from
+  untrusted input without strict validation and allowlisting.
+- Review outbound fetchers for SSRF when users can influence URLs, hosts,
+  redirects, headers, or request bodies.
+- Confirm cache behavior cannot leak user-specific or tenant-specific data
+  across users.
+
+## Cookies and sessions
+
+- Prefer `HttpOnly`, `SameSite`, and production-only `Secure` cookies for auth
+  sessions.
+- Do not set `Secure` unconditionally for local HTTP development unless the repo
+  already has an environment override.
+- Re-verify authentication and authorization from trusted server-side sources
+  instead of trusting client-provided flags, headers, or search params.
