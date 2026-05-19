@@ -108,6 +108,17 @@ Choose `figma-create-file` when the task is primarily:
 
 - creating a new blank Figma design file or FigJam file
 
+Choose `architecture-from-spec` when the task is primarily:
+
+- turning a specification, technical assignment, or large refactor brief into
+  React/frontend architecture guidance
+- choosing a recommended architecture path before implementation starts
+- producing an implementation-ready plan without editing the repository
+
+Do not choose `architecture-from-spec` for ordinary feature, bugfix, or refactor
+implementation requests. If the user asks to implement now, route through the
+execution skills below and use architecture notes only as context.
+
 ## Overlapping domains
 
 When a task spans both routing and component concerns, use both skills

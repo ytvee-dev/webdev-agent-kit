@@ -1,6 +1,6 @@
 ﻿---
 name: webapp-task-protocol
-description: Use as the single router for React-first frontend tasks. Classify React and Next.js feature, bugfix, refactor, review, audit, design, and architecture work; detect project type; choose the skill chain from the user prompt and repo context; and enforce inspect, plan, implement, verify.
+description: Use as the single router for React-first frontend tasks. Classify React and Next.js feature, bugfix, refactor, review, audit, design, and architecture-planning work; detect project type; choose the skill chain from the user prompt and repo context; and enforce inspect, plan, implement-or-answer, verify.
 id: 'agents.skills.webapp-task-protocol.skill'
 title: 'Webapp Task Protocol'
 doc_type: 'skill'
@@ -24,6 +24,8 @@ related:
     - '[[skills/react-state-workflow/SKILL|React State Workflow]]'
     - '[[skills/frontend-design-workflow/SKILL|Frontend Design Workflow]]'
     - '[[skills/nextjs-app-router/SKILL|Nextjs App Router]]'
+    - '[[skills/boundary-input-validation/SKILL|Boundary Input Validation]]'
+    - '[[skills/architecture-from-spec/SKILL|Architecture From Spec]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
 ---
@@ -38,7 +40,7 @@ depends_on:
 - Code review or follow-up fixes
 - SEO or security audits
 - Design implementation tasks that may start from a Figma URL
-- Architecture or large-refactor briefs for React/frontend work
+- Architecture or large-refactor briefs for React/frontend planning guidance
 
 ## Required context order
 
@@ -118,7 +120,10 @@ depends_on:
 - Use `screenshot-design-inspector` when Figma access is unavailable and the
   user provides or can provide screenshots.
 - Use `architecture-from-spec` when the user provides a new-project or
-  large-refactor React/frontend specification and wants architecture guidance.
+  large-refactor React/frontend specification and wants architecture guidance
+  rather than immediate implementation. That route ends with guidance or an
+  implementation-ready plan; it does not automatically continue into repo
+  edits.
 
 ## Figma trigger
 

@@ -117,8 +117,9 @@ the same task.
 - `skills/technical-seo-app` - technical SEO review and fixes
 - `skills/screenshot-design-inspector` - screenshot-first design extraction and
   Figma-unavailable fallback, not a replacement for Figma MCP reads
-- `skills/architecture-from-spec` - architecture planning from a user
-  specification
+- `skills/architecture-from-spec` - planning-only architecture guidance from a
+  user specification, technical assignment, or large refactor brief; it produces
+  an implementation-ready plan and stops before edits
 
 ## Nested upstream repo
 

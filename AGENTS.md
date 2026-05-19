@@ -163,7 +163,8 @@ not need to name a skill explicitly.
 - Human-facing `.agents/README.md` maintenance -> `readme-maintainer`
 - Bundle sync and upstream publication -> `webdev-assistant-sync`
 - Screenshot-based design inspection -> `screenshot-design-inspector`
-- Architecture planning from user specs -> `architecture-from-spec`
+- Architecture planning from user specs, with no implicit edits ->
+  `architecture-from-spec`
 - Technical SEO audit/fixes -> `technical-seo-app`
 - Security audit/reporting -> `frontend-security-inspector`
 - Refresh of `.agents/project/*` docs -> `project-context-adapter`

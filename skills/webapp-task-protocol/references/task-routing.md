@@ -102,3 +102,13 @@ When a feature requires new routes AND new component architecture:
 ### Architecture or spec request
 
 1. `architecture-from-spec`
+
+This chain ends in architecture guidance or an implementation-ready plan. It does
+not implicitly continue into execution skills until the user asks for
+implementation.
+
+Do not append `nextjs-app-router`, `react-component-workflow`,
+`react-state-workflow`, or `boundary-input-validation` as implementation steps
+while the deliverable is still architecture guidance. Name those skills only as
+later handoff owners unless the user explicitly changes the deliverable to code
+execution.
