@@ -100,6 +100,56 @@ Read `references/skill-quality-rubric.md` when creating a new skill, making a
 skill broader, changing trigger behavior, or improving a skill that produced
 imprecise or inconsistent results.
 
+## Skill Creation Loop
+
+Use this loop when the task is to create a new skill or materially improve an
+existing one:
+
+1. Decide whether a new skill is justified at all.
+   - Prefer editing an existing skill, a reference, `.agents/common`, or
+     `.agents/project` when the workflow already exists.
+2. Extract the workflow before drafting.
+   - Mine the current conversation, repo docs, task traces, user corrections,
+     and known failure cases before asking the user to restate the workflow.
+3. Lock the reusable contract.
+   - Record the trigger surface, expected inputs, output shape, defaults, stop
+     conditions, and important constraints the implementing agent must not
+     guess.
+4. Write the first draft.
+   - Keep `SKILL.md` focused on trigger, workflow, defaults, gotchas, and
+     validation; push long examples and variants into `references/`.
+5. Run a trigger eval pass.
+   - Write realistic should-trigger and near-miss should-not-trigger prompts to
+     test the `description` and `agents/openai.yaml` metadata.
+6. Run a workflow eval pass.
+   - Use 2-3 realistic user prompts to check whether the skill improves actual
+     behavior, not only the text of the package.
+7. Inspect traces and outputs before tightening rules.
+   - Read the agent's steps, not only the final answer. If the skill wastes
+     effort or follows irrelevant branches, fix the general cause before adding
+     narrower rules.
+8. Revise for reusable behavior.
+   - Keep changes general enough to help future prompts. Do not overfit the
+     skill to one eval prompt or one user phrasing.
+9. Sync package metadata.
+   - Keep `SKILL.md`, `agents/openai.yaml`, references, and any eval examples
+     aligned whenever trigger wording or scope changes.
+10. Run the cold-read final gate.
+    - Another agent should be able to load the package, understand the trigger
+      boundary, and follow the workflow without hidden context or Claude-only
+      tooling.
+
+## Improvement Heuristics
+
+- Extract an existing workflow from conversation history or repo context before
+  inventing a new one from scratch.
+- When eval feedback reveals a failure, prefer durable, reusable corrections to
+  one-off prompt patches.
+- If several test prompts repeatedly force the agent to perform the same
+  deterministic helper work, consider `scripts/` or `assets/`.
+- Keep the package instruction-only when the repeated helper work is not stable
+  enough to justify more artifacts.
+
 ## Core rules
 
 - Create and edit skill packages and overlay docs strictly inside `.agents/`.

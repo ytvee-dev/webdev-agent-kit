@@ -29,10 +29,14 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
 - Use lowercase hyphen-case for `name`.
 - Write `description` as the primary trigger surface: what the skill does and
   when to use it.
+- Make `description` cover the capability, the trigger conditions, and the
+  important `when not` boundary when overlap risk is real.
 - Mention concrete task shapes in the description, not only broad topics.
 - Keep `description` non-empty and under 1024 characters.
 - Front-load the most important trigger words because long skill lists may
   shorten descriptions before matching.
+- Keep descriptions dense and informative. Codex includes skill descriptions in
+  the initial skills list budget, so marketing phrasing wastes scarce context.
 
 ## Trigger writing
 
@@ -43,6 +47,8 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
 - Describe user intent instead of internal implementation. Say when the user
   needs the workflow, not only what files the skill contains.
 - Include near-miss exclusions when keywords overlap with unrelated work.
+- Avoid keyword stuffing and overly pushy descriptions that try to win every
+  adjacent prompt.
 
 ## Trigger evals
 
@@ -52,6 +58,8 @@ Before finalizing trigger wording for a new or broadened skill:
   detail, and complexity.
 - Write near-miss should-not-trigger prompts that share keywords but require a
   different workflow.
+- Make should-trigger prompts substantive enough that Codex would benefit from
+  consulting a skill instead of handling the request as a trivial one-step task.
 - Confirm explicit invocation still works through `$skill-name`.
 - Confirm implicit invocation is appropriate before keeping
   `allow_implicit_invocation: true`.
@@ -71,3 +79,5 @@ Before finalizing trigger wording for a new or broadened skill:
 - `short_description` should not promise more than the skill actually covers.
 - If the skill becomes broader or narrower, update both `SKILL.md` and
   `agents/openai.yaml` in the same change.
+- When trigger wording changes, refresh the trigger eval examples in the same
+  pass so the boundary stays testable.

@@ -53,3 +53,25 @@ instructions:
   references only when the agent needs them.
 - Prefer eval-minded iteration over speculative prompt wording.
 - Keep missing requirements explicit and ask the user instead of guessing.
+
+## Transferable vs non-transferable ideas
+
+Transferable to Codex skill authoring:
+
+- progressive disclosure between frontmatter, `SKILL.md`, and optional
+  references;
+- trigger evals with realistic should-trigger and near-miss should-not-trigger
+  prompts;
+- workflow evals that test the drafted skill on realistic user requests;
+- trace review, not just output review, when refining instructions;
+- moving repeated deterministic helper work into `scripts/` or `assets/` only
+  when repetition and stability justify the extra package weight.
+
+Do not treat these Claude-specific ideas as part of the Codex contract:
+
+- Claude-only runners, viewers, or browser review flows;
+- `claude -p` or other Claude CLI loops;
+- packaging or distribution flows that assume Claude-specific formats or tools.
+
+For skill structure, discovery, and metadata, keep official OpenAI Codex docs
+as the primary source of truth.

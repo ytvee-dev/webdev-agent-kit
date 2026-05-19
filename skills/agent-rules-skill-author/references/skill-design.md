@@ -47,6 +47,31 @@ one.
 - Capture the decision points an implementing agent must not guess: audience,
   inputs, outputs, defaults, compatibility boundaries, and verification.
 
+## Capture intent before drafting
+
+Before writing or widening a skill, lock the core contract:
+
+- What capability should the skill enable?
+- When should it trigger, and when should it stay out of the way?
+- What output shape or report structure matters to the user?
+- Which inputs, constraints, file types, or environment assumptions are
+  required?
+- Is the workflow objectively checkable, or is it mainly judgment-heavy?
+
+Extract as much of this as possible from the current conversation, task
+examples, user corrections, repo docs, and failure cases before asking the user
+for more detail. Ask only about gaps that materially change the workflow or the
+trigger boundary.
+
+## Choose the validation style
+
+- Objective workflows need concrete workflow test prompts and observable checks
+  that confirm the skill changed behavior, not just wording.
+- Judgment-heavy workflows need explicit human review criteria; do not invent
+  fake assertions that imply precision the workflow does not actually have.
+- Use trigger evals to validate `description`, then use 2-3 realistic workflow
+  prompts to validate the draft itself.
+
 ## Choose the degree of freedom
 
 - Use high freedom when multiple implementations are valid and the skill mainly
@@ -78,3 +103,13 @@ Before finalizing a skill, ask:
 - Does the package avoid hidden decisions for the implementing agent?
 - Does the skill name realistic should-trigger and should-not-trigger prompts?
 - Does the workflow include a validation path proportional to the task risk?
+
+## Organize variants deliberately
+
+If one skill supports several frameworks, domains, or operating modes:
+
+- Keep `SKILL.md` as the router and shared workflow contract.
+- Point to the specific reference file for each variant instead of telling the
+  agent to read every reference.
+- Split only when the trigger surface stays shared and the execution details
+  truly differ by domain.

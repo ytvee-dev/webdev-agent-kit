@@ -45,7 +45,11 @@ over-broad results.
 - Name the boundary: where the skill applies, where it must not apply, and
   whether implicit invocation is safe.
 - Use near-miss negative cases to tighten wording. A negative case should share
-  keywords with the skill but require a different workflow.
+  keywords with the skill but require a different workflow, not be obviously
+  unrelated.
+- Use positive cases that vary by phrasing style: direct requests, indirect
+  requests, casual wording, typo or noisy wording, and prompts that mention
+  files or paths.
 - Keep `description` within the Agent Skills limit of 1024 characters and short
   enough to survive description shortening in large skill sets.
 
@@ -88,9 +92,14 @@ over-broad results.
   broad or high-risk skills; fewer examples are acceptable for narrow edits.
 - Vary phrasing, explicitness, detail, complexity, typos, and file/path
   mentions so the trigger is tested against realistic user requests.
+- After drafting the skill, run 2-3 realistic workflow prompts to see whether
+  the instructions improve actual execution, not only frontmatter wording.
 - Define output assertions for important behavior. Require concrete evidence
   for pass/fail judgments instead of accepting section labels or vague
   compliance.
+- For judgment-heavy workflows, prefer explicit human review criteria over fake
+  precision. Use observable checks where they help, and manual review where the
+  outcome is inherently qualitative.
 - Compare with-skill behavior against without-skill behavior when practical.
   Keep the skill only if it improves correctness, consistency, speed, or
   reviewability enough to justify its context cost.
@@ -99,6 +108,25 @@ over-broad results.
   decisions across runs.
 - Feed specific human feedback back into the skill. Add durable corrections to
   gotchas, workflow steps, validation gates, or references.
+
+## Anti-overfitting
+
+- Do not patch every failure with a narrow `must` or one more special-case
+  bullet.
+- Look for the shared cause behind repeated failures and explain the `why`
+  inside the skill when that produces more durable behavior.
+- Remove instructions that do not improve outcomes or that consistently cause
+  wasted work, irrelevant branches, or verbose compliance theater.
+- Revise for reusable behavior across prompts, not just the eval case that most
+  recently failed.
+
+## Reusable automation heuristic
+
+- If multiple workflow evals repeatedly lead the agent to create the same
+  helper steps, helper script, or output scaffold, that is evidence for
+  `scripts/` or `assets/`.
+- Keep the package instruction-only when the repeated helper work is unstable,
+  highly contextual, or too rare to justify more bundle weight.
 
 ## Final quality gate
 
@@ -111,3 +139,5 @@ Before finishing, confirm:
 - the package has a clear validation path and no hidden decisions;
 - `agents/openai.yaml` matches the trigger, scope, and implicit invocation
   policy.
+- the skill improves correctness, consistency, reviewability, or speed enough
+  to justify itself over weaker guidance or no skill at all.
