@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Figma Design to Code'
+    short_description: 'Implement repo code from Figma'
+    default_prompt: 'Use $figma-design-to-code to implement repository UI code from a Figma node or design.'
+policy:
+    allow_implicit_invocation: true

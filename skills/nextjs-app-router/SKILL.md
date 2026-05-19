@@ -18,6 +18,7 @@ parent:
 related:
     - '[[skills/nextjs-app-router/references/anti-patterns|Anti-Patterns]]'
     - '[[skills/nextjs-app-router/references/figma-implementation|Figma Implementation]]'
+    - '[[skills/figma-design-to-code/SKILL|Figma Design To Code]]'
     - '[[skills/nextjs-app-router/references/metadata-patterns|Metadata Patterns]]'
     - '[[skills/nextjs-app-router/references/route-patterns|Route Patterns]]'
     - '[[skills/nextjs-app-router/references/server-client-boundaries|Server/Client Boundaries]]'
@@ -68,10 +69,11 @@ Before editing:
 When a task starts from a Figma URL:
 
 1. Use the built-in Figma capabilities first.
-2. Inspect component structure, variables, spacing, and layout behavior.
-3. Rebuild the UI with the repo's existing patterns, tokens, and breakpoints.
-4. Avoid one-off hardcoded values when a reusable token or pattern fits.
-5. If Figma access fails, ask the user for screenshots and use
+2. Use `figma-design-to-code` for the Figma-to-code workflow instead of keeping
+   the whole design-reading process inside this skill.
+3. Use this skill to enforce route structure, App Router conventions, and
+   server/client boundaries around that implementation.
+4. If Figma access fails, ask the user for screenshots and use
    `screenshot-design-inspector` before implementing UI.
 
 ## Reference map

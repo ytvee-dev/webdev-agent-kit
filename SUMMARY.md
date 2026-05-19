@@ -75,8 +75,21 @@ the same task.
   TypeScript, rendering logic, and reusable React UI behavior
 - `skills/react-state-workflow` - React shared state, context, Redux,
   selectors, typed store hooks, and store-like reactive hooks
-- `skills/frontend-design-workflow` - visual design, Figma/screenshot
-  translation, responsive polish, and explicit canvas/generative UI work
+- `skills/frontend-design-workflow` - visual design orchestration, Figma or
+  screenshot implementation, responsive polish, and explicit
+  canvas/generative UI work
+- `skills/figma-design-reader` - read-only Figma analysis, screenshots,
+  variables, assets, and MCP troubleshooting
+- `skills/figma-design-to-code` - implement repository UI code from Figma
+- `skills/figma-canvas-editing` - low-level `use_figma` canvas editing,
+  variables, components, variants, and styles
+- `skills/figma-screen-generation` - build or update full screens, pages, and
+  views inside Figma
+- `skills/figma-design-system-builder` - build or update Figma design systems,
+  tokens, and component libraries
+- `skills/figma-code-connect` - map published Figma components to code through
+  Code Connect
+- `skills/figma-create-file` - create blank Figma design files or FigJam files
 - `skills/boundary-input-validation` - boundary parsing without new
   dependencies
 - `skills/frontend-review-and-fix` - final review, regression checks, and
@@ -102,7 +115,8 @@ the same task.
 - `skills/frontend-security-inspector` - security-focused review, secure
   coding, and threat modeling for React and Next.js surfaces
 - `skills/technical-seo-app` - technical SEO review and fixes
-- `skills/screenshot-design-inspector` - screenshot-first design extraction
+- `skills/screenshot-design-inspector` - screenshot-first design extraction and
+  Figma-unavailable fallback, not a replacement for Figma MCP reads
 - `skills/architecture-from-spec` - architecture planning from a user
   specification
 

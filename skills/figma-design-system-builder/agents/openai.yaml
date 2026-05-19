@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Figma Design System Builder'
+    short_description: 'Build Figma design systems'
+    default_prompt: 'Use $figma-design-system-builder to build or update a Figma design system or component library from a codebase.'
+policy:
+    allow_implicit_invocation: true

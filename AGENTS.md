@@ -142,6 +142,17 @@ not need to name a skill explicitly.
   `react-state-workflow`
 - Visual design, Figma/screenshot translation, responsive polish, and
   generative UI -> `frontend-design-workflow`
+- Read-only Figma inspection, screenshots, variables, and MCP troubleshooting ->
+  `figma-design-reader`
+- Figma-to-code implementation in the repo -> `figma-design-to-code`
+- Low-level Figma canvas mutation through `use_figma` ->
+  `figma-canvas-editing`
+- Full-screen and multi-section generation inside Figma ->
+  `figma-screen-generation`
+- Figma design system and component library building ->
+  `figma-design-system-builder`
+- Figma Code Connect mappings -> `figma-code-connect`
+- New blank Figma or FigJam file creation -> `figma-create-file`
 - Boundary validation without new dependencies -> `boundary-input-validation`
 - Review pass and verification -> `frontend-review-and-fix`
 - Interactive browser QA with Playwright, screenshots, and viewport checks ->

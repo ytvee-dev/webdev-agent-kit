@@ -69,9 +69,44 @@ Choose `react-state-workflow` when the task touches:
 Choose `frontend-design-workflow` when the task is primarily:
 
 - visual UI design, styling polish, typography, color, spacing, or motion
-- Figma or screenshot implementation
+- Figma or screenshot implementation at the visual orchestration layer
 - responsive design behavior
 - canvas, generative, or web-art UI explicitly requested by the user
+
+Choose `figma-design-reader` when the task is primarily:
+
+- read-only Figma analysis
+- node, frame, variable, asset, or screenshot inspection through Figma MCP
+- understanding the design before deciding whether to implement code or edit
+  Figma
+
+Choose `figma-design-to-code` when the task is primarily:
+
+- implementing repository code from a Figma design
+- translating Figma context into the repo's components, tokens, and routes
+
+Choose `figma-canvas-editing` when the task is primarily:
+
+- create, edit, delete, or inspect-with-JavaScript work inside a Figma file
+- auto-layout, variables, components, variants, or style mutation through
+  `use_figma`
+
+Choose `figma-screen-generation` when the task is primarily:
+
+- building or updating a full screen, page, or multi-section layout inside
+  Figma
+
+Choose `figma-design-system-builder` when the task is primarily:
+
+- building a Figma token system, component library, or design-system file
+
+Choose `figma-code-connect` when the task is primarily:
+
+- mapping published Figma components to code through Code Connect
+
+Choose `figma-create-file` when the task is primarily:
+
+- creating a new blank Figma design file or FigJam file
 
 ## Overlapping domains
 
@@ -84,7 +119,8 @@ sequentially — do not pick just one:
    and hooks within those boundaries.
 
 Add `frontend-design-workflow` when visual implementation or design fidelity is
-part of the task. Add `react-state-workflow` when context, Redux, selectors, or
-shared client state are part of the task. Add `boundary-input-validation`
-whenever the task touches boundary validation or untrusted input, regardless of
-which domain skill is active.
+part of the task. Add `figma-design-to-code` when Figma is the source of truth
+for repo implementation. Add `react-state-workflow` when context, Redux,
+selectors, or shared client state are part of the task. Add
+`boundary-input-validation` whenever the task touches boundary validation or
+untrusted input, regardless of which domain skill is active.

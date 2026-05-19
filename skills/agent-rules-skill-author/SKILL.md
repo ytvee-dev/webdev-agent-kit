@@ -18,6 +18,7 @@ parent:
 related:
     - '[[skills/agent-rules-skill-author/references/documentation-maintenance|Documentation Maintenance Workflow]]'
     - '[[skills/agent-rules-skill-author/references/codex-native-skill-contract|Codex Native Skill Contract]]'
+    - '[[skills/agent-rules-skill-author/references/figma-derived-conventions|Figma Derived Conventions]]'
     - '[[skills/agent-rules-skill-author/references/rules-writing|Rules Writing]]'
     - '[[skills/agent-rules-skill-author/references/skill-design|Skill Design]]'
     - '[[skills/agent-rules-skill-author/references/skill-quality-rubric|Skill Quality Rubric]]'
@@ -144,6 +145,8 @@ Read references selectively instead of bulk-loading the whole package:
   `agents/openai.yaml`, implicit invocation, or dependency metadata.
 - `references/validation-checklist.md` before finalizing a material skill or
   policy change.
+- `references/figma-derived-conventions.md` when the bundle needs to encode
+  reusable routing or policy learned from Figma workflows.
 - `references/source-backed-prompting.md` when current OpenAI docs, system
   skills, or external source hierarchy affect the instructions.
 - `references/documentation-maintenance.md` when the change affects
@@ -334,5 +337,6 @@ existing one:
 - `references/skill-quality-rubric.md`
 - `references/trigger-and-metadata.md`
 - `references/validation-checklist.md`
+- `references/figma-derived-conventions.md`
 - `references/source-backed-prompting.md`
 - `references/documentation-maintenance.md`

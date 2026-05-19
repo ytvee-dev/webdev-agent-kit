@@ -18,6 +18,8 @@ parent:
 related:
     - '[[skills/webapp-task-protocol/references/classification-rules|Classification Rules]]'
     - '[[skills/webapp-task-protocol/references/task-routing|Task Routing]]'
+    - '[[skills/figma-design-reader/SKILL|Figma Design Reader]]'
+    - '[[skills/figma-design-to-code/SKILL|Figma Design To Code]]'
     - '[[skills/react-component-workflow/SKILL|React Component Workflow]]'
     - '[[skills/react-state-workflow/SKILL|React State Workflow]]'
     - '[[skills/frontend-design-workflow/SKILL|Frontend Design Workflow]]'
@@ -95,6 +97,16 @@ depends_on:
 
 ## Prompt-specific skills
 
+- Use `figma-design-reader` for read-only Figma analysis and MCP
+  troubleshooting.
+- Use `figma-design-to-code` when the deliverable is repository code from
+  Figma.
+- Use `figma-canvas-editing` for low-level `use_figma` writes.
+- Use `figma-screen-generation` for building or updating full Figma screens.
+- Use `figma-design-system-builder` for Figma library, token, or design-system
+  work.
+- Use `figma-code-connect` for Code Connect mapping requests.
+- Use `figma-create-file` for blank Figma or FigJam file creation.
 - Use `technical-seo-app` for SEO requests.
 - Use `frontend-security-inspector` for security-audit requests.
 - Use `project-context-adapter` when repo overlay docs need refresh or
@@ -110,15 +122,21 @@ depends_on:
 
 ## Figma trigger
 
-If the prompt includes a Figma URL, node, or explicit design implementation
-request:
+If the prompt includes a Figma URL, node, or explicit Figma request:
 
 1. Use the built-in Figma capabilities first.
 2. Read `.agents/project/figma-profile.md`.
-3. If Figma access fails, ask the user for screenshots and switch to
+3. Route by deliverable:
+   - read or explain Figma -> `figma-design-reader`
+   - implement repo code from Figma -> `figma-design-to-code` plus
+     `frontend-design-workflow` and the appropriate React or Next.js skill
+   - edit existing Figma canvas entities -> `figma-canvas-editing`
+   - build a full screen in Figma -> `figma-screen-generation`
+   - build a design system or library in Figma -> `figma-design-system-builder`
+   - create Code Connect mappings -> `figma-code-connect`
+   - create a new blank file -> `figma-create-file`
+4. If Figma access fails, ask the user for screenshots and switch to
    `screenshot-design-inspector`.
-4. Continue implementation with `frontend-design-workflow` plus the appropriate
-   React or Next.js domain skill.
 
 ## Reference map
 

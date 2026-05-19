@@ -53,6 +53,9 @@ responsive UI work.
 ## Figma and screenshots
 
 - Use configured Figma capabilities first when a Figma URL or node is provided.
+- Use `figma-design-reader` for read-only Figma intake and
+  `figma-design-to-code` when the deliverable is repo implementation from
+  Figma.
 - If Figma is unavailable, request screenshots and use
   `screenshot-design-inspector` before implementing from guesswork.
 - Recreate responsive behavior and interaction states with existing repo

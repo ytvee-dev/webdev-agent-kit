@@ -300,12 +300,107 @@ requests.
 - сначала определить purpose, audience и visual intent;
 - следовать текущей styling system: CSS Modules, tokens, variables,
   breakpoints, typography primitives и component patterns;
+- для Figma read-only analysis подключать `figma-design-reader`, а для repo
+  implementation from Figma подключать `figma-design-to-code`;
 - не добавлять Tailwind, shadcn/ui, external fonts, p5.js, Three.js, новый
   token system или artifact toolchain без явного approval;
 - использовать Figma capability first, screenshots как fallback через
   `screenshot-design-inspector`;
 - проверять responsive behavior, text wrapping, accessibility, focus states и
   reduced-motion risks.
+
+### `figma-design-reader`
+
+Используется для read-only Figma analysis: `get_design_context`,
+`get_metadata`, `get_screenshot`, variables, assets, structure reading и MCP
+troubleshooting.
+
+Ключевые правила:
+
+- сначала читать Figma, а не пытаться реализовывать по памяти;
+- использовать `get_metadata` как map, если `get_design_context` слишком
+  большой;
+- всегда брать screenshot того же node перед visual claims;
+- не использовать этот skill для repo implementation и не писать им в Figma
+  canvas.
+
+### `figma-design-to-code`
+
+Используется, когда deliverable - production code в репозитории из Figma
+design.
+
+Ключевые правила:
+
+- обязательный flow: Figma context -> screenshot -> assets -> translation to
+  repo conventions -> validation;
+- использовать вместе с `frontend-design-workflow` и
+  `react-component-workflow` или `nextjs-app-router`;
+- трактовать MCP output как representation of design, а не как final code
+  style;
+- при недоступности Figma явно переключаться на screenshot fallback, а не
+  продолжать по догадке.
+
+### `figma-canvas-editing`
+
+Используется для low-level write/edit/delete действий внутри Figma через
+`use_figma`: nodes, auto-layout, variables, components, variants, styles и
+programmatic file inspection in JS context.
+
+Ключевые правила:
+
+- это prerequisite skill для Figma writes, но не screen builder и не
+  design-system orchestrator;
+- работать маленькими mutation steps и возвращать все created/mutated node IDs;
+- останавливаться на `use_figma` error, а не ретраить вслепую;
+- делать follow-up validation между шагами.
+
+### `figma-screen-generation`
+
+Используется для build/update full screens, pages, views и multi-section
+layouts внутри Figma.
+
+Ключевые правила:
+
+- использовать вместе с `figma-canvas-editing`;
+- сначала разбирать section structure и design-system reuse path;
+- собирать экран section-by-section, а не одной огромной mutation;
+- проверять section screenshots и full-screen state до signoff.
+
+### `figma-design-system-builder`
+
+Используется для build/update Figma design systems и component libraries:
+variables, collections, modes, text/effect styles, component families,
+documentation pages и token/code alignment.
+
+Ключевые правила:
+
+- использовать вместе с `figma-canvas-editing`;
+- идти фазами: discovery -> foundations -> file structure -> components -> QA;
+- не строить components до foundations;
+- подтверждать scope и major milestones перед следующей фазой.
+
+### `figma-code-connect`
+
+Используется для Code Connect workflows: suggestions, codebase matching, user
+confirmation и sending mappings.
+
+Ключевые правила:
+
+- не путать mapping workflow с design implementation;
+- сначала искать реальные code matches в repo, а не сразу спрашивать path;
+- учитывать published component requirement и plan limitations;
+- отправлять только подтвержденные mappings.
+
+### `figma-create-file`
+
+Используется для создания blank Figma design files и FigJam files.
+
+Ключевые правила:
+
+- корректно разрешать target plan или organization;
+- создавать `design` или `figjam` file по user intent;
+- после создания передавать workflow в `figma-canvas-editing` или
+  `figma-screen-generation`, если работа продолжается в новом файле.
 
 ### `boundary-input-validation`
 
@@ -418,6 +513,9 @@ root `AGENTS.md`, планирует заполнение `.agents/project/**`, 
   только frontmatter;
 - при создании skills определить trigger surface, should/should-not prompts,
   output shape, source-backed workflow и validation gates;
+- при изменении Figma-related rules сверять routing и layer boundaries через
+  Figma-specific reference внутри `agent-rules-skill-author`, а не смешивать
+  все Figma workflows в один broad skill;
 - исправлять skill по reusable причинам, а не подгонять его под один prompt;
 - держать `SKILL.md` lean, details выносить в `references/`;
 - для длинных references добавлять TOC или section map near the top;
@@ -530,14 +628,18 @@ remediation, follow-up verification.
 ### Design / Figma
 
 ```text
-Figma capability
--> frontend-design-workflow
--> nextjs-app-router и/или react-component-workflow
--> screenshot-design-inspector, если Figma недоступна
+read/analyze Figma -> figma-design-reader
+Figma -> code -> figma-design-to-code -> frontend-design-workflow -> nextjs-app-router и/или react-component-workflow
+edit Figma file -> figma-canvas-editing
+code/description -> Figma screen -> figma-screen-generation -> figma-canvas-editing
+Figma design system -> figma-design-system-builder -> figma-canvas-editing
+Code Connect -> figma-code-connect
+new file -> figma-create-file
+screenshots only / Figma unavailable -> screenshot-design-inspector
 ```
 
-Figma URL или design implementation request сначала идет через Figma capability.
-Screenshots - fallback, не основной источник.
+Figma capability используется first для real Figma work, но routing внутри
+bundle зависит от deliverable. Screenshots - fallback, не основной источник.
 
 ### Agent rules / skills / docs
 

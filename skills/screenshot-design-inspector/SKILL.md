@@ -28,6 +28,7 @@ depends_on:
 ## Purpose
 
 Inspect screenshots as a design source when Figma is unavailable or insufficient.
+This is the screenshot fallback skill, not the primary Figma MCP reading skill.
 
 ## Required context
 
@@ -54,6 +55,8 @@ Inspect screenshots as a design source when Figma is unavailable or insufficient
 ## Core rules
 
 - Do not invent missing design data.
+- Do not use this skill as a substitute for `figma-design-reader` when real
+  Figma MCP access is available.
 - Prefer existing project tokens and theme variables when translating screenshot
   observations into implementation.
 - If a screenshot suggests a new global token, ask the user before adding it.

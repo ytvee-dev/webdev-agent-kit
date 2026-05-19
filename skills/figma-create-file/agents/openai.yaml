@@ -1,0 +1,6 @@
+interface:
+    display_name: 'Figma Create File'
+    short_description: 'Create blank Figma or FigJam files'
+    default_prompt: 'Use $figma-create-file to create a new blank Figma design file or FigJam file.'
+policy:
+    allow_implicit_invocation: true

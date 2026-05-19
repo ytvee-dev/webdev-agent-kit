@@ -19,6 +19,8 @@ parent:
 related:
     - '[[skills/frontend-design-workflow/references/design-implementation|Design Implementation]]'
     - '[[skills/frontend-design-workflow/references/generative-ui|Generative UI]]'
+    - '[[skills/figma-design-reader/SKILL|Figma Design Reader]]'
+    - '[[skills/figma-design-to-code/SKILL|Figma Design To Code]]'
     - '[[skills/screenshot-design-inspector/SKILL|Screenshot Design Inspector]]'
     - '[[skills/react-component-workflow/SKILL|React Component Workflow]]'
 depends_on:
@@ -38,6 +40,9 @@ depends_on:
 - Create canvas, generative, or web-art UI only when the user explicitly asks
   for that kind of experience.
 
+This skill owns the visual implementation and orchestration layer. It is not the
+full Figma suite by itself.
+
 ## Required context
 
 Before editing:
@@ -49,8 +54,12 @@ Before editing:
 4. Read `.agents/project/react/path-index.md` or
    `.agents/project/next/path-index.md` based on the affected UI surface.
 5. Read the existing component and nearby styles before designing new UI.
-6. Add `react-component-workflow` for component architecture and hooks.
-7. Add `nextjs-app-router` when the visual work changes route structure,
+6. Add `figma-design-reader` when the work starts from a Figma URL, node, or
+   read-only design analysis.
+7. Add `figma-design-to-code` when the deliverable is repository code from
+   Figma.
+8. Add `react-component-workflow` for component architecture and hooks.
+9. Add `nextjs-app-router` when the visual work changes route structure,
    layouts, metadata, or server/client boundaries.
 
 ## Core rules
@@ -71,6 +80,9 @@ Before editing:
   compatible with accessibility and repo conventions.
 - Preserve accessibility: labels, focus states, keyboard interaction, contrast,
   alt text, and reduced-motion expectations.
+- If the source of truth is Figma, do not treat this skill alone as the design
+  intake layer. Use `figma-design-reader` for analysis and
+  `figma-design-to-code` for repo implementation.
 - If Figma access fails, ask for screenshots and use
   `screenshot-design-inspector`.
 - For canvas, generative, or algorithmic UI, do not add p5.js, Three.js, a
