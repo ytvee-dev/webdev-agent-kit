@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.skills.technical-seo-app.references.structured-data'
 title: 'Structured Data'
 doc_type: 'skill-reference'
@@ -14,56 +14,45 @@ tags:
 parent:
     - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
 related:
-    []
+    - '[[skills/technical-seo-app/references/source-refresh|Source Refresh]]'
 depends_on:
     - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
 ---
 
 # Structured Data
 
+Use this reference before adding or changing JSON-LD.
+
 ## Principles
 
-- Add structured data only when it improves clarity for a real page type.
-- Keep schema content consistent with visible page content.
-- Avoid speculative or misleading structured data just to chase rich snippets.
+- Add structured data only when it represents visible page content and a real
+  page type.
+- Prefer Google-supported rich result schemas only when the page satisfies the
+  documented requirements. Otherwise use schema.org types for clarity without
+  claiming rich-result eligibility.
+- Avoid speculative schema, fake ratings, hidden FAQs, fabricated authorship,
+  or fields that do not exist in the content source.
+- Keep JSON-LD generation on the server and escape serialized JSON before
+  putting it into `dangerouslySetInnerHTML`.
 
-## Common schema types for content sites
+## Common Content Site Types
 
-| Page type | Recommended schema |
+| Page type | Candidate schema |
 |---|---|
-| Blog post / essay | `Article` |
-| Home / landing page | `WebSite` |
-| Author / about page | `Person` |
+| Blog post or essay | `Article` or a more specific article subtype |
+| Home page | `WebSite` |
+| About or author page | `ProfilePage` plus `Person` |
+| Tag or topic page | `CollectionPage` plus `ItemList` |
 
-## Rendering pattern
+## Review Checklist
 
-Render structured data as a `<script type="application/ld+json">` tag inside the
-Server Component for the page. Do not include it in `generateMetadata`:
-
-```tsx
-export default function PostPage({ post }) {
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: post.title,
-        description: post.description,
-        datePublished: post.date,
-        author: { '@type': 'Person', name: 'Author Name' },
-    }
-
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-            {/* page content */}
-        </>
-    )
-}
-```
-
-## Validation
-
-Test structured data with Google's Rich Results Test after adding or changing
-schemas. Confirm that schema properties match the visible content on the page.
+- `@context`, `@type`, URL, headline/name, description, language, image, date,
+  and author match visible content and canonical route.
+- Article dates use valid ISO strings and distinguish published versus modified
+  dates when both exist.
+- Tags map to `keywords` or `about` only when they come from validated content
+  taxonomy.
+- Item lists use stable positions and canonical item URLs.
+- Validation instructions point to official Google Rich Results Test or schema
+  validation tools, but the agent does not claim live validation unless it was
+  actually run.

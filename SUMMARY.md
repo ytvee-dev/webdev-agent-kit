@@ -56,6 +56,8 @@ the same task.
   state-management snapshot
 - `project/architecture-map.md` - host-project route tree, shared code
   locations, and client/server structure
+- `project/seo-profile.md` - host-project SEO architecture, external content
+  taxonomy flow, webmaster state, and AI-readable route surfaces
 - `project/styling-profile.md` - host-project styling conventions and tokens
 - `project/verification-profile.md` - host-project verification order and scope
 - `project/approved-patterns.md` - host-project approved-pattern addenda and
@@ -114,7 +116,9 @@ the same task.
   `main` does not exist yet
 - `skills/frontend-security-inspector` - security-focused review, secure
   coding, and threat modeling for React and Next.js surfaces
-- `skills/technical-seo-app` - technical SEO review and fixes
+- `skills/technical-seo-app` - source-backed technical SEO audits and fixes,
+  including metadata, crawlability, webmaster setup, external content taxonomy,
+  and AI-agent discoverability
 - `skills/screenshot-design-inspector` - screenshot-first design extraction and
   Figma-unavailable fallback, not a replacement for Figma MCP reads
 - `skills/architecture-from-spec` - planning-only architecture guidance from a

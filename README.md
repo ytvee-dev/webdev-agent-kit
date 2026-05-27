@@ -120,6 +120,8 @@ overlays должен сверяться с `SUMMARY.md`.
 
 - `project/stack-profile.md` - стек, runtime, tooling, state-management;
 - `project/architecture-map.md` - маршруты, shared code, client/server zones;
+- `project/seo-profile.md` - локальная SEO-архитектура, внешняя content
+  taxonomy, webmaster state и AI-readable surfaces;
 - `project/styling-profile.md` - styling system, tokens, conventions;
 - `project/verification-profile.md` - команды проверки и порядок запуска;
 - `project/approved-patterns.md` - локальные разрешенные паттерны;
@@ -551,11 +553,15 @@ bundle. Он не должен превращать README в маркетинг
 
 ### `technical-seo-app`
 
-Используется для metadata, canonical URLs, robots, sitemap, crawlability,
-Open Graph и structured data.
+Используется для source-backed technical SEO: metadata, canonical URLs,
+robots, sitemap, crawlability, indexing, Open Graph, structured data, Google
+Search Console/Yandex Webmaster setup, external content taxonomy и
+AI-agent discoverability.
 
-По умолчанию это audit-first skill: сначала report, затем fixes только если
-пользователь явно попросил применить изменения.
+Перед выводами и правками skill сверяется с официальными источниками или
+configured docs MCP, если поведение могло измениться. По умолчанию это
+audit-first skill: сначала report, затем fixes только если пользователь явно
+попросил применить изменения или сразу попросил реализацию.
 
 ### `frontend-security-inspector`
 
@@ -630,8 +636,10 @@ Review начинается с findings: bugs, regressions, risks, missing tests
 technical-seo-app
 ```
 
-Если пользователь просит только проверить, skill не применяет fixes. Если
-пользователь просит применить, после report можно переходить к implementation.
+Для этого host repo SEO chain сначала читает `.agents/project/seo-profile.md`,
+затем `next/path-index.md` и affected source files. Если пользователь просит
+только проверить, skill не применяет fixes. Если пользователь просит
+применить, после короткого report можно переходить к implementation.
 
 ### Security
 
@@ -822,6 +830,8 @@ prompt, frontmatter `description`, repo context и touched area.
 ```text
 $webapp-task-protocol реализуй feature ...
 $technical-seo-app проверь metadata ...
+$technical-seo-app настрой Google Search Console verification ...
+$technical-seo-app проверь llms.txt и AI crawler access ...
 $frontend-design-workflow реализуй UI по скриншоту ...
 $frontend-security-inspector проведи security audit ...
 $architecture-from-spec спланируй frontend architecture по technical assignment ...
@@ -838,6 +848,7 @@ $webdev-assistant-sync publish-up ...
 - component/hooks/client UI work -> `.agents/project/react/path-index.md`;
 - stack facts -> `.agents/project/stack-profile.md`;
 - architecture/data flow -> `.agents/project/architecture-map.md`;
+- SEO/webmaster/AI discoverability -> `.agents/project/seo-profile.md`;
 - styling -> `.agents/project/styling-profile.md`;
 - verification -> `.agents/project/verification-profile.md`.
 
@@ -852,7 +863,9 @@ verification commands или project structure, агент должен пров
 ### Audit skills report-first
 
 SEO и security skills сначала дают report. Они не должны автоматически
-применять изменения, если пользователь попросил только проверить.
+применять изменения, если пользователь попросил только проверить. SEO fixes
+должны указывать source basis, когда рекомендация зависит от актуальной
+документации поисковой системы, Vercel, Next.js или AI crawler provider.
 
 ### Figma first, screenshots fallback
 

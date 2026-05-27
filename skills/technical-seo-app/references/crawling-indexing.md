@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.skills.technical-seo-app.references.crawling-indexing'
 title: 'Crawling and Indexing'
 doc_type: 'skill-reference'
@@ -14,46 +14,47 @@ tags:
 parent:
     - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
 related:
-    []
+    - '[[skills/technical-seo-app/references/source-refresh|Source Refresh]]'
+    - '[[skills/technical-seo-app/references/ai-agent-discoverability|AI Agent Discoverability]]'
 depends_on:
     - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
 ---
 
 # Crawling and Indexing
 
-## General checks
+Use this reference for `robots.txt`, sitemaps, crawlability, indexability,
+internal linking, and route coverage.
 
-- Check robots behavior for the affected environment.
-- Confirm sitemap coverage for indexable pages.
-- Look for accidental `noindex`, duplicate routes, or orphaned internal pages.
-- Verify internal linking when new sections or routes are introduced.
+## Source Baseline
 
-## Next.js 16 file conventions
+- Next.js supports generated `app/robots.ts` and `app/sitemap.ts` metadata file
+  conventions. Confirm the current version through Next.js docs MCP.
+- Google Search requires Googlebot to be able to fetch the page with HTTP 200,
+  read indexable text in the HTML, and access required resources for rendering.
+- Sitemaps help discovery, but they do not replace crawlable internal links.
+- Yandex Webmaster also supports sitemap discovery through `robots.txt` or
+  direct submission.
 
-Use the built-in file conventions rather than static files in `/public`:
+## Audit Steps
 
-**`src/app/sitemap.ts`** — generates `sitemap.xml` dynamically. Export a default
-function returning an array of sitemap entries:
+1. Fetch or inspect the generated `robots.txt` behavior and confirm sitemap URLs
+   are absolute and production-safe.
+2. Inspect sitemap generation and verify coverage for every indexable route
+   class: static pages, content detail pages, listing pages, and taxonomy pages.
+3. Compare sitemap entries with published content filters, dates, canonical
+   paths, route params, and not-found behavior.
+4. Check for accidental `noindex`, blocked crawlers, duplicate canonical URLs,
+   orphan pages, missing internal links, and environment-specific host mistakes.
+5. For dynamic content sources, verify that build-time or cached content loading
+   cannot silently omit published pages from sitemap or tag pages.
 
-```ts
-export default function sitemap(): MetadataRoute.Sitemap {
-    return [
-        { url: 'https://example.com', lastModified: new Date() },
-        { url: 'https://example.com/posts', lastModified: new Date() },
-    ]
-}
-```
+## Implementation Rules
 
-**`src/app/robots.ts`** — generates `robots.txt` dynamically:
-
-```ts
-export default function robots(): MetadataRoute.Robots {
-    return {
-        rules: { userAgent: '*', allow: '/' },
-        sitemap: 'https://example.com/sitemap.xml',
-    }
-}
-```
-
-Both files are automatically served by Next.js at `/sitemap.xml` and
-`/robots.txt`. They replace hand-written static files in `/public`.
+- Prefer `app/robots.ts` and `app/sitemap.ts` when the repo already uses App
+  Router metadata conventions.
+- Keep sitemap URLs canonical and absolute.
+- Use source content `updatedAt` when available, falling back to publish date.
+- Keep crawl blocks narrow and explicit. Do not block AI crawlers or search
+  crawlers unless the user asks for that access policy.
+- Do not submit or modify live webmaster settings from the agent. Provide the
+  code-level setup and verification steps instead.

@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.skills.technical-seo-app.references.metadata-rules'
 title: 'Metadata Rules'
 doc_type: 'skill-reference'
@@ -14,44 +14,49 @@ tags:
 parent:
     - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
 related:
-    []
+    - '[[skills/technical-seo-app/references/source-refresh|Source Refresh]]'
 depends_on:
     - '[[skills/technical-seo-app/SKILL|Technical SEO App]]'
 ---
 
 # Metadata Rules
 
-## Content alignment
+Use this reference for metadata, canonical URLs, robots metadata, and social
+previews. Confirm current Next.js behavior through Next.js docs MCP before
+editing metadata APIs.
 
-- Align titles and descriptions with the route's actual content.
-- Keep canonical behavior explicit for indexable pages.
-- Ensure Open Graph fields are coherent with user-facing metadata.
-- Treat route-level metadata as a maintained surface, not an afterthought.
+## Next.js App Router Rules
 
-## metadataBase
+- Use `metadata` for static route metadata and `generateMetadata` when metadata
+  depends on params, external data, or parent metadata.
+- Keep `metadata` and `generateMetadata` in Server Components only.
+- Do not export both `metadata` and `generateMetadata` from the same route
+  segment.
+- Set `metadataBase` at the root layout when relative canonical URLs, Open
+  Graph images, or Twitter images are used.
+- Remember that nested metadata objects are shallowly merged. A later route
+  segment that defines `openGraph` or `robots` replaces that nested object.
+- Prefer shared metadata helpers when the repo already has them.
 
-`metadataBase` must be set in the root `layout.tsx` whenever relative paths are
-used in Open Graph images, Twitter images, or canonical URLs. Without it,
-Next.js cannot resolve relative paths and logs a warning in development; in
-production the tags are rendered incorrectly.
+## Content Alignment
 
-## Length limits
+- Align title, description, canonical URL, Open Graph, Twitter card, and visible
+  page content.
+- Keep canonical behavior explicit for every indexable page.
+- Use the route's real language/locale and normalize Open Graph locale format
+  according to the repo's existing helper.
+- Use article Open Graph fields only for article-like pages and include
+  published/modified dates when the content model supports them.
+- Use tags as a taxonomy signal only when they also exist in visible content,
+  structured data, or machine-readable summaries.
 
-| Field | Recommended limit |
-|---|---|
-| `title` | ≤ 60 characters |
-| `description` | ≤ 240 characters |
+## Review Checklist
 
-## generateMetadata is server-only
-
-`generateMetadata()` and the static `metadata` export only work in Server
-Components. Adding them to a Client Component has no effect — they are silently
-ignored by Next.js.
-
-## Open Graph
-
-- Set `openGraph.type` appropriate to the page: `website` for the home page,
-  `article` for blog posts and essays.
-- Include `publishedTime` for articles.
-- Provide an `ogImage` with explicit dimensions to avoid layout shift in link
-  previews.
+- Title is route-specific and does not conflict with parent template behavior.
+- Description summarizes the visible page, not a hidden marketing variant.
+- Canonical URL resolves to the preferred indexable URL.
+- Social image path resolves to an absolute URL through `metadataBase` or is
+  already absolute.
+- `robots` metadata does not accidentally `noindex` published routes.
+- Missing or unpublished content returns `noindex` metadata where the app
+  renders a not-found or unavailable state.

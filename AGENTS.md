@@ -165,7 +165,8 @@ not need to name a skill explicitly.
 - Screenshot-based design inspection -> `screenshot-design-inspector`
 - Architecture planning from user specs, with no implicit edits ->
   `architecture-from-spec`
-- Technical SEO audit/fixes -> `technical-seo-app`
+- Source-backed technical SEO audit/fixes, webmaster setup, external content
+  taxonomy, and AI-agent discoverability -> `technical-seo-app`
 - Security audit/reporting -> `frontend-security-inspector`
 - Refresh of `.agents/project/*` docs -> `project-context-adapter`
 
@@ -180,6 +181,7 @@ not need to name a skill explicitly.
 - `.agents/project/stack-profile.md`
 - `.agents/project/architecture-map.md`
 - `.agents/project/styling-profile.md`
+- `.agents/project/seo-profile.md`
 - `.agents/project/verification-profile.md`
 - `.agents/project/approved-patterns.md`
 - `.agents/project/anti-patterns.md`
