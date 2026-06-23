@@ -222,9 +222,35 @@ Codex собирает инструкции слоями:
 - Figma capability нужна для задач с Figma URL и design implementation.
 - Filesystem MCP желателен для чтения файлов и структуры каталогов; правила
   набора предпочитают MCP file reads, когда инструмент доступен.
+- MDN MCP рекомендуется для HTML, CSS, Web APIs, HTTP, browser compatibility и
+  других web platform вопросов, чтобы Codex сверялся с текущей MDN
+  документацией вместо памяти модели.
 - WSL нужен только если проект и tooling живут в WSL. В этом случае Codex в VS
   Code должен запускаться в той же среде, где находятся зависимости и команды
   проекта.
+
+### MDN MCP для web platform docs
+
+Официальный MDN MCP server подключается как remote HTTP MCP. Рекомендуемая
+global установка для Codex CLI и Codex IDE extension:
+
+```shell
+codex mcp add mdn --url https://mcp.mdn.mozilla.net/
+```
+
+Эквивалентный блок в `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.mdn]
+url = "https://mcp.mdn.mozilla.net/"
+enabled = true
+http_headers = { "X-Moz-1st-Party-Data-Opt-Out" = "1" }
+```
+
+MDN описывает этот server как экспериментальный. Пока он экспериментальный,
+MDN может хранить данные о полученных queries; не передавайте туда приватные
+данные. Header `X-Moz-1st-Party-Data-Opt-Out: 1` отключает first-party
+analytics для MCP requests.
 
 Модель, approvals, sandbox и некоторые настройки Codex управляются настройками
 Codex/IDE extension и конфигурацией Codex, а не файлами этого bundle. README
@@ -878,6 +904,11 @@ SEO и security skills сначала дают report. Они не должны 
 Если задача зависит от текущего поведения OpenAI, Next.js, Vercel, GitHub,
 Figma или другой внешней системы, агент должен свериться с официальной
 документацией или configured docs MCP, а не полагаться на память.
+
+Для HTML, CSS, Web APIs, HTTP, browser compatibility и другого web platform
+поведения configured docs MCP по умолчанию - `mdn`, официальный MDN MCP server.
+Если `mdn` недоступен, агент должен использовать официальные страницы MDN
+перед broad web search.
 
 ## Как управлять skills
 

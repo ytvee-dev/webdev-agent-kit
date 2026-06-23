@@ -80,6 +80,11 @@ not need to name a skill explicitly.
   available for the target path. Use shell file reads only when filesystem MCP
   access is unavailable, blocked, or when command output is the source of truth
   for the task.
+- For HTML, CSS, Web APIs, HTTP, browser compatibility, and other web platform
+  behavior, prefer the configured MDN MCP server `mdn` when it is available.
+  If `mdn` is unavailable, use official MDN documentation before broad web
+  search. Treat the MDN MCP server as experimental and verify current behavior
+  against official MDN docs or MCP output.
 - Prefer solutions that do not require installing new packages.
 - Before proposing or installing a package, check whether it already exists in
   the host repo and get explicit user approval before installation.
