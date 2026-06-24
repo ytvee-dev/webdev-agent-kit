@@ -1,6 +1,6 @@
 interface:
     display_name: 'Webdev Assistant Sync'
-    short_description: 'Sync, publish, or push a fallback branch for the shared AGENTS bundle through the upstream checkout'
+    short_description: 'Sync or publish the shared AGENTS bundle'
     default_prompt: 'Use $webdev-assistant-sync for sync-down, publish-up, or an explicit branch-push fallback with the shared webdev-assistant repository.'
 policy:
     allow_implicit_invocation: true

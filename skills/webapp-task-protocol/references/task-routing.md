@@ -21,6 +21,11 @@ depends_on:
 
 # Task Routing
 
+## Section Map
+
+- `Recommended chains` for feature, review, SEO, security, design, Figma,
+  project refresh, documentation, sync, and architecture requests.
+
 ## Recommended chains
 
 ### Feature / refactor / bugfix

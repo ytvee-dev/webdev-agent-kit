@@ -30,8 +30,9 @@ depends_on:
 - Are types, boundary validation, and error states handled clearly?
 - Did the change introduce duplicated code, duplicate component names, magic
   numbers, hardcoded reusable text/links, or hidden metadata/config?
-- Did the change introduce `{} as const`, meaningless pass-through aliases, or
-  repetitive defensive checks that the existing contract already covers?
+- Did the change introduce object-literal `as const`, meaningless pass-through
+  aliases, or repetitive defensive checks that the existing contract already
+  covers?
 - Did the change introduce `useCallback`, `void someFunc()`, `renderSomething`
   JSX variables, or `let isCancelled = false` cancellation guards?
 - Did the change add code comments or feature tests without an explicit user

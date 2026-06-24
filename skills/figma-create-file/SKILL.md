@@ -42,6 +42,12 @@ next Figma workflow.
   canvas skill.
 - Read-only design analysis. Use `figma-design-reader`.
 
+## Required context
+
+1. Read `AGENTS.md`.
+2. Read `.agents/project/figma-profile.md`.
+3. Determine whether the target editor type is `design` or `figjam`.
+
 ## Core workflow
 
 1. Resolve the target plan or organization when required.

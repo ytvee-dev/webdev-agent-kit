@@ -28,6 +28,14 @@ If `origin/main` exists, use the normal PR flow below.
 If `origin/main` is missing, use the fallback only when the user explicitly asks
 for branch+push without a PR.
 
+## Section Map
+
+- `Naming contract` for branch, commit, and PR title requirements.
+- `Eligibility rules` for publishable and forbidden paths.
+- `Steps` for the normal local-main authoring and PR branch flow.
+- `Push-only fallback` for the explicit no-PR fallback path.
+- `Required outcome` for final state and reporting requirements.
+
 ## Naming contract
 
 - Branch names must use `[fix|feat]-[description]`.

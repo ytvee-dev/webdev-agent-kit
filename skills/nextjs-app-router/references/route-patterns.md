@@ -21,6 +21,16 @@ depends_on:
 
 # Route Patterns
 
+## Section Map
+
+- `Special file conventions` for App Router file roles.
+- `Component rendering hierarchy` for wrapper order and route state behavior.
+- `Rendering mode exports` for segment render configuration.
+- `Static generation` for `generateStaticParams()` and `dynamicParams`.
+- `Fetching and caching (Next.js 16)` for opt-in cache behavior.
+- `notFound() and Suspense` for route error-state placement.
+- `General` for broad route structure rules.
+
 ## Special file conventions
 
 Use each file only for its intended Next.js App Router role:

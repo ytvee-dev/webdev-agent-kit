@@ -21,6 +21,12 @@ depends_on:
 
 # Classification Rules
 
+## Section Map
+
+- `Project type` for `frontend-only` versus `fullstack`.
+- `Framework selection` for choosing the primary domain skill.
+- `Overlapping domains` for multi-skill routing.
+
 ## Project type
 
 Use `frontend-only` when the work is primarily:

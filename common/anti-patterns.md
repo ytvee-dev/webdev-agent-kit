@@ -42,7 +42,8 @@ explicit local exceptions.
 - Adding helpers, services, selectors, hooks, or modules before checking
   whether the host repo already solves the same problem
 - Using `any`, `@ts-ignore`, or similarly broad unsafe typing
-- Using `{} as const` or similar empty assertions to bypass typing
+- Creating object literals with `as const`, including `{} as const`, to bypass
+  typing
 - Creating meaningless pass-through aliases or variables that only rename an
   existing symbol without adding domain meaning
 - Re-validating already guaranteed values inside internal helpers when the

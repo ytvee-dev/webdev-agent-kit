@@ -23,6 +23,13 @@ depends_on:
 
 Run this preflight before `sync-down` or `publish-up`.
 
+## Section Map
+
+- `Required checks` for upstream checkout, remote, and `origin/main`.
+- `Working Tree Guard` before checkout, pull, rebase, branch, stash, or restore.
+- `PR preflight` before the normal `publish-up` flow.
+- `Push-only fallback preflight` when the user explicitly requested no PR.
+
 ## Required checks
 
 1. Confirm that `.agents/.git` exists.

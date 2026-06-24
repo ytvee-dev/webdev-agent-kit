@@ -2,3 +2,5 @@ interface:
     display_name: 'README Maintainer'
     short_description: 'Keep .agents README accurate and concise'
     default_prompt: 'Use $readme-maintainer to audit agent documentation and update .agents/README.md.'
+policy:
+    allow_implicit_invocation: true
