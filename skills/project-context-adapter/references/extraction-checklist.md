@@ -23,13 +23,18 @@ depends_on:
 
 - Framework and router model
 - React version and rendering model
+- Non-React frontend framework, static frontend model, or custom build model
 - Project type: `frontend-only` or `fullstack`
 - Styling system and token sources
 - Validation libraries
 - Verification commands
+- Official documentation sources selected for the detected stack
+- MCP dependency scan from `skills/*/agents/openai.yaml`
+- Required, available, missing, optional, approved, installed, skipped, or
+  blocked MCP capabilities
 - Shared architecture patterns
 - Local anti-patterns
-- Figma implementation constraints
+- Screenshot, exported asset, copied inspect, and design-reference constraints
 - Current code paths and modules after recent code changes
 - Framework-specific lookup indexes for:
   - styles and themes

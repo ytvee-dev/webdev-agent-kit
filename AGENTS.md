@@ -47,6 +47,8 @@ workflow:
 - `project/**` contains host-project facts and stays local-only.
 - `.agents/` may be used as a nested checkout, but publication and sync flows
   are outside this reduced skill bundle.
+- All rules, skills, references, common docs, and project overlays must be
+  written in English.
 
 ## Required Reading Order
 
@@ -67,8 +69,8 @@ Before implementation, documentation, or skill work:
   `frontend-layout-implementer`
 - Rendered UI verification, browser screenshots, and visual diff review ->
   `frontend-visual-qa`
-- Project onboarding, root pointer planning, and `project/**` creation ->
-  `project-onboarding-adapter`
+- Project onboarding, root pointer creation, stack detection, docs/MCP
+  selection, and `project/**` cache creation -> `project-onboarding-adapter`
 - Refresh factual project overlays and path indexes ->
   `project-context-adapter`
 - Skill authoring and bundle rule maintenance ->
@@ -107,6 +109,12 @@ design-screenshot-spec
 - If a named MCP server required by the active skill is unavailable, report the
   missing capability before using a fallback. Use fallback only when the skill
   allows it or the user explicitly accepts it.
+- During project onboarding, scan current `skills/*/agents/openai.yaml` files
+  for declared MCP dependencies and cache required, available, missing,
+  optional, approved, installed, skipped, or blocked capabilities in
+  `project/mcp-profile.md`.
+- Install missing MCP servers only after explicit user approval and only when
+  the official install source has been verified.
 - Never use Figma MCP as a fallback in this bundle.
 
 ## Frontend Implementation Rules
@@ -119,6 +127,10 @@ design-screenshot-spec
   and verification commands before introducing new ones.
 - Do not add packages, styling systems, global tokens, generated scaffolds, or
   architecture layers without explicit user approval.
+- During new or empty project onboarding, do not create app source files,
+  framework configs, package manifests, routes, components, styles, tests, or
+  build scripts. Create only the host-root pointer and local-only
+  `project/**` overlays from inferred or user-provided intended stack facts.
 - Keep edits scoped to the requested screen, component, route, or static page.
 - Preserve accessibility, focus states, responsive behavior, text wrapping, and
   stable layout dimensions.
@@ -129,6 +141,10 @@ design-screenshot-spec
 
 - Keep reusable instructions in `common/**` or `skills/**`.
 - Keep host-project facts in `project/**`.
+- Keep MCP and official documentation capability facts in
+  `project/mcp-profile.md`.
+- Keep screenshot, exported asset, copied inspect, and design-reference
+  boundaries in `project/design-reference-profile.md`.
 - Keep every Markdown file in this bundle graph-linkable with YAML frontmatter:
   `id`, `title`, `doc_type`, `layer`, `status`, `publishable`, `local_only`,
   `tags`, `parent`, `related`, and `depends_on`.
@@ -145,7 +161,7 @@ For skill and documentation changes:
 1. Validate changed skills with
    `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>`.
 2. Search for stale deleted skill names and prohibited Figma/Jam routing.
-3. Check that `SUMMARY.md`, `README.md`, and actual `skills/**` directories
+3. Search changed rules and overlays for non-English rule text.
+4. Check that `SUMMARY.md`, `README.md`, and actual `skills/**` directories
    agree.
-4. Run Markdown formatting checks when available.
-
+5. Run Markdown formatting checks when available.

@@ -54,7 +54,7 @@ frontend implementer.
 2. Read `SUMMARY.md`.
 3. Read `common/approved-patterns.md`.
 4. Read `common/anti-patterns.md`.
-5. Read `project/figma-profile.md` when present.
+5. Read `project/design-reference-profile.md` when present.
 6. Read `references/spec-extraction-checklist.md`.
 
 ## Tool Contract

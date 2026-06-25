@@ -40,6 +40,12 @@ Before changing bundle docs or skills:
 - Keep the host-root `AGENTS.md` pointer out of ordinary bundle edits.
 - Use bundle-local paths inside `AGENTS.md`, `SUMMARY.md`, `README.md`,
   `common/**`, and `skills/**`.
+- Keep all rules, skills, references, common docs, and project overlays written
+  in English.
+- Keep MCP capability and official documentation facts in
+  `project/mcp-profile.md`.
+- Keep screenshot, exported asset, copied inspect, and design-reference
+  boundaries in `project/design-reference-profile.md`.
 
 ## Markdown Rules
 
@@ -59,6 +65,8 @@ Before changing bundle docs or skills:
 - Keep references linked from the owning `SKILL.md`.
 - Keep `agents/openai.yaml` aligned with the trigger, scope, and tool contract.
 - Do not declare Figma MCP dependencies in this bundle.
+- When onboarding or context refresh changes MCP dependencies, scan current
+  `skills/*/agents/openai.yaml` files and update `project/mcp-profile.md`.
 
 ## Validation
 
@@ -66,6 +74,6 @@ Before finishing documentation or skill changes:
 
 1. Validate each changed skill package.
 2. Search for stale removed skill names and prohibited Figma/Jam routing.
-3. Verify actual `skills/**` directories match `SUMMARY.md` and `README.md`.
-4. Run Markdown formatting checks when available.
-
+3. Search changed docs and overlays for non-English rule text.
+4. Verify actual `skills/**` directories match `SUMMARY.md` and `README.md`.
+5. Run Markdown formatting checks when available.

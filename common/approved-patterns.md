@@ -32,6 +32,11 @@ Purpose: define reusable patterns for screenshot-to-frontend implementation.
 ## Project-Native Implementation
 
 - Detect the actual frontend stack before choosing framework patterns.
+- Select official documentation for the detected stack before encoding
+  stack-specific rules: MDN for web platform behavior and `context7` for
+  current framework, library, CLI, and tooling docs.
+- Cache MCP and documentation capability facts in `project/mcp-profile.md`
+  during onboarding or context refresh.
 - Reuse existing components, routes, styling systems, tokens, breakpoints, and
   verification commands.
 - Keep styles local to the edited surface unless the project already owns a
@@ -52,4 +57,3 @@ Purpose: define reusable patterns for screenshot-to-frontend implementation.
 - Use browser-rendered evidence for visual work.
 - Compare implementation screenshots against the spec and visual references.
 - Report material visual deviations instead of hiding them.
-

@@ -1,11 +1,17 @@
 interface:
     display_name: 'Project Onboarding Adapter'
-    short_description: 'Plan host project onboarding'
-    default_prompt: 'Use $project-onboarding-adapter to plan .agents onboarding for this frontend project.'
+    short_description: 'Adapt host project context'
+    default_prompt: 'Use $project-onboarding-adapter to adapt .agents onboarding, project overlays, and MCP context for this frontend project.'
 policy:
     allow_implicit_invocation: true
 dependencies:
     tools:
         - type: 'mcp'
           value: 'filesystem_server'
-          description: 'Inspect project files and existing bundle paths during onboarding planning.'
+          description: 'Inspect project files, bundle paths, skill metadata, and project overlays during onboarding.'
+        - type: 'mcp'
+          value: 'context7'
+          description: 'Fetch current official framework, library, CLI, and tooling documentation for detected frontend stacks.'
+        - type: 'mcp'
+          value: 'mdn'
+          description: 'Fetch official HTML, CSS, Web API, accessibility, and browser compatibility documentation when stack rules depend on web platform behavior.'

@@ -52,8 +52,10 @@ All paths are bundle-local paths rooted at `.agents/`. The host-root
 - `project/verification-profile.md` - local verification commands.
 - `project/approved-patterns.md` - host-project implementation addenda.
 - `project/anti-patterns.md` - host-project prohibited local patterns.
-- `project/figma-profile.md` - local screenshot-derived design constraints and
-  Figma no-MCP boundary.
+- `project/mcp-profile.md` - required, available, missing, optional, approved,
+  installed, skipped, or blocked MCP capabilities for current skills.
+- `project/design-reference-profile.md` - local screenshot, exported asset,
+  copied inspect, and design-reference boundaries.
 - `project/react/path-index.md` - React/client lookup index when present.
 - `project/next/path-index.md` - Next.js lookup index when present.
 
@@ -71,10 +73,12 @@ skills or common docs.
 - `skills/frontend-visual-qa` - verify rendered UI against the design spec and
   visual references with browser screenshots, viewport checks, and visual diff
   review.
-- `skills/project-onboarding-adapter` - Plan Mode project onboarding, host-root
-  `AGENTS.md` pointer planning, and first project overlay creation.
+- `skills/project-onboarding-adapter` - project onboarding, host-root
+  `AGENTS.md` pointer handling, stack detection, official docs/MCP selection,
+  MCP dependency audit, and first project overlay creation.
 - `skills/project-context-adapter` - refresh factual project overlays and
-  frontend path indexes after project structure or conventions change.
+  frontend path indexes after project structure, docs/MCP choices, or
+  conventions change.
 - `skills/agent-rules-skill-author` - create, edit, evaluate, and validate
   `.agents` skill packages and bundle rules.
 
@@ -106,5 +110,9 @@ or notes. The agent must not use Figma MCP or inspect live Figma files.
 - Use `context7` for current framework or library documentation.
 - Use `mdn` for HTML, CSS, Web APIs, and browser compatibility.
 - Use Browser or Playwright MCP for rendered frontend verification.
+- During onboarding, scan current `skills/*/agents/openai.yaml` files for MCP
+  dependencies and cache required, available, missing, optional, approved,
+  installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
+- Install missing MCP servers only after explicit user approval and verified
+  official install source.
 - Never use Figma MCP or Figma whiteboard tooling in this bundle.
-

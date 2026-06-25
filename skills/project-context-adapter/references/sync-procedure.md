@@ -24,12 +24,20 @@ depends_on:
 1. Read the current `AGENTS.md`.
 2. Inspect stack and tooling files.
 3. Inspect route structure, shared components, styling, and validation helpers.
-4. Build or refresh framework-specific path indexes so common request types map
+4. Inspect current `skills/*/agents/openai.yaml` dependency declarations when
+   MCP or documentation capability facts may have changed.
+5. Build or refresh framework-specific path indexes so common request types map
    to concrete project paths before broad repo scanning is needed.
-5. Update `.agents/project/**` with factual repo details only.
-6. Keep local approved-pattern and anti-pattern files limited to host-project
+6. Update `.agents/project/**` with factual repo details only.
+7. Keep `project/mcp-profile.md` aligned with required, available, missing,
+   optional, approved, installed, skipped, or blocked MCP capabilities.
+8. Keep `project/design-reference-profile.md` focused on screenshot, exported
+   asset, copied inspect, and design-reference boundaries; do not imply live
+   design-tool access.
+9. Keep local approved-pattern and anti-pattern files limited to host-project
    addenda; do not duplicate bundle-wide rules from `.agents/common/**`.
-7. After application code changes, verify whether routes, components, helpers,
-   tokens, verification commands, or indexed paths changed.
-8. Keep the reusable skills untouched unless the user explicitly asked for a
+10. After application code changes, verify whether routes, components, helpers,
+   tokens, verification commands, MCP facts, documentation choices, or indexed
+   paths changed.
+11. Keep the reusable skills untouched unless the user explicitly asked for a
    library-level skill change.

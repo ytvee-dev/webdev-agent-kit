@@ -98,13 +98,24 @@ visual comparison, responsive behavior, text overflow, and interaction states.
 
 ### `project-onboarding-adapter`
 
-Use this Plan Mode skill to adapt the bundle to a host frontend project. It
-plans the host-root `AGENTS.md` pointer and the local-only `project/**`
-overlays. It does not edit files while Plan Mode is active.
+Use this skill to adapt the bundle to a host frontend project. It plans or
+executes the host-root `AGENTS.md` pointer, detects the frontend stack, selects
+official documentation and MCP capabilities, scans current skill MCP
+dependencies, and writes local-only `project/**` overlays.
+
+In Plan Mode it produces a plan only. Outside Plan Mode it may execute an
+approved adaptation, but it must not create application source files. For a new
+or empty project it creates or refreshes only the host-root pointer and
+`.agents/project/**` overlays from inferred or user-provided intended stack
+facts.
+
+It installs missing MCP servers only after explicit user approval and only when
+the official install source has been verified.
 
 ### `project-context-adapter`
 
-Use this skill to refresh `project/**` overlays and frontend path indexes after
+Use this skill to refresh `project/**` overlays, docs/MCP choices, design
+reference boundaries, patterns, anti-patterns, and frontend path indexes after
 project facts change.
 
 ### `agent-rules-skill-author`
@@ -150,6 +161,27 @@ project/**
 generated, vendor, build, cache, and host-project source paths
 ```
 
+Project context cache files include:
+
+```text
+project/stack-profile.md
+project/architecture-map.md
+project/styling-profile.md
+project/verification-profile.md
+project/approved-patterns.md
+project/anti-patterns.md
+project/mcp-profile.md
+project/design-reference-profile.md
+project/react/path-index.md
+project/next/path-index.md
+```
+
+`project/mcp-profile.md` caches required, available, missing, optional,
+approved, installed, skipped, or blocked MCP capabilities for the current
+skills. `project/design-reference-profile.md` caches screenshot, exported
+asset, copied inspect, and design-reference boundaries without implying live
+design-tool access.
+
 ## Prohibited Workflows
 
 - Do not use Figma MCP.
@@ -157,6 +189,9 @@ generated, vendor, build, cache, and host-project source paths
 - Do not create or edit Figma files.
 - Do not use Figma whiteboard.
 - Do not generate Figma design systems or Code Connect mappings.
+- Do not install missing MCP servers without explicit user approval and a
+  verified official install source.
+- Do not scaffold app source files during new-project onboarding.
 - Do not implement before a design spec exists.
 - Do not add packages, styling systems, global tokens, or architecture layers
   without explicit approval.
