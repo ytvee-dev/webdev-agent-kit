@@ -72,10 +72,10 @@ skills or common docs.
   `Design Implementation Spec`.
 - `skills/frontend-layout-implementer` - implement a `Design Implementation
   Spec` in the current frontend project while adapting to the actual stack and
-  project architecture.
+  project architecture, then run rendered visual QA when applicable.
 - `skills/frontend-visual-qa` - verify rendered UI against the design spec and
-  visual references with browser screenshots, viewport checks, and visual diff
-  review.
+  visual references with automatic available Playwright MCP browser checks,
+  screenshots, viewport checks, and visual diff review.
 - `skills/project-onboarding-adapter` - project onboarding, host-root
   `AGENTS.md` pointer handling, stack detection, official docs/MCP selection,
   MCP dependency audit, and first project overlay creation.
@@ -113,6 +113,10 @@ or notes. The agent must not use Figma MCP or inspect live Figma files.
 - Use `context7` for current framework or library documentation.
 - Use `mdn` for HTML, CSS, Web APIs, and browser compatibility.
 - Use Browser or Playwright MCP for rendered frontend verification.
+- Use already available Browser or Playwright MCP for rendered frontend
+  verification without extra user confirmation. This does not install missing
+  MCP servers or bypass approval requirements for commands, package installs,
+  destructive actions, or production access.
 - During onboarding, scan current `skills/*/agents/openai.yaml` files for MCP
   dependencies and cache required, available, missing, optional, approved,
   installed, skipped, or blocked capabilities in `project/mcp-profile.md`.

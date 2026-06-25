@@ -39,7 +39,9 @@ design-screenshot-spec
 2. `frontend-layout-implementer` implements that spec in the current frontend
    project using project context and the actual stack.
 3. `frontend-visual-qa` verifies the rendered UI with browser screenshots,
-   viewport checks, console/runtime review, and visual diff review.
+   viewport checks, console/runtime review, and visual diff review. When
+   Playwright MCP is available, Codex runs those browser checks automatically
+   after implementation without asking for separate confirmation.
 
 ## Source Material
 
@@ -89,12 +91,18 @@ It uses these tools when available:
 
 If a named MCP is unavailable, Codex must report the missing capability before
 using a lower-confidence fallback. Figma MCP is never a fallback.
+Using available Browser or Playwright MCP for rendered UI verification does not
+require separate user confirmation. Installing missing MCP servers, package
+installs, commands that require approval, destructive actions, and production
+access still require the approvals defined by the active environment.
 
 ### `frontend-visual-qa`
 
 Use this skill after implementation. It verifies local app rendering, console
 and runtime errors, desktop/tablet/mobile viewport fit, screenshot capture,
 visual comparison, responsive behavior, text overflow, and interaction states.
+When Playwright MCP is available, the skill runs those rendered checks directly
+instead of only proposing or handing off browser QA.
 
 ### `project-onboarding-adapter`
 

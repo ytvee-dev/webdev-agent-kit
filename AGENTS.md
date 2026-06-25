@@ -139,6 +139,11 @@ design-screenshot-spec
 - Use `context7` for current framework or library documentation.
 - Use `mdn` for current HTML, CSS, Web API, and browser compatibility facts.
 - Use Browser or Playwright MCP for rendered UI verification.
+- When Browser or Playwright MCP is already available in the session, use it
+  for rendered UI verification without asking the user for extra confirmation.
+  This does not override explicit approval requirements for installing missing
+  MCP servers, starting commands that require approval, package installs,
+  destructive actions, or production-system access.
 - If a named MCP server required by the active skill is unavailable, report the
   missing capability before using a fallback. Use fallback only when the skill
   allows it or the user explicitly accepts it.

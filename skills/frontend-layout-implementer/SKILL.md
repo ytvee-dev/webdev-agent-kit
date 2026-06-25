@@ -76,7 +76,9 @@ commands.
   implementation depends on API or framework behavior.
 - Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility
   facts.
-- Use Browser or Playwright MCP for rendered verification after implementation.
+- Use available Playwright MCP for rendered verification after implementation
+  without asking the user for separate confirmation. Browser MCP is an allowed
+  lower-confidence fallback only when Playwright MCP is unavailable.
 - Use Visual Diff MCP when available during final visual comparison.
 - Do not use Figma MCP.
 - If a named MCP is unavailable, report the missing capability before using a
@@ -100,7 +102,13 @@ commands.
 8. Preserve accessibility, semantic structure, keyboard/focus behavior, text
    wrapping, and responsive behavior.
 9. Run relevant project verification commands from `project/verification-profile.md`.
-10. Hand off rendered visual verification to `frontend-visual-qa`.
+10. Run `frontend-visual-qa` after scoped rendered frontend changes, using
+    available Playwright MCP automatically when the local app can be started or
+    reused.
+11. Skip browser visual QA only for documentation-only or static-only tasks,
+    changes with no rendered surface, blocked local app startup, unavailable
+    Playwright/browser tooling, or an explicit user request to skip browser
+    checks.
 
 ## Output Contract
 
@@ -111,7 +119,7 @@ Report:
 - project primitives, tokens, or styling owners reused;
 - deviations from the design spec;
 - verification commands run;
-- visual QA handoff status or blocker.
+- rendered visual QA result or blocker.
 
 ## Validation Gates
 
@@ -119,7 +127,8 @@ Report:
 - No Figma MCP use is allowed.
 - No new package, styling system, global token, or architecture layer may appear
   without approval.
-- The result must be ready for browser visual QA.
+- Rendered frontend changes must include browser visual QA unless one of the
+  documented workflow blockers applies.
 
 ## Trigger Evals
 

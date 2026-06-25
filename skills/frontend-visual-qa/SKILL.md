@@ -58,15 +58,20 @@ and visual diff review.
 
 ## Tool Contract
 
-- Use Browser or Playwright MCP to open the local app, inspect console/runtime
-  errors, interact with controls, resize viewports, and capture screenshots.
+- Use Playwright MCP directly when it is available and callable in the current
+  session. Open the local app, inspect console/runtime errors, interact with
+  controls, resize viewports, and capture screenshots without asking the user
+  for separate confirmation.
+- Use Browser MCP as a lower-confidence rendered QA fallback only when
+  Playwright MCP is unavailable. Do not install missing MCP servers as part of
+  the fallback.
 - Use Visual Diff MCP when available to compare implementation screenshots with
   supplied references.
 - Use Visual Reference MCP when available to access supplied images.
 - Use `mdn` only when web platform behavior affects the QA finding.
 - Do not use Figma MCP.
-- If browser tooling or visual diff tooling is unavailable, report the blocker
-  and complete only the checks that can be run honestly.
+- If Playwright MCP, browser tooling, or visual diff tooling is unavailable,
+  report the blocker and complete only the checks that can be run honestly.
 
 ## Workflow
 
@@ -100,6 +105,8 @@ Report:
 ## Validation Gates
 
 - A visual QA pass must include rendered browser evidence unless blocked.
+- When Playwright MCP is callable, proposing Playwright checks or reporting a
+  handoff is not a completed visual QA pass; run the rendered checks.
 - Static typecheck, lint, or build alone is not visual QA.
 - Material visual mismatches must be reported with the affected viewport or
   state.
