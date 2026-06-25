@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Screenshot Design Inspector'
-    short_description: 'Read supplied UI screenshots'
-    default_prompt: 'Use $screenshot-design-inspector when design guidance comes from supplied screenshots or copied visual inspect panels.'
-policy:
-    allow_implicit_invocation: true

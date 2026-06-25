@@ -1,6 +1,6 @@
 ---
 id: 'agents.skills.agent-rules-skill-author.references.figma-derived-conventions'
-title: 'Figma Derived Conventions'
+title: 'Screenshot Derived Conventions'
 doc_type: 'skill-reference'
 layer: 'skill'
 status: 'active'
@@ -10,58 +10,47 @@ skill: 'agent-rules-skill-author'
 tags:
     - 'agents/skill-package'
     - 'agents/authoring'
-    - 'frontend/figma'
+    - 'frontend/design'
     - 'agents/reference'
 parent:
-    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules Skill Author]]'
 related:
-    - '[[skills/figma-design-reader/SKILL|Figma Design Reader]]'
-    - '[[skills/figma-design-to-code/SKILL|Figma Design To Code]]'
+    - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
+    - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
+    - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
 depends_on:
-    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules Skill Author]]'
 ---
 
-# Figma Derived Conventions
+# Screenshot Derived Conventions
 
-Use this reference when agent rules or skills need to encode reusable behavior
-that was learned from Figma workflows.
+Use this reference when agent rules or skills need to encode behavior learned
+from screenshot-derived frontend workflows.
 
-## Section Map
+## Layer Boundaries
 
-- `Layer boundaries` for where Figma-derived rules belong.
-- `Routing model` for mapping user intent to the correct Figma skill.
-- `What not to encode` for avoiding repo leakage and skill overlap.
+- Put reusable screenshot intake and spec rules in `design-screenshot-spec`.
+- Put reusable implementation rules in `frontend-layout-implementer`.
+- Put reusable rendered verification rules in `frontend-visual-qa`.
+- Put project-specific tokens, breakpoints, component paths, and local examples
+  in `project/**`.
+- Put generic source-first or project-native implementation policy in
+  `common/**`.
 
-## Layer boundaries
+## Routing Model
 
-- Put project-specific token names, breakpoint facts, and component locations in
-  `.agents/project/figma-profile.md`, not in reusable skills.
-- Put reusable offline Figma-derived artifact reading in `figma-design-reader`.
-- Put reusable Figma-derived artifact-to-code workflow in
-  `figma-design-to-code`.
-- Put reusable manual Figma canvas edit planning in `figma-canvas-editing`.
-- Put screenshot-only fallback rules in `screenshot-design-inspector`.
+- Supplied screenshots or visual inspect panels -> `design-screenshot-spec`.
+- `Design Implementation Spec` to frontend code -> `frontend-layout-implementer`.
+- Rendered UI comparison against spec or references -> `frontend-visual-qa`.
+- Project overlay refresh -> `project-context-adapter`.
+- Skill authoring or rule maintenance -> `agent-rules-skill-author`.
 
-## Routing model
+## Prohibited Encodings
 
-- Read or explain supplied Figma-derived artifacts -> `figma-design-reader`
-- Implement repo code from supplied Figma-derived artifacts ->
-  `figma-design-to-code`
-- Plan manual edits to existing Figma nodes, variables, or components ->
-  `figma-canvas-editing`
-- Blueprint whole screens for manual Figma creation -> `figma-screen-generation`
-- Blueprint a Figma library or design system ->
-  `figma-design-system-builder`
-- Recommend Code Connect mappings or snippet drafts -> `figma-code-connect`
-- Prepare a blank file setup brief -> `figma-create-file`
-- Screenshots or copied visual inspect panels only ->
-  `screenshot-design-inspector`
-
-## What not to encode
-
-- Do not collapse all Figma work into `frontend-design-workflow`.
-- Do not move Figma canvas rules into repo implementation skills.
-- Do not encode Figma URLs as sufficient source material; require screenshots,
-  exports, copied inspect values, token/style notes, written specs, or briefs.
-- Do not copy vendor assets, licenses, or maintainers metadata into `.agents`
-  unless the bundle truly needs them.
+- Do not encode live Figma access as part of this bundle.
+- Do not add Figma MCP dependencies.
+- Do not route Figma whiteboard, canvas editing, file creation,
+  design-system generation, or Code Connect tasks.
+- Do not treat screenshots as exact tokens unless the value is copied from an
+  inspect panel or explicit note.
+- Do not put host-project facts in reusable skills.

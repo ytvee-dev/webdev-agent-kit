@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Webapp Task Protocol'
-    short_description: 'Route React-first frontend work to the right skills'
-    default_prompt: 'Use $webapp-task-protocol to route this React/frontend task before implementation or guidance.'
-policy:
-    allow_implicit_invocation: true

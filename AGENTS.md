@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.agents'
 title: 'AGENTS.md'
 doc_type: 'policy'
@@ -9,190 +9,143 @@ local_only: false
 tags:
     - 'agents/policy'
     - 'docs/entrypoint'
-parent:
-    []
+parent: []
 related:
     - '[[SUMMARY|Agent Documentation Summary]]'
-    - '[[README|webdev-assistant README]]'
+    - '[[README|Screenshot Frontend Assistant README]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
-depends_on:
-    []
+depends_on: []
 ---
 
 # AGENTS.md
 
-This file is the canonical policy entrypoint for the embedded `.agents/`
-bundle. The host-project root `AGENTS.md` is only a stable pointer to this file,
-not a synchronized copy.
+This is the canonical policy entrypoint for this `.agents` bundle. Paths in
+this file are bundle-local paths rooted at `.agents/` itself, such as
+`AGENTS.md`, `SUMMARY.md`, `skills/**`, `common/**`, and `project/**`.
+
+The host repository root `AGENTS.md` is managed only by
+`project-onboarding-adapter`. Do not edit or mirror the host-root pointer during
+ordinary bundle skill work.
+
+## Role
+
+Codex acts as a senior frontend implementation agent for a screenshot-to-code
+workflow:
+
+1. Read user-supplied Figma screenshot material without opening Figma.
+2. Produce a strict `Design Implementation Spec`.
+3. Implement the spec in the current frontend project.
+4. Verify the rendered result with browser screenshots and visual QA.
 
 ## Bundle Model
 
-- The host-root `AGENTS.md` holds only the stable pointer to
-  `.agents/AGENTS.md`.
-- `.agents/AGENTS.md` is the canonical publishable policy file.
-- `.agents/common/**` holds reusable shared rules that may be published to the
-  shared `webdev-assistant` repository.
-- `.agents/project/**` holds host-repo facts, examples, overlays, and local
-  addenda only.
-- `.agents/skills/**` holds reusable workflows that may be published to the
-  shared `webdev-assistant` repository.
-- `.agents/` itself is the local checkout of the shared
-  `git@github.com:ytvee-dev/webdev-assistant.git` repository.
-- `.agents/project/**` is intentionally local-only inside that nested checkout
-  and must never be published upstream.
-- Changes inside `.agents/` do not require updating the host-root `AGENTS.md`
-  unless the canonical policy path itself changes.
+- `AGENTS.md` is the canonical publishable policy file for the bundle.
+- `SUMMARY.md` is the navigation summary for the bundle.
+- `README.md` is the human-facing usage guide.
+- `common/**` contains reusable rules.
+- `skills/**` contains reusable Codex skills.
+- `project/**` contains host-project facts and stays local-only.
+- `.agents/` may be used as a nested checkout, but publication and sync flows
+  are outside this reduced skill bundle.
 
-## Inspect First
+## Required Reading Order
 
-Before implementation work:
+Before implementation, documentation, or skill work:
 
 1. Read `AGENTS.md`.
-2. Read `.agents/SUMMARY.md`.
-3. Load the relevant skill from `.agents/skills/`.
-4. Read the relevant `.agents/common/**` docs and `.agents/project/**` overlays.
-5. Read the affected source files and configs before changing anything.
-
-Do not skip this order when the task changes code, agent policy, or bundle
-structure. Select skills from the user prompt and repo context; the user does
-not need to name a skill explicitly.
-
-## Host Project Rules
-
-- Detect project type, stack, routing model, styling system, and verification
-  commands from the inspected host repository and `.agents/project/**`.
-- Do not store host-project stack facts, architecture, or local examples in
-  `AGENTS.md`, `.agents/common/**`, or reusable skill packages.
-- Treat `.agents/project/**` as the current host-project context, not as static
-  notes.
-- After changing host code or documentation structure, update the relevant local
-  `.agents/project/**` overlays in the same task.
-- Every Markdown file in `.agents/**` must keep graph frontmatter current.
-  Treat it as navigation metadata only; workflow instructions belong in the
-  document body.
-
-## Generic Workflow Rules
-
-- Prefer MCP tools and repo-local documentation over broad guesswork whenever
-  the required tool or context is available.
-- For file inspection, prefer filesystem MCP tools such as `read_text_file`,
-  `read_multiple_files`, `list_directory`, and `directory_tree` when they are
-  available for the target path. Use shell file reads only when filesystem MCP
-  access is unavailable, blocked, or when command output is the source of truth
-  for the task.
-- For HTML, CSS, Web APIs, HTTP, browser compatibility, and other web platform
-  behavior, prefer the configured MDN MCP server `mdn` when it is available.
-  If `mdn` is unavailable, use official MDN documentation before broad web
-  search. Treat the MDN MCP server as experimental and verify current behavior
-  against official MDN docs or MCP output.
-- Prefer solutions that do not require installing new packages.
-- Before proposing or installing a package, check whether it already exists in
-  the host repo and get explicit user approval before installation.
-- Do not interact with production systems, production data, or live production
-  environments.
-- Do not invent architecture, API contracts, or missing implementation details;
-  narrow the search and then ask the user if the repo still does not define the
-  needed fact.
-- Do not modify the host repository root `README.md` unless the user explicitly
-  asks for it.
-
-## Upstream Bundle Rules
-
-- Publishable checkout-root bundle content inside `.agents/` is limited to
-  `AGENTS.md`, `SUMMARY.md`, `common/**`, `skills/**`, `README.md`, and
-  `.gitignore`.
-- For `.agents/` documentation git work, use branch names in the form
-  `[fix|feat]-[description]`.
-- Keep `description` to 1-3 lowercase kebab-case words that summarize the
-  grouped documentation commits.
-- Do not use numbers, timestamps, ticket ids, repo names, or placeholders such
-  as `webdev`, `assistant`, or `bundle` in `.agents/` documentation branch
-  names unless the word is the real subject of the change.
-- When committing publishable documentation changes in `.agents/`, use
-  `fix(docs): <short description>` or `feat(docs): <short description>`.
-- Keep the local `.agents/` checkout on `main` by default; treat feature
-  branches as push/PR transport only.
-- Commit publishable documentation changes locally on `main`.
-- Do not create a publication branch, push, open a PR, or report publication
-  success while eligible publishable documentation changes remain uncommitted.
-- After committing publishable documentation, verify that eligible publishable
-  paths have no remaining staged or unstaged changes before continuing.
-- Do not switch `.agents/` branches while uncommitted or unmerged changes are
-  present; resolve, commit, or stop and report the exact paths first.
-- Stage and commit only eligible publishable paths before creating a push
-  branch.
-- Never push local `main` directly to `origin`.
-- Before pushing a documentation branch, run `git pull --rebase origin main`
-  while on local `main`.
-- After that pull, create the new `[fix|feat]-[description]` branch from local
-  `main`, push it, open the PR to `main`, and then return the local checkout to
-  `main`.
-- Reuse the same core description in the branch name, commit subject, and PR
-  title when `webdev-assistant-sync` opens a PR.
-- Never publish `project/**`, old helper paths such as `upstream/**`, source
-  code, or other host-project files to `webdev-assistant`.
-- Do not mirror `.agents/AGENTS.md` into the host-root `AGENTS.md`; keep the
-  root file as a stable pointer.
-- Use `webdev-assistant-sync` for bundle sync and publication tasks.
-- Do not run git publication commands from the host project repository root; run
-  them only inside the nested `.agents/` git repository.
+2. Read `SUMMARY.md`.
+3. Select and read the relevant `skills/**/SKILL.md`.
+4. Read relevant `common/**` rules.
+5. Read relevant `project/**` overlays and path indexes.
+6. Read affected source files and configs before editing.
 
 ## Skill Map
 
-- Task classification and workflow routing -> `webapp-task-protocol`
-- Next.js App Router work -> `nextjs-app-router`
-- React component architecture, strict TypeScript, and implementation ->
-  `react-component-workflow`
-- React shared state, context, Redux, selectors, and store-like hooks ->
-  `react-state-workflow`
-- Visual design, Figma-derived artifact/screenshot translation, responsive polish, and
-  generative UI -> `frontend-design-workflow`
-- Offline Figma-derived artifact analysis, screenshots, exports, copied inspect
-  values, variables, and specs ->
-  `figma-design-reader`
-- Figma-derived artifact-to-code implementation in the repo ->
-  `figma-design-to-code`
-- Manual Figma canvas edit specs and planning ->
-  `figma-canvas-editing`
-- Full-screen and multi-section Figma blueprints for manual creation ->
-  `figma-screen-generation`
-- Figma design system and component library blueprints ->
-  `figma-design-system-builder`
-- Figma Code Connect mapping recommendations and snippet drafts ->
-  `figma-code-connect`
-- New blank Figma or FigJam file setup briefs -> `figma-create-file`
-- Boundary validation without new dependencies -> `boundary-input-validation`
-- Review pass and verification -> `frontend-review-and-fix`
-- Interactive browser QA with Playwright, screenshots, and viewport checks ->
-  `playwright-interactive`
-- First-time host project adaptation and `.agents/project/**` planning ->
+- Screenshot or copied visual inspect material to implementation spec ->
+  `design-screenshot-spec`
+- Frontend implementation from a `Design Implementation Spec` ->
+  `frontend-layout-implementer`
+- Rendered UI verification, browser screenshots, and visual diff review ->
+  `frontend-visual-qa`
+- Project onboarding, root pointer planning, and `project/**` creation ->
   `project-onboarding-adapter`
-- Agent rules and skill authoring -> `agent-rules-skill-author`
-- Human-facing `.agents/README.md` maintenance -> `readme-maintainer`
-- Bundle sync and upstream publication -> `webdev-assistant-sync`
-- Screenshot-based design inspection -> `screenshot-design-inspector`
-- Architecture planning from user specs, with no implicit edits ->
-  `architecture-from-spec`
-- Source-backed technical SEO audit/fixes, webmaster setup, external content
-  taxonomy, and AI-agent discoverability -> `technical-seo-app`
-- Security audit/reporting -> `frontend-security-inspector`
-- Refresh of `.agents/project/*` docs -> `project-context-adapter`
+- Refresh factual project overlays and path indexes ->
+  `project-context-adapter`
+- Skill authoring and bundle rule maintenance ->
+  `agent-rules-skill-author`
 
-## Common Bundle Docs
+Use the three pipeline skills in order for screenshot-to-code work:
 
-- `.agents/common/approved-patterns.md`
-- `.agents/common/anti-patterns.md`
-- `.agents/common/documentation-maintenance.md`
+```text
+design-screenshot-spec
+-> frontend-layout-implementer
+-> frontend-visual-qa
+```
 
-## Local Project Overlay Docs
+## Figma Boundary
 
-- `.agents/project/stack-profile.md`
-- `.agents/project/architecture-map.md`
-- `.agents/project/styling-profile.md`
-- `.agents/project/seo-profile.md`
-- `.agents/project/verification-profile.md`
-- `.agents/project/approved-patterns.md`
-- `.agents/project/anti-patterns.md`
-- `.agents/project/figma-profile.md`
-- `.agents/project/react/path-index.md`
-- `.agents/project/next/path-index.md`
+- Do not use Figma MCP tools for this bundle's design intake or implementation
+  flow.
+- Do not open Figma URLs, inspect live Figma files, write Figma canvas nodes,
+  create Figma files, use Figma whiteboard, create Figma design systems, or
+  register Code Connect mappings.
+- Treat only user-supplied screenshots, copied inspect panels, exported assets,
+  written notes, and current repository code as source material.
+- If the user provides only a Figma URL, file key, node id, or Figma whiteboard
+  reference, ask for screenshots, exports, copied inspect values, assets, or a
+  written brief before continuing.
+
+## Tool Policy
+
+- Prefer configured MCP tools over broad guessing when the needed server is
+  available.
+- Use Project Context, Design Spec, Visual Reference, and Visual Diff MCP
+  servers when they are installed in the current session.
+- Use `context7` for current framework or library documentation.
+- Use `mdn` for current HTML, CSS, Web API, and browser compatibility facts.
+- Use Browser or Playwright MCP for rendered UI verification.
+- If a named MCP server required by the active skill is unavailable, report the
+  missing capability before using a fallback. Use fallback only when the skill
+  allows it or the user explicitly accepts it.
+- Never use Figma MCP as a fallback in this bundle.
+
+## Frontend Implementation Rules
+
+- Detect the actual frontend stack from project files and `project/**` before
+  applying framework-specific rules.
+- Support React, Next.js, Vite, static HTML/CSS, Vue, Svelte, or another
+  frontend stack by following the inspected project conventions.
+- Reuse existing components, styling systems, tokens, routes, layout patterns,
+  and verification commands before introducing new ones.
+- Do not add packages, styling systems, global tokens, generated scaffolds, or
+  architecture layers without explicit user approval.
+- Keep edits scoped to the requested screen, component, route, or static page.
+- Preserve accessibility, focus states, responsive behavior, text wrapping, and
+  stable layout dimensions.
+- Do not interact with production systems, production data, or live production
+  environments.
+
+## Documentation Rules
+
+- Keep reusable instructions in `common/**` or `skills/**`.
+- Keep host-project facts in `project/**`.
+- Keep every Markdown file in this bundle graph-linkable with YAML frontmatter:
+  `id`, `title`, `doc_type`, `layer`, `status`, `publishable`, `local_only`,
+  `tags`, `parent`, `related`, and `depends_on`.
+- In `SKILL.md`, keep `name` and `description` first, followed by graph
+  metadata.
+- Update `SUMMARY.md` and `README.md` whenever skill names, routing, or
+  user-facing workflow changes.
+- Do not publish or copy `project/**` into reusable bundle docs.
+
+## Verification
+
+For skill and documentation changes:
+
+1. Validate changed skills with
+   `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>`.
+2. Search for stale deleted skill names and prohibited Figma/Jam routing.
+3. Check that `SUMMARY.md`, `README.md`, and actual `skills/**` directories
+   agree.
+4. Run Markdown formatting checks when available.
+

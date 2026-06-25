@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Architecture From Spec'
-    short_description: 'Planning-only React architecture guidance'
-    default_prompt: 'Use $architecture-from-spec for planning-only React/frontend architecture guidance from a spec or large refactor brief.'
-policy:
-    allow_implicit_invocation: true

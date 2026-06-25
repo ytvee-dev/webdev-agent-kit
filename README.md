@@ -1,6 +1,6 @@
-﻿---
+---
 id: 'agents.readme'
-title: 'webdev-assistant'
+title: 'Screenshot Frontend Assistant'
 doc_type: 'readme'
 layer: 'bundle'
 status: 'active'
@@ -13,790 +13,132 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[SUMMARY|Agent Documentation Summary]]'
-depends_on:
-    []
+depends_on: []
 ---
 
-# webdev-assistant
+# Screenshot Frontend Assistant
 
-`webdev-assistant` - это общий набор инструкций, проектных overlays и навыков
-для работы OpenAI Codex с React-first frontend задачами, Next.js, TypeScript,
-CSS Modules, дизайном интерфейсов, security review и документацией самого
-набора.
+This `.agents` bundle gives Codex a strict frontend workflow for turning
+user-supplied Figma screenshots and copied visual inspect material into
+production frontend code.
 
-Эта документация описывает именно использование набора через официальный
-OpenAI Codex IDE extension в VS Code. Она не является инструкцией для Cursor,
-Roo, Cline, Claude Code, Copilot, Continue или других агентных систем. Другие
-инструменты могут читать Markdown-файлы, но routing skills,
-`agents/openai.yaml`, implicit invocation, MCP/connectors и рабочие соглашения
-здесь рассчитаны на Codex.
+It is built for the official OpenAI Codex IDE extension workflow. It is not a
+Figma MCP workflow and does not support Figma whiteboard workflows, Figma canvas
+editing, Figma file creation, design-system generation, or Code Connect.
 
-Официальные справочные страницы:
-
-- Codex IDE extension: <https://developers.openai.com/codex/ide>
-- Codex IDE settings: <https://developers.openai.com/codex/ide/settings>
-- Codex skills: <https://developers.openai.com/codex/skills>
-- `AGENTS.md` discovery: <https://developers.openai.com/codex/guides/agents-md>
-
-## Модель подключения
-
-В принимающем проекте этот набор подключается как вложенный checkout
-`.agents/`:
+## Core Flow
 
 ```text
-host-project/
-├─ AGENTS.md
-├─ .agents/
-│  ├─ AGENTS.md
-│  ├─ SUMMARY.md
-│  ├─ README.md
-│  ├─ common/
-│  ├─ skills/
-│  ├─ project/
-│  └─ .gitignore
-└─ src/...
+design-screenshot-spec
+-> frontend-layout-implementer
+-> frontend-visual-qa
 ```
 
-Корневой `AGENTS.md` принимающего проекта должен быть стабильным указателем на
-`.agents/AGENTS.md`. Он не должен копировать содержимое `.agents/AGENTS.md`.
+1. `design-screenshot-spec` reads supplied screenshots, inspect panels, assets,
+   and notes, then produces a `Design Implementation Spec`.
+2. `frontend-layout-implementer` implements that spec in the current frontend
+   project using project context and the actual stack.
+3. `frontend-visual-qa` verifies the rendered UI with browser screenshots,
+   viewport checks, console/runtime review, and visual diff review.
 
-`.agents/` одновременно является локальным checkout репозитория
-`git@github.com:ytvee-dev/webdev-assistant.git`. Внутри upstream-репозитория
-эти же файлы лежат в корне, но в принимающем проекте они доступны через
-`.agents/<path>`.
+## Source Material
 
-## Архитектура `.agents/`
+Supported inputs:
 
-### `AGENTS.md`
+- screenshots of Figma frames, components, pages, or inspect panels;
+- copied visual inspect values;
+- exported assets;
+- dimensions, typography, colors, spacing, states, and written notes;
+- existing project code and project overlays.
 
-Главная политика набора. В ней закреплены:
+Unsupported inputs by themselves:
 
-- модель вложенного bundle;
-- порядок чтения;
-- общие правила работы;
-- правила публикации upstream;
-- карта навыков;
-- список общих документов;
-- список локальных project overlays.
+- Figma URL;
+- file key;
+- node id;
+- Figma whiteboard reference.
 
-Это канонический publishable policy file. Если правило в README и
-`.agents/AGENTS.md` расходится, реализацию нужно привести к `.agents/AGENTS.md`,
-а README обновить.
+When only unsupported input is provided, Codex must ask for screenshots,
+exports, copied inspect values, assets, or a written brief.
 
-### `SUMMARY.md`
+## Skills
 
-Навигационная карта набора. Она отвечает на вопросы:
+### `design-screenshot-spec`
 
-- какие common docs существуют;
-- какие project overlays ожидаются;
-- какие skills есть;
-- какой общий порядок чтения;
-- какие пути publishable, а какие local-only;
-- какие skill chains выбирать для типовых задач.
+Use this skill to create the implementation artifact. It outputs a structured
+`Design Implementation Spec` with source inventory, layout, typography, color,
+spacing, assets, states, responsive behavior, accessibility notes, acceptance
+criteria, confidence, and unknowns.
 
-README может объяснять назначение этих частей, но актуальный список skills и
-overlays должен сверяться с `SUMMARY.md`.
+### `frontend-layout-implementer`
 
-### `common/**`
+Use this skill to implement the spec in the current frontend project. It is
+framework-agnostic and must inspect the project before choosing patterns. It
+supports React, Next.js, Vite, static HTML/CSS, Vue, Svelte, or another
+frontend stack by following actual project conventions.
 
-Общие publishable правила, которые можно переносить между принимающими
-проектами:
+It uses these tools when available:
 
-- `common/approved-patterns.md` - общие разрешенные паттерны реализации;
-- `common/anti-patterns.md` - общие запрещенные направления;
-- `common/documentation-maintenance.md` - правила изменения документации,
-  слоев и sync-контракта.
+- Project Context MCP;
+- Design Spec MCP;
+- Visual Reference MCP;
+- `context7`;
+- MDN MCP;
+- Browser or Playwright MCP;
+- Visual Diff MCP.
 
-В `common/**` нельзя помещать факты конкретного проекта: реальные пути
-приложения, версии зависимостей, локальные исключения, локальные команды,
-локальные токены или архитектурные детали конкретного продукта.
+If a named MCP is unavailable, Codex must report the missing capability before
+using a lower-confidence fallback. Figma MCP is never a fallback.
 
-### `project/**`
+### `frontend-visual-qa`
 
-Локальный контекст принимающего проекта. Этот каталог нужен, чтобы Codex не
-сканировал весь репозиторий заново перед каждой задачей.
-
-Ожидаемые overlays:
-
-- `project/stack-profile.md` - стек, runtime, tooling, state-management;
-- `project/architecture-map.md` - маршруты, shared code, client/server zones;
-- `project/seo-profile.md` - локальная SEO-архитектура, внешняя content
-  taxonomy, webmaster state и AI-readable surfaces;
-- `project/styling-profile.md` - styling system, tokens, conventions;
-- `project/verification-profile.md` - команды проверки и порядок запуска;
-- `project/approved-patterns.md` - локальные разрешенные паттерны;
-- `project/anti-patterns.md` - локальные анти-паттерны и исключения;
-- `project/figma-profile.md` - правила design-to-code;
-- `project/react/path-index.md` - lookup index для React/client работы;
-- `project/next/path-index.md` - lookup index для Next.js App Router.
-
-`project/**` всегда local-only. Его нельзя публиковать upstream.
-
-### `skills/**`
-
-Переиспользуемые workflows для Codex. Skill - это папка с обязательным
-`SKILL.md` и дополнительными ресурсами:
-
-```text
-skills/<skill-name>/
-├─ SKILL.md
-├─ agents/openai.yaml
-├─ references/
-├─ scripts/
-└─ assets/
-```
-
-`SKILL.md` должен описывать, когда skill включается, что прочитать, какой
-workflow выполнить и как проверить результат. Подробные чеклисты, варианты,
-таблицы и справочные материалы выносятся в `references/`. Скрипты добавляются
-только для повторяемой или хрупкой работы, где нужен детерминированный
-инструмент.
-
-### `.gitignore`
-
-Защищает local-only paths и служебный шум во вложенном checkout. В частности,
-`project/**` и старые helper trees вроде `upstream/**` не должны попадать в
-публикацию.
-
-## Obsidian Graph
-
-Каталог `.agents/` можно открыть как Obsidian vault. Все Markdown-документы в
-этом дереве имеют YAML frontmatter с `id`, `title`, `doc_type`, `layer`,
-`publishable`, `local_only`, `tags` и связями `parent`, `related`,
-`depends_on`.
-
-Frontmatter - это metadata для routing, поиска, навигации и graph view. Агент
-должен читать рабочие правила и workflow в body документа. Frontmatter не
-заменяет `Reference map`, не содержит скрытых инструкций и не требует читать
-все связанные документы без причины.
-
-Связи записываются как Obsidian wikilinks относительно root `.agents`, например
-`[[skills/webapp-task-protocol/SKILL|Webapp Task Protocol]]`. Для одноименных
-файлов вроде `anti-patterns.md` и `path-index.md` используются полные пути,
-чтобы graph не смешивал разные документы.
-
-Локальные настройки vault в `.obsidian/**` не публикуются upstream и должны
-оставаться local-only.
-
-## Как Codex читает инструкции
-
-Codex собирает инструкции слоями:
-
-1. Глобальные инструкции пользователя из Codex home.
-2. Project-level `AGENTS.md` от корня workspace вниз к текущей директории.
-3. Более близкие инструкции имеют приоритет над более дальними.
-4. Repo-local skills подбираются отдельно по имени, описанию и user intent.
-
-В этом проекте порядок для агента такой:
-
-1. Прочитать корневой `AGENTS.md`.
-2. Перейти к `.agents/AGENTS.md`.
-3. Прочитать `.agents/SUMMARY.md`.
-4. Выбрать relevant skill по prompt и repo context.
-5. Прочитать нужные `common/**`, `project/**`, references и affected source
-   files.
-
-Пользователь не обязан явно писать `$skill-name`. Если prompt совпадает с
-описанием skill, Codex должен выбрать skill сам.
-
-## Что должно быть настроено в VS Code
-
-Минимальная рабочая конфигурация:
-
-1. Установлен официальный OpenAI Codex IDE extension из Visual Studio Code
-   Marketplace.
-2. Пользователь вошел через ChatGPT account или API key.
-3. В VS Code открыт корень принимающего проекта, где есть корневой `AGENTS.md`
-   и каталог `.agents/`.
-4. `.agents/skills/**` находится внутри workspace, чтобы Codex мог обнаружить
-   repo-scoped skills.
-5. В проекте сохранена структура `.agents/AGENTS.md`, `.agents/SUMMARY.md`,
-   `.agents/common/**`, `.agents/skills/**`, `.agents/project/**`.
-6. Shell доступен для search, git state, diff, formatting и verification
-   commands.
-
-Дополнительные возможности:
-
-- GitHub connector нужен для `webdev-assistant-sync publish-up`, потому что PR
-  должен создаваться через connector.
-- Filesystem MCP желателен для чтения файлов и структуры каталогов; правила
-  набора предпочитают MCP file reads, когда инструмент доступен.
-- MDN MCP рекомендуется для HTML, CSS, Web APIs, HTTP, browser compatibility и
-  других web platform вопросов, чтобы Codex сверялся с текущей MDN
-  документацией вместо памяти модели.
-- WSL нужен только если проект и tooling живут в WSL. В этом случае Codex в VS
-  Code должен запускаться в той же среде, где находятся зависимости и команды
-  проекта.
-
-### MDN MCP для web platform docs
-
-Официальный MDN MCP server подключается как remote HTTP MCP. Рекомендуемая
-global установка для Codex CLI и Codex IDE extension:
-
-```shell
-codex mcp add mdn --url https://mcp.mdn.mozilla.net/
-```
-
-Эквивалентный блок в `~/.codex/config.toml`:
-
-```toml
-[mcp_servers.mdn]
-url = "https://mcp.mdn.mozilla.net/"
-enabled = true
-http_headers = { "X-Moz-1st-Party-Data-Opt-Out" = "1" }
-```
-
-MDN описывает этот server как экспериментальный. Пока он экспериментальный,
-MDN может хранить данные о полученных queries; не передавайте туда приватные
-данные. Header `X-Moz-1st-Party-Data-Opt-Out: 1` отключает first-party
-analytics для MCP requests.
-
-Модель, approvals, sandbox и некоторые настройки Codex управляются настройками
-Codex/IDE extension и конфигурацией Codex, а не файлами этого bundle. README
-фиксирует только требования, которые важны для корректного чтения `.agents`.
-
-## Навыки
-
-### `webapp-task-protocol`
-
-Базовый routing skill для React/Next.js задач. Используется для feature,
-refactor, bugfix, review, audit, design implementation и architecture-planning
-requests.
-
-Что делает:
-
-- классифицирует задачу;
-- определяет project type: `frontend-only` или `fullstack`;
-- выбирает skill chain;
-- требует inspect -> plan -> implement-or-answer -> verify;
-- направляет агента к path indexes и overlays до широкого поиска.
-
-### `nextjs-app-router`
-
-Используется для App Router routes, layouts, metadata, dynamic segments,
-loading/error states и server/client boundaries.
-
-Ключевые правила:
-
-- держать route special files тонкими;
-- выбирать server/client boundary осознанно;
-- не импортировать server-only логику в client code;
-- учитывать metadata, canonical, robots, sitemap и route-level UX states;
-- после structural route changes проверять, нужны ли updates в
-  `.agents/project/next/path-index.md`.
-
-### `react-component-workflow`
-
-Используется для компонентов, props/state flow, hooks, rendering logic, client
-UI, TypeScript-heavy component contracts и reusable behavior.
-
-Ключевые правила:
-
-- делать компоненты небольшими и сфокусированными;
-- держать data flow явным;
-- хранить state на минимальном нужном уровне;
-- использовать effects только для настоящих side effects;
-- учитывать reactive identity context/store/custom hooks;
-- применять встроенные TypeScript rules для props, exported helpers и safe
-  narrowing;
-- добавлять `react-state-workflow`, если затронут shared state;
-- добавлять `frontend-design-workflow`, если задача в первую очередь про Figma,
-  screenshots, visual polish или responsive behavior.
-
-### `react-state-workflow`
-
-Используется для React shared state: local vs lifted state, context, Redux,
-Redux Toolkit, selectors, typed hooks, providers и store-like reactive hooks.
-
-Ключевые правила:
-
-- сначала доказать, что state действительно shared;
-- не добавлять Redux в проект, где его нет, без явного пользовательского
-  approval;
-- держать shared state serializable и минимальным;
-- не использовать context/Redux/store как transport/fetch/business layer;
-- предпочитать узкие subscriptions, selectors и stable references.
-
-### `frontend-design-workflow`
-
-Используется для visual design, Figma-derived artifact/screenshot
-implementation, responsive polish, typography, color, hierarchy, motion и
-explicit canvas/generative UI requests.
-
-Ключевые правила:
-
-- сначала определить purpose, audience и visual intent;
-- следовать текущей styling system: CSS Modules, tokens, variables,
-  breakpoints, typography primitives и component patterns;
-- для Figma-derived artifact analysis подключать `figma-design-reader`, а для
-  repo implementation from supplied Figma-derived material подключать
-  `figma-design-to-code`;
-- не добавлять Tailwind, shadcn/ui, external fonts, p5.js, Three.js, новый
-  token system или artifact toolchain без явного approval;
-- если пользователь дал только Figma URL/node/file key, просить screenshots,
-  exports, copied inspect values, token/spec notes или written brief;
-- проверять responsive behavior, text wrapping, accessibility, focus states и
-  reduced-motion risks.
-
-### `figma-design-reader`
-
-Используется для offline analysis of user-provided Figma-derived artifacts:
-screenshots, exports, copied inspect values, variables/styles, assets,
-structure notes и written specs.
-
-Ключевые правила:
-
-- Figma URL/node/file key сам по себе недостаточен; агент просит source
-  material и не открывает Figma;
-- copied inspect values, exports и token/spec notes считаются более точными,
-  чем screenshot estimates;
-- unknown states, assets, breakpoints и variables явно отмечаются;
-- skill не используется для repo implementation и не пишет в Figma canvas.
-
-### `figma-design-to-code`
-
-Используется, когда deliverable - production code в репозитории из
-user-provided Figma-derived material.
-
-Ключевые правила:
-
-- обязательный flow: source material inventory -> repo pattern mapping ->
-  implementation -> validation against supplied artifacts;
-- использовать вместе с `frontend-design-workflow` и
-  `react-component-workflow` или `nextjs-app-router`;
-- трактовать supplied Figma-derived artifacts как design intent, а не как
-  final code style;
-- если source material неполный, просить недостающие screenshots/exports/specs,
-  а не продолжать по догадке.
-
-### `figma-canvas-editing`
-
-Используется для manual Figma canvas edit specs: nodes, auto-layout, variables,
-components, variants, styles, bindings, pages и file structure.
-
-Ключевые правила:
-
-- не открывать Figma, не запускать scripts и не мутировать canvas;
-- писать ordered manual checklist для человека в Figma editor;
-- включать target page/frame/layer, values и verification checks, когда они
-  есть в source material;
-- missing IDs, layer names, styles и variables отмечать как missing source
-  material.
-
-### `figma-screen-generation`
-
-Используется для Figma screen blueprints и manual creation specs для full
-screens, pages, views и multi-section layouts.
-
-Ключевые правила:
-
-- использовать `figma-canvas-editing`, только если blueprint нужны low-level
-  manual edit steps;
-- сначала разбирать section structure и design-system reuse path;
-- описывать экран section-by-section;
-- добавлять manual visual checks для section screenshots и full-screen state.
-
-### `figma-design-system-builder`
-
-Используется для Figma design-system и component-library blueprints:
-variables, collections, modes, text/effect styles, component families,
-documentation pages и token/code alignment.
-
-Ключевые правила:
-
-- не создавать variables/components в Figma напрямую;
-- идти фазами: discovery -> foundations -> file structure -> components -> QA
-  recommendations;
-- не строить components до foundations;
-- подтверждать scope и major milestones перед следующей фазой.
-
-### `figma-code-connect`
-
-Используется для offline Code Connect mapping recommendations и snippet drafts
-из user-provided component details плюс repo code.
-
-Ключевые правила:
-
-- не путать mapping workflow с design implementation;
-- сначала искать реальные code matches в repo, а не сразу спрашивать path;
-- учитывать published component requirement как manual prerequisite;
-- не запускать suggestions, не отправлять mappings и не обещать registration.
-
-### `figma-create-file`
-
-Используется для manual setup briefs для blank Figma design files и FigJam
-files.
-
-Ключевые правила:
-
-- определить editor type: `design` или `figjam`;
-- предложить file name, page structure, starter frames/sections и manual next
-  steps;
-- не создавать файл, не возвращать file key или URL;
-- передавать дальше только offline planning workflows.
-
-### `boundary-input-validation`
-
-Используется для untrusted input: user input, route params, search params,
-external data, files и public entry points.
-
-Ключевые правила:
-
-- валидировать на boundary;
-- не размазывать fallback coercion downstream;
-- сначала искать существующие helpers/dependencies;
-- не добавлять validation library без явного approval.
-
-### `frontend-review-and-fix`
-
-Используется после реализации или когда пользователь просит review/follow-up
-fixes.
-
-Ключевые правила:
-
-- сначала искать bugs, regressions, лишние abstraction и risk;
-- запускать verification из `.agents/project/verification-profile.md`;
-- выполнять browser verification, когда затронуты rendered UI, interaction,
-  hydration, screenshots, responsive layout или console/runtime errors;
-- проверять, нужны ли updates в `.agents/project/**`;
-- для security/SEO поверхностей рекомендовать профильный audit.
-
-### `playwright-interactive`
-
-Используется для interactive browser QA локальных web apps через Playwright:
-проверка rendered UI, interaction flows, screenshots, desktop/mobile viewports,
-viewport fit, console/runtime errors и browser-only behavior.
-
-Ключевые правила:
-
-- перед browser pass составлять QA inventory из требований, реализованных
-  user-visible behaviors и claims для final response;
-- держать dev server и Playwright session persistent, переиспользуя browser
-  handles между итерациями;
-- проверять functional QA и visual QA отдельными проходами;
-- использовать screenshot evidence для responsive layout, canvas, visual polish
-  и coordinate-based follow-up;
-- проверять viewport fit для app-like shells, tools, dashboards, editors,
-  games и fixed layouts;
-- не устанавливать Playwright, browser binaries или Electron dependencies без
-  explicit approval;
-- не использовать production systems, production data или production URLs.
-
-### `project-context-adapter`
-
-Используется, когда изменились факты проекта или path indexes устарели.
-
-Что обновляет:
-
-- `stack-profile.md`;
-- `architecture-map.md`;
-- `styling-profile.md`;
-- `verification-profile.md`;
-- `approved-patterns.md`;
-- `anti-patterns.md`;
-- `figma-profile.md`;
-- `react/path-index.md`;
-- `next/path-index.md`.
-
-Этот skill редактирует только `.agents/project/**`.
+Use this skill after implementation. It verifies local app rendering, console
+and runtime errors, desktop/tablet/mobile viewport fit, screenshot capture,
+visual comparison, responsive behavior, text overflow, and interaction states.
 
 ### `project-onboarding-adapter`
 
-Используется для первичной адаптации `webdev-assistant` в новом проекте:
-`адаптируйся`, `адаптируй проект`, `подключи .agents`,
-`обнови контекст проекта`, `initialize Codex project context`.
+Use this Plan Mode skill to adapt the bundle to a host frontend project. It
+plans the host-root `AGENTS.md` pointer and the local-only `project/**`
+overlays. It does not edit files while Plan Mode is active.
 
-Skill работает только в Plan Mode. Если пользователь вызывает его в обычном
-режиме, агент должен коротко ответить:
+### `project-context-adapter`
 
-```text
-Этот навык работает только в Plan Mode. Включите Plan Mode и повторите: "адаптируйся".
-```
-
-В Plan Mode skill не меняет файлы. Он анализирует host project, проверяет
-root `AGENTS.md`, планирует заполнение `.agents/project/**`, сверяет пути в
-`.agents` docs и skills, затем выдает decision-complete план адаптации.
-Выполнение начинается отдельным запросом после выхода из Plan Mode.
-
-Отличие от `project-context-adapter`: `project-onboarding-adapter` отвечает за
-первичное подключение проекта, root pointer и полный path/rules audit, а
-`project-context-adapter` обновляет уже существующие overlays после drift или
-изменений в коде.
+Use this skill to refresh `project/**` overlays and frontend path indexes after
+project facts change.
 
 ### `agent-rules-skill-author`
 
-Используется для `AGENTS.md`, `.agents/common/**`, `.agents/project/**`,
-`.agents/skills/**`, skill authoring и agent policy.
+Use this skill to create, evaluate, or edit `.agents` skills, rules, metadata,
+and graph links.
 
-Ключевые правила:
+## Path Model
 
-- сначала выбрать слой: repo policy, common docs, project overlay или skill;
-- по умолчанию создавать и чинить именно `.agents`-compatible skills, а не
-  generic portable OpenAI skills;
-- strict native-portable OpenAI skill authoring включать только по явному
-  запросу на portability outside `.agents/`;
-- не смешивать reusable policy и project facts;
-- при создании skills сначала извлекать workflow из чата, repo docs, task
-  traces и user corrections, а не писать skill с нуля по догадке;
-- различать native Codex contract и локальное `.agents` расширение: `name` и
-  `description` - trigger contract, graph fields - navigation metadata;
-- для новых `.agents` skills использовать local toolkit, если он подходит:
-  `init_agent_skill.py`, `generate_openai_yaml.py`, `validate_agent_skill.py`;
-- делать и trigger evals, и 2-3 realistic workflow evals, а не ограничиваться
-  только frontmatter;
-- при создании skills определить trigger surface, should/should-not prompts,
-  output shape, source-backed workflow и validation gates;
-- при изменении Figma-related rules сверять routing и layer boundaries через
-  Figma-specific reference внутри `agent-rules-skill-author`, а не смешивать
-  все Figma workflows в один broad skill;
-- исправлять skill по reusable причинам, а не подгонять его под один prompt;
-- держать `SKILL.md` lean, details выносить в `references/`;
-- для длинных references добавлять TOC или section map near the top;
-- в `SKILL.md` не просто перечислять references, а явно писать, когда какой
-  reference читать;
-- синхронизировать `agents/openai.yaml` с intent skill.
-
-### `readme-maintainer`
-
-Используется для аудита и поддержки `.agents/README.md`.
-
-После текущего обновления его задача - держать README подробным, точным и
-структурированным, если README является пользовательским справочником по
-bundle. Он не должен превращать README в маркетинговый текст или склад
-локальных project facts.
-
-### `webdev-assistant-sync`
-
-Используется для `sync-down`, `publish-up` и fallback branch push в upstream
-`git@github.com:ytvee-dev/webdev-assistant.git`.
-
-Ключевые правила:
-
-- git publication commands выполнять только внутри `.agents`;
-- не публиковать `project/**`, `upstream/**` и host-project files;
-- коммитить publishable docs на local `.agents/main`;
-- не пушить local `main` напрямую;
-- перед publication branch делать `pull --rebase origin main`;
-- создавать ветку `[fix|feat]-[description]`;
-- открывать PR через GitHub connector;
-- возвращать checkout на `main`.
-
-### `technical-seo-app`
-
-Используется для source-backed technical SEO: metadata, canonical URLs,
-robots, sitemap, crawlability, indexing, Open Graph, structured data, Google
-Search Console/Yandex Webmaster setup, external content taxonomy и
-AI-agent discoverability.
-
-Перед выводами и правками skill сверяется с официальными источниками или
-configured docs MCP, если поведение могло измениться. По умолчанию это
-audit-first skill: сначала report, затем fixes только если пользователь явно
-попросил применить изменения или сразу попросил реализацию.
-
-### `frontend-security-inspector`
-
-Используется для secrets, auth/session, public entry points, unsafe data,
-environment exposure, client/server boundary risks, secure-by-default coding и
-threat modeling.
-
-Поддерживает режимы secure-by-default editing, passive high-impact finding,
-explicit audit и threat model. Для audit сначала дает structured findings
-report, затем remediation только по отдельному запросу.
-
-### `screenshot-design-inspector`
-
-Используется, когда design implementation начинается со screenshots или copied
-visual inspect panels.
-
-Извлекает typography, spacing, colors, hierarchy, breakpoints и confidence
-level. Screenshot-derived values считаются менее надежными, чем copied inspect
-values, exports и written specs.
-
-### `architecture-from-spec`
-
-Используется, когда пользователь дает specification, technical assignment или
-large refactor brief и хочет planning-only React/frontend architecture guidance.
-
-Сначала извлекает требования, затем предлагает recommended architecture path и
-ограниченные alternatives без выдумывания недостающих constraints.
-Deliverable этого skill - architecture guidance или implementation-ready plan,
-а не implicit start of code changes.
-Обычная реализация feature/refactor остается в `webapp-task-protocol`,
-адаптация проекта - в `project-onboarding-adapter`, а правки rules/skills/docs -
-в `agent-rules-skill-author`.
-
-## Основные цепочки навыков
-
-### Feature / refactor / bugfix
-
-```text
-webapp-task-protocol
--> nextjs-app-router и/или react-component-workflow
--> react-state-workflow, если затронут shared state
--> frontend-design-workflow, если затронут visual design или responsive polish
--> boundary-input-validation, если есть boundary input
--> frontend-review-and-fix
--> project-context-adapter, если изменился project context
-```
-
-### Architecture / spec guidance
-
-```text
-architecture-from-spec
-```
-
-Эта цепочка заканчивается guidance или implementation-ready plan. Она не
-переходит к `nextjs-app-router`, `react-component-workflow`,
-`react-state-workflow` или `boundary-input-validation` как execution steps,
-пока пользователь явно не попросит реализацию.
-
-### Review
-
-```text
-webapp-task-protocol
--> frontend-review-and-fix
--> playwright-interactive, если review требует browser QA, screenshots или viewport checks
-```
-
-Review начинается с findings: bugs, regressions, risks, missing tests. Summary
-идет после findings.
-
-### SEO
-
-```text
-technical-seo-app
-```
-
-Для этого host repo SEO chain сначала читает `.agents/project/seo-profile.md`,
-затем `next/path-index.md` и affected source files. Если пользователь просит
-только проверить, skill не применяет fixes. Если пользователь просит
-применить, после короткого report можно переходить к implementation.
-
-### Security
-
-```text
-frontend-security-inspector
-```
-
-Security work начинается с structured report: severity, affected area, evidence,
-remediation, follow-up verification.
-
-### Design / Figma
-
-```text
-read/analyze supplied Figma-derived artifacts -> figma-design-reader
-Figma-derived artifacts -> code -> figma-design-to-code -> frontend-design-workflow -> nextjs-app-router и/или react-component-workflow
-manual Figma canvas edit spec -> figma-canvas-editing
-code/description -> Figma screen blueprint -> figma-screen-generation
-Figma design-system blueprint -> figma-design-system-builder
-Code Connect recommendations/snippets -> figma-code-connect
-new file setup brief -> figma-create-file
-screenshots / copied visual inspect panels -> screenshot-design-inspector
-```
-
-Figma URL/node/file key сам по себе недостаточен. Агент работает только с
-предоставленными screenshots, exports, copied inspect values, token/spec notes
-или written brief. Routing внутри bundle зависит от deliverable и
-предоставленного source material.
-
-### Agent rules / skills / docs
-
-```text
-agent-rules-skill-author
--> readme-maintainer, если меняется README или user-facing workflow
--> webdev-assistant-sync, если нужен sync-down или publish-up
-```
-
-### Project onboarding
-
-```text
-project-onboarding-adapter
--> project-context-adapter, когда пользователь позже попросит выполнить план
--> agent-rules-skill-author, если plan audit нашел drift в reusable bundle docs
-```
-
-Этот workflow доступен только в Plan Mode. В обычном режиме агент не должен
-читать весь проект или начинать адаптацию.
-
-### Bundle sync / publication
-
-```text
-webdev-assistant-sync
-```
-
-Этот skill обслуживает nested `.agents` checkout и upstream PR workflow. Host
-repo root не используется для upstream publication commands.
-
-## Правила и запреты
-
-### Общие запреты
-
-- Не взаимодействовать с production systems, production data или live production
-  environments.
-- Не устанавливать packages и не менять shared tokens без явного approval.
-- Не добавлять архитектуру, API contracts или behavior, которых нет в prompt или
-  repo facts.
-- Не делать unrelated refactors.
-- Не дублировать существующие helpers/components/selectors/modules до поиска
-  текущих решений.
-- Не добавлять comments без запроса или реальной safety need.
-- Не писать feature tests без явного запроса, если repo convention этого не
-  требует.
-
-### React / Next.js
-
-- Не использовать `useEffect` для логики, которая может быть render-time,
-  memoized или event-handler logic.
-- Не использовать `useCallback` по умолчанию.
-- Не использовать `void someFunc()`.
-- Не использовать `let isCancelled = false`; prefer `AbortController`.
-- Не строить JSX в `renderSomething` variables, если component extraction
-  яснее.
-- Не импортировать server-only modules в client code.
-- Не fetch own route handlers из server-side code, если есть direct module
-  call.
-
-### TypeScript
-
-- Не использовать `any`.
-- Не использовать `@ts-ignore`, кроме явно обоснованных крайних случаев.
-- Не делать unsafe double casts.
-- Не клонировать параллельные types, если есть shared types/schemas/helpers.
-
-### State management
-
-- Не переносить local-only UI state в Redux/context/store без shared ownership.
-- Не добавлять Redux в проект, где его нет, без explicit approval.
-- Не использовать context/Redux/store как transport layer или место тяжелой
-  business logic.
-- Не подписываться на broad store/context objects, если нужен узкий selector.
-- Не возвращать fresh objects/arrays из non-memoized selectors без stability
-  strategy.
-
-### Documentation / `.agents`
-
-- Не публиковать `.agents/project/**`.
-- Не публиковать `upstream/**`.
-- Не зеркалить `.agents/AGENTS.md` в host-root `AGENTS.md`.
-- Не менять host-root `README.md`, если пользователь явно не попросил.
-- Не добавлять `README.md`, `CHANGELOG.md`, `QUICK_REFERENCE.md` внутрь skill
-  packages.
-- Не смешивать host-project facts с reusable skills и common docs.
-- Не удалять graph frontmatter из `.agents/**/*.md`; для `SKILL.md` не менять
-  порядок первых полей `name` и `description`.
-- Не помещать binding workflow-инструкции во frontmatter. Смысловые правила
-  должны оставаться в body документа.
-
-## Publishable и local-only paths
-
-Publishable paths внутри checkout root `.agents/`:
+Paths inside this bundle are bundle-local:
 
 ```text
 AGENTS.md
 SUMMARY.md
+README.md
 common/**
 skills/**
+project/**
+```
+
+The host-root `AGENTS.md` lives outside the bundle and should be a pointer to
+`.agents/AGENTS.md`. Only `project-onboarding-adapter` owns creating or
+recreating that pointer.
+
+## Publishable And Local-Only
+
+Publishable bundle paths:
+
+```text
+AGENTS.md
+SUMMARY.md
 README.md
+common/**
+skills/**
 .gitignore
 ```
 
@@ -804,319 +146,53 @@ Local-only paths:
 
 ```text
 project/**
-upstream/**
 .obsidian/**
-application source code
-tests
-configs
-build outputs
-host-project files
+generated, vendor, build, cache, and host-project source paths
 ```
 
-Если файл не входит в publishable list, его нельзя включать в upstream PR.
+## Prohibited Workflows
 
-## Sync-down и publish-up
+- Do not use Figma MCP.
+- Do not inspect live Figma files.
+- Do not create or edit Figma files.
+- Do not use Figma whiteboard.
+- Do not generate Figma design systems or Code Connect mappings.
+- Do not implement before a design spec exists.
+- Do not add packages, styling systems, global tokens, or architecture layers
+  without explicit approval.
+- Do not interact with production systems or production data.
 
-### `sync-down`
+## Skill Authoring Standard
 
-Используется, чтобы подтянуть shared bundle из upstream в текущий принимающий
-проект.
+Every remaining skill uses:
 
-Основные правила:
+- `name` and `description` first in frontmatter;
+- graph metadata after native trigger fields;
+- `Purpose`;
+- `When To Use`;
+- `When Not To Use`;
+- `Required Context`;
+- `Tool Contract`;
+- `Workflow`;
+- `Output Contract`;
+- `Validation Gates`;
+- `Trigger Evals`;
+- `Reference Map`;
+- synchronized `agents/openai.yaml`.
 
-- работать только во вложенном `.agents`;
-- не трогать `project/**`;
-- не менять host-root pointer без причины;
-- после sync проверить Markdown и relevant docs.
+## Validation
 
-### `publish-up`
+For skill changes, run:
 
-Используется, чтобы опубликовать generic bundle changes upstream.
-
-Порядок:
-
-1. Убедиться, что `.agents/.git` существует.
-2. Проверить remote `git@github.com:ytvee-dev/webdev-assistant.git`.
-3. Проверить, что `origin/main` существует.
-4. Проверить working tree и unmerged paths.
-5. Работать на local `.agents/main`.
-6. Stage only publishable paths.
-7. Commit на local `main` с `fix(docs): ...` или `feat(docs): ...`.
-8. Проверить, что eligible publishable changes не остались unstaged/staged.
-9. `pull --rebase origin main`.
-10. Создать ветку `[fix|feat]-[description]`.
-11. Push branch.
-12. Создать PR через GitHub connector.
-13. Вернуть локальный checkout на `main`.
-
-Local `.agents/main` напрямую не пушится.
-
-## Неявные правила, которые агент слушает
-
-### Skill selection prompt-driven
-
-Пользователь не обязан писать `$skill-name`. Codex должен сам выбрать skill по
-prompt, frontmatter `description`, repo context и touched area.
-
-Явный вызов полезен, когда нужно снять неопределенность:
-
-```text
-$webapp-task-protocol реализуй feature ...
-$technical-seo-app проверь metadata ...
-$technical-seo-app настрой Google Search Console verification ...
-$technical-seo-app проверь llms.txt и AI crawler access ...
-$frontend-design-workflow реализуй UI по скриншоту ...
-$frontend-security-inspector проведи security audit ...
-$architecture-from-spec спланируй frontend architecture по technical assignment ...
-$agent-rules-skill-author создай skill ...
-$project-onboarding-adapter адаптируйся ...
-$webdev-assistant-sync publish-up ...
+```shell
+python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>
 ```
 
-### Indexes before broad search
+From the host repository root, the equivalent path is:
 
-Если существуют path indexes, агент сначала читает их:
-
-- route/layout/metadata work -> `.agents/project/next/path-index.md`;
-- component/hooks/client UI work -> `.agents/project/react/path-index.md`;
-- stack facts -> `.agents/project/stack-profile.md`;
-- architecture/data flow -> `.agents/project/architecture-map.md`;
-- SEO/webmaster/AI discoverability -> `.agents/project/seo-profile.md`;
-- styling -> `.agents/project/styling-profile.md`;
-- verification -> `.agents/project/verification-profile.md`.
-
-Широкий repo search используется после targeted docs и indexes.
-
-### Project overlays refresh
-
-Если реализация изменила routes, components, helpers, styling tokens,
-verification commands или project structure, агент должен проверить, нужно ли
-обновить `.agents/project/**`. Пользователь не обязан просить это отдельно.
-
-### Audit skills report-first
-
-SEO и security skills сначала дают report. Они не должны автоматически
-применять изменения, если пользователь попросил только проверить. SEO fixes
-должны указывать source basis, когда рекомендация зависит от актуальной
-документации поисковой системы, Vercel, Next.js или AI crawler provider.
-
-### Figma source material first
-
-Если prompt содержит Figma URL/node/file key без артефактов, агент не открывает
-Figma и просит screenshots, exports, copied inspect values, token/spec notes
-или written brief. Direct Figma actions не поддерживаются: агент не читает и не
-изменяет Figma files, не вызывает Figma-specific tooling, не регистрирует Code
-Connect mappings и не создает files. Если source material - только screenshots
-или copied visual inspect panels, агент подключает
-`screenshot-design-inspector`.
-
-### Official docs for changing external behavior
-
-Если задача зависит от текущего поведения OpenAI, Next.js, Vercel, GitHub,
-Figma или другой внешней системы, агент должен свериться с официальной
-документацией или configured docs MCP, а не полагаться на память.
-
-Для HTML, CSS, Web APIs, HTTP, browser compatibility и другого web platform
-поведения configured docs MCP по умолчанию - `mdn`, официальный MDN MCP server.
-Если `mdn` недоступен, агент должен использовать официальные страницы MDN
-перед broad web search.
-
-## Как управлять skills
-
-### Когда создавать новый skill
-
-Новый skill нужен, если у задачи есть:
-
-- отдельный trigger surface;
-- отдельный reusable workflow;
-- повторяемые constraints;
-- набор references/scripts/assets, который будет использоваться многократно.
-
-Новый skill не нужен, если достаточно:
-
-- уточнить trigger существующего skill;
-- добавить missing rule;
-- обновить reference;
-- добавить project-specific fact в `.agents/project/**`;
-- добавить reusable rule в `.agents/common/**`.
-
-### Что писать в `SKILL.md`
-
-Frontmatter:
-
-```yaml
----
-name: skill-name
-description: Use when ...
----
+```shell
+python .agents/skills/agent-rules-skill-author/scripts/validate_agent_skill.py .agents/skills/<skill-name>
 ```
 
-Правила:
-
-- `name` - lowercase hyphen-case;
-- `description` - основной trigger surface;
-- в `description` должны быть user intent, verbs, artifacts и граница
-  применения;
-- `description` должна быть плотной и front-loaded, потому что участвует в
-  initial skills list budget Codex;
-- для trigger quality нужны realistic should-trigger и near-miss
-  should-not-trigger prompts;
-- native Codex contract - это `name` и `description`;
-- после них в этом bundle идут graph metadata fields и связи с owning docs,
-  references/assets и related workflows как локальное расширение;
-- body должен быть procedural: purpose, context, workflow, rules, validation,
-  reference map;
-- body не должен переобъяснять весь домен.
-
-### Что писать в `references/`
-
-`references/` подходит для:
-
-- длинных checklist;
-- detailed examples;
-- variants;
-- schemas/API notes;
-- source-backed guidance;
-- quality rubrics.
-
-Reference должен быть связан из `SKILL.md`, иначе агент может о нем не узнать.
-
-### Когда добавлять `scripts/`
-
-`scripts/` нужен, когда workflow:
-
-- повторяемый;
-- хрупкий;
-- требует deterministic output;
-- часто переписывается вручную;
-- удобнее проверяется командой.
-
-Если одни и те же workflow evals стабильно приводят к одинаковой helper work,
-это аргумент за `scripts/`. Если выгода не повторяется, лучше оставить skill
-instruction-only.
-
-Скрипты должны быть неинтерактивными, давать понятные ошибки и иметь понятный
-интерфейс запуска.
-
-Для `.agents` skill authoring есть локальный toolkit:
-
-- `scripts/init_agent_skill.py` - создать новый `.agents` skill package;
-- `scripts/generate_openai_yaml.py` - собрать или обновить `agents/openai.yaml`;
-- `scripts/validate_agent_skill.py` - проверить native constraints и локальные
-  `.agents` расширения.
-
-### Когда добавлять `assets/`
-
-`assets/` нужен для шаблонов и ресурсов, которые агент использует в output:
-
-- starter files;
-- templates;
-- images/icons/fonts;
-- structured boilerplate.
-
-Инструкции, которые агент должен читать, не должны жить только в `assets/`.
-
-### Что писать в `agents/openai.yaml`
-
-Фактический `.agents`-совместимый формат:
-
-```yaml
-interface:
-  display_name: "Human Readable Skill Name"
-  short_description: "Short workflow description"
-  default_prompt: "Use $skill-name to ..."
-  icon_small: "./assets/icon-small.svg"
-  icon_large: "./assets/icon-large.svg"
-  brand_color: "#3B82F6"
-policy:
-  allow_implicit_invocation: true
-dependencies:
-  tools:
-    - type: "mcp"
-      value: "github"
-      description: "GitHub MCP server"
-      transport: "streamable_http"
-      url: "https://api.githubcopilot.com/mcp/"
-```
-
-`allow_implicit_invocation: true` означает, что skill может включаться по user
-intent без явного `$skill-name`. Если поставить `false`, skill остается доступен
-для явного вызова, но не должен выбираться автоматически.
-
-Правила:
-
-- `display_name` - человекочитаемое название;
-- `short_description` - 25-64 characters;
-- `default_prompt`, если задан, должен содержать `$skill-name`;
-- icons и `brand_color` добавляются только когда реально нужны;
-- `dependencies.tools` нужен для фактических MCP/connector dependencies, а не
-  "на будущее";
-- для генерации или регенерации в этом bundle использовать
-  `scripts/generate_openai_yaml.py`.
-
-`agents/openai.yaml` нужно обновлять вместе с `SKILL.md`, если меняется trigger,
-scope или default prompt.
-
-## Maintenance checklist
-
-### Перед изменением кода
-
-1. Прочитать root `AGENTS.md`.
-2. Прочитать `.agents/AGENTS.md`.
-3. Прочитать `.agents/SUMMARY.md`.
-4. Выбрать relevant skill.
-5. Прочитать relevant common docs и project overlays.
-6. Прочитать affected source/config files.
-7. Сделать минимальную scoped правку.
-8. Запустить relevant verification.
-9. Проверить, нужны ли updates в `.agents/project/**`.
-
-### Перед изменением `.agents` docs
-
-1. Выбрать слой: `AGENTS.md`, `common/**`, `project/**`, `skills/**`,
-   `README.md`.
-2. Проверить соседние rules и skill chains.
-3. Не смешивать reusable docs и project facts.
-4. Обновить cross-links и `SUMMARY.md`, если изменилась структура или routing.
-5. Обновить README, если изменились user-facing workflow, paths, skill list или
-   publication rules.
-6. Обновить graph frontmatter и Obsidian wikilinks для changed Markdown files.
-7. Проверить, что frontmatter не содержит workflow вместо body-инструкций.
-8. Запустить Markdown/Prettier check.
-
-### Перед публикацией upstream
-
-1. Работать только внутри `.agents`.
-2. Убедиться, что `project/**` не staged.
-3. Commit publishable docs на local `main`.
-4. Не пушить local `main`.
-5. Rebase на `origin/main`.
-6. Создать `fix-*` или `feat-*` branch.
-7. Push branch.
-8. Создать PR через GitHub connector.
-9. Вернуться на local `main`.
-
-## Как поддерживать этот README
-
-README должен быть подробным техническим справочником по bundle, если он
-отвечает на вопросы:
-
-- что такое `.agents`;
-- какие правила и skills есть;
-- как Codex выбирает инструкции;
-- что настроить в VS Code;
-- какие paths publishable/local-only;
-- как делать sync и publication;
-- какие запреты важно знать до работы.
-
-README не должен содержать:
-
-- host-project facts;
-- маркетинговый текст;
-- историю изменений;
-- дословную копию всех references;
-- инструкции для не-Codex агентных систем;
-- публикацию local-only paths.
-
-Если меняются skill list, routing, sync/publication policy, canonical path,
-README должен обновляться в той же задаче.
+Also search for stale removed skill names and prohibited Figma/Jam routing
+before finishing.

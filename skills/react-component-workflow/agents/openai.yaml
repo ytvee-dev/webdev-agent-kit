@@ -1,6 +1,0 @@
-interface:
-    display_name: 'React Component Workflow'
-    short_description: 'React components, hooks, props, and TypeScript'
-    default_prompt: 'Use $react-component-workflow for component-heavy React work.'
-policy:
-    allow_implicit_invocation: true

@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.common.approved-patterns'
 title: 'Approved Patterns'
 doc_type: 'common-rule'
@@ -13,47 +13,43 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[SUMMARY|Agent Documentation Summary]]'
-    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
-depends_on:
-    []
+    - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
+depends_on: []
 ---
 
 # Approved Patterns
 
-Purpose: record bundle-wide implementation patterns that are safe to reuse
-across multiple host projects.
+Purpose: define reusable patterns for screenshot-to-frontend implementation.
 
-Use `.agents/project/approved-patterns.md` only for host-repo additions,
-exceptions, and concrete local examples.
+## Source-First Design Intake
 
-## Keep host entry files thin
+- Treat user-supplied screenshots, copied inspect panels, exported assets, and
+  written notes as the design source.
+- Separate high-confidence copied values from screenshot-inferred values.
+- Convert visual input into a `Design Implementation Spec` before editing code.
+- Keep unknown states, breakpoints, assets, and token values explicit.
 
-- Keep route files, app entry files, and other top-level composition files thin.
-- Move reusable logic into helpers, feature modules, selectors, or shared UI
-  modules instead of burying it in entrypoint files.
+## Project-Native Implementation
 
-## Keep interactivity close to the consumer
+- Detect the actual frontend stack before choosing framework patterns.
+- Reuse existing components, routes, styling systems, tokens, breakpoints, and
+  verification commands.
+- Keep styles local to the edited surface unless the project already owns a
+  shared primitive for the pattern.
+- Use the nearest established styling owner: CSS Modules, global CSS,
+  styled-components, design-system components, plain CSS, framework scoped
+  styles, or another project-native mechanism.
 
-- Push client-only behavior to the closest component that actually needs it.
-- Keep broader shells, layouts, and route composition free of client-only logic
-  unless the whole boundary truly depends on it.
+## Responsive Layout
 
-## Prefer the nearest established styling system
+- Implement desktop, tablet, and mobile behavior from the spec when supplied.
+- Preserve text wrapping, tap targets, focus states, and stable dimensions
+  across supported viewport widths.
+- Prefer semantic layout structure over pixel-only duplication.
 
-- Follow the styling system already established in the edited area.
-- Reuse existing tokens, variables, and primitives before introducing new local
-  values or a new styling stack.
+## Verification
 
-## Keep configuration adjacent to ownership
+- Use browser-rendered evidence for visual work.
+- Compare implementation screenshots against the spec and visual references.
+- Report material visual deviations instead of hiding them.
 
-- Keep reusable copy, links, metadata, route config, and feature config
-  adjacent to the component, route, or module that owns them.
-- Prefer explicit config objects or neighboring modules over hidden inline
-  literals deep inside render logic.
-
-## Trust internal contracts after validation
-
-- Once a value is already guaranteed by types, validated boundaries, or clear
-  control flow, use that contract directly.
-- Add new guards only at true boundaries or where inspected call paths do not
-  actually guarantee the value.

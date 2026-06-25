@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Figma Design Reader'
-    short_description: 'Read supplied Figma-derived artifacts'
-    default_prompt: 'Use $figma-design-reader to analyze supplied Figma-derived screenshots, exports, inspect values, or specs.'
-policy:
-    allow_implicit_invocation: true

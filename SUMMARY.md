@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.summary'
 title: 'Agent Documentation Summary'
 doc_type: 'summary'
@@ -12,163 +12,99 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
-    - '[[README|webdev-assistant README]]'
-depends_on:
-    []
+    - '[[README|Screenshot Frontend Assistant README]]'
+depends_on: []
 ---
 
 # Agent Documentation Summary
 
-Purpose: explain the current `.agents/` tree, reading order, and the split
-between upstream-managed bundle docs, reusable workflows, and host-project
-overlays.
+Purpose: map the reduced screenshot-to-frontend `.agents` bundle.
 
-All Markdown files under `.agents/` carry graph frontmatter for Obsidian-style
-navigation. Treat `.agents` as the vault root when reading `parent`, `related`,
-and `depends_on` wikilinks.
+All paths are bundle-local paths rooted at `.agents/`. The host-root
+`AGENTS.md` pointer is handled only by `project-onboarding-adapter`.
 
-Graph frontmatter is required metadata, not a replacement for document body
-instructions. New or changed Markdown files must update frontmatter links in
-the same task.
+## Reading Order
 
-## Reading order
+1. Read `AGENTS.md`.
+2. Read this `SUMMARY.md`.
+3. Choose the relevant skill from `skills/**`.
+4. Read relevant `common/**` rules.
+5. Read relevant `project/**` overlays and path indexes.
+6. Read affected source files and configs.
 
-1. Start with `AGENTS.md`.
-2. For implementation work, load `.agents/skills/webapp-task-protocol/SKILL.md`
-   first, then follow its skill chain.
-3. For documentation or agent-rules work, read this file, then
-   `.agents/common/documentation-maintenance.md`, then
-   `.agents/skills/agent-rules-skill-author/SKILL.md`.
-4. Read only the overlays and skill references relevant to the current task.
-5. Finish implementation work with
-   `.agents/skills/frontend-review-and-fix/SKILL.md`.
+## Common Docs
 
-## Common bundle docs
+- `common/approved-patterns.md` - reusable frontend screenshot-to-code
+  implementation patterns.
+- `common/anti-patterns.md` - prohibited workflow, Figma, tooling, and frontend
+  implementation patterns.
+- `common/documentation-maintenance.md` - rules for changing bundle docs and
+  skill packages.
 
-- `common/approved-patterns.md` - bundle-wide reusable implementation patterns
-- `common/anti-patterns.md` - bundle-wide prohibited directions
-- `common/documentation-maintenance.md` - rules for changing publishable bundle
-  docs
+## Project Overlays
 
-## Project overlays
+- `project/stack-profile.md` - host-project framework, runtime, package,
+  tooling, and state snapshot.
+- `project/architecture-map.md` - routes, pages, shared code, and frontend
+  ownership map.
+- `project/styling-profile.md` - local styling systems, tokens, breakpoints,
+  and CSS conventions.
+- `project/verification-profile.md` - local verification commands.
+- `project/approved-patterns.md` - host-project implementation addenda.
+- `project/anti-patterns.md` - host-project prohibited local patterns.
+- `project/figma-profile.md` - local screenshot-derived design constraints and
+  Figma no-MCP boundary.
+- `project/react/path-index.md` - React/client lookup index when present.
+- `project/next/path-index.md` - Next.js lookup index when present.
 
-- `project/stack-profile.md` - host-project framework, runtime, tooling, and
-  state-management snapshot
-- `project/architecture-map.md` - host-project route tree, shared code
-  locations, and client/server structure
-- `project/seo-profile.md` - host-project SEO architecture, external content
-  taxonomy flow, webmaster state, and AI-readable route surfaces
-- `project/styling-profile.md` - host-project styling conventions and tokens
-- `project/verification-profile.md` - host-project verification order and scope
-- `project/approved-patterns.md` - host-project approved-pattern addenda and
-  examples
-- `project/anti-patterns.md` - host-project anti-pattern addenda and exceptions
-- `project/figma-profile.md` - host-project design-to-code constraints
-- `project/react/path-index.md` - host-project lookup index for component and
-  client work
-- `project/next/path-index.md` - host-project lookup index for App Router work
+`project/**` is local-only and must not be copied into publishable reusable
+skills or common docs.
 
-## Skill packages
+## Skills
 
-- `skills/webapp-task-protocol` - classify the task and choose the skill chain
-- `skills/nextjs-app-router` - App Router routes, layouts, metadata, and
-  boundaries
-- `skills/react-component-workflow` - component structure, props, hooks, strict
-  TypeScript, rendering logic, and reusable React UI behavior
-- `skills/react-state-workflow` - React shared state, context, Redux,
-  selectors, typed store hooks, and store-like reactive hooks
-- `skills/frontend-design-workflow` - visual design orchestration,
-  Figma-derived artifact or screenshot implementation, responsive polish, and explicit
-  canvas/generative UI work
-- `skills/figma-design-reader` - offline analysis of user-provided
-  Figma-derived screenshots, exports, copied inspect values, variables, assets,
-  and specs
-- `skills/figma-design-to-code` - implement repository UI code from
-  user-provided Figma-derived source material
-- `skills/figma-canvas-editing` - manual Figma canvas edit specs for nodes,
-  variables, components, variants, and styles
-- `skills/figma-screen-generation` - full-screen, page, and view blueprints for
-  manual Figma creation
-- `skills/figma-design-system-builder` - Figma design-system, token, and
-  component-library blueprints
-- `skills/figma-code-connect` - Code Connect mapping recommendations and snippet
-  drafts
-- `skills/figma-create-file` - manual setup briefs for blank Figma design files
-  or FigJam files
-- `skills/boundary-input-validation` - boundary parsing without new
-  dependencies
-- `skills/frontend-review-and-fix` - final review, regression checks, and
-  verification
-- `skills/playwright-interactive` - interactive browser QA for local web apps
-  with Playwright, screenshots, console/runtime checks, and viewport fit checks
-- `skills/project-onboarding-adapter` - Plan Mode-only first-time host project
-  adaptation planning, root `AGENTS.md` pointer setup, `.agents/project/**`
-  overlay planning, and bundle path audit
-- `skills/project-context-adapter` - refresh repo overlays after structure
-  drift
-- `skills/agent-rules-skill-author` - maintain `.agents/` and repo-local agent
-  policy, including `.agents`-first skill authoring, native Codex skill
-  contract boundaries, `openai.yaml`, local scaffolding and validation
-  scripts, trigger precision, source-backed workflows, progressive disclosure,
-  and validation
-- `skills/readme-maintainer` - audit agent documentation and keep
-  `.agents/README.md` structured, accurate, and user-facing
-- `skills/webdev-assistant-sync` - sync the shared bundle with the upstream
-  `webdev-assistant` repository while keeping local work on `main`, using
-  short-lived PR branches for publication, or pushing a fallback branch when
-  `main` does not exist yet
-- `skills/frontend-security-inspector` - security-focused review, secure
-  coding, and threat modeling for React and Next.js surfaces
-- `skills/technical-seo-app` - source-backed technical SEO audits and fixes,
-  including metadata, crawlability, webmaster setup, external content taxonomy,
-  and AI-agent discoverability
-- `skills/screenshot-design-inspector` - screenshot-first design extraction
-  from supplied UI images and copied inspect panels
-- `skills/architecture-from-spec` - planning-only architecture guidance from a
-  user specification, technical assignment, or large refactor brief; it produces
-  an implementation-ready plan and stops before edits
+- `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
+  copied inspect panels, assets, and notes, then produce a strict
+  `Design Implementation Spec`.
+- `skills/frontend-layout-implementer` - implement a `Design Implementation
+  Spec` in the current frontend project while adapting to the actual stack and
+  project architecture.
+- `skills/frontend-visual-qa` - verify rendered UI against the design spec and
+  visual references with browser screenshots, viewport checks, and visual diff
+  review.
+- `skills/project-onboarding-adapter` - Plan Mode project onboarding, host-root
+  `AGENTS.md` pointer planning, and first project overlay creation.
+- `skills/project-context-adapter` - refresh factual project overlays and
+  frontend path indexes after project structure or conventions change.
+- `skills/agent-rules-skill-author` - create, edit, evaluate, and validate
+  `.agents` skill packages and bundle rules.
 
-## Nested upstream repo
+## Screenshot-To-Frontend Pipeline
 
-- `.agents/` itself is the local checkout of
-  `git@github.com:ytvee-dev/webdev-assistant.git`
-- `.agents/AGENTS.md` is the canonical publishable copy of the bundle policy
-- the host repository root `AGENTS.md` is a stable pointer to
-  `.agents/AGENTS.md`, not a synchronized mirror
-- `.agents/README.md` and `.agents/.gitignore` belong to the shared bundle repo
-- `.agents/project/**` stays local-only inside the nested checkout
-- `.agents/.obsidian/**` stores local Obsidian vault settings and is not
-  publishable
-- changes inside `.agents/` do not require updating the host-root `AGENTS.md`
-  unless the canonical policy path itself changes
+Use this chain for the main workflow:
 
-## Navigation rules
+```text
+design-screenshot-spec
+-> frontend-layout-implementer
+-> frontend-visual-qa
+```
 
-- Prefer filesystem MCP tools for reading file contents and directory
-  structure. Use shell commands for search, git state, diffs, and executable
-  checks when command output itself is needed.
-- Treat `.agents/common/**` as upstream-managed reusable bundle docs.
-- Treat `.agents/project/**` as repo-specific facts and policy overlays.
-- Treat `.agents/skills/**` as reusable workflows and reference material.
-- Treat `.agents/AGENTS.md`, `.agents/SUMMARY.md`, `.agents/common/**`,
-  `.agents/skills/**`, `.agents/README.md`, and `.agents/.gitignore` as the
-  publishable shared-bundle surface.
-- When a task changes project facts or reveals documentation drift, update the
-  relevant `.agents/project/**` files in the same task.
-- When a task asks the agent to adapt to a new project, initialize Codex
-  project context, connect `.agents`, or create the host-root `AGENTS.md`
-  pointer, use `project-onboarding-adapter`; it only works in Plan Mode.
-- When a task changes publishable bundle structure, cross-links, skill names,
-  or reading order, update this file in the same task.
-- When a task adds, renames, or moves Markdown files, update graph frontmatter
-  and Obsidian wikilinks in the same task.
-- When project onboarding, project context refresh, README maintenance,
-  sync-down drift repair, or skill authoring changes Markdown docs, update
-  graph frontmatter and keep workflow instructions in the body.
-- When a task changes user-facing agent workflow, skill lists, path policy, or
-  sync/publication instructions, update `.agents/README.md` in the same task.
-- When shared client state, selectors, context, or Redux are in scope, include
-  `react-state-workflow` alongside the React or Next.js skill chain instead of
-  relying on component guidance alone.
-- When a task is about syncing or publishing the bundle itself, use
-  `webdev-assistant-sync`.
+The user supplies screenshots, copied visual inspect panels, exported assets,
+or notes. The agent must not use Figma MCP or inspect live Figma files.
+
+## Navigation Rules
+
+- Use Project Context MCP when available for project facts; otherwise read
+  `project/**` and affected source files directly.
+- Use Design Spec MCP when available to store or read the
+  `Design Implementation Spec`; otherwise keep the spec in the response or a
+  user-approved local artifact.
+- Use Visual Reference MCP when available for supplied screenshots and
+  reference images; otherwise rely on attached images and local files supplied
+  by the user.
+- Use Visual Diff MCP when available for image comparison; otherwise use the
+  manual visual-diff checklist in `frontend-visual-qa`.
+- Use `context7` for current framework or library documentation.
+- Use `mdn` for HTML, CSS, Web APIs, and browser compatibility.
+- Use Browser or Playwright MCP for rendered frontend verification.
+- Never use Figma MCP or Figma whiteboard tooling in this bundle.
+

@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Technical SEO App'
-    short_description: 'Source-backed technical SEO audit and fixes'
-    default_prompt: 'Use $technical-seo-app to audit and improve technical SEO.'
-policy:
-    allow_implicit_invocation: true

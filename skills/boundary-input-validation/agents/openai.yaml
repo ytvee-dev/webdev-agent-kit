@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Boundary Input Validation'
-    short_description: 'Validate untrusted input without defaulting to new dependencies'
-    default_prompt: 'Use $boundary-input-validation when validating boundary input without introducing new packages by default.'
-policy:
-    allow_implicit_invocation: true

@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Playwright Interactive'
-    short_description: 'Interactive Playwright QA'
-    default_prompt: 'Use $playwright-interactive for browser verification with persistent Playwright QA and screenshot evidence.'
-policy:
-    allow_implicit_invocation: true

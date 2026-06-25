@@ -1,6 +1,6 @@
-﻿---
+---
 name: agent-rules-skill-author
-description: Use when creating, evaluating, or editing `.agents`-compatible skills, repo-local agent rules, `AGENTS.md`, `.agents/common`, `.agents/project`, or `.agents/skills`. Focus on precise skill authoring, trigger boundaries, source-backed instructions, progressive disclosure, validation, and layer-correct bundle docs inside `.agents/`.
+description: Use when creating, evaluating, or editing this .agents screenshot-to-frontend skill bundle, repo-local agent rules, AGENTS.md, common/**, project/**, or skills/**. Focus on precise skill authoring, trigger boundaries, source-backed instructions, progressive disclosure, validation, and layer-correct docs.
 id: 'agents.skills.agent-rules-skill-author.skill'
 title: 'Agent Rules And Skill Author'
 doc_type: 'skill'
@@ -36,6 +36,91 @@ depends_on:
 
 Create or revise repo-local agent rules and `.agents`-compatible skill
 packages without leaking project-specific instructions into the wrong layer.
+
+## When To Use
+
+- The user asks to create, evaluate, rename, delete, or edit skills.
+- The user asks to change `AGENTS.md`, `SUMMARY.md`, `README.md`, `common/**`,
+  `project/**`, or `skills/**`.
+- The screenshot-to-frontend pipeline rules, tool contracts, or skill routing
+  need maintenance.
+
+## When Not To Use
+
+- The user asks to write a design implementation spec from screenshots. Use
+  `design-screenshot-spec`.
+- The user asks to implement a frontend layout from a spec. Use
+  `frontend-layout-implementer`.
+- The user asks to visually verify rendered UI. Use `frontend-visual-qa`.
+- The user asks to adapt a new project in Plan Mode. Use
+  `project-onboarding-adapter`.
+
+## Required Context
+
+1. Read `AGENTS.md`.
+2. Read `SUMMARY.md`.
+3. Read `common/documentation-maintenance.md`.
+4. Read affected `common/**`, `skills/**`, `project/**`, and root pointer files
+   for the requested change.
+5. Read relevant references from this skill only when their topic is in scope.
+6. Read current OpenAI Codex docs when native skill behavior, `AGENTS.md`,
+   MCP, plugins, or `agents/openai.yaml` behavior may have changed.
+
+## Tool Contract
+
+- Use filesystem reads and targeted search for local bundle facts.
+- Use official OpenAI Codex docs for current skill and MCP behavior.
+- Use `context7` and `mdn` only when authoring rules depend on current
+  framework or web platform behavior.
+- Do not use Figma MCP for this bundle.
+
+## Workflow
+
+1. Classify the target layer: `AGENTS.md`, `SUMMARY.md`, `README.md`,
+   `common/**`, `project/**`, or `skills/**`.
+2. Confirm whether a new skill is needed or an existing skill/reference/common
+   rule should be edited.
+3. Define trigger surface, non-trigger cases, inputs, outputs, defaults, tool
+   contract, failure modes, and validation gates.
+4. Keep skill packages in the standard section order used by this bundle.
+5. Keep graph frontmatter and `agents/openai.yaml` synchronized.
+6. Remove stale links after renames or deletions.
+7. Validate changed skill packages and run documentation checks.
+
+## Output Contract
+
+Report:
+
+- files changed;
+- skill routing or trigger changes;
+- tool dependency changes;
+- validation performed;
+- unresolved risks or blocked checks.
+
+## Validation Gates
+
+- `name` and `description` stay first in `SKILL.md` frontmatter.
+- Every skill has `Purpose`, `When To Use`, `When Not To Use`,
+  `Required Context`, `Tool Contract`, `Workflow`, `Output Contract`,
+  `Validation Gates`, `Trigger Evals`, and `Reference Map`.
+- New references are linked from the owning `SKILL.md`.
+- `agents/openai.yaml` matches skill trigger, scope, and factual tool
+  dependencies.
+- No Figma MCP or Figma whiteboard workflow is introduced.
+
+## Trigger Evals
+
+Should trigger:
+
+- "Create a new skill for visual QA."
+- "Audit and rewrite the .agents skill routing."
+- "Update AGENTS.md and SUMMARY.md for renamed skills."
+
+Should not trigger:
+
+- "Implement this Design Implementation Spec."
+- "Compare the rendered page to the screenshot."
+- "Write a layout spec from these screenshots."
 
 ## Authoring modes
 
@@ -258,9 +343,8 @@ existing one:
 - Keep `.agents/AGENTS.md` as canonical policy and keep the repository root
   `AGENTS.md` as a stable pointer, not a synchronized mirror.
 - If `.agents/` structure changes, update `.agents/SUMMARY.md` in the same task.
-- If documentation changes affect user-facing workflow, skill lists, path
-  policy, or sync/publication instructions, update `.agents/README.md` in the
-  same task using `readme-maintainer`.
+- If documentation changes affect user-facing workflow, skill lists, or path
+  policy, update `README.md` in the same task.
 - If a new skill changes how tasks should be routed, update the relevant
   path-index or skill-routing docs in the same task.
 - If a new approved pattern or anti-pattern is added, inspect the related

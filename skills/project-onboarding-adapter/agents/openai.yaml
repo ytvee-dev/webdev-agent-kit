@@ -1,6 +1,11 @@
 interface:
     display_name: 'Project Onboarding Adapter'
-    short_description: 'Plan first-time .agents adaptation for a new project'
-    default_prompt: 'Use $project-onboarding-adapter to plan adaptation of this project for the shared .agents bundle.'
+    short_description: 'Plan host project onboarding'
+    default_prompt: 'Use $project-onboarding-adapter to plan .agents onboarding for this frontend project.'
 policy:
     allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'filesystem_server'
+          description: 'Inspect project files and existing bundle paths during onboarding planning.'
