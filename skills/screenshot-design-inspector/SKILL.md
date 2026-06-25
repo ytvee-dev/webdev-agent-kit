@@ -1,6 +1,6 @@
 ﻿---
 name: screenshot-design-inspector
-description: Use when design implementation starts from screenshots, or when Figma MCP access fails and the user can provide screenshots. Inspect desktop, tablet, and mobile screenshots to extract typography, color, spacing, and breakpoint intent without inventing missing design data.
+description: Use when design implementation starts from user-provided screenshots or copied visual inspect panels. Inspect desktop, tablet, and mobile screenshots to extract typography, color, spacing, and breakpoint intent without inventing missing design data. Do not treat this as a remote file reader.
 id: 'agents.skills.screenshot-design-inspector.skill'
 title: 'Screenshot Design Inspector'
 doc_type: 'skill'
@@ -27,8 +27,8 @@ depends_on:
 
 ## Purpose
 
-Inspect screenshots as a design source when Figma is unavailable or insufficient.
-This is the screenshot fallback skill, not the primary Figma MCP reading skill.
+Inspect screenshots and copied visual inspect panels as design sources.
+This is a first-class offline source-material skill, not a remote file reader.
 
 ## Required context
 
@@ -39,8 +39,10 @@ This is the screenshot fallback skill, not the primary Figma MCP reading skill.
 
 ## Workflow
 
-1. Try Figma MCP first when the request started from a Figma URL or node.
-2. If Figma access fails, ask the user to resend the task with screenshots.
+1. Confirm screenshots or copied visual inspect panels are present.
+2. If the request provides only a Figma URL, node, or file key, ask the user for
+   screenshots, exports, copied inspect values, token/style notes, or a written
+   brief.
 3. Group screenshots by device class: desktop, tablet, and mobile.
 4. Extract what is visible with confidence:
    - font size
@@ -55,13 +57,14 @@ This is the screenshot fallback skill, not the primary Figma MCP reading skill.
 ## Core rules
 
 - Do not invent missing design data.
-- Do not use this skill as a substitute for `figma-design-reader` when real
-  Figma MCP access is available.
+- Do not use this skill as a substitute for `figma-design-reader` when the user
+  supplies Figma-derived specs, exports, or copied inspect values that need
+  structured analysis.
 - Prefer existing project tokens and theme variables when translating screenshot
   observations into implementation.
 - If a screenshot suggests a new global token, ask the user before adding it.
-- Use screenshots to estimate values only when Figma or source code does not
-  provide them.
+- Use screenshots to estimate values only when source material or source code
+  does not provide them.
 
 ## Reference map
 

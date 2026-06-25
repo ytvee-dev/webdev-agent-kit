@@ -21,11 +21,14 @@ depends_on:
 
 # Figma Implementation
 
-- Use `figma-design-to-code` for the actual Figma-to-code intake and design
-  reading flow.
+- Use `figma-design-to-code` for source-material-to-code intake when
+  user-provided Figma-derived artifacts are available.
+- If the user provides only a Figma URL, node, or file key, ask for screenshots,
+  exports, copied inspect values, token/style notes, written specs, or a design
+  brief before implementing.
 - Keep `nextjs-app-router` focused on route composition, metadata, layouts,
   loading/error states, and server/client boundaries around that UI.
 - Reuse existing route-level patterns, layout primitives, and styling tokens
   instead of hardcoded values.
-- If Figma access fails, ask the user for screenshots and use
-  `screenshot-design-inspector`.
+- Use `screenshot-design-inspector` only when screenshots are the primary
+  supplied source and no Figma-specific source context is available.

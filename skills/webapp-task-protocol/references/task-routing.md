@@ -35,8 +35,8 @@ depends_on:
     - `nextjs-app-router` — routing, layouts, file conventions, server/client boundaries
     - `react-component-workflow` — component architecture, props, state, hooks
     - `react-state-workflow` — context, Redux, selectors, typed hooks, and shared client state
-    - `frontend-design-workflow` — visual design, Figma, screenshots, responsive polish
-    - `figma-design-to-code` — implement repo code from Figma when Figma is the source of truth
+    - `frontend-design-workflow` — visual design, Figma-derived artifacts, screenshots, responsive polish
+    - `figma-design-to-code` — implement repo code from supplied Figma-derived material when it is the source of truth
     - Use both when the task spans routing AND component concerns (see `classification-rules.md`)
     - Use `react-state-workflow` alongside the React or Next skill when the task
       changes store shape, selectors, provider wiring, or store consumers
@@ -71,22 +71,22 @@ When a feature requires new routes AND new component architecture:
 ### Design request
 
 1. `frontend-design-workflow`
-2. `figma-design-reader` for read-only Figma inspection when the request starts from Figma
-3. `figma-design-to-code` when the deliverable is repo code from Figma
+2. `figma-design-reader` for offline Figma-derived artifact analysis when source material is supplied
+3. `figma-design-to-code` when the deliverable is repo code from supplied Figma-derived material
 4. `react-component-workflow` or `nextjs-app-router` as needed for implementation
-5. `screenshot-design-inspector` when Figma access is unavailable and screenshots are the source
+5. `screenshot-design-inspector` when generic screenshots are the source
 
-### Figma canvas request
+### Figma manual canvas planning request
 
 1. `figma-canvas-editing`
-2. `figma-screen-generation` when the deliverable is a full screen or page
-3. `figma-design-system-builder` when the deliverable is a library or token system
+2. `figma-screen-generation` when the deliverable is a full screen or page blueprint
+3. `figma-design-system-builder` when the deliverable is a library or token-system blueprint
 
-### Figma Code Connect request
+### Figma Code Connect recommendation request
 
 1. `figma-code-connect`
 
-### Figma file creation request
+### Figma file setup request
 
 1. `figma-create-file`
 

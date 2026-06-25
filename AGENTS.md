@@ -145,19 +145,22 @@ not need to name a skill explicitly.
   `react-component-workflow`
 - React shared state, context, Redux, selectors, and store-like hooks ->
   `react-state-workflow`
-- Visual design, Figma/screenshot translation, responsive polish, and
+- Visual design, Figma-derived artifact/screenshot translation, responsive polish, and
   generative UI -> `frontend-design-workflow`
-- Read-only Figma inspection, screenshots, variables, and MCP troubleshooting ->
+- Offline Figma-derived artifact analysis, screenshots, exports, copied inspect
+  values, variables, and specs ->
   `figma-design-reader`
-- Figma-to-code implementation in the repo -> `figma-design-to-code`
-- Low-level Figma canvas mutation through `use_figma` ->
+- Figma-derived artifact-to-code implementation in the repo ->
+  `figma-design-to-code`
+- Manual Figma canvas edit specs and planning ->
   `figma-canvas-editing`
-- Full-screen and multi-section generation inside Figma ->
+- Full-screen and multi-section Figma blueprints for manual creation ->
   `figma-screen-generation`
-- Figma design system and component library building ->
+- Figma design system and component library blueprints ->
   `figma-design-system-builder`
-- Figma Code Connect mappings -> `figma-code-connect`
-- New blank Figma or FigJam file creation -> `figma-create-file`
+- Figma Code Connect mapping recommendations and snippet drafts ->
+  `figma-code-connect`
+- New blank Figma or FigJam file setup briefs -> `figma-create-file`
 - Boundary validation without new dependencies -> `boundary-input-validation`
 - Review pass and verification -> `frontend-review-and-fix`
 - Interactive browser QA with Playwright, screenshots, and viewport checks ->

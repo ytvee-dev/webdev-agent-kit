@@ -23,41 +23,42 @@ depends_on:
 
 # Implementation Flow
 
-Use this reference when translating Figma designs into code in the repo.
+Use this reference when translating user-provided Figma-derived source material
+into code in the repo.
 
 ## Section Map
 
-- `Required flow` for Figma-to-code order.
+- `Required flow` for source-material-to-code order.
 - `Translation rules` for mapping design to repo conventions.
 - `Validation` for visual signoff and fallback.
 
 ## Required flow
 
-1. Parse the Figma URL or selected node.
-2. Fetch `get_design_context`.
-3. Fetch `get_screenshot` for the same node.
-4. Download or reference required assets from the Figma MCP payload.
-5. Read the touched code area and map the design onto existing repo patterns.
-6. Implement with the repo's owned styling and component system.
-7. Validate against the Figma screenshot before finishing.
+1. Inventory supplied screenshots, exports, copied inspect values, token/style
+   notes, written specs, briefs, and assets.
+2. If only a Figma URL, node, or file key is provided, ask for source material
+   before implementation.
+3. Read the touched code area and map the design onto existing repo patterns.
+4. Implement with the repo's owned styling and component system.
+5. Validate against supplied screenshots, exports, specs, and intended states
+   before finishing.
 
 ## Translation rules
 
-- Treat the MCP output as an explanation of layout and behavior, not as final
-  code style.
+- Treat supplied Figma-derived artifacts as an explanation of layout and
+  behavior, not as final code style.
 - Replace any Tailwind-like output or generic Figma code with the repo's real
   tokens, CSS conventions, and framework primitives.
 - Prefer extending an existing component over creating a parallel one.
-- Use Figma variables and styles as intent, then bind them to the repo's design
-  tokens or local equivalents.
+- Use copied variables, style values, and token notes as intent, then bind them
+  to the repo's design tokens or local equivalents.
 - If the design and the repo's reusable token system conflict, prefer the repo's
   owned token model and document the visual adjustment.
 
 ## Validation
 
 - Validate spacing, typography hierarchy, assets, and interaction states against
-  the screenshot or node states fetched from Figma.
-- If the design source is truncated or incomplete, say so and narrow the node
-  read before continuing.
-- If Figma becomes unavailable mid-task, explicitly switch to screenshot-based
-  interpretation instead of silently guessing.
+  the supplied screenshots, exports, or specs.
+- If the design source is incomplete, say so and ask for the missing artifact
+  when it affects implementation.
+- Do not silently guess missing Figma states, assets, tokens, or breakpoints.

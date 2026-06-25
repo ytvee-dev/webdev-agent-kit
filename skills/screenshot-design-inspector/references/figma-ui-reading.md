@@ -21,7 +21,8 @@ depends_on:
 
 # Figma UI Reading
 
-Use this reference when Figma MCP or screenshots expose Figma-like UI labels.
+Use this reference when supplied screenshots, exports, or copied inspect panels
+expose Figma-like UI labels.
 
 ## Text layers
 

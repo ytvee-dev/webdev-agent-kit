@@ -21,8 +21,8 @@ depends_on:
 
 # Design Implementation
 
-Use this reference for Figma, screenshot, redesign, styling polish, and
-responsive UI work.
+Use this reference for Figma-derived artifacts, screenshots, redesign, styling
+polish, and responsive UI work.
 
 ## Design reading
 
@@ -50,14 +50,17 @@ responsive UI work.
 - Document design deviations only when they affect implementation or user
   expectations.
 
-## Figma and screenshots
+## Figma-derived artifacts and screenshots
 
-- Use configured Figma capabilities first when a Figma URL or node is provided.
-- Use `figma-design-reader` for read-only Figma intake and
+- Use only user-provided Figma-derived screenshots, exports, copied inspect
+  values, token/style notes, written specs, briefs, and repo code.
+- If the user provides only a Figma URL, node, or file key, ask for source
+  material before implementing.
+- Use `figma-design-reader` for offline Figma-derived intake and
   `figma-design-to-code` when the deliverable is repo implementation from
-  Figma.
-- If Figma is unavailable, request screenshots and use
-  `screenshot-design-inspector` before implementing from guesswork.
+  supplied Figma-derived material.
+- Use `screenshot-design-inspector` when screenshots are the primary source and
+  no Figma-specific source context is available.
 - Recreate responsive behavior and interaction states with existing repo
   patterns instead of copying one static viewport blindly.
 - Ask before adding reusable tokens or design-system primitives that do not

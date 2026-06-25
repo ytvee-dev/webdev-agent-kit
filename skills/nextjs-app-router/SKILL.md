@@ -33,7 +33,8 @@ depends_on:
 - Add or edit routes, layouts, loading states, or metadata
 - Work with dynamic segments and static params
 - Adjust server/client boundaries in a Next.js app
-- Implement Figma-driven pages or sections inside a Next.js repository
+- Implement pages or sections from supplied Figma-derived artifacts inside a
+  Next.js repository
 
 ## Required context
 
@@ -66,15 +67,17 @@ Before editing:
 
 ## Figma
 
-When a task starts from a Figma URL:
+When a task starts from Figma-derived material:
 
-1. Use the built-in Figma capabilities first.
-2. Use `figma-design-to-code` for the Figma-to-code workflow instead of keeping
-   the whole design-reading process inside this skill.
+1. If the user provides only a Figma URL, node, or file key, ask for
+   screenshots, exports, copied inspect values, token/style notes, written
+   specs, or a design brief. Do not try to open Figma.
+2. Use `figma-design-to-code` for the source-material-to-code workflow instead
+   of keeping the whole design-reading process inside this skill.
 3. Use this skill to enforce route structure, App Router conventions, and
    server/client boundaries around that implementation.
-4. If Figma access fails, ask the user for screenshots and use
-   `screenshot-design-inspector` before implementing UI.
+4. Use `screenshot-design-inspector` only when screenshots are the primary
+   supplied source and no Figma-specific source context is available.
 
 ## Reference map
 

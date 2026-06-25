@@ -39,7 +39,8 @@ depends_on:
 - Bug fixes
 - Code review or follow-up fixes
 - SEO or security audits
-- Design implementation tasks that may start from a Figma URL
+- Design implementation tasks that may start from Figma-derived artifacts or a
+  Figma URL that requires source material
 - Architecture or large-refactor briefs for React/frontend planning guidance
 
 ## Required context order
@@ -85,8 +86,8 @@ depends_on:
     - React component/state/hooks work -> `react-component-workflow`
     - Context, Redux, selectors, providers, or shared client-state work ->
       `react-state-workflow`
-    - Visual design, Figma, screenshots, responsive polish, or canvas/generative
-      UI -> `frontend-design-workflow`
+    - Visual design, Figma-derived artifacts, screenshots, responsive polish, or
+      canvas/generative UI -> `frontend-design-workflow`
 3. Detect the project type:
     - `frontend-only`
     - `fullstack`
@@ -99,16 +100,17 @@ depends_on:
 
 ## Prompt-specific skills
 
-- Use `figma-design-reader` for read-only Figma analysis and MCP
-  troubleshooting.
+- Use `figma-design-reader` for offline analysis of user-provided
+  Figma-derived artifacts.
 - Use `figma-design-to-code` when the deliverable is repository code from
-  Figma.
-- Use `figma-canvas-editing` for low-level `use_figma` writes.
-- Use `figma-screen-generation` for building or updating full Figma screens.
-- Use `figma-design-system-builder` for Figma library, token, or design-system
-  work.
-- Use `figma-code-connect` for Code Connect mapping requests.
-- Use `figma-create-file` for blank Figma or FigJam file creation.
+  supplied Figma-derived source material.
+- Use `figma-canvas-editing` for manual Figma canvas edit specs.
+- Use `figma-screen-generation` for manual full-screen Figma blueprints.
+- Use `figma-design-system-builder` for Figma library, token, or
+  design-system blueprints.
+- Use `figma-code-connect` for Code Connect mapping recommendations or snippet
+  drafts.
+- Use `figma-create-file` for blank Figma or FigJam file setup briefs.
 - Use `technical-seo-app` for SEO requests.
 - Use `frontend-security-inspector` for security-audit requests.
 - Use `project-context-adapter` when repo overlay docs need refresh or
@@ -117,8 +119,8 @@ depends_on:
   or `AGENTS.md` policy.
 - Use `webdev-assistant-sync` when the request is about syncing or publishing
   the shared agent bundle through `git@github.com:ytvee-dev/webdev-assistant.git`.
-- Use `screenshot-design-inspector` when Figma access is unavailable and the
-  user provides or can provide screenshots.
+- Use `screenshot-design-inspector` when screenshots are the primary supplied
+  source and the task is not specifically Figma-derived.
 - Use `architecture-from-spec` when the user provides a new-project or
   large-refactor React/frontend specification and wants architecture guidance
   rather than immediate implementation. That route ends with guidance or an
@@ -129,19 +131,20 @@ depends_on:
 
 If the prompt includes a Figma URL, node, or explicit Figma request:
 
-1. Use the built-in Figma capabilities first.
-2. Read `.agents/project/figma-profile.md`.
-3. Route by deliverable:
-   - read or explain Figma -> `figma-design-reader`
-   - implement repo code from Figma -> `figma-design-to-code` plus
+1. Read `.agents/project/figma-profile.md`.
+2. If the user provides only a Figma URL, node, or file key, ask for
+   screenshots, exports, copied inspect values, token/style notes, written
+   specs, or a design brief. Do not try to open Figma.
+3. Route by deliverable once source material is available:
+   - read or explain Figma-derived artifacts -> `figma-design-reader`
+   - implement repo code from Figma-derived artifacts -> `figma-design-to-code` plus
      `frontend-design-workflow` and the appropriate React or Next.js skill
-   - edit existing Figma canvas entities -> `figma-canvas-editing`
-   - build a full screen in Figma -> `figma-screen-generation`
-   - build a design system or library in Figma -> `figma-design-system-builder`
-   - create Code Connect mappings -> `figma-code-connect`
-   - create a new blank file -> `figma-create-file`
-4. If Figma access fails, ask the user for screenshots and switch to
-   `screenshot-design-inspector`.
+   - plan edits to existing Figma canvas entities -> `figma-canvas-editing`
+   - blueprint a full screen for Figma -> `figma-screen-generation`
+   - blueprint a design system or library for Figma ->
+     `figma-design-system-builder`
+   - recommend Code Connect mappings -> `figma-code-connect`
+   - prepare a new blank file setup brief -> `figma-create-file`
 
 ## Reference map
 

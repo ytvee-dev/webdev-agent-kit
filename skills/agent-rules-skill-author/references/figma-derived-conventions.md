@@ -36,27 +36,32 @@ that was learned from Figma workflows.
 
 - Put project-specific token names, breakpoint facts, and component locations in
   `.agents/project/figma-profile.md`, not in reusable skills.
-- Put reusable read-only Figma workflow in `figma-design-reader`.
-- Put reusable Figma-to-code workflow in `figma-design-to-code`.
-- Put reusable Figma canvas mutation workflow in `figma-canvas-editing`.
+- Put reusable offline Figma-derived artifact reading in `figma-design-reader`.
+- Put reusable Figma-derived artifact-to-code workflow in
+  `figma-design-to-code`.
+- Put reusable manual Figma canvas edit planning in `figma-canvas-editing`.
 - Put screenshot-only fallback rules in `screenshot-design-inspector`.
 
 ## Routing model
 
-- Read or explain Figma -> `figma-design-reader`
-- Implement repo code from Figma -> `figma-design-to-code`
-- Edit existing Figma nodes, variables, or components -> `figma-canvas-editing`
-- Build whole screens in Figma -> `figma-screen-generation`
-- Build a Figma library or design system -> `figma-design-system-builder`
-- Create Code Connect mappings -> `figma-code-connect`
-- Create blank file -> `figma-create-file`
-- No Figma access, screenshots only -> `screenshot-design-inspector`
+- Read or explain supplied Figma-derived artifacts -> `figma-design-reader`
+- Implement repo code from supplied Figma-derived artifacts ->
+  `figma-design-to-code`
+- Plan manual edits to existing Figma nodes, variables, or components ->
+  `figma-canvas-editing`
+- Blueprint whole screens for manual Figma creation -> `figma-screen-generation`
+- Blueprint a Figma library or design system ->
+  `figma-design-system-builder`
+- Recommend Code Connect mappings or snippet drafts -> `figma-code-connect`
+- Prepare a blank file setup brief -> `figma-create-file`
+- Screenshots or copied visual inspect panels only ->
+  `screenshot-design-inspector`
 
 ## What not to encode
 
 - Do not collapse all Figma work into `frontend-design-workflow`.
 - Do not move Figma canvas rules into repo implementation skills.
-- Do not encode screenshot-only fallback as if it were equivalent to Figma MCP
-  reads.
+- Do not encode Figma URLs as sufficient source material; require screenshots,
+  exports, copied inspect values, token/style notes, written specs, or briefs.
 - Do not copy vendor assets, licenses, or maintainers metadata into `.agents`
   unless the bundle truly needs them.

@@ -77,21 +77,24 @@ the same task.
   TypeScript, rendering logic, and reusable React UI behavior
 - `skills/react-state-workflow` - React shared state, context, Redux,
   selectors, typed store hooks, and store-like reactive hooks
-- `skills/frontend-design-workflow` - visual design orchestration, Figma or
-  screenshot implementation, responsive polish, and explicit
+- `skills/frontend-design-workflow` - visual design orchestration,
+  Figma-derived artifact or screenshot implementation, responsive polish, and explicit
   canvas/generative UI work
-- `skills/figma-design-reader` - read-only Figma analysis, screenshots,
-  variables, assets, and MCP troubleshooting
-- `skills/figma-design-to-code` - implement repository UI code from Figma
-- `skills/figma-canvas-editing` - low-level `use_figma` canvas editing,
+- `skills/figma-design-reader` - offline analysis of user-provided
+  Figma-derived screenshots, exports, copied inspect values, variables, assets,
+  and specs
+- `skills/figma-design-to-code` - implement repository UI code from
+  user-provided Figma-derived source material
+- `skills/figma-canvas-editing` - manual Figma canvas edit specs for nodes,
   variables, components, variants, and styles
-- `skills/figma-screen-generation` - build or update full screens, pages, and
-  views inside Figma
-- `skills/figma-design-system-builder` - build or update Figma design systems,
-  tokens, and component libraries
-- `skills/figma-code-connect` - map published Figma components to code through
-  Code Connect
-- `skills/figma-create-file` - create blank Figma design files or FigJam files
+- `skills/figma-screen-generation` - full-screen, page, and view blueprints for
+  manual Figma creation
+- `skills/figma-design-system-builder` - Figma design-system, token, and
+  component-library blueprints
+- `skills/figma-code-connect` - Code Connect mapping recommendations and snippet
+  drafts
+- `skills/figma-create-file` - manual setup briefs for blank Figma design files
+  or FigJam files
 - `skills/boundary-input-validation` - boundary parsing without new
   dependencies
 - `skills/frontend-review-and-fix` - final review, regression checks, and
@@ -119,8 +122,8 @@ the same task.
 - `skills/technical-seo-app` - source-backed technical SEO audits and fixes,
   including metadata, crawlability, webmaster setup, external content taxonomy,
   and AI-agent discoverability
-- `skills/screenshot-design-inspector` - screenshot-first design extraction and
-  Figma-unavailable fallback, not a replacement for Figma MCP reads
+- `skills/screenshot-design-inspector` - screenshot-first design extraction
+  from supplied UI images and copied inspect panels
 - `skills/architecture-from-spec` - planning-only architecture guidance from a
   user specification, technical assignment, or large refactor brief; it produces
   an implementation-ready plan and stops before edits

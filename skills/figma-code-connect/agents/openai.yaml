@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Figma Code Connect'
-    short_description: 'Map Figma components to code'
-    default_prompt: 'Use $figma-code-connect to match published Figma components to repository code and send Code Connect mappings.'
-policy:
-    allow_implicit_invocation: true

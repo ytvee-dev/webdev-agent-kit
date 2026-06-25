@@ -219,7 +219,6 @@ Codex собирает инструкции слоями:
 
 - GitHub connector нужен для `webdev-assistant-sync publish-up`, потому что PR
   должен создаваться через connector.
-- Figma capability нужна для задач с Figma URL и design implementation.
 - Filesystem MCP желателен для чтения файлов и структуры каталогов; правила
   набора предпочитают MCP file reads, когда инструмент доступен.
 - MDN MCP рекомендуется для HTML, CSS, Web APIs, HTTP, browser compatibility и
@@ -320,116 +319,121 @@ Redux Toolkit, selectors, typed hooks, providers и store-like reactive hooks.
 
 ### `frontend-design-workflow`
 
-Используется для visual design, Figma/screenshot implementation, responsive
-polish, typography, color, hierarchy, motion и explicit canvas/generative UI
-requests.
+Используется для visual design, Figma-derived artifact/screenshot
+implementation, responsive polish, typography, color, hierarchy, motion и
+explicit canvas/generative UI requests.
 
 Ключевые правила:
 
 - сначала определить purpose, audience и visual intent;
 - следовать текущей styling system: CSS Modules, tokens, variables,
   breakpoints, typography primitives и component patterns;
-- для Figma read-only analysis подключать `figma-design-reader`, а для repo
-  implementation from Figma подключать `figma-design-to-code`;
+- для Figma-derived artifact analysis подключать `figma-design-reader`, а для
+  repo implementation from supplied Figma-derived material подключать
+  `figma-design-to-code`;
 - не добавлять Tailwind, shadcn/ui, external fonts, p5.js, Three.js, новый
   token system или artifact toolchain без явного approval;
-- использовать Figma capability first, screenshots как fallback через
-  `screenshot-design-inspector`;
+- если пользователь дал только Figma URL/node/file key, просить screenshots,
+  exports, copied inspect values, token/spec notes или written brief;
 - проверять responsive behavior, text wrapping, accessibility, focus states и
   reduced-motion risks.
 
 ### `figma-design-reader`
 
-Используется для read-only Figma analysis: `get_design_context`,
-`get_metadata`, `get_screenshot`, variables, assets, structure reading и MCP
-troubleshooting.
+Используется для offline analysis of user-provided Figma-derived artifacts:
+screenshots, exports, copied inspect values, variables/styles, assets,
+structure notes и written specs.
 
 Ключевые правила:
 
-- сначала читать Figma, а не пытаться реализовывать по памяти;
-- использовать `get_metadata` как map, если `get_design_context` слишком
-  большой;
-- всегда брать screenshot того же node перед visual claims;
-- не использовать этот skill для repo implementation и не писать им в Figma
-  canvas.
+- Figma URL/node/file key сам по себе недостаточен; агент просит source
+  material и не открывает Figma;
+- copied inspect values, exports и token/spec notes считаются более точными,
+  чем screenshot estimates;
+- unknown states, assets, breakpoints и variables явно отмечаются;
+- skill не используется для repo implementation и не пишет в Figma canvas.
 
 ### `figma-design-to-code`
 
-Используется, когда deliverable - production code в репозитории из Figma
-design.
+Используется, когда deliverable - production code в репозитории из
+user-provided Figma-derived material.
 
 Ключевые правила:
 
-- обязательный flow: Figma context -> screenshot -> assets -> translation to
-  repo conventions -> validation;
+- обязательный flow: source material inventory -> repo pattern mapping ->
+  implementation -> validation against supplied artifacts;
 - использовать вместе с `frontend-design-workflow` и
   `react-component-workflow` или `nextjs-app-router`;
-- трактовать MCP output как representation of design, а не как final code
-  style;
-- при недоступности Figma явно переключаться на screenshot fallback, а не
-  продолжать по догадке.
+- трактовать supplied Figma-derived artifacts как design intent, а не как
+  final code style;
+- если source material неполный, просить недостающие screenshots/exports/specs,
+  а не продолжать по догадке.
 
 ### `figma-canvas-editing`
 
-Используется для low-level write/edit/delete действий внутри Figma через
-`use_figma`: nodes, auto-layout, variables, components, variants, styles и
-programmatic file inspection in JS context.
+Используется для manual Figma canvas edit specs: nodes, auto-layout, variables,
+components, variants, styles, bindings, pages и file structure.
 
 Ключевые правила:
 
-- это prerequisite skill для Figma writes, но не screen builder и не
-  design-system orchestrator;
-- работать маленькими mutation steps и возвращать все created/mutated node IDs;
-- останавливаться на `use_figma` error, а не ретраить вслепую;
-- делать follow-up validation между шагами.
+- не открывать Figma, не запускать scripts и не мутировать canvas;
+- писать ordered manual checklist для человека в Figma editor;
+- включать target page/frame/layer, values и verification checks, когда они
+  есть в source material;
+- missing IDs, layer names, styles и variables отмечать как missing source
+  material.
 
 ### `figma-screen-generation`
 
-Используется для build/update full screens, pages, views и multi-section
-layouts внутри Figma.
+Используется для Figma screen blueprints и manual creation specs для full
+screens, pages, views и multi-section layouts.
 
 Ключевые правила:
 
-- использовать вместе с `figma-canvas-editing`;
+- использовать `figma-canvas-editing`, только если blueprint нужны low-level
+  manual edit steps;
 - сначала разбирать section structure и design-system reuse path;
-- собирать экран section-by-section, а не одной огромной mutation;
-- проверять section screenshots и full-screen state до signoff.
+- описывать экран section-by-section;
+- добавлять manual visual checks для section screenshots и full-screen state.
 
 ### `figma-design-system-builder`
 
-Используется для build/update Figma design systems и component libraries:
+Используется для Figma design-system и component-library blueprints:
 variables, collections, modes, text/effect styles, component families,
 documentation pages и token/code alignment.
 
 Ключевые правила:
 
-- использовать вместе с `figma-canvas-editing`;
-- идти фазами: discovery -> foundations -> file structure -> components -> QA;
+- не создавать variables/components в Figma напрямую;
+- идти фазами: discovery -> foundations -> file structure -> components -> QA
+  recommendations;
 - не строить components до foundations;
 - подтверждать scope и major milestones перед следующей фазой.
 
 ### `figma-code-connect`
 
-Используется для Code Connect workflows: suggestions, codebase matching, user
-confirmation и sending mappings.
+Используется для offline Code Connect mapping recommendations и snippet drafts
+из user-provided component details плюс repo code.
 
 Ключевые правила:
 
 - не путать mapping workflow с design implementation;
 - сначала искать реальные code matches в repo, а не сразу спрашивать path;
-- учитывать published component requirement и plan limitations;
-- отправлять только подтвержденные mappings.
+- учитывать published component requirement как manual prerequisite;
+- не запускать suggestions, не отправлять mappings и не обещать registration.
 
 ### `figma-create-file`
 
-Используется для создания blank Figma design files и FigJam files.
+Используется для manual setup briefs для blank Figma design files и FigJam
+files.
 
 Ключевые правила:
 
-- корректно разрешать target plan или organization;
-- создавать `design` или `figjam` file по user intent;
-- после создания передавать workflow в `figma-canvas-editing` или
-  `figma-screen-generation`, если работа продолжается в новом файле.
+- определить editor type: `design` или `figjam`;
+- предложить file name, page structure, starter frames/sections и manual next
+  steps;
+- не создавать файл, не возвращать file key или URL;
+- передавать дальше только offline planning workflows.
 
 ### `boundary-input-validation`
 
@@ -601,11 +605,12 @@ report, затем remediation только по отдельному запро
 
 ### `screenshot-design-inspector`
 
-Используется, когда design implementation начинается со screenshots или когда
-Figma access недоступен.
+Используется, когда design implementation начинается со screenshots или copied
+visual inspect panels.
 
 Извлекает typography, spacing, colors, hierarchy, breakpoints и confidence
-level. Screenshot-derived values считаются менее надежными, чем Figma data.
+level. Screenshot-derived values считаются менее надежными, чем copied inspect
+values, exports и written specs.
 
 ### `architecture-from-spec`
 
@@ -679,18 +684,20 @@ remediation, follow-up verification.
 ### Design / Figma
 
 ```text
-read/analyze Figma -> figma-design-reader
-Figma -> code -> figma-design-to-code -> frontend-design-workflow -> nextjs-app-router и/или react-component-workflow
-edit Figma file -> figma-canvas-editing
-code/description -> Figma screen -> figma-screen-generation -> figma-canvas-editing
-Figma design system -> figma-design-system-builder -> figma-canvas-editing
-Code Connect -> figma-code-connect
-new file -> figma-create-file
-screenshots only / Figma unavailable -> screenshot-design-inspector
+read/analyze supplied Figma-derived artifacts -> figma-design-reader
+Figma-derived artifacts -> code -> figma-design-to-code -> frontend-design-workflow -> nextjs-app-router и/или react-component-workflow
+manual Figma canvas edit spec -> figma-canvas-editing
+code/description -> Figma screen blueprint -> figma-screen-generation
+Figma design-system blueprint -> figma-design-system-builder
+Code Connect recommendations/snippets -> figma-code-connect
+new file setup brief -> figma-create-file
+screenshots / copied visual inspect panels -> screenshot-design-inspector
 ```
 
-Figma capability используется first для real Figma work, но routing внутри
-bundle зависит от deliverable. Screenshots - fallback, не основной источник.
+Figma URL/node/file key сам по себе недостаточен. Агент работает только с
+предоставленными screenshots, exports, copied inspect values, token/spec notes
+или written brief. Routing внутри bundle зависит от deliverable и
+предоставленного source material.
 
 ### Agent rules / skills / docs
 
@@ -893,11 +900,15 @@ SEO и security skills сначала дают report. Они не должны 
 должны указывать source basis, когда рекомендация зависит от актуальной
 документации поисковой системы, Vercel, Next.js или AI crawler provider.
 
-### Figma first, screenshots fallback
+### Figma source material first
 
-Если prompt содержит Figma URL или design implementation request, сначала
-используется Figma capability. Если Figma недоступна, агент просит screenshots
-и подключает `screenshot-design-inspector`.
+Если prompt содержит Figma URL/node/file key без артефактов, агент не открывает
+Figma и просит screenshots, exports, copied inspect values, token/spec notes
+или written brief. Direct Figma actions не поддерживаются: агент не читает и не
+изменяет Figma files, не вызывает Figma-specific tooling, не регистрирует Code
+Connect mappings и не создает files. Если source material - только screenshots
+или copied visual inspect panels, агент подключает
+`screenshot-design-inspector`.
 
 ### Official docs for changing external behavior
 

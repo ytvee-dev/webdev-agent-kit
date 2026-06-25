@@ -1,6 +1,6 @@
 ---
 name: frontend-design-workflow
-description: Use when React or Next.js work is primarily visual design, design-to-code implementation, Figma or screenshot translation, responsive polish, typography, color, motion, canvas/generative UI, or making an interface feel intentionally designed. Do not use for pure routing, metadata, security, or non-visual refactors.
+description: Use when React or Next.js work is primarily visual design, design-to-code implementation from supplied Figma-derived artifacts or screenshots, responsive polish, typography, color, motion, canvas/generative UI, or making an interface feel intentionally designed. Do not use for pure routing, metadata, security, or non-visual refactors.
 id: 'agents.skills.frontend-design-workflow.skill'
 title: 'Frontend Design Workflow'
 doc_type: 'skill'
@@ -31,8 +31,8 @@ depends_on:
 
 ## When to use
 
-- Implement a visual design from Figma, screenshots, written design direction,
-  or an existing UI that needs polish.
+- Implement a visual design from supplied Figma-derived artifacts, screenshots,
+  written design direction, or an existing UI that needs polish.
 - Improve typography, color, hierarchy, spacing, responsiveness, motion, or
   interaction states.
 - Build a React UI whose primary challenge is visual quality rather than data
@@ -50,14 +50,15 @@ Before editing:
 1. Read `AGENTS.md`.
 2. Read `.agents/project/styling-profile.md` for the styling system, tokens,
    breakpoints, and CSS conventions.
-3. Read `.agents/project/figma-profile.md` when the work starts from Figma.
+3. Read `.agents/project/figma-profile.md` when the work starts from
+   Figma-derived artifacts or a Figma URL.
 4. Read `.agents/project/react/path-index.md` or
    `.agents/project/next/path-index.md` based on the affected UI surface.
 5. Read the existing component and nearby styles before designing new UI.
-6. Add `figma-design-reader` when the work starts from a Figma URL, node, or
-   read-only design analysis.
+6. Add `figma-design-reader` when the work starts from supplied Figma-derived
+   artifacts or needs offline design analysis.
 7. Add `figma-design-to-code` when the deliverable is repository code from
-   Figma.
+   supplied Figma-derived source material.
 8. Add `react-component-workflow` for component architecture and hooks.
 9. Add `nextjs-app-router` when the visual work changes route structure,
    layouts, metadata, or server/client boundaries.
@@ -80,11 +81,12 @@ Before editing:
   compatible with accessibility and repo conventions.
 - Preserve accessibility: labels, focus states, keyboard interaction, contrast,
   alt text, and reduced-motion expectations.
-- If the source of truth is Figma, do not treat this skill alone as the design
-  intake layer. Use `figma-design-reader` for analysis and
-  `figma-design-to-code` for repo implementation.
-- If Figma access fails, ask for screenshots and use
-  `screenshot-design-inspector`.
+- If the source of truth is Figma-derived material, do not treat this skill
+  alone as the design intake layer. Use `figma-design-reader` for offline
+  artifact analysis and `figma-design-to-code` for repo implementation.
+- If the user provides only a Figma URL, node, or file key, ask for screenshots,
+  exports, copied inspect values, token/style notes, written specs, or a design
+  brief before implementation.
 - For canvas, generative, or algorithmic UI, do not add p5.js, Three.js, a
   bundling scaffold, or an artifact toolchain unless the user explicitly wants
   that approach and the repo already supports it or approves the dependency.

@@ -1,6 +1,6 @@
 interface:
     display_name: 'Screenshot Design Inspector'
-    short_description: 'Read UI screenshots when Figma is unavailable or insufficient'
-    default_prompt: 'Use $screenshot-design-inspector when design guidance comes from screenshots or when Figma access fails.'
+    short_description: 'Read supplied UI screenshots'
+    default_prompt: 'Use $screenshot-design-inspector when design guidance comes from supplied screenshots or copied visual inspect panels.'
 policy:
     allow_implicit_invocation: true

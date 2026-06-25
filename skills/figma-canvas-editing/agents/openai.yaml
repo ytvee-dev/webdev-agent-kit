@@ -1,6 +1,0 @@
-interface:
-    display_name: 'Figma Canvas Editing'
-    short_description: 'Edit Figma canvas via use_figma'
-    default_prompt: 'Use $figma-canvas-editing for create, edit, or delete actions inside a Figma file through use_figma.'
-policy:
-    allow_implicit_invocation: true
