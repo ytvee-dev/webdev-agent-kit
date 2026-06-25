@@ -38,6 +38,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - Trigger wording has at least one realistic should-trigger and one near-miss
   should-not-trigger prompt when the boundary is non-obvious.
 - No conflict exists with current `AGENTS.md` policy.
+- `SUMMARY.md` is not listed in runtime `Required Context`; it is consulted
+  only when the task explicitly edits, audits, or verifies the manual catalog.
 - Documentation file contents and directory structure were inspected through
   filesystem MCP when available, with shell reserved for search, git state,
   diffs, formatting, or executable validation.

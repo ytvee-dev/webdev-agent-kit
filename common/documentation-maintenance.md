@@ -26,10 +26,11 @@ Purpose: keep the reduced screenshot-to-frontend bundle internally consistent.
 Before changing bundle docs or skills:
 
 1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
-3. Read this file.
-4. Read `skills/agent-rules-skill-author/SKILL.md`.
-5. Read the affected docs, skills, references, and project overlays.
+2. Read this file.
+3. Read `skills/agent-rules-skill-author/SKILL.md`.
+4. Read the affected docs, skills, references, and project overlays.
+5. Consult `SUMMARY.md` only when the task explicitly edits, audits, or
+   verifies the manual catalog.
 
 ## Layer Rules
 
@@ -55,6 +56,7 @@ Before changing bundle docs or skills:
 - Keep binding workflow instructions in the document body.
 - Update `SUMMARY.md` and `README.md` when skill names, workflow, routing, or
   user-facing setup changes.
+- Do not add `SUMMARY.md` to any skill's runtime `Required Context`.
 
 ## Skill Package Rules
 

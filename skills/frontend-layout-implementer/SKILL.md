@@ -52,7 +52,8 @@ commands.
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
+2. Confirm the classified task is `frontend-layout`, `feature/development`,
+   `bugfix`, `refactor`, or `optimization` for a rendered frontend surface.
 3. Read `common/approved-patterns.md`.
 4. Read `common/anti-patterns.md`.
 5. Read `project/stack-profile.md`, `project/architecture-map.md`,

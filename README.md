@@ -140,6 +140,10 @@ The host-root `AGENTS.md` lives outside the bundle and should be a pointer to
 `.agents/AGENTS.md`. Only `project-onboarding-adapter` owns creating or
 recreating that pointer.
 
+`SUMMARY.md` is a manual catalog for humans. Agents must not read it for normal
+prompt routing or required context unless the user explicitly asks to edit,
+audit, or summarize it.
+
 ## Publishable And Local-Only
 
 Publishable bundle paths:

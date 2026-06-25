@@ -47,7 +47,8 @@ and visual diff review.
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
+2. Confirm the classified task is `visual-qa`, frontend verification, or a
+   post-implementation rendered UI check.
 3. Read `common/approved-patterns.md`.
 4. Read `common/anti-patterns.md`.
 5. Read `project/verification-profile.md` when present.
@@ -121,4 +122,3 @@ Should not trigger:
 ## Reference Map
 
 - `references/visual-qa-checklist.md`
-

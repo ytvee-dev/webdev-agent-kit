@@ -49,7 +49,8 @@ implement screenshot-derived specs without scanning the whole repository.
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
+2. Confirm the classified task is `project-context-refresh` or a project
+   context cache update required by another task.
 3. Read `common/documentation-maintenance.md`.
 4. Read existing `project/**` overlays.
 5. Inspect relevant manifests, configs, entrypoints, routes, components,

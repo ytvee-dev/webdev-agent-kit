@@ -40,7 +40,9 @@ workflow:
 ## Bundle Model
 
 - `AGENTS.md` is the canonical publishable policy file for the bundle.
-- `SUMMARY.md` is the navigation summary for the bundle.
+- `SUMMARY.md` is a manual catalog for humans. Do not read it during normal
+  agent runtime unless the user explicitly asks to edit, audit, or summarize
+  it.
 - `README.md` is the human-facing usage guide.
 - `common/**` contains reusable rules.
 - `skills/**` contains reusable Codex skills.
@@ -50,16 +52,47 @@ workflow:
 - All rules, skills, references, common docs, and project overlays must be
   written in English.
 
-## Required Reading Order
+## Prompt Intake And Task Classification
 
-Before implementation, documentation, or skill work:
+The user may write a natural-language task without naming a skill. Before
+reading task-specific files, classify the task and choose the minimal context
+needed to solve it.
 
-1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
-3. Select and read the relevant `skills/**/SKILL.md`.
-4. Read relevant `common/**` rules.
-5. Read relevant `project/**` overlays and path indexes.
-6. Read affected source files and configs before editing.
+Classify every task as one or more of:
+
+- `bugfix`
+- `refactor`
+- `project-audit`
+- `optimization`
+- `feature/development`
+- `documentation`
+- `skill-documentation-refactor`
+- `design-spec`
+- `frontend-layout`
+- `visual-qa`
+- `project-onboarding`
+- `project-context-refresh`
+- `planning/architecture`
+- `brainstorm/conversation`
+- `internet-research`
+- `other`
+
+After classification:
+
+1. Read this `AGENTS.md`.
+2. Select relevant skills from the skill metadata and the skill map below. The
+   user must not need to name a skill.
+3. Read only selected `skills/**/SKILL.md` files.
+4. Read only references named by the selected skill workflow and needed for the
+   current task.
+5. Read only relevant `common/**`, `project/**`, source files, configs,
+   official docs, or external sources needed for the classified task.
+6. If no repo-local skill matches, handle the task with base Codex behavior and
+   read only relevant project context.
+
+Do not read all skills, all references, all common docs, all overlays, or
+`SUMMARY.md` for routing. Progressive disclosure is required: spend tokens on
+the context needed for correctness, not on blanket scanning.
 
 ## Skill Map
 

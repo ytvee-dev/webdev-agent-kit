@@ -58,12 +58,15 @@ packages without leaking project-specific instructions into the wrong layer.
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
+2. Confirm the classified task is `skill-documentation-refactor`,
+   `documentation`, or another `.agents` rule-maintenance task.
 3. Read `common/documentation-maintenance.md`.
 4. Read affected `common/**`, `skills/**`, `project/**`, and root pointer files
    for the requested change.
-5. Read relevant references from this skill only when their topic is in scope.
-6. Read current OpenAI Codex docs when native skill behavior, `AGENTS.md`,
+5. Consult `SUMMARY.md` only when the task explicitly edits, audits, or
+   verifies the manual catalog.
+6. Read relevant references from this skill only when their topic is in scope.
+7. Read current OpenAI Codex docs when native skill behavior, `AGENTS.md`,
    MCP, plugins, or `agents/openai.yaml` behavior may have changed.
 
 ## Tool Contract
@@ -146,10 +149,11 @@ native validator:
 Before editing:
 
 1. Read `AGENTS.md`.
-2. Read `.agents/SUMMARY.md`.
-3. Read `.agents/common/documentation-maintenance.md`.
-4. Read the relevant `.agents/common/*.md` docs and `.agents/project/*.md`
+2. Read `.agents/common/documentation-maintenance.md`.
+3. Read the relevant `.agents/common/*.md` docs and `.agents/project/*.md`
    overlays for the target change.
+4. Consult `.agents/SUMMARY.md` only when the task explicitly edits, audits, or
+   verifies the manual catalog.
 5. Read the relevant framework-specific path indexes when the change touches
    repo navigation guidance.
 6. Read neighboring skills in `.agents/skills/` when changing an existing skill

@@ -51,7 +51,8 @@ frontend implementer.
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Read `SUMMARY.md`.
+2. Confirm the classified task is `design-spec` or design intake for later
+   frontend implementation.
 3. Read `common/approved-patterns.md`.
 4. Read `common/anti-patterns.md`.
 5. Read `project/design-reference-profile.md` when present.

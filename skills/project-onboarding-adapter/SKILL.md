@@ -61,15 +61,17 @@ the approved adaptation without creating application source files.
 1. Check the active collaboration mode and decide whether this is planning or
    approved execution.
 2. Read the host-root `AGENTS.md` if it exists.
-3. Read bundle-local `AGENTS.md`, `SUMMARY.md`, and `README.md`.
-4. Read `common/**`.
-5. Read every current `skills/*/SKILL.md` and `skills/*/agents/openai.yaml`.
-6. Read existing `project/**` overlays.
-7. Inspect host project manifests, configs, source entrypoints, routes, styles,
+3. Read bundle-local `AGENTS.md` and `README.md`.
+4. Consult `SUMMARY.md` only when the task explicitly edits, audits, or
+   verifies the manual catalog.
+5. Read only `common/**` files needed for the onboarding task.
+6. Read every current `skills/*/SKILL.md` and `skills/*/agents/openai.yaml`.
+7. Read existing `project/**` overlays.
+8. Inspect host project manifests, configs, source entrypoints, routes, styles,
    assets, tests, and verification scripts without generated/vendor/build/cache
    directories.
-8. Read `references/adaptation-checklist.md`.
-9. Read `references/path-audit-checklist.md`.
+9. Read `references/adaptation-checklist.md`.
+10. Read `references/path-audit-checklist.md`.
 
 ## Tool Contract
 
@@ -113,38 +115,39 @@ collaboration mode and user request.
 
 Use this workflow for planning and approved execution:
 
-1. Read the host-root `AGENTS.md`, bundle-local `AGENTS.md`, `SUMMARY.md`, and
-   `README.md`.
-2. Read `common/**`.
-3. Read every current `skills/*/SKILL.md`, every present
+1. Read the host-root `AGENTS.md`, bundle-local `AGENTS.md`, and `README.md`.
+2. Consult `SUMMARY.md` only when the task explicitly edits, audits, or
+   verifies the manual catalog.
+3. Read only `common/**` files needed for the onboarding task.
+4. Read every current `skills/*/SKILL.md`, every present
    `skills/*/agents/openai.yaml`, and only referenced skill references needed
    for path and workflow validation.
-4. Read existing `project/**` overlays.
-5. Inspect the host project without generated, vendor, build, and cache
+5. Read existing `project/**` overlays.
+6. Inspect the host project without generated, vendor, build, and cache
    directories such as `node_modules`, `.next`, `dist`, `coverage`, `.cache`,
    and `.playwright-mcp`.
-6. Determine whether the project is existing, new/empty, or partially
+7. Determine whether the project is existing, new/empty, or partially
    initialized.
-7. Detect the stack from manifests, lockfiles, framework configs, TypeScript or
+8. Detect the stack from manifests, lockfiles, framework configs, TypeScript or
    JavaScript configs, source roots, routes, styling files, test configs, and
    entrypoints. Ask for intended stack only when no reliable stack or user
    intent is available.
-8. Select documentation and MCP capabilities from official sources:
+9. Select documentation and MCP capabilities from official sources:
    - MDN for HTML, CSS, Web APIs, accessibility, and browser compatibility.
    - `context7` for current framework, library, CLI, and tooling docs.
    - Browser or Playwright MCP for rendered verification of an existing app.
    - Next Devtools MCP only for a Next.js project that supports it and exposes
      the tool in the current session.
-9. Scan `skills/*/agents/openai.yaml`, collect `dependencies.tools`, compare
+10. Scan `skills/*/agents/openai.yaml`, collect `dependencies.tools`, compare
    required tools with active or configured MCP capabilities, and record
    required, available, missing, optional, install source, and approval status.
-10. Use `references/adaptation-checklist.md` to collect project facts.
-11. Use `references/path-audit-checklist.md` to find missing, stale, or
+11. Use `references/adaptation-checklist.md` to collect project facts.
+12. Use `references/path-audit-checklist.md` to find missing, stale, or
    template-only paths in bundle docs and skill reference maps.
-12. Include graph frontmatter and Obsidian link updates for every planned or
+13. Include graph frontmatter and Obsidian link updates for every planned or
    changed `project/**` overlay and any publishable docs whose links drifted.
-13. In Plan Mode, return the complete adaptation plan and stop.
-14. In approved execution mode, create or update only the approved files, then
+14. In Plan Mode, return the complete adaptation plan and stop.
+15. In approved execution mode, create or update only the approved files, then
    run the validation gates.
 
 ## Required Plan Contents

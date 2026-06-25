@@ -18,19 +18,22 @@ depends_on: []
 
 # Agent Documentation Summary
 
-Purpose: map the reduced screenshot-to-frontend `.agents` bundle.
+Purpose: provide a manual catalog of the reduced screenshot-to-frontend
+`.agents` bundle for humans.
 
 All paths are bundle-local paths rooted at `.agents/`. The host-root
 `AGENTS.md` pointer is handled only by `project-onboarding-adapter`.
 
-## Reading Order
+This file is not part of normal agent runtime. Agents must not use this file
+for prompt routing or required context unless the user explicitly asks to edit,
+audit, or summarize `SUMMARY.md`.
 
-1. Read `AGENTS.md`.
-2. Read this `SUMMARY.md`.
-3. Choose the relevant skill from `skills/**`.
-4. Read relevant `common/**` rules.
-5. Read relevant `project/**` overlays and path indexes.
-6. Read affected source files and configs.
+## Manual Catalog Use
+
+- Use this file to inspect the published bundle shape manually.
+- Keep this file synchronized when skills, common docs, project overlay names,
+  or user-facing workflows change.
+- Do not copy host-project facts from `project/**` into this file.
 
 ## Common Docs
 
