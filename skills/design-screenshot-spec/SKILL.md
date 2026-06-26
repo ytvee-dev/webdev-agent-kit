@@ -74,13 +74,25 @@ frontend implementer.
 2. If only a Figma URL, file key, node id, Figma whiteboard reference is present,
    stop and ask for screenshots, exported assets, copied inspect values, or a
    written brief.
-3. Group screenshots by screen, component, state, and viewport.
+3. Group screenshots by screen, component, state, and viewport. For each
+   screenshot, record the visible frame or viewport width, height, state,
+   screen or component ownership, and confidence.
 4. Extract visible layout, hierarchy, typography, color, spacing, sizing,
    radius, shadow, assets, states, and responsive behavior.
-5. Mark each value as `source-provided`, `screenshot-inferred`, or `unknown`.
-6. Resolve conflicts by preferring copied inspect values and exported values
+5. For typography, prefer copied inspect values or selected-text properties for
+   `font-family`, `font-size`, `font-weight`, `line-height`, color, alignment,
+   max width, and wrapping. When properties are unavailable, estimate from the
+   screenshot and mark each estimate as `screenshot-inferred`.
+6. For spacing, separate outside margins, section rhythm, inter-component gaps,
+   container padding, and internal control padding instead of merging them into
+   one generic gap value.
+7. Mark each value as `source-provided`, `screenshot-inferred`, or `unknown`.
+8. Resolve conflicts by preferring copied inspect values and exported values
    over screenshot estimates.
-7. Produce the `Design Implementation Spec` and stop unless the user also asks
+9. Ask the user about disputed or low-confidence values when the answer changes
+   layout, responsive behavior, visual hierarchy, typography, or implementation
+   acceptance.
+10. Produce the `Design Implementation Spec` and stop unless the user also asks
    for implementation.
 
 ## Output Contract
@@ -103,7 +115,18 @@ Return a `Design Implementation Spec` with these sections:
 ## Validation Gates
 
 - Every concrete value must cite its source confidence.
+- `Source Inventory` must record each screenshot's viewport or frame size when
+  visible or provided.
+- `Spacing And Sizing` must distinguish measured or estimated margins, section
+  rhythm, inter-component gaps, container padding, and internal control padding
+  with confidence labels.
+- `Typography` must distinguish inspect-provided text properties from inferred
+  font family, size, weight, line height, color, alignment, and wrapping.
+- `Responsive Behavior` must include viewport-aware notes based on supplied
+  screenshot widths and must mark inferred intermediate behavior explicitly.
 - Missing states, assets, breakpoints, and token names must be explicit.
+- Disputed values that materially affect implementation must be asked back to
+  the user or listed as unresolved questions.
 - The spec must be usable by `frontend-layout-implementer` without guessing the
   target layout intent.
 - The response must not mention using Figma MCP or live Figma inspection.
