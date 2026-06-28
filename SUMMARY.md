@@ -43,6 +43,9 @@ audit, or summarize `SUMMARY.md`.
   implementation patterns.
 - `common/documentation-maintenance.md` - rules for changing bundle docs and
   skill packages.
+- `common/prompt-intent-routing-rules.md` - task scale routing rules that keep
+  narrow prompts lightweight and reserve planning, checkpoints, and deep scans
+  for standard or deep workflows.
 
 ## Project Overlays
 
@@ -97,6 +100,21 @@ design-screenshot-spec
 
 The user supplies screenshots, copied visual inspect panels, exported assets,
 or notes. The agent must not use Figma MCP or inspect live Figma files.
+
+## Prompt Intent Routing
+
+Use `common/prompt-intent-routing-rules.md` to choose the workflow weight before
+selecting a skill chain:
+
+```text
+Lightweight Workflow
+Standard Workflow
+Deep Workflow
+```
+
+Small bugs, obvious type errors, small styling fixes, isolated component
+changes, and direct file-scope requests must stay lightweight unless targeted
+inspection proves the task is larger than it first appeared.
 
 ## Navigation Rules
 
