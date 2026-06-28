@@ -20,6 +20,7 @@ Completed in this architecture draft:
 4. MCP/tooling architecture
 5. Design intelligence architecture
 6. Implementation plan
+7. Frontend skill landscape integration notes
 ```
 
 Out of scope for this branch:
@@ -43,6 +44,281 @@ Out of scope for this branch:
 - Use MCP/tool dependencies deliberately.
 - Add validation gates before broadening scope.
 - Do not create large unreviewable diffs.
+- Preserve the original concept: a disciplined frontend engineering skill pack with goal planning, project memory, MCP/tooling discipline, design intelligence, small-slice execution, and AI-slop filtering.
+- Do not turn this pack into a marketplace mirror or a collection of unrelated third-party skills.
+
+## Hard Exclusions
+
+The `awesome-frontend-skills` landscape contains useful categories, but two categories are explicitly excluded from the WebDev Assistant plan.
+
+Do not create, import, recommend, or package dedicated skills for:
+
+```text
+UI component libraries
+Testing skills
+```
+
+This means the implementation plan must not add skills for shadcn/ui, Tailwind UI, component-library guides, Playwright test generation, E2E testing patterns, unit testing, component testing, visual regression testing, or similar testing-library workflows.
+
+Allowed related behavior:
+
+```text
+- rendered UI verification as part of frontend-visual-qa;
+- browser evidence for visual review;
+- local project verification commands already present in the host project;
+- code-quality checks that do not create testing workflows;
+- framework-specific implementation guidance from official docs.
+```
+
+## Frontend Skill Landscape Integration Notes
+
+The `awesome-frontend-skills` repository is useful as a landscape map, not as a source to copy directly. It shows that the frontend skill ecosystem clusters around frameworks, design, animation, code quality, TypeScript, build tools, auth, data, mobile, and skill management.
+
+What to take:
+
+```text
+- installation UX patterns;
+- framework-aware adapter strategy;
+- official-source preference;
+- code-quality severity model;
+- TypeScript type-safety discipline;
+- build-tool and monorepo awareness;
+- auth/data integration boundaries for frontend work;
+- optional vertical adapters for video or mobile only after core web skills are stable.
+```
+
+What not to take:
+
+```text
+- UI component library skills;
+- testing skills;
+- broad catalog duplication;
+- stack-specific dependency inflation;
+- package installation defaults;
+- skills that bypass our goal-plan-checkpoint operating model.
+```
+
+## Landscape-Informed Additions To The Plan
+
+### Installation UX
+
+The pack should eventually provide installation documentation similar in clarity to skill directories that support:
+
+```text
+install one skill
+list skills in the pack
+install for specific agents
+install the complete pack
+```
+
+This belongs in the packaging phase, not in early skill implementation.
+
+### Framework Adapter Strategy
+
+Do not create one giant framework skill. Create a shared framework-adaptation policy first, then add framework-specific references only when needed.
+
+Target common files:
+
+```text
+common/framework-adaptation-policy.md
+common/framework-source-map.md
+project/docs-profile.md
+project/stack-profile.md
+```
+
+Frameworks to support by policy:
+
+```text
+React
+Next.js
+Vue
+Nuxt
+Svelte / SvelteKit
+Angular
+Remix / React Router
+TanStack Start / Router / Query
+Vite
+Astro when detected in a host project
+```
+
+Rules:
+
+- prefer local project conventions before generic framework rules;
+- prefer official framework docs before community advice;
+- load only the detected framework reference;
+- do not install framework packages as part of guidance;
+- do not introduce a framework migration unless explicitly requested.
+
+### State, Routing, Data, And Forms Boundaries
+
+Take the category idea from state-management, routing, data-fetching, HTTP, and forms skills, but express it as frontend architecture boundaries rather than separate dependency-heavy skills.
+
+Target files:
+
+```text
+common/state-ownership-rules.md
+common/routing-boundary-rules.md
+common/data-fetching-boundary-rules.md
+common/form-boundary-rules.md
+project/state-management-profile.md
+project/data-fetching-profile.md
+```
+
+Rules:
+
+- local UI state stays local by default;
+- shared state requires an explicit owner and reason;
+- derived state should not be stored unless the project convention requires it;
+- routing patterns follow the detected router;
+- data fetching follows the existing project layer;
+- form handling follows the existing project convention;
+- do not add state, data, or form libraries without approval.
+
+### Code Quality Severity Model
+
+Add a review model inspired by code-review skills, but keep it aligned with WebDev Assistant's anti-slop goals.
+
+Target future file:
+
+```text
+common/review-severity-model.md
+```
+
+Severity labels:
+
+```text
+blocking
+high
+medium
+low
+nit
+praise
+```
+
+Review output must distinguish:
+
+```text
+required fixes
+optional improvements
+observations
+praise
+unknowns
+```
+
+Rules:
+
+- no broad rewrite from review findings;
+- every blocking/high issue needs evidence;
+- security findings require source-backed reasoning;
+- visual findings require rendered evidence when available;
+- architecture findings must cite local project conventions or official docs.
+
+### TypeScript Discipline
+
+Take the TypeScript category as a signal that type safety deserves a dedicated common rule set, not a standalone broad skill at first.
+
+Target future file:
+
+```text
+common/typescript-discipline.md
+```
+
+Rules:
+
+- preserve project TypeScript strictness;
+- avoid `any` unless the project already uses it and no safe narrowing is available;
+- prefer narrowing over casts;
+- avoid forced casts that hide design errors;
+- type component props explicitly;
+- keep public types stable during refactors;
+- align with official TypeScript docs and local tsconfig.
+
+### Build Tool And Monorepo Awareness
+
+Take build-tool skills as a signal that the pack needs build-profile awareness.
+
+Target files:
+
+```text
+common/build-tool-boundary-rules.md
+project/build-profile.md
+project/workspace-profile.md
+```
+
+Supported awareness:
+
+```text
+Vite
+Next.js build pipeline
+Nuxt build pipeline
+SvelteKit build pipeline
+Angular CLI
+Turborepo
+Nx
+pnpm workspaces
+npm/yarn/bun workspaces
+VitePress when detected
+```
+
+Rules:
+
+- inspect the project before choosing commands;
+- do not change build tooling without approval;
+- do not add monorepo tooling unless the project already uses it or the user explicitly asks;
+- cache build and workspace facts in project overlays;
+- use build information to choose verification commands and affected paths.
+
+### Auth And Data Integration Boundaries
+
+Auth and database categories are relevant only as frontend integration boundaries. They must not turn WebDev Assistant into a backend, ORM, or database skill pack.
+
+Target future file:
+
+```text
+common/frontend-integration-boundaries.md
+```
+
+Rules:
+
+- support frontend integration with existing auth/data layers;
+- follow existing project SDKs and official provider docs;
+- do not create backend schemas, RLS policies, migrations, or database setup unless the user explicitly changes the scope;
+- do not handle secrets in client code;
+- ask for approval before changing auth flow or persistence behavior.
+
+### Animation And Motion
+
+Take only the motion discipline, not full animation-library specialization.
+
+Target future file:
+
+```text
+common/motion-rules.md
+```
+
+Rules:
+
+- use motion only when it clarifies state, hierarchy, transition, or subject atmosphere;
+- prefer CSS-first motion when sufficient;
+- prefer transform and opacity for lightweight UI motion;
+- respect reduced motion;
+- do not add animation libraries without approval;
+- do not add motion to hide weak layout or generic content.
+
+### Skill Management And Packaging
+
+The skill ecosystem includes skill managers and package-based discovery. Use this as a packaging requirement later.
+
+Packaging goals:
+
+```text
+- document one-skill install;
+- document full-pack install;
+- document agent-targeted install;
+- document how to list available skills;
+- document how to remove or update the pack;
+- keep package installation optional until release phase.
+```
 
 ## Phase 0: Architecture Draft
 
@@ -67,6 +343,7 @@ Done when:
 - operating model is explicit;
 - MCP/tooling policy is explicit;
 - design intelligence layer is captured;
+- frontend skill landscape notes are integrated without adding excluded categories;
 - no PR is created.
 ```
 
@@ -84,7 +361,8 @@ Goals:
 - preserve existing screenshot-to-frontend pipeline;
 - keep existing skills working;
 - update `SUMMARY.md` and README only after routing changes are approved;
-- avoid creating new skills until the operating model is agreed.
+- avoid creating new skills until the operating model is agreed;
+- add the hard exclusions for UI component libraries and testing skills to the reusable policy layer.
 
 Candidate changes:
 
@@ -94,6 +372,7 @@ README.md
 SUMMARY.md
 common/approved-patterns.md
 common/anti-patterns.md
+common/frontend-scope-boundaries.md
 ```
 
 Validation:
@@ -102,7 +381,8 @@ Validation:
 - existing skill names still route correctly;
 - screenshot-to-frontend workflow remains intact;
 - no local-only project facts leak into publishable docs;
-- no non-English reusable instructions are introduced.
+- no non-English reusable instructions are introduced;
+- no UI component library or testing skill is introduced.
 ```
 
 ## Phase 2: Add Agent Operating System Files
@@ -196,6 +476,7 @@ skills/frontend-design-director/references/design-direction-contract.md
 common/design-quality-rubric.md
 common/anti-template-defaults.md
 common/interface-copy-rules.md
+common/motion-rules.md
 templates/design-direction-contract.md
 templates/visual-memory.md
 ```
@@ -205,7 +486,8 @@ Goals:
 - define subject-grounded design direction before UI implementation;
 - block generic AI UI defaults;
 - define visual acceptance criteria;
-- integrate screenshot critique and visual memory.
+- integrate screenshot critique and visual memory;
+- add motion discipline without adding animation-library specialization.
 
 Validation:
 
@@ -213,7 +495,8 @@ Validation:
 - design skill does not implement code by default;
 - design direction contract is concrete;
 - anti-template defaults are not absolute style bans;
-- visual memory remains local-only when project-specific.
+- visual memory remains local-only when project-specific;
+- no UI component library skill or animation-library dependency is introduced.
 ```
 
 ## Phase 5: Add Frontend Architecture And Greenfield Skills
@@ -235,8 +518,33 @@ Goals:
 
 - support starting projects from scratch without dependency inflation;
 - support architecture planning in existing projects;
-- define state ownership, routing, styling, data fetching, and verification strategy;
-- require approval before scaffolding or package installation.
+- define state ownership, routing, styling, data fetching, forms, and verification strategy;
+- require approval before scaffolding or package installation;
+- add framework adapter policy before stack-specific references;
+- add build-tool and workspace awareness without changing project tooling by default.
+
+Candidate common files:
+
+```text
+common/framework-adaptation-policy.md
+common/framework-source-map.md
+common/state-ownership-rules.md
+common/routing-boundary-rules.md
+common/data-fetching-boundary-rules.md
+common/form-boundary-rules.md
+common/build-tool-boundary-rules.md
+common/frontend-integration-boundaries.md
+```
+
+Candidate project overlays:
+
+```text
+project/docs-profile.md
+project/build-profile.md
+project/workspace-profile.md
+project/state-management-profile.md
+project/data-fetching-profile.md
+```
 
 Validation:
 
@@ -244,7 +552,8 @@ Validation:
 - greenfield skill produces plan before scaffold;
 - architecture planner stops at plan unless implementation is requested;
 - official docs and local project facts are used before framework-specific claims;
-- architecture layers are justified by user goal and project scale.
+- architecture layers are justified by user goal and project scale;
+- no UI library, testing toolchain, or framework migration is introduced without explicit request.
 ```
 
 ## Phase 6: Add Debugging And Refactor Skills
@@ -268,7 +577,16 @@ Goals:
 - reproduce or record symptoms;
 - fix the smallest cause;
 - preserve behavior during refactors;
-- verify using the same failing check or behavior contract.
+- verify using the same failing check or behavior contract;
+- apply TypeScript discipline during fixes and refactors.
+
+Candidate common files:
+
+```text
+common/typescript-discipline.md
+common/debugging-evidence-rules.md
+common/refactor-safety-rules.md
+```
 
 Validation:
 
@@ -276,7 +594,8 @@ Validation:
 - debugger does not rewrite unrelated code;
 - refactor skill does not change behavior without explicit approval;
 - verification is tied to the original symptom or behavior contract;
-- UI changes trigger visual QA when applicable.
+- UI changes trigger visual QA when applicable;
+- no testing skill or test-generation workflow is introduced.
 ```
 
 ## Phase 7: Expand Quality And Anti-Slop Review
@@ -295,10 +614,21 @@ frontend-quality-reviewer
 
 Goals:
 
-- detect AI slop in architecture, code, UI, verification, security, and performance;
+- detect AI slop in architecture, code, UI, verification, security, performance, TypeScript, build/workspace awareness, and frontend integration boundaries;
 - provide pass / pass with concerns / fail verdict;
 - distinguish required fixes from optional improvements;
-- prevent claims without evidence.
+- prevent claims without evidence;
+- add review severity labels.
+
+Candidate common files:
+
+```text
+common/review-severity-model.md
+common/typescript-discipline.md
+common/security-review-rules.md
+common/performance-review-rules.md
+common/build-tool-boundary-rules.md
+```
 
 Validation:
 
@@ -306,7 +636,9 @@ Validation:
 - review output includes evidence;
 - review does not become a broad rewrite;
 - review respects project conventions;
-- security findings use OWASP or official framework/platform docs when possible.
+- security findings use OWASP or official framework/platform docs when possible;
+- severity labels are applied consistently;
+- no UI component library or testing category is introduced.
 ```
 
 ## Phase 8: Integrate Existing Screenshot Pipeline
@@ -330,7 +662,8 @@ Validation:
 - screenshot-to-code flow still works;
 - visual QA requires rendered evidence unless blocked;
 - implementation does not happen before spec or design direction when needed;
-- project overlays are used before broad scanning.
+- project overlays are used before broad scanning;
+- rendered verification remains QA evidence and does not become a testing skill.
 ```
 
 ## Phase 9: Package For Distribution
@@ -348,7 +681,8 @@ Goals:
 - add examples;
 - add validation scripts;
 - add demo workflows;
-- decide public/private release model.
+- decide public/private release model;
+- document installation UX inspired by frontend skill directories without copying excluded categories.
 
 Candidate files:
 
@@ -367,8 +701,30 @@ Validation:
 - examples are realistic;
 - skill descriptions fit context budget;
 - plugin does not bundle local-only project facts;
-- no non-English reusable instructions are introduced.
+- no non-English reusable instructions are introduced;
+- no UI component library or testing skill is packaged.
 ```
+
+## Deferred Optional Verticals
+
+The landscape includes video, mobile, auth, and database categories. These should not be part of the initial concept.
+
+Deferred verticals:
+
+```text
+frontend-video-adapter
+mobile-frontend-adapter
+frontend-auth-integration-adapter
+frontend-data-integration-adapter
+```
+
+Rules:
+
+- create only after the core web skill pack is stable;
+- create only if there is repeated real demand;
+- keep them frontend-boundary focused;
+- require official docs and explicit user scope;
+- never turn the pack into backend, ORM, database, or mobile-generalist tooling.
 
 ## Skill Work Order
 
@@ -384,9 +740,11 @@ Recommended order:
 7. frontend-bugfix-debugger
 8. frontend-refactor-surgeon
 9. frontend-quality-reviewer
-10. project-context-adapter integration
-11. screenshot pipeline integration
-12. plugin packaging
+10. framework adaptation and frontend boundary common files
+11. project-context-adapter integration
+12. screenshot pipeline integration
+13. plugin packaging
+14. deferred optional verticals only after core stabilization
 ```
 
 ## Definition Of Done For Each Future Skill
@@ -406,11 +764,12 @@ A skill is done when:
 - References are linked and not bulk-required.
 - No host-project facts are embedded.
 - No non-English reusable instructions are present.
+- No UI component library or testing workflow is introduced unless a future architecture decision explicitly reverses the hard exclusion.
 ```
 
 ## Current Stop Point
 
-This branch should stop after adding the architecture documents.
+This branch should stop after adding the architecture documents and frontend skill landscape integration notes.
 
 Next exact step after review:
 
