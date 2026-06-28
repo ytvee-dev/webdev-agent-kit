@@ -14,6 +14,7 @@ related:
     - '[[SUMMARY|Agent Documentation Summary]]'
     - '[[README|Screenshot Frontend Assistant README]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
+    - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
 depends_on: []
 ---
 
@@ -77,7 +78,30 @@ Classify every task as one or more of:
 - `internet-research`
 - `other`
 
-After classification:
+## Prompt Intent And Task Scale Gate
+
+Before selecting the final skill chain, classify the prompt by workflow weight:
+`Lightweight Workflow`, `Standard Workflow`, or `Deep Workflow`.
+
+Read `common/prompt-intent-routing-rules.md` when the prompt could be confused
+between a narrow task and a larger multi-step task.
+
+Use `Lightweight Workflow` for one small bug, one obvious typo or type error,
+one small styling adjustment, one isolated component change, or one direct
+request where the affected file, component, route, or error context is obvious.
+Do not invoke `goal-planner`, `execution-plan-manager`, broad scans, MCP
+installation checks, or persistent project plan files for lightweight tasks
+unless targeted inspection proves the scope is larger than it first appeared.
+
+Use `Standard Workflow` for multi-file features, screenshot/spec UI work,
+unclear bug root causes, refactors with behavior boundaries, or tasks that need
+more than one implementation slice. Standard tasks may use compact planning.
+
+Use `Deep Workflow` only for new project creation, architecture design, stack
+migration, onboarding an unknown project, broad redesign, repeated failures, or
+large work that needs durable stop/resume state.
+
+After task and scale classification:
 
 1. Read this `AGENTS.md`.
 2. Select relevant skills from the skill metadata and the skill map below. The
