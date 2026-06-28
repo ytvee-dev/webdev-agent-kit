@@ -43,6 +43,25 @@ design-screenshot-spec
    Playwright MCP is available, Codex runs those browser checks automatically
    after implementation without asking for separate confirmation.
 
+## Prompt Intent Routing
+
+The bundle classifies prompt scale before selecting a skill chain:
+
+```text
+Lightweight Workflow
+Standard Workflow
+Deep Workflow
+```
+
+Small bugs, obvious type errors, small styling fixes, isolated component
+changes, and direct file-scope requests stay lightweight. They should not create
+persistent goal files, execution plans, progress logs, decision logs, broad
+scans, or MCP installation checks unless targeted inspection proves the task is
+larger than it first appeared.
+
+Use `common/prompt-intent-routing-rules.md` when a prompt could be confused
+between a narrow fix and a larger workflow.
+
 ## Source Material
 
 Supported inputs:
