@@ -52,8 +52,12 @@ goal-planner
 -> selected implementation or planning skill
 ```
 
-Do not insert `goal-planner` or `execution-plan-manager` into lightweight
-workflows unless the task escalates.
+Use `mcp-toolchain-manager` only when tool capability affects the current slice
+or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
+
+Do not insert `goal-planner`, `execution-plan-manager`, or
+`mcp-toolchain-manager` into lightweight workflows unless the task escalates or
+the user directly asks about MCP/tooling.
 
 ## Prompt Intent Routing
 
@@ -109,6 +113,13 @@ Use this skill after the goal is defined for standard or deep frontend work that
 needs task slices, context budget, checkpoint rules, or stop/resume state. It
 must not run for lightweight micro-fixes or isolated direct edits unless the task
 escalates.
+
+### `mcp-toolchain-manager`
+
+Use this skill when frontend work needs MCP/tool capability detection,
+missing-tool reporting, official install source verification, approval-gated
+installation planning, or `project/mcp-profile.md` updates. It must not install
+tools, run package installs, or change configs without explicit user approval.
 
 ### `design-screenshot-spec`
 
