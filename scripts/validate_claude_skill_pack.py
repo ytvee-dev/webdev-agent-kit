@@ -7,6 +7,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "dist" / "claude"
 FORBIDDEN_SKILL_TERMS = ("shadcn", "tailwind-ui", "component-library", "testing", "e2e", "unit-test")
+REQUIRED_COMMON_FILES = (
+    "common/target-stack-policy.md",
+    "common/anti-patterns.md",
+    "common/anti-patterns/README.md",
+    "common/anti-patterns/no-as-const-variables.md",
+    "common/anti-patterns/no-anonymous-functions.md",
+    "common/anti-patterns/no-use-callback-by-default.md",
+    "common/anti-patterns/no-render-functions.md",
+    "common/anti-patterns/no-nested-array-pipelines.md",
+    "common/anti-patterns/no-component-loops.md",
+    "common/anti-patterns/no-tests-for-components-or-functions.md",
+)
 
 
 def read_frontmatter(path):
@@ -35,6 +47,9 @@ def validate():
         errors.append("dist/claude must not include project/**")
     if list(TARGET.glob("skills/*/agents/openai.yaml")):
         errors.append("dist/claude must not include Codex-only agents/openai.yaml files")
+    for relative_path in REQUIRED_COMMON_FILES:
+        if not (TARGET / relative_path).exists():
+            errors.append(f"dist/claude is missing required common file: {relative_path}")
     skills = sorted((TARGET / "skills").glob("*/SKILL.md"))
     if not skills:
         errors.append("dist/claude contains no skills")
