@@ -53,6 +53,8 @@ audit, or summarize `SUMMARY.md`.
   empty states, errors, and consistency.
 - `common/motion-rules.md` - restrained frontend motion rules with reduced
   motion and approval gates.
+- `common/lint-verification-rules.md` - lint verification and approval-gated
+  lint setup rules for code-changing frontend work.
 
 ## Project Overlays
 
