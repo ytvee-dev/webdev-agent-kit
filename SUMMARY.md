@@ -76,6 +76,10 @@ skills or common docs.
 - `skills/execution-plan-manager` - split standard or deep frontend work into
   small verified slices with context budget, checkpoint rules, and stop/resume
   state after the goal is defined. It must not run for lightweight direct edits.
+- `skills/mcp-toolchain-manager` - detect required MCP/tool capabilities,
+  report missing tools, verify official install sources, request approval before
+  installation or config changes, and update `project/mcp-profile.md` when
+  durable tool state is needed.
 - `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
   copied inspect panels, assets, and notes, then produce a strict
   `Design Implementation Spec`.
@@ -116,8 +120,12 @@ goal-planner
 -> selected implementation or planning skill
 ```
 
-Do not insert `goal-planner` or `execution-plan-manager` into lightweight
-workflows unless the task escalates.
+Use `mcp-toolchain-manager` only when tool capability affects the current slice
+or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
+
+Do not insert `goal-planner`, `execution-plan-manager`, or
+`mcp-toolchain-manager` into lightweight workflows unless the task escalates or
+the user directly asks about MCP/tooling.
 
 ## Prompt Intent Routing
 
