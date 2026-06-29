@@ -73,6 +73,9 @@ skills or common docs.
 - `skills/goal-planner` - define a clear user goal, scope, constraints, and
   done criteria for standard or deep frontend work before implementation. It
   must not run for lightweight micro-fixes unless the task escalates.
+- `skills/execution-plan-manager` - split standard or deep frontend work into
+  small verified slices with context budget, checkpoint rules, and stop/resume
+  state after the goal is defined. It must not run for lightweight direct edits.
 - `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
   copied inspect panels, assets, and notes, then produce a strict
   `Design Implementation Spec`.
@@ -104,14 +107,17 @@ design-screenshot-spec
 The user supplies screenshots, copied visual inspect panels, exported assets,
 or notes. The agent must not use Figma MCP or inspect live Figma files.
 
-For standard or deep work that needs goal clarity before implementation, use:
+For standard or deep work that needs goal clarity and task slicing before
+implementation, use:
 
 ```text
 goal-planner
+-> execution-plan-manager
 -> selected implementation or planning skill
 ```
 
-Do not insert `goal-planner` into lightweight workflows unless the task escalates.
+Do not insert `goal-planner` or `execution-plan-manager` into lightweight
+workflows unless the task escalates.
 
 ## Prompt Intent Routing
 
