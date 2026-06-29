@@ -15,9 +15,14 @@ related:
     - '[[README|Screenshot Frontend Assistant README]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
+    - '[[common/design-quality-rubric|Design Quality Rubric]]'
+    - '[[common/anti-template-defaults|Anti-Template Defaults]]'
+    - '[[common/interface-copy-rules|Interface Copy Rules]]'
+    - '[[common/motion-rules|Motion Rules]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
+    - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
 depends_on: []
 ---
 
@@ -38,8 +43,9 @@ workflow:
 
 1. Read user-supplied Figma screenshot material without opening Figma.
 2. Produce a strict `Design Implementation Spec`.
-3. Implement the spec in the current frontend project.
-4. Verify the rendered result with browser screenshots and visual QA.
+3. Define a design direction when visual judgment is needed.
+4. Implement the spec in the current frontend project.
+5. Verify the rendered result with browser screenshots and visual QA.
 
 ## Bundle Model
 
@@ -72,6 +78,7 @@ Classify every task as one or more of:
 - `documentation`
 - `skill-documentation-refactor`
 - `design-spec`
+- `design-direction`
 - `frontend-layout`
 - `visual-qa`
 - `project-onboarding`
@@ -134,10 +141,13 @@ the context needed for correctness, not on blanket scanning.
 - MCP/tool capability detection, missing-tool reporting, official install
   source verification, approval-gated installation planning, or
   `project/mcp-profile.md` updates -> `mcp-toolchain-manager`
+- Standard or deep UI work that needs visual direction, redesign, visual
+  polish, design critique, anti-template checks, or design handoff before
+  implementation -> `frontend-design-director`
 - Screenshot or copied visual inspect material to implementation spec ->
   `design-screenshot-spec`
-- Frontend implementation from a `Design Implementation Spec` ->
-  `frontend-layout-implementer`
+- Frontend implementation from a `Design Implementation Spec` or Design
+  Direction Contract -> `frontend-layout-implementer`
 - Rendered UI verification, browser screenshots, and visual diff review ->
   `frontend-visual-qa`
 - Project onboarding, root pointer creation, stack detection, docs/MCP
@@ -147,10 +157,11 @@ the context needed for correctness, not on blanket scanning.
 - Skill authoring and bundle rule maintenance ->
   `agent-rules-skill-author`
 
-Use the three pipeline skills in order for screenshot-to-code work:
+Use the screenshot-to-code pipeline in order:
 
 ```text
 design-screenshot-spec
+-> frontend-design-director when visual judgment is needed
 -> frontend-layout-implementer
 -> frontend-visual-qa
 ```
@@ -168,9 +179,9 @@ Use `mcp-toolchain-manager` before a selected skill only when tool capability
 affects the current slice or the user asks for MCP/tool setup, audit, or
 troubleshooting. Do not use it as a mandatory step for every task.
 
-Do not insert `goal-planner`, `execution-plan-manager`, or
-`mcp-toolchain-manager` into lightweight workflows unless the task escalates or
-the user directly asks about MCP/tooling.
+Do not insert `goal-planner`, `execution-plan-manager`,
+`mcp-toolchain-manager`, or `frontend-design-director` into lightweight
+workflows unless the task escalates or the user directly asks for that concern.
 
 ## Figma Boundary
 
