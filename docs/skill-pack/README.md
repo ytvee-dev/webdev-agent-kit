@@ -16,7 +16,8 @@ This directory captures the proposed architecture for turning `webdev-assistant`
 - `PROMPT_INTENT_ROUTING.md` - prompt intent and task scale gate that prevents small prompts from triggering heavy planning.
 - `CODEX_CLAUDE_COMPATIBILITY.md` - cross-agent compatibility plan for Codex and Claude Code targets.
 - `README_RUNTIME_BOUNDARY.md` - rule that repository README files are human-facing only and must not participate in agent runtime flow.
-- `LINT_POLICY_NOTE.md` - rule that code-changing tasks must run the smallest relevant existing lint command and that linter setup is approval-gated.
+- `LINT_POLICY_NOTE.md` - lint verification and approval-gated linter setup note.
+- `TARGET_STACK_NARROWING.md` - active note that narrows the pack to React, Next.js, CSS Modules, Redux, TanStack, and Axios.
 
 ## Non-Goals For This Draft
 
@@ -32,16 +33,4 @@ All reusable skill instructions, architecture documents, rules, templates, and f
 
 ## Architecture Sources
 
-This architecture is based on:
-
-- OpenAI Codex Agent Skills documentation: https://developers.openai.com/codex/skills
-- OpenAI Codex best practices: https://developers.openai.com/codex/learn/best-practices
-- Model Context Protocol tools specification: https://modelcontextprotocol.io/specification/2025-06-18/server/tools
-- Anthropic frontend-design skill: https://github.com/anthropics/claude-code/blob/main/plugins/frontend-design/skills/frontend-design/SKILL.md
-- React docs: https://react.dev
-- Redux docs: https://redux.js.org
-- TypeScript docs: https://www.typescriptlang.org/docs
-- MDN Web Docs: https://developer.mozilla.org
-- W3C WAI / WCAG: https://www.w3.org/WAI/standards-guidelines/wcag
-- web.dev performance guidance: https://web.dev/learn/performance
-- OWASP cheat sheets: https://cheatsheetseries.owasp.org
+This architecture is based on official docs for OpenAI Codex skills, MCP, React, Next.js, CSS Modules, Redux, TanStack, Axios, TypeScript, MDN, accessibility, performance, and frontend security.
