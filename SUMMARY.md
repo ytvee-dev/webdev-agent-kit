@@ -92,12 +92,16 @@ skills or common docs.
 - `skills/frontend-design-director` - define subject-grounded visual direction,
   anti-template checks, interface-copy stance, motion stance, and visual
   acceptance criteria before UI implementation when design judgment is needed.
+- `skills/frontend-architecture-planner` - plan frontend architecture,
+  ownership boundaries, routing, state, data, styling, forms, build/workspace
+  concerns, approval gates, and implementation handoff before code changes.
 - `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
   copied inspect panels, assets, and notes, then produce a strict
   `Design Implementation Spec`.
 - `skills/frontend-layout-implementer` - implement a `Design Implementation
-  Spec` in the current frontend project while adapting to the actual stack and
-  project architecture, then run rendered visual QA when applicable.
+  Spec`, Design Direction Contract, or Frontend Architecture Plan in the current
+  frontend project while adapting to the actual stack and project architecture,
+  then run rendered visual QA when applicable.
 - `skills/frontend-visual-qa` - verify rendered UI against the design spec and
   visual references with automatic available Playwright MCP browser checks,
   screenshots, viewport checks, and visual diff review.
@@ -117,6 +121,7 @@ Use this chain for the main workflow:
 ```text
 design-screenshot-spec
 -> frontend-design-director when visual judgment is needed
+-> frontend-architecture-planner when architecture boundaries matter
 -> frontend-layout-implementer
 -> frontend-visual-qa
 ```
@@ -137,8 +142,9 @@ Use `mcp-toolchain-manager` only when tool capability affects the current slice
 or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
 
 Do not insert `goal-planner`, `execution-plan-manager`,
-`mcp-toolchain-manager`, or `frontend-design-director` into lightweight
-workflows unless the task escalates or the user directly asks for that concern.
+`mcp-toolchain-manager`, `frontend-design-director`, or
+`frontend-architecture-planner` into lightweight workflows unless the task
+escalates or the user directly asks for that concern.
 
 ## Templates
 
