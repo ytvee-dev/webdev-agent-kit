@@ -13,8 +13,7 @@ tags:
     - 'agents/skill-package'
     - 'frontend/implementation'
     - 'frontend/layout'
-parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+parent: []
 related:
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/approved-patterns|Approved Patterns]]'
@@ -33,7 +32,7 @@ depends_on:
 
 ## Purpose
 
-Implement a `Design Implementation Spec` in a React or Next.js project while respecting existing CSS Modules, Redux, TanStack, Axios, architecture, styling, and verification conventions.
+Implement a `Design Implementation Spec` in a React or Next.js project while respecting existing CSS Modules, Redux, TanStack, Axios, architecture, styling, decomposition, and verification conventions.
 
 ## When To Use
 
@@ -59,7 +58,7 @@ Implement a `Design Implementation Spec` in a React or Next.js project while res
 7. Read affected source files, styles, components, routes, and configs.
 8. Read `references/implementation-rules.md` when present.
 
-Do not read `README.md`, `SUMMARY.md`, or `dist/**` during normal runtime.
+Do not read `README.md` or `dist/**` during normal runtime.
 
 ## Tool Contract
 
@@ -80,16 +79,19 @@ Do not read `README.md`, `SUMMARY.md`, or `dist/**` during normal runtime.
 3. Map the spec to existing project components, layout primitives, tokens, assets, and styles.
 4. Identify missing design details before editing. Ask only when the gap changes implementation.
 5. Use `frontend-architecture-planner` before editing when route, state, data, form, build, workspace, or shared component ownership is unclear or material.
-6. Implement the smallest scoped change that satisfies the spec, design direction, and architecture handoff.
-7. Keep UI state local unless existing React, Redux, or TanStack ownership requires otherwise.
-8. Keep styles in CSS Modules by default.
-9. Reuse existing Axios clients and API adapters for API-facing changes.
-10. Do not add dependencies, global tokens, UI libraries, or new styling systems without explicit approval.
-11. Preserve accessibility, semantic structure, keyboard/focus behavior, text wrapping, and responsive behavior.
-12. Use `frontend-linter-manager` after code-changing work when a lint command exists.
-13. Run relevant project verification commands from `project/verification-profile.md`.
-14. Run `frontend-visual-qa` after scoped rendered frontend changes when browser tooling and a local app are available.
-15. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, or the plan requires a quality pass.
+6. Plan component decomposition before editing. Separate route or page shell, feature sections, small presentational components, list or item components, and named helpers, selectors, adapters, or approved hooks when needed.
+7. Implement the smallest scoped change that satisfies the spec, design direction, architecture handoff, and decomposition plan.
+8. Do not create or expand components that mix routing, data access, state orchestration, transformations, form logic, repeated markup, large JSX, and side effects in one file.
+9. Do not hide missing decomposition behind `renderXxx`, `xxxRender`, nested array pipelines, component-body JSX preparation, oversized custom hooks, or unnecessary `useCallback`.
+10. Keep UI state local unless existing React, Redux, or TanStack ownership requires otherwise.
+11. Keep styles in CSS Modules by default.
+12. Reuse existing Axios clients and API adapters for API-facing changes.
+13. Do not add dependencies, global tokens, UI libraries, or new styling systems without explicit approval.
+14. Preserve accessibility, semantic structure, keyboard/focus behavior, text wrapping, and responsive behavior.
+15. Use `frontend-linter-manager` after code-changing work when a lint command exists.
+16. Run relevant project verification commands from `project/verification-profile.md`.
+17. Run `frontend-visual-qa` after scoped rendered frontend changes when browser tooling and a local app are available.
+18. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, or the plan requires a quality pass.
 
 ## Output Contract
 
@@ -97,6 +99,7 @@ Report:
 
 - implemented spec scope;
 - affected React or Next.js surface;
+- decomposition applied or why the touched component remained intentionally small;
 - CSS Modules, Redux, TanStack, Axios, or project primitives reused;
 - deviations from the design spec;
 - lint and verification commands run;
@@ -106,6 +109,7 @@ Report:
 
 - Implementation must follow inspected project conventions.
 - The target must be within React, Next.js, CSS Modules, Redux, TanStack, or Axios scope.
+- Changed UI must respect component decomposition rules regardless of framework or library.
 - No Figma MCP use is allowed.
 - No new package, styling system, global token, architecture layer, or UI library may appear without approval.
 - Rendered frontend changes must include browser visual QA unless a documented blocker applies.
