@@ -1,7 +1,0 @@
-interface:
-  display_name: "Frontend Quality Reviewer"
-  short_description: "Evidence-backed frontend quality review"
-  default_prompt: "Use $frontend-quality-reviewer to review this frontend work."
-
-policy:
-  allow_implicit_invocation: true

@@ -1,5 +1,0 @@
-interface:
-    display_name: 'Frontend Linter Manager'
-    short_description: 'Run existing frontend lint verification'
-policy:
-    allow_implicit_invocation: true

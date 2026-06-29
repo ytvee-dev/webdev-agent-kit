@@ -1,7 +1,0 @@
-interface:
-  display_name: "Frontend Bugfix Debugger"
-  short_description: "Evidence-first frontend bugfix workflow"
-  default_prompt: "Use $frontend-bugfix-debugger to debug this frontend issue."
-
-policy:
-  allow_implicit_invocation: true
