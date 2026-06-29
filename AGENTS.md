@@ -15,6 +15,7 @@ related:
     - '[[README|Screenshot Frontend Assistant README]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
+    - '[[skills/goal-planner/SKILL|Goal Planner]]'
 depends_on: []
 ---
 
@@ -74,6 +75,7 @@ Classify every task as one or more of:
 - `project-onboarding`
 - `project-context-refresh`
 - `planning/architecture`
+- `goal-planning`
 - `brainstorm/conversation`
 - `internet-research`
 - `other`
@@ -120,6 +122,8 @@ the context needed for correctness, not on blanket scanning.
 
 ## Skill Map
 
+- Standard or deep frontend work that needs a clear user goal, scope,
+  constraints, and done criteria before implementation -> `goal-planner`
 - Screenshot or copied visual inspect material to implementation spec ->
   `design-screenshot-spec`
 - Frontend implementation from a `Design Implementation Spec` ->
@@ -140,6 +144,15 @@ design-screenshot-spec
 -> frontend-layout-implementer
 -> frontend-visual-qa
 ```
+
+For standard or deep work, create the goal contract before implementation:
+
+```text
+goal-planner
+-> selected implementation or planning skill
+```
+
+Do not insert `goal-planner` into lightweight workflows unless the task escalates.
 
 ## Figma Boundary
 
