@@ -13,6 +13,9 @@ This directory captures the proposed architecture for turning `webdev-assistant`
 - `MCP_TOOLING.md` - required and optional MCP/tooling model, safe installation workflow, and `agents/openai.yaml` dependency policy.
 - `DESIGN_INTELLIGENCE.md` - design-direction layer, anti-template defaults, visual memory, screenshot repair loop, copy rules, motion rules, and CSS specificity checks.
 - `IMPLEMENTATION_PLAN.md` - staged plan for turning this architecture into concrete skills later.
+- `PROMPT_INTENT_ROUTING.md` - prompt intent and task scale gate that prevents small prompts from triggering heavy planning.
+- `CODEX_CLAUDE_COMPATIBILITY.md` - cross-agent compatibility plan for Codex and Claude Code targets.
+- `README_RUNTIME_BOUNDARY.md` - rule that repository README files are human-facing only and must not participate in agent runtime flow.
 
 ## Non-Goals For This Draft
 
