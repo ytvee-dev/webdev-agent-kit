@@ -29,8 +29,8 @@ depends_on: []
 # AGENTS.md
 
 This is the canonical policy entrypoint for this `.agents` bundle. Paths in
-this file are bundle-local paths rooted at `.agents/` itself, such as
-`AGENTS.md`, `SUMMARY.md`, `skills/**`, `common/**`, and `project/**`.
+this file are bundle-local paths rooted at `.agents` itself, such as
+`AGENTS.md`, `skills/**`, `common/**`, and `project/**`.
 
 The host repository root `AGENTS.md` is managed only by
 `project-onboarding-adapter`. Do not edit or mirror the host-root pointer during
@@ -50,10 +50,14 @@ workflow:
 ## Bundle Model
 
 - `AGENTS.md` is the canonical publishable policy file for the bundle.
+- `README.md` is a human-facing repository description and installation guide
+  only. It is not part of agent runtime routing, context gathering, skill
+  execution, verification, or project memory. Do not read it during normal agent
+  runtime unless the user explicitly asks to edit, audit, or summarize
+  `README.md` itself.
 - `SUMMARY.md` is a manual catalog for humans. Do not read it during normal
   agent runtime unless the user explicitly asks to edit, audit, or summarize
   it.
-- `README.md` is the human-facing usage guide.
 - `common/**` contains reusable rules.
 - `skills/**` contains reusable Codex skills.
 - `project/**` contains host-project facts and stays local-only.
@@ -127,9 +131,9 @@ After task and scale classification:
 6. If no repo-local skill matches, handle the task with base Codex behavior and
    read only relevant project context.
 
-Do not read all skills, all references, all common docs, all overlays, or
-`SUMMARY.md` for routing. Progressive disclosure is required: spend tokens on
-the context needed for correctness, not on blanket scanning.
+Do not read all skills, all references, all common docs, all overlays,
+`SUMMARY.md`, or `README.md` for routing. Progressive disclosure is required:
+spend tokens on the context needed for correctness, not on blanket scanning.
 
 ## Skill Map
 
@@ -254,8 +258,11 @@ workflows unless the task escalates or the user directly asks for that concern.
   `tags`, `parent`, `related`, and `depends_on`.
 - In `SKILL.md`, keep `name` and `description` first, followed by graph
   metadata.
-- Update `SUMMARY.md` and `README.md` whenever skill names, routing, or
-  user-facing workflow changes.
+- Update `README.md` only for human-facing repository documentation changes,
+  not for agent runtime routing or context. Agents may read or edit it only when
+  the user explicitly asks for README work.
+- Update `SUMMARY.md` only as a human manual catalog when skill names, common
+  docs, project overlay names, or user-facing workflows change.
 - Do not publish or copy `project/**` into reusable bundle docs.
 
 ## Verification
@@ -267,5 +274,6 @@ For skill and documentation changes:
 2. Search for stale deleted skill names and prohibited Figma/Jam routing.
 3. Search changed rules and overlays for non-English rule text.
 4. Check that `SUMMARY.md`, `README.md`, and actual `skills/**` directories
-   agree.
+   agree only for human-facing documentation changes; do not use `README.md` as
+   runtime context.
 5. Run Markdown formatting checks when available.
