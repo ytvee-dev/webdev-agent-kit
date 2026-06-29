@@ -46,6 +46,13 @@ audit, or summarize `SUMMARY.md`.
 - `common/prompt-intent-routing-rules.md` - task scale routing rules that keep
   narrow prompts lightweight and reserve planning, checkpoints, and deep scans
   for standard or deep workflows.
+- `common/design-quality-rubric.md` - design review dimensions and verdicts.
+- `common/anti-template-defaults.md` - suspicious generic AI design defaults and
+  replacement rules.
+- `common/interface-copy-rules.md` - interface copy rules for actions, labels,
+  empty states, errors, and consistency.
+- `common/motion-rules.md` - restrained frontend motion rules with reduced
+  motion and approval gates.
 
 ## Project Overlays
 
@@ -62,6 +69,8 @@ audit, or summarize `SUMMARY.md`.
   installed, skipped, or blocked MCP capabilities for current skills.
 - `project/design-reference-profile.md` - local screenshot, exported asset,
   copied inspect, and design-reference boundaries.
+- `project/visual-memory.md` - local-only accepted, rejected, and repeated
+  visual direction memory when copied from `templates/visual-memory.md`.
 - `project/react/path-index.md` - React/client lookup index when present.
 - `project/next/path-index.md` - Next.js lookup index when present.
 
@@ -80,6 +89,9 @@ skills or common docs.
   report missing tools, verify official install sources, request approval before
   installation or config changes, and update `project/mcp-profile.md` when
   durable tool state is needed.
+- `skills/frontend-design-director` - define subject-grounded visual direction,
+  anti-template checks, interface-copy stance, motion stance, and visual
+  acceptance criteria before UI implementation when design judgment is needed.
 - `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
   copied inspect panels, assets, and notes, then produce a strict
   `Design Implementation Spec`.
@@ -104,6 +116,7 @@ Use this chain for the main workflow:
 
 ```text
 design-screenshot-spec
+-> frontend-design-director when visual judgment is needed
 -> frontend-layout-implementer
 -> frontend-visual-qa
 ```
@@ -123,9 +136,16 @@ goal-planner
 Use `mcp-toolchain-manager` only when tool capability affects the current slice
 or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
 
-Do not insert `goal-planner`, `execution-plan-manager`, or
-`mcp-toolchain-manager` into lightweight workflows unless the task escalates or
-the user directly asks about MCP/tooling.
+Do not insert `goal-planner`, `execution-plan-manager`,
+`mcp-toolchain-manager`, or `frontend-design-director` into lightweight
+workflows unless the task escalates or the user directly asks for that concern.
+
+## Templates
+
+- `templates/design-direction-contract.md` - durable design direction contract
+  template for frontend design handoff.
+- `templates/visual-memory.md` - local-only visual memory template for
+  `project/visual-memory.md`.
 
 ## Prompt Intent Routing
 
