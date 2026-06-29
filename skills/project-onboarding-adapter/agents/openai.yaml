@@ -1,7 +1,7 @@
 interface:
     display_name: 'Project Onboarding Adapter'
     short_description: 'Adapt host project context'
-    default_prompt: 'Use $project-onboarding-adapter to adapt .agents onboarding, project overlays, and MCP context for this frontend project.'
+    default_prompt: 'Use $project-onboarding-adapter when the user says адаптируйся or asks to adapt .agents to the current React/Next.js project, create project overlays, scan MCP needs, and cache project context.'
 policy:
     allow_implicit_invocation: true
 dependencies:
@@ -11,7 +11,7 @@ dependencies:
           description: 'Inspect project files, bundle paths, skill metadata, and project overlays during onboarding.'
         - type: 'mcp'
           value: 'context7'
-          description: 'Fetch current official framework, library, CLI, and tooling documentation for detected frontend stacks.'
+          description: 'Fetch current official React, Next.js, Redux, TanStack, Axios, TypeScript, CLI, and tooling documentation for detected target-stack projects.'
         - type: 'mcp'
           value: 'mdn'
           description: 'Fetch official HTML, CSS, Web API, accessibility, and browser compatibility documentation when stack rules depend on web platform behavior.'
