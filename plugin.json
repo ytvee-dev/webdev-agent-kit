@@ -1,7 +1,7 @@
 {
   "name": "webdev-assistant",
   "version": "0.1.0",
-  "description": "Codex-first frontend skill pack for screenshot-to-code, planning, architecture, bugfixing, refactoring, review, and visual QA.",
+  "description": "Frontend skill pack for React, Next.js, CSS Modules, Redux, TanStack, Axios, screenshot-to-code, planning, architecture, bugfixing, refactoring, review, and visual QA.",
   "skills": [
     "goal-planner",
     "execution-plan-manager",
@@ -26,8 +26,9 @@
   },
   "excludes": [
     "project/**",
+    "dist/**",
+    "docs/**",
     ".obsidian/**",
     "node_modules/**"
   ]
 }
-
