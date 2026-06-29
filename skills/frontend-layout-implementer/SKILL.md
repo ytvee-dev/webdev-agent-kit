@@ -1,6 +1,6 @@
 ---
 name: frontend-layout-implementer
-description: Use when implementing a Design Implementation Spec or supplied screenshot-derived visual spec in the current frontend project. Adapt to the actual stack, use project context, current framework docs, MDN, and available visual reference tooling. Do not use Figma MCP, create new styling systems, or implement before design intent is specified.
+description: Use when implementing a Design Implementation Spec or screenshot-derived visual spec in a React or Next.js project using existing CSS Modules, Redux, TanStack, and Axios conventions. Do not use for unrelated frontend stacks, Figma MCP, new styling systems, or implementation before design intent is specified.
 id: 'agents.skills.frontend-layout-implementer.skill'
 title: 'Frontend Layout Implementer'
 doc_type: 'skill'
@@ -16,7 +16,9 @@ tags:
 parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
-    - '[[skills/frontend-layout-implementer/references/implementation-rules|Implementation Rules]]'
+    - '[[common/target-stack-policy|Target Stack Policy]]'
+    - '[[common/approved-patterns|Approved Patterns]]'
+    - '[[common/anti-patterns|Common Anti-Patterns]]'
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
     - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
     - '[[skills/frontend-linter-manager/SKILL|Frontend Linter Manager]]'
@@ -31,127 +33,90 @@ depends_on:
 
 ## Purpose
 
-Implement a `Design Implementation Spec` in the current frontend project while
-respecting the actual stack, architecture, styling system, and verification
-commands.
+Implement a `Design Implementation Spec` in a React or Next.js project while respecting existing CSS Modules, Redux, TanStack, Axios, architecture, styling, and verification conventions.
 
 ## When To Use
 
-- The user asks to build a screen, section, component, or static page from a
-  `Design Implementation Spec`.
-- The user supplies screenshot-derived design material and asks for code in the
-  current frontend project.
-- The implementation target may be React, Next.js, Vite, static HTML/CSS, Vue,
-  Svelte, or another frontend stack.
+- The user asks to build a screen, section, component, or static page from a `Design Implementation Spec`.
+- The user supplies screenshot-derived design material and asks for code in the current supported frontend project.
+- The implementation target is within React, Next.js, CSS Modules, Redux, TanStack, or Axios scope.
 
 ## When Not To Use
 
-- The design intent has not been converted into a spec and the source is only
-  screenshots. Use `design-screenshot-spec` first.
-- The user asks for live Figma inspection, Figma MCP, canvas edits, or Figma
-  whiteboard workflows.
+- The design intent has not been converted into a spec and the source is only screenshots. Use `design-screenshot-spec` first.
+- The user asks for live Figma inspection, Figma MCP, canvas edits, or Figma whiteboard workflows.
+- The project is outside the supported target stack unless the user explicitly changes scope.
 - The task is unrelated to frontend rendering or layout.
 
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Confirm the classified task is `frontend-layout`, `feature/development`,
-   `bugfix`, `refactor`, or `optimization` for a rendered frontend surface.
-3. Read `common/approved-patterns.md`.
-4. Read `common/anti-patterns.md`.
-5. Read `project/stack-profile.md`, `project/architecture-map.md`,
-   `project/styling-profile.md`, and `project/verification-profile.md` when
-   present.
-6. Read relevant path indexes under `project/**` when present.
-7. Read the `Design Implementation Spec` and supplied visual references.
-8. Read affected source files, styles, components, routes, and configs.
-9. Read `references/implementation-rules.md`.
+2. Read `common/target-stack-policy.md`.
+3. Confirm the classified task is `frontend-layout`, `feature/development`, `bugfix`, `refactor`, or `optimization` for a rendered React or Next.js surface.
+4. Read `common/approved-patterns.md` and relevant anti-pattern rules.
+5. Read relevant project overlays when present: stack, architecture, styling, verification, state, data-fetching, build, and workspace profiles.
+6. Read the `Design Implementation Spec` and supplied visual references.
+7. Read affected source files, styles, components, routes, and configs.
+8. Read `references/implementation-rules.md` when present.
+
+Do not read `README.md`, `SUMMARY.md`, or `dist/**` during normal runtime.
 
 ## Tool Contract
 
-- Use Project Context MCP when available; otherwise read `project/**` and
-  source files directly.
-- Use Design Spec MCP when available; otherwise use the supplied spec text or
-  user-approved local artifact.
-- Use Visual Reference MCP when available; otherwise use attached or local
-  image files supplied by the user.
-- Use `context7` for current framework, library, or build-tool docs when the
-  implementation depends on API or framework behavior.
-- Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility
-  facts.
-- Use available Playwright MCP for rendered verification after implementation
-  without asking the user for separate confirmation. Browser MCP is an allowed
-  lower-confidence fallback only when Playwright MCP is unavailable.
+- Use Project Context MCP when available; otherwise read `project/**` and source files directly.
+- Use Design Spec MCP when available; otherwise use the supplied spec text or user-approved local artifact.
+- Use Visual Reference MCP when available; otherwise use attached or local image files supplied by the user.
+- Use `context7` for React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool docs when implementation depends on current behavior.
+- Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility facts.
+- Use available Playwright MCP for rendered verification after implementation without asking the user for separate confirmation when the local app can be used.
 - Use Visual Diff MCP when available during final visual comparison.
 - Do not use Figma MCP.
-- If a named MCP is unavailable, report the missing capability before using a
-  fallback that may reduce confidence.
+- If a named MCP is unavailable, report the missing capability before using a lower-confidence fallback.
 
 ## Workflow
 
-1. Classify the task as `frontend-only` unless the inspected project proves
-   server-owned domain logic is being changed.
-2. Detect the actual frontend stack, router, styling system, state layer, and
-   verification commands.
-3. Map the spec to existing project components, layout primitives, tokens,
-   assets, and styles.
-4. Identify missing design details before editing. Ask only when the gap changes
-   implementation.
-5. Use `frontend-architecture-planner` before editing when route, state, data,
-   form, build, workspace, or shared component ownership is unclear or material
-   to the implementation.
-6. Implement the smallest scoped change that satisfies the spec, design
-   direction, and architecture handoff.
-7. Keep state local unless the existing project architecture requires shared
-   ownership.
-8. Do not add dependencies, global tokens, or new styling systems without
-   explicit approval.
-9. Preserve accessibility, semantic structure, keyboard/focus behavior, text
-   wrapping, and responsive behavior.
-10. Use `frontend-linter-manager` after code-changing work when a lint command
-    exists.
-11. Run relevant project verification commands from `project/verification-profile.md`.
-12. Run `frontend-visual-qa` after scoped rendered frontend changes, using
-    available Playwright MCP automatically when the local app can be started or
-    reused.
-13. Use `frontend-quality-reviewer` before final reporting when the user asks
-    for review, the implementation has significant surface area, or the plan
-    requires a quality pass.
-14. Skip browser visual QA only for documentation-only or static-only tasks,
-    changes with no rendered surface, blocked local app startup, unavailable
-    Playwright/browser tooling, or an explicit user request to skip browser
-    checks.
+1. Confirm the task is within the supported target stack.
+2. Detect React/Next.js routing, CSS Modules ownership, Redux ownership, TanStack usage, Axios API adapter boundaries, and verification commands.
+3. Map the spec to existing project components, layout primitives, tokens, assets, and styles.
+4. Identify missing design details before editing. Ask only when the gap changes implementation.
+5. Use `frontend-architecture-planner` before editing when route, state, data, form, build, workspace, or shared component ownership is unclear or material.
+6. Implement the smallest scoped change that satisfies the spec, design direction, and architecture handoff.
+7. Keep UI state local unless existing React, Redux, or TanStack ownership requires otherwise.
+8. Keep styles in CSS Modules by default.
+9. Reuse existing Axios clients and API adapters for API-facing changes.
+10. Do not add dependencies, global tokens, UI libraries, or new styling systems without explicit approval.
+11. Preserve accessibility, semantic structure, keyboard/focus behavior, text wrapping, and responsive behavior.
+12. Use `frontend-linter-manager` after code-changing work when a lint command exists.
+13. Run relevant project verification commands from `project/verification-profile.md`.
+14. Run `frontend-visual-qa` after scoped rendered frontend changes when browser tooling and a local app are available.
+15. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, or the plan requires a quality pass.
 
 ## Output Contract
 
 Report:
 
 - implemented spec scope;
-- affected frontend surface;
-- project primitives, tokens, or styling owners reused;
+- affected React or Next.js surface;
+- CSS Modules, Redux, TanStack, Axios, or project primitives reused;
 - deviations from the design spec;
-- verification commands run;
+- lint and verification commands run;
 - rendered visual QA result or blocker.
 
 ## Validation Gates
 
 - Implementation must follow inspected project conventions.
+- The target must be within React, Next.js, CSS Modules, Redux, TanStack, or Axios scope.
 - No Figma MCP use is allowed.
-- No new package, styling system, global token, or architecture layer may appear
-  without approval.
-- Rendered frontend changes must include browser visual QA unless one of the
-  documented workflow blockers applies.
-- Code-changing implementation must run lint when an existing lint command is
-  available.
-- Significant implementation must run or explicitly defer
-  `frontend-quality-reviewer` when review is requested or appropriate.
+- No new package, styling system, global token, architecture layer, or UI library may appear without approval.
+- Rendered frontend changes must include browser visual QA unless a documented blocker applies.
+- Code-changing implementation must run lint when an existing lint command is available.
 
 ## Trigger Evals
 
 Should trigger:
 
-- "Implement this Design Implementation Spec in the app."
-- "Build this screenshot-derived screen in the current frontend project."
+- "Implement this Design Implementation Spec in the React app."
+- "Build this screenshot-derived screen in the Next.js project."
 - "Code this layout from the spec and match the supplied references."
 
 Should not trigger:
@@ -159,10 +124,13 @@ Should not trigger:
 - "Create a spec from these screenshots."
 - "Use Figma MCP to inspect this node."
 - "Run only visual QA on an already implemented screen."
+- "Adapt this to an unrelated frontend framework."
 
 ## Reference Map
 
-- `references/implementation-rules.md`
+- `common/target-stack-policy.md`
+- `common/approved-patterns.md`
+- `common/anti-patterns.md`
 - `skills/frontend-architecture-planner/SKILL.md`
 - `skills/frontend-linter-manager/SKILL.md`
 - `skills/frontend-quality-reviewer/SKILL.md`
