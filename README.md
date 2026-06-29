@@ -74,6 +74,8 @@ design-screenshot-spec
 
 ## Distribution
 
-Source files are the source of truth. Generated targets live under `dist/codex` and `dist/claude`.
+Source files are the source of truth.
 
-Update source files first, then rebuild distribution targets.
+Generated distribution targets are produced from source during packaging or release and must not be used as runtime context or edited manually.
+
+When generated output is needed, rebuild it from source instead of patching `dist/codex` or `dist/claude` directly.
