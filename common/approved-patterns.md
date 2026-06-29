@@ -12,8 +12,8 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
-    - '[[SUMMARY|Agent Documentation Summary]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
+    - '[[common/anti-patterns|Common Anti-Patterns]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
 depends_on: []
 ---
@@ -34,6 +34,16 @@ Purpose: define reusable patterns for React, Next.js, CSS Modules, Redux, TanSta
 - Reuse existing React components, Next.js routes, CSS Modules, Redux slices, TanStack conventions, Axios clients, tokens, breakpoints, and verification commands.
 - Keep styles local to the edited surface by default through CSS Modules.
 - Touch global CSS only when the existing project has a specific global owner and the task requires it.
+
+## Component Decomposition
+
+- Keep every changed component focused on one primary responsibility.
+- Split screens into route or page shell, feature sections, small presentational components, list or item components, and named helpers when needed.
+- Extract repeated markup into named components before final reporting.
+- Extract non-trivial filtering, sorting, grouping, mapping, and formatting into named helpers, selectors, adapters, or approved hooks.
+- Keep JSX readable without inline business logic.
+- Do not use `renderXxx`, `xxxRender`, nested array pipelines, component-body JSX preparation, or `useCallback` to hide poor component shape.
+- Apply this rule regardless of the framework, router, state library, data library, or styling system.
 
 ## Verification
 
