@@ -17,6 +17,21 @@ Supported target stack:
 
 Other frontend frameworks, styling systems, UI libraries, app generators, and backend tooling are not supported defaults.
 
+## Usage
+
+1. Copy this package into your project as `.agents/`.
+2. Add a host-root `AGENTS.md` pointer to `.agents/AGENTS.md`.
+3. Ask the agent: `адаптируйся`.
+4. The agent will inspect the project, detect the target stack, create or update `.agents/project/**`, scan MCP needs, cache paths and verification commands, and report missing tools.
+5. Missing MCP installation requires explicit approval after the agent reports the official source and exact install or config action.
+6. For screenshot-to-code work, provide screenshots, exported assets, copied inspect values, or a written brief.
+
+Recommended first prompt:
+
+```text
+адаптируйся к проекту: проверь стек, пути, команды проверки, доступные MCP, недостающие MCP, создай локальный кеш проекта в .agents/project/**, но не меняй исходный код приложения.
+```
+
 ## Core Flow
 
 ```text
@@ -44,6 +59,7 @@ design-screenshot-spec
 - It will not use Figma MCP or inspect live Figma files.
 - It will not add packages, UI libraries, styling systems, framework migrations, or app generators without explicit approval.
 - It will not turn Redux into server communication or domain processing.
+- It will not create tests for components or functions.
 - It will not treat README as agent runtime context.
 - It will not adapt itself to unrelated frontend stacks as supported defaults.
 
@@ -51,7 +67,7 @@ design-screenshot-spec
 
 `AGENTS.md` and `skills/**` operate the agent.
 
-`README.md` is only a human-facing repository overview and installation guide.
+`README.md` is only a human-facing repository overview and usage guide.
 
 ## Main Skills
 
