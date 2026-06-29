@@ -23,6 +23,7 @@ related:
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
+    - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
 depends_on: []
 ---
 
@@ -44,8 +45,10 @@ workflow:
 1. Read user-supplied Figma screenshot material without opening Figma.
 2. Produce a strict `Design Implementation Spec`.
 3. Define a design direction when visual judgment is needed.
-4. Implement the spec in the current frontend project.
-5. Verify the rendered result with browser screenshots and visual QA.
+4. Plan frontend architecture when structure, ownership, routing, state, data,
+   styling, forms, build, or workspace boundaries matter.
+5. Implement the spec in the current frontend project.
+6. Verify the rendered result with browser screenshots and visual QA.
 
 ## Bundle Model
 
@@ -84,6 +87,7 @@ Classify every task as one or more of:
 - `design-spec`
 - `design-direction`
 - `frontend-layout`
+- `frontend-architecture`
 - `visual-qa`
 - `project-onboarding`
 - `project-context-refresh`
@@ -148,10 +152,13 @@ spend tokens on the context needed for correctness, not on blanket scanning.
 - Standard or deep UI work that needs visual direction, redesign, visual
   polish, design critique, anti-template checks, or design handoff before
   implementation -> `frontend-design-director`
+- Standard or deep frontend work that needs architecture planning, ownership
+  boundaries, routing/state/data/styling/form/build decisions, migration risk
+  assessment, or implementation handoff -> `frontend-architecture-planner`
 - Screenshot or copied visual inspect material to implementation spec ->
   `design-screenshot-spec`
-- Frontend implementation from a `Design Implementation Spec` or Design
-  Direction Contract -> `frontend-layout-implementer`
+- Frontend implementation from a `Design Implementation Spec`, Design Direction
+  Contract, or Frontend Architecture Plan -> `frontend-layout-implementer`
 - Rendered UI verification, browser screenshots, and visual diff review ->
   `frontend-visual-qa`
 - Project onboarding, root pointer creation, stack detection, docs/MCP
@@ -166,6 +173,7 @@ Use the screenshot-to-code pipeline in order:
 ```text
 design-screenshot-spec
 -> frontend-design-director when visual judgment is needed
+-> frontend-architecture-planner when architecture boundaries matter
 -> frontend-layout-implementer
 -> frontend-visual-qa
 ```
@@ -184,8 +192,9 @@ affects the current slice or the user asks for MCP/tool setup, audit, or
 troubleshooting. Do not use it as a mandatory step for every task.
 
 Do not insert `goal-planner`, `execution-plan-manager`,
-`mcp-toolchain-manager`, or `frontend-design-director` into lightweight
-workflows unless the task escalates or the user directly asks for that concern.
+`mcp-toolchain-manager`, `frontend-design-director`, or
+`frontend-architecture-planner` into lightweight workflows unless the task
+escalates or the user directly asks for that concern.
 
 ## Figma Boundary
 
