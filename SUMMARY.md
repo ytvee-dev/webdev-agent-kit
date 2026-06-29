@@ -98,6 +98,9 @@ skills or common docs.
 - `skills/greenfield-project-builder` - plan new or empty frontend projects,
   first vertical slice, stack assumptions, approval gates, and onboarding
   handoff before any scaffold or package installation.
+- `skills/frontend-linter-manager` - run existing project lint verification
+  after code-changing frontend work, or plan user-approved linter setup from the
+  provided ESLint model.
 - `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
   copied inspect panels, assets, and notes, then produce a strict
   `Design Implementation Spec`.
@@ -126,6 +129,7 @@ design-screenshot-spec
 -> frontend-design-director when visual judgment is needed
 -> frontend-architecture-planner when architecture boundaries matter
 -> frontend-layout-implementer
+-> frontend-linter-manager when code changed and lint is available
 -> frontend-visual-qa
 ```
 
@@ -153,6 +157,9 @@ goal-planner
 
 Use `mcp-toolchain-manager` only when tool capability affects the current slice
 or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
+
+Use `frontend-linter-manager` after code-changing work when a lint command is
+available, or before code changes only when the user asks for lint setup.
 
 Do not insert `goal-planner`, `execution-plan-manager`,
 `mcp-toolchain-manager`, `frontend-design-director`,
