@@ -2,6 +2,10 @@
 /project/
 /project/**
 
+# Generated distribution output. Rebuild from source files before release.
+/dist/
+/dist/**
+
 # Local helper checkout state. Never publish old helper sync trees.
 /upstream/
 /upstream/**
