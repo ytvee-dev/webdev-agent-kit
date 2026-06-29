@@ -43,6 +43,15 @@ design-screenshot-spec
    Playwright MCP is available, Codex runs those browser checks automatically
    after implementation without asking for separate confirmation.
 
+For standard or deep work that needs a clear goal before implementation, use:
+
+```text
+goal-planner
+-> selected implementation or planning skill
+```
+
+Do not insert `goal-planner` into lightweight workflows unless the task escalates.
+
 ## Prompt Intent Routing
 
 The bundle classifies prompt scale before selecting a skill chain:
@@ -83,6 +92,13 @@ When only unsupported input is provided, Codex must ask for screenshots,
 exports, copied inspect values, assets, or a written brief.
 
 ## Skills
+
+### `goal-planner`
+
+Use this skill for standard or deep frontend work that needs a clear user goal,
+scope, constraints, and done criteria before implementation. It must not run for
+micro-fixes, obvious type errors, tiny styling changes, isolated component
+edits, or direct file-scope changes unless the task escalates.
 
 ### `design-screenshot-spec`
 
