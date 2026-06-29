@@ -11,7 +11,6 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
-    - '[[SUMMARY|Agent Documentation Summary]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
@@ -24,16 +23,9 @@ related:
     - '[[common/agent-operating-model|Agent Operating Model]]'
     - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
     - '[[common/typescript-discipline|TypeScript Discipline]]'
-    - '[[skills/goal-planner/SKILL|Goal Planner]]'
-    - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
+    - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
+    - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
-    - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
-    - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
-    - '[[skills/greenfield-project-builder/SKILL|Greenfield Project Builder]]'
-    - '[[skills/frontend-linter-manager/SKILL|Frontend Linter Manager]]'
-    - '[[skills/frontend-bugfix-debugger/SKILL|Frontend Bugfix Debugger]]'
-    - '[[skills/frontend-refactor-surgeon/SKILL|Frontend Refactor Surgeon]]'
-    - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
 depends_on: []
 ---
 
@@ -49,29 +41,24 @@ WebDev Assistant targets only React, Next.js, CSS Modules, Redux, TanStack, and 
 
 Do not present unrelated frontend frameworks, UI libraries, app generators, styling systems, or testing workflows as supported defaults. If a host project is outside the target stack, report the unsupported scope instead of adapting this bundle to it.
 
-## Role
-
-Codex acts as a senior frontend implementation agent for a focused React/Next.js workflow:
-
-1. Read user-supplied screenshot material without opening Figma.
-2. Produce a strict `Design Implementation Spec`.
-3. Define a design direction when visual judgment is needed.
-4. Plan architecture when route, component, state, data, styling, form, build, or workspace boundaries matter.
-5. Plan greenfield React or Next.js projects safely before any scaffold.
-6. Implement in the current React/Next.js project using CSS Modules, Redux, TanStack, and Axios conventions when present.
-7. Run lint verification for code-changing work when a project lint command exists.
-8. Verify the rendered result with browser screenshots and visual QA when applicable.
-
-## Bundle Model
+## Runtime Source Model
 
 - `AGENTS.md` is the canonical publishable policy file for agent runtime.
-- `README.md` is a human-facing repository description and installation guide only. It is not part of agent runtime routing, context gathering, skill execution, verification, or project memory. Do not read it during normal agent runtime unless the user explicitly asks to edit, audit, or summarize `README.md` itself.
-- `SUMMARY.md` is a manual catalog for humans. Do not read it during normal agent runtime unless the user explicitly asks to edit, audit, or summarize it.
+- `skills/**` contains executable skill instructions.
 - `common/**` contains reusable runtime rules.
-- `skills/**` contains reusable Codex skills.
+- `templates/**` contains optional local artifact templates.
 - `project/**` contains host-project facts and stays local-only.
-- `dist/**` is generated distribution output. Do not use it as source-of-truth during ordinary source editing.
+- `README.md` is a human-facing repository description and usage guide only. Do not read it during normal agent runtime unless the user explicitly asks for README work.
+- `dist/**` is generated distribution output. Do not use it as source-of-truth during ordinary source editing or runtime routing.
 - All rules, skills, references, common docs, and project overlays must be written in English.
+
+## Natural Language Commands
+
+When the user says `адаптируйся`, `адаптируйся к проекту`, `адаптируй этот skill pack к проекту`, `инициализируй .agents`, or asks to initialize this bundle in the current repo, classify the task as `project-onboarding` and route to `project-onboarding-adapter`.
+
+If the project already has `.agents/project/**` overlays and the user asks only to refresh stale paths, cached facts, commands, MCP state, or indexes, classify the task as `project-context-refresh` and route to `project-context-adapter`.
+
+The adaptation command must not create app source files. It may create or update the host-root pointer and `.agents/project/**` overlays. Missing MCP installation must be reported with official sources and requires explicit approval before installation or config changes.
 
 ## Prompt Intake And Task Classification
 
@@ -125,7 +112,7 @@ After task and scale classification:
 6. Read only relevant `common/**`, `project/**`, source files, configs, official docs, or external sources needed for the classified task.
 7. If no repo-local skill matches, handle the task with base Codex behavior and read only relevant project context.
 
-Do not read all skills, all references, all common docs, all overlays, `SUMMARY.md`, `README.md`, or `dist/**` for routing. Progressive disclosure is required.
+Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing. Progressive disclosure is required.
 
 ## Skill Map
 
@@ -215,7 +202,6 @@ Do not insert `goal-planner`, `execution-plan-manager`, `mcp-toolchain-manager`,
 - Keep every Markdown file in this bundle graph-linkable with YAML frontmatter: `id`, `title`, `doc_type`, `layer`, `status`, `publishable`, `local_only`, `tags`, `parent`, `related`, and `depends_on`.
 - In `SKILL.md`, keep `name` and `description` first, followed by graph metadata.
 - Update `README.md` only for human-facing repository documentation changes, not for agent runtime routing or context. Agents may read or edit it only when the user explicitly asks for README work.
-- Update `SUMMARY.md` only as a human manual catalog when skill names, common docs, project overlay names, or user-facing workflows change.
 - Do not publish or copy `project/**` facts into reusable bundle docs.
 
 ## Verification
@@ -225,5 +211,5 @@ For skill and documentation changes:
 1. Validate changed skills with `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>` when available.
 2. Search for stale deleted skill names and prohibited Figma/Jam routing.
 3. Search changed rules and overlays for non-English rule text.
-4. Check that `SUMMARY.md`, `README.md`, and actual `skills/**` directories agree only for human-facing documentation changes; do not use `README.md` as runtime context.
+4. Check that `README.md`, `plugin.json`, and actual `skills/**` directories agree only for human-facing documentation changes; do not use `README.md` as runtime context.
 5. Run Markdown formatting checks when available.
