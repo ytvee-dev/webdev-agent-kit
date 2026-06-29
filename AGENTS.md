@@ -187,6 +187,10 @@ Do not insert `goal-planner`, `execution-plan-manager`, `mcp-toolchain-manager`,
 
 - Detect whether the task is within React, Next.js, CSS Modules, Redux, TanStack, or Axios before applying stack-specific rules.
 - Reuse existing React components, Next.js routes, CSS Modules, Redux slices, TanStack conventions, Axios clients, tokens, layout patterns, and verification commands before introducing new ones.
+- Decompose changed UI into clear boundaries before final reporting: route or page shell, feature sections, small presentational components, list or item components, and named helpers, selectors, adapters, or approved hooks when needed.
+- Do not create or expand components that mix routing, data access, state orchestration, transformations, form logic, repeated markup, large JSX, and side effects in one file.
+- Do not hide missing decomposition behind `renderXxx`, `xxxRender`, nested array pipelines, component-body JSX preparation, oversized custom hooks, or unnecessary `useCallback`.
+- Apply component decomposition rules regardless of the library, framework, router, state layer, data layer, or styling system.
 - Do not add packages, styling systems, global tokens, generated scaffolds, architecture layers, UI libraries, or testing workflows without explicit user approval.
 - During new or empty project onboarding, do not create app source files, framework configs, package manifests, routes, components, styles, tests, or build scripts. Create only the host-root pointer and local-only `project/**` overlays from inferred or user-provided intended stack facts.
 - Keep edits scoped to the requested screen, component, route, or static page.
