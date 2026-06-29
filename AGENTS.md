@@ -16,6 +16,7 @@ related:
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
+    - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
 depends_on: []
 ---
 
@@ -76,6 +77,7 @@ Classify every task as one or more of:
 - `project-context-refresh`
 - `planning/architecture`
 - `goal-planning`
+- `execution-planning`
 - `brainstorm/conversation`
 - `internet-research`
 - `other`
@@ -124,6 +126,9 @@ the context needed for correctness, not on blanket scanning.
 
 - Standard or deep frontend work that needs a clear user goal, scope,
   constraints, and done criteria before implementation -> `goal-planner`
+- Standard or deep frontend work that needs task slices, context budget,
+  checkpoint rules, or stop/resume state after the goal is defined ->
+  `execution-plan-manager`
 - Screenshot or copied visual inspect material to implementation spec ->
   `design-screenshot-spec`
 - Frontend implementation from a `Design Implementation Spec` ->
@@ -145,14 +150,17 @@ design-screenshot-spec
 -> frontend-visual-qa
 ```
 
-For standard or deep work, create the goal contract before implementation:
+For standard or deep work, create the goal contract and execution plan before
+implementation when both are needed:
 
 ```text
 goal-planner
+-> execution-plan-manager
 -> selected implementation or planning skill
 ```
 
-Do not insert `goal-planner` into lightweight workflows unless the task escalates.
+Do not insert `goal-planner` or `execution-plan-manager` into lightweight
+workflows unless the task escalates.
 
 ## Figma Boundary
 
