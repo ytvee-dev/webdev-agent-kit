@@ -24,6 +24,7 @@ related:
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
     - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
+    - '[[skills/greenfield-project-builder/SKILL|Greenfield Project Builder]]'
 depends_on: []
 ---
 
@@ -47,8 +48,10 @@ workflow:
 3. Define a design direction when visual judgment is needed.
 4. Plan frontend architecture when structure, ownership, routing, state, data,
    styling, forms, build, or workspace boundaries matter.
-5. Implement the spec in the current frontend project.
-6. Verify the rendered result with browser screenshots and visual QA.
+5. Plan greenfield frontend projects safely before any scaffold when the task is
+   a new app or empty repository.
+6. Implement the spec in the current frontend project.
+7. Verify the rendered result with browser screenshots and visual QA.
 
 ## Bundle Model
 
@@ -88,6 +91,7 @@ Classify every task as one or more of:
 - `design-direction`
 - `frontend-layout`
 - `frontend-architecture`
+- `greenfield-project`
 - `visual-qa`
 - `project-onboarding`
 - `project-context-refresh`
@@ -155,10 +159,14 @@ spend tokens on the context needed for correctness, not on blanket scanning.
 - Standard or deep frontend work that needs architecture planning, ownership
   boundaries, routing/state/data/styling/form/build decisions, migration risk
   assessment, or implementation handoff -> `frontend-architecture-planner`
+- Deep frontend work that starts a new project, plans an empty repository, or
+  defines the first vertical slice from a product idea before any scaffold ->
+  `greenfield-project-builder`
 - Screenshot or copied visual inspect material to implementation spec ->
   `design-screenshot-spec`
 - Frontend implementation from a `Design Implementation Spec`, Design Direction
-  Contract, or Frontend Architecture Plan -> `frontend-layout-implementer`
+  Contract, Frontend Architecture Plan, or Greenfield Project Plan ->
+  `frontend-layout-implementer`
 - Rendered UI verification, browser screenshots, and visual diff review ->
   `frontend-visual-qa`
 - Project onboarding, root pointer creation, stack detection, docs/MCP
@@ -178,6 +186,16 @@ design-screenshot-spec
 -> frontend-visual-qa
 ```
 
+For new or empty frontend projects, use the greenfield flow before any scaffold:
+
+```text
+goal-planner
+-> execution-plan-manager
+-> greenfield-project-builder
+-> frontend-architecture-planner when architecture boundaries need deeper planning
+-> project-onboarding-adapter for pointer and local-only overlays
+```
+
 For standard or deep work, create the goal contract and execution plan before
 implementation when both are needed:
 
@@ -192,9 +210,10 @@ affects the current slice or the user asks for MCP/tool setup, audit, or
 troubleshooting. Do not use it as a mandatory step for every task.
 
 Do not insert `goal-planner`, `execution-plan-manager`,
-`mcp-toolchain-manager`, `frontend-design-director`, or
-`frontend-architecture-planner` into lightweight workflows unless the task
-escalates or the user directly asks for that concern.
+`mcp-toolchain-manager`, `frontend-design-director`,
+`frontend-architecture-planner`, or `greenfield-project-builder` into
+lightweight workflows unless the task escalates or the user directly asks for
+that concern.
 
 ## Figma Boundary
 
