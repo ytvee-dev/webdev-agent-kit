@@ -16,6 +16,7 @@ This directory captures the proposed architecture for turning `webdev-assistant`
 - `PROMPT_INTENT_ROUTING.md` - prompt intent and task scale gate that prevents small prompts from triggering heavy planning.
 - `CODEX_CLAUDE_COMPATIBILITY.md` - cross-agent compatibility plan for Codex and Claude Code targets.
 - `README_RUNTIME_BOUNDARY.md` - rule that repository README files are human-facing only and must not participate in agent runtime flow.
+- `LINT_POLICY_NOTE.md` - rule that code-changing tasks must run the smallest relevant existing lint command and that linter setup is approval-gated.
 
 ## Non-Goals For This Draft
 
