@@ -6,6 +6,10 @@
 /dist/
 /dist/**
 
+# Removed internal notes. Keep installable pack source-first.
+/docs/
+/docs/**
+
 # Local helper checkout state. Never publish old helper sync trees.
 /upstream/
 /upstream/**
