@@ -1,0 +1,20 @@
+interface:
+    display_name: 'Frontend Design Director'
+    short_description: 'Define frontend visual direction'
+    default_prompt: 'Use $frontend-design-director to define a subject-grounded visual direction, anti-template checks, and visual acceptance criteria before UI implementation.'
+policy:
+    allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'filesystem_server'
+          description: 'Read relevant project overlays and write design direction artifacts only when durable handoff is needed.'
+        - type: 'mcp'
+          value: 'mdn'
+          description: 'Check CSS, accessibility, browser behavior, and motion constraints when needed.'
+        - type: 'mcp'
+          value: 'context7'
+          description: 'Fetch current framework or styling documentation when project-specific UI constraints depend on framework behavior.'
+        - type: 'mcp'
+          value: 'playwright'
+          description: 'Capture rendered UI screenshots only when critiquing or repairing an existing UI.'
