@@ -18,6 +18,9 @@ parent:
 related:
     - '[[skills/frontend-layout-implementer/references/implementation-rules|Implementation Rules]]'
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
+    - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
+    - '[[skills/frontend-linter-manager/SKILL|Frontend Linter Manager]]'
+    - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
     - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
 depends_on:
@@ -94,18 +97,27 @@ commands.
    assets, and styles.
 4. Identify missing design details before editing. Ask only when the gap changes
    implementation.
-5. Implement the smallest scoped change that satisfies the spec.
-6. Keep state local unless the existing project architecture requires shared
+5. Use `frontend-architecture-planner` before editing when route, state, data,
+   form, build, workspace, or shared component ownership is unclear or material
+   to the implementation.
+6. Implement the smallest scoped change that satisfies the spec, design
+   direction, and architecture handoff.
+7. Keep state local unless the existing project architecture requires shared
    ownership.
-7. Do not add dependencies, global tokens, or new styling systems without
+8. Do not add dependencies, global tokens, or new styling systems without
    explicit approval.
-8. Preserve accessibility, semantic structure, keyboard/focus behavior, text
+9. Preserve accessibility, semantic structure, keyboard/focus behavior, text
    wrapping, and responsive behavior.
-9. Run relevant project verification commands from `project/verification-profile.md`.
-10. Run `frontend-visual-qa` after scoped rendered frontend changes, using
+10. Use `frontend-linter-manager` after code-changing work when a lint command
+    exists.
+11. Run relevant project verification commands from `project/verification-profile.md`.
+12. Run `frontend-visual-qa` after scoped rendered frontend changes, using
     available Playwright MCP automatically when the local app can be started or
     reused.
-11. Skip browser visual QA only for documentation-only or static-only tasks,
+13. Use `frontend-quality-reviewer` before final reporting when the user asks
+    for review, the implementation has significant surface area, or the plan
+    requires a quality pass.
+14. Skip browser visual QA only for documentation-only or static-only tasks,
     changes with no rendered surface, blocked local app startup, unavailable
     Playwright/browser tooling, or an explicit user request to skip browser
     checks.
@@ -129,6 +141,10 @@ Report:
   without approval.
 - Rendered frontend changes must include browser visual QA unless one of the
   documented workflow blockers applies.
+- Code-changing implementation must run lint when an existing lint command is
+  available.
+- Significant implementation must run or explicitly defer
+  `frontend-quality-reviewer` when review is requested or appropriate.
 
 ## Trigger Evals
 
@@ -147,3 +163,7 @@ Should not trigger:
 ## Reference Map
 
 - `references/implementation-rules.md`
+- `skills/frontend-architecture-planner/SKILL.md`
+- `skills/frontend-linter-manager/SKILL.md`
+- `skills/frontend-quality-reviewer/SKILL.md`
+- `skills/frontend-visual-qa/SKILL.md`

@@ -16,7 +16,10 @@ tags:
 parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
+    - '[[common/agent-operating-model|Agent Operating Model]]'
+    - '[[common/goal-contract|Goal Contract]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
+    - '[[templates/goal-contract|Goal Contract Template]]'
     - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
 depends_on:
@@ -64,10 +67,11 @@ If a lightweight task reveals hidden scope, escalate first using `common/prompt-
 
 1. Read `AGENTS.md`.
 2. Read `common/prompt-intent-routing-rules.md` when task scale is not obvious.
-3. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
-4. Read only project overlays that are needed to understand the goal boundary, such as `project/stack-profile.md`, `project/architecture-map.md`, or `project/design-reference-profile.md`.
-5. Read affected source files only when the goal cannot be stated without them.
-6. Do not read `SUMMARY.md` unless the task explicitly edits, audits, or summarizes it.
+3. Read `common/goal-contract.md`.
+4. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
+5. Read only project overlays that are needed to understand the goal boundary, such as `project/stack-profile.md`, `project/architecture-map.md`, or `project/design-reference-profile.md`.
+6. Read affected source files only when the goal cannot be stated without them.
+7. Do not read `SUMMARY.md` unless the task explicitly edits, audits, or summarizes it.
 
 ## Tool Contract
 
@@ -167,4 +171,6 @@ Should not trigger:
 
 - `AGENTS.md` - canonical policy, routing, tool rules, and documentation rules.
 - `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation/de-escalation rules.
+- `common/goal-contract.md` - reusable goal contract rules.
+- `templates/goal-contract.md` - durable goal contract template.
 - `project/active-goals.md` - optional local-only durable goal contract for deep work.

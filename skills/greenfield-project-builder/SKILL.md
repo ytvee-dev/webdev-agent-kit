@@ -17,6 +17,9 @@ parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
+    - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
+    - '[[common/build-tool-boundary-rules|Build Tool Boundary Rules]]'
+    - '[[common/frontend-integration-boundaries|Frontend Integration Boundaries]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
     - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
@@ -71,15 +74,17 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
 1. Read `AGENTS.md`.
 2. Read `common/prompt-intent-routing-rules.md`.
 3. Confirm the task is `Deep Workflow`.
-4. Read the compact goal contract or `project/active-goals.md` when present.
-5. Read the compact execution plan or `project/active-plan.md` when present.
-6. Read existing project overlays only when this is a new app inside a larger existing workspace:
+4. Read `common/framework-adaptation-policy.md` and
+   `common/build-tool-boundary-rules.md`.
+5. Read the compact goal contract or `project/active-goals.md` when present.
+6. Read the compact execution plan or `project/active-plan.md` when present.
+7. Read existing project overlays only when this is a new app inside a larger existing workspace:
    - `project/stack-profile.md`;
    - `project/architecture-map.md`;
    - `project/build-profile.md` when present;
    - `project/workspace-profile.md` when present;
    - `project/verification-profile.md` when present.
-7. Do not read `README.md` or `SUMMARY.md` during normal runtime.
+8. Do not read `README.md` or `SUMMARY.md` during normal runtime.
 
 ## Tool Contract
 
@@ -206,6 +211,9 @@ Should not trigger:
 
 - `AGENTS.md` - canonical policy, routing, tool rules, and documentation rules.
 - `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation rules.
+- `common/framework-adaptation-policy.md` - intended stack adaptation rules.
+- `common/build-tool-boundary-rules.md` - build and workspace approval gates.
+- `common/frontend-integration-boundaries.md` - frontend integration scope limits.
 - `skills/goal-planner/SKILL.md` - product goal contract.
 - `skills/execution-plan-manager/SKILL.md` - task slicing and stop/resume planning.
 - `skills/frontend-architecture-planner/SKILL.md` - architecture boundary planning.

@@ -1,0 +1,33 @@
+{
+  "name": "webdev-assistant",
+  "version": "0.1.0",
+  "description": "Codex-first frontend skill pack for screenshot-to-code, planning, architecture, bugfixing, refactoring, review, and visual QA.",
+  "skills": [
+    "goal-planner",
+    "execution-plan-manager",
+    "mcp-toolchain-manager",
+    "frontend-design-director",
+    "frontend-architecture-planner",
+    "greenfield-project-builder",
+    "frontend-bugfix-debugger",
+    "frontend-refactor-surgeon",
+    "frontend-quality-reviewer",
+    "frontend-linter-manager",
+    "design-screenshot-spec",
+    "frontend-layout-implementer",
+    "frontend-visual-qa",
+    "project-onboarding-adapter",
+    "project-context-adapter",
+    "agent-rules-skill-author"
+  ],
+  "targets": {
+    "codex": "dist/codex",
+    "claude": "dist/claude"
+  },
+  "excludes": [
+    "project/**",
+    ".obsidian/**",
+    "node_modules/**"
+  ]
+}
+

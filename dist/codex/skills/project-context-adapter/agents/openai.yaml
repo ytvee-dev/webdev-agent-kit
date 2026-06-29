@@ -1,0 +1,17 @@
+interface:
+    display_name: 'Project Context Adapter'
+    short_description: 'Refresh project context cache'
+    default_prompt: 'Use $project-context-adapter to refresh project overlays, frontend path indexes, docs/MCP choices, and local context cache.'
+policy:
+    allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'filesystem_server'
+          description: 'Read local project files, skill metadata, and existing project overlay facts.'
+        - type: 'mcp'
+          value: 'context7'
+          description: 'Refresh current official framework, library, CLI, and tooling documentation choices when project stack facts change.'
+        - type: 'mcp'
+          value: 'mdn'
+          description: 'Refresh official web platform documentation choices when HTML, CSS, Web API, accessibility, or compatibility facts change.'

@@ -1,0 +1,15 @@
+interface:
+    display_name: 'Frontend Visual QA'
+    short_description: 'Verify rendered UI against visual specs'
+    default_prompt: 'Use $frontend-visual-qa to verify rendered UI against a Design Implementation Spec and supplied screenshots.'
+policy:
+    allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'playwright'
+          description: 'Open local pages, inspect runtime state, resize viewports, and capture screenshots.'
+        - type: 'mcp'
+          value: 'mdn'
+          description: 'Verify web platform behavior when visual QA depends on browser semantics.'
+

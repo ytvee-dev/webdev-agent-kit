@@ -1,0 +1,17 @@
+interface:
+    display_name: 'Frontend Architecture Planner'
+    short_description: 'Plan frontend architecture'
+    default_prompt: 'Use $frontend-architecture-planner to plan frontend ownership boundaries, routing, state, data, styling, forms, build/workspace concerns, approval gates, and implementation handoff before code changes.'
+policy:
+    allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'filesystem_server'
+          description: 'Read relevant project overlays and affected source files for architecture planning without changing application code.'
+        - type: 'mcp'
+          value: 'context7'
+          description: 'Fetch current official framework or library documentation when architecture depends on framework behavior.'
+        - type: 'mcp'
+          value: 'mdn'
+          description: 'Check web platform, accessibility, forms, CSS, and browser behavior constraints when they affect architecture.'

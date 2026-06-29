@@ -18,6 +18,7 @@ parent:
 related:
     - '[[skills/frontend-visual-qa/references/visual-qa-checklist|Visual QA Checklist]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
+    - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
 ---
@@ -89,6 +90,9 @@ and visual diff review.
    and interaction states when provided by the spec.
 9. Fix scoped implementation issues only when the user asked for fixes or the
    task is part of implementation; otherwise report findings.
+10. Hand off material quality, architecture, TypeScript, security, or
+    performance concerns to `frontend-quality-reviewer` instead of treating
+    visual QA as a broad code review.
 
 ## Output Contract
 
@@ -108,6 +112,7 @@ Report:
 - When Playwright MCP is callable, proposing Playwright checks or reporting a
   handoff is not a completed visual QA pass; run the rendered checks.
 - Static typecheck, lint, or build alone is not visual QA.
+- Rendered verification is QA evidence, not a testing workflow.
 - Material visual mismatches must be reported with the affected viewport or
   state.
 - No Figma MCP use is allowed.

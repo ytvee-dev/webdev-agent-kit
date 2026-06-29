@@ -17,6 +17,7 @@ parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
     - '[[skills/design-screenshot-spec/references/spec-extraction-checklist|Spec Extraction Checklist]]'
+    - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
 depends_on:
@@ -93,7 +94,11 @@ frontend implementer.
    layout, responsive behavior, visual hierarchy, typography, or implementation
    acceptance.
 10. Produce the `Design Implementation Spec` and stop unless the user also asks
-   for implementation.
+    for implementation.
+11. Route to `frontend-design-director` before implementation when the supplied
+    material needs redesign, polish, distinctive visual direction, anti-template
+    critique, interface-copy stance, motion stance, or visual acceptance
+    criteria.
 
 ## Output Contract
 
@@ -129,6 +134,8 @@ Return a `Design Implementation Spec` with these sections:
   the user or listed as unresolved questions.
 - The spec must be usable by `frontend-layout-implementer` without guessing the
   target layout intent.
+- When visual judgment is needed, the handoff must name
+  `frontend-design-director` before implementation.
 - The response must not mention using Figma MCP or live Figma inspection.
 
 ## Trigger Evals
@@ -148,3 +155,4 @@ Should not trigger:
 ## Reference Map
 
 - `references/spec-extraction-checklist.md`
+- `skills/frontend-design-director/SKILL.md`

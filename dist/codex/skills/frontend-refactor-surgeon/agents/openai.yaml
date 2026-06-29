@@ -1,0 +1,7 @@
+interface:
+  display_name: "Frontend Refactor Surgeon"
+  short_description: "Behavior-preserving frontend refactors"
+  default_prompt: "Use $frontend-refactor-surgeon to refactor this frontend code safely."
+
+policy:
+  allow_implicit_invocation: true

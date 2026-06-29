@@ -17,6 +17,13 @@ parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
+    - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
+    - '[[common/state-ownership-rules|State Ownership Rules]]'
+    - '[[common/routing-boundary-rules|Routing Boundary Rules]]'
+    - '[[common/data-fetching-boundary-rules|Data Fetching Boundary Rules]]'
+    - '[[common/form-boundary-rules|Form Boundary Rules]]'
+    - '[[common/build-tool-boundary-rules|Build Tool Boundary Rules]]'
+    - '[[common/frontend-integration-boundaries|Frontend Integration Boundaries]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
@@ -75,7 +82,15 @@ Do not use this skill as a required step for every frontend implementation. Use 
 2. Read `common/prompt-intent-routing-rules.md` when workflow level is unclear.
 3. Read the compact goal contract or `project/active-goals.md` when present.
 4. Read the compact execution plan or `project/active-plan.md` when present.
-5. Read only relevant project overlays:
+5. Read common boundary rules relevant to the task:
+   - `common/framework-adaptation-policy.md`;
+   - `common/state-ownership-rules.md` for state ownership;
+   - `common/routing-boundary-rules.md` for routing;
+   - `common/data-fetching-boundary-rules.md` for data fetching;
+   - `common/form-boundary-rules.md` for forms;
+   - `common/build-tool-boundary-rules.md` for build or workspace concerns;
+   - `common/frontend-integration-boundaries.md` for auth/data/provider integration.
+6. Read only relevant project overlays:
    - `project/stack-profile.md`;
    - `project/architecture-map.md`;
    - `project/styling-profile.md`;
@@ -85,8 +100,8 @@ Do not use this skill as a required step for every frontend implementation. Use 
    - `project/workspace-profile.md` when present;
    - `project/state-management-profile.md` when present;
    - `project/data-fetching-profile.md` when present.
-6. Read affected source files only when architectural boundaries cannot be planned from overlays.
-7. Do not read `README.md` or `SUMMARY.md` during normal runtime.
+7. Read affected source files only when architectural boundaries cannot be planned from overlays.
+8. Do not read `README.md` or `SUMMARY.md` during normal runtime.
 
 ## Tool Contract
 
@@ -225,6 +240,13 @@ Should not trigger:
 
 - `AGENTS.md` - canonical policy, routing, tool rules, and documentation rules.
 - `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation rules.
+- `common/framework-adaptation-policy.md` - framework adaptation boundaries.
+- `common/state-ownership-rules.md` - state ownership defaults.
+- `common/routing-boundary-rules.md` - route ownership and router boundaries.
+- `common/data-fetching-boundary-rules.md` - frontend data-fetching boundaries.
+- `common/form-boundary-rules.md` - form state and validation boundaries.
+- `common/build-tool-boundary-rules.md` - build and workspace boundaries.
+- `common/frontend-integration-boundaries.md` - auth/data/provider integration boundaries.
 - `skills/goal-planner/SKILL.md` - goal contract for standard or deep work.
 - `skills/execution-plan-manager/SKILL.md` - task slicing and stop/resume planning.
 - `project/architecture-map.md` - local-only current architecture map.

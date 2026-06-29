@@ -17,6 +17,11 @@ parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
+    - '[[common/planning-rules|Planning Rules]]'
+    - '[[common/execution-loops|Execution Loops]]'
+    - '[[common/token-budget-rules|Token Budget Rules]]'
+    - '[[common/checkpoint-rules|Checkpoint Rules]]'
+    - '[[templates/execution-plan|Execution Plan Template]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
@@ -66,11 +71,13 @@ If a lightweight task reveals hidden scope, escalate first using `common/prompt-
 
 1. Read `AGENTS.md`.
 2. Read `common/prompt-intent-routing-rules.md` when task scale is not obvious.
-3. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
-4. Read the current goal contract from the response, user request, or `project/active-goals.md` when present and relevant.
-5. Read only project overlays needed to slice the task safely, such as `project/stack-profile.md`, `project/architecture-map.md`, `project/styling-profile.md`, or `project/verification-profile.md`.
-6. Read affected source files only when slicing cannot be done safely without them.
-7. Do not read `SUMMARY.md` unless the task explicitly edits, audits, or summarizes it.
+3. Read `common/planning-rules.md`.
+4. Read `common/checkpoint-rules.md` when durable stop/resume state is needed.
+5. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
+6. Read the current goal contract from the response, user request, or `project/active-goals.md` when present and relevant.
+7. Read only project overlays needed to slice the task safely, such as `project/stack-profile.md`, `project/architecture-map.md`, `project/styling-profile.md`, or `project/verification-profile.md`.
+8. Read affected source files only when slicing cannot be done safely without them.
+9. Do not read `SUMMARY.md` unless the task explicitly edits, audits, or summarizes it.
 
 ## Tool Contract
 
@@ -201,6 +208,9 @@ Should not trigger:
 
 - `AGENTS.md` - canonical policy, routing, tool rules, and documentation rules.
 - `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation/de-escalation rules.
+- `common/planning-rules.md` - context budget and task slice rules.
+- `common/checkpoint-rules.md` - stop/resume state rules.
+- `templates/execution-plan.md` - durable execution plan template.
 - `skills/goal-planner/SKILL.md` - goal contract producer for standard or deep work.
 - `project/active-plan.md` - optional local-only durable execution plan for deep or resumable work.
 - `project/progress-log.md` - optional local-only progress log.
