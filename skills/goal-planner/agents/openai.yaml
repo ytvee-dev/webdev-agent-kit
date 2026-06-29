@@ -1,0 +1,11 @@
+interface:
+    display_name: 'Goal Planner'
+    short_description: 'Define frontend task goals'
+    default_prompt: 'Use $goal-planner to define the user goal, scope, constraints, and done criteria for standard or deep frontend work before implementation.'
+policy:
+    allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'filesystem_server'
+          description: 'Read project overlays and write project/active-goals.md only when durable goal tracking is needed.'
