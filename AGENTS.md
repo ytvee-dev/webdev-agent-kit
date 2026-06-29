@@ -17,6 +17,7 @@ related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
+    - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
 depends_on: []
 ---
 
@@ -78,6 +79,7 @@ Classify every task as one or more of:
 - `planning/architecture`
 - `goal-planning`
 - `execution-planning`
+- `mcp-tooling`
 - `brainstorm/conversation`
 - `internet-research`
 - `other`
@@ -129,6 +131,9 @@ the context needed for correctness, not on blanket scanning.
 - Standard or deep frontend work that needs task slices, context budget,
   checkpoint rules, or stop/resume state after the goal is defined ->
   `execution-plan-manager`
+- MCP/tool capability detection, missing-tool reporting, official install
+  source verification, approval-gated installation planning, or
+  `project/mcp-profile.md` updates -> `mcp-toolchain-manager`
 - Screenshot or copied visual inspect material to implementation spec ->
   `design-screenshot-spec`
 - Frontend implementation from a `Design Implementation Spec` ->
@@ -159,8 +164,13 @@ goal-planner
 -> selected implementation or planning skill
 ```
 
-Do not insert `goal-planner` or `execution-plan-manager` into lightweight
-workflows unless the task escalates.
+Use `mcp-toolchain-manager` before a selected skill only when tool capability
+affects the current slice or the user asks for MCP/tool setup, audit, or
+troubleshooting. Do not use it as a mandatory step for every task.
+
+Do not insert `goal-planner`, `execution-plan-manager`, or
+`mcp-toolchain-manager` into lightweight workflows unless the task escalates or
+the user directly asks about MCP/tooling.
 
 ## Figma Boundary
 
