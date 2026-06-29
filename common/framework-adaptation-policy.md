@@ -13,23 +13,20 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/framework-source-map|Framework Source Map]]'
+    - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
 depends_on: []
 ---
 
 # Framework Adaptation Policy
 
-Purpose: adapt frontend work to the detected framework without turning the
-bundle into stack-specific dependency automation.
+Purpose: adapt frontend work to React, Next.js, CSS Modules, Redux, TanStack, and Axios without turning the bundle into a generic framework pack.
 
 ## Rules
 
-- Detect the actual framework, router, package manager, build tool, and styling
-  system before applying framework guidance.
-- Prefer local project conventions and overlays before generic framework docs.
-- Use official docs or configured docs MCP when current framework behavior
-  affects correctness.
-- Load only the reference needed for the detected stack.
-- Do not introduce a framework migration, package install, UI library, or
-  testing workflow by default.
-
+- Detect whether the project is within the target stack before applying guidance.
+- Prefer local project conventions and overlays before generic documentation.
+- Use official docs or configured docs MCP when current target-stack behavior affects correctness.
+- Load only the reference needed for the detected target-stack area.
+- Report unsupported scope instead of adapting to unrelated frameworks.
+- Do not introduce a framework migration, package install, UI library, styling system, or test workflow by default.
