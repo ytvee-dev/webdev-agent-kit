@@ -95,13 +95,16 @@ skills or common docs.
 - `skills/frontend-architecture-planner` - plan frontend architecture,
   ownership boundaries, routing, state, data, styling, forms, build/workspace
   concerns, approval gates, and implementation handoff before code changes.
+- `skills/greenfield-project-builder` - plan new or empty frontend projects,
+  first vertical slice, stack assumptions, approval gates, and onboarding
+  handoff before any scaffold or package installation.
 - `skills/design-screenshot-spec` - analyze user-supplied Figma screenshots,
   copied inspect panels, assets, and notes, then produce a strict
   `Design Implementation Spec`.
 - `skills/frontend-layout-implementer` - implement a `Design Implementation
-  Spec`, Design Direction Contract, or Frontend Architecture Plan in the current
-  frontend project while adapting to the actual stack and project architecture,
-  then run rendered visual QA when applicable.
+  Spec`, Design Direction Contract, Frontend Architecture Plan, or Greenfield
+  Project Plan in the current frontend project while adapting to the actual
+  stack and project architecture, then run rendered visual QA when applicable.
 - `skills/frontend-visual-qa` - verify rendered UI against the design spec and
   visual references with automatic available Playwright MCP browser checks,
   screenshots, viewport checks, and visual diff review.
@@ -129,6 +132,16 @@ design-screenshot-spec
 The user supplies screenshots, copied visual inspect panels, exported assets,
 or notes. The agent must not use Figma MCP or inspect live Figma files.
 
+For new or empty frontend projects, use:
+
+```text
+goal-planner
+-> execution-plan-manager
+-> greenfield-project-builder
+-> frontend-architecture-planner when architecture boundaries need deeper planning
+-> project-onboarding-adapter for pointer and local-only overlays
+```
+
 For standard or deep work that needs goal clarity and task slicing before
 implementation, use:
 
@@ -142,9 +155,10 @@ Use `mcp-toolchain-manager` only when tool capability affects the current slice
 or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
 
 Do not insert `goal-planner`, `execution-plan-manager`,
-`mcp-toolchain-manager`, `frontend-design-director`, or
-`frontend-architecture-planner` into lightweight workflows unless the task
-escalates or the user directly asks for that concern.
+`mcp-toolchain-manager`, `frontend-design-director`,
+`frontend-architecture-planner`, or `greenfield-project-builder` into
+lightweight workflows unless the task escalates or the user directly asks for
+that concern.
 
 ## Templates
 
@@ -191,5 +205,5 @@ inspection proves the task is larger than it first appeared.
   dependencies and cache required, available, missing, optional, approved,
   installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
 - Install missing MCP servers only after explicit user approval and verified
-  official install source.
+  official source.
 - Never use Figma MCP or Figma whiteboard tooling in this bundle.
