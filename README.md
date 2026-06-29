@@ -30,15 +30,18 @@ editing, Figma file creation, design-system generation, or Code Connect.
 
 ```text
 design-screenshot-spec
+-> frontend-design-director when visual judgment is needed
 -> frontend-layout-implementer
 -> frontend-visual-qa
 ```
 
 1. `design-screenshot-spec` reads supplied screenshots, inspect panels, assets,
    and notes, then produces a `Design Implementation Spec`.
-2. `frontend-layout-implementer` implements that spec in the current frontend
-   project using project context and the actual stack.
-3. `frontend-visual-qa` verifies the rendered UI with browser screenshots,
+2. `frontend-design-director` defines subject-grounded visual direction when the
+   task needs redesign, polish, distinctive UI, or anti-template critique.
+3. `frontend-layout-implementer` implements that spec or design direction in the
+   current frontend project using project context and the actual stack.
+4. `frontend-visual-qa` verifies the rendered UI with browser screenshots,
    viewport checks, console/runtime review, and visual diff review. When
    Playwright MCP is available, Codex runs those browser checks automatically
    after implementation without asking for separate confirmation.
@@ -55,9 +58,9 @@ goal-planner
 Use `mcp-toolchain-manager` only when tool capability affects the current slice
 or the user asks for MCP/tool setup, audit, validation, or troubleshooting.
 
-Do not insert `goal-planner`, `execution-plan-manager`, or
-`mcp-toolchain-manager` into lightweight workflows unless the task escalates or
-the user directly asks about MCP/tooling.
+Do not insert `goal-planner`, `execution-plan-manager`,
+`mcp-toolchain-manager`, or `frontend-design-director` into lightweight
+workflows unless the task escalates or the user directly asks for that concern.
 
 ## Prompt Intent Routing
 
@@ -120,6 +123,14 @@ Use this skill when frontend work needs MCP/tool capability detection,
 missing-tool reporting, official install source verification, approval-gated
 installation planning, or `project/mcp-profile.md` updates. It must not install
 tools, run package installs, or change configs without explicit user approval.
+
+### `frontend-design-director`
+
+Use this skill for standard or deep UI work that needs subject-grounded visual
+direction, redesign, visual polish, design critique, anti-template checks,
+interface-copy stance, motion stance, or visual acceptance criteria before
+implementation. It must not run for purely technical micro-fixes or isolated
+code edits.
 
 ### `design-screenshot-spec`
 
@@ -187,6 +198,25 @@ project facts change.
 Use this skill to create, evaluate, or edit `.agents` skills, rules, metadata,
 and graph links.
 
+## Design Intelligence Layer
+
+The design layer includes:
+
+```text
+skills/frontend-design-director
+common/design-quality-rubric.md
+common/anti-template-defaults.md
+common/interface-copy-rules.md
+common/motion-rules.md
+templates/design-direction-contract.md
+templates/visual-memory.md
+```
+
+It exists to prevent generic AI UI and to create a concrete design contract
+before implementation when visual judgment is needed. It must not introduce UI
+component libraries, testing workflows, animation libraries, or unapproved
+packages.
+
 ## Path Model
 
 Paths inside this bundle are bundle-local:
@@ -197,6 +227,7 @@ SUMMARY.md
 README.md
 common/**
 skills/**
+templates/**
 project/**
 ```
 
@@ -218,6 +249,7 @@ SUMMARY.md
 README.md
 common/**
 skills/**
+templates/**
 .gitignore
 ```
 
@@ -240,6 +272,7 @@ project/approved-patterns.md
 project/anti-patterns.md
 project/mcp-profile.md
 project/design-reference-profile.md
+project/visual-memory.md
 project/react/path-index.md
 project/next/path-index.md
 ```
@@ -248,7 +281,8 @@ project/next/path-index.md
 approved, installed, skipped, or blocked MCP capabilities for the current
 skills. `project/design-reference-profile.md` caches screenshot, exported
 asset, copied inspect, and design-reference boundaries without implying live
-design-tool access.
+design-tool access. `project/visual-memory.md` is local-only and must be copied
+from `templates/visual-memory.md` only when durable visual memory is useful.
 
 ## Prohibited Workflows
 
@@ -261,8 +295,9 @@ design-tool access.
   verified official install source.
 - Do not scaffold app source files during new-project onboarding.
 - Do not implement before a design spec exists.
-- Do not add packages, styling systems, global tokens, or architecture layers
-  without explicit approval.
+- Do not add packages, styling systems, UI component libraries, animation
+  libraries, global tokens, or architecture layers without explicit approval.
+- Do not create testing workflows or testing skills.
 - Do not interact with production systems or production data.
 
 ## Skill Authoring Standard
