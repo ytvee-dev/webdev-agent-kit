@@ -43,14 +43,17 @@ design-screenshot-spec
    Playwright MCP is available, Codex runs those browser checks automatically
    after implementation without asking for separate confirmation.
 
-For standard or deep work that needs a clear goal before implementation, use:
+For standard or deep work that needs goal clarity and task slicing before
+implementation, use:
 
 ```text
 goal-planner
+-> execution-plan-manager
 -> selected implementation or planning skill
 ```
 
-Do not insert `goal-planner` into lightweight workflows unless the task escalates.
+Do not insert `goal-planner` or `execution-plan-manager` into lightweight
+workflows unless the task escalates.
 
 ## Prompt Intent Routing
 
@@ -99,6 +102,13 @@ Use this skill for standard or deep frontend work that needs a clear user goal,
 scope, constraints, and done criteria before implementation. It must not run for
 micro-fixes, obvious type errors, tiny styling changes, isolated component
 edits, or direct file-scope changes unless the task escalates.
+
+### `execution-plan-manager`
+
+Use this skill after the goal is defined for standard or deep frontend work that
+needs task slices, context budget, checkpoint rules, or stop/resume state. It
+must not run for lightweight micro-fixes or isolated direct edits unless the task
+escalates.
 
 ### `design-screenshot-spec`
 
