@@ -67,7 +67,7 @@ Do not read `README.md` or `dist/**` during normal runtime.
 - Use Visual Reference MCP when available; otherwise use attached or local image files supplied by the user.
 - Use `context7` for React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool docs when implementation depends on current behavior.
 - Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility facts.
-- Use available Playwright MCP for rendered verification after implementation without asking the user for separate confirmation when the local app can be used.
+- Use rendered visual QA only when screenshot comparison, viewport evidence, overflow checks, or visible interaction states are in scope.
 - Use Visual Diff MCP when available during final visual comparison.
 - Do not use Figma MCP.
 - If a named MCP is unavailable, report the missing capability before using a lower-confidence fallback.
@@ -90,7 +90,7 @@ Do not read `README.md` or `dist/**` during normal runtime.
 14. Preserve accessibility, semantic structure, keyboard/focus behavior, text wrapping, and responsive behavior.
 15. Use `frontend-linter-manager` after code-changing work when a lint command exists.
 16. Run relevant project verification commands from `project/verification-profile.md`.
-17. Run `frontend-visual-qa` after scoped rendered frontend changes when browser tooling and a local app are available.
+17. Run `frontend-visual-qa` only when the change needs rendered screenshot comparison, viewport evidence, overflow verification, or visible state verification.
 18. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, or the plan requires a quality pass.
 
 ## Output Contract
@@ -103,7 +103,7 @@ Report:
 - CSS Modules, Redux, TanStack, Axios, or project primitives reused;
 - deviations from the design spec;
 - lint and verification commands run;
-- rendered visual QA result or blocker.
+- rendered visual QA result, skipped reason, or blocker.
 
 ## Validation Gates
 
@@ -112,7 +112,7 @@ Report:
 - Changed UI must respect component decomposition rules regardless of framework or library.
 - No Figma MCP use is allowed.
 - No new package, styling system, global token, architecture layer, or UI library may appear without approval.
-- Rendered frontend changes must include browser visual QA unless a documented blocker applies.
+- Rendered visual QA is required only when screenshot comparison, viewport evidence, overflow checks, or visible interaction states are in scope; otherwise report why it was skipped.
 - Code-changing implementation must run lint when an existing lint command is available.
 
 ## Trigger Evals
