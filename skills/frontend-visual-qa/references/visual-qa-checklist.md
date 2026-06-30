@@ -14,6 +14,7 @@ tags:
 parent:
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
 related:
+    - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
 depends_on:
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
@@ -21,31 +22,42 @@ depends_on:
 
 # Visual QA Checklist
 
-## Browser Checks
+## Use Rendered Browser Evidence For
 
-- Page or route loads without blocking runtime errors.
-- Console has no unexpected errors or hydration/render failures.
+- Page or route loads without blocking runtime errors when visual QA is in scope.
 - Primary content is visible above the fold at required viewports.
 - Layout does not overflow horizontally.
-- Text fits containers and wraps acceptably.
+- Text wraps acceptably as visible layout behavior.
 - Fixed headers, sidebars, modals, and toolbars do not occlude content.
+- Desktop, tablet, and mobile layout match supplied references when those viewports are in scope.
+- Hover, focus, active, selected, disabled, loading, empty, and error states visibly match the spec when supplied.
 
-## Viewport Checks
+## Do Not Use Rendered Browser Evidence For
 
-- Desktop: verify spacing, hierarchy, and multi-column layout.
-- Tablet: verify reflow and intermediate widths when supplied by the spec.
-- Mobile: verify stacking, tap targets, text wrapping, and viewport fit.
+- Reading font family, size, weight, line height, color, spacing, CSS variables, or token values when source files or copied inspect values are available.
+- Checking typography by computed styles only.
+- Replacing lint, typecheck, build, or static review.
+- Project onboarding, stack detection, or MCP availability detection.
+
+## Static Style Source Order
+
+For font, color, spacing, and token questions, inspect in this order:
+
+1. Design Implementation Spec or copied inspect values.
+2. Local CSS, module styles, tokens, variables, and component files.
+3. Project style overlays when present.
+4. MDN or official docs when browser behavior affects interpretation.
+
+Use Browser or Playwright only if the typography, spacing, or color issue is part of a broader visible mismatch that source inspection cannot answer.
 
 ## Visual Comparison
 
-- Compare layout structure, alignment, spacing rhythm, typography hierarchy,
-  colors, borders, radii, shadows, assets, and states.
+- Compare layout structure, alignment, spacing rhythm, typography hierarchy, colors, borders, radii, shadows, assets, and states from screenshots or visual references.
 - Record each material mismatch with viewport and visible evidence.
 - Distinguish approved project-native deviations from accidental mismatches.
 
-## Interaction Checks
+## Availability Check
 
-- Hover, focus, active, selected, disabled, loading, empty, and error states
-  match the spec when supplied.
-- Keyboard focus remains visible for interactive controls in scope.
-
+- Browser or Playwright MCP must be callable in the current agent session before reporting rendered browser QA.
+- A running local app or installed Playwright dependency is not enough to claim Browser or Playwright MCP availability.
+- When the tool is unavailable, report blocked rendered checks and continue only with honest static or manual checks.
