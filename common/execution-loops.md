@@ -1,6 +1,6 @@
 ---
 id: 'agents.common.execution-loops'
-title: 'Execution Loops'
+title: 'Execution Feedback Cycles'
 doc_type: 'common-rule'
 layer: 'common'
 status: 'active'
@@ -13,16 +13,18 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/checkpoint-rules|Checkpoint Rules]]'
+    - '[[common/feedback-cycle-policy|Feedback Cycle Policy]]'
     - '[[templates/progress-log|Progress Log Template]]'
 depends_on: []
 ---
 
-# Execution Loops
+# Execution Feedback Cycles
 
-Purpose: keep implementation, debugging, refactoring, review, and verification
-work in short loops with clear evidence.
+Purpose: keep implementation, debugging, refactoring, review, and verification work in short evidence-based feedback cycles.
 
-## Standard Loop
+These are workflow cycles only. They never authorize iterative constructs in host project code.
+
+## Standard Cycle
 
 1. Confirm the slice goal.
 2. Inspect only required context.
@@ -31,7 +33,7 @@ work in short loops with clear evidence.
 5. Fix issues caused by the change.
 6. Update progress or report evidence.
 
-## Debug Loop
+## Debug Cycle
 
 1. Record the symptom and reproduction path.
 2. Form one hypothesis.
@@ -39,11 +41,10 @@ work in short loops with clear evidence.
 4. Apply the smallest fix.
 5. Re-run the failing check or reproduce the behavior.
 
-## Refactor Loop
+## Refactor Cycle
 
 1. Define the behavior boundary.
 2. Identify safe mechanical steps.
 3. Change one boundary at a time.
 4. Run the same verification after each meaningful step.
 5. Stop if behavior changes without approval.
-

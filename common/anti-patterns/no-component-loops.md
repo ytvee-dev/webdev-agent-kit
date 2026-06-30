@@ -1,6 +1,6 @@
 ---
 id: 'agents.common.anti-patterns.no-component-loops'
-title: 'No Component Loops'
+title: 'No Project Code Loops'
 doc_type: 'anti-pattern-template'
 layer: 'common'
 status: 'active'
@@ -8,52 +8,28 @@ publishable: true
 local_only: false
 tags:
     - 'agents/common'
-    - 'anti-patterns/react'
+    - 'anti-patterns/readability'
 parent:
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
-related: []
+related:
+    - '[[common/frontend-implementation-boundaries|Frontend Implementation Boundaries]]'
 depends_on: []
 ---
 
-# No Component Loops
+# No Project Code Loops
 
 ## Rule
 
-Do not use imperative loops inside React component bodies.
+Do not introduce project-code loops.
 
-## Bad
+This applies to components, routes, state slices, effects, render logic, business orchestration, adapters, selectors, and helpers.
 
-```tsx
-const TagsPanel = ({ tags }: TagsPanelProps) => {
-    const badges = tags.reduce<JSX.Element[]>((items, tag) => {
-        items.push(<TagBadge key={tag.id} tag={tag} />);
-        return items;
-    }, []);
+## Exception
 
-    return <div>{badges}</div>;
-};
-```
+A loop is allowed only inside a small isolated utility when there is no practical alternative.
 
-## Good
-
-```tsx
-const TagsPanel = ({ tags }: TagsPanelProps) => {
-    return <TagsList tags={tags} />;
-};
-```
-
-```tsx
-const TagsList = ({ tags }: TagsListProps) => {
-    return (
-        <div>
-            {tags.map((tag) => (
-                <TagBadge key={tag.id} tag={tag} />
-            ))}
-        </div>
-    );
-};
-```
+The exception must be named, local, small, outside render and orchestration code, and reported in the final response.
 
 ## Apply When
 
-Do not prepare JSX with imperative loops, reducers, manual pushes, or hidden render arrays in component bodies. Use small list components and named data helpers.
+Use this whenever implementation, bugfix, refactor, or review touches collection handling, list rendering, transformations, adapters, selectors, or UI actions.

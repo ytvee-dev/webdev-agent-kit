@@ -8,10 +8,11 @@ publishable: true
 local_only: false
 tags:
     - 'agents/common'
-    - 'anti-patterns/react'
+    - 'anti-patterns/readability'
 parent:
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
-related: []
+related:
+    - '[[common/frontend-implementation-boundaries|Frontend Implementation Boundaries]]'
 depends_on: []
 ---
 
@@ -19,38 +20,10 @@ depends_on: []
 
 ## Rule
 
-Use named components, handlers, and helpers. Do not export anonymous components or hide meaningful logic inside unnamed callbacks.
+Use named components, handlers, callbacks, predicates, mappers, selectors, adapters, formatters, and helpers.
 
-## Bad
-
-```tsx
-export default () => {
-    return <div>Agents</div>;
-};
-```
-
-```tsx
-<button onClick={() => saveAgent(agent.id)}>Save</button>
-```
-
-## Good
-
-```tsx
-const AgentsPage = () => {
-    return <div>Agents</div>;
-};
-
-export default AgentsPage;
-```
-
-```tsx
-const handleSaveAgent = () => {
-    saveAgent(agent.id);
-};
-
-<button onClick={handleSaveAgent}>Save</button>
-```
+Do not export anonymous components. Do not hide meaningful behavior inside unnamed callbacks or inline handlers.
 
 ## Apply When
 
-Name exported components, event handlers, repeated callbacks, and helpers with behavior.
+Name any behavior that affects rendering, state, data preparation, formatting, action selection, navigation, accessibility, or side effects.
