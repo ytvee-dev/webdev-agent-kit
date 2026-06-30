@@ -78,24 +78,28 @@ frontend implementer.
 3. Group screenshots by screen, component, state, and viewport. For each
    screenshot, record the visible frame or viewport width, height, state,
    screen or component ownership, and confidence.
-4. Extract visible layout, hierarchy, typography, color, spacing, sizing,
+4. Treat each screenshot or design-frame size as a reference coordinate system,
+   not as a production container cap. Record whether containment is explicitly
+   visible and capture desktop edge anchors plus expected behavior beyond the
+   reference viewport.
+5. Extract visible layout, hierarchy, typography, color, spacing, sizing,
    radius, shadow, assets, states, and responsive behavior.
-5. For typography, prefer copied inspect values or selected-text properties for
+6. For typography, prefer copied inspect values or selected-text properties for
    `font-family`, `font-size`, `font-weight`, `line-height`, color, alignment,
    max width, and wrapping. When properties are unavailable, estimate from the
    screenshot and mark each estimate as `screenshot-inferred`.
-6. For spacing, separate outside margins, section rhythm, inter-component gaps,
+7. For spacing, separate outside margins, section rhythm, inter-component gaps,
    container padding, and internal control padding instead of merging them into
    one generic gap value.
-7. Mark each value as `source-provided`, `screenshot-inferred`, or `unknown`.
-8. Resolve conflicts by preferring copied inspect values and exported values
+8. Mark each value as `source-provided`, `screenshot-inferred`, or `unknown`.
+9. Resolve conflicts by preferring copied inspect values and exported values
    over screenshot estimates.
-9. Ask the user about disputed or low-confidence values when the answer changes
+10. Ask the user about disputed or low-confidence values when the answer changes
    layout, responsive behavior, visual hierarchy, typography, or implementation
    acceptance.
-10. Produce the `Design Implementation Spec` and stop unless the user also asks
+11. Produce the `Design Implementation Spec` and stop unless the user also asks
     for implementation.
-11. Route to `frontend-design-director` before implementation when the supplied
+12. Route to `frontend-design-director` before implementation when the supplied
     material needs redesign, polish, distinctive visual direction, anti-template
     critique, interface-copy stance, motion stance, or visual acceptance
     criteria.
@@ -128,7 +132,11 @@ Return a `Design Implementation Spec` with these sections:
 - `Typography` must distinguish inspect-provided text properties from inferred
   font family, size, weight, line height, color, alignment, and wrapping.
 - `Responsive Behavior` must include viewport-aware notes based on supplied
-  screenshot widths and must mark inferred intermediate behavior explicitly.
+  screenshot widths, desktop edge anchors, and behavior beyond each reference
+  viewport, and must mark inferred intermediate behavior explicitly.
+- Screenshot or design-frame dimensions must not become runtime `max-width`,
+  fixed container dimensions, or equivalent caps without source evidence of a
+  centered container and an explicit responsive rationale.
 - Missing states, assets, breakpoints, and token names must be explicit.
 - Disputed values that materially affect implementation must be asked back to
   the user or listed as unresolved questions.

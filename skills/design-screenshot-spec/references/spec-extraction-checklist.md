@@ -47,6 +47,10 @@ depends_on:
 
 ## Measurement Discipline
 
+- Treat screenshot and design-frame dimensions as coordinate systems for
+  measurement, not as production `max-width` or fixed container dimensions.
+- Add a runtime container cap only when the source explicitly shows a centered
+  container boundary; record that evidence and its responsive rationale.
 - Record measured or inferred spacing with element pair, axis, value, viewport,
   and confidence.
 - Separate outside margins, section rhythm, inter-component gaps, container
@@ -81,6 +85,11 @@ depends_on:
 - Create a viewport matrix that maps each supplied width to visible layout,
   density, typography scale, content order, hidden elements, and interaction
   state when those details are visible.
+- For every desktop reference, record left, right, top, and bottom edge anchors
+  for major content and media, including which anchors stay attached to the
+  viewport and which belong to an explicitly evidenced container.
+- State how the layout behaves beyond the widest reference viewport: which
+  regions remain edge-anchored, grow, cap, crop, or expose background.
 - Describe how the layout should stack, reflow, hide, resize, crop, or change
   density between supplied widths.
 - When intermediate viewport sizes are not supplied, provide conservative
@@ -98,6 +107,8 @@ depends_on:
 
 - Do not invent hidden details.
 - Do not convert screenshot estimates into global design tokens.
+- Do not transfer screenshot or design-frame dimensions into runtime container
+  caps without explicit source evidence and a responsive justification.
 - Ask for missing artifacts when the uncertainty would materially change the
   implementation.
 - The final spec must include measured or inferred spacing, typography, and
