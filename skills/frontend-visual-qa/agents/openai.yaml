@@ -1,7 +1,7 @@
 interface:
     display_name: 'Frontend Visual QA'
-    short_description: 'Verify rendered UI against visual specs'
-    default_prompt: 'Use $frontend-visual-qa to verify rendered UI against a Design Implementation Spec and supplied screenshots.'
+    short_description: 'Verify rendered UI across frontend stacks'
+    default_prompt: 'Use $frontend-visual-qa to verify rendered UI against a Design Implementation Spec and supplied screenshots. This skill is framework-agnostic when it works from browser evidence, screenshots, HTML, CSS, accessibility, and responsive behavior.'
 policy:
     allow_implicit_invocation: true
 dependencies:
@@ -12,4 +12,3 @@ dependencies:
         - type: 'mcp'
           value: 'mdn'
           description: 'Verify web platform behavior when visual QA depends on browser semantics.'
-

@@ -1,7 +1,7 @@
 interface:
     display_name: 'Design Screenshot Spec'
-    short_description: 'Turn design screenshots into frontend specs'
-    default_prompt: 'Use $design-screenshot-spec to produce a Design Implementation Spec from supplied screenshots and inspect panels.'
+    short_description: 'Turn design screenshots into cross-stack frontend specs'
+    default_prompt: 'Use $design-screenshot-spec to produce a Design Implementation Spec from supplied screenshots and inspect panels. This skill is framework-agnostic and can be used before implementation in React, Next.js, Astro, Vue, Svelte, static HTML, or another frontend stack.'
 policy:
     allow_implicit_invocation: true
 dependencies:
@@ -12,4 +12,3 @@ dependencies:
         - type: 'mcp'
           value: 'mdn'
           description: 'Verify web platform facts when spec decisions depend on HTML, CSS, or browser behavior.'
-
