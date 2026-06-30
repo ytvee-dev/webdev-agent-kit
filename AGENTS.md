@@ -14,6 +14,7 @@ related:
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/skill-applicability-policy|Skill Applicability Policy]]'
     - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
+    - '[[common/lightweight-routing-policy|Lightweight Routing Policy]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/approved-patterns|Approved Patterns]]'
@@ -70,6 +71,8 @@ Before reading task-specific files, classify the task and choose the minimal con
 
 Classify every task as one or more of:
 
+- `lookup-only`
+- `explanation-only`
 - `bugfix`
 - `refactor`
 - `project-audit`
@@ -96,9 +99,11 @@ Classify every task as one or more of:
 
 ## Prompt Intent And Task Scale Gate
 
-Before selecting the final skill chain, classify the prompt by workflow weight: `Lightweight Workflow`, `Standard Workflow`, or `Deep Workflow`.
+Before selecting the final skill chain, classify the prompt by workflow weight: `Fast Lookup`, `Lightweight Workflow`, `Standard Workflow`, or `Deep Workflow`.
 
 Read `common/prompt-intent-routing-rules.md` when the prompt could be confused between a narrow task and a larger multi-step task.
+
+Use `Fast Lookup` for narrow questions, file lookup, code explanation, locating related files, and inspecting how a small function, selector, route, style, or config works. Read `common/lightweight-routing-policy.md` for this path. Do not load task skills, references, planning skills, MCP profiles, visual QA, quality review, onboarding, or validation checklists unless targeted inspection proves escalation is required.
 
 Use `Lightweight Workflow` for one small bug, obvious typo or type error, small styling adjustment, isolated component change, or direct request with obvious affected scope.
 
@@ -109,17 +114,19 @@ Use `Deep Workflow` only for new project creation, architecture design, stack mi
 After task and scale classification:
 
 1. Read this `AGENTS.md`.
-2. Read `common/target-stack-policy.md` when stack scope matters.
-3. Read `common/skill-applicability-policy.md` when the project is outside the target stack or the task can be solved by design, QA, review, lint, planning, MCP, onboarding, context, or skill-authoring without stack-specific implementation rules.
-4. Select relevant skills from skill metadata and the skill map below. The user must not need to name a skill.
-5. Read only selected `skills/**/SKILL.md` files.
-6. Read only references and project files needed for the classified task.
-7. If no repo-local skill matches, handle the task with base Codex behavior and relevant project context.
+2. If the task is `Fast Lookup`, read `common/lightweight-routing-policy.md`, search narrowly, inspect only the top relevant files or snippets, answer, and stop unless escalation is justified.
+3. Read `common/target-stack-policy.md` when stack scope matters.
+4. Read `common/skill-applicability-policy.md` when the project is outside the target stack or the task can be solved by design, QA, review, lint, planning, MCP, onboarding, context, or skill-authoring without stack-specific implementation rules.
+5. Select relevant skills from the skill metadata and the skill map below. The user must not need to name a skill.
+6. Read only selected `skills/**/SKILL.md` files.
+7. Read only references and project files needed for the classified task.
+8. If no repo-local skill matches, handle the task with base Codex behavior and relevant project context.
 
 Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing.
 
 ## Skill Map
 
+- Narrow lookup, code explanation, file location, and small inspection that do not need file changes -> `Fast Lookup` with `common/lightweight-routing-policy.md`, no task skill chain unless escalation is justified.
 - Standard or deep frontend work that needs a clear user goal, scope, constraints, and done criteria before implementation -> `goal-planner`.
 - Standard or deep frontend work that needs task slices, context budget, checkpoint rules, or stop/resume state after the goal is defined -> `execution-plan-manager`.
 - MCP/tool capability detection, missing-tool reporting, official install source verification, approval-gated installation planning, or `project/mcp-profile.md` updates -> `mcp-toolchain-manager`.

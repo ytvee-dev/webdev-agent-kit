@@ -13,6 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/lightweight-routing-policy|Lightweight Routing Policy]]'
     - '[[SUMMARY|Agent Documentation Summary]]'
     - '[[common/approved-patterns|Approved Patterns]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
@@ -27,12 +28,16 @@ Purpose: choose the right workflow weight before selecting a skill chain.
 
 Do not apply the same workflow weight to every user prompt. Classify the prompt intent and task scale before invoking planning, checkpointing, project memory updates, MCP installation checks, deep project scans, or architecture workflows.
 
-A narrow bugfix must stay lightweight. A large ambiguous request must be planned before implementation.
+Start with the cheapest path that can answer the user. Escalate only when targeted evidence proves that a heavier workflow is needed.
+
+A narrow lookup must stay fast. A narrow bugfix must stay lightweight. A large ambiguous request must be planned before implementation.
 
 ## Intent Classes
 
 Classify every implementation-relevant prompt as one of:
 
+- `lookup-only`
+- `explanation-only`
 - `micro-fix`
 - `small-change`
 - `standard-task`
@@ -43,11 +48,37 @@ Classify every implementation-relevant prompt as one of:
 
 ## Workflow Levels
 
-Use one of three workflow levels:
+Use one of four workflow levels:
 
+- `Fast Lookup`
 - `Lightweight Workflow`
 - `Standard Workflow`
 - `Deep Workflow`
+
+## Fast Lookup
+
+Read `common/lightweight-routing-policy.md` for lookup and explanation tasks.
+
+Use for:
+
+- finding where something is implemented;
+- inspecting how a function, selector, component, style, route, or config works;
+- explaining a small code fragment;
+- locating related files;
+- answering a narrow project question;
+- checking whether a specific pattern exists.
+
+Behavior:
+
+1. Search narrowly first.
+2. Read only the most relevant snippets or files.
+3. Answer the question before proposing implementation.
+4. Do not change files.
+5. Do not run validation commands.
+6. Do not start local servers or browser tooling.
+7. Do not load planning, architecture, onboarding, MCP audit, visual QA, quality review, or skill-authoring workflows.
+
+Escalate from `Fast Lookup` only when the user asks for a change or targeted inspection proves the task is broader.
 
 ## Lightweight Workflow
 
@@ -123,6 +154,12 @@ Behavior:
 
 ## Escalation Rules
 
+Escalate from Fast Lookup to Lightweight only when:
+
+- the user asks for a code or documentation change;
+- the answer requires inspecting affected source files beyond the first narrow search;
+- the lookup reveals a concrete bug or implementation task.
+
 Escalate from Lightweight to Standard only when:
 
 - the apparent fix touches multiple unrelated files;
@@ -144,12 +181,24 @@ De-escalate when a prompt sounds broad but the actionable surface is narrow.
 
 Examples:
 
+- `Find where notifications are rendered` -> Fast Lookup.
+- `Explain how this selector works` -> Fast Lookup.
 - `Fix the dashboard` -> inspect enough to identify the failing surface, then choose Lightweight or Standard.
 - `Improve this page` with one screenshot and one target file -> Standard, not Deep.
 - `Make the button color match the screenshot` -> Lightweight.
 - `Fix this TypeScript error` -> Lightweight unless the error reveals broader type design issues.
 
 ## Skill Chain Examples
+
+Lookup prompt:
+
+```text
+Fast Lookup
+-> narrow search
+-> targeted file read
+-> answer
+-> no skill chain unless escalation is justified
+```
 
 Small bug prompt:
 
@@ -203,11 +252,17 @@ Deep Workflow
 
 Before selecting a heavy workflow, verify:
 
-- the prompt is not a `micro-fix` or `small-change`;
-- the user did not ask for one narrow bugfix or isolated change;
+- the prompt is not `lookup-only`, `explanation-only`, `micro-fix`, or `small-change`;
+- the user did not ask for one narrow lookup, explanation, bugfix, or isolated change;
 - persistent project memory files are actually needed;
 - MCP installation checks are necessary for the current slice;
 - broad scans are justified by the task scale.
+
+Before finishing a fast lookup task, verify:
+
+- no files were changed;
+- no heavy skills were loaded;
+- the answer names the relevant inspected files or states that nothing was found.
 
 Before finishing a lightweight task, verify:
 
