@@ -13,6 +13,7 @@ parent: []
 related:
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/skill-applicability-policy|Skill Applicability Policy]]'
+    - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/approved-patterns|Approved Patterns]]'
@@ -184,7 +185,9 @@ Do not insert planning, MCP, design direction, architecture, or greenfield skill
 - Prefer configured MCP tools over broad guessing when the needed server is available.
 - Use `context7` for current React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool documentation when needed.
 - Use `mdn` for current HTML, CSS, Web API, and browser compatibility facts.
-- Use Browser or Playwright MCP for rendered UI verification.
+- Use Browser or Playwright MCP only for rendered visual QA tasks allowed by `common/rendered-visual-verification-policy.md`.
+- Do not use Browser or Playwright MCP for font, token, color, spacing, or CSS-variable lookup when source files, copied inspect values, or specs can answer the question.
+- A running local app or installed Playwright dependency does not mean Browser or Playwright MCP is available.
 - Install missing MCP servers only after explicit user approval and only when the official install source has been verified.
 - Never use Figma MCP as a fallback in this bundle.
 
