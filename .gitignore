@@ -2,6 +2,14 @@
 /project/
 /project/**
 
+# Generated distribution output. Rebuild from source files before release.
+/dist/
+/dist/**
+
+# Removed internal notes. Keep installable pack source-first.
+/docs/
+/docs/**
+
 # Local helper checkout state. Never publish old helper sync trees.
 /upstream/
 /upstream/**
@@ -14,6 +22,8 @@ Thumbs.db
 .obsidian/**
 node_modules/
 .next/
-dist/
 coverage/
+__pycache__/
+*.pyc
+*.pyo
 .obsidian

@@ -1,245 +1,97 @@
----
-id: 'agents.readme'
-title: 'Screenshot Frontend Assistant'
-doc_type: 'readme'
-layer: 'bundle'
-status: 'active'
-publishable: true
-local_only: false
-tags:
-    - 'agents/readme'
-    - 'docs/onboarding'
-parent:
-    - '[[AGENTS|Canonical Agent Policy]]'
-related:
-    - '[[SUMMARY|Agent Documentation Summary]]'
-depends_on: []
----
+# WebDev Assistant
 
-# Screenshot Frontend Assistant
+WebDev Assistant is a focused frontend agent skill pack for React and Next.js projects that use CSS Modules, Redux, TanStack, and Axios.
 
-This `.agents` bundle gives Codex a strict frontend workflow for turning
-user-supplied Figma screenshots and copied visual inspect material into
-production frontend code.
+It helps coding agents plan, implement, verify, debug, refactor, and review frontend work without turning the project into a generic framework playground.
 
-It is built for the official OpenAI Codex IDE extension workflow. It is not a
-Figma MCP workflow and does not support Figma whiteboard workflows, Figma canvas
-editing, Figma file creation, design-system generation, or Code Connect.
+## Target Stack
+
+Supported target stack:
+
+- React
+- Next.js
+- CSS Modules
+- Redux
+- TanStack
+- Axios
+
+Other frontend frameworks, styling systems, UI libraries, app generators, and backend tooling are not supported defaults.
+
+## Usage
+
+1. Copy this package into your project as `.agents/`.
+2. Add a host-root `AGENTS.md` pointer to `.agents/AGENTS.md`.
+3. Ask the agent: `адаптируйся`.
+4. The agent will inspect the project, detect the target stack, create or update `.agents/project/**`, scan MCP needs, cache paths and verification commands, and report missing tools.
+5. Missing MCP installation requires explicit approval after the agent reports the official source and exact install or config action.
+6. For screenshot-to-code work, provide screenshots, exported assets, copied inspect values, or a written brief.
+
+Recommended first prompt:
+
+```text
+адаптируйся к проекту: проверь стек, пути, команды проверки, доступные MCP, недостающие MCP, создай локальный кеш проекта в .agents/project/**, но не меняй исходный код приложения.
+```
 
 ## Core Flow
 
 ```text
 design-screenshot-spec
+-> frontend-design-director when visual judgment is needed
+-> frontend-architecture-planner when architecture boundaries matter
 -> frontend-layout-implementer
+-> frontend-linter-manager when code changed and lint is available
 -> frontend-visual-qa
+-> frontend-quality-reviewer when quality review is requested or appropriate
 ```
 
-1. `design-screenshot-spec` reads supplied screenshots, inspect panels, assets,
-   and notes, then produces a `Design Implementation Spec`.
-2. `frontend-layout-implementer` implements that spec in the current frontend
-   project using project context and the actual stack.
-3. `frontend-visual-qa` verifies the rendered UI with browser screenshots,
-   viewport checks, console/runtime review, and visual diff review. When
-   Playwright MCP is available, Codex runs those browser checks automatically
-   after implementation without asking for separate confirmation.
+## What It Does
 
-## Source Material
+- Turns supplied screenshots, inspect notes, assets, and briefs into implementation specs.
+- Defines subject-grounded visual direction when UI judgment matters.
+- Plans frontend architecture before code when routing, state, data, form, styling, build, or workspace boundaries matter.
+- Implements scoped React and Next.js frontend changes using existing project conventions.
+- Runs existing lint verification when code changes and a lint command exists.
+- Runs rendered visual QA when a local app and browser tooling are available.
+- Reviews implementation quality with evidence-backed findings.
 
-Supported inputs:
+## What It Will Not Do By Default
 
-- screenshots of Figma frames, components, pages, or inspect panels;
-- copied visual inspect values;
-- exported assets;
-- dimensions, typography, colors, spacing, states, and written notes;
-- existing project code and project overlays.
+- It will not use Figma MCP or inspect live Figma files.
+- It will not add packages, UI libraries, styling systems, framework migrations, or app generators without explicit approval.
+- It will not turn Redux into server communication or domain processing.
+- It will not create tests for components or functions.
+- It will not treat README as agent runtime context.
+- It will not adapt itself to unrelated frontend stacks as supported defaults.
 
-Unsupported inputs by themselves:
+## Runtime Source Of Truth
 
-- Figma URL;
-- file key;
-- node id;
-- Figma whiteboard reference.
+`AGENTS.md` and `skills/**` operate the agent.
 
-When only unsupported input is provided, Codex must ask for screenshots,
-exports, copied inspect values, assets, or a written brief.
+`README.md` is only a human-facing repository overview and usage guide.
 
-## Skills
+## Main Skills
 
-### `design-screenshot-spec`
+- `goal-planner`
+- `execution-plan-manager`
+- `mcp-toolchain-manager`
+- `frontend-design-director`
+- `frontend-architecture-planner`
+- `greenfield-project-builder`
+- `frontend-bugfix-debugger`
+- `frontend-refactor-surgeon`
+- `frontend-quality-reviewer`
+- `frontend-linter-manager`
+- `design-screenshot-spec`
+- `frontend-layout-implementer`
+- `frontend-visual-qa`
+- `project-onboarding-adapter`
+- `project-context-adapter`
+- `agent-rules-skill-author`
 
-Use this skill to create the implementation artifact. It outputs a structured
-`Design Implementation Spec` with source inventory, layout, typography, color,
-spacing, assets, states, responsive behavior, accessibility notes, acceptance
-criteria, confidence, and unknowns.
+## Distribution
 
-### `frontend-layout-implementer`
+Source files are the source of truth.
 
-Use this skill to implement the spec in the current frontend project. It is
-framework-agnostic and must inspect the project before choosing patterns. It
-supports React, Next.js, Vite, static HTML/CSS, Vue, Svelte, or another
-frontend stack by following actual project conventions.
+Generated distribution targets are produced from source during packaging or release and must not be used as runtime context or edited manually.
 
-It uses these tools when available:
-
-- Project Context MCP;
-- Design Spec MCP;
-- Visual Reference MCP;
-- `context7`;
-- MDN MCP;
-- Browser or Playwright MCP;
-- Visual Diff MCP.
-
-If a named MCP is unavailable, Codex must report the missing capability before
-using a lower-confidence fallback. Figma MCP is never a fallback.
-Using available Browser or Playwright MCP for rendered UI verification does not
-require separate user confirmation. Installing missing MCP servers, package
-installs, commands that require approval, destructive actions, and production
-access still require the approvals defined by the active environment.
-
-### `frontend-visual-qa`
-
-Use this skill after implementation. It verifies local app rendering, console
-and runtime errors, desktop/tablet/mobile viewport fit, screenshot capture,
-visual comparison, responsive behavior, text overflow, and interaction states.
-When Playwright MCP is available, the skill runs those rendered checks directly
-instead of only proposing or handing off browser QA.
-
-### `project-onboarding-adapter`
-
-Use this skill to adapt the bundle to a host frontend project. It plans or
-executes the host-root `AGENTS.md` pointer, detects the frontend stack, selects
-official documentation and MCP capabilities, scans current skill MCP
-dependencies, and writes local-only `project/**` overlays.
-
-In Plan Mode it produces a plan only. Outside Plan Mode it may execute an
-approved adaptation, but it must not create application source files. For a new
-or empty project it creates or refreshes only the host-root pointer and
-`.agents/project/**` overlays from inferred or user-provided intended stack
-facts.
-
-It installs missing MCP servers only after explicit user approval and only when
-the official install source has been verified.
-
-### `project-context-adapter`
-
-Use this skill to refresh `project/**` overlays, docs/MCP choices, design
-reference boundaries, patterns, anti-patterns, and frontend path indexes after
-project facts change.
-
-### `agent-rules-skill-author`
-
-Use this skill to create, evaluate, or edit `.agents` skills, rules, metadata,
-and graph links.
-
-## Path Model
-
-Paths inside this bundle are bundle-local:
-
-```text
-AGENTS.md
-SUMMARY.md
-README.md
-common/**
-skills/**
-project/**
-```
-
-The host-root `AGENTS.md` lives outside the bundle and should be a pointer to
-`.agents/AGENTS.md`. Only `project-onboarding-adapter` owns creating or
-recreating that pointer.
-
-`SUMMARY.md` is a manual catalog for humans. Agents must not read it for normal
-prompt routing or required context unless the user explicitly asks to edit,
-audit, or summarize it.
-
-## Publishable And Local-Only
-
-Publishable bundle paths:
-
-```text
-AGENTS.md
-SUMMARY.md
-README.md
-common/**
-skills/**
-.gitignore
-```
-
-Local-only paths:
-
-```text
-project/**
-.obsidian/**
-generated, vendor, build, cache, and host-project source paths
-```
-
-Project context cache files include:
-
-```text
-project/stack-profile.md
-project/architecture-map.md
-project/styling-profile.md
-project/verification-profile.md
-project/approved-patterns.md
-project/anti-patterns.md
-project/mcp-profile.md
-project/design-reference-profile.md
-project/react/path-index.md
-project/next/path-index.md
-```
-
-`project/mcp-profile.md` caches required, available, missing, optional,
-approved, installed, skipped, or blocked MCP capabilities for the current
-skills. `project/design-reference-profile.md` caches screenshot, exported
-asset, copied inspect, and design-reference boundaries without implying live
-design-tool access.
-
-## Prohibited Workflows
-
-- Do not use Figma MCP.
-- Do not inspect live Figma files.
-- Do not create or edit Figma files.
-- Do not use Figma whiteboard.
-- Do not generate Figma design systems or Code Connect mappings.
-- Do not install missing MCP servers without explicit user approval and a
-  verified official install source.
-- Do not scaffold app source files during new-project onboarding.
-- Do not implement before a design spec exists.
-- Do not add packages, styling systems, global tokens, or architecture layers
-  without explicit approval.
-- Do not interact with production systems or production data.
-
-## Skill Authoring Standard
-
-Every remaining skill uses:
-
-- `name` and `description` first in frontmatter;
-- graph metadata after native trigger fields;
-- `Purpose`;
-- `When To Use`;
-- `When Not To Use`;
-- `Required Context`;
-- `Tool Contract`;
-- `Workflow`;
-- `Output Contract`;
-- `Validation Gates`;
-- `Trigger Evals`;
-- `Reference Map`;
-- synchronized `agents/openai.yaml`.
-
-## Validation
-
-For skill changes, run:
-
-```shell
-python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>
-```
-
-From the host repository root, the equivalent path is:
-
-```shell
-python .agents/skills/agent-rules-skill-author/scripts/validate_agent_skill.py .agents/skills/<skill-name>
-```
-
-Also search for stale removed skill names and prohibited Figma/Jam routing
-before finishing.
+When generated output is needed, rebuild it from source instead of patching `dist/codex` or `dist/claude` directly.
