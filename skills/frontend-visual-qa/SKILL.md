@@ -17,6 +17,9 @@ parent:
     - '[[SUMMARY|Agent Documentation Summary]]'
 related:
     - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
+    - '[[common/mobile-responsive-rules|Mobile Responsive Rules]]'
+    - '[[common/form-feedback-rules|Form Feedback Rules]]'
+    - '[[common/navigation-ux-rules|Navigation UX Rules]]'
     - '[[skills/frontend-visual-qa/references/visual-qa-checklist|Visual QA Checklist]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
     - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
@@ -28,7 +31,7 @@ depends_on:
 
 ## Purpose
 
-Verify a rendered frontend implementation against a `Design Implementation Spec` and supplied visual references when the task needs browser-rendered visual evidence.
+Verify a rendered frontend implementation against a `Design Implementation Spec`, Design Direction Contract, and supplied visual references when the task needs browser-rendered visual evidence.
 
 This skill is not a general style-inspection tool. It exists for screenshot comparison, responsive rendering, visual regression evidence, and visible state verification.
 
@@ -55,9 +58,10 @@ This skill is not a general style-inspection tool. It exists for screenshot comp
 3. Confirm the classified task is `visual-qa` and specifically needs rendered visual evidence.
 4. Read `common/approved-patterns.md`.
 5. Read `common/anti-patterns.md`.
-6. Read `project/verification-profile.md` when present.
-7. Read the `Design Implementation Spec`, visual references, changed files, and relevant routes or pages.
-8. Read `references/visual-qa-checklist.md`.
+6. Read `common/mobile-responsive-rules.md` when responsive behavior is in scope.
+7. Read `project/verification-profile.md` when present.
+8. Read the `Design Implementation Spec`, Design Direction Contract, visual references, changed files, and relevant routes or pages.
+9. Read `references/visual-qa-checklist.md`.
 
 ## Tool Contract
 
@@ -78,7 +82,7 @@ This skill is not a general style-inspection tool. It exists for screenshot comp
 4. Start or reuse the local app with the project's normal development or preview command only when rendered visual evidence is in scope.
 5. Open the rendered target in Browser or Playwright MCP only when that MCP tool is available and the task is in scope.
 6. Check console and runtime errors only when they affect the rendered visual QA scope.
-7. Verify desktop, tablet, and mobile viewport fit when in scope.
+7. Verify desktop, tablet, small phone, and landscape behavior when those viewports are in scope.
 8. Capture implementation screenshots when visual comparison or evidence is in scope.
 9. Compare screenshots against visual references with Visual Diff MCP when available; otherwise perform manual comparison using the checklist.
 10. Exercise relevant hover, focus, selected, disabled, loading, empty, error, and interaction states only when provided by the spec or visible acceptance criteria.
@@ -110,24 +114,8 @@ Report:
 - Material visual mismatches must be reported with the affected viewport or state.
 - No Figma MCP use is allowed.
 
-## Trigger Evals
-
-Should trigger:
-
-- "Verify the implemented screen against the screenshots with Playwright."
-- "Run visual QA on desktop and mobile."
-- "Compare the rendered page to the design references and report deviations."
-- "Capture screenshots and check whether the mobile layout overflows."
-
-Should not trigger:
-
-- "Check which font-size token this heading uses."
-- "Read computed styles for typography."
-- "Write the implementation spec from screenshots."
-- "Implement this spec now."
-- "Inspect the Figma node directly."
-
 ## Reference Map
 
 - `common/rendered-visual-verification-policy.md`
+- `common/mobile-responsive-rules.md`
 - `references/visual-qa-checklist.md`

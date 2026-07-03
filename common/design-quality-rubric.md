@@ -14,9 +14,11 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
+    - '[[skills/frontend-design-intelligence/SKILL|Frontend Design Intelligence]]'
     - '[[common/anti-template-defaults|Anti-Template Defaults]]'
     - '[[common/interface-copy-rules|Interface Copy Rules]]'
     - '[[common/motion-rules|Motion Rules]]'
+    - '[[common/ui-ux-priority-checklist|UI UX Priority Checklist]]'
 depends_on: []
 ---
 
@@ -42,6 +44,12 @@ fail
 - The hierarchy makes the primary job obvious.
 - The user can tell what to do next.
 
+### Lead Thesis
+
+- The hero or lead section expresses the page's central thesis.
+- The first screen proves something specific about the subject.
+- The opening material comes from the product's real world, workflow, data, content, or audience.
+
 ### Hierarchy
 
 - Layout, spacing, typography, and emphasis agree.
@@ -51,8 +59,22 @@ fail
 ### Specificity
 
 - The design is tied to the subject, product, and audience.
-- The hero or lead section expresses the page thesis.
 - The signature element is meaningful, not decorative filler.
+- The UI would not fit an unrelated product with only copy swapped.
+
+### Design Dials
+
+- Visual variance matches the audience and product risk.
+- Motion intensity is justified and restrained.
+- Information density matches the user's scanning task.
+
+### Structure As Information
+
+- Numbering communicates sequence, priority, or reference.
+- Dividers communicate grouping.
+- Labels classify real meaning.
+- Badges communicate status, category, or material difference.
+- Grids do not flatten content that has hierarchy.
 
 ### Consistency
 
@@ -62,7 +84,7 @@ fail
 
 ### Responsiveness
 
-- The layout has an explicit desktop, tablet, and mobile behavior when relevant.
+- The layout has explicit desktop, tablet, and mobile behavior when relevant.
 - Text wrapping, overflow, and density are considered.
 - The mobile model is not an afterthought.
 
