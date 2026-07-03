@@ -23,9 +23,17 @@ related:
     - '[[common/anti-template-defaults|Anti-Template Defaults]]'
     - '[[common/interface-copy-rules|Interface Copy Rules]]'
     - '[[common/motion-rules|Motion Rules]]'
+    - '[[common/ui-ux-priority-checklist|UI UX Priority Checklist]]'
+    - '[[common/css-modules-specificity-rules|CSS Modules Specificity Rules]]'
+    - '[[common/form-feedback-rules|Form Feedback Rules]]'
+    - '[[common/navigation-ux-rules|Navigation UX Rules]]'
+    - '[[common/data-visualization-rules|Data Visualization Rules]]'
+    - '[[common/icon-quality-rules|Icon Quality Rules]]'
+    - '[[common/mobile-responsive-rules|Mobile Responsive Rules]]'
     - '[[common/agent-operating-model|Agent Operating Model]]'
     - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
     - '[[common/typescript-discipline|TypeScript Discipline]]'
+    - '[[skills/frontend-design-intelligence/SKILL|Frontend Design Intelligence]]'
     - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
     - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
@@ -81,6 +89,7 @@ Classify every task as one or more of:
 - `documentation`
 - `skill-documentation-refactor`
 - `design-spec`
+- `design-intelligence`
 - `design-direction`
 - `frontend-layout`
 - `frontend-architecture`
@@ -130,13 +139,14 @@ Do not read all skills, all references, all common docs, all overlays, `README.m
 - Standard or deep frontend work that needs a clear user goal, scope, constraints, and done criteria before implementation -> `goal-planner`.
 - Standard or deep frontend work that needs task slices, context budget, checkpoint rules, or stop/resume state after the goal is defined -> `execution-plan-manager`.
 - MCP/tool capability detection, missing-tool reporting, official install source verification, approval-gated installation planning, or `project/mcp-profile.md` updates -> `mcp-toolchain-manager`.
+- Standard or deep UI work that needs product category, page pattern, design dials, domain UX risks, or product-specific anti-pattern grounding before visual direction -> `frontend-design-intelligence`.
 - Standard or deep UI work that needs visual direction, redesign, visual polish, design critique, anti-template checks, or design handoff before implementation -> `frontend-design-director`.
 - Standard or deep React/Next.js work that needs architecture planning, ownership boundaries, routing/state/data/styling/form/build decisions, migration risk assessment, or implementation handoff -> `frontend-architecture-planner`.
 - Deep React or Next.js work that starts a new project, plans an empty repository, or defines the first vertical slice from a product idea before any scaffold -> `greenfield-project-builder`.
 - Code-changing frontend work that needs lint verification, or explicit user-requested lint setup -> `frontend-linter-manager`.
 - Evidence-first frontend bugfixes inside the target stack -> `frontend-bugfix-debugger`.
 - Behavior-preserving frontend refactors inside the target stack -> `frontend-refactor-surgeon`.
-- Evidence-backed frontend quality review of code, UI implementation, architecture boundaries, TypeScript, security, performance, verification, and anti-slop concerns -> `frontend-quality-reviewer`.
+- Evidence-backed frontend quality review of code, UI implementation, architecture boundaries, TypeScript, security, performance, UX gates, verification, and anti-slop concerns -> `frontend-quality-reviewer`.
 - Screenshot or copied visual inspect material to implementation spec, including for non-target frontend projects -> `design-screenshot-spec`.
 - React/Next.js implementation from a `Design Implementation Spec`, Design Direction Contract, Frontend Architecture Plan, or Greenfield Project Plan -> `frontend-layout-implementer`.
 - Rendered UI verification, browser screenshots, and visual diff review, including for non-target frontend projects -> `frontend-visual-qa`.
@@ -148,6 +158,7 @@ Use the target-stack screenshot pipeline in order:
 
 ```text
 design-screenshot-spec
+-> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
 -> frontend-architecture-planner when architecture boundaries matter
 -> frontend-layout-implementer
@@ -160,6 +171,7 @@ Use the framework-agnostic screenshot pipeline in non-target frontend projects:
 
 ```text
 design-screenshot-spec
+-> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
 -> base Codex implementation using inspected local project conventions
 -> frontend-linter-manager when code changed and an existing lint command is available
@@ -179,7 +191,7 @@ goal-planner
 
 For code-changing tasks, run the smallest relevant existing lint command before final reporting. If no lint command exists, report that lint was not run. If the user asks for lint setup, use `frontend-linter-manager` and require explicit approval before dependency, script, or config changes.
 
-Do not insert planning, MCP, design direction, architecture, or greenfield skills into lightweight workflows unless the task escalates or the user directly asks for that concern.
+Do not insert planning, MCP, design direction, architecture, design intelligence, or greenfield skills into lightweight workflows unless the task escalates or the user directly asks for that concern.
 
 ## Figma Boundary
 
@@ -204,6 +216,8 @@ Do not insert planning, MCP, design direction, architecture, or greenfield skill
 - When the project is outside the target stack, do not suppress framework-agnostic skills that match the user request; use base Codex behavior for source edits and apply only local project conventions plus browser-platform rules.
 - Reuse existing project components, routes, styles, data boundaries, tokens, layout patterns, and verification commands before introducing new ones.
 - Apply component decomposition rules regardless of framework, router, state layer, data layer, or styling system.
+- Apply CSS Modules specificity rules when CSS Modules are changed.
+- Apply conditional UX gates for forms, navigation, data visualization, icons, and mobile responsive behavior when those surfaces are touched.
 - Do not add packages, styling systems, global tokens, generated scaffolds, architecture layers, UI libraries, or testing workflows without explicit user approval.
 - Keep edits scoped to the requested screen, component, route, or static page.
 - Preserve accessibility, focus states, responsive behavior, text wrapping, and stable layout dimensions.
