@@ -1,6 +1,6 @@
 ---
 name: frontend-visual-qa
-description: Use after frontend visual implementation only when rendered visual evidence is required: screenshot comparison, responsive layout, overflow, visible interaction states, or visual regression evidence. Use Browser or Playwright MCP only for those rendered visual QA tasks. Do not use it for static style lookup, font checks by computed styles, routine code review, lint, typecheck, build, onboarding, or MCP detection.
+description: Use after frontend visual implementation only when rendered visual evidence is required: screenshot comparison, responsive layout, overflow, visible interaction states, or visual regression evidence. Supports bounded repair loops when fixes are in scope. Use Browser or Playwright MCP only for those rendered visual QA tasks. Do not use it for static style lookup, font checks by computed styles, routine code review, lint, typecheck, build, onboarding, or MCP detection.
 id: 'agents.skills.frontend-visual-qa.skill'
 title: 'Frontend Visual QA'
 doc_type: 'skill'
@@ -20,6 +20,9 @@ related:
     - '[[common/mobile-responsive-rules|Mobile Responsive Rules]]'
     - '[[common/form-feedback-rules|Form Feedback Rules]]'
     - '[[common/navigation-ux-rules|Navigation UX Rules]]'
+    - '[[common/agent-loop-policy|Agent Loop Policy]]'
+    - '[[common/verification-loop-rules|Verification Loop Rules]]'
+    - '[[common/bounded-retry-rules|Bounded Retry Rules]]'
     - '[[skills/frontend-visual-qa/references/visual-qa-checklist|Visual QA Checklist]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
     - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
@@ -33,7 +36,7 @@ depends_on:
 
 Verify a rendered frontend implementation against a `Design Implementation Spec`, Design Direction Contract, and supplied visual references when the task needs browser-rendered visual evidence.
 
-This skill is not a general style-inspection tool. It exists for screenshot comparison, responsive rendering, visual regression evidence, and visible state verification.
+This skill is not a general style-inspection tool. It exists for screenshot comparison, responsive rendering, visual regression evidence, visible state verification, and bounded repair loops when the implementation task includes fixes.
 
 ## When To Use
 
@@ -41,6 +44,7 @@ This skill is not a general style-inspection tool. It exists for screenshot comp
 - When the user asks to run visual QA, capture desktop/mobile screenshots, or compare rendered output to a design reference.
 - When the issue is visibly rendered: responsive layout, wrapping, overflow, clipping, occlusion, viewport fit, visible interaction states, or screenshot-backed visual regression.
 - When console or runtime errors must be checked because they affect the rendered UI during visual QA.
+- When a loop contract says to repair material visual deviations and rerun rendered evidence.
 
 ## When Not To Use
 
@@ -59,9 +63,10 @@ This skill is not a general style-inspection tool. It exists for screenshot comp
 4. Read `common/approved-patterns.md`.
 5. Read `common/anti-patterns.md`.
 6. Read `common/mobile-responsive-rules.md` when responsive behavior is in scope.
-7. Read `project/verification-profile.md` when present.
-8. Read the `Design Implementation Spec`, Design Direction Contract, visual references, changed files, and relevant routes or pages.
-9. Read `references/visual-qa-checklist.md`.
+7. Read `common/verification-loop-rules.md` and `common/bounded-retry-rules.md` when visual repair is in scope.
+8. Read `project/verification-profile.md` when present.
+9. Read the `Design Implementation Spec`, Design Direction Contract, visual references, changed files, and relevant routes or pages.
+10. Read `references/visual-qa-checklist.md`.
 
 ## Tool Contract
 
@@ -86,8 +91,9 @@ This skill is not a general style-inspection tool. It exists for screenshot comp
 8. Capture implementation screenshots when visual comparison or evidence is in scope.
 9. Compare screenshots against visual references with Visual Diff MCP when available; otherwise perform manual comparison using the checklist.
 10. Exercise relevant hover, focus, selected, disabled, loading, empty, error, and interaction states only when provided by the spec or visible acceptance criteria.
-11. Fix scoped implementation issues only when the user asked for fixes or the task is part of implementation; otherwise report findings.
-12. Hand off material quality, architecture, TypeScript, security, or performance concerns to `frontend-quality-reviewer` instead of treating visual QA as a broad code review.
+11. If visual repair is in scope, list material deviations, fix scoped deviations, rerun rendered checks, and apply bounded retry rules.
+12. Do not use a visual repair loop as permission for broad redesign, new design direction, package installation, or unrelated layout cleanup.
+13. Hand off material quality, architecture, TypeScript, security, or performance concerns to `frontend-quality-reviewer` instead of treating visual QA as a broad code review.
 
 ## Output Contract
 
@@ -99,6 +105,7 @@ Report:
 - interactions or states checked;
 - console/runtime findings when in scope;
 - visual diff result or manual comparison summary;
+- attempts when visual repair was in scope;
 - static style checks used instead of browser tooling, when applicable;
 - fixed issues or remaining deviations;
 - blockers and unavailable tools.
@@ -109,6 +116,7 @@ Report:
 - A local Playwright package, lockfile entry, or running local server must not be reported as Browser or Playwright MCP availability.
 - Font and token checks must prefer source files, copied inspect values, and specs over computed styles.
 - A visual QA pass must include rendered browser evidence unless blocked.
+- Visual repair attempts must be bounded and scoped to acceptance criteria.
 - Static typecheck, lint, or build alone is not visual QA.
 - Rendered verification is QA evidence, not a testing workflow.
 - Material visual mismatches must be reported with the affected viewport or state.
@@ -118,4 +126,6 @@ Report:
 
 - `common/rendered-visual-verification-policy.md`
 - `common/mobile-responsive-rules.md`
+- `common/verification-loop-rules.md`
+- `common/bounded-retry-rules.md`
 - `references/visual-qa-checklist.md`
