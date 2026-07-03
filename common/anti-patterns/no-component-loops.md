@@ -1,6 +1,6 @@
 ---
 id: 'agents.common.anti-patterns.no-component-loops'
-title: 'No Project Code Loops'
+title: 'No Unclear Render Orchestration Loops'
 doc_type: 'anti-pattern-template'
 layer: 'common'
 status: 'active'
@@ -16,20 +16,18 @@ related:
 depends_on: []
 ---
 
-# No Project Code Loops
+# No Unclear Render Orchestration Loops
 
 ## Rule
 
-Do not introduce project-code loops.
+Do not use imperative loops for render-side mutation, hidden component-body preparation, or orchestration that becomes harder to understand than named transformations.
 
-This applies to components, routes, state slices, effects, render logic, business orchestration, adapters, selectors, and helpers.
+Use a normal local loop when it is the clearest correct solution, especially for early exit, indexed traversal, bounded accumulation, or performance-sensitive work. Keep it named or isolated when the body contains meaningful behavior.
 
 ## Exception
 
-A loop is allowed only inside a small isolated utility when there is no practical alternative.
-
-The exception must be named, local, small, outside render and orchestration code, and reported in the final response.
+Inside React render paths, prefer immutable named helpers and readable collection transformations. Move side effects and multi-step orchestration to the existing owner rather than hiding them in render preparation.
 
 ## Apply When
 
-Use this whenever implementation, bugfix, refactor, or review touches collection handling, list rendering, transformations, adapters, selectors, or UI actions.
+Use this whenever implementation, bugfix, refactor, or review touches collection handling, list rendering, transformations, adapters, selectors, or UI actions. Judge clarity and behavior instead of banning syntax globally.

@@ -1,6 +1,6 @@
 ---
 name: frontend-visual-qa
-description: Use after frontend visual implementation only when rendered visual evidence is required: screenshot comparison, responsive layout, overflow, visible interaction states, or visual regression evidence. Supports bounded repair loops when fixes are in scope. Use Browser or Playwright MCP only for those rendered visual QA tasks. Do not use it for static style lookup, font checks by computed styles, routine code review, lint, typecheck, build, onboarding, or MCP detection.
+description: 'Use after frontend visual implementation only when rendered visual evidence is required: screenshot comparison, responsive layout, overflow, visible interaction states, or visual regression evidence. Supports bounded repair loops when fixes are in scope. Use Browser or Playwright MCP only for those rendered visual QA tasks. Do not use it for static style lookup, font checks by computed styles, routine code review, lint, typecheck, build, onboarding, or MCP detection.'
 id: 'agents.skills.frontend-visual-qa.skill'
 title: 'Frontend Visual QA'
 doc_type: 'skill'
@@ -14,7 +14,7 @@ tags:
     - 'frontend/verification'
     - 'frontend/visual-qa'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
     - '[[common/mobile-responsive-rules|Mobile Responsive Rules]]'
@@ -121,6 +121,18 @@ Report:
 - Rendered verification is QA evidence, not a testing workflow.
 - Material visual mismatches must be reported with the affected viewport or state.
 - No Figma MCP use is allowed.
+
+## Trigger Evals
+
+Should trigger:
+
+- "Check the implemented page at desktop and 375px against these screenshots."
+- "Verify overflow, fixed UI, and visible states in the rendered app."
+
+Should not trigger:
+
+- "Read the font token from this CSS file."
+- "Detect whether Playwright MCP is installed during onboarding."
 
 ## Reference Map
 

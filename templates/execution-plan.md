@@ -10,7 +10,7 @@ tags:
     - 'agents/template'
     - 'workflow/execution-plan'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/planning-rules|Planning Rules]]'
 depends_on: []

@@ -1,0 +1,36 @@
+{
+  "name": "webdev-assistant",
+  "version": "0.1.0",
+  "description": "Internal source and distribution inventory for the WebDev Assistant skill bundle.",
+  "skills": [
+    "agent-rules-skill-author",
+    "design-screenshot-spec",
+    "execution-plan-manager",
+    "frontend-architecture-planner",
+    "frontend-bugfix-debugger",
+    "frontend-design-director",
+    "frontend-design-intelligence",
+    "frontend-layout-implementer",
+    "frontend-linter-manager",
+    "frontend-quality-reviewer",
+    "frontend-refactor-surgeon",
+    "frontend-visual-qa",
+    "goal-planner",
+    "greenfield-project-builder",
+    "loop-workflow-planner",
+    "mcp-toolchain-manager",
+    "project-context-adapter",
+    "project-onboarding-adapter"
+  ],
+  "targets": {
+    "codex": "dist/codex",
+    "claude": "dist/claude"
+  },
+  "excludes": [
+    "project/**",
+    "dist/**",
+    "docs/**",
+    ".obsidian/**",
+    "node_modules/**"
+  ]
+}

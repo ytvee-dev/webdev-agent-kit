@@ -15,6 +15,7 @@ tags:
     - 'frontend/layout'
 parent: []
 related:
+    - '[[skills/frontend-layout-implementer/references/implementation-rules|Implementation Rules]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/approved-patterns|Approved Patterns]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
@@ -135,6 +136,18 @@ Report:
 - No Figma MCP use is allowed.
 - No new package, styling system, global token, architecture layer, or UI library may appear without approval.
 - Code-changing implementation must run lint when an existing lint command is available.
+
+## Trigger Evals
+
+Should trigger:
+
+- "Implement this Design Implementation Spec in the current React page."
+- "Build this approved design direction with the existing CSS Modules."
+
+Should not trigger:
+
+- "Write a visual direction before coding."
+- "Compare the rendered page with the screenshot only."
 
 ## Reference Map
 

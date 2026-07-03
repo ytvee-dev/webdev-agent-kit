@@ -30,7 +30,7 @@ Check path references in:
 
 - host-root `AGENTS.md`;
 - `.agents/AGENTS.md`;
-- `.agents/SUMMARY.md`;
+- `.agents/bundle-manifest.json` and `.agents/.codex-plugin/plugin.json`;
 - `.agents/README.md`;
 - `.agents/common/**`;
 - `.agents/skills/*/SKILL.md`;

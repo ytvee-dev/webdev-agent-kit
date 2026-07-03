@@ -101,6 +101,18 @@ Design Direction Handoff
 - Design dials must explain restraint or intensity.
 - Durable records belong in local project overlays, not reusable bundle docs.
 
+## Trigger Evals
+
+Should trigger:
+
+- "Ground this analytics dashboard before choosing its visual direction."
+- "Choose product patterns and design dials for this AI workflow."
+
+Should not trigger:
+
+- "Change this button color."
+- "Implement this completed Design Direction Contract."
+
 ## Reference Map
 
 - `references/product-pattern-matrix.md`

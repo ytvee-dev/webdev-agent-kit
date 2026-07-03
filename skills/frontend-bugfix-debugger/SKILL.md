@@ -14,7 +14,7 @@ tags:
     - 'frontend/debugging'
     - 'workflow/bugfix'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/debugging-evidence-rules|Debugging Evidence Rules]]'
     - '[[common/agent-loop-policy|Agent Loop Policy]]'
@@ -53,7 +53,7 @@ If the task is a behavior-preserving refactor, use `frontend-refactor-surgeon`. 
 5. Read `common/typescript-discipline.md` for TypeScript work.
 6. Read relevant project overlays, especially `project/verification-profile.md` and path indexes when present.
 7. Read the error, log, route, component, styles, or source files needed for the active bug hypothesis.
-8. Do not read `README.md` or `SUMMARY.md` during normal runtime.
+8. Do not read human-facing `README.md` during normal runtime.
 
 ## Tool Contract
 
@@ -101,6 +101,18 @@ Remaining risk:
 - Lint verification must run after code changes when a command exists.
 - UI changes must trigger visual QA when applicable.
 - No testing workflow, UI library, package install, or framework migration may be introduced by default.
+
+## Trigger Evals
+
+Should trigger:
+
+- "Reproduce and fix this broken route."
+- "This UI bug survived the first fix; change the hypothesis and retry."
+
+Should not trigger:
+
+- "Refactor this component without changing behavior."
+- "Review this implementation without fixing it."
 
 ## Reference Map
 

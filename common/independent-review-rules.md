@@ -29,12 +29,13 @@ The implementer should not be the only judge of its own work when material risk 
 
 Use an independent review pass when:
 
-- the task is standard or deep and produced code changes;
-- verification failed and was repaired during a loop;
-- architecture, state ownership, data flow, security, or build behavior changed;
-- the visual surface is significant;
 - the user requested review, audit, pass/fail, or merge confidence;
-- the loop contract requires a reviewer.
+- the loop contract requires a reviewer;
+- a material verification failure was repaired and residual risk remains;
+- architecture, state ownership, data flow, security, or build behavior changed materially;
+- the changed visual surface is large or high-risk.
+
+Standard or deep workflow classification alone does not require an independent review. Use the risk and acceptance criteria of the current task.
 
 ## Platform-Neutral Mapping
 

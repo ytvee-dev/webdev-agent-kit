@@ -30,11 +30,14 @@ Subject
 Audience
 Single Job
 Product Context
+Lead / Hero Thesis
+Design Dials
 Visual Position
 Design Risk
 Signature Element
 Token System
 Typography Roles
+Structure As Information
 Layout Concept
 Motion Stance
 Interface Copy Voice
@@ -54,6 +57,14 @@ Name who the interface serves and what density, tone, and complexity they can to
 ## Single Job
 
 State the one main job the screen must perform. Every major layout decision should support this job.
+
+## Lead / Hero Thesis
+
+State what the first screen must prove, which subject-specific material opens the page, and why the lead cannot be reused for an unrelated product by swapping copy.
+
+## Design Dials
+
+Record visual variance, motion intensity, and information density on a 1-10 scale with a reason and responsive implication. Treat the values as directional constraints, not style presets.
 
 ## Visual Position
 
@@ -87,6 +98,14 @@ spacing rhythm
 border and radius stance
 shadow or depth stance
 ```
+
+## Typography Roles
+
+Define display, body, and utility or data roles plus scale, weight rhythm, line height, letter spacing, and where typography carries personality.
+
+## Structure As Information
+
+Explain what numbering, dividers, badges, labels, grids, and metrics communicate. Remove structural devices that do not encode sequence, grouping, classification, status, comparison, or another real relationship.
 
 ## Layout Concept
 

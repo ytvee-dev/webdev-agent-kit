@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -17,7 +19,7 @@ REQUIRED_COMMON_FILES = (
     "common/anti-patterns/no-render-functions.md",
     "common/anti-patterns/no-nested-array-pipelines.md",
     "common/anti-patterns/no-component-loops.md",
-    "common/anti-patterns/no-tests-for-components-or-functions.md",
+    "common/anti-patterns/no-unapproved-test-infrastructure.md",
 )
 
 
@@ -45,14 +47,24 @@ def validate():
         return ["dist/claude does not exist; run scripts/build_skill_targets.py"]
     if (TARGET / "project").exists():
         errors.append("dist/claude must not include project/**")
+    if (TARGET / "bundle-manifest.json").exists():
+        errors.append("dist/claude must not expose the internal bundle-manifest.json")
     if list(TARGET.glob("skills/*/agents/openai.yaml")):
         errors.append("dist/claude must not include Codex-only agents/openai.yaml files")
+    if (TARGET / ".codex-plugin").exists():
+        errors.append("dist/claude must not include the Codex plugin manifest")
     for relative_path in REQUIRED_COMMON_FILES:
         if not (TARGET / relative_path).exists():
             errors.append(f"dist/claude is missing required common file: {relative_path}")
     skills = sorted((TARGET / "skills").glob("*/SKILL.md"))
     if not skills:
         errors.append("dist/claude contains no skills")
+    try:
+        inventory = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"))["skills"]
+        if [skill.parent.name for skill in skills] != sorted(inventory):
+            errors.append("dist/claude skill inventory does not match bundle-manifest.json")
+    except Exception as exc:
+        errors.append(f"Cannot validate Claude skill inventory: {exc}")
     for skill in skills:
         name = skill.parent.name
         if any(term in name for term in FORBIDDEN_SKILL_TERMS):
@@ -72,6 +84,8 @@ def validate():
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Validate the generated Claude portable skill-pack target.")
+    parser.parse_args()
     errors = validate()
     if errors:
         for error in errors:

@@ -40,16 +40,17 @@ report evidence
 
 ## Verification Source Order
 
-Use the smallest reliable existing check:
+Use the smallest reliable existing evidence in this precedence order:
 
-1. exact failing command, reproduction, route, or interaction;
-2. relevant lint command;
-3. relevant typecheck command;
-4. relevant build command;
-5. rendered visual QA when visual behavior is in scope;
-6. manual source inspection only when executable verification is unavailable.
+1. exact acceptance criterion, failing command, reproduction, route, interaction, or existing regression test;
+2. the order and commands recorded in `project/verification-profile.md` when present;
+3. relevant existing test, lint, typecheck, build, or format-check commands required by the changed surface;
+4. rendered visual QA when visual behavior is in scope;
+5. manual source inspection only when executable verification is unavailable.
 
-Do not invent new scripts, package dependencies, testing frameworks, or CI jobs without explicit approval.
+Do not impose a generic command order over a verified project profile. Run relevant existing tests when they cover changed behavior; creating new test infrastructure still requires approval.
+
+Do not invent new scripts, package dependencies, testing frameworks, broad test suites, or CI jobs without explicit approval.
 
 ## Failure Classification
 

@@ -14,7 +14,7 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/lightweight-routing-policy|Lightweight Routing Policy]]'
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
     - '[[common/approved-patterns|Approved Patterns]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
 depends_on: []
@@ -32,240 +32,46 @@ Start with the cheapest path that can answer the user. Escalate only when target
 
 A narrow lookup must stay fast. A narrow bugfix must stay lightweight. A large ambiguous request must be planned before implementation.
 
-## Intent Classes
-
-Classify every implementation-relevant prompt as one of:
-
-- `lookup-only`
-- `explanation-only`
-- `micro-fix`
-- `small-change`
-- `standard-task`
-- `large-task`
-- `exploratory-plan`
-- `deep-architecture`
-- `maintenance-only`
-
 ## Workflow Levels
 
-Use one of four workflow levels:
+Use the canonical task classification and skill map in `AGENTS.md`, then choose the lightest safe workflow:
 
-- `Fast Lookup`
-- `Lightweight Workflow`
-- `Standard Workflow`
-- `Deep Workflow`
+| Level | Use when | Process boundary |
+| --- | --- | --- |
+| Fast Lookup | Narrow lookup or explanation with no requested change | Read the lookup policy, search narrowly, answer, stop |
+| Lightweight Workflow | One clear bug, type error, styling adjustment, local refactor, or isolated edit | Inspect the affected owner, change directly, run the smallest relevant check |
+| Standard Workflow | Multi-file work, unclear root cause, screenshot/spec implementation, or measurable retry | Use compact goal/slicing only when it improves execution; add the selected task skill |
+| Deep Workflow | New project, architecture or stack migration, broad redesign, repeated failures, or resumable work | Define durable goal, plan, context budget, checkpoints, and approval gates |
 
-## Fast Lookup
+## Escalation
 
-Read `common/lightweight-routing-policy.md` for lookup and explanation tasks.
+Escalate only when targeted evidence shows one of these conditions:
 
-Use for:
+- the apparent fix crosses unrelated owners or public boundaries;
+- the root cause remains unclear after focused inspection;
+- routing, architecture, state ownership, data flow, security, build behavior, or shared styling changes materially;
+- verification disproves the current scope or requires bounded retry;
+- the work needs multiple independently verifiable slices or durable stop/resume state;
+- a new dependency, tool, framework, testing infrastructure, or broader approval is required.
 
-- finding where something is implemented;
-- inspecting how a function, selector, component, style, route, or config works;
-- explaining a small code fragment;
-- locating related files;
-- answering a narrow project question;
-- checking whether a specific pattern exists.
+## De-Escalation
 
-Behavior:
-
-1. Search narrowly first.
-2. Read only the most relevant snippets or files.
-3. Answer the question before proposing implementation.
-4. Do not change files.
-5. Do not run validation commands.
-6. Do not start local servers or browser tooling.
-7. Do not load planning, architecture, onboarding, MCP audit, visual QA, quality review, or skill-authoring workflows.
-
-Escalate from `Fast Lookup` only when the user asks for a change or targeted inspection proves the task is broader.
-
-## Lightweight Workflow
-
-Use for:
-
-- one small bug;
-- one obvious typo or type error;
-- one small styling adjustment;
-- one isolated component change;
-- one local refactor with clear boundaries;
-- one direct request where the target file, route, component, or error context is obvious.
-
-Behavior:
-
-1. Restate the immediate task in one short sentence only when useful.
-2. Inspect only the affected files, error context, supplied screenshot, or rendered surface.
-3. Make the smallest safe change.
-4. Run the smallest relevant verification available.
-5. Report what changed and what was checked.
-
-Do not create or update these files for a lightweight task unless the task escalates:
-
-- `project/active-goals.md`
-- `project/active-plan.md`
-- `project/progress-log.md`
-- `project/decision-log.md`
-
-Do not invoke `goal-planner` or `execution-plan-manager` for a lightweight task unless targeted inspection proves that the task is larger than it first appeared.
-
-## Standard Workflow
-
-Use for:
-
-- a feature touching multiple files;
-- a UI implementation from a spec or screenshot;
-- a bug with unclear root cause;
-- a refactor that needs a behavior boundary;
-- a task that needs more than one implementation slice;
-- a task that changes project conventions or reusable patterns.
-
-Behavior:
-
-1. Create a compact goal and compact plan.
-2. Use project overlays before broad scans.
-3. Execute one slice at a time.
-4. Verify each slice.
-5. Compare the result with the compact plan before finishing.
-6. Update checkpoint files only when the task is genuinely multi-step or resumable.
-
-`goal-planner` and `execution-plan-manager` may run in compact mode for standard tasks.
-
-## Deep Workflow
-
-Use for:
-
-- new project creation;
-- architecture design;
-- stack migration;
-- onboarding an unknown project;
-- broad visual redesign;
-- repeated failures after lightweight or standard attempts;
-- large tasks that require durable stop/resume state.
-
-Behavior:
-
-1. Create or update a Goal Contract.
-2. Create or update an Execution Plan.
-3. Define context budget and scan boundaries.
-4. Check required MCP/tools only when they are needed for the current slice.
-5. Execute small slices.
-6. Update progress and decision logs.
-7. Leave a precise stop/resume point.
-
-## Escalation Rules
-
-Escalate from Fast Lookup to Lightweight only when:
-
-- the user asks for a code or documentation change;
-- the answer requires inspecting affected source files beyond the first narrow search;
-- the lookup reveals a concrete bug or implementation task.
-
-Escalate from Lightweight to Standard only when:
-
-- the apparent fix touches multiple unrelated files;
-- the root cause is unclear after targeted inspection;
-- the change affects architecture, routing, data flow, state ownership, or shared styling;
-- verification shows the first fix is insufficient;
-- the user expands the scope.
-
-Escalate from Standard to Deep only when:
-
-- the task requires project-wide scanning;
-- the work cannot be completed safely in one or two slices;
-- the task needs long-lived decisions or stop/resume state;
-- the task requires new tooling, package installation, framework migration, or architecture changes.
-
-## De-Escalation Rules
-
-De-escalate when a prompt sounds broad but the actionable surface is narrow.
+De-escalate when a broad prompt resolves to one concrete surface. Do not create goals, plans, MCP audits, memory files, visual QA, or independent review solely because the wording sounds important.
 
 Examples:
 
-- `Find where notifications are rendered` -> Fast Lookup.
-- `Explain how this selector works` -> Fast Lookup.
-- `Fix the dashboard` -> inspect enough to identify the failing surface, then choose Lightweight or Standard.
-- `Improve this page` with one screenshot and one target file -> Standard, not Deep.
-- `Make the button color match the screenshot` -> Lightweight.
-- `Fix this TypeScript error` -> Lightweight unless the error reveals broader type design issues.
-
-## Skill Chain Examples
-
-Lookup prompt:
-
-```text
-Fast Lookup
--> narrow search
--> targeted file read
--> answer
--> no skill chain unless escalation is justified
-```
-
-Small bug prompt:
-
-```text
-Lightweight Workflow
--> frontend-bugfix-debugger
--> minimal verification
--> no goal-planner
--> no execution-plan-manager
--> no persistent plan files
-```
-
-Large feature prompt:
-
-```text
-Standard Workflow
--> goal-planner compact mode
--> execution-plan-manager compact mode
--> relevant frontend skill
--> verification
-```
-
-Frontend refactor prompt:
-
-```text
-Lightweight or Standard Workflow
--> frontend-refactor-surgeon
--> frontend-linter-manager when code changed and lint is available
--> frontend-visual-qa when rendered UI could change
-```
-
-Frontend review prompt:
-
-```text
-Lightweight or Standard Workflow
--> frontend-quality-reviewer
--> no broad rewrite unless separately requested
-```
-
-Greenfield or architecture prompt:
-
-```text
-Deep Workflow
--> goal-planner
--> execution-plan-manager
--> mcp-toolchain-manager when needed
--> architecture or greenfield skill
-```
+- locating a notification renderer is Fast Lookup;
+- changing one button token is Lightweight;
+- implementing a supplied screen across several owners is Standard;
+- migrating the routing or styling architecture is Deep.
 
 ## Validation Gates
 
-Before selecting a heavy workflow, verify:
+Before selecting Standard or Deep, confirm that Fast Lookup or Lightweight cannot safely complete the request.
 
-- the prompt is not `lookup-only`, `explanation-only`, `micro-fix`, or `small-change`;
-- the user did not ask for one narrow lookup, explanation, bugfix, or isolated change;
-- persistent project memory files are actually needed;
-- MCP installation checks are necessary for the current slice;
-- broad scans are justified by the task scale.
+Before finishing:
 
-Before finishing a fast lookup task, verify:
-
-- no files were changed;
-- no heavy skills were loaded;
-- the answer names the relevant inspected files or states that nothing was found.
-
-Before finishing a lightweight task, verify:
-
-- no unnecessary plan or checkpoint files were created;
-- no unrelated source files were changed;
-- the response reports the small verification that was run or honestly reports why it was not run.
+- keep reads and writes within the selected scope;
+- create durable project artifacts only for genuinely resumable work;
+- run the smallest relevant project verification;
+- report escalation, skipped checks, or blockers honestly.

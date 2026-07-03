@@ -27,8 +27,8 @@ Purpose: spend context on correctness instead of broad, repetitive reading.
 - Use path indexes and overlays before broad searches when they exist.
 - Prefer targeted reads, nearby patterns, and precise `rg` queries.
 - Stop reading when enough evidence exists to make a safe change.
-- Do not read `README.md` or `SUMMARY.md` for runtime routing unless the task
-  explicitly edits, audits, or summarizes them.
+- Do not read `README.md` for runtime routing unless the task explicitly edits,
+  audits, or summarizes human-facing documentation.
 - Compress final output, not task understanding.
 
 ## Escalation

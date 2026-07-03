@@ -15,6 +15,8 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[skills/project-onboarding-adapter/references/adaptation-checklist|Adaptation Checklist]]'
+    - '[[skills/project-onboarding-adapter/references/path-audit-checklist|Path Audit Checklist]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/skill-applicability-policy|Skill Applicability Policy]]'
     - '[[common/context-compaction-rules|Context Compaction Rules]]'
@@ -66,7 +68,7 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 - Use Project Context MCP when available; otherwise use targeted filesystem reads.
 - Use MDN for HTML, CSS, Web APIs, accessibility, and browser behavior.
 - Use `context7` only for detected target-stack libraries or tooling.
-- Use Browser or Playwright only for rendered verification capability facts.
+- Determine Browser or Playwright availability from the current session tool registry or configured capability facts. Do not invoke either tool during onboarding or MCP detection.
 - Do not use Figma MCP.
 - Missing MCP installation requires explicit user approval after reporting the official source.
 

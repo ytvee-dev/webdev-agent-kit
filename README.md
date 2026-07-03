@@ -1,3 +1,23 @@
+---
+id: 'agents.readme'
+title: 'WebDev Assistant README'
+doc_type: 'readme'
+layer: 'bundle'
+status: 'active'
+publishable: true
+local_only: false
+tags:
+    - 'agents/readme'
+    - 'docs/human'
+parent:
+    - '[[AGENTS|Canonical Agent Policy]]'
+related:
+    - '[[examples/screenshot-to-frontend|Screenshot To Frontend Example]]'
+    - '[[examples/bugfix-refactor-review|Bugfix Refactor Review Example]]'
+    - '[[skills/greenfield-project-builder/SKILL|Greenfield Project Builder]]'
+depends_on: []
+---
+
 # WebDev Assistant
 
 WebDev Assistant is a focused frontend agent skill pack for React and Next.js projects that use CSS Modules, Redux, TanStack, and Axios.
@@ -85,7 +105,7 @@ Claude hosts may map this to `/goal`, `/loop`, subagents, or evaluator workflows
 - It will not run unbounded autonomous loops.
 - It will not treat vague goals such as "make it better" as sufficient stop criteria for iterative work.
 - It will not turn Redux into server communication or domain processing.
-- It will not create tests for components or functions.
+- It will use scoped existing or regression tests when the task and project conventions require them, but it will not add test infrastructure without explicit approval.
 - It will not treat README as agent runtime context.
 - It will not adapt itself to unrelated frontend stacks as supported defaults.
 
@@ -139,6 +159,10 @@ Claude hosts may map this to `/goal`, `/loop`, subagents, or evaluator workflows
 ## Distribution
 
 Source files are the source of truth.
+
+- `bundle-manifest.json` is the internal source and target inventory.
+- `.codex-plugin/plugin.json` is the native Codex plugin entrypoint.
+- Claude distribution uses portable skill packages and does not include Codex-only metadata.
 
 Generated distribution targets are produced from source during packaging or release and must not be used as runtime context or edited manually.
 

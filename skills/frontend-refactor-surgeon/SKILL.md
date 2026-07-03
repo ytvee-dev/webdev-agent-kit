@@ -111,6 +111,18 @@ Risks:
 - Rendered UI changes or risk must trigger visual QA when applicable.
 - No testing workflow, UI library, package install, or framework migration may be introduced by default.
 
+## Trigger Evals
+
+Should trigger:
+
+- "Extract this component while preserving its public behavior."
+- "Simplify this state flow in bounded verified steps."
+
+Should not trigger:
+
+- "Fix this runtime bug from its reproduction."
+- "Redesign this page."
+
 ## Reference Map
 
 - `common/refactor-safety-rules.md`

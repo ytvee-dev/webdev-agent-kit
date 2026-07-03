@@ -10,7 +10,7 @@ tags:
     - 'agents/template'
     - 'workflow/decision-log'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/checkpoint-rules|Checkpoint Rules]]'
 depends_on: []

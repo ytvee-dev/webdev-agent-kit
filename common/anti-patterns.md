@@ -13,7 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
     - '[[common/frontend-implementation-boundaries|Frontend Implementation Boundaries]]'
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
@@ -37,8 +37,8 @@ Load only the template relevant to the current code risk:
 - `common/anti-patterns/no-use-callback-by-default.md` - do not use `useCallback` when a normal function works.
 - `common/anti-patterns/no-render-functions.md` - do not create `renderXxx`, `xxxRender`, or similar JSX helpers.
 - `common/anti-patterns/no-nested-array-pipelines.md` - avoid unreadable chained collection expressions and split hard chains into named steps.
-- `common/anti-patterns/no-component-loops.md` - do not introduce project-code loops except for the named isolated utility exception.
-- `common/anti-patterns/no-tests-for-components-or-functions.md` - do not create new project tests or edit existing tests without a direct user request.
+- `common/anti-patterns/no-component-loops.md` - avoid unclear render-side mutation and orchestration loops while allowing clear local iteration.
+- `common/anti-patterns/no-unapproved-test-infrastructure.md` - use scoped project tests when required, but do not add test infrastructure without approval.
 
 ## Workflow Anti-Patterns
 

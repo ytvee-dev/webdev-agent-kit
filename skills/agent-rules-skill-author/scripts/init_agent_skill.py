@@ -24,7 +24,7 @@ tags:
     - 'agents/skill-package'
     - 'agents/skill'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related: []
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
@@ -36,11 +36,50 @@ depends_on:
 
 [TODO: Explain the capability this skill adds.]
 
+## When To Use
+
+- [TODO: Add concrete trigger conditions.]
+
+## When Not To Use
+
+- [TODO: Add near-miss exclusions.]
+
+## Required Context
+
+1. Read `AGENTS.md`.
+2. [TODO: Add the minimum required context.]
+
+## Tool Contract
+
+- [TODO: State allowed and prohibited tools or write boundaries.]
+
 ## Workflow
 
 1. [TODO: Capture the trigger boundary.]
 2. [TODO: Describe the reusable workflow.]
 3. [TODO: Describe validation or stop conditions.]
+
+## Output Contract
+
+[TODO: Define the output shape.]
+
+## Validation Gates
+
+- [TODO: Add objective or reviewable completion gates.]
+
+## Trigger Evals
+
+Should trigger:
+
+- "[TODO: realistic prompt]"
+
+Should not trigger:
+
+- "[TODO: near-miss prompt]"
+
+## Reference Map
+
+- [TODO: List conditional references or state that none are needed.]
 """
 
 EXAMPLE_SCRIPT = """#!/usr/bin/env python3

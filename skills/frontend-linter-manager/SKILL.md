@@ -14,7 +14,7 @@ tags:
     - 'agents/quality'
     - 'workflow/lint'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/agent-loop-policy|Agent Loop Policy]]'
@@ -48,7 +48,7 @@ Do not use this skill for planning-only, design-only, documentation-only, README
 2. Read package scripts or `project/verification-profile.md` to find existing lint commands.
 3. Read `common/verification-loop-rules.md` and `common/bounded-retry-rules.md` when lint repair is in scope.
 4. Read only files needed to understand the package manager or workspace boundary.
-5. Do not read `README.md` or `SUMMARY.md` during normal runtime.
+5. Do not read human-facing `README.md` during normal runtime.
 
 ## Tool Contract
 
@@ -103,6 +103,18 @@ If lint was not run, include the reason and impact.
 - No dependency, script, or config change happened without approval.
 - No testing workflow was introduced.
 - No UI component library was introduced.
+
+## Trigger Evals
+
+Should trigger:
+
+- "Run the existing lint command after this frontend change."
+- "Repair only lint failures caused by the current patch."
+
+Should not trigger:
+
+- "Add a new testing framework."
+- "Explain this lint rule without running verification."
 
 ## Reference Map
 

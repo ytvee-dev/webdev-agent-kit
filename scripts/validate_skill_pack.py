@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import subprocess
 import sys
 from pathlib import Path
@@ -14,6 +15,12 @@ def run(script):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Validate source metadata, then build and validate Codex and Claude targets.")
+    parser.parse_args()
+
+    source_code = run("validate_source_bundle.py")
+    if source_code:
+        sys.exit(source_code)
     build_code = run("build_skill_targets.py")
     if build_code:
         sys.exit(build_code)

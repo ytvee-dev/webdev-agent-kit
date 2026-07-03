@@ -12,7 +12,6 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
-    - '[[SUMMARY|Agent Documentation Summary]]'
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules Skill Author]]'
 depends_on: []
 ---
@@ -29,8 +28,6 @@ Before changing bundle docs or skills:
 2. Read this file.
 3. Read `skills/agent-rules-skill-author/SKILL.md`.
 4. Read the affected docs, skills, references, and project overlays.
-5. Consult `SUMMARY.md` only when the task explicitly edits, audits, or
-   verifies the manual catalog.
 
 ## Layer Rules
 
@@ -39,8 +36,8 @@ Before changing bundle docs or skills:
 - Put host-project facts in `project/**`.
 - Keep `project/**` local-only.
 - Keep the host-root `AGENTS.md` pointer out of ordinary bundle edits.
-- Use bundle-local paths inside `AGENTS.md`, `SUMMARY.md`, `README.md`,
-  `common/**`, and `skills/**`.
+- Use bundle-local paths inside `AGENTS.md`, `README.md`, `common/**`, and
+  `skills/**`.
 - Keep all rules, skills, references, common docs, and project overlays written
   in English.
 - Keep MCP capability and official documentation facts in
@@ -54,9 +51,8 @@ Before changing bundle docs or skills:
 - In `SKILL.md`, keep `name` and `description` first.
 - Treat graph frontmatter as navigation metadata only.
 - Keep binding workflow instructions in the document body.
-- Update `SUMMARY.md` and `README.md` when skill names, workflow, routing, or
-  user-facing setup changes.
-- Do not add `SUMMARY.md` to any skill's runtime `Required Context`.
+- Update `README.md`, manifests, and owning graph links when skill names,
+  workflow, routing, or user-facing setup changes.
 
 ## Skill Package Rules
 
@@ -77,5 +73,6 @@ Before finishing documentation or skill changes:
 1. Validate each changed skill package.
 2. Search for stale removed skill names and prohibited Figma/Jam routing.
 3. Search changed docs and overlays for non-English rule text.
-4. Verify actual `skills/**` directories match `SUMMARY.md` and `README.md`.
+4. Verify actual `skills/**` directories match `bundle-manifest.json`,
+   `.codex-plugin/plugin.json`, and `README.md`.
 5. Run Markdown formatting checks when available.

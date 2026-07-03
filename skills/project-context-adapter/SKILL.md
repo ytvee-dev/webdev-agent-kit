@@ -14,11 +14,22 @@ tags:
     - 'agents/project-context'
     - 'frontend/project-context'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
     - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
+    - '[[templates/context-index|Context Index Template]]'
+    - '[[project/architecture-map|Architecture Map]]'
+    - '[[project/stack-profile|Stack Profile]]'
+    - '[[project/styling-profile|Styling Profile]]'
+    - '[[project/verification-profile|Verification Profile]]'
+    - '[[project/design-reference-profile|Design Reference Profile]]'
+    - '[[project/mcp-profile|MCP Profile]]'
+    - '[[project/approved-patterns|Approved Patterns]]'
+    - '[[project/anti-patterns|Project Anti-Patterns]]'
+    - '[[project/react/path-index|React Path Index]]'
+    - '[[project/next/path-index|Next Path Index]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
 ---
@@ -81,8 +92,8 @@ implement screenshot-derived specs without scanning the whole repository.
    from real project code or official documentation for the detected stack.
 6. Keep graph frontmatter current with `publishable: false` and
    `local_only: true`.
-7. Keep host-project facts out of `AGENTS.md`, `SUMMARY.md`, `common/**`, and
-   reusable `skills/**`.
+7. Keep host-project facts out of `AGENTS.md`, `README.md`, `common/**`,
+   manifests, and reusable `skills/**`.
 8. Verify updated facts against actual files or official documentation sources.
 
 ## Output Contract

@@ -14,7 +14,7 @@ tags:
     - 'frontend/design'
     - 'frontend/spec'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/design-screenshot-spec/references/spec-extraction-checklist|Spec Extraction Checklist]]'
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'

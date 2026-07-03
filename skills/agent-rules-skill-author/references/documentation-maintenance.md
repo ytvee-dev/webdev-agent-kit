@@ -31,7 +31,7 @@ agent policy stored in overlays.
     - Decide whether the change affects `AGENTS.md`, `.agents/common`,
       `.agents/project`, `.agents/skills`, the nested `.agents` git repo
       contract, or
-      `.agents/SUMMARY.md`.
+      bundle manifests and graph ownership.
     - Prefer filesystem MCP reads for file contents and directory structure;
       reserve shell commands for search, git state, diffs, formatting, and
       executable validation.
@@ -43,7 +43,7 @@ agent policy stored in overlays.
     - Add, rename, or remove files only when the new structure is clearly
       simpler or more accurate.
     - If a skill package is added or renamed, update its `agents/openai.yaml`,
-      `.agents/SUMMARY.md`, and any skill-routing docs that should point to it.
+      bundle manifests, README, and any skill-routing docs that should point to it.
     - If a documentation change affects user-facing workflow, skill lists, path
       policy, or sync/publication instructions, update `.agents/README.md` in
       the same task.
@@ -74,7 +74,8 @@ agent policy stored in overlays.
     - Confirm that no repo-specific facts leaked into reusable skills.
     - Confirm that no reusable workflow was buried inside a repo-specific
       overlay.
-    - Confirm that the updated tree is reflected in `.agents/SUMMARY.md`.
+    - Confirm that the updated tree is reflected in the bundle manifest,
+      native Codex plugin manifest, README, and owning graph links.
     - Confirm that `.agents/README.md` still gives accurate user-facing
       instructions without duplicating the full rulebook.
     - Confirm that any new branch or commit examples follow the

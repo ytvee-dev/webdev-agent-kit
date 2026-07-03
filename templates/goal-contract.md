@@ -10,7 +10,7 @@ tags:
     - 'agents/template'
     - 'workflow/goal-contract'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/goal-contract|Goal Contract]]'
 depends_on: []

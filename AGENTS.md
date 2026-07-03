@@ -42,6 +42,7 @@ related:
     - '[[common/typescript-discipline|TypeScript Discipline]]'
     - '[[skills/frontend-design-intelligence/SKILL|Frontend Design Intelligence]]'
     - '[[skills/loop-workflow-planner/SKILL|Loop Workflow Planner]]'
+    - '[[skills/greenfield-project-builder/SKILL|Greenfield Project Builder]]'
     - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
     - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'

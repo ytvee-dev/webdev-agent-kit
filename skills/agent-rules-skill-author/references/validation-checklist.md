@@ -38,8 +38,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - Trigger wording has at least one realistic should-trigger and one near-miss
   should-not-trigger prompt when the boundary is non-obvious.
 - No conflict exists with current `AGENTS.md` policy.
-- `SUMMARY.md` is not listed in runtime `Required Context`; it is consulted
-  only when the task explicitly edits, audits, or verifies the manual catalog.
+- Removed catalogs and deleted documentation surfaces are not referenced by
+  runtime instructions, graph metadata, scaffolding, or validators.
 - Documentation file contents and directory structure were inspected through
   filesystem MCP when available, with shell reserved for search, git state,
   diffs, formatting, or executable validation.
@@ -110,6 +110,6 @@ Use this checklist before and after editing repo-local agent rules or skills.
   shallow compliance.
 - Check that no Claude-specific runner, viewer, packaging, or CLI dependency
   became a hidden requirement for the workflow.
-- Run `python scripts/validate_agent_skill.py <skill-dir>` for new or materially
+- Run `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py <skill-dir>` for new or materially
   changed `.agents` skills.
 - Run `npx prettier --check .` for markdown and skill-only changes.

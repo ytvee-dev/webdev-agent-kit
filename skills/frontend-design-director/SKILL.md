@@ -14,7 +14,7 @@ tags:
     - 'agents/design'
     - 'workflow/design-direction'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/design-quality-rubric|Design Quality Rubric]]'
@@ -26,6 +26,7 @@ related:
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
+    - '[[templates/visual-memory|Visual Memory Template]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
 ---
@@ -77,7 +78,7 @@ Do not use this skill as a required step for every frontend task. Use it only wh
    - `project/active-goals.md` or the compact goal contract when present.
 6. Read supplied screenshots, design references, copied inspect values, or written brief.
 7. Read affected route or component files only when existing project constraints are needed.
-8. Do not read all source files, all skills, all references, or `SUMMARY.md` for routing.
+8. Do not read all source files, all skills, or all references for routing.
 
 ## Tool Contract
 

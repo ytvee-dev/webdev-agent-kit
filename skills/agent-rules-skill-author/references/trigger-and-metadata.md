@@ -97,7 +97,7 @@ Before finalizing trigger wording for a new or broadened skill:
 - Treat `icon_small`, `icon_large`, and `brand_color` as optional UI fields.
 - Use `dependencies.tools` when the skill depends on MCP servers or another
   explicit tool contract. Keep dependency metadata factual and narrow.
-- Prefer `scripts/generate_openai_yaml.py` when regenerating `.agents`
+- Prefer `skills/agent-rules-skill-author/scripts/generate_openai_yaml.py` when regenerating `.agents`
   `openai.yaml` files so quoting, length checks, and preserved policy fields
   stay consistent.
 

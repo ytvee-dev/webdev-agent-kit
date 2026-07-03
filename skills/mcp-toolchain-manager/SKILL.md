@@ -14,7 +14,7 @@ tags:
     - 'agents/tooling'
     - 'workflow/mcp'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
@@ -73,7 +73,7 @@ Do not use this skill to implement frontend code, write tests, scaffold projects
 3. Read selected skill metadata and `agents/openai.yaml` files only for skills relevant to the current task.
 4. Read `project/mcp-profile.md` when it exists and the task needs tool state.
 5. Read `project/verification-profile.md` only when verification commands influence tool needs.
-6. Do not read all skills, all YAML files, or `SUMMARY.md` during normal routing.
+6. Do not read all skills or all YAML files during normal routing.
 
 ## Tool Contract
 

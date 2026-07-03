@@ -14,7 +14,7 @@ tags:
     - 'agents/greenfield'
     - 'workflow/frontend-greenfield'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
@@ -84,7 +84,7 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
    - `project/build-profile.md` when present;
    - `project/workspace-profile.md` when present;
    - `project/verification-profile.md` when present.
-8. Do not read `README.md` or `SUMMARY.md` during normal runtime.
+8. Do not read human-facing `README.md` during normal runtime.
 
 ## Tool Contract
 

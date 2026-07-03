@@ -10,7 +10,7 @@ tags:
     - 'agents/template'
     - 'workflow/context-index'
 parent:
-    - '[[SUMMARY|Agent Documentation Summary]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/token-budget-rules|Token Budget Rules]]'
 depends_on: []

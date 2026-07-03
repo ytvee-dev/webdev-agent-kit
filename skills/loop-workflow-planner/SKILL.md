@@ -1,6 +1,6 @@
 ---
 name: loop-workflow-planner
-description: Use for standard or deep work that needs a platform-neutral bounded agent loop: measurable acceptance criteria, verification, retry limits, independent review, memory update, and stop conditions. Do not use for Fast Lookup, tiny direct edits, one-off explanations, or platform-specific loop commands alone.
+description: 'Use for standard or deep work that needs a platform-neutral bounded agent loop: measurable acceptance criteria, verification, retry limits, independent review, memory update, and stop conditions. Do not use for Fast Lookup, tiny direct edits, one-off explanations, or platform-specific loop commands alone.'
 id: 'agents.skills.loop-workflow-planner.skill'
 title: 'Loop Workflow Planner'
 doc_type: 'skill'
@@ -76,7 +76,7 @@ Do not use for:
 9. Read the current Goal Contract, Execution Plan, user request, or `project/active-goals.md` when present.
 10. Read `project/verification-profile.md` when verification commands matter.
 
-Do not read unrelated skills, `README.md`, `SUMMARY.md`, or `dist/**` during normal runtime.
+Do not read unrelated skills, human-facing `README.md`, or generated `dist/**` during normal runtime.
 
 ## Tool Contract
 

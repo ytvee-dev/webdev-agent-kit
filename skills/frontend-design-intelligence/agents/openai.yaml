@@ -1,0 +1,11 @@
+interface:
+    display_name: 'Frontend Design Intelligence'
+    short_description: 'Ground product-specific UI direction'
+    default_prompt: 'Use $frontend-design-intelligence to ground this UI task in product patterns, design dials, UX risks, and anti-patterns before visual direction.'
+policy:
+    allow_implicit_invocation: true
+dependencies:
+    tools:
+        - type: 'mcp'
+          value: 'filesystem_server'
+          description: 'Read relevant project overlays, source files, and supplied local design artifacts.'

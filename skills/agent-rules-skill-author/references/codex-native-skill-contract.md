@@ -31,6 +31,7 @@ understands versus what this `.agents` bundle adds locally.
 - `Source hierarchy` for which authority wins when docs disagree.
 - `Native Codex contract` for the strict OpenAI-portable shape.
 - `Repo-local .agents extension` for the extra metadata this bundle adds.
+- `Plugin packaging` for the native plugin entrypoint versus internal inventory.
 - `agents/openai.yaml` and `Local toolkit contract` for UI metadata and local
   helper scripts.
 
@@ -87,6 +88,19 @@ Because of that extension, `.agents`-compatible skills are not automatically
 strict native-portable skills. An official native validator such as the system
 `quick_validate.py` accepts only the native frontmatter keys.
 
+## Plugin packaging
+
+Keep the two packaging contracts separate:
+
+- `.codex-plugin/plugin.json` is the native Codex plugin manifest. Its
+  `skills` field points to `./skills/` and it belongs in the Codex target.
+- `bundle-manifest.json` is this repository's internal inventory for source
+  synchronization and validation. It is not a Codex or Claude platform
+  manifest.
+
+Do not copy `.codex-plugin/` into the Claude target. Do not rename the internal
+inventory to `plugin.json` or treat it as a native manifest.
+
 ## `agents/openai.yaml`
 
 `agents/openai.yaml` is recommended native skill metadata and should be treated
@@ -116,9 +130,9 @@ Rules to preserve:
 Inside this bundle, prefer the local helper scripts when creating or validating
 skills:
 
-- `scripts/init_agent_skill.py` for scaffolding a new `.agents` skill package
-- `scripts/generate_openai_yaml.py` for UI metadata generation or regeneration
-- `scripts/validate_agent_skill.py` for native and `.agents`-specific checks
+- `skills/agent-rules-skill-author/scripts/init_agent_skill.py` for scaffolding a new `.agents` skill package
+- `skills/agent-rules-skill-author/scripts/generate_openai_yaml.py` for UI metadata generation or regeneration
+- `skills/agent-rules-skill-author/scripts/validate_agent_skill.py` for native and `.agents`-specific checks
 
 These helpers exist to encode the OpenAI-native contract without losing this
 bundle's graph metadata and local publishing rules.
