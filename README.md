@@ -36,6 +36,7 @@ Recommended first prompt:
 
 ```text
 design-screenshot-spec
+-> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
 -> frontend-architecture-planner when architecture boundaries matter
 -> frontend-layout-implementer
@@ -47,9 +48,11 @@ design-screenshot-spec
 ## What It Does
 
 - Turns supplied screenshots, inspect notes, assets, and briefs into implementation specs.
+- Grounds product category, page pattern, design dials, domain UX risks, and product-specific anti-patterns before visual direction when needed.
 - Defines subject-grounded visual direction when UI judgment matters.
 - Plans frontend architecture before code when routing, state, data, form, styling, build, or workspace boundaries matter.
 - Implements scoped React and Next.js frontend changes using existing project conventions.
+- Applies conditional UX gates for forms, navigation, data visualization, icons, CSS Modules specificity, and responsive behavior when those surfaces are touched.
 - Runs existing lint verification when code changes and a lint command exists.
 - Runs rendered visual QA when a local app and browser tooling are available.
 - Reviews implementation quality with evidence-backed findings.
@@ -57,7 +60,7 @@ design-screenshot-spec
 ## What It Will Not Do By Default
 
 - It will not use Figma MCP or inspect live Figma files.
-- It will not add packages, UI libraries, styling systems, framework migrations, or app generators without explicit approval.
+- It will not add packages, UI libraries, styling systems, framework migrations, app generators, design generators, icon packages, or animation libraries without explicit approval.
 - It will not turn Redux into server communication or domain processing.
 - It will not create tests for components or functions.
 - It will not treat README as agent runtime context.
@@ -74,6 +77,7 @@ design-screenshot-spec
 - `goal-planner`
 - `execution-plan-manager`
 - `mcp-toolchain-manager`
+- `frontend-design-intelligence`
 - `frontend-design-director`
 - `frontend-architecture-planner`
 - `greenfield-project-builder`
@@ -87,6 +91,16 @@ design-screenshot-spec
 - `project-onboarding-adapter`
 - `project-context-adapter`
 - `agent-rules-skill-author`
+
+## Main Common Rule Additions
+
+- `ui-ux-priority-checklist`
+- `css-modules-specificity-rules`
+- `form-feedback-rules`
+- `navigation-ux-rules`
+- `data-visualization-rules`
+- `icon-quality-rules`
+- `mobile-responsive-rules`
 
 ## Distribution
 
