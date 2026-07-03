@@ -33,7 +33,7 @@ depends_on:
 
 Create a compact design intelligence brief before visual direction when a UI task needs product-category grounding, page-pattern choice, density decisions, or domain-specific anti-pattern checks.
 
-This skill adapts design-system reasoning into the WebDev Assistant model without becoming a UI framework, CLI generator, or package installer.
+This skill adapts design-system reasoning into the WebDev Agent Kit model without becoming a UI framework, CLI generator, or package installer.
 
 ## When To Use
 

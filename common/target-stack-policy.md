@@ -20,7 +20,7 @@ depends_on: []
 
 # Target Stack Policy
 
-WebDev Assistant targets React, Next.js, CSS Modules, Redux, TanStack, and Axios for stack-specific implementation, architecture, greenfield, state, data, and styling guidance.
+WebDev Agent Kit targets React, Next.js, CSS Modules, Redux, TanStack, and Axios for stack-specific implementation, architecture, greenfield, state, data, and styling guidance.
 
 Use local project conventions first. Use official documentation for the detected target-stack library when current behavior matters.
 

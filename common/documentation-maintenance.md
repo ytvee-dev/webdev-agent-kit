@@ -18,7 +18,7 @@ depends_on: []
 
 # Documentation Maintenance
 
-Purpose: keep the reduced screenshot-to-frontend bundle internally consistent.
+Purpose: keep the WebDev Agent Kit bundle internally consistent.
 
 ## Required Context
 

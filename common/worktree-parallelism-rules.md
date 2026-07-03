@@ -23,7 +23,7 @@ depends_on: []
 
 Purpose: define safe optional use of multiple agents or branches without file ownership conflicts.
 
-Parallel work is host-dependent and never required for ordinary WebDev Assistant tasks.
+Parallel work is host-dependent and never required for ordinary WebDev Agent Kit tasks.
 
 ## When To Consider Parallelism
 

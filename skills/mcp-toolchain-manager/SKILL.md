@@ -30,7 +30,7 @@ depends_on:
 
 ## Purpose
 
-Detect, explain, validate, and record MCP/tool capabilities needed by WebDev Assistant skills without turning tool setup into automatic or unsafe behavior.
+Detect, explain, validate, and record MCP/tool capabilities needed by WebDev Agent Kit skills without turning tool setup into automatic or unsafe behavior.
 
 This skill exists to keep MCP usage deliberate. It identifies which tools are required for the current workflow, which tools are already available, which tools are missing, what each missing tool unlocks, and what official source must be verified before installation is proposed.
 

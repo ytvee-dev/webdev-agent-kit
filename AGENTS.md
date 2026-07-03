@@ -57,7 +57,7 @@ The host repository root `AGENTS.md` is managed only by `project-onboarding-adap
 
 ## Target Stack
 
-WebDev Assistant targets React, Next.js, CSS Modules, Redux, TanStack, and Axios for stack-specific implementation, architecture, greenfield, state, data, and styling guidance.
+WebDev Agent Kit targets React, Next.js, CSS Modules, Redux, TanStack, and Axios for stack-specific implementation, architecture, greenfield, state, data, and styling guidance.
 
 Do not present unrelated frontend frameworks, UI libraries, app generators, styling systems, or testing workflows as supported defaults. If the host project is outside the target stack, distinguish unsupported stack-specific work from framework-agnostic bundle skills. Read `common/skill-applicability-policy.md` before deciding that no skill applies.
 
