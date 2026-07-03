@@ -2,7 +2,7 @@
 
 WebDev Assistant is a focused frontend agent skill pack for React and Next.js projects that use CSS Modules, Redux, TanStack, and Axios.
 
-It helps coding agents plan, implement, verify, debug, refactor, and review frontend work without turning the project into a generic framework playground.
+It helps coding agents plan, implement, verify, debug, refactor, review, and iterate on frontend work without turning the project into a generic framework playground.
 
 ## Target Stack
 
@@ -39,10 +39,11 @@ design-screenshot-spec
 -> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
 -> frontend-architecture-planner when architecture boundaries matter
+-> loop-workflow-planner when bounded retry or measurable iteration is required
 -> frontend-layout-implementer
 -> frontend-linter-manager when code changed and lint is available
 -> frontend-visual-qa
--> frontend-quality-reviewer when quality review is requested or appropriate
+-> frontend-quality-reviewer when quality review is requested or required by the loop contract
 ```
 
 ## What It Does
@@ -51,16 +52,38 @@ design-screenshot-spec
 - Grounds product category, page pattern, design dials, domain UX risks, and product-specific anti-patterns before visual direction when needed.
 - Defines subject-grounded visual direction when UI judgment matters.
 - Plans frontend architecture before code when routing, state, data, form, styling, build, or workspace boundaries matter.
+- Creates platform-neutral loop contracts when work must iterate until measurable acceptance criteria pass.
 - Implements scoped React and Next.js frontend changes using existing project conventions.
 - Applies conditional UX gates for forms, navigation, data visualization, icons, CSS Modules specificity, and responsive behavior when those surfaces are touched.
 - Runs existing lint verification when code changes and a lint command exists.
 - Runs rendered visual QA when a local app and browser tooling are available.
 - Reviews implementation quality with evidence-backed findings.
 
+## Agent Loop Support
+
+WebDev Assistant supports bounded agent loops without requiring Claude-only commands.
+
+A loop contract defines:
+
+- objective;
+- allowed scope;
+- acceptance criteria;
+- verification source;
+- maximum attempts or turns;
+- retry strategy;
+- independent review;
+- memory update;
+- stop conditions;
+- final evidence.
+
+Claude hosts may map this to `/goal`, `/loop`, subagents, or evaluator workflows when available. Codex, GPT-based coding agents, GitHub PR workflows, and generic agents can execute the same contract manually through plan, edit, verify, retry, review, and final evidence.
+
 ## What It Will Not Do By Default
 
 - It will not use Figma MCP or inspect live Figma files.
-- It will not add packages, UI libraries, styling systems, framework migrations, app generators, design generators, icon packages, or animation libraries without explicit approval.
+- It will not add packages, UI libraries, styling systems, framework migrations, app generators, design generators, icon packages, animation libraries, loop automation, or testing workflows without explicit approval.
+- It will not run unbounded autonomous loops.
+- It will not treat vague goals such as "make it better" as sufficient stop criteria for iterative work.
 - It will not turn Redux into server communication or domain processing.
 - It will not create tests for components or functions.
 - It will not treat README as agent runtime context.
@@ -76,6 +99,7 @@ design-screenshot-spec
 
 - `goal-planner`
 - `execution-plan-manager`
+- `loop-workflow-planner`
 - `mcp-toolchain-manager`
 - `frontend-design-intelligence`
 - `frontend-design-director`
@@ -101,6 +125,16 @@ design-screenshot-spec
 - `data-visualization-rules`
 - `icon-quality-rules`
 - `mobile-responsive-rules`
+
+## Main Loop Rules
+
+- `agent-loop-policy`
+- `stop-criteria-rules`
+- `bounded-retry-rules`
+- `verification-loop-rules`
+- `context-compaction-rules`
+- `independent-review-rules`
+- `worktree-parallelism-rules`
 
 ## Distribution
 
