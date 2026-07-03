@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
 related:
+    - '[[skills/frontend-design-intelligence/SKILL|Frontend Design Intelligence]]'
     - '[[skills/frontend-design-director/references/design-direction-contract|Design Direction Contract Reference]]'
     - '[[common/design-quality-rubric|Design Quality Rubric]]'
 depends_on: []
@@ -35,17 +36,42 @@ depends_on: []
 
 ...
 
+## Lead / Hero Thesis
+
+```text
+what the first screen must prove:
+subject-specific opening material:
+why this is not a generic hero:
+```
+
+## Design Dials
+
+```text
+visual variance: 1-10 + reason
+motion intensity: 1-10 + reason
+information density: 1-10 + reason
+```
+
 ## Visual Position
 
 ...
 
 ## Design Risk
 
-...
+```text
+risk taken:
+why it fits the subject:
+what would make it fail:
+```
 
 ## Signature Element
 
-...
+```text
+memorable element:
+subject reason:
+where it appears:
+what stays quiet around it:
+```
 
 ## Token System
 
@@ -58,6 +84,7 @@ text:
 muted:
 accent:
 semantic:
+contrast notes:
 ```
 
 ### Typography Roles
@@ -66,6 +93,11 @@ semantic:
 display:
 body:
 utility/data:
+scale:
+weight rhythm:
+line-height:
+letter-spacing:
+where typography carries personality:
 ```
 
 ### Spacing And Density
@@ -74,6 +106,7 @@ utility/data:
 section rhythm:
 component gaps:
 content density:
+mobile density adjustment:
 ```
 
 ### Shape And Depth
@@ -82,6 +115,18 @@ content density:
 radius:
 border:
 shadow/depth:
+why depth is needed or avoided:
+```
+
+## Structure As Information
+
+```text
+numbering:
+dividers:
+badges:
+labels:
+grids:
+what each structural device communicates:
 ```
 
 ## Layout Concept
@@ -95,7 +140,9 @@ ASCII wireframe or short structural description.
 ```text
 needed: yes | no
 purpose:
+primary motion idea:
 reduced-motion behavior:
+implementation boundary:
 ```
 
 ## Interface Copy Voice
@@ -105,7 +152,9 @@ reduced-motion behavior:
 ## Anti-Template Checks
 
 ```text
-- ...
+- generic defaults challenged:
+- product-specific anti-patterns challenged:
+- what was removed or replaced:
 ```
 
 ## Implementation Handoff Notes
@@ -113,14 +162,21 @@ reduced-motion behavior:
 ```text
 - existing project conventions to reuse:
 - tokens to map:
+- CSS Modules ownership:
 - components or routes affected:
+- form, navigation, data, icon, or responsive risks:
 - risks:
 ```
 
 ## Visual Acceptance Criteria
 
 ```text
-- ...
+- desktop:
+- tablet:
+- small phone:
+- states:
+- accessibility:
+- motion:
 ```
 
 ## Next Step
