@@ -30,10 +30,18 @@ related:
     - '[[common/data-visualization-rules|Data Visualization Rules]]'
     - '[[common/icon-quality-rules|Icon Quality Rules]]'
     - '[[common/mobile-responsive-rules|Mobile Responsive Rules]]'
+    - '[[common/agent-loop-policy|Agent Loop Policy]]'
+    - '[[common/stop-criteria-rules|Stop Criteria Rules]]'
+    - '[[common/bounded-retry-rules|Bounded Retry Rules]]'
+    - '[[common/verification-loop-rules|Verification Loop Rules]]'
+    - '[[common/context-compaction-rules|Context Compaction Rules]]'
+    - '[[common/independent-review-rules|Independent Review Rules]]'
+    - '[[common/worktree-parallelism-rules|Worktree Parallelism Rules]]'
     - '[[common/agent-operating-model|Agent Operating Model]]'
     - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
     - '[[common/typescript-discipline|TypeScript Discipline]]'
     - '[[skills/frontend-design-intelligence/SKILL|Frontend Design Intelligence]]'
+    - '[[skills/loop-workflow-planner/SKILL|Loop Workflow Planner]]'
     - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
     - '[[skills/project-context-adapter/SKILL|Project Context Adapter]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
@@ -96,6 +104,8 @@ Classify every task as one or more of:
 - `greenfield-project`
 - `lint-verification`
 - `visual-qa`
+- `agent-loop`
+- `loop-planning`
 - `project-onboarding`
 - `project-context-refresh`
 - `planning/architecture`
@@ -112,13 +122,13 @@ Before selecting the final skill chain, classify the prompt by workflow weight: 
 
 Read `common/prompt-intent-routing-rules.md` when the prompt could be confused between a narrow task and a larger multi-step task.
 
-Use `Fast Lookup` for narrow questions, file lookup, code explanation, locating related files, and inspecting how a small function, selector, route, style, or config works. Read `common/lightweight-routing-policy.md` for this path. Do not load task skills, references, planning skills, MCP profiles, visual QA, quality review, onboarding, or validation checklists unless targeted inspection proves escalation is required.
+Use `Fast Lookup` for narrow questions, file lookup, code explanation, locating related files, and inspecting how a small function, selector, route, style, or config works. Read `common/lightweight-routing-policy.md` for this path. Do not load task skills, references, planning skills, loop workflow planning, MCP profiles, visual QA, quality review, onboarding, or validation checklists unless targeted inspection proves escalation is required.
 
 Use `Lightweight Workflow` for one small bug, obvious typo or type error, small styling adjustment, isolated component change, or direct request with obvious affected scope.
 
-Use `Standard Workflow` for multi-file features, screenshot/spec UI work, unclear bug root causes, refactors with behavior boundaries, or tasks that need more than one implementation slice.
+Use `Standard Workflow` for multi-file features, screenshot/spec UI work, unclear bug root causes, refactors with behavior boundaries, tasks that need more than one implementation slice, or tasks that require bounded retry against measurable verification.
 
-Use `Deep Workflow` only for new project creation, architecture design, stack migration, onboarding an unknown project, broad redesign, repeated failures, or large work that needs durable stop/resume state.
+Use `Deep Workflow` only for new project creation, architecture design, stack migration, onboarding an unknown project, broad redesign, repeated failures, parallel experiments, or large work that needs durable stop/resume state.
 
 After task and scale classification:
 
@@ -138,6 +148,7 @@ Do not read all skills, all references, all common docs, all overlays, `README.m
 - Narrow lookup, code explanation, file location, and small inspection that do not need file changes -> `Fast Lookup` with `common/lightweight-routing-policy.md`, no task skill chain unless escalation is justified.
 - Standard or deep frontend work that needs a clear user goal, scope, constraints, and done criteria before implementation -> `goal-planner`.
 - Standard or deep frontend work that needs task slices, context budget, checkpoint rules, or stop/resume state after the goal is defined -> `execution-plan-manager`.
+- Standard or deep work that must iterate until measurable acceptance criteria pass, repair verification failures, use bounded retry, preserve loop memory, or separate implementation from final judgment -> `loop-workflow-planner`.
 - MCP/tool capability detection, missing-tool reporting, official install source verification, approval-gated installation planning, or `project/mcp-profile.md` updates -> `mcp-toolchain-manager`.
 - Standard or deep UI work that needs product category, page pattern, design dials, domain UX risks, or product-specific anti-pattern grounding before visual direction -> `frontend-design-intelligence`.
 - Standard or deep UI work that needs visual direction, redesign, visual polish, design critique, anti-template checks, or design handoff before implementation -> `frontend-design-director`.
@@ -161,10 +172,11 @@ design-screenshot-spec
 -> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
 -> frontend-architecture-planner when architecture boundaries matter
+-> loop-workflow-planner when bounded retry or measurable iteration is required
 -> frontend-layout-implementer
 -> frontend-linter-manager when code changed and lint is available
 -> frontend-visual-qa
--> frontend-quality-reviewer when quality review is requested or appropriate
+-> frontend-quality-reviewer when quality review is requested or required by the loop contract
 ```
 
 Use the framework-agnostic screenshot pipeline in non-target frontend projects:
@@ -173,10 +185,11 @@ Use the framework-agnostic screenshot pipeline in non-target frontend projects:
 design-screenshot-spec
 -> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
+-> loop-workflow-planner when bounded retry or measurable iteration is required
 -> base Codex implementation using inspected local project conventions
 -> frontend-linter-manager when code changed and an existing lint command is available
 -> frontend-visual-qa when a local app and browser tooling are available
--> frontend-quality-reviewer when quality review is requested or appropriate
+-> frontend-quality-reviewer when quality review is requested or required by the loop contract
 ```
 
 For new or empty React/Next.js projects, use the greenfield flow before any scaffold:
@@ -191,7 +204,9 @@ goal-planner
 
 For code-changing tasks, run the smallest relevant existing lint command before final reporting. If no lint command exists, report that lint was not run. If the user asks for lint setup, use `frontend-linter-manager` and require explicit approval before dependency, script, or config changes.
 
-Do not insert planning, MCP, design direction, architecture, design intelligence, or greenfield skills into lightweight workflows unless the task escalates or the user directly asks for that concern.
+For iterative tasks, use `common/agent-loop-policy.md`. A loop must have measurable acceptance criteria, an attempt limit, stop conditions, and final evidence. Do not require Claude-only commands such as `/goal`, `/loop`, or `/schedule`; map the same Loop Workflow Contract to the host platform when available.
+
+Do not insert planning, MCP, design direction, architecture, design intelligence, loop workflow planning, or greenfield skills into lightweight workflows unless the task escalates, repeated failure appears, measurable iteration is explicitly requested, or the user directly asks for that concern.
 
 ## Figma Boundary
 
@@ -218,6 +233,7 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 - Apply component decomposition rules regardless of framework, router, state layer, data layer, or styling system.
 - Apply CSS Modules specificity rules when CSS Modules are changed.
 - Apply conditional UX gates for forms, navigation, data visualization, icons, and mobile responsive behavior when those surfaces are touched.
+- Use bounded verification loops only when acceptance criteria, retry limit, and stop conditions are defined.
 - Do not add packages, styling systems, global tokens, generated scaffolds, architecture layers, UI libraries, or testing workflows without explicit user approval.
 - Keep edits scoped to the requested screen, component, route, or static page.
 - Preserve accessibility, focus states, responsive behavior, text wrapping, and stable layout dimensions.
@@ -226,6 +242,7 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 
 - Keep reusable instructions in `common/**` or `skills/**`.
 - Keep host-project facts in `project/**`.
+- Keep loop memory and verified loop learnings in local-only `project/**` files.
 - Keep MCP and official documentation capability facts in `project/mcp-profile.md`.
 - Keep screenshot, exported asset, copied inspect, and design-reference boundaries in `project/design-reference-profile.md`.
 - Keep every Markdown file in this bundle graph-linkable with YAML frontmatter.
