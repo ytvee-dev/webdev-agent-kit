@@ -21,6 +21,8 @@ related:
     - '[[common/anti-template-defaults|Anti-Template Defaults]]'
     - '[[common/interface-copy-rules|Interface Copy Rules]]'
     - '[[common/motion-rules|Motion Rules]]'
+    - '[[common/ui-ux-priority-checklist|UI UX Priority Checklist]]'
+    - '[[skills/frontend-design-intelligence/SKILL|Frontend Design Intelligence]]'
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
@@ -34,39 +36,30 @@ depends_on:
 
 Define a concrete, subject-grounded frontend design direction before implementation when a task requires visual judgment.
 
-This skill prevents generic AI-generated UI by making deliberate choices about audience, single job, visual position, hierarchy, typography, color, layout, motion, interface copy, and anti-template risks.
+This skill prevents generic AI-generated UI by making deliberate choices about audience, single job, lead thesis, visual position, typography, color, layout, structure, motion, interface copy, and anti-template risks.
 
-It does not implement code by default. It creates a design direction contract that can be handed to `frontend-layout-implementer` and verified by `frontend-visual-qa` or `frontend-quality-reviewer`.
+It does not implement code by default. It creates a Design Direction Contract that can be handed to `frontend-layout-implementer` and verified by `frontend-visual-qa` or `frontend-quality-reviewer`.
+
+## Design Lead Stance
+
+Act as a design lead, not a style randomizer.
+
+- The page needs a point of view that fits this subject and audience.
+- Take one real visual risk only when it can be justified.
+- Spend boldness in one place and keep the rest disciplined.
+- The hero or lead section must express the page thesis.
+- Typography, structure, motion, and copy are design material, not filler.
+- Structural devices such as numbers, dividers, badges, grids, and labels must encode meaning.
 
 ## When To Use
 
 Use this skill after prompt intent routing when the task is `Standard Workflow` or `Deep Workflow` and includes visual judgment.
 
-Use this skill when the user asks to:
-
-- create a new UI;
-- redesign an existing UI;
-- improve visual quality;
-- make a page more distinctive;
-- create or reshape a landing page;
-- create or reshape a dashboard;
-- turn a vague visual request into a concrete direction;
-- critique generic AI-looking UI;
-- define visual acceptance criteria before implementation;
-- adapt a screenshot, visual reference, or design brief into a stronger frontend direction.
+Use this skill when the user asks to create, redesign, polish, critique, make distinctive, or define visual acceptance criteria for a rendered frontend surface.
 
 ## When Not To Use
 
-Do not use this skill for:
-
-- one small bug;
-- one obvious type error;
-- one direct file-scope edit;
-- one isolated code refactor;
-- purely technical debugging;
-- backend, database, or infrastructure work;
-- UI component library selection;
-- testing workflows.
+Do not use this skill for one small bug, one obvious type error, one direct file-scope edit, one isolated code refactor, purely technical debugging, UI library selection, package installation, or testing workflows.
 
 Do not use this skill as a required step for every frontend task. Use it only when design judgment affects the current slice.
 
@@ -74,19 +67,21 @@ Do not use this skill as a required step for every frontend task. Use it only wh
 
 1. Read `AGENTS.md`.
 2. Read `common/prompt-intent-routing-rules.md` when workflow level is unclear.
-3. Read only relevant project overlays:
+3. Read `common/design-quality-rubric.md`, `common/anti-template-defaults.md`, `common/interface-copy-rules.md`, and `common/motion-rules.md`.
+4. Read `skills/frontend-design-intelligence/SKILL.md` only when product category, page pattern, design dials, or domain-specific anti-patterns need grounding.
+5. Read only relevant project overlays:
    - `project/stack-profile.md`;
    - `project/styling-profile.md`;
    - `project/design-reference-profile.md`;
    - `project/visual-memory.md` when present;
    - `project/active-goals.md` or the compact goal contract when present.
-4. Read supplied screenshots, design references, copied inspect values, or written brief.
-5. Read affected route or component files only when existing project constraints are needed.
-6. Do not read all source files, all skills, all references, or `SUMMARY.md` for routing.
+6. Read supplied screenshots, design references, copied inspect values, or written brief.
+7. Read affected route or component files only when existing project constraints are needed.
+8. Do not read all source files, all skills, all references, or `SUMMARY.md` for routing.
 
 ## Tool Contract
 
-- May use filesystem access to read relevant project overlays and write design artifacts only when the task requires durable handoff.
+- May use filesystem access to read relevant project overlays and write design artifacts only when durable handoff is required.
 - May use Browser or Playwright screenshots when a rendered UI already exists and screenshot critique is needed.
 - May use MDN or official platform docs for CSS, accessibility, motion, or browser behavior details when needed.
 - May use `context7` for framework-specific UI constraints when relevant.
@@ -99,60 +94,24 @@ Do not use this skill as a required step for every frontend task. Use it only wh
 1. Confirm visual task scope.
    - If the task is lightweight and purely technical, stop and route to the direct technical skill.
    - If visual direction matters, continue.
-
 2. Ground the design.
-   Define:
-   - subject;
-   - audience;
-   - single job;
-   - product context;
-   - workflow level.
-
-3. Identify existing constraints.
-   - Existing typography system.
-   - Existing colors and tokens.
-   - Existing layout patterns.
-   - Existing component conventions.
-   - Accessibility and responsive constraints.
-   - Visual memory or rejected directions.
-
-4. Explore compact directions.
-   Produce two or three concise direction options only when the task is ambiguous. For a clear brief, produce one direction.
-
-5. Select or recommend a direction.
-   Explain why the selected direction fits the subject, audience, and single job.
-
-6. Define the Design Direction Contract.
-   Include:
-   - subject;
-   - audience;
-   - single job;
-   - visual position;
-   - design risk;
-   - signature element;
-   - token system;
-   - layout concept;
-   - typography roles;
-   - motion stance;
-   - interface copy voice;
-   - anti-template checks;
-   - acceptance criteria.
-
-7. Run anti-template review.
-   Check for:
-   - generic SaaS hero;
-   - fake metrics;
-   - meaningless feature grids;
-   - decorative badges or numbers;
-   - unjustified glass, glow, gradients, or shadows;
-   - typography without purpose;
-   - motion used to hide weak structure.
-
-8. Prepare implementation handoff.
-   Hand off to `frontend-layout-implementer` only after the design direction is concrete enough to implement.
-
-9. Prepare verification handoff.
-   Define visual acceptance criteria that `frontend-visual-qa` or `frontend-quality-reviewer` can verify.
+   Define subject, audience, single job, product context, and workflow level.
+3. Use `frontend-design-intelligence` when the product/page pattern or design dials are not already clear.
+4. Identify existing constraints: typography system, colors, tokens, layout patterns, components, accessibility, responsive constraints, visual memory, and rejected directions.
+5. Draft a compact first-pass direction with color, type, layout, structure, motion, copy voice, and signature element.
+6. Critique the draft against the brief.
+   - If it could fit an unrelated product by swapping copy, revise it.
+   - If structural devices do not encode meaning, remove or replace them.
+   - If typography is neutral by habit, give it a role or keep it intentionally quiet.
+7. Define the lead or hero thesis.
+   - What must the first screen prove?
+   - What subject-specific material opens the page?
+   - Why is this not a generic hero?
+8. Select or recommend the final direction.
+9. Define the Design Direction Contract.
+10. Run anti-template review.
+11. Prepare implementation handoff to `frontend-layout-implementer` only when concrete enough to implement.
+12. Prepare verification handoff with visual acceptance criteria for `frontend-visual-qa` or `frontend-quality-reviewer`.
 
 ## Output Contract
 
@@ -163,11 +122,14 @@ Subject
 Audience
 Single Job
 Product Context
+Lead / Hero Thesis
+Design Dials
 Visual Position
 Design Risk
 Signature Element
 Token System
 Typography Roles
+Structure As Information
 Layout Concept
 Motion Stance
 Interface Copy Voice
@@ -186,8 +148,11 @@ Before finishing, verify:
 - the task actually needed design judgment;
 - the direction is grounded in the subject and audience;
 - the screen has one primary job;
+- the hero or lead section expresses a thesis when the surface has a lead section;
+- design dials are explicit when visual intensity, motion, or density matters;
 - at least one signature element is defined when creating or redesigning a major page;
-- typography, color, layout, and motion choices have reasons;
+- typography, color, layout, structure, and motion choices have reasons;
+- structural devices encode real meaning;
 - anti-template checks were applied;
 - no UI component library skill was introduced;
 - no testing workflow was introduced;
@@ -215,10 +180,12 @@ Should not trigger:
 ## Reference Map
 
 - `AGENTS.md` - canonical policy, routing, tool rules, and documentation rules.
+- `skills/frontend-design-intelligence/SKILL.md` - product pattern, design dials, and product anti-pattern grounding.
 - `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation rules.
 - `common/design-quality-rubric.md` - design review dimensions and verdicts.
 - `common/anti-template-defaults.md` - suspicious generic UI defaults.
 - `common/interface-copy-rules.md` - copy as part of interface design.
 - `common/motion-rules.md` - motion restraint and reduced-motion rules.
+- `common/ui-ux-priority-checklist.md` - user-impact priority model.
 - `templates/design-direction-contract.md` - durable design direction artifact.
 - `templates/visual-memory.md` - local-only project visual memory template.
