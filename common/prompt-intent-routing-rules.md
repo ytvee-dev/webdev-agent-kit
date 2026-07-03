@@ -32,6 +32,25 @@ Start with the cheapest path that can answer the user. Escalate only when target
 
 A narrow lookup must stay fast. A narrow bugfix must stay lightweight. A large ambiguous request must be planned before implementation.
 
+## Question-First Gate
+
+When the user asks for options, tradeoffs, or approach before implementation, answer the question before editing files.
+
+Question-first prompts include:
+
+- "how can we";
+- "what are the options";
+- "which approach is better";
+- "какими способами";
+- "как лучше сделать";
+- "что можно сделать".
+
+For question-first prompts:
+
+1. Inspect narrowly only when project-specific context is needed.
+2. Explain viable options and recommend one.
+3. Do not edit files, run validation, start servers, or invoke implementation skills until the user explicitly asks to implement or approves the chosen option.
+
 ## Workflow Levels
 
 Use the canonical task classification and skill map in `AGENTS.md`, then choose the lightest safe workflow:
@@ -39,9 +58,28 @@ Use the canonical task classification and skill map in `AGENTS.md`, then choose 
 | Level | Use when | Process boundary |
 | --- | --- | --- |
 | Fast Lookup | Narrow lookup or explanation with no requested change | Read the lookup policy, search narrowly, answer, stop |
-| Lightweight Workflow | One clear bug, type error, styling adjustment, local refactor, or isolated edit | Inspect the affected owner, change directly, run the smallest relevant check |
+| Lightweight Workflow | One clear bug, micro UI fix, type error, styling adjustment, local refactor, or isolated edit | Inspect the affected owner, change directly, run the smallest relevant check |
 | Standard Workflow | Multi-file work, unclear root cause, screenshot/spec implementation, or measurable retry | Use compact goal/slicing only when it improves execution; add the selected task skill |
 | Deep Workflow | New project, architecture or stack migration, broad redesign, repeated failures, or resumable work | Define durable goal, plan, context budget, checkpoints, and approval gates |
+
+## Micro UI Fix Classification
+
+Classify a task as a `Lightweight Workflow` micro UI fix when all of these are true:
+
+- the change is isolated to one rendered component, one small component cluster, or one adjacent stylesheet;
+- the expected patch is one or two files;
+- any needed library is already installed or already used by the project;
+- no API, WebSocket frame shape, store, routing, auth, data-flow, architecture, build-tool, or package-manager boundary must change;
+- the user wants a direct local fix, not a full redesign, screenshot implementation, audit, or review.
+
+Examples:
+
+- rendering an existing chat message string with an already-installed markdown renderer;
+- changing compact spacing inside one chat bubble;
+- adjusting one button's disabled state rendering;
+- fixing a one-component text wrapping issue.
+
+Micro UI fixes must not be escalated to Standard Workflow merely because they affect rendered UI. Escalate only when targeted evidence shows that the apparent small patch crosses a boundary listed in `Escalation`.
 
 ## Escalation
 
@@ -62,6 +100,7 @@ Examples:
 
 - locating a notification renderer is Fast Lookup;
 - changing one button token is Lightweight;
+- rendering chat markdown with an already-installed renderer in one message component is Lightweight;
 - implementing a supplied screen across several owners is Standard;
 - migrating the routing or styling architecture is Deep.
 
