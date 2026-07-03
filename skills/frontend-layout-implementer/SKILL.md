@@ -1,6 +1,6 @@
 ---
 name: frontend-layout-implementer
-description: Use when implementing a Design Implementation Spec or screenshot-derived visual spec in a React or Next.js project using existing CSS Modules, Redux, TanStack, and Axios conventions. Do not use for unrelated frontend stacks, Figma MCP, new styling systems, or implementation before design intent is specified.
+description: Use when implementing a Design Implementation Spec or screenshot-derived visual spec in a React or Next.js project using existing CSS Modules, Redux, TanStack, and Axios conventions. Supports bounded verification handoff when measurable iteration is required. Do not use for unrelated frontend stacks, Figma MCP, new styling systems, or implementation before design intent is specified.
 id: 'agents.skills.frontend-layout-implementer.skill'
 title: 'Frontend Layout Implementer'
 doc_type: 'skill'
@@ -24,6 +24,9 @@ related:
     - '[[common/data-visualization-rules|Data Visualization Rules]]'
     - '[[common/icon-quality-rules|Icon Quality Rules]]'
     - '[[common/mobile-responsive-rules|Mobile Responsive Rules]]'
+    - '[[common/agent-loop-policy|Agent Loop Policy]]'
+    - '[[common/verification-loop-rules|Verification Loop Rules]]'
+    - '[[skills/loop-workflow-planner/SKILL|Loop Workflow Planner]]'
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
     - '[[skills/frontend-architecture-planner/SKILL|Frontend Architecture Planner]]'
@@ -39,7 +42,9 @@ depends_on:
 
 ## Purpose
 
-Implement a `Design Implementation Spec` or `Design Direction Contract` in a React or Next.js project while respecting existing CSS Modules, Redux, TanStack, Axios, architecture, styling, decomposition, and verification conventions.
+Implement a `Design Implementation Spec` or `Design Direction Contract` in a React or Next.js project while respecting existing CSS Modules, Redux, TanStack, Axios, architecture, styling, decomposition, UX gates, and verification conventions.
+
+When the user asks to keep iterating until measurable visual, lint, build, or route acceptance criteria pass, implementation must follow a Loop Workflow Contract or hand off to `loop-workflow-planner` before editing.
 
 ## When To Use
 
@@ -62,10 +67,11 @@ Implement a `Design Implementation Spec` or `Design Direction Contract` in a Rea
 4. Read `common/approved-patterns.md` and relevant anti-pattern rules.
 5. Read `common/css-modules-specificity-rules.md` for CSS Modules changes.
 6. Read conditional UX rules only when the touched surface needs them: forms, navigation, data visualization, icons, or mobile responsive behavior.
-7. Read relevant project overlays when present: stack, architecture, styling, verification, state, data-fetching, build, and workspace profiles.
-8. Read the `Design Implementation Spec`, `Design Direction Contract`, and supplied visual references.
-9. Read affected source files, styles, components, routes, and configs.
-10. Read `references/implementation-rules.md` when present.
+7. Read `common/agent-loop-policy.md` and `common/verification-loop-rules.md` when measurable iteration or bounded retry is required.
+8. Read relevant project overlays when present: stack, architecture, styling, verification, state, data-fetching, build, and workspace profiles.
+9. Read the `Design Implementation Spec`, `Design Direction Contract`, and supplied visual references.
+10. Read affected source files, styles, components, routes, and configs.
+11. Read `references/implementation-rules.md` when present.
 
 Do not read `README.md` or `dist/**` during normal runtime.
 
@@ -88,20 +94,21 @@ Do not read `README.md` or `dist/**` during normal runtime.
 3. Map the spec to existing project components, layout primitives, tokens, assets, styles, and UX patterns.
 4. Identify missing design details before editing. Ask only when the gap changes implementation.
 5. Use `frontend-architecture-planner` before editing when route, state, data, form, build, workspace, or shared component ownership is unclear or material.
-6. Plan component decomposition before editing.
-7. Map structure as information before adding numbers, dividers, badges, labels, grids, metrics, or decorative sections.
-8. Identify conditional UX gates: forms, navigation, data visualization, icon quality, and mobile responsiveness.
-9. Identify CSS Modules ownership and selector risks before styling.
-10. Implement the smallest scoped change that satisfies the spec, design direction, architecture handoff, and decomposition plan.
-11. Keep UI state local unless existing React, Redux, or TanStack ownership requires otherwise.
-12. Keep styles in CSS Modules by default.
-13. Reuse existing Axios clients and API adapters for API-facing changes.
-14. Do not add dependencies, global tokens, UI libraries, or new styling systems without explicit approval.
-15. Preserve accessibility, semantic structure, keyboard/focus behavior, text wrapping, responsive behavior, and stable layout dimensions.
-16. Use `frontend-linter-manager` after code-changing work when a lint command exists.
-17. Run relevant project verification commands from `project/verification-profile.md`.
-18. Run `frontend-visual-qa` only when the change needs rendered screenshot comparison, viewport evidence, overflow verification, or visible state verification.
-19. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, or the plan requires a quality pass.
+6. Use `loop-workflow-planner` before editing when the task requires bounded retry, independent review, loop memory, or measurable iteration beyond one implementation pass.
+7. Plan component decomposition before editing.
+8. Map structure as information before adding numbers, dividers, badges, labels, grids, metrics, or decorative sections.
+9. Identify conditional UX gates: forms, navigation, data visualization, icon quality, and mobile responsiveness.
+10. Identify CSS Modules ownership and selector risks before styling.
+11. Implement the smallest scoped change that satisfies the spec, design direction, architecture handoff, and decomposition plan.
+12. Keep UI state local unless existing React, Redux, or TanStack ownership requires otherwise.
+13. Keep styles in CSS Modules by default.
+14. Reuse existing Axios clients and API adapters for API-facing changes.
+15. Do not add dependencies, global tokens, UI libraries, or new styling systems without explicit approval.
+16. Preserve accessibility, semantic structure, keyboard/focus behavior, text wrapping, responsive behavior, and stable layout dimensions.
+17. Use `frontend-linter-manager` after code-changing work when a lint command exists.
+18. Run relevant project verification commands from `project/verification-profile.md`.
+19. Run `frontend-visual-qa` only when the change needs rendered screenshot comparison, viewport evidence, overflow verification, or visible state verification.
+20. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, a loop contract requires independent review, or the plan requires a quality pass.
 
 ## Output Contract
 
@@ -112,6 +119,7 @@ Report:
 - decomposition applied or why the touched component remained intentionally small;
 - CSS Modules, Redux, TanStack, Axios, or project primitives reused;
 - form, navigation, data, icon, and responsive gates considered or skipped as not applicable;
+- loop contract followed or why no loop was needed;
 - deviations from the design spec;
 - lint and verification commands run;
 - rendered visual QA result, skipped reason, or blocker.
@@ -123,6 +131,7 @@ Report:
 - CSS Modules changes must have clear ownership and stable specificity.
 - Structural devices must encode meaning instead of decoration.
 - Form, navigation, data, icon, and mobile risks must be handled when present.
+- Bounded iteration must have measurable criteria, attempt limit, and stop conditions.
 - No Figma MCP use is allowed.
 - No new package, styling system, global token, architecture layer, or UI library may appear without approval.
 - Code-changing implementation must run lint when an existing lint command is available.
@@ -138,6 +147,9 @@ Report:
 - `common/data-visualization-rules.md`
 - `common/icon-quality-rules.md`
 - `common/mobile-responsive-rules.md`
+- `common/agent-loop-policy.md`
+- `common/verification-loop-rules.md`
+- `skills/loop-workflow-planner/SKILL.md`
 - `skills/frontend-architecture-planner/SKILL.md`
 - `skills/frontend-linter-manager/SKILL.md`
 - `skills/frontend-quality-reviewer/SKILL.md`
