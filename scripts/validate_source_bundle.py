@@ -39,10 +39,16 @@ REMOVED_TERMS = (
     "react-state-workflow",
     "frontend-review-and-fix",
 )
+HUMAN_ONLY_MARKDOWN_FILES = {"README.md"}
 
 
 def markdown_files():
-    return sorted(path for path in ROOT.rglob("*.md") if "dist" not in path.parts)
+    return sorted(
+        path
+        for path in ROOT.rglob("*.md")
+        if "dist" not in path.parts
+        and path.relative_to(ROOT).as_posix() not in HUMAN_ONLY_MARKDOWN_FILES
+    )
 
 
 def split_frontmatter(path):
@@ -77,6 +83,17 @@ def graph_field_links(frontmatter, field):
         if active:
             links.extend(re.findall(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]", line))
     return links
+
+
+def validate_license(errors):
+    path = ROOT / "LICENSE"
+    if not path.exists():
+        errors.append("LICENSE file is required and must use Apache License 2.0")
+        return
+
+    text = path.read_text(encoding="utf-8", errors="replace")
+    if "Apache License" not in text or "Version 2.0" not in text:
+        errors.append("LICENSE must contain Apache License 2.0 text")
 
 
 def validate_markdown(errors):
@@ -124,7 +141,6 @@ def validate_markdown(errors):
 
     orphan_exceptions = {
         (ROOT / "AGENTS.md").resolve(),
-        (ROOT / "README.md").resolve(),
         (ROOT / "CHANGELOG.md").resolve(),
         (ROOT / "CONTRIBUTING.md").resolve(),
         (ROOT / "SECURITY.md").resolve(),
@@ -216,6 +232,7 @@ def validate_positive_project_paths(errors):
 
 def validate():
     errors = []
+    validate_license(errors)
     validate_markdown(errors)
     validate_skill_inventory(errors)
     validate_skill_path_mentions(errors)
