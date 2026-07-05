@@ -70,6 +70,27 @@ jobs:
         if: steps.validate_source.outputs.status != '0'
         run: exit ${{ steps.validate_source.outputs.status }}
 
+      - name: Validate skill evals
+        id: validate_evals
+        run: |
+          set +e
+          python scripts/validate_skill_evals.py > validation-evals.log 2>&1
+          status=$?
+          cat validation-evals.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload eval validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-evals-log
+          path: validation-evals.log
+
+      - name: Fail if eval validation failed
+        if: steps.validate_evals.outputs.status != '0'
+        run: exit ${{ steps.validate_evals.outputs.status }}
+
       - name: Build portable targets
         run: python scripts/build_skill_targets.py
 
