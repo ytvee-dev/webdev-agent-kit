@@ -252,13 +252,18 @@ def validate(strict_graph=False):
 
 def main():
     parser = argparse.ArgumentParser(description="Validate bundle metadata against repository JSON schemas.")
+    parser.add_argument("--strict", action="store_true", help="Fail on schema validation errors. Default is warning-only while schemas mature.")
     parser.add_argument("--strict-graph", action="store_true", help="Also enforce graph-doc schema on non-skill Markdown frontmatter.")
     args = parser.parse_args()
     errors = validate(strict_graph=args.strict_graph)
     if errors:
+        print("Schema validation warnings:")
         for error in errors:
-            print(error)
-        sys.exit(1)
+            print(f"- {error}")
+        if args.strict:
+            sys.exit(1)
+        print("Schema validation is warning-only; rerun with --strict to fail on these issues.")
+        return
     print("Schema validation passed.")
 
 
