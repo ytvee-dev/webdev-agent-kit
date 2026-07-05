@@ -15,9 +15,12 @@ def run(script):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate source metadata, then build and validate Codex and Claude targets.")
+    parser = argparse.ArgumentParser(description="Validate schemas and source metadata, then build and validate Codex and Claude targets.")
     parser.parse_args()
 
+    schema_code = run("validate_schemas.py")
+    if schema_code:
+        sys.exit(schema_code)
     source_code = run("validate_source_bundle.py")
     if source_code:
         sys.exit(source_code)
@@ -31,4 +34,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
