@@ -26,6 +26,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added initial skill trigger eval fixtures for high-value routing decisions.
+- Added initial skill output eval fixtures for review, bugfix, visual QA, layout implementation, and bundle maintenance workflows.
+- Added `scripts/validate_skill_evals.py` and JSON schemas for eval suites and eval cases.
 - Added repository JSON schemas for bundle manifest metadata, skill frontmatter, OpenAI agent metadata, and graph document frontmatter.
 - Added `scripts/validate_schemas.py` as a first schema-first validation pass before source and target validation.
 - Added Apache License 2.0 through root `LICENSE` and bundle manifest metadata.
@@ -35,6 +38,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- CI now validates skill eval fixtures before building portable targets.
+- `scripts/validate_skill_pack.py` now runs eval validation before build and target validation.
 - Hardened source validation so a clean reusable-bundle checkout does not require local-only `project/**` overlays.
 - Removed README inventory checks from source validation because `README.md` is human-facing documentation, not an agent runtime or validation source.
 - Clarified in runtime policy and authoring rules that `README.md` stays user-facing and outside agent reads.
