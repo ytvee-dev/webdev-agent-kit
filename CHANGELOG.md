@@ -26,6 +26,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added tagged release workflow for validated Codex and Claude portable target artifacts.
 - Added initial skill trigger eval fixtures for high-value routing decisions.
 - Added initial skill output eval fixtures for review, bugfix, visual QA, layout implementation, and bundle maintenance workflows.
 - Added `scripts/validate_skill_evals.py` and JSON schemas for eval suites and eval cases.
