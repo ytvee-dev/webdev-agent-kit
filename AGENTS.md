@@ -70,9 +70,19 @@ Non-target frontend projects may still use design intake, visual direction, rend
 - `common/**` contains reusable runtime rules.
 - `templates/**` contains optional local artifact templates.
 - `project/**` contains host-project facts and stays local-only.
-- `README.md` is a human-facing repository description and usage guide only.
+- `README.md` is a human-facing repository description and usage guide only. It is not runtime context, not a routing source, not a policy source, not a skill inventory source, and not a validation source for agents.
 - `dist/**` is generated distribution output and must not be used as source of truth.
 - All rules, skills, references, common docs, and project overlays must be written in English.
+
+## README Runtime Boundary
+
+Agents must never read `README.md` under any circumstance.
+
+- Do not open, search, summarize, cite, route from, validate from, or treat `README.md` as context.
+- Do not use `README.md` for task classification, skill selection, onboarding, project context refresh, bundle maintenance, verification, source inventory, or generated-target validation.
+- Use `AGENTS.md`, `bundle-manifest.json`, `skills/**`, `common/**`, `templates/**`, and local-only `project/**` overlays as the available source model instead.
+- If a user asks about README content, ask the user to paste the relevant excerpt or desired replacement text. Do not inspect `README.md`.
+- If a human-facing README change is needed, propose the text in the final response for a human maintainer to apply. Do not autonomously read or edit `README.md`.
 
 ## Natural Language Commands
 
@@ -142,7 +152,7 @@ After task and scale classification:
 7. Read only references and project files needed for the classified task.
 8. If no repo-local skill matches, handle the task with base Codex behavior and relevant project context.
 
-Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing.
+Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing. Never read `README.md` for any non-routing task either.
 
 ## Skill Map
 
@@ -246,9 +256,9 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 - Keep loop memory and verified loop learnings in local-only `project/**` files.
 - Keep MCP and official documentation capability facts in `project/mcp-profile.md`.
 - Keep screenshot, exported asset, copied inspect, and design-reference boundaries in `project/design-reference-profile.md`.
-- Keep every Markdown file in this bundle graph-linkable with YAML frontmatter.
+- Keep every runtime Markdown file in this bundle graph-linkable with YAML frontmatter. `README.md` is excluded because it is human-only.
 - In `SKILL.md`, keep `name` and `description` first, followed by graph metadata.
-- Update `README.md` only for human-facing repository documentation changes.
+- Do not read or autonomously update `README.md`. Propose human-facing README text to the user instead.
 - Do not publish or copy `project/**` facts into reusable bundle docs.
 
 ## Verification
@@ -258,5 +268,5 @@ For skill and documentation changes:
 1. Validate changed skills with `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>` when available.
 2. Search for stale deleted skill names and prohibited Figma/Jam routing.
 3. Search changed rules and overlays for non-English rule text.
-4. Check that human-facing docs and actual `skills/**` directories agree only when those docs changed.
+4. Check that human-facing docs and actual `skills/**` directories agree only when those docs changed, without reading `README.md`.
 5. Run Markdown formatting checks when available.

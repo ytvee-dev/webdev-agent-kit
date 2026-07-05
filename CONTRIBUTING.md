@@ -11,7 +11,6 @@ tags:
     - 'governance'
 parent: []
 related:
-    - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
 depends_on: []
@@ -28,6 +27,7 @@ WebDev Agent Kit is a reusable source bundle for coding-agent workflows. Contrib
 - Prefer precise workflow instructions over broad slogans such as "follow best practices".
 - Treat skill `description` fields as routing triggers. Include what the skill does, when to use it, and important non-use boundaries.
 - Keep `SKILL.md` files compact. Move durable details into `references/**`, deterministic helpers into `scripts/**`, and templates or sample artifacts into `assets/**`.
+- Keep `README.md` human-maintained. Do not use it as an agent source, routing source, or validation source.
 - Do not add dependencies, supported stacks, MCP tools, or generated scaffolds without an explicit policy and validation update.
 
 ## Required Checks Before A Pull Request
@@ -78,7 +78,8 @@ A skill is ready for review only when:
 - referenced resource paths exist;
 - `agents/openai.yaml` has a useful interface and valid policy fields;
 - trigger and negative-trigger examples are documented in the skill;
-- the README or manifest is updated when the published inventory changes.
+- the manifest is updated when the published skill inventory changes;
+- proposed human-facing README text is supplied separately when public docs need an update.
 
 ## Review Severity
 

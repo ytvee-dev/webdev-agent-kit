@@ -26,6 +26,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added Apache License 2.0 through root `LICENSE` and bundle manifest metadata.
 - Added a GitHub Actions validation workflow for source-bundle and generated-target checks.
 - Added public contribution and security guidance for the reusable skill bundle.
 - Added an audit-driven optimization plan that turns the prior research findings into tracked engineering work.
@@ -33,5 +34,6 @@ Use this changelog for source-bundle and distribution-target changes that affect
 ### Changed
 
 - Hardened source validation so a clean reusable-bundle checkout does not require local-only `project/**` overlays.
-- Made README skill inventory validation tolerant of the current human-facing `Skill Map` section instead of requiring one exact heading.
-- Included public OSS docs in generated Codex and Claude distribution targets when those files exist.
+- Removed README inventory checks from source validation because `README.md` is human-facing documentation, not an agent runtime or validation source.
+- Clarified in runtime policy and authoring rules that `README.md` stays user-facing and outside agent reads.
+- Included public OSS docs and `LICENSE` in generated Codex and Claude distribution targets when those files exist.

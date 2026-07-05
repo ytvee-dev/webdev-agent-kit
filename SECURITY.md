@@ -11,7 +11,6 @@ tags:
     - 'supply-chain'
 parent: []
 related:
-    - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[CONTRIBUTING|Contributing To WebDev Agent Kit]]'
 depends_on: []
@@ -33,6 +32,8 @@ This policy covers:
 - installation, contribution, and release documentation.
 
 Local-only host project overlays under `project/**` are out of scope for the reusable upstream bundle and must not be published.
+
+`README.md` is human-facing only. It must not be used by agents as a policy, routing, inventory, or validation source.
 
 ## Security Rules For Contributors
 

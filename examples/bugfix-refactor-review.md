@@ -9,7 +9,7 @@ local_only: false
 tags:
     - 'agents/example'
 parent:
-    - '[[README|Screenshot Frontend Assistant README]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/frontend-bugfix-debugger/SKILL|Frontend Bugfix Debugger]]'
     - '[[skills/frontend-refactor-surgeon/SKILL|Frontend Refactor Surgeon]]'
@@ -44,4 +44,3 @@ Expected exclusions:
 - no broad rewrite from a review finding alone;
 - no behavior change during refactor without approval;
 - no generated testing workflow.
-
