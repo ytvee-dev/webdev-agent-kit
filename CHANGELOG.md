@@ -35,8 +35,14 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Split CI validation into explicit schema, source, build, target, and orchestrator steps with uploaded validation logs for failures.
 - Hardened source validation so a clean reusable-bundle checkout does not require local-only `project/**` overlays.
 - Removed README inventory checks from source validation because `README.md` is human-facing documentation, not an agent runtime or validation source.
 - Clarified in runtime policy and authoring rules that `README.md` stays user-facing and outside agent reads.
 - Included public OSS docs and `LICENSE` in generated Codex and Claude distribution targets when those files exist.
 - `scripts/validate_skill_pack.py` now runs schema validation before legacy source, build, and target validators.
+
+### Fixed
+
+- Tolerated explicit indented empty-list syntax in frontmatter parsing.
+- Allowed `skill-reference` as a valid graph document layer for skill reference files.
