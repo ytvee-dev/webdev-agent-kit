@@ -26,6 +26,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added formatting and linting configuration for Ruff, markdownlint-cli2, and yamllint.
+- Added `quality-ci` workflow for Python, Markdown, and YAML quality checks.
 - Added tagged release workflow for validated Codex and Claude portable target artifacts.
 - Added initial skill trigger eval fixtures for high-value routing decisions.
 - Added initial skill output eval fixtures for review, bugfix, visual QA, layout implementation, and bundle maintenance workflows.
