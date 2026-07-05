@@ -78,4 +78,21 @@ jobs:
         run: python scripts/validate_claude_skill_pack.py
 
       - name: Full validation orchestrator smoke check
-        run: python scripts/validate_skill_pack.py
+        id: validate_full
+        continue-on-error: true
+        run: |
+          python scripts/validate_skill_pack.py > validation-full.log 2>&1
+          status=$?
+          cat validation-full.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+      - name: Upload full validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-full-log
+          path: validation-full.log
+
+      - name: Fail if full validation failed
+        if: steps.validate_full.outputs.status != '0'
+        run: exit ${{ steps.validate_full.outputs.status }}
