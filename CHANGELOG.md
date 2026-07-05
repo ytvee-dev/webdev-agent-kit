@@ -26,6 +26,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added repository JSON schemas for bundle manifest metadata, skill frontmatter, OpenAI agent metadata, and graph document frontmatter.
+- Added `scripts/validate_schemas.py` as a first schema-first validation pass before source and target validation.
 - Added Apache License 2.0 through root `LICENSE` and bundle manifest metadata.
 - Added a GitHub Actions validation workflow for source-bundle and generated-target checks.
 - Added public contribution and security guidance for the reusable skill bundle.
@@ -37,3 +39,4 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Removed README inventory checks from source validation because `README.md` is human-facing documentation, not an agent runtime or validation source.
 - Clarified in runtime policy and authoring rules that `README.md` stays user-facing and outside agent reads.
 - Included public OSS docs and `LICENSE` in generated Codex and Claude distribution targets when those files exist.
+- `scripts/validate_skill_pack.py` now runs schema validation before legacy source, build, and target validators.

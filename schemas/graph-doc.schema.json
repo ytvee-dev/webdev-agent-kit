@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ytvee-dev/webdev-agent-kit/schemas/graph-doc.schema.json",
+  "title": "WebDev Agent Kit Graph Document Frontmatter",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "doc_type",
+    "layer",
+    "status",
+    "publishable",
+    "local_only",
+    "tags",
+    "parent",
+    "related",
+    "depends_on"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^agents(?:\\.[a-z0-9-]+)+$",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "doc_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "layer": {
+      "type": "string",
+      "enum": ["bundle", "common", "skill", "template", "example", "project"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "draft", "deprecated"]
+    },
+    "publishable": {
+      "type": "boolean"
+    },
+    "local_only": {
+      "type": "boolean"
+    },
+    "skill": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      }
+    },
+    "parent": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "related": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}
