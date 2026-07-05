@@ -9,6 +9,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "dist" / "claude"
 FORBIDDEN_SKILL_TERMS = ("shadcn", "tailwind-ui", "component-library", "testing", "e2e", "unit-test")
+REQUIRED_ROOT_FILES = (
+    "AGENTS.md",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+)
 REQUIRED_COMMON_FILES = (
     "common/target-stack-policy.md",
     "common/anti-patterns.md",
@@ -53,6 +61,9 @@ def validate():
         errors.append("dist/claude must not include Codex-only agents/openai.yaml files")
     if (TARGET / ".codex-plugin").exists():
         errors.append("dist/claude must not include the Codex plugin manifest")
+    for relative_path in REQUIRED_ROOT_FILES:
+        if not (TARGET / relative_path).exists():
+            errors.append(f"dist/claude is missing required root file: {relative_path}")
     for relative_path in REQUIRED_COMMON_FILES:
         if not (TARGET / relative_path).exists():
             errors.append(f"dist/claude is missing required common file: {relative_path}")

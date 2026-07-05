@@ -1,6 +1,7 @@
 {
   "name": "webdev-agent-kit",
   "version": "0.1.0",
+  "license": "Apache-2.0",
   "description": "Internal source and distribution inventory for the WebDev Agent Kit skill bundle.",
   "skills": [
     "agent-rules-skill-author",

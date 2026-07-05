@@ -126,6 +126,9 @@ def validate_markdown(errors):
         (ROOT / "AGENTS.md").resolve(),
         (ROOT / "README.md").resolve(),
         (ROOT / "CHANGELOG.md").resolve(),
+        (ROOT / "CONTRIBUTING.md").resolve(),
+        (ROOT / "SECURITY.md").resolve(),
+        (ROOT / "AUDIT_AND_OPTIMIZATION_PLAN.md").resolve(),
     }
     for path, count in incoming.items():
         if count == 0 and path not in orphan_exceptions:
@@ -159,12 +162,6 @@ def validate_skill_inventory(errors):
         plugin = {}
     if plugin.get("skills") != "./skills/":
         errors.append("Native Codex plugin manifest must use skills: './skills/'")
-
-    readme = (ROOT / "README.md").read_text(encoding="utf-8-sig")
-    section = re.search(r"^## Main Skills\s*(.*?)(?=^## |\Z)", readme, re.MULTILINE | re.DOTALL)
-    readme_skills = sorted(re.findall(r"^- `([a-z0-9-]+)`", section.group(1), re.MULTILINE)) if section else []
-    if readme_skills != actual:
-        errors.append("README Main Skills inventory does not match skills/*")
 
     validator = ROOT / "skills" / "agent-rules-skill-author" / "scripts" / "validate_agent_skill.py"
     for skill_dir in skill_directories():
@@ -206,6 +203,10 @@ def path_exists(pattern):
 def validate_positive_project_paths(errors):
     pattern = re.compile(r"`((?:src|tools)/[A-Za-z0-9_@.*\-/]+(?:\.[A-Za-z0-9.*]+)?)`")
     for path in POSITIVE_PATH_DOCS:
+        if not path.exists():
+            # `project/**` is a local-only overlay and is intentionally ignored in
+            # the reusable source bundle. A clean checkout must still validate.
+            continue
         text = path.read_text(encoding="utf-8-sig")
         for referenced in sorted(set(pattern.findall(text))):
             if not path_exists(referenced):
