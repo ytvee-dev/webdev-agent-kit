@@ -30,12 +30,13 @@ jobs:
 
       - name: Validate schemas
         id: validate_schemas
-        continue-on-error: true
         run: |
+          set +e
           python scripts/validate_schemas.py > validation-schemas.log 2>&1
           status=$?
           cat validation-schemas.log
           echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Upload schema validation log
         if: always()
@@ -50,12 +51,13 @@ jobs:
 
       - name: Validate source bundle
         id: validate_source
-        continue-on-error: true
         run: |
+          set +e
           python scripts/validate_source_bundle.py > validation-source.log 2>&1
           status=$?
           cat validation-source.log
           echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Upload source validation log
         if: always()
@@ -79,12 +81,13 @@ jobs:
 
       - name: Full validation orchestrator smoke check
         id: validate_full
-        continue-on-error: true
         run: |
+          set +e
           python scripts/validate_skill_pack.py > validation-full.log 2>&1
           status=$?
           cat validation-full.log
           echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Upload full validation log
         if: always()
