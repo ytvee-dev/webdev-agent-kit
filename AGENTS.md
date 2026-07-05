@@ -70,7 +70,8 @@ Non-target frontend projects may still use design intake, visual direction, rend
 - `common/**` contains reusable runtime rules.
 - `templates/**` contains optional local artifact templates.
 - `project/**` contains host-project facts and stays local-only.
-- `README.md` is a human-facing repository description and usage guide only.
+- `README.md` is human-facing documentation only. Exclude it from agent runtime reads, routing, planning, verification, fallback context, and source-of-truth decisions under every workflow.
+- `LICENSE` is legal metadata for humans and distribution, not runtime policy.
 - `dist/**` is generated distribution output and must not be used as source of truth.
 - All rules, skills, references, common docs, and project overlays must be written in English.
 
@@ -142,7 +143,7 @@ After task and scale classification:
 7. Read only references and project files needed for the classified task.
 8. If no repo-local skill matches, handle the task with base Codex behavior and relevant project context.
 
-Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing.
+Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing. `README.md` remains outside agent reads even for planning, validation, troubleshooting, or fallback context.
 
 ## Skill Map
 
@@ -248,7 +249,8 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 - Keep screenshot, exported asset, copied inspect, and design-reference boundaries in `project/design-reference-profile.md`.
 - Keep every Markdown file in this bundle graph-linkable with YAML frontmatter.
 - In `SKILL.md`, keep `name` and `description` first, followed by graph metadata.
-- Update `README.md` only for human-facing repository documentation changes.
+- Keep `README.md` user-facing. Do not read, route from, validate against, or use it as policy while acting as an agent.
+- Update `README.md` only for explicit user-facing documentation work.
 - Do not publish or copy `project/**` facts into reusable bundle docs.
 
 ## Verification
@@ -258,5 +260,5 @@ For skill and documentation changes:
 1. Validate changed skills with `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>` when available.
 2. Search for stale deleted skill names and prohibited Figma/Jam routing.
 3. Search changed rules and overlays for non-English rule text.
-4. Check that human-facing docs and actual `skills/**` directories agree only when those docs changed.
+4. Check that manifests, skill directories, and native plugin metadata agree when those files changed.
 5. Run Markdown formatting checks when available.
