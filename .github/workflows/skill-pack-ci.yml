@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
 
       - name: Compile Python validators
         run: |
@@ -29,4 +30,31 @@ jobs:
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
 
       - name: Validate source bundle and generated targets
-        run: python scripts/validate_skill_pack.py
+        run: |
+          mkdir -p artifacts
+          set -o pipefail
+          python scripts/validate_skill_pack.py 2>&1 | tee artifacts/validate_skill_pack.log
+
+      - name: Record generated target inventory
+        if: always()
+        run: |
+          mkdir -p artifacts
+          {
+            echo '# Generated target inventory'
+            echo
+            if [ -d dist ]; then
+              find dist -maxdepth 4 -type f | sort
+            else
+              echo 'dist/ was not generated.'
+            fi
+          } > artifacts/generated-target-inventory.md
+
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-pack-validation-${{ github.run_id }}
+          if-no-files-found: ignore
+          path: |
+            artifacts/**
+            dist/**
