@@ -40,6 +40,7 @@ REMOVED_TERMS = (
     "frontend-review-and-fix",
 )
 HUMAN_ONLY_MARKDOWN_FILES = {"README.md"}
+LOCAL_ONLY_WIKILINK_PREFIXES = ("project/",)
 
 
 def markdown_files():
@@ -64,6 +65,11 @@ def split_frontmatter(path):
 def scalar(frontmatter, key):
     match = re.search(rf"^{re.escape(key)}:\s*['\"]?([^'\"\n]+)", frontmatter, re.MULTILINE)
     return match.group(1).strip() if match else None
+
+
+def is_local_only_wikilink(target):
+    normalized = target.split("#", 1)[0].strip()
+    return normalized.startswith(LOCAL_ONLY_WIKILINK_PREFIXES)
 
 
 def resolve_wikilink(target):
@@ -125,7 +131,8 @@ def validate_markdown(errors):
             target = match.group(1)
             resolved = resolve_wikilink(target)
             if resolved is None:
-                errors.append(f"{relative}: unresolved wikilink [[{target}]]")
+                if not is_local_only_wikilink(target):
+                    errors.append(f"{relative}: unresolved wikilink [[{target}]]")
             elif resolved.resolve() in incoming:
                 incoming[resolved.resolve()] += 1
 
