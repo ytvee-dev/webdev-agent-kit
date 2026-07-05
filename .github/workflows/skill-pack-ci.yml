@@ -1,0 +1,32 @@
+name: skill-pack-ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'audit/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate source and portable targets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile Python validators
+        run: |
+          python -m py_compile scripts/*.py
+          python -m py_compile skills/agent-rules-skill-author/scripts/*.py
+
+      - name: Validate source bundle and generated targets
+        run: python scripts/validate_skill_pack.py
