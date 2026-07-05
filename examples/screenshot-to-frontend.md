@@ -9,7 +9,7 @@ local_only: false
 tags:
     - 'agents/example'
 parent:
-    - '[[README|Screenshot Frontend Assistant README]]'
+    - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
@@ -43,4 +43,3 @@ Expected exclusions:
 - no UI component library install;
 - no testing workflow creation;
 - no package installation without approval.
-
