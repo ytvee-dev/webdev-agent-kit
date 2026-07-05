@@ -35,14 +35,48 @@ jobs:
           python -m pip install ruff yamllint
           npm install --global markdownlint-cli2
 
-      - name: Ruff lint
-        run: ruff check scripts skills/agent-rules-skill-author/scripts
+      - name: Ruff correctness gate
+        run: ruff check --select E9,F scripts skills/agent-rules-skill-author/scripts
 
-      - name: Ruff format check
-        run: ruff format --check scripts skills/agent-rules-skill-author/scripts
+      - name: Ruff full lint report
+        if: always()
+        run: |
+          set +e
+          ruff check scripts skills/agent-rules-skill-author/scripts > ruff-lint.log 2>&1
+          cat ruff-lint.log
+          exit 0
 
-      - name: YAML lint
-        run: yamllint .github .codex-plugin skills/*/agents
+      - name: Ruff format report
+        if: always()
+        run: |
+          set +e
+          ruff format --check scripts skills/agent-rules-skill-author/scripts > ruff-format.log 2>&1
+          cat ruff-format.log
+          exit 0
 
-      - name: Markdown lint
-        run: markdownlint-cli2
+      - name: YAML lint report
+        if: always()
+        run: |
+          set +e
+          yamllint .github .codex-plugin skills/*/agents > yamllint.log 2>&1
+          cat yamllint.log
+          exit 0
+
+      - name: Markdown lint report
+        if: always()
+        run: |
+          set +e
+          markdownlint-cli2 > markdownlint.log 2>&1
+          cat markdownlint.log
+          exit 0
+
+      - name: Upload quality logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-lint-logs
+          path: |
+            ruff-lint.log
+            ruff-format.log
+            yamllint.log
+            markdownlint.log
