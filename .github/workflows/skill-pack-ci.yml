@@ -32,7 +32,7 @@ jobs:
         id: validate_schemas
         run: |
           set +e
-          python scripts/validate_schemas.py > validation-schemas.log 2>&1
+          python scripts/validate_schemas.py --strict-graph > validation-schemas.log 2>&1
           status=$?
           cat validation-schemas.log
           echo "status=$status" >> "$GITHUB_OUTPUT"
