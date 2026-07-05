@@ -152,6 +152,8 @@ def validate_markdown(errors):
         (ROOT / "CONTRIBUTING.md").resolve(),
         (ROOT / "SECURITY.md").resolve(),
         (ROOT / "AUDIT_AND_OPTIMIZATION_PLAN.md").resolve(),
+        (ROOT / "examples" / "bugfix-refactor-review.md").resolve(),
+        (ROOT / "examples" / "screenshot-to-frontend.md").resolve(),
     }
     for path, count in incoming.items():
         if count == 0 and path not in orphan_exceptions:
