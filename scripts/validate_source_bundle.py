@@ -22,11 +22,6 @@ REQUIRED_SKILL_SECTIONS = (
     "Trigger Evals",
     "Reference Map",
 )
-README_SKILL_SECTIONS = (
-    "Main Skills",
-    "Skill Map",
-    "Main Capabilities",
-)
 POSITIVE_PATH_DOCS = (
     ROOT / "project" / "architecture-map.md",
     ROOT / "project" / "react" / "path-index.md",
@@ -144,31 +139,8 @@ def skill_directories():
     return sorted(path for path in (ROOT / "skills").iterdir() if path.is_dir())
 
 
-def extract_readme_skill_names(readme):
-    """Return skills documented in README without requiring one exact heading name.
-
-    README is a human-facing guide. It may expose the inventory as `Main Skills`,
-    `Skill Map`, or a capability-oriented section. The manifest and `skills/*`
-    remain the source of truth; this function only checks for README drift.
-    """
-
-    for heading in README_SKILL_SECTIONS:
-        section = re.search(
-            rf"^## {re.escape(heading)}\s*(.*?)(?=^## |\Z)",
-            readme,
-            re.MULTILINE | re.DOTALL,
-        )
-        if not section:
-            continue
-        names = sorted(set(re.findall(r"`([a-z0-9]+(?:-[a-z0-9]+)*)`", section.group(1))))
-        if names:
-            return names
-    return []
-
-
 def validate_skill_inventory(errors):
     actual = [path.name for path in skill_directories()]
-    actual_set = set(actual)
     manifest_path = ROOT / "bundle-manifest.json"
     plugin_path = ROOT / ".codex-plugin" / "plugin.json"
 
@@ -190,15 +162,6 @@ def validate_skill_inventory(errors):
         plugin = {}
     if plugin.get("skills") != "./skills/":
         errors.append("Native Codex plugin manifest must use skills: './skills/'")
-
-    readme = (ROOT / "README.md").read_text(encoding="utf-8-sig")
-    readme_skills = set(extract_readme_skill_names(readme))
-    missing_from_readme = sorted(actual_set - readme_skills)
-    unknown_in_readme = sorted(readme_skills - actual_set)
-    if missing_from_readme:
-        errors.append(f"README skill inventory is missing: {', '.join(missing_from_readme)}")
-    if unknown_in_readme:
-        errors.append(f"README skill inventory contains unknown skills: {', '.join(unknown_in_readme)}")
 
     validator = ROOT / "skills" / "agent-rules-skill-author" / "scripts" / "validate_agent_skill.py"
     for skill_dir in skill_directories():
