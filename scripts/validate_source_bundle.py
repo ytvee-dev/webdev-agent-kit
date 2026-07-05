@@ -40,6 +40,8 @@ REMOVED_TERMS = (
     "frontend-review-and-fix",
 )
 HUMAN_ONLY_MARKDOWN_FILES = {"README.md"}
+LOCAL_ONLY_WIKILINK_PREFIXES = ("project/",)
+OPTIONAL_ORPHAN_PATH_PREFIXES = ("examples/",)
 
 
 def markdown_files():
@@ -85,6 +87,15 @@ def graph_field_links(frontmatter, field):
     return links
 
 
+def is_local_only_wikilink(target):
+    return target.startswith(LOCAL_ONLY_WIKILINK_PREFIXES)
+
+
+def is_optional_orphan(path):
+    relative = path.relative_to(ROOT).as_posix()
+    return relative.startswith(OPTIONAL_ORPHAN_PATH_PREFIXES)
+
+
 def validate_license(errors):
     path = ROOT / "LICENSE"
     if not path.exists():
@@ -125,6 +136,8 @@ def validate_markdown(errors):
             target = match.group(1)
             resolved = resolve_wikilink(target)
             if resolved is None:
+                if is_local_only_wikilink(target):
+                    continue
                 errors.append(f"{relative}: unresolved wikilink [[{target}]]")
             elif resolved.resolve() in incoming:
                 incoming[resolved.resolve()] += 1
@@ -147,7 +160,7 @@ def validate_markdown(errors):
         (ROOT / "AUDIT_AND_OPTIMIZATION_PLAN.md").resolve(),
     }
     for path, count in incoming.items():
-        if count == 0 and path not in orphan_exceptions:
+        if count == 0 and path not in orphan_exceptions and not is_optional_orphan(path):
             errors.append(f"{path.relative_to(ROOT)}: graph document has no incoming edge")
 
 
