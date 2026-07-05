@@ -13,6 +13,7 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/planning-rules|Planning Rules]]'
+    - '[[common/token-economy-rules|Token Economy Rules]]'
 depends_on: []
 ---
 
@@ -27,12 +28,11 @@ Purpose: spend context on correctness instead of broad, repetitive reading.
 - Use path indexes and overlays before broad searches when they exist.
 - Prefer targeted reads, nearby patterns, and precise `rg` queries.
 - Stop reading when enough evidence exists to make a safe change.
-- Do not read `README.md` for runtime routing unless the task explicitly edits,
-  audits, or summarizes human-facing documentation.
+- Do not read `README.md` for runtime routing, validation, source inventory, or
+  fallback context.
 - Compress final output, not task understanding.
 
 ## Escalation
 
 Increase context budget only when targeted inspection reveals unclear ownership,
 cross-module behavior, architecture risk, or conflicting evidence.
-
