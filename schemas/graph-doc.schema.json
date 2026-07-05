@@ -35,7 +35,7 @@
     },
     "layer": {
       "type": "string",
-      "enum": ["bundle", "common", "skill", "template", "example", "project"]
+      "enum": ["bundle", "common", "skill", "skill-reference", "template", "example", "project"]
     },
     "status": {
       "type": "string",
