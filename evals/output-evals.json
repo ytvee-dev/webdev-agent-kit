@@ -1,0 +1,51 @@
+{
+  "version": "0.1.0",
+  "eval_type": "skill-output",
+  "cases": [
+    {
+      "id": "frontend-quality-reviewer.review-output-contract",
+      "prompt": "Review this frontend change before merge. Do not apply fixes.",
+      "skill": "frontend-quality-reviewer",
+      "required_output_sections": ["Verdict", "Findings", "Severity", "Evidence", "Required fixes", "Verification gaps"],
+      "forbidden_behaviors": ["apply fixes without user request", "invent verification results", "ignore unresolved risk"],
+      "risk_notes": ["Review output must separate required fixes from optional improvements."],
+      "reason": "The review skill needs a consistent evidence-backed verdict shape."
+    },
+    {
+      "id": "frontend-bugfix-debugger.smallest-fix-output",
+      "prompt": "The settings page crashes after clicking Save. Reproduce it, fix the smallest cause, and rerun the relevant check.",
+      "skill": "frontend-bugfix-debugger",
+      "required_output_sections": ["Symptom", "Reproduction", "Root cause", "Changed", "Verified", "Risks"],
+      "forbidden_behaviors": ["skip reproduction when tools are available", "change unrelated behavior", "claim verification without evidence"],
+      "risk_notes": ["Bugfix reports must distinguish verified fixes from blocked or unavailable checks."],
+      "reason": "Bugfix output must preserve evidence, root cause, exact changes, and verification state."
+    },
+    {
+      "id": "frontend-visual-qa.viewport-evidence-output",
+      "prompt": "Verify the implemented page against screenshots at desktop, tablet, and 375px mobile.",
+      "skill": "frontend-visual-qa",
+      "required_output_sections": ["Viewports", "Evidence", "Mismatches", "Verdict", "Blocked checks"],
+      "forbidden_behaviors": ["claim rendered QA without browser evidence", "treat source inspection as screenshot verification", "hide missing tool blockers"],
+      "risk_notes": ["Visual QA must be explicit when Browser or Playwright MCP is unavailable."],
+      "reason": "Rendered visual verification must report viewport-specific evidence and blockers."
+    },
+    {
+      "id": "frontend-layout-implementer.implementation-output",
+      "prompt": "Implement this approved Design Implementation Spec in the current React page using existing CSS Modules.",
+      "skill": "frontend-layout-implementer",
+      "required_output_sections": ["Changed", "Spec source", "Project conventions reused", "Verified", "Risks"],
+      "forbidden_behaviors": ["install packages without approval", "invent new styling system", "skip available lint verification"],
+      "risk_notes": ["Implementation reports must make reuse and verification explicit."],
+      "reason": "Layout implementation output should prove scope control, project-native reuse, and verification."
+    },
+    {
+      "id": "agent-rules-skill-author.bundle-maintenance-output",
+      "prompt": "Update the agent bundle rules and validators for a new skill trigger boundary.",
+      "skill": "agent-rules-skill-author",
+      "required_output_sections": ["Files changed", "Trigger changes", "Validation", "Risks", "Follow-up"],
+      "forbidden_behaviors": ["use README as runtime policy", "skip manifest alignment", "leave stale graph links unchecked"],
+      "risk_notes": ["Bundle-maintenance output must report policy, graph, validator, and manifest impacts."],
+      "reason": "Skill authoring changes need concise operational reporting and validation evidence."
+    }
+  ]
+}

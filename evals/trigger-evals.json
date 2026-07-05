@@ -1,0 +1,106 @@
+{
+  "version": "0.1.0",
+  "eval_type": "skill-trigger",
+  "cases": [
+    {
+      "id": "frontend-bugfix-debugger.mobile-blank-route",
+      "prompt": "The dashboard route renders blank on mobile. Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-bugfix-debugger",
+      "should_trigger": ["frontend-bugfix-debugger"],
+      "should_not_trigger": ["frontend-design-director", "greenfield-project-builder", "frontend-refactor-surgeon"],
+      "risk_notes": ["A visible frontend defect needs evidence-first debugging, not redesign or broad refactor."],
+      "reason": "User reports a user-visible frontend defect and asks for a smallest verified fix."
+    },
+    {
+      "id": "frontend-layout-implementer.approved-pricing-spec",
+      "prompt": "Implement this approved Design Implementation Spec in the pricing page. Reuse existing components and CSS Modules. Do not install packages.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-layout-implementer",
+      "should_trigger": ["frontend-layout-implementer"],
+      "should_not_trigger": ["design-screenshot-spec", "greenfield-project-builder", "mcp-toolchain-manager"],
+      "risk_notes": ["The spec is already approved, so the implementation skill should run instead of spec extraction."],
+      "reason": "User asks to implement an approved frontend spec inside the target stack with strict reuse constraints."
+    },
+    {
+      "id": "frontend-quality-reviewer.pre-merge-review",
+      "prompt": "Review this frontend change before merge. Check correctness, TypeScript safety, accessibility, performance, architecture, and verification honesty. Do not apply fixes.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": ["frontend-quality-reviewer"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-bugfix-debugger", "frontend-refactor-surgeon"],
+      "risk_notes": ["The user explicitly asks for review only, so implementation skills must not apply fixes."],
+      "reason": "User asks for an evidence-backed frontend quality review and explicitly blocks fixes."
+    },
+    {
+      "id": "frontend-visual-qa.rendered-screenshot-comparison",
+      "prompt": "Verify the implemented page against these screenshots at desktop, tablet, and 375px mobile. Report visual mismatches with viewport evidence.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-visual-qa",
+      "should_trigger": ["frontend-visual-qa"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-linter-manager", "mcp-toolchain-manager"],
+      "risk_notes": ["The task requires rendered browser evidence, not source-only implementation."],
+      "reason": "User requests rendered UI verification against screenshots across viewports."
+    },
+    {
+      "id": "agent-rules-skill-author.new-visual-qa-skill",
+      "prompt": "Create a new skill for visual QA routing, add trigger examples, update manifests, and validate the changed skill package.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "agent-rules-skill-author",
+      "should_trigger": ["agent-rules-skill-author"],
+      "should_not_trigger": ["frontend-visual-qa", "frontend-layout-implementer", "project-onboarding-adapter"],
+      "risk_notes": ["This changes the agent bundle itself and must not be routed as runtime visual QA work."],
+      "reason": "User asks to create or maintain skill package metadata and validation."
+    },
+    {
+      "id": "design-screenshot-spec.screenshots-to-spec",
+      "prompt": "Use these screenshots and copied inspect notes to write a Design Implementation Spec. Do not implement the page yet.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "frontend-bugfix-debugger"],
+      "risk_notes": ["The user asks for spec extraction only, so implementation and QA must wait."],
+      "reason": "Screenshot and inspect material should be converted into an implementation spec before coding."
+    },
+    {
+      "id": "frontend-refactor-surgeon.settings-panel-extraction",
+      "prompt": "Refactor this settings panel into smaller components without changing behavior. Preserve public props and rendered output.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-refactor-surgeon",
+      "should_trigger": ["frontend-refactor-surgeon"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-design-director", "frontend-bugfix-debugger"],
+      "risk_notes": ["The task is behavior-preserving and should not become a redesign or bugfix workflow."],
+      "reason": "User asks for a bounded behavior-preserving frontend refactor."
+    },
+    {
+      "id": "mcp-toolchain-manager.missing-rendered-qa-tools",
+      "prompt": "Check which MCP tools are missing for rendered visual QA and report the official install sources. Do not install anything yet.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "mcp-toolchain-manager",
+      "should_trigger": ["mcp-toolchain-manager"],
+      "should_not_trigger": ["frontend-visual-qa", "frontend-layout-implementer", "frontend-linter-manager"],
+      "risk_notes": ["Tool capability detection is not the same as running visual QA."],
+      "reason": "User asks for MCP capability detection and approval-gated tooling guidance."
+    },
+    {
+      "id": "project-onboarding-adapter.adapt-command",
+      "prompt": "адаптируйся",
+      "workflow_level": "Deep Workflow",
+      "expected_primary_skill": "project-onboarding-adapter",
+      "should_trigger": ["project-onboarding-adapter"],
+      "should_not_trigger": ["project-context-adapter", "frontend-architecture-planner", "greenfield-project-builder"],
+      "risk_notes": ["The natural-language command should initialize or refresh local-only project overlays without app source edits."],
+      "reason": "The bundle policy maps this Russian adaptation command to project onboarding."
+    },
+    {
+      "id": "goal-planner.dashboard-redesign-goal",
+      "prompt": "Before implementing this dashboard redesign, define the user goal, scope, constraints, non-goals, acceptance criteria, and done definition.",
+      "workflow_level": "Deep Workflow",
+      "expected_primary_skill": "goal-planner",
+      "should_trigger": ["goal-planner"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "frontend-linter-manager"],
+      "risk_notes": ["The user asks for goal definition before execution; implementation should not start yet."],
+      "reason": "Standard or deep work needs an explicit goal contract before implementation."
+    }
+  ]
+}
