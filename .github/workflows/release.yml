@@ -1,0 +1,107 @@
+name: release-skill-pack
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish portable targets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile Python validators
+        run: |
+          python -m py_compile scripts/*.py
+          python -m py_compile skills/agent-rules-skill-author/scripts/*.py
+
+      - name: Validate schemas
+        run: python scripts/validate_schemas.py
+
+      - name: Validate source bundle
+        run: python scripts/validate_source_bundle.py
+
+      - name: Validate skill evals
+        run: python scripts/validate_skill_evals.py
+
+      - name: Build portable targets
+        run: python scripts/build_skill_targets.py
+
+      - name: Validate Codex target
+        run: python scripts/validate_codex_skill_pack.py
+
+      - name: Validate Claude target
+        run: python scripts/validate_claude_skill_pack.py
+
+      - name: Run full validation orchestrator
+        run: python scripts/validate_skill_pack.py
+
+      - name: Inspect generated targets
+        run: |
+          test -d dist/codex
+          test -d dist/claude
+          test ! -e dist/codex/project
+          test ! -e dist/claude/project
+          test ! -e dist/codex/bundle-manifest.json
+          test ! -e dist/claude/bundle-manifest.json
+          test -f dist/codex/LICENSE
+          test -f dist/claude/LICENSE
+          test -f dist/codex/.codex-plugin/plugin.json
+          test ! -e dist/claude/.codex-plugin
+          if find dist -path '*/.obsidian/*' -o -path '*/node_modules/*' -o -path '*/project/*' | grep .; then
+            echo 'Generated targets contain excluded local or generated paths.'
+            exit 1
+          fi
+
+      - name: Package release artifacts
+        run: |
+          mkdir -p release-artifacts
+          tar -czf "release-artifacts/webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz" -C dist codex
+          tar -czf "release-artifacts/webdev-agent-kit-claude-${GITHUB_REF_NAME}.tar.gz" -C dist claude
+          (cd release-artifacts && sha256sum *.tar.gz > SHA256SUMS)
+          cat > release-artifacts/RELEASE_NOTES.md <<'NOTES'
+          WebDev Agent Kit portable release artifacts.
+
+          Artifacts:
+          - Codex target: `webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz`
+          - Claude target: `webdev-agent-kit-claude-${GITHUB_REF_NAME}.tar.gz`
+          - Checksums: `SHA256SUMS`
+
+          Validation performed:
+          - schema validation
+          - source bundle validation
+          - skill eval validation
+          - portable target build
+          - Codex target validation
+          - Claude target validation
+          - excluded-path inspection
+          NOTES
+
+      - name: Upload release artifact bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: webdev-agent-kit-release-${{ github.ref_name }}
+          path: release-artifacts/
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            release-artifacts/webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/webdev-agent-kit-claude-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/SHA256SUMS \
+            --title "WebDev Agent Kit ${GITHUB_REF_NAME}" \
+            --notes-file release-artifacts/RELEASE_NOTES.md \
+            --verify-tag
