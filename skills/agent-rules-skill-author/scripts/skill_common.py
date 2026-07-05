@@ -137,6 +137,8 @@ def parse_frontmatter(frontmatter_text):
             continue
 
         if isinstance(data.get(current_key), list):
+            if stripped == "[]":
+                continue
             if not stripped.startswith("- "):
                 raise ValueError(f"Invalid list item: {raw_line}")
             data[current_key].append(parse_scalar(stripped[2:]))
