@@ -12,6 +12,7 @@ TARGETS = ("codex", "claude")
 COPY_ROOT_FILES = (
     "AGENTS.md",
     "README.md",
+    "LICENSE",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
