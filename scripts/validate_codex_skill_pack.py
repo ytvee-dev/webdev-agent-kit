@@ -9,6 +9,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "dist" / "codex"
 FORBIDDEN_SKILL_TERMS = ("shadcn", "tailwind-ui", "component-library", "testing", "e2e", "unit-test")
+REQUIRED_ROOT_FILES = (
+    "AGENTS.md",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+)
 REQUIRED_COMMON_FILES = (
     "common/target-stack-policy.md",
     "common/anti-patterns.md",
@@ -49,6 +57,9 @@ def validate():
         errors.append("dist/codex must not include project/**")
     if (TARGET / "bundle-manifest.json").exists():
         errors.append("dist/codex must not expose the internal bundle-manifest.json")
+    for relative_path in REQUIRED_ROOT_FILES:
+        if not (TARGET / relative_path).exists():
+            errors.append(f"dist/codex is missing required root file: {relative_path}")
     plugin_path = TARGET / ".codex-plugin" / "plugin.json"
     if not plugin_path.exists():
         errors.append("dist/codex is missing .codex-plugin/plugin.json")
