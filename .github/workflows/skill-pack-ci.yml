@@ -28,5 +28,20 @@ jobs:
           python -m py_compile scripts/*.py
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
 
-      - name: Validate source bundle and generated targets
+      - name: Validate schemas
+        run: python scripts/validate_schemas.py
+
+      - name: Validate source bundle
+        run: python scripts/validate_source_bundle.py
+
+      - name: Build portable targets
+        run: python scripts/build_skill_targets.py
+
+      - name: Validate Codex target
+        run: python scripts/validate_codex_skill_pack.py
+
+      - name: Validate Claude target
+        run: python scripts/validate_claude_skill_pack.py
+
+      - name: Full validation orchestrator smoke check
         run: python scripts/validate_skill_pack.py
