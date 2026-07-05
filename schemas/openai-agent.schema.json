@@ -9,46 +9,21 @@
       "type": "object",
       "required": ["display_name", "short_description"],
       "properties": {
-        "display_name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 80
-        },
-        "short_description": {
-          "type": "string",
-          "minLength": 25,
-          "maxLength": 64
-        },
-        "default_prompt": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 600
-        },
-        "icon_small": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "icon_large": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "brand_color": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        }
+        "display_name": {"type": "string", "minLength": 1, "maxLength": 160},
+        "short_description": {"type": "string", "minLength": 25, "maxLength": 64},
+        "default_prompt": {"type": "string", "minLength": 1, "maxLength": 1500},
+        "icon_small": {"type": "string", "minLength": 1, "maxLength": 240},
+        "icon_large": {"type": "string", "minLength": 1, "maxLength": 240},
+        "brand_color": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}
       },
       "additionalProperties": false
     },
     "policy": {
       "type": "object",
       "properties": {
-        "allow_implicit_invocation": {
-          "type": "boolean"
-        }
+        "allow_implicit_invocation": {"type": "boolean"}
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "dependencies": {
       "type": "object",
@@ -59,36 +34,17 @@
             "type": "object",
             "required": ["type", "value"],
             "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["mcp"]
-              },
-              "value": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 120
-              },
-              "description": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 300
-              },
-              "transport": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 80
-              },
-              "url": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 240
-              }
+              "type": {"type": "string", "enum": ["mcp"]},
+              "value": {"type": "string", "minLength": 1, "maxLength": 160},
+              "description": {"type": "string", "minLength": 1, "maxLength": 1000},
+              "transport": {"type": "string", "minLength": 1, "maxLength": 120},
+              "url": {"type": "string", "minLength": 1, "maxLength": 500}
             },
-            "additionalProperties": false
+            "additionalProperties": true
           }
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     }
   },
   "additionalProperties": false

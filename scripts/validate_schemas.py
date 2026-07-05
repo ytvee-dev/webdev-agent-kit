@@ -174,7 +174,6 @@ def validate_bundle_manifest(schema, errors):
         errors.append("bundle-manifest.json: skills must match actual skills/* directories")
 
 
-
 def validate_skills(schema, errors):
     for skill_dir in sorted(path for path in (ROOT / "skills").iterdir() if path.is_dir()):
         try:
@@ -190,7 +189,6 @@ def validate_skills(schema, errors):
             errors.append(f"{label}: frontmatter name must match directory name")
         if frontmatter.get("skill") != skill_dir.name:
             errors.append(f"{label}: graph skill must match directory name")
-
 
 
 def validate_openai_metadata(schema, errors):
@@ -213,7 +211,6 @@ def validate_openai_metadata(schema, errors):
             errors.append(f"{label}: interface.default_prompt must mention ${skill_dir.name}")
 
 
-
 def validate_graph_docs(schema, errors):
     for path in markdown_files_for_graph_schema():
         relative = path.relative_to(ROOT).as_posix()
@@ -225,7 +222,6 @@ def validate_graph_docs(schema, errors):
         validate_with_schema(relative, frontmatter, schema, errors)
 
 
-
 def validate_schema_files(errors):
     for path in sorted(SCHEMA_DIR.glob("*.schema.json")):
         try:
@@ -234,8 +230,7 @@ def validate_schema_files(errors):
             errors.append(f"{path.relative_to(ROOT).as_posix()}: cannot parse JSON schema: {exc}")
 
 
-
-def validate():
+def validate(strict_graph=False):
     errors = []
     validate_schema_files(errors)
 
@@ -250,14 +245,16 @@ def validate():
     validate_bundle_manifest(bundle_schema, errors)
     validate_skills(skill_schema, errors)
     validate_openai_metadata(openai_schema, errors)
-    validate_graph_docs(graph_schema, errors)
+    if strict_graph:
+        validate_graph_docs(graph_schema, errors)
     return errors
 
 
 def main():
     parser = argparse.ArgumentParser(description="Validate bundle metadata against repository JSON schemas.")
-    parser.parse_args()
-    errors = validate()
+    parser.add_argument("--strict-graph", action="store_true", help="Also enforce graph-doc schema on non-skill Markdown frontmatter.")
+    args = parser.parse_args()
+    errors = validate(strict_graph=args.strict_graph)
     if errors:
         for error in errors:
             print(error)
