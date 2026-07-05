@@ -22,6 +22,11 @@ REQUIRED_SKILL_SECTIONS = (
     "Trigger Evals",
     "Reference Map",
 )
+README_SKILL_SECTIONS = (
+    "Main Skills",
+    "Skill Map",
+    "Main Capabilities",
+)
 POSITIVE_PATH_DOCS = (
     ROOT / "project" / "architecture-map.md",
     ROOT / "project" / "react" / "path-index.md",
@@ -126,6 +131,9 @@ def validate_markdown(errors):
         (ROOT / "AGENTS.md").resolve(),
         (ROOT / "README.md").resolve(),
         (ROOT / "CHANGELOG.md").resolve(),
+        (ROOT / "CONTRIBUTING.md").resolve(),
+        (ROOT / "SECURITY.md").resolve(),
+        (ROOT / "AUDIT_AND_OPTIMIZATION_PLAN.md").resolve(),
     }
     for path, count in incoming.items():
         if count == 0 and path not in orphan_exceptions:
@@ -136,8 +144,31 @@ def skill_directories():
     return sorted(path for path in (ROOT / "skills").iterdir() if path.is_dir())
 
 
+def extract_readme_skill_names(readme):
+    """Return skills documented in README without requiring one exact heading name.
+
+    README is a human-facing guide. It may expose the inventory as `Main Skills`,
+    `Skill Map`, or a capability-oriented section. The manifest and `skills/*`
+    remain the source of truth; this function only checks for README drift.
+    """
+
+    for heading in README_SKILL_SECTIONS:
+        section = re.search(
+            rf"^## {re.escape(heading)}\s*(.*?)(?=^## |\Z)",
+            readme,
+            re.MULTILINE | re.DOTALL,
+        )
+        if not section:
+            continue
+        names = sorted(set(re.findall(r"`([a-z0-9]+(?:-[a-z0-9]+)*)`", section.group(1))))
+        if names:
+            return names
+    return []
+
+
 def validate_skill_inventory(errors):
     actual = [path.name for path in skill_directories()]
+    actual_set = set(actual)
     manifest_path = ROOT / "bundle-manifest.json"
     plugin_path = ROOT / ".codex-plugin" / "plugin.json"
 
@@ -161,10 +192,13 @@ def validate_skill_inventory(errors):
         errors.append("Native Codex plugin manifest must use skills: './skills/'")
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8-sig")
-    section = re.search(r"^## Main Skills\s*(.*?)(?=^## |\Z)", readme, re.MULTILINE | re.DOTALL)
-    readme_skills = sorted(re.findall(r"^- `([a-z0-9-]+)`", section.group(1), re.MULTILINE)) if section else []
-    if readme_skills != actual:
-        errors.append("README Main Skills inventory does not match skills/*")
+    readme_skills = set(extract_readme_skill_names(readme))
+    missing_from_readme = sorted(actual_set - readme_skills)
+    unknown_in_readme = sorted(readme_skills - actual_set)
+    if missing_from_readme:
+        errors.append(f"README skill inventory is missing: {', '.join(missing_from_readme)}")
+    if unknown_in_readme:
+        errors.append(f"README skill inventory contains unknown skills: {', '.join(unknown_in_readme)}")
 
     validator = ROOT / "skills" / "agent-rules-skill-author" / "scripts" / "validate_agent_skill.py"
     for skill_dir in skill_directories():
@@ -206,6 +240,10 @@ def path_exists(pattern):
 def validate_positive_project_paths(errors):
     pattern = re.compile(r"`((?:src|tools)/[A-Za-z0-9_@.*\-/]+(?:\.[A-Za-z0-9.*]+)?)`")
     for path in POSITIVE_PATH_DOCS:
+        if not path.exists():
+            # `project/**` is a local-only overlay and is intentionally ignored in
+            # the reusable source bundle. A clean checkout must still validate.
+            continue
         text = path.read_text(encoding="utf-8-sig")
         for referenced in sorted(set(pattern.findall(text))):
             if not path_exists(referenced):
