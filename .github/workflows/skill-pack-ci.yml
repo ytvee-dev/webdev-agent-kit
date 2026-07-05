@@ -29,7 +29,24 @@ jobs:
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
 
       - name: Validate schemas
-        run: python scripts/validate_schemas.py
+        id: validate_schemas
+        continue-on-error: true
+        run: |
+          python scripts/validate_schemas.py > validation-schemas.log 2>&1
+          status=$?
+          cat validation-schemas.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+      - name: Upload schema validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-schemas-log
+          path: validation-schemas.log
+
+      - name: Fail if schema validation failed
+        if: steps.validate_schemas.outputs.status != '0'
+        run: exit ${{ steps.validate_schemas.outputs.status }}
 
       - name: Validate source bundle
         run: python scripts/validate_source_bundle.py
