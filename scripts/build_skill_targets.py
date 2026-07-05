@@ -9,7 +9,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 TARGETS = ("codex", "claude")
-COPY_ROOT_FILES = ("AGENTS.md", "README.md", "CHANGELOG.md")
+COPY_ROOT_FILES = (
+    "AGENTS.md",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+)
 COPY_DIRS = ("common", "templates", "examples")
 
 
