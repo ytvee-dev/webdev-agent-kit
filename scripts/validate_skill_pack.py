@@ -15,7 +15,7 @@ def run(script):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate schemas and source metadata, then build and validate Codex and Claude targets.")
+    parser = argparse.ArgumentParser(description="Validate schemas, source metadata, skill evals, then build and validate Codex and Claude targets.")
     parser.parse_args()
 
     schema_code = run("validate_schemas.py")
@@ -24,6 +24,9 @@ def main():
     source_code = run("validate_source_bundle.py")
     if source_code:
         sys.exit(source_code)
+    eval_code = run("validate_skill_evals.py")
+    if eval_code:
+        sys.exit(eval_code)
     build_code = run("build_skill_targets.py")
     if build_code:
         sys.exit(build_code)
