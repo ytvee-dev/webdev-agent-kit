@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ytvee-dev/webdev-agent-kit/schemas/bundle-manifest.schema.json",
+  "title": "WebDev Agent Kit Bundle Manifest",
+  "type": "object",
+  "required": ["name", "version", "license", "description", "skills", "targets", "excludes"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "license": {
+      "type": "string",
+      "enum": ["Apache-2.0"]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    "targets": {
+      "type": "object",
+      "required": ["codex", "claude"],
+      "properties": {
+        "codex": {
+          "type": "string",
+          "enum": ["dist/codex"]
+        },
+        "claude": {
+          "type": "string",
+          "enum": ["dist/claude"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "excludes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    }
+  },
+  "additionalProperties": false
+}
