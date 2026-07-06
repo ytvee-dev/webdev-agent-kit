@@ -43,7 +43,7 @@ jobs:
       - name: Ruff format check
         run: |
           set -o pipefail
-          ruff format --check scripts skills/agent-rules-skill-author/scripts 2>&1 | tee ruff-format.log
+          ruff format --diff scripts skills/agent-rules-skill-author/scripts 2>&1 | tee ruff-format.log
 
       - name: YAML lint
         run: |
