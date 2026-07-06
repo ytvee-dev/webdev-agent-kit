@@ -44,4 +44,3 @@ Every stop state must include:
 - blockers, risks, and approval gates.
 
 Keep checkpoint files in local-only `project/**`.
-
