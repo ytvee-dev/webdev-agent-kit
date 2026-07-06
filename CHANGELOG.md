@@ -42,6 +42,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 ### Changed
 
 - Applied Ruff import and formatting cleanup to Python validation and packaging scripts.
+- `quality-ci` now treats Ruff lint, Ruff format, and yamllint checks as blocking gates while keeping markdownlint diagnostic-only.
 - CI now validates skill eval fixtures before building portable targets.
 - `scripts/validate_skill_pack.py` now runs eval validation before build and target validation.
 - Hardened source validation so a clean reusable-bundle checkout does not require local-only `project/**` overlays.
