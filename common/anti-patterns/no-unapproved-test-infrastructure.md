@@ -42,4 +42,3 @@ Do not add a testing framework, setup layer, script, dependency, broad fixture s
 ## Apply When
 
 Use this whenever an agent considers changing tests, test scripts, test dependencies, test setup, or the verification plan.
-
