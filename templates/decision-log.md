@@ -33,4 +33,3 @@ Rejected Alternatives:
 Approval:
 
 Impact:
-
