@@ -169,8 +169,14 @@ def validate_markdown(errors):
         (ROOT / "AUDIT_AND_OPTIMIZATION_PLAN.md").resolve(),
     }
     for path, count in incoming.items():
-        if count == 0 and path not in orphan_exceptions and not is_optional_orphan(path):
-            errors.append(f"{path.relative_to(ROOT)}: graph document has no incoming edge")
+        if (
+            count == 0
+            and path not in orphan_exceptions
+            and not is_optional_orphan(path)
+        ):
+            errors.append(
+                f"{path.relative_to(ROOT)}: graph document has no incoming edge"
+            )
 
 
 def skill_directories():
@@ -203,12 +209,22 @@ def validate_skill_inventory(errors):
     if plugin.get("skills") != "./skills/":
         errors.append("Native Codex plugin manifest must use skills: './skills/'")
 
-    validator = ROOT / "skills" / "agent-rules-skill-author" / "scripts" / "validate_agent_skill.py"
+    validator = (
+        ROOT
+        / "skills"
+        / "agent-rules-skill-author"
+        / "scripts"
+        / "validate_agent_skill.py"
+    )
     for skill_dir in skill_directories():
         content = (skill_dir / "SKILL.md").read_text(encoding="utf-8-sig")
         for section_name in REQUIRED_SKILL_SECTIONS:
-            if not re.search(rf"^## {re.escape(section_name)}\s*$", content, re.MULTILINE):
-                errors.append(f"skills/{skill_dir.name}/SKILL.md: missing section {section_name}")
+            if not re.search(
+                rf"^## {re.escape(section_name)}\s*$", content, re.MULTILINE
+            ):
+                errors.append(
+                    f"skills/{skill_dir.name}/SKILL.md: missing section {section_name}"
+                )
         if not (skill_dir / "agents" / "openai.yaml").exists():
             errors.append(f"skills/{skill_dir.name}: missing agents/openai.yaml")
             continue
@@ -231,7 +247,9 @@ def validate_skill_path_mentions(errors):
             if name == "skills":
                 continue
             if name not in actual:
-                errors.append(f"{path.relative_to(ROOT).as_posix()}: unknown skill path {name}")
+                errors.append(
+                    f"{path.relative_to(ROOT).as_posix()}: unknown skill path {name}"
+                )
 
 
 def path_exists(pattern):
@@ -241,9 +259,7 @@ def path_exists(pattern):
 
 
 def validate_positive_project_paths(errors):
-    pattern = re.compile(
-        r"`((?:src|tools)/[A-Za-z0-9_@.*\-/]+(?:\.[A-Za-z0-9.*]+)?)`"
-    )
+    pattern = re.compile(r"`((?:src|tools)/[A-Za-z0-9_@.*\-/]+(?:\.[A-Za-z0-9.*]+)?)`")
     for path in POSITIVE_PATH_DOCS:
         if not path.exists():
             # `project/**` is a local-only overlay and is intentionally ignored in
@@ -253,7 +269,9 @@ def validate_positive_project_paths(errors):
         for referenced in sorted(set(pattern.findall(text))):
             if not path_exists(referenced):
                 relative = path.relative_to(ROOT).as_posix()
-                errors.append(f"{relative}: positive project path does not exist: {referenced}")
+                errors.append(
+                    f"{relative}: positive project path does not exist: {referenced}"
+                )
 
 
 def validate():
