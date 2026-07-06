@@ -42,7 +42,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
-- `quality-ci` now treats Ruff lint, Ruff format, and yamllint checks as blocking gates while keeping markdownlint diagnostic-only.
+- Cleaned Markdown hygiene issues and made markdownlint a blocking `quality-ci` gate.
+- `quality-ci` now treats Ruff lint, Ruff format, yamllint, and markdownlint checks as blocking gates.
 - Standardized the Ruff formatter line length for the existing Python formatting baseline.
 - Clarified cross-agent portability boundaries for source, generated targets, host-specific metadata, and advisory host adaptations.
 - Calibrated markdownlint for this bundle's frontmatter-heavy documents and source-reference files.
