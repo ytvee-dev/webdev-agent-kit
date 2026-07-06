@@ -123,7 +123,15 @@ def validate_output_case(label, case, actual_skills, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
-def validate_suite(path, expected_type, suite_schema, case_schema, actual_skills, seen_ids, errors):
+def validate_suite(
+    path,
+    expected_type,
+    suite_schema,
+    case_schema,
+    actual_skills,
+    seen_ids,
+    errors,
+):
     suite = load_eval_file(path, errors)
     if suite is None:
         return
@@ -171,8 +179,24 @@ def validate():
         return [f"schemas: cannot load eval schema files: {exc}"]
 
     seen_ids = set()
-    validate_suite(TRIGGER_EVALS, "skill-trigger", suite_schema, case_schema, actual_skills, seen_ids, errors)
-    validate_suite(OUTPUT_EVALS, "skill-output", suite_schema, case_schema, actual_skills, seen_ids, errors)
+    validate_suite(
+        TRIGGER_EVALS,
+        "skill-trigger",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        OUTPUT_EVALS,
+        "skill-output",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
     return errors
 
 
