@@ -68,13 +68,21 @@ def validate_trigger_case(label, case, actual_skills, errors):
     require_case_keys(
         label,
         case,
-        ("workflow_level", "expected_primary_skill", "should_trigger", "should_not_trigger", "reason"),
+        (
+            "workflow_level",
+            "expected_primary_skill",
+            "should_trigger",
+            "should_not_trigger",
+            "reason",
+        ),
         errors,
     )
 
     workflow_level = case.get("workflow_level")
     if workflow_level not in WORKFLOW_LEVELS:
-        errors.append(f"{label}: workflow_level must be one of {', '.join(sorted(WORKFLOW_LEVELS))}")
+        errors.append(
+            f"{label}: workflow_level must be one of {', '.join(sorted(WORKFLOW_LEVELS))}"
+        )
 
     expected_primary = case.get("expected_primary_skill")
     if expected_primary and expected_primary not in actual_skills:
@@ -96,7 +104,10 @@ def validate_trigger_case(label, case, actual_skills, errors):
 
 def validate_output_case(label, case, actual_skills, errors):
     require_case_keys(
-        label, case, ("skill", "required_output_sections", "forbidden_behaviors", "reason"), errors
+        label,
+        case,
+        ("skill", "required_output_sections", "forbidden_behaviors", "reason"),
+        errors,
     )
 
     skill = case.get("skill")
