@@ -18,4 +18,3 @@ dependencies:
         - type: 'mcp'
           value: 'playwright'
           description: 'Verify rendered frontend behavior and screenshots.'
-
