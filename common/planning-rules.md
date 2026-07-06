@@ -39,4 +39,3 @@ Purpose: split frontend work into small, evidence-backed slices.
   repeated failure.
 
 Use the smallest budget that can produce a correct result.
-

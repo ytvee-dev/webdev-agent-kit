@@ -30,4 +30,3 @@ Purpose: keep frontend security review evidence-backed and scope-correct.
 - Do not claim a vulnerability without a concrete path, file, or behavior.
 - Do not implement broad security rewrites from review findings without a
   separate approved fix task.
-

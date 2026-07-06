@@ -36,4 +36,3 @@ Purpose: make frontend review findings consistent and actionable.
 - `pass with concerns`: required fixes are absent, but risks or optional
   improvements should be recorded.
 - `fail`: at least one `blocking` or unresolved required `high` issue exists.
-

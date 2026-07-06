@@ -41,4 +41,3 @@ Source `SKILL.md` files may include `.agents` graph metadata after `name` and
 
 Generated target `SKILL.md` files must keep only portable frontmatter keys
 unless a target validator explicitly permits more.
-

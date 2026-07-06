@@ -50,13 +50,10 @@ jobs:
           set -o pipefail
           yamllint .github .codex-plugin skills/*/agents 2>&1 | tee yamllint.log
 
-      - name: Markdown lint report
-        if: always()
+      - name: Markdown lint
         run: |
-          set +e
-          markdownlint-cli2 > markdownlint.log 2>&1
-          cat markdownlint.log
-          exit 0
+          set -o pipefail
+          markdownlint-cli2 2>&1 | tee markdownlint.log
 
       - name: Upload quality logs
         if: always()

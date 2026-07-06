@@ -29,4 +29,3 @@ Purpose: preserve frontend behavior while improving structure.
 - Do not combine refactor work with new features unless explicitly requested.
 - Avoid broad rewrites when targeted extraction or simplification is enough.
 - Run the same relevant verification before final reporting.
-

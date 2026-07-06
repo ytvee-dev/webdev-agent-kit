@@ -53,4 +53,3 @@ depends_on:
 - Run the relevant local checks from `project/verification-profile.md`.
 - Use `frontend-visual-qa` for browser screenshots, viewport checks, and visual
   comparison.
-
