@@ -6,13 +6,16 @@ import re
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_SCRIPT_DIR = ROOT / "skills" / "agent-rules-skill-author" / "scripts"
 sys.path.insert(0, str(SKILL_SCRIPT_DIR))
 
-from skill_common import load_openai_yaml, load_skill_frontmatter, parse_frontmatter, split_frontmatter  # noqa: E402
-
+from skill_common import (  # noqa: E402
+    load_openai_yaml,
+    load_skill_frontmatter,
+    parse_frontmatter,
+    split_frontmatter,
+)
 
 SCHEMA_DIR = ROOT / "schemas"
 HUMAN_ONLY_MARKDOWN_FILES = {"README.md"}
@@ -251,8 +254,14 @@ def validate(strict_graph=False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate bundle metadata against repository JSON schemas.")
-    parser.add_argument("--strict-graph", action="store_true", help="Also enforce graph-doc schema on non-skill Markdown frontmatter.")
+    parser = argparse.ArgumentParser(
+        description="Validate bundle metadata against repository JSON schemas."
+    )
+    parser.add_argument(
+        "--strict-graph",
+        action="store_true",
+        help="Also enforce graph-doc schema on non-skill Markdown frontmatter.",
+    )
     args = parser.parse_args()
     errors = validate(strict_graph=args.strict_graph)
     if errors:

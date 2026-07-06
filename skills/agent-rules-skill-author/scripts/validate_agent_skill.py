@@ -9,8 +9,8 @@ from skill_common import (
     ALLOWED_FRONTMATTER_KEYS,
     GRAPH_FRONTMATTER_KEYS,
     MAX_DESCRIPTION_LENGTH,
-    MIN_SHORT_DESCRIPTION_LENGTH,
     MAX_SHORT_DESCRIPTION_LENGTH,
+    MIN_SHORT_DESCRIPTION_LENGTH,
     extract_resource_paths,
     load_openai_yaml,
     load_skill_frontmatter,
@@ -27,7 +27,10 @@ def validate_frontmatter(frontmatter):
     unexpected = sorted(set(frontmatter.keys()) - ALLOWED_FRONTMATTER_KEYS)
     if unexpected:
         allowed = ", ".join(sorted(ALLOWED_FRONTMATTER_KEYS))
-        return f"Unexpected key(s) in SKILL.md frontmatter: {', '.join(unexpected)}. Allowed properties are: {allowed}"
+        return (
+            f"Unexpected key(s) in SKILL.md frontmatter: {', '.join(unexpected)}. "
+            f"Allowed properties are: {allowed}"
+        )
 
     name = frontmatter.get("name")
     if not isinstance(name, str) or not name.strip():
@@ -45,7 +48,10 @@ def validate_frontmatter(frontmatter):
         return "Description cannot contain angle brackets (< or >)"
 
     if len(description.strip()) > MAX_DESCRIPTION_LENGTH:
-        return f"Description is too long ({len(description.strip())} characters). Maximum is {MAX_DESCRIPTION_LENGTH}"
+        return (
+            f"Description is too long ({len(description.strip())} characters). "
+            f"Maximum is {MAX_DESCRIPTION_LENGTH}"
+        )
 
     metadata = frontmatter.get("metadata")
     if metadata is not None and not isinstance(metadata, dict):
@@ -79,7 +85,11 @@ def validate_openai_yaml(skill_name, data):
     short_description = interface.get("short_description")
     if not isinstance(short_description, str):
         return "interface.short_description must be a string"
-    if not (MIN_SHORT_DESCRIPTION_LENGTH <= len(short_description) <= MAX_SHORT_DESCRIPTION_LENGTH):
+    if not (
+        MIN_SHORT_DESCRIPTION_LENGTH
+        <= len(short_description)
+        <= MAX_SHORT_DESCRIPTION_LENGTH
+    ):
         return (
             "interface.short_description must be 25-64 characters "
             f"(got {len(short_description)})"

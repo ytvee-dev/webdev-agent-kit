@@ -5,7 +5,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -15,7 +14,9 @@ def run(script):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate schemas, source metadata, skill evals, then build and validate Codex and Claude targets.")
+    parser = argparse.ArgumentParser(
+        description="Validate schemas, source metadata, skill evals, then build and validate Codex and Claude targets."
+    )
     parser.parse_args()
 
     schema_code = run("validate_schemas.py")

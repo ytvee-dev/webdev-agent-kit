@@ -7,7 +7,6 @@ from pathlib import Path
 
 from validate_schemas import load_json, schema_path, validate_instance
 
-
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "evals"
 TRIGGER_EVALS = EVAL_DIR / "trigger-evals.json"
@@ -69,13 +68,21 @@ def validate_trigger_case(label, case, actual_skills, errors):
     require_case_keys(
         label,
         case,
-        ("workflow_level", "expected_primary_skill", "should_trigger", "should_not_trigger", "reason"),
+        (
+            "workflow_level",
+            "expected_primary_skill",
+            "should_trigger",
+            "should_not_trigger",
+            "reason",
+        ),
         errors,
     )
 
     workflow_level = case.get("workflow_level")
     if workflow_level not in WORKFLOW_LEVELS:
-        errors.append(f"{label}: workflow_level must be one of {', '.join(sorted(WORKFLOW_LEVELS))}")
+        errors.append(
+            f"{label}: workflow_level must be one of {', '.join(sorted(WORKFLOW_LEVELS))}"
+        )
 
     expected_primary = case.get("expected_primary_skill")
     if expected_primary and expected_primary not in actual_skills:
@@ -96,7 +103,12 @@ def validate_trigger_case(label, case, actual_skills, errors):
 
 
 def validate_output_case(label, case, actual_skills, errors):
-    require_case_keys(label, case, ("skill", "required_output_sections", "forbidden_behaviors", "reason"), errors)
+    require_case_keys(
+        label,
+        case,
+        ("skill", "required_output_sections", "forbidden_behaviors", "reason"),
+        errors,
+    )
 
     skill = case.get("skill")
     if skill and skill not in actual_skills:
@@ -111,7 +123,15 @@ def validate_output_case(label, case, actual_skills, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
-def validate_suite(path, expected_type, suite_schema, case_schema, actual_skills, seen_ids, errors):
+def validate_suite(
+    path,
+    expected_type,
+    suite_schema,
+    case_schema,
+    actual_skills,
+    seen_ids,
+    errors,
+):
     suite = load_eval_file(path, errors)
     if suite is None:
         return
@@ -159,8 +179,24 @@ def validate():
         return [f"schemas: cannot load eval schema files: {exc}"]
 
     seen_ids = set()
-    validate_suite(TRIGGER_EVALS, "skill-trigger", suite_schema, case_schema, actual_skills, seen_ids, errors)
-    validate_suite(OUTPUT_EVALS, "skill-output", suite_schema, case_schema, actual_skills, seen_ids, errors)
+    validate_suite(
+        TRIGGER_EVALS,
+        "skill-trigger",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        OUTPUT_EVALS,
+        "skill-output",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
     return errors
 
 

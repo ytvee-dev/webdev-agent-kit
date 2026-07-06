@@ -17,9 +17,13 @@ from skill_common import (
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Create or refresh agents/openai.yaml for an .agents skill.")
+    parser = argparse.ArgumentParser(
+        description="Create or refresh agents/openai.yaml for an .agents skill."
+    )
     parser.add_argument("skill_dir", help="Path to the skill directory")
-    parser.add_argument("--name", help="Skill name override (defaults to SKILL.md frontmatter)")
+    parser.add_argument(
+        "--name", help="Skill name override (defaults to SKILL.md frontmatter)"
+    )
     parser.add_argument(
         "--interface",
         action="append",
@@ -42,12 +46,20 @@ def main():
         sys.exit(1)
 
     skill_name = args.name or frontmatter.get("name", "")
-    metadata = frontmatter.get("metadata", {}) if isinstance(frontmatter.get("metadata"), dict) else {}
+    metadata = (
+        frontmatter.get("metadata", {})
+        if isinstance(frontmatter.get("metadata"), dict)
+        else {}
+    )
     existing_interface = existing_yaml.get("interface", {})
     existing_policy = existing_yaml.get("policy", {})
     existing_dependencies = existing_yaml.get("dependencies", {})
 
-    display_name = overrides.get("display_name") or existing_interface.get("display_name") or format_display_name(skill_name)
+    display_name = (
+        overrides.get("display_name")
+        or existing_interface.get("display_name")
+        or format_display_name(skill_name)
+    )
     short_description = (
         overrides.get("short_description")
         or existing_interface.get("short_description")
@@ -55,7 +67,11 @@ def main():
         or generate_short_description(display_name)
     )
 
-    if not (MIN_SHORT_DESCRIPTION_LENGTH <= len(short_description) <= MAX_SHORT_DESCRIPTION_LENGTH):
+    if not (
+        MIN_SHORT_DESCRIPTION_LENGTH
+        <= len(short_description)
+        <= MAX_SHORT_DESCRIPTION_LENGTH
+    ):
         print(
             "[ERROR] short_description must be 25-64 characters "
             f"(got {len(short_description)})."
@@ -71,7 +87,9 @@ def main():
         interface[key] = overrides.get(key) or existing_interface.get(key)
 
     policy = existing_policy or {"allow_implicit_invocation": True}
-    yaml_output = build_openai_yaml(interface, policy=policy, dependencies=existing_dependencies)
+    yaml_output = build_openai_yaml(
+        interface, policy=policy, dependencies=existing_dependencies
+    )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(yaml_output, encoding="utf-8")

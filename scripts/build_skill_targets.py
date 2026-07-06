@@ -5,7 +5,6 @@ import json
 import shutil
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 TARGETS = ("codex", "claude")
@@ -84,7 +83,9 @@ def build_target(target):
     for skill_dir in sorted(path for path in skills_src.iterdir() if path.is_dir()):
         dst = skills_dst / skill_dir.name
         dst.mkdir(parents=True)
-        skill_text = portable_skill_text((skill_dir / "SKILL.md").read_text(encoding="utf-8"))
+        skill_text = portable_skill_text(
+            (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+        )
         (dst / "SKILL.md").write_text(skill_text, encoding="utf-8")
         for resource_dir in ("references", "scripts", "assets"):
             copy_tree(skill_dir / resource_dir, dst / resource_dir)
@@ -93,8 +94,15 @@ def build_target(target):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build portable Codex and Claude skill-pack targets.")
-    parser.add_argument("--target", choices=TARGETS, action="append", help="Build only the selected target; repeat to build both.")
+    parser = argparse.ArgumentParser(
+        description="Build portable Codex and Claude skill-pack targets."
+    )
+    parser.add_argument(
+        "--target",
+        choices=TARGETS,
+        action="append",
+        help="Build only the selected target; repeat to build both.",
+    )
     args = parser.parse_args()
 
     targets = tuple(dict.fromkeys(args.target or TARGETS))
