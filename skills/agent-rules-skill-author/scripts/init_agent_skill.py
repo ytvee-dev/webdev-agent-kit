@@ -5,7 +5,11 @@ import sys
 from pathlib import Path
 
 from generate_openai_yaml import main as generate_openai_yaml_main
-from skill_common import normalize_skill_name, parse_interface_overrides, title_case_skill_name
+from skill_common import (
+    normalize_skill_name,
+    parse_interface_overrides,
+    title_case_skill_name,
+)
 
 ALLOWED_RESOURCES = {"scripts", "references", "assets"}
 
