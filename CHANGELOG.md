@@ -24,6 +24,10 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
+No unreleased changes yet.
+
+## 0.1.0 - 2026-07-06
+
 ### Added
 
 - Added host compatibility matrix for source, Codex, Claude, Copilot, Cursor, Windsurf, and generic coding-agent adaptation.
