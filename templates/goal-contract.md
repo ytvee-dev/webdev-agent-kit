@@ -37,4 +37,3 @@ Workflow Level:
 Current Status:
 
 Next Skill Or Next Step:
-
