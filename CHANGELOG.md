@@ -24,7 +24,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
-No unreleased changes yet.
+### Changed
+
+- Refreshed `AUDIT_AND_OPTIMIZATION_PLAN.md` into a current audit status tracker after `v0.1.0` and removed stale roadmap claims.
 
 ## 0.1.0 - 2026-07-06
 
