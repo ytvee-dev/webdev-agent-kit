@@ -7,7 +7,6 @@ from pathlib import Path
 
 from validate_schemas import load_json, schema_path, validate_instance
 
-
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "evals"
 TRIGGER_EVALS = EVAL_DIR / "trigger-evals.json"
@@ -96,7 +95,9 @@ def validate_trigger_case(label, case, actual_skills, errors):
 
 
 def validate_output_case(label, case, actual_skills, errors):
-    require_case_keys(label, case, ("skill", "required_output_sections", "forbidden_behaviors", "reason"), errors)
+    require_case_keys(
+        label, case, ("skill", "required_output_sections", "forbidden_behaviors", "reason"), errors
+    )
 
     skill = case.get("skill")
     if skill and skill not in actual_skills:
