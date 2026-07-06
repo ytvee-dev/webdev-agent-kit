@@ -1,7 +1,7 @@
 ---
 id: 'agents.audit-and-optimization-plan'
-title: 'Audit And Optimization Plan'
-doc_type: 'audit-plan'
+title: 'Audit And Optimization Status'
+doc_type: 'audit-status'
 layer: 'bundle'
 status: 'active'
 publishable: true
@@ -12,236 +12,172 @@ tags:
     - 'roadmap'
 parent: []
 related:
-    - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[CONTRIBUTING|Contributing To WebDev Agent Kit]]'
     - '[[SECURITY|WebDev Agent Kit Security Policy]]'
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
+    - '[[common/cross-agent-compatibility-rules|Cross-Agent Compatibility Rules]]'
 depends_on: []
 ---
 
-# Audit And Optimization Plan
+# Audit And Optimization Status
 
-This document turns the external audit reports into a repository-local engineering plan. WebDev Agent Kit should behave like a source bundle that can be validated, packaged, reviewed, and safely installed into frontend projects.
+This document is the current status record for the audit and optimization pass that led to WebDev Agent Kit `v0.1.0`. It replaces the original audit roadmap as the active source of truth for what is complete and what remains open.
 
 ## Review Role
 
 Use the role of Principal AI Systems Architect and Staff Developer Experience Engineer. Review the bundle as an installable source bundle, a portable skill pack, a policy graph for frontend engineering workflows, and a package of executable agent instructions.
 
-## High-Level Verdict
+## Current Release Status
 
-The architecture is strong, but operational maturity must improve.
+`v0.1.0` is the first release-ready baseline for WebDev Agent Kit.
 
-Strengths:
+The release baseline includes:
 
-- clear bundle entrypoint in `AGENTS.md`;
-- explicit source model for `skills/**`, `common/**`, `templates/**`, `examples/**`, and local-only `project/**` overlays;
-- broad skill coverage across onboarding, planning, design, implementation, lint, visual QA, review, refactor, and bugfix work;
-- portable target idea through `dist/codex` and `dist/claude`;
-- local validators already exist.
+- source-bundle validation;
+- schema validation;
+- initial skill trigger evals;
+- initial skill output evals;
+- Codex and Claude portable target builds;
+- Codex and Claude target validation;
+- release workflow for tagged artifacts;
+- Apache License 2.0;
+- contribution and security governance;
+- blocking Ruff lint, Ruff format, yamllint, and markdownlint quality gates;
+- README runtime exclusion and human-only boundary;
+- host compatibility matrix for source, Codex, Claude, Copilot, Cursor, Windsurf, and generic coding-agent adaptations.
 
-Main risks:
+## Completed Work
 
-- validation must work on a clean reusable-bundle checkout without local `project/**` overlays;
-- README inventory checks must track the current documentation structure;
-- CI must run the same validators used locally;
-- public OSS governance files must exist;
-- schema-first validation, evals, and release discipline are not yet complete.
+### Source And Runtime Model
 
-## File-By-File Audit Inventory
+- `AGENTS.md` is the canonical runtime policy entrypoint.
+- `README.md` is human-facing only and excluded from agent runtime, routing, source inventory, and validation.
+- `skills/**` contains executable skill instructions.
+- `common/**` contains reusable runtime rules.
+- `templates/**` contains optional local artifact templates.
+- `project/**` is local-only host-project overlay state and must not be published.
+- `dist/**` is generated release output and must not be edited as source.
 
-### Root And Infrastructure
+### Packaging And Distribution
 
-| Path | Purpose | Finding | Priority |
-| --- | --- | --- | --- |
-| `AGENTS.md` | Canonical runtime router and policy entrypoint. | Strong routing and progressive disclosure. Keep it thin. | P1 |
-| `README.md` | Human-facing install and usage guide. | Good guide, but validation must not depend on one obsolete heading name. | P0 |
-| `bundle-manifest.json` | Source inventory and target map. | Good source of truth. Add schema validation later. | P1 |
-| `.codex-plugin/plugin.json` | Codex plugin manifest. | Minimal and correct. Keep aligned with bundle version. | P2 |
-| `.gitignore` | Excludes local overlays, generated targets, local notes, and noise. | Correctly excludes `project/**`; validators must treat it as optional. | P0 |
-| `CHANGELOG.md` | Release notes. | Added to support versioned behavior changes. | P1 |
-| `CONTRIBUTING.md` | Contribution policy. | Added to prevent skill drift and document review gates. | P1 |
-| `SECURITY.md` | Security policy. | Added because agent skills are executable instructions. | P0 |
-| `AUDIT_AND_OPTIMIZATION_PLAN.md` | Audit-to-roadmap bridge. | Added to keep follow-up work explicit and reviewable. | P1 |
-| `.github/workflows/skill-pack-ci.yml` | Pull request and push validation. | Added to run structural validators in CI. | P0 |
+- `bundle-manifest.json` tracks source skill inventory, target paths, and publish exclusions.
+- `.codex-plugin/plugin.json` is the Codex plugin entrypoint.
+- `scripts/build_skill_targets.py` builds `dist/codex` and `dist/claude`.
+- Codex target includes `.codex-plugin/plugin.json` and `skills/*/agents/openai.yaml`.
+- Claude target excludes Codex-only `.codex-plugin` and `agents/openai.yaml` metadata.
+- `project/**`, `.obsidian/**`, `node_modules/**`, and internal generated/source-only artifacts are excluded from distribution targets.
 
-### Scripts
+### Validation And CI
 
-| Path | Purpose | Finding | Priority |
-| --- | --- | --- | --- |
-| `scripts/validate_skill_pack.py` | Orchestrates source validation, target build, and target validation. | Correct orchestration. Add richer reporting later. | P1 |
-| `scripts/validate_source_bundle.py` | Validates graph metadata, skill inventory, README inventory, and local positive path docs. | Hardened to skip absent local-only `project/**` overlays and accept the README `Skill Map`. | P0 |
-| `scripts/build_skill_targets.py` | Builds portable Codex and Claude targets. | Updated to include public docs when present. Future pass should use a manifest-driven allowlist. | P1 |
-| `scripts/validate_codex_skill_pack.py` | Validates generated Codex target. | Useful target checklist. Future pass should use shared constants and JSON Schema. | P1 |
-| `scripts/validate_claude_skill_pack.py` | Validates generated Claude target. | Correctly blocks Codex-only metadata in Claude output. Future pass should share target validation logic. | P1 |
-| `skills/agent-rules-skill-author/scripts/skill_common.py` | Shared skill parsing and generation helpers. | Useful, but still a custom YAML subset parser. Replace with schema-backed parsing later. | P1 |
-| `skills/agent-rules-skill-author/scripts/validate_agent_skill.py` | Skill-level validation. | Good local validator. Extend with trigger-eval and schema checks later. | P1 |
+- `scripts/validate_skill_pack.py` orchestrates schema validation, source validation, eval validation, target build, and target validation.
+- `scripts/validate_schemas.py` provides the first schema-first validation pass for bundle metadata, skill frontmatter, OpenAI agent metadata, and graph docs.
+- `scripts/validate_source_bundle.py` validates graph metadata, source inventory, skill structure, stale names, license presence, and clean-checkout behavior.
+- `scripts/validate_skill_evals.py` validates trigger and output eval fixtures.
+- `scripts/validate_codex_skill_pack.py` validates the generated Codex target.
+- `scripts/validate_claude_skill_pack.py` validates the generated Claude target.
+- `.github/workflows/skill-pack-ci.yml` runs structural validation on pull requests and relevant pushes.
+- `.github/workflows/quality-ci.yml` enforces Ruff lint, Ruff format, yamllint, and markdownlint quality gates.
 
-### Common Rule Files
+### Eval Layer
 
-The common layer is valuable but broad. Each rule file should stay short, scoped, and loaded only by a matching skill or router decision.
+- `evals/trigger-evals.json` contains initial should-trigger and should-not-trigger routing fixtures for high-value skills.
+- `evals/output-evals.json` contains initial output contract fixtures for review, bugfix, visual QA, layout implementation, and bundle-maintenance workflows.
+- `schemas/eval-suite.schema.json` and `schemas/eval-case.schema.json` define eval fixture structure.
 
-| Path | Audit action |
-| --- | --- |
-| `common/agent-loop-policy.md` | Keep; every loop needs objective, max attempts, stop conditions, and evidence. |
-| `common/agent-operating-model.md` | Keep; avoid duplicate routing already in `AGENTS.md`. |
-| `common/anti-patterns.md` | Keep; split only when a skill needs deeper details. |
-| `common/anti-template-defaults.md` | Keep; tie examples to design skills. |
-| `common/approved-patterns.md` | Keep; add examples only when reusable across projects. |
-| `common/bounded-retry-rules.md` | Keep; use with loop workflows and visual repair. |
-| `common/build-tool-boundary-rules.md` | Keep; require approval for package manager changes. |
-| `common/checkpoint-rules.md` | Keep; route through planning and loop skills. |
-| `common/codex-official-docs-policy.md` | Keep; use as primary reference for Codex-specific behavior. |
-| `common/context-compaction-rules.md` | Keep; durable memory stays local-only. |
-| `common/cross-agent-compatibility-rules.md` | Keep; use during packaging and skill authoring. |
-| `common/css-modules-specificity-rules.md` | Keep; load only when CSS Modules change. |
-| `common/data-fetching-boundary-rules.md` | Keep; connect to TanStack, Redux, and Axios guidance. |
-| `common/data-visualization-rules.md` | Keep; load only for data visual surfaces. |
-| `common/debugging-evidence-rules.md` | Keep; bugfix skill should be primary consumer. |
-| `common/design-quality-rubric.md` | Keep; design director and visual QA should consume it. |
-| `common/documentation-maintenance.md` | Keep; update after new governance files. |
-| `common/execution-loops.md` | Review for overlap with loop policy and bounded retry. |
-| `common/feedback-cycle-policy.md` | Keep if distinct from loop contracts; otherwise merge later. |
-| `common/form-boundary-rules.md` | Keep; load only for form surfaces. |
-| `common/form-feedback-rules.md` | Keep; connect with accessibility and validation evidence. |
-| `common/framework-adaptation-policy.md` | Keep; important portability rule. |
-| `common/framework-source-map.md` | Keep; verify links and supported stack boundaries. |
-| `common/frontend-implementation-boundaries.md` | Keep; avoid duplicating `AGENTS.md` guardrails. |
-| `common/frontend-integration-boundaries.md` | Keep; tie to architecture planning. |
-| `common/goal-contract.md` | Keep; goal planner should own durable artifact generation. |
-| `common/icon-quality-rules.md` | Keep; prevent new icon packages by default. |
-| `common/independent-review-rules.md` | Keep; important for loop final judgment. |
-| `common/interface-copy-rules.md` | Keep; load for interface text and forms. |
-| `common/lightweight-routing-policy.md` | Keep; critical defense against over-planning. |
-| `common/lint-verification-rules.md` | Keep; align with linter manager. |
-| `common/mobile-responsive-rules.md` | Keep; load for layout and visual QA tasks. |
-| `common/motion-rules.md` | Keep; avoid animation-library defaults. |
-| `common/navigation-ux-rules.md` | Keep; load only when navigation changes. |
-| `common/performance-review-rules.md` | Keep; add measurable checks when project profile exists. |
-| `common/planning-rules.md` | Review for overlap with goal and execution skills. |
-| `common/portable-skill-core-contract.md` | Keep; use in authoring and target validation. |
-| `common/prompt-intent-routing-rules.md` | Keep; one of the most important router references. |
-| `common/refactor-safety-rules.md` | Keep; refactor skill should consume it. |
-| `common/rendered-visual-verification-policy.md` | Keep; visual QA should be primary consumer. |
-| `common/review-severity-model.md` | Keep; align with contribution guide severity labels. |
-| `common/routing-boundary-rules.md` | Review for overlap with prompt intent rules. |
-| `common/rule-audit-findings.md` | Keep only if current; otherwise convert to this plan or changelog entries. |
-| `common/security-review-rules.md` | Keep; align with `SECURITY.md`. |
-| `common/skill-applicability-policy.md` | Keep; important outside target stack. |
-| `common/state-ownership-rules.md` | Keep; architecture and implementation skills should consume it. |
-| `common/stop-criteria-rules.md` | Keep; important for loops and blocked verification. |
-| `common/target-stack-policy.md` | Keep; canonical stack boundary. |
-| `common/token-budget-rules.md` | Keep; should remain short and operational. |
-| `common/token-economy-rules.md` | Keep; avoid duplicate advice with token budget rules. |
-| `common/typescript-discipline.md` | Keep; load for TypeScript-changing tasks. |
-| `common/ui-ux-priority-checklist.md` | Keep; useful in review and implementation. |
-| `common/verification-loop-rules.md` | Keep; align with linter, visual QA, and bugfix workflows. |
-| `common/worktree-parallelism-rules.md` | Keep; load only for parallel execution tasks. |
-| `common/anti-patterns/README.md` | Keep; useful progressive-disclosure entrypoint. |
-| `common/anti-patterns/no-as-const-variables.md` | Keep; TypeScript-specific. |
-| `common/anti-patterns/no-anonymous-functions.md` | Keep; implementation and review skills should use it. |
-| `common/anti-patterns/no-use-callback-by-default.md` | Keep; good targeted rule. |
-| `common/anti-patterns/no-render-functions.md` | Keep; implementation and refactor skills should use it. |
-| `common/anti-patterns/no-nested-array-pipelines.md` | Keep; implementation and review skills should use it. |
-| `common/anti-patterns/no-component-loops.md` | Keep; clarify examples if false positives appear. |
-| `common/anti-patterns/no-unapproved-test-infrastructure.md` | Keep; important approval gate. |
+### Governance And Release
 
-### Examples And Templates
+- `LICENSE` uses Apache License 2.0.
+- `CHANGELOG.md` records release behavior and validation changes.
+- `CONTRIBUTING.md` documents contribution rules and review expectations.
+- `SECURITY.md` documents supply-chain and executable-instruction safety rules.
+- `.github/workflows/release.yml` builds and publishes Codex and Claude release artifacts from tags matching `v*.*.*`.
 
-| Path | Audit action |
-| --- | --- |
-| `examples/bugfix-refactor-review.md` | Update old aliases if any remain from previous project names. |
-| `examples/screenshot-to-frontend.md` | Keep source-first and no-Figma boundary explicit. |
-| `templates/context-index.md` | Keep local-only usage clear. |
-| `templates/decision-log.md` | Keep concise; do not duplicate progress log. |
-| `templates/design-direction-contract.md` | Keep tied to design director output. |
-| `templates/execution-plan.md` | Keep slice, verification, context budget, and stop/resume fields. |
-| `templates/goal-contract.md` | Keep done criteria explicit. |
-| `templates/loop-memory.md` | Keep local-only; never publish host facts. |
-| `templates/loop-workflow-contract.md` | Keep max attempts, retry strategy, and final judgment fields. |
-| `templates/progress-log.md` | Keep factual and compact. |
-| `templates/visual-memory.md` | Keep only accepted facts and evidence. |
+## Still Open
 
-### Skill Packages
+### P1: Replace Custom YAML Subset Parsing
 
-| Skill | Audit action |
-| --- | --- |
-| `agent-rules-skill-author` | Highest leverage. Continue moving audit policy into validators and contribution checks. |
-| `design-screenshot-spec` | Keep Figma boundary explicit and avoid live-link assumptions. |
-| `execution-plan-manager` | Add evals for over-planning versus appropriate planning. |
-| `frontend-architecture-planner` | Keep target-stack-specific and avoid non-target framework claims. |
-| `frontend-bugfix-debugger` | Add trigger evals for bug reports versus broad refactors. |
-| `frontend-design-director` | Keep separate from implementation. |
-| `frontend-design-intelligence` | Keep as pre-implementation design reasoning. |
-| `frontend-layout-implementer` | Keep dependency, token, styling, and architecture approval gates strict. |
-| `frontend-linter-manager` | Keep no-setup-without-approval rule. |
-| `frontend-quality-reviewer` | Maintain severity model and independent review boundaries. |
-| `frontend-refactor-surgeon` | Keep refactor distinct from redesign and feature work. |
-| `frontend-visual-qa` | Keep rendered evidence-driven. |
-| `goal-planner` | Keep goal, constraints, non-goals, and done criteria measurable. |
-| `greenfield-project-builder` | Keep scaffold approval gates and package boundaries explicit. |
-| `loop-workflow-planner` | Keep retry limits and final independent judgment explicit. |
-| `mcp-toolchain-manager` | Never install or configure tools without approval. |
-| `project-context-adapter` | Keep writes local-only and evidence-backed. |
-| `project-onboarding-adapter` | Must not be required for clean source validation. |
+Schema files exist, but some validators still parse frontmatter and `agents/openai.yaml` through local helper functions. Replace the custom YAML subset parser with a real schema-backed YAML loader, then keep custom Python checks only for semantic rules schemas cannot express.
 
-## Rule Audit Summary
+Acceptance criteria:
 
-Fixed in this branch:
+- `SKILL.md` frontmatter is parsed by a standard YAML loader.
+- `agents/openai.yaml` is parsed by a standard YAML loader.
+- Existing schemas remain the structural contract.
+- Error messages stay file-specific and actionable.
+- `python scripts/validate_skill_pack.py` passes.
 
-- source validation no longer assumes local-only `project/**` files exist;
-- README inventory validation now accepts the actual `Skill Map` structure;
-- CI now runs the source and target validators;
-- contribution, security, and changelog docs now exist;
-- distribution builds copy public OSS docs when present.
+### P1: Expand Eval Coverage
 
-Remaining high-value improvements:
+The initial eval layer exists. Add more realistic fixtures before changing routing descriptions or adding new skills.
 
-1. Add JSON Schema or Pydantic validation for `SKILL.md` frontmatter and `agents/openai.yaml`.
-2. Add trigger eval files for every high-value skill.
-3. Add link checking for Markdown and official-source references.
-4. Normalize Markdown wrapping and Python formatting after the validator passes in CI.
-5. Deduplicate overlapping common rules only after usage traces show real overlap.
-6. Add a release workflow that builds `dist/codex` and `dist/claude` artifacts from a tag.
+Acceptance criteria:
 
-## Roadmap
+- every high-value skill has multiple should-trigger and should-not-trigger cases;
+- output evals cover bugfix, visual QA, quality review, layout implementation, onboarding, and skill-authoring workflows;
+- near-miss prompts test over-planning, false design escalation, false bugfix escalation, and unsupported target-stack behavior.
 
-### Phase 0: Stabilize The Bundle
+### P1: Add Link Checking
 
-- Keep CI green on every pull request.
-- Ensure clean checkout validation does not need local overlays.
-- Keep README, manifest, plugin metadata, and skill directories aligned.
+Add a link checker for Markdown links and official-source references.
 
-### Phase 1: Make Validation Schema-First
+Acceptance criteria:
 
-- Add schemas for skill frontmatter, `agents/openai.yaml`, bundle manifest, and plugin manifest.
-- Replace custom YAML subset parsing with schema-backed loaders.
-- Keep custom semantic checks only where schemas cannot express the rule.
+- link checker runs in CI or a dedicated scheduled workflow;
+- generated `dist/**` and local-only `project/**` are excluded;
+- README remains human-only and is checked only as documentation, not as agent runtime source;
+- official-source references fail clearly when moved or unavailable.
 
-### Phase 2: Add Evals
+### P2: Usage-Trace Driven Rule Dedupe
 
-- Add skill-local eval fixtures for should-trigger and should-not-trigger prompts.
-- Add output-quality fixtures for bugfix, visual QA, quality review, and layout implementation.
-- Record pass/fail criteria in each skill.
+The common layer is intentionally broad. Do not deduplicate based on taste alone. First collect which rules are loaded by which skills and which rules overlap in practice.
 
-### Phase 3: Improve Distribution And Release Discipline
+Candidate overlap areas:
 
-- Add release notes discipline through `CHANGELOG.md`.
-- Build release artifacts for Codex and Claude targets.
-- Add manual inspection steps for executable instructions.
+- planning rules versus goal and execution planning skills;
+- loop policy versus bounded retry and verification loop rules;
+- routing boundary rules versus prompt intent and lightweight routing rules;
+- token budget rules versus token economy and context compaction rules.
 
-### Phase 4: Optimize Rule Surface
+Acceptance criteria:
 
-- Measure which common rules are loaded by which skills.
-- Merge or split rules based on observed routing, not taste.
-- Keep `AGENTS.md` as router and boundary document, not a full encyclopedia.
+- each merge/split is supported by observed routing or maintenance friction;
+- `AGENTS.md` remains a thin router and boundary document;
+- common rules stay short, scoped, and progressively disclosed;
+- skill output contracts and evals are updated when rule ownership changes.
 
-## Definition Of Done For This Optimization Pass
+### P2: Skill Maturity Metadata
 
-This branch is ready for review when:
+Add maturity metadata when the release cadence needs stronger lifecycle control.
 
-- `python scripts/validate_skill_pack.py` passes in CI;
-- public governance files are present and graph-valid;
-- source validation works without `project/**`;
-- README inventory drift is no longer caused by heading-name mismatch;
-- follow-up work is tracked in this file and `CHANGELOG.md`.
+Suggested fields:
+
+```yaml
+metadata:
+  version: '0.1.0'
+  maturity: 'draft|beta|stable'
+  owner: 'webdev-agent-kit'
+  last-reviewed: 'YYYY-MM-DD'
+  risk: 'low|medium|high'
+```
+
+Acceptance criteria:
+
+- schema validates the metadata;
+- all skills are assigned a maturity and risk level;
+- release notes mention maturity changes;
+- deprecated skills have explicit migration guidance.
+
+## Historical Audit Notes
+
+The original audit found a strong architecture with operational gaps. The highest-risk gaps from that audit have been resolved for `v0.1.0`:
+
+- clean reusable-bundle validation no longer requires local `project/**` overlays;
+- README is no longer part of runtime validation or routing;
+- CI runs source, schema, eval, build, target, formatting, and Markdown checks;
+- public OSS governance files exist;
+- Codex and Claude target generation is release-driven;
+- the initial eval layer exists;
+- release artifacts are built from validated source.
+
+Keep this document as a status tracker. Move completed future items into `CHANGELOG.md` and update the `Still Open` section instead of accumulating stale roadmap claims.
