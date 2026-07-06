@@ -30,4 +30,3 @@ Purpose: focus frontend performance review on evidence and user-visible risk.
 - Do not add caching, memoization, virtualization, build tooling, or dependencies
   without evidence and approval.
 - Label speculative opportunities as optional improvements, not required fixes.
-
