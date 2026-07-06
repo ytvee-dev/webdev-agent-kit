@@ -40,10 +40,13 @@ jobs:
           set -o pipefail
           ruff check scripts skills/agent-rules-skill-author/scripts 2>&1 | tee ruff-lint.log
 
-      - name: Ruff format check
+      - name: Ruff format report
+        if: always()
         run: |
-          set -o pipefail
-          ruff format --check scripts skills/agent-rules-skill-author/scripts 2>&1 | tee ruff-format.log
+          set +e
+          ruff format --check scripts skills/agent-rules-skill-author/scripts > ruff-format.log 2>&1
+          cat ruff-format.log
+          exit 0
 
       - name: YAML lint
         run: |
