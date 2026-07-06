@@ -40,4 +40,3 @@ workflow starts implementation.
 - Keep constraints specific to the task; avoid generic filler.
 - If a durable file is needed, write local-only state under `project/**`.
 - Reuse `templates/goal-contract.md` for durable contracts.
-
