@@ -34,4 +34,3 @@ Purpose: preserve type safety during frontend fixes, refactors, and reviews.
 - Keep public types stable during refactors unless the behavior change is
   approved.
 - Align with local `tsconfig` and nearby patterns before generic advice.
-
