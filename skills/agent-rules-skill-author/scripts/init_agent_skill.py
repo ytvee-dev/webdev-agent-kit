@@ -112,7 +112,9 @@ def parse_resources(raw_resources):
     invalid = sorted({item for item in resources if item not in ALLOWED_RESOURCES})
     if invalid:
         allowed = ", ".join(sorted(ALLOWED_RESOURCES))
-        raise ValueError(f"Unknown resource type(s): {', '.join(invalid)}. Allowed: {allowed}")
+        raise ValueError(
+            f"Unknown resource type(s): {', '.join(invalid)}. Allowed: {allowed}"
+        )
     deduped = []
     seen = set()
     for resource in resources:
@@ -140,7 +142,9 @@ def create_resource_dirs(skill_dir, resources, include_examples):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Initialize a new .agents skill package.")
+    parser = argparse.ArgumentParser(
+        description="Initialize a new .agents skill package."
+    )
     parser.add_argument("skill_name", help="Skill name (normalized to hyphen-case)")
     parser.add_argument("--path", required=True, help="Output directory for the skill")
     parser.add_argument(
