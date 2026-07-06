@@ -7,7 +7,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 HOST_ROOT = ROOT.parent
 REQUIRED_SKILL_SECTIONS = (
@@ -64,7 +63,9 @@ def split_frontmatter(path):
 
 
 def scalar(frontmatter, key):
-    match = re.search(rf"^{re.escape(key)}:\s*['\"]?([^'\"\n]+)", frontmatter, re.MULTILINE)
+    match = re.search(
+        rf"^{re.escape(key)}:\s*['\"]?([^'\"\n]+)", frontmatter, re.MULTILINE
+    )
     return match.group(1).strip() if match else None
 
 
@@ -121,15 +122,23 @@ def validate_markdown(errors):
         if not document_id:
             errors.append(f"{relative}: missing graph id")
         elif document_id in ids:
-            errors.append(f"Duplicate graph id {document_id}: {ids[document_id]} and {relative}")
+            errors.append(
+                f"Duplicate graph id {document_id}: {ids[document_id]} and {relative}"
+            )
         else:
             ids[document_id] = relative
 
         if relative.startswith("skills/") and relative.endswith("/SKILL.md"):
             for key in ("name", "description"):
                 match = re.search(rf"^{key}:\s*(.+)$", frontmatter, re.MULTILINE)
-                if match and not match.group(1).startswith(("'", '"')) and ": " in match.group(1):
-                    errors.append(f"{relative}: unquoted {key} is not valid YAML because it contains ': '")
+                if (
+                    match
+                    and not match.group(1).startswith(("'", '"'))
+                    and ": " in match.group(1)
+                ):
+                    errors.append(
+                        f"{relative}: unquoted {key} is not valid YAML because it contains ': '"
+                    )
 
         document = f"{frontmatter}\n{text}"
         for match in re.finditer(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]", document):
@@ -174,7 +183,9 @@ def validate_skill_inventory(errors):
     plugin_path = ROOT / ".codex-plugin" / "plugin.json"
 
     if (ROOT / "plugin.json").exists():
-        errors.append("Legacy root plugin.json must not exist; use bundle-manifest.json and .codex-plugin/plugin.json")
+        errors.append(
+            "Legacy root plugin.json must not exist; use bundle-manifest.json and .codex-plugin/plugin.json"
+        )
 
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -230,7 +241,9 @@ def path_exists(pattern):
 
 
 def validate_positive_project_paths(errors):
-    pattern = re.compile(r"`((?:src|tools)/[A-Za-z0-9_@.*\-/]+(?:\.[A-Za-z0-9.*]+)?)`")
+    pattern = re.compile(
+        r"`((?:src|tools)/[A-Za-z0-9_@.*\-/]+(?:\.[A-Za-z0-9.*]+)?)`"
+    )
     for path in POSITIVE_PATH_DOCS:
         if not path.exists():
             # `project/**` is a local-only overlay and is intentionally ignored in
@@ -254,7 +267,9 @@ def validate():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate the source .agents bundle before building targets.")
+    parser = argparse.ArgumentParser(
+        description="Validate the source .agents bundle before building targets."
+    )
     parser.parse_args()
     errors = validate()
     if errors:
