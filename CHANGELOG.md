@@ -41,6 +41,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Calibrated markdownlint for this bundle's frontmatter-heavy documents and source-reference files.
 - Applied Ruff import and formatting cleanup to Python validation and packaging scripts.
 - `quality-ci` now treats Ruff lint and yamllint checks as blocking gates while keeping Ruff format and markdownlint diagnostic-only.
 - CI now validates skill eval fixtures before building portable targets.
