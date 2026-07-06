@@ -26,6 +26,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added host compatibility matrix for source, Codex, Claude, Copilot, Cursor, Windsurf, and generic coding-agent adaptation.
 - Added formatting and linting configuration for Ruff, markdownlint-cli2, and yamllint.
 - Added `quality-ci` workflow for Python, Markdown, and YAML quality checks.
 - Added tagged release workflow for validated Codex and Claude portable target artifacts.
@@ -41,6 +42,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Clarified cross-agent portability boundaries for source, generated targets, host-specific metadata, and advisory host adaptations.
 - Calibrated markdownlint for this bundle's frontmatter-heavy documents and source-reference files.
 - Applied Ruff import and formatting cleanup to Python validation and packaging scripts.
 - `quality-ci` now treats Ruff lint and yamllint checks as blocking gates while keeping Ruff format and markdownlint diagnostic-only.
