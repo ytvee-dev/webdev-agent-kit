@@ -30,4 +30,3 @@ Purpose: require bugfix work to start from symptoms, reproduction, and evidence.
 - Fix the smallest cause that explains the evidence.
 - Verify with the same failing command, route, interaction, or symptom when
   possible.
-
