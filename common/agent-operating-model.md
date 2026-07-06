@@ -54,4 +54,3 @@ Stop before continuing when:
 - the change would touch production systems or secrets;
 - the current evidence contradicts the plan;
 - the goal cannot be satisfied without guessing product intent.
-
