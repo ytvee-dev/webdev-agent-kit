@@ -176,7 +176,11 @@ def validate_skill_name(skill_name):
 
 
 def title_case_skill_name(skill_name):
-    return " ".join(format_display_word(word, index) for index, word in enumerate(skill_name.split("-")) if word)
+    return " ".join(
+        format_display_word(word, index)
+        for index, word in enumerate(skill_name.split("-"))
+        if word
+    )
 
 
 def format_display_word(word, index):
@@ -193,7 +197,9 @@ def format_display_word(word, index):
 
 def format_display_name(skill_name):
     words = [word for word in skill_name.split("-") if word]
-    return " ".join(format_display_word(word, index) for index, word in enumerate(words))
+    return " ".join(
+        format_display_word(word, index) for index, word in enumerate(words)
+    )
 
 
 def generate_short_description(display_name):
@@ -270,7 +276,11 @@ def parse_openai_yaml(content):
                 data.setdefault(section, {})
             continue
 
-        if section in {"interface", "policy"} and ":" in stripped and not stripped.endswith(":"):
+        if (
+            section in {"interface", "policy"}
+            and ":" in stripped
+            and not stripped.endswith(":")
+        ):
             key, raw_value = split_key_value(stripped)
             data[section][key] = parse_scalar(raw_value)
             continue
@@ -280,7 +290,11 @@ def parse_openai_yaml(content):
             data[section]["tools"] = []
             continue
 
-        if section == "dependencies" and subsection == "tools" and stripped.startswith("- "):
+        if (
+            section == "dependencies"
+            and subsection == "tools"
+            and stripped.startswith("- ")
+        ):
             current_tool = {}
             remainder = stripped[2:].strip()
             if remainder:
@@ -289,7 +303,12 @@ def parse_openai_yaml(content):
             data[section]["tools"].append(current_tool)
             continue
 
-        if section == "dependencies" and subsection == "tools" and current_tool is not None and ":" in stripped:
+        if (
+            section == "dependencies"
+            and subsection == "tools"
+            and current_tool is not None
+            and ":" in stripped
+        ):
             key, raw_value = split_key_value(stripped)
             current_tool[key] = parse_scalar(raw_value)
             continue
@@ -322,7 +341,13 @@ def build_openai_yaml(interface, policy=None, dependencies=None):
         lines.append("")
         lines.append("policy:")
         for key, value in policy.items():
-            rendered = "true" if value is True else "false" if value is False else yaml_quote(value)
+            rendered = (
+                "true"
+                if value is True
+                else "false"
+                if value is False
+                else yaml_quote(value)
+            )
             lines.append(f"  {key}: {rendered}")
 
     tools = (dependencies or {}).get("tools", [])
@@ -344,7 +369,9 @@ def build_openai_yaml(interface, policy=None, dependencies=None):
 
 def extract_resource_paths(content):
     body = strip_frontmatter(content)
-    pattern = re.compile(r"`(?P<path>(?:references|scripts|assets|agents)/[A-Za-z0-9._/\-]+)`")
+    pattern = re.compile(
+        r"`(?P<path>(?:references|scripts|assets|agents)/[A-Za-z0-9._/\-]+)`"
+    )
     paths = []
     seen = set()
     for match in pattern.finditer(body):

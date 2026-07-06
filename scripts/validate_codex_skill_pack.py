@@ -7,7 +7,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "dist" / "codex"
-FORBIDDEN_SKILL_TERMS = ("shadcn", "tailwind-ui", "component-library", "testing", "e2e", "unit-test")
+FORBIDDEN_SKILL_TERMS = (
+    "shadcn",
+    "tailwind-ui",
+    "component-library",
+    "testing",
+    "e2e",
+    "unit-test",
+)
 REQUIRED_ROOT_FILES = (
     "AGENTS.md",
     "README.md",
@@ -71,14 +78,20 @@ def validate():
             errors.append(f"Invalid dist/codex plugin manifest: {exc}")
     for relative_path in REQUIRED_COMMON_FILES:
         if not (TARGET / relative_path).exists():
-            errors.append(f"dist/codex is missing required common file: {relative_path}")
+            errors.append(
+                f"dist/codex is missing required common file: {relative_path}"
+            )
     skills = sorted((TARGET / "skills").glob("*/SKILL.md"))
     if not skills:
         errors.append("dist/codex contains no skills")
     try:
-        inventory = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"))["skills"]
+        inventory = json.loads(
+            (ROOT / "bundle-manifest.json").read_text(encoding="utf-8")
+        )["skills"]
         if [skill.parent.name for skill in skills] != sorted(inventory):
-            errors.append("dist/codex skill inventory does not match bundle-manifest.json")
+            errors.append(
+                "dist/codex skill inventory does not match bundle-manifest.json"
+            )
     except Exception as exc:
         errors.append(f"Cannot validate Codex skill inventory: {exc}")
     for skill in skills:
@@ -93,7 +106,9 @@ def validate():
         if keys[:2] != ["name", "description"]:
             errors.append(f"{skill} must start frontmatter with name and description")
         if set(keys) != {"name", "description"}:
-            errors.append(f"{skill} must contain only portable frontmatter in dist/codex")
+            errors.append(
+                f"{skill} must contain only portable frontmatter in dist/codex"
+            )
         if not values.get("name") or not values.get("description"):
             errors.append(f"{skill} needs non-empty name and description")
         if not (skill.parent / "agents" / "openai.yaml").exists():
@@ -102,7 +117,9 @@ def validate():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate the generated Codex skill-pack target.")
+    parser = argparse.ArgumentParser(
+        description="Validate the generated Codex skill-pack target."
+    )
     parser.parse_args()
     errors = validate()
     if errors:

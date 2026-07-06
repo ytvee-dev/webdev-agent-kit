@@ -64,7 +64,9 @@ def validate_frontmatter(frontmatter):
 
     for graph_key in GRAPH_FRONTMATTER_KEYS & set(frontmatter.keys()):
         value = frontmatter[graph_key]
-        if graph_key in {"tags", "parent", "related", "depends_on"} and not isinstance(value, list):
+        if graph_key in {"tags", "parent", "related", "depends_on"} and not isinstance(
+            value, list
+        ):
             return f"{graph_key} must be a list in .agents graph metadata"
 
     return None

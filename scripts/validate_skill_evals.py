@@ -11,7 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "evals"
 TRIGGER_EVALS = EVAL_DIR / "trigger-evals.json"
 OUTPUT_EVALS = EVAL_DIR / "output-evals.json"
-WORKFLOW_LEVELS = {"Fast Lookup", "Lightweight Workflow", "Standard Workflow", "Deep Workflow"}
+WORKFLOW_LEVELS = {
+    "Fast Lookup",
+    "Lightweight Workflow",
+    "Standard Workflow",
+    "Deep Workflow",
+}
 
 
 def load_actual_skills(errors):
@@ -24,7 +29,9 @@ def load_actual_skills(errors):
 
     skills = manifest.get("skills")
     if not isinstance(skills, list):
-        errors.append("bundle-manifest.json: skills must be a list before eval validation")
+        errors.append(
+            "bundle-manifest.json: skills must be a list before eval validation"
+        )
         return set()
 
     return set(skills)
@@ -91,15 +98,25 @@ def validate_trigger_case(label, case, actual_skills, errors):
     should_trigger = case.get("should_trigger", [])
     should_not_trigger = case.get("should_not_trigger", [])
     validate_skill_list(label, "should_trigger", should_trigger, actual_skills, errors)
-    validate_skill_list(label, "should_not_trigger", should_not_trigger, actual_skills, errors)
+    validate_skill_list(
+        label, "should_not_trigger", should_not_trigger, actual_skills, errors
+    )
 
-    if expected_primary and isinstance(should_trigger, list) and expected_primary not in should_trigger:
-        errors.append(f"{label}: expected_primary_skill must be included in should_trigger")
+    if (
+        expected_primary
+        and isinstance(should_trigger, list)
+        and expected_primary not in should_trigger
+    ):
+        errors.append(
+            f"{label}: expected_primary_skill must be included in should_trigger"
+        )
 
     if isinstance(should_trigger, list) and isinstance(should_not_trigger, list):
         overlap = sorted(set(should_trigger) & set(should_not_trigger))
         if overlap:
-            errors.append(f"{label}: should_trigger and should_not_trigger overlap: {', '.join(overlap)}")
+            errors.append(
+                f"{label}: should_trigger and should_not_trigger overlap: {', '.join(overlap)}"
+            )
 
 
 def validate_output_case(label, case, actual_skills, errors):
@@ -116,7 +133,9 @@ def validate_output_case(label, case, actual_skills, errors):
 
     required_sections = case.get("required_output_sections", [])
     if isinstance(required_sections, list) and len(required_sections) < 3:
-        errors.append(f"{label}: required_output_sections should define at least 3 sections")
+        errors.append(
+            f"{label}: required_output_sections should define at least 3 sections"
+        )
 
     forbidden = case.get("forbidden_behaviors", [])
     if isinstance(forbidden, list) and len(forbidden) < 2:
@@ -201,7 +220,9 @@ def validate():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate skill trigger and output eval fixtures.")
+    parser = argparse.ArgumentParser(
+        description="Validate skill trigger and output eval fixtures."
+    )
     parser.parse_args()
     errors = validate()
     if errors:

@@ -174,15 +174,21 @@ def validate_bundle_manifest(schema, errors):
 
     actual = sorted(path.name for path in (ROOT / "skills").iterdir() if path.is_dir())
     if sorted(skills) != actual:
-        errors.append("bundle-manifest.json: skills must match actual skills/* directories")
+        errors.append(
+            "bundle-manifest.json: skills must match actual skills/* directories"
+        )
 
 
 def validate_skills(schema, errors):
-    for skill_dir in sorted(path for path in (ROOT / "skills").iterdir() if path.is_dir()):
+    for skill_dir in sorted(
+        path for path in (ROOT / "skills").iterdir() if path.is_dir()
+    ):
         try:
             frontmatter, _ = load_skill_frontmatter(skill_dir)
         except Exception as exc:
-            errors.append(f"skills/{skill_dir.name}/SKILL.md: cannot parse frontmatter: {exc}")
+            errors.append(
+                f"skills/{skill_dir.name}/SKILL.md: cannot parse frontmatter: {exc}"
+            )
             continue
 
         label = f"skills/{skill_dir.name}/SKILL.md"
@@ -195,7 +201,9 @@ def validate_skills(schema, errors):
 
 
 def validate_openai_metadata(schema, errors):
-    for skill_dir in sorted(path for path in (ROOT / "skills").iterdir() if path.is_dir()):
+    for skill_dir in sorted(
+        path for path in (ROOT / "skills").iterdir() if path.is_dir()
+    ):
         label = f"skills/{skill_dir.name}/agents/openai.yaml"
         try:
             data, path = load_openai_yaml(skill_dir)
@@ -211,7 +219,9 @@ def validate_openai_metadata(schema, errors):
 
         default_prompt = data.get("interface", {}).get("default_prompt")
         if default_prompt and f"${skill_dir.name}" not in default_prompt:
-            errors.append(f"{label}: interface.default_prompt must mention ${skill_dir.name}")
+            errors.append(
+                f"{label}: interface.default_prompt must mention ${skill_dir.name}"
+            )
 
 
 def validate_graph_docs(schema, errors):
@@ -230,7 +240,9 @@ def validate_schema_files(errors):
         try:
             load_json(path)
         except Exception as exc:
-            errors.append(f"{path.relative_to(ROOT).as_posix()}: cannot parse JSON schema: {exc}")
+            errors.append(
+                f"{path.relative_to(ROOT).as_posix()}: cannot parse JSON schema: {exc}"
+            )
 
 
 def validate(strict_graph=False):
