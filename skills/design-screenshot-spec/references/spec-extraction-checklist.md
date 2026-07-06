@@ -113,4 +113,3 @@ depends_on:
   implementation.
 - The final spec must include measured or inferred spacing, typography, and
   viewport behavior with confidence labels rather than generic descriptions.
-
