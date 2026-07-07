@@ -51,6 +51,10 @@ jobs:
         run: |
           test -d dist/codex
           test -d dist/claude
+          test -d dist/claude-code
+          test -d dist/cursor
+          test -d dist/vs-code-codex
+          test -d dist/vs-code-claude
           test ! -e dist/codex/project
           test ! -e dist/claude/project
           test ! -e dist/codex/bundle-manifest.json
@@ -58,7 +62,13 @@ jobs:
           test -f dist/codex/LICENSE
           test -f dist/claude/LICENSE
           test -f dist/codex/.codex-plugin/plugin.json
+          test -f dist/vs-code-codex/.codex-plugin/plugin.json
+          test -f dist/claude-code/CLAUDE.md
+          test -f dist/vs-code-claude/CLAUDE.md
+          test -f dist/cursor/.cursor/rules/webdev-agent-kit.mdc
           test ! -e dist/claude/.codex-plugin
+          test ! -e dist/claude-code/.codex-plugin
+          test ! -e dist/vs-code-claude/.codex-plugin
           if find dist -path '*/.obsidian/*' -o -path '*/node_modules/*' -o -path '*/project/*' | grep .; then
             echo 'Generated targets contain excluded local or generated paths.'
             exit 1
@@ -67,15 +77,20 @@ jobs:
       - name: Package release artifacts
         run: |
           mkdir -p release-artifacts
-          tar -czf "release-artifacts/webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz" -C dist codex
-          tar -czf "release-artifacts/webdev-agent-kit-claude-${GITHUB_REF_NAME}.tar.gz" -C dist claude
+          for target in codex claude-code cursor vs-code-codex vs-code-claude; do
+            tar -czf "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" -C dist "${target}"
+            cp "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" "release-artifacts/webdev-agent-kit-${target}.tar.gz"
+          done
           (cd release-artifacts && sha256sum *.tar.gz > SHA256SUMS)
           cat > release-artifacts/RELEASE_NOTES.md <<'NOTES'
           WebDev Agent Kit portable release artifacts.
 
           Artifacts:
-          - Codex target: `webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz`
-          - Claude target: `webdev-agent-kit-claude-${GITHUB_REF_NAME}.tar.gz`
+          - Codex target: `webdev-agent-kit-codex.tar.gz`
+          - Claude Code target: `webdev-agent-kit-claude-code.tar.gz`
+          - Cursor target: `webdev-agent-kit-cursor.tar.gz`
+          - VS Code Codex target: `webdev-agent-kit-vs-code-codex.tar.gz`
+          - VS Code Claude target: `webdev-agent-kit-vs-code-claude.tar.gz`
           - Checksums: `SHA256SUMS`
 
           Validation performed:
@@ -100,7 +115,15 @@ jobs:
         run: |
           gh release create "${GITHUB_REF_NAME}" \
             release-artifacts/webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz \
-            release-artifacts/webdev-agent-kit-claude-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/webdev-agent-kit-claude-code-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/webdev-agent-kit-cursor-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/webdev-agent-kit-vs-code-codex-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/webdev-agent-kit-vs-code-claude-${GITHUB_REF_NAME}.tar.gz \
+            release-artifacts/webdev-agent-kit-codex.tar.gz \
+            release-artifacts/webdev-agent-kit-claude-code.tar.gz \
+            release-artifacts/webdev-agent-kit-cursor.tar.gz \
+            release-artifacts/webdev-agent-kit-vs-code-codex.tar.gz \
+            release-artifacts/webdev-agent-kit-vs-code-claude.tar.gz \
             release-artifacts/SHA256SUMS \
             --title "WebDev Agent Kit ${GITHUB_REF_NAME}" \
             --notes-file release-artifacts/RELEASE_NOTES.md \
