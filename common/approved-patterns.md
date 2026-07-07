@@ -14,6 +14,7 @@ parent:
 related:
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
+    - '[[common/typescript-discipline|TypeScript Discipline]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
 depends_on: []
 ---
@@ -35,6 +36,45 @@ Purpose: define reusable patterns for React, Next.js, CSS Modules, Redux, TanSta
 - Keep styles local to the edited surface by default through CSS Modules.
 - Touch global CSS only when the existing project has a specific global owner and the task requires it.
 
+## TypeScript Implementation Style
+
+- Prefer arrow functions for new or changed functions unless local runtime semantics require otherwise.
+- Add explicit return types to new or changed functions.
+- Destructure named object fields when it improves clarity and does not hide nullability.
+
+Example:
+
+```ts
+const selectNotificationTitle = (notification: Notification): string => {
+  const { title } = notification.content;
+  return title;
+};
+```
+
+## Single Discriminant Status
+
+Use one typed status field for one lifecycle or async state.
+
+Prefer:
+
+```ts
+type AuthInitializationStatus = 'idle' | 'initializing' | 'initialized' | 'failed';
+
+type AuthState = {
+  initializationStatus: AuthInitializationStatus;
+};
+```
+
+Use discriminated unions when each status carries different data.
+
+```ts
+type AuthInitializationState =
+  | { status: 'idle' }
+  | { status: 'initializing' }
+  | { status: 'initialized'; userId: string }
+  | { status: 'failed'; error: string };
+```
+
 ## Component Decomposition
 
 - Keep every changed component focused on one primary responsibility.
@@ -47,6 +87,6 @@ Purpose: define reusable patterns for React, Next.js, CSS Modules, Redux, TanSta
 
 ## Verification
 
-- Use browser-rendered evidence for visual work.
+- Use browser-rendered evidence for visual work when rendered visual QA is in scope.
 - Compare implementation screenshots against the spec and visual references.
 - Report material visual deviations instead of hiding them.
