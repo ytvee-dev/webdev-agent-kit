@@ -13,6 +13,7 @@ parent: []
 related:
     - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
+    - '[[docs/install/README|Installation Guides]]'
 depends_on: []
 ---
 
