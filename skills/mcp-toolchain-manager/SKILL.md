@@ -1,6 +1,6 @@
 ---
 name: mcp-toolchain-manager
-description: Use when frontend work needs MCP/tool capability detection, missing-tool reporting, official install source verification, approval-gated installation planning, or project/mcp-profile.md updates. Do not install tools, run package installs, or change configs without explicit user approval.
+description: Use when frontend work needs tool capability detection, missing-tool reporting, official install source verification, approval-gated MCP installation planning, or project/mcp-profile.md updates. Prefer declared capabilities over server-name assumptions. Do not install tools, run package installs, or change configs without explicit user approval.
 id: 'agents.skills.mcp-toolchain-manager.skill'
 title: 'MCP Toolchain Manager'
 doc_type: 'skill'
@@ -16,6 +16,8 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/tool-capability-model|Tool Capability Model]]'
+    - '[[common/mcp-installation-policy|MCP Installation Policy]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[skills/goal-planner/SKILL|Goal Planner]]'
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
@@ -30,25 +32,25 @@ depends_on:
 
 ## Purpose
 
-Detect, explain, validate, and record MCP/tool capabilities needed by WebDev Agent Kit skills without turning tool setup into automatic or unsafe behavior.
+Detect, explain, validate, and record tool capabilities needed by WebDev Agent Kit skills without turning tool setup into automatic or unsafe behavior.
 
-This skill exists to keep MCP usage deliberate. It identifies which tools are required for the current workflow, which tools are already available, which tools are missing, what each missing tool unlocks, and what official source must be verified before installation is proposed.
+This skill exists to keep MCP usage deliberate. It identifies which capabilities are required for the current workflow, which providers are already available, which providers are missing, what each missing capability blocks, which fallback is allowed, and what official source must be verified before installation or configuration is proposed.
 
 ## When To Use
 
 Use this skill when:
 
-- a selected skill declares MCP/tool dependencies;
+- a selected skill declares capability dependencies in `tool-capabilities-manifest.json`;
 - a task requires rendered UI verification, official documentation lookup, project context retrieval, visual references, GitHub metadata, or another external capability;
-- the agent needs to audit available vs missing MCP servers;
-- the user asks what MCP/tools are required for the skill pack;
+- the agent needs to audit available vs missing MCP servers, native tools, connectors, or fallbacks;
+- the user asks what MCP servers or tools are required for the skill pack;
 - the user asks to install, configure, validate, or troubleshoot MCP tools;
 - `project/mcp-profile.md` must be created or refreshed;
 - a missing tool limitation must be reported before fallback behavior.
 
 Use this skill in `Standard Workflow` or `Deep Workflow` when tool capability affects the current slice.
 
-It may also be used in `Lightweight Workflow` only when the user directly asks about MCP/tool availability or when a missing already-required tool prevents a narrow task from being verified.
+It may also be used in `Lightweight Workflow` only when the user directly asks about MCP/tool availability or when a missing already-required capability prevents a narrow task from being verified.
 
 ## When Not To Use
 
@@ -69,45 +71,50 @@ Do not use this skill to implement frontend code, write tests, scaffold projects
 ## Required Context
 
 1. Read `AGENTS.md`.
-2. Read `common/prompt-intent-routing-rules.md` when workflow level is unclear.
-3. Read selected skill metadata and `agents/openai.yaml` files only for skills relevant to the current task.
-4. Read `project/mcp-profile.md` when it exists and the task needs tool state.
-5. Read `project/verification-profile.md` only when verification commands influence tool needs.
-6. Do not read all skills or all YAML files during normal routing.
+2. Read `common/tool-capability-model.md`.
+3. Read `common/mcp-installation-policy.md` when installation or configuration is in scope.
+4. Read `common/prompt-intent-routing-rules.md` when workflow level is unclear.
+5. Read `tool-capabilities-manifest.json` for selected skills and capabilities.
+6. Read selected skill metadata and `agents/openai.yaml` files only when Codex-native metadata matters for the current client.
+7. Read `project/mcp-profile.md` when it exists and the task needs durable tool state.
+8. Read `project/verification-profile.md` only when verification commands influence tool needs.
+9. Do not read all skills or all YAML files during normal routing.
 
 ## Tool Contract
 
-- May read skill metadata and `agents/openai.yaml` files for selected skills.
+- May read `tool-capabilities-manifest.json`, selected skill metadata, selected `agents/openai.yaml`, and local-only `project/mcp-profile.md`.
 - May read or update `project/mcp-profile.md` when durable tool state is needed.
-- May search official documentation only to verify installation sources or current tool docs.
+- May search official documentation only to verify installation sources or current client/tool docs.
+- Must prefer declared capabilities over server-name assumptions.
 - Must not install MCP servers without explicit user approval.
-- Must not change Codex, Claude, MCP, shell, package manager, or project configuration without explicit user approval.
+- Must not change Codex, Claude, Cursor, VS Code, MCP, shell, package manager, or project configuration without explicit user approval.
 - Must not run package installs.
 - Must not access production systems or secrets.
 - Must not use Figma MCP unless the user explicitly requested a live Figma workflow and that workflow is outside the screenshot-only bundle boundary.
 
-## Core MCP Categories
+## Core Tool Capabilities
 
-Expected core capabilities for the future full skill pack:
+Core capability vocabulary is defined in `common/tool-capability-model.md` and `tool-capabilities-manifest.json`.
+
+Expected high-value capabilities:
 
 ```text
-filesystem_server
-playwright
-context7
-mdn
-openaiDeveloperDocs
+project_files
+current_library_docs
+web_platform_docs
+rendered_visual_evidence
+codex_platform_docs
+client_platform_docs
+repo_metadata
+design_reference_files
 ```
 
-Optional capabilities:
+Blocked by default for this bundle's screenshot-only flow:
 
 ```text
-github
-figma
-browser/devtools
-visual-diff
-design-reference
-linear/jira
-docs/search
+live_design_source
+figma_mcp
+figjam_mcp
 ```
 
 Core does not mean always installed or always used. Use only what the current workflow needs.
@@ -116,50 +123,46 @@ Core does not mean always installed or always used. Use only what the current wo
 
 1. Identify the active task and selected skill chain.
    - Use prompt intent routing first.
-   - Do not expand a lightweight task into tool setup unless the user asked for tool setup or the missing tool blocks verification.
+   - Do not expand a lightweight task into tool setup unless the user asked for tool setup or the missing capability blocks required verification.
 
-2. Collect required tool declarations.
-   - Inspect only `agents/openai.yaml` files for selected skills.
-   - Record declared required and optional tools.
+2. Collect required capability declarations.
+   - Inspect `tool-capabilities-manifest.json` for selected skills.
+   - Inspect `agents/openai.yaml` only when Codex-native metadata must be aligned.
+   - Record required, required-when-in-scope, optional, and blocked capabilities.
    - Do not scan every skill unless onboarding or full toolchain audit is explicitly requested.
 
-3. Determine tool need for the current slice.
+3. Determine need for the current slice.
    - Required for this slice.
+   - Required only when visual QA or another conditional workflow is in scope.
    - Useful but optional.
    - Not needed.
    - Explicitly blocked.
 
-4. Compare with available tools.
-   - Available.
+4. Compare capabilities with available providers.
+   - Available in the current session.
+   - Available as a native host capability.
    - Missing.
    - Approved for install.
-   - Installed.
+   - Installed and validated.
    - Skipped.
    - Blocked.
    - Unknown.
 
 5. Explain missing capability impact.
-   - State what cannot be verified or automated without the tool.
-   - State the fallback and confidence level when fallback is allowed.
-   - Do not claim tool-based verification if the tool is missing.
+   - State what cannot be verified or automated without the capability.
+   - State the allowed fallback and confidence level when fallback is allowed.
+   - Do not claim tool-based verification if the provider is missing.
+   - Do not treat `package.json`, lockfiles, local Playwright dependencies, or a running dev server as proof of MCP availability.
 
 6. Verify official install source when installation is relevant.
-   Accepted sources:
-   - official project documentation;
-   - official package repository;
-   - official vendor documentation;
-   - trusted repository owned by the tool maintainer.
-
-   Rejected sources:
-   - random blog snippets;
-   - search result summaries;
-   - unverified package names;
-   - unofficial forks;
-   - generated guesses.
+   - Use accepted sources from `common/mcp-installation-policy.md`.
+   - Reject random snippets, search summaries, unofficial forks, and generated guesses.
 
 7. Ask approval before installation or configuration changes.
    The approval request must name:
-   - tool/server name;
+   - capability;
+   - provider/server name;
+   - target client and config scope;
    - reason;
    - official source;
    - install/config action;
@@ -171,8 +174,9 @@ Core does not mean always installed or always used. Use only what the current wo
 
 9. Hand off.
    Return to the selected frontend skill with:
-   - tools available now;
-   - missing tools;
+   - capabilities available now;
+   - missing capabilities;
+   - active providers;
    - approved fallbacks;
    - verification limits.
 
@@ -181,25 +185,26 @@ Core does not mean always installed or always used. Use only what the current wo
 When writing or updating `project/mcp-profile.md`, use these sections:
 
 ```text
-Required For Skill Pack
-Required For Current Task
-Available
-Missing
-Optional
-Approved For Install
-Installed
-Skipped
-Blocked
-Official Install Sources
+Client
+Capability State
+Configured MCP Servers
+Missing Capabilities
+Optional Capabilities
+Blocked Capabilities
+Official Sources Verified
+Approval State
 Validation Results
+Allowed Fallbacks
+Confidence Impact
 Last Updated
 ```
 
 Tool entry shape:
 
 ```text
-Tool
+Capability
 Status
+Provider
 Required By
 Reason
 Current Task Need
@@ -207,6 +212,7 @@ Official Source
 Install Approved
 Validation
 Fallback
+Confidence Impact
 Notes
 ```
 
@@ -218,11 +224,12 @@ Return a Toolchain Report with:
 Task
 Workflow Level
 Selected Skill Chain
-Required Tools
-Available Tools
-Missing Tools
-Optional Tools
-Blocked Tools
+Required Capabilities
+Available Capabilities
+Available Providers
+Missing Capabilities
+Optional Capabilities
+Blocked Capabilities
 Official Sources Verified
 Approval Needed
 Allowed Fallbacks
@@ -239,9 +246,11 @@ Before finishing, verify:
 - no config was changed without explicit approval;
 - no package install was performed;
 - official sources are recorded for proposed installations;
-- missing tool limitations are explicit;
+- missing capability limitations are explicit;
 - fallback confidence is honest;
 - `project/mcp-profile.md` was updated only when durable state is useful;
+- server names were not treated as capabilities;
+- local dependencies or running servers were not reported as MCP availability;
 - no UI component library or testing skill was introduced;
 - no production systems or secrets were accessed.
 
@@ -253,20 +262,19 @@ Should trigger:
 - "Do we have Playwright MCP available for visual QA?"
 - "Set up the MCP tools, but show me the official install sources first."
 - "Update project/mcp-profile.md after onboarding."
-- "This skill requires context7 and MDN; tell me what is missing."
+- "This skill requires rendered visual evidence and MDN; tell me what is missing."
+- "Which capabilities are missing for Cursor visual QA?"
 
 Should not trigger:
 
 - "Fix this TypeScript error."
-- "Change this button color."
-- "Implement this component from the already written spec."
-- "Write a goal contract."
-- "Create an execution plan."
+- "Change this local CSS background color."
+- "Run visual QA now with the browser tool that is already available."
 
 ## Reference Map
 
-- `AGENTS.md` - canonical policy, routing, tool rules, and documentation rules.
-- `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation/de-escalation rules.
-- `project/mcp-profile.md` - optional local-only durable MCP/tool capability cache.
-- `project/verification-profile.md` - local verification command facts when tool need depends on project checks.
-- `skills/*/agents/openai.yaml` - selected skill tool declarations.
+- `common/tool-capability-model.md`
+- `common/mcp-installation-policy.md`
+- `tool-capabilities-manifest.json`
+- `common/prompt-intent-routing-rules.md`
+- `project/mcp-profile.md`
