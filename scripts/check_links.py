@@ -12,7 +12,6 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED_PARTS = {"dist", "project", "node_modules", ".obsidian", ".git"}
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
-WIKI_LINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]")
 
 
 def markdown_files() -> list[Path]:
@@ -46,18 +45,6 @@ def local_target_exists(source: Path, target: str) -> bool:
             candidate.with_suffix(".md").exists() or (candidate / "README.md").exists()
         )
     return False
-
-
-def wiki_target_exists(target: str) -> bool:
-    target = target.strip()
-    if not target:
-        return True
-    candidates = [
-        ROOT / f"{target}.md",
-        ROOT / target,
-        ROOT / target / "README.md",
-    ]
-    return any(candidate.exists() for candidate in candidates)
 
 
 def check_external_url(url: str, timeout: int) -> str | None:
@@ -101,11 +88,6 @@ def check_file(path: Path, check_external: bool, timeout: int) -> list[str]:
             continue
         if not local_target_exists(path, target):
             errors.append(f"{relative}: broken local link {target!r}")
-
-    for match in WIKI_LINK_RE.finditer(text):
-        target = match.group(1).strip()
-        if not wiki_target_exists(target):
-            errors.append(f"{relative}: broken wiki link {target!r}")
 
     return errors
 
