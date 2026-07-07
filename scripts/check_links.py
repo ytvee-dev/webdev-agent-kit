@@ -17,9 +17,7 @@ WIKI_LINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]")
 
 def markdown_files() -> list[Path]:
     return sorted(
-        path
-        for path in ROOT.rglob("*.md")
-        if not (set(path.parts) & EXCLUDED_PARTS)
+        path for path in ROOT.rglob("*.md") if not (set(path.parts) & EXCLUDED_PARTS)
     )
 
 
@@ -44,7 +42,9 @@ def local_target_exists(source: Path, target: str) -> bool:
     if candidate.exists():
         return True
     if candidate.suffix == "":
-        return candidate.with_suffix(".md").exists() or (candidate / "README.md").exists()
+        return (
+            candidate.with_suffix(".md").exists() or (candidate / "README.md").exists()
+        )
     return False
 
 
@@ -61,7 +61,9 @@ def wiki_target_exists(target: str) -> bool:
 
 
 def check_external_url(url: str, timeout: int) -> str | None:
-    request = Request(url, method="HEAD", headers={"User-Agent": "webdev-agent-kit-link-check"})
+    request = Request(
+        url, method="HEAD", headers={"User-Agent": "webdev-agent-kit-link-check"}
+    )
     try:
         with urlopen(request, timeout=timeout) as response:
             if response.status >= 400:
@@ -69,7 +71,9 @@ def check_external_url(url: str, timeout: int) -> str | None:
             return None
     except Exception:
         try:
-            request = Request(url, method="GET", headers={"User-Agent": "webdev-agent-kit-link-check"})
+            request = Request(
+                url, method="GET", headers={"User-Agent": "webdev-agent-kit-link-check"}
+            )
             with urlopen(request, timeout=timeout) as response:
                 if response.status >= 400:
                     return f"HTTP {response.status}"
@@ -91,7 +95,9 @@ def check_file(path: Path, check_external: bool, timeout: int) -> list[str]:
             if check_external:
                 error = check_external_url(target, timeout)
                 if error:
-                    errors.append(f"{relative}: external link failed {target!r}: {error}")
+                    errors.append(
+                        f"{relative}: external link failed {target!r}: {error}"
+                    )
             continue
         if not local_target_exists(path, target):
             errors.append(f"{relative}: broken local link {target!r}")
@@ -105,9 +111,15 @@ def check_file(path: Path, check_external: bool, timeout: int) -> list[str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Check Markdown local links and optional external links.")
-    parser.add_argument("--external", action="store_true", help="Also check external HTTP(S) links.")
-    parser.add_argument("--timeout", type=int, default=10, help="External link timeout in seconds.")
+    parser = argparse.ArgumentParser(
+        description="Check Markdown local links and optional external links."
+    )
+    parser.add_argument(
+        "--external", action="store_true", help="Also check external HTTP(S) links."
+    )
+    parser.add_argument(
+        "--timeout", type=int, default=10, help="External link timeout in seconds."
+    )
     args = parser.parse_args()
 
     errors: list[str] = []
