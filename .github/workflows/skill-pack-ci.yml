@@ -49,6 +49,27 @@ jobs:
         if: steps.validate_schemas.outputs.status != '0'
         run: exit ${{ steps.validate_schemas.outputs.status }}
 
+      - name: Validate README boundary
+        id: validate_readme_boundary
+        run: |
+          set +e
+          python scripts/check_readme_boundary.py > validation-readme-boundary.log 2>&1
+          status=$?
+          cat validation-readme-boundary.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload README boundary log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-readme-boundary-log
+          path: validation-readme-boundary.log
+
+      - name: Fail if README boundary failed
+        if: steps.validate_readme_boundary.outputs.status != '0'
+        run: exit ${{ steps.validate_readme_boundary.outputs.status }}
+
       - name: Validate source bundle
         id: validate_source
         run: |
