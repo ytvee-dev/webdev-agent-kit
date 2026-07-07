@@ -1,6 +1,6 @@
 interface:
     display_name: 'MCP Toolchain Manager'
-    short_description: 'Manage tool capabilities'
+    short_description: 'Manage MCP tool capabilities'
     default_prompt: 'Use $mcp-toolchain-manager to detect required tool capabilities, map them to available MCP/native providers, report missing capabilities, verify official install sources, request approval before installation, and update project/mcp-profile.md when durable tool state is needed.'
 policy:
     allow_implicit_invocation: true
