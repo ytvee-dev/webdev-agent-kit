@@ -83,6 +83,26 @@
       "reason": "User asks for MCP capability detection and approval-gated tooling guidance."
     },
     {
+      "id": "verification.css-background-four-pages-no-oververification",
+      "prompt": "Change the background color on these four pages. Do not over-test.",
+      "workflow_level": "Lightweight Workflow",
+      "expected_primary_skill": "frontend-bugfix-debugger",
+      "should_trigger": ["frontend-bugfix-debugger"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-visual-qa", "loop-workflow-planner", "frontend-quality-reviewer"],
+      "risk_notes": ["A CSS-only background change should stay lightweight and should not inspect MCP state, start a dev server, or test unrelated routes by default."],
+      "reason": "The user requests a bounded low-risk visual tweak and explicitly asks to avoid over-testing."
+    },
+    {
+      "id": "verification.repeated-visual-request-escalates",
+      "prompt": "I already asked twice; the background is still wrong on mobile. Verify it visually.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-visual-qa",
+      "should_trigger": ["frontend-visual-qa"],
+      "should_not_trigger": ["mcp-toolchain-manager", "greenfield-project-builder", "frontend-design-director"],
+      "risk_notes": ["Repeated visual failure plus explicit verification request should escalate to targeted rendered evidence when browser capability exists."],
+      "reason": "Repeated failure changes the verification budget from source-only confidence to targeted rendered QA."
+    },
+    {
       "id": "project-onboarding-adapter.adapt-command",
       "prompt": "адаптируйся",
       "workflow_level": "Deep Workflow",
