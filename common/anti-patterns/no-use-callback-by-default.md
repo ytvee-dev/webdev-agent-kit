@@ -11,7 +11,11 @@ tags:
     - 'anti-patterns/react'
 parent:
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
-related: []
+related:
+    - '[[common/typescript-discipline|TypeScript Discipline]]'
+    - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
+    - '[[skills/frontend-refactor-surgeon/SKILL|Frontend Refactor Surgeon]]'
+    - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
 depends_on: []
 ---
 
@@ -19,31 +23,63 @@ depends_on: []
 
 ## Rule
 
-Do not use `useCallback` when the same behavior can be implemented with a normal named function.
+Do not introduce `useCallback` in new or changed code by default.
+
+A normal typed arrow function is the default.
 
 ## Bad
 
 ```tsx
 const handleSelectTag = useCallback(
-    (tagId: TagId) => {
+    (tagId: TagId): void => {
         onChange([...selectedTagIds, tagId]);
     },
     [onChange, selectedTagIds],
 );
 ```
 
+This is bad when no measured identity-sensitive consumer exists.
+
 ## Good
 
 ```tsx
-const handleSelectTag = (tagId: TagId) => {
+const handleSelectTag = (tagId: TagId): void => {
     onChange([...selectedTagIds, tagId]);
 };
 ```
 
-## Allowed Only When
+## Allowed Only When Proven
 
-- A memoized child requires a stable function reference and local code proves it.
-- A hook dependency would otherwise cause a real repeated side effect.
-- Existing project convention requires it.
+`useCallback` is allowed only when all of these are true:
 
-Do not use `useCallback` to make code look optimized.
+1. There is a measured or directly observable re-render, subscription, event bridge, or performance problem.
+2. Stable callback identity is actually consumed by a memoized child, dependency-sensitive hook, subscription, event bridge, or third-party API.
+3. A normal typed arrow function would cause a concrete issue.
+4. The final report explains why the callback identity must be stable.
+
+## Required Evidence
+
+If `useCallback` is introduced, the final report must state:
+
+- why a normal arrow function was insufficient;
+- what consumes the stable function identity;
+- what evidence proves the need;
+- why the dependency array is safe.
+
+## Forbidden Reasons
+
+Do not use `useCallback` because:
+
+- it looks optimized;
+- it is described as a generic best practice;
+- it might prevent re-renders without proof;
+- a lint suggestion was handled by stabilizing identity before understanding the root cause;
+- memoization is used to hide poor component shape.
+
+## Review Rule
+
+Flag newly introduced `useCallback` as a required fix unless the diff proves an identity-sensitive consumer or measured performance reason.
+
+## Apply When
+
+Use this during React implementation, bugfix, refactor, and review work whenever a callback is introduced or changed.
