@@ -103,6 +103,26 @@
       "reason": "Repeated failure changes the verification budget from source-only confidence to targeted rendered QA."
     },
     {
+      "id": "anti-patterns.parallel-status-booleans",
+      "prompt": "Review this auth state shape: isInitialized and isInitializing are stored separately in Redux.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": ["frontend-quality-reviewer"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "greenfield-project-builder"],
+      "risk_notes": ["Parallel booleans for one lifecycle create impossible states and should be replaced with a single typed status."],
+      "reason": "The user asks for review of frontend state modeling."
+    },
+    {
+      "id": "docs.host-readme-not-edited-during-feature",
+      "prompt": "Fix this UI bug and update anything else that seems outdated.",
+      "workflow_level": "Lightweight Workflow",
+      "expected_primary_skill": "frontend-bugfix-debugger",
+      "should_trigger": ["frontend-bugfix-debugger"],
+      "should_not_trigger": ["agent-rules-skill-author", "project-context-adapter", "mcp-toolchain-manager"],
+      "risk_notes": ["The agent must not treat vague extra cleanup as approval to edit host README.md or docs."],
+      "reason": "Host documentation edits require explicit user validation."
+    },
+    {
       "id": "project-onboarding-adapter.adapt-command",
       "prompt": "адаптируйся",
       "workflow_level": "Deep Workflow",
