@@ -113,6 +113,16 @@
       "reason": "The user asks for review of frontend state modeling."
     },
     {
+      "id": "anti-patterns.no-use-callback-by-default",
+      "prompt": "Review this React change. The agent added useCallback around a simple click handler with no memoized child.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": ["frontend-quality-reviewer"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "mcp-toolchain-manager"],
+      "risk_notes": ["useCallback without a proven identity-sensitive consumer is an anti-pattern."],
+      "reason": "The user asks for review of a React implementation quality issue."
+    },
+    {
       "id": "docs.host-readme-not-edited-during-feature",
       "prompt": "Fix this UI bug and update anything else that seems outdated.",
       "workflow_level": "Lightweight Workflow",
