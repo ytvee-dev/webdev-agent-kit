@@ -1,39 +1,76 @@
----
-id: 'agents.readme'
-title: 'WebDev Agent Kit README'
-doc_type: 'readme'
-layer: 'bundle'
-status: 'active'
-publishable: true
-local_only: false
-tags:
-    - 'agents/readme'
-    - 'frontend'
-    - 'developer-guide'
-parent: []
-related:
-    - '[[AGENTS|Canonical Agent Policy]]'
-    - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
-    - '[[common/target-stack-policy|Target Stack Policy]]'
-    - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
-depends_on: []
----
-
 # WebDev Agent Kit
 
-WebDev Agent Kit is a project-local skill pack for frontend coding agents.
+A project-local operating kit for frontend coding agents.
 
-It gives an agent a structured way to plan, implement, debug, refactor, review, visually verify, and maintain frontend work without turning every prompt into a broad rewrite. The kit is optimized for React and Next.js projects that use CSS Modules, Redux, TanStack, Axios, and TypeScript, while several planning, design, review, visual QA, onboarding, and toolchain workflows can still help in other frontend stacks.
+WebDev Agent Kit helps AI coding agents plan, implement, debug, refactor, review, and visually verify frontend work without broad rewrites, unapproved packages, fake verification, or generic UI output.
 
-The core idea is simple: put reusable agent behavior in `.agents/`, keep host-project facts in `.agents/project/**`, and make the agent load only the smallest set of rules needed for the current task.
+Built for frontend projects that use React, Next.js, TypeScript, CSS Modules, Redux, TanStack, and Axios.
 
-## Quick Usage
+Use it when you want your coding agent to:
 
-Use this section first after the kit is installed in a project.
+- understand the current frontend project before changing it;
+- choose the right workflow for the task;
+- keep small tasks small;
+- avoid unapproved packages, tooling changes, and broad rewrites;
+- verify changes with real evidence;
+- preserve project-specific conventions across repeated work.
 
-### 1. Adapt the kit to the current project
+WebDev Agent Kit is not a UI library, component library, starter template, scaffolder, or test framework. It is a local instruction system that gives coding agents a safer operating model for frontend development.
 
-Ask the agent:
+## Demo
+
+User prompt:
+
+```text
+The dashboard route renders blank on mobile.
+Reproduce the symptom, fix the smallest cause, and run the relevant existing verification.
+```
+
+WebDev Agent Kit routes it as:
+
+```text
+frontend-bugfix-debugger
+-> frontend-linter-manager when lint exists
+-> frontend-visual-qa when rendered UI changed
+-> frontend-quality-reviewer when review is requested or risk is high
+```
+
+Expected final report:
+
+```text
+Changed: files or surfaces touched
+Why: root cause or implementation rationale
+Verified: exact command, rendered check, or blocked check
+Risks: unresolved or out-of-scope issues
+Next: one useful follow-up, only when needed
+```
+
+The goal is compact evidence, not process theater. The agent should explain what changed, why it changed, how it was verified, what remains risky, and what the next useful step is when there is one.
+
+## Quick Start
+
+### 1. Install the kit into your frontend project
+
+From the host project root, copy the kit into `.agents/`:
+
+```bash
+mkdir -p .agents
+cp -R /path/to/webdev-agent-kit/. .agents/
+```
+
+### 2. Add a root `AGENTS.md` pointer
+
+If your project does not already have a root `AGENTS.md`, create one:
+
+```md
+# AGENTS.md
+
+Use the project-local agent policy in `.agents/AGENTS.md`.
+```
+
+Keep the full policy inside `.agents/AGENTS.md`. The root file should stay small and should not mirror the full bundled policy.
+
+### 3. Ask the agent to adapt
 
 ```text
 адаптируйся
@@ -45,7 +82,7 @@ or in English:
 Adapt this .agents bundle to the current frontend project.
 ```
 
-Expected result:
+Expected onboarding result:
 
 - the agent reads the host project shape;
 - detects whether the project fits the target stack;
@@ -53,9 +90,7 @@ Expected result:
 - records stack, architecture, styling, verification, MCP/tool, and path-index facts;
 - does not create app source files, install packages, or change runtime code during onboarding.
 
-### 2. Give the agent a task in product terms
-
-Good prompts describe the desired outcome, surface, and constraints:
+### 4. Give the agent a product-level task
 
 ```text
 Implement this approved Design Implementation Spec in the pricing page.
@@ -63,47 +98,212 @@ Reuse existing CSS Modules and do not install packages.
 Verify desktop and 375px mobile layout.
 ```
 
-```text
-The dashboard route is blank on mobile.
-Reproduce the symptom, fix the smallest cause, and run the relevant existing verification.
-```
+The agent should route the task through `.agents/AGENTS.md`, select the right workflow level, load only the matching skill package, and report evidence.
+
+## Main Use Cases
+
+### 1. Screenshot to frontend implementation
+
+Turn screenshots, exported assets, copied inspect values, and written notes into an implementation-ready frontend spec and then into project-native code.
+
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Best for:
+
+- landing pages;
+- pricing pages;
+- dashboards;
+- static product pages;
+- redesign implementation;
+- screenshot-derived UI work without live Figma inspection.
+
+### 2. Evidence-first bug fixing
+
+Make the agent reproduce the symptom, identify the smallest cause, fix the smallest safe scope, and rerun the relevant check.
+
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Useful prompt:
 
 ```text
-Review this PR for frontend correctness, TypeScript safety, accessibility, performance, and verification gaps.
-Do not apply fixes yet.
+The settings page crashes after clicking Save.
+Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.
 ```
 
-The agent should route the task through `AGENTS.md`, select the right workflow level, load only the matching skill package, and report evidence.
+### 3. Safe frontend refactoring
 
-### 3. Use explicit skill names only when you need to force a workflow
+Split components, remove duplication, simplify props, tighten TypeScript boundaries, and preserve behavior.
 
-Most of the time, let `AGENTS.md` route the task. If you need a specific workflow, call it directly:
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Useful prompt:
 
 ```text
-Use $frontend-quality-reviewer to review this implementation before merge.
+Refactor this settings panel into smaller components without changing behavior.
+Preserve public props and rendered output.
 ```
+
+### 4. Pre-merge frontend review
+
+Review frontend work for correctness, TypeScript safety, accessibility, performance, architecture fit, UX risks, and verification honesty.
+
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Useful prompt:
 
 ```text
-Use $loop-workflow-planner to define a bounded loop before repairing visual QA deviations.
+Review this frontend change before merge.
+Check correctness, TypeScript safety, accessibility, performance, architecture, and verification honesty.
+Do not apply fixes.
 ```
+
+### 5. Rendered visual QA
+
+Check desktop, tablet, and mobile viewports with rendered evidence instead of source-only guessing.
+
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Useful prompt:
 
 ```text
-Use $mcp-toolchain-manager to check which MCP tools are missing for rendered visual QA.
+Verify the implemented page against these screenshots at desktop, tablet, and 375px mobile.
+Report visual mismatches with viewport evidence.
 ```
 
-### 4. Expect compact evidence, not process theater
+### 6. Project onboarding and context caching
 
-Final reports should tell you what changed, why, how it was verified, what is blocked, and the next useful step when there is one.
+Let the agent inspect a frontend project once and store local-only project facts in `.agents/project/**`, so future tasks can use compact factual context instead of repeated broad scans.
 
-For code-changing work, expect a report like:
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Useful prompt:
 
 ```text
-Changed: files or surfaces touched
-Why: root cause or implementation rationale
-Verified: exact command, rendered check, or blocked check
-Risks: unresolved or out-of-scope issues
-Next: one useful follow-up, only when needed
+адаптируйся
 ```
+
+### 7. Greenfield frontend planning
+
+Plan the first version of a new React or Next.js project before scaffolding anything.
+
+<!-- Add project walkthrough video, GIF, or screenshot here. -->
+
+Useful prompt:
+
+```text
+Plan the first version of a new Next.js app for this product idea.
+Do not scaffold yet.
+```
+
+## How It Works
+
+```text
+user prompt
+-> AGENTS.md classifies the task
+-> workflow level is selected
+-> matching skill package is loaded
+-> project overlays provide local project facts
+-> agent executes the smallest approved scope
+-> verification runs against existing project evidence
+-> final report explains changes, risks, and blockers
+```
+
+The kit uses progressive disclosure. The agent does not read every rule for every task. It starts from `AGENTS.md`, selects the relevant workflow, then loads only the skill, project overlays, common rules, and references needed for the current task.
+
+### Workflow levels
+
+| Level | Use for | Behavior |
+| --- | --- | --- |
+| Fast Lookup | Locating a file, answering a narrow repo question, checking one rule | No heavy planning. Read only enough to answer. |
+| Lightweight Workflow | One small bug, typo, styling tweak, obvious type error, direct local edit | Keep the task small. No durable plan unless it escalates. |
+| Standard Workflow | Multi-file feature, meaningful bugfix, refactor, UI implementation, review | Use selected skills, relevant overlays, and verification. |
+| Deep Workflow | Onboarding, greenfield planning, broad redesign, repeated failure, resumable work | Use goal contracts, execution plans, loop contracts, and local-only memory when useful. |
+
+## Guardrails
+
+WebDev Agent Kit is strict by design. It is meant to control coding agents, not merely advise them.
+
+The agent must ask for approval before:
+
+- installing packages;
+- adding UI libraries;
+- adding state, data, form, styling, animation, chart, icon, testing, or build tooling;
+- changing package manager, scripts, bundler, monorepo tooling, or framework;
+- creating testing infrastructure;
+- changing auth persistence, session behavior, or data mutation flow;
+- scaffolding a new app;
+- touching production systems, secrets, or production data;
+- performing broad rewrites outside the requested scope.
+
+The kit also prevents common frontend-agent failure modes:
+
+- broad rewrites from narrow requests;
+- unnecessary planning for tiny fixes;
+- fake verification claims;
+- generic SaaS UI defaults;
+- decorative dashboards with fake metrics;
+- unapproved Figma MCP usage;
+- package installation as a first resort;
+- moving server communication, domain workflow, or data processing into Redux by default.
+
+## Supported Scope
+
+### Best fit
+
+WebDev Agent Kit is optimized for frontend projects using:
+
+- React;
+- Next.js;
+- TypeScript;
+- CSS Modules;
+- Redux;
+- TanStack Query or TanStack Router;
+- Axios.
+
+Stack-specific implementation and architecture skills are strict about this scope. They should not pretend to support unrelated frameworks.
+
+### Also useful for
+
+Some workflows are framework-agnostic and can help with:
+
+- project onboarding;
+- project context refresh;
+- design intake;
+- screenshot-to-spec work;
+- visual direction;
+- rendered visual QA;
+- frontend quality review;
+- lint verification;
+- MCP/tool capability detection;
+- planning and execution contracts;
+- skill authoring and bundle maintenance.
+
+These workflows can still apply to Astro, Vue, Svelte, static HTML/CSS, or another frontend stack when the task does not depend on React/Next-specific implementation rules.
+
+### Not intended for
+
+WebDev Agent Kit is not:
+
+- a UI library;
+- a component library;
+- a starter template;
+- a scaffolder;
+- a test framework;
+- a framework generator;
+- a backend framework;
+- a production access tool;
+- a replacement for project-specific architecture;
+- a live Figma MCP workflow by default.
+
+It does not:
+
+- install packages automatically;
+- install MCP servers automatically;
+- create testing infrastructure by default;
+- create app source files during onboarding;
+- generate a full application from a vague idea without approval gates;
+- migrate routers, state layers, styling systems, build tools, or frameworks by default;
+- access production systems, secrets, or production data.
 
 ## Installation
 
@@ -127,7 +327,23 @@ your-frontend-project/
 └── src/ or app/
 ```
 
-### Option A: Copy the kit into a project
+### Option A: Use a release artifact
+
+Recommended for normal usage after versioned releases are published.
+
+Download the Codex or Claude target from GitHub Releases and copy it into your project as `.agents/`.
+
+Release artifacts are built as:
+
+```text
+webdev-agent-kit-codex-<version>.tar.gz
+webdev-agent-kit-claude-<version>.tar.gz
+SHA256SUMS
+```
+
+### Option B: Copy the source bundle
+
+Best for local experimentation or active kit development.
 
 From the host project root:
 
@@ -144,13 +360,11 @@ Then create a small root `AGENTS.md` pointer if the project does not already hav
 Use the project-local agent policy in `.agents/AGENTS.md`.
 ```
 
-Keep the full policy inside `.agents/AGENTS.md`. The root pointer should not mirror the full bundled policy.
+### Option C: Track it as a nested checkout or submodule
 
-### Option B: Track it as a nested checkout or submodule
+Best when you want to update the kit independently from the host app.
 
-If you want to update the kit independently from the host app, keep it as a nested checkout or submodule under `.agents/`.
-
-The host app should still treat `.agents/AGENTS.md` as the canonical policy for agent behavior.
+Keep the kit as a nested checkout or submodule under `.agents/`. The host app should still treat `.agents/AGENTS.md` as the canonical policy for agent behavior.
 
 ### After installation
 
@@ -162,62 +376,80 @@ Run onboarding through the agent:
 
 Review the proposed `.agents/project/**` overlays before accepting durable project facts. The overlays are local-only and should not be published upstream with the reusable kit.
 
-## What This Is
+## Prompt Recipes
 
-WebDev Agent Kit is not a UI library, component library, starter template, scaffolder, test framework, or framework generator.
-
-It is a runtime instruction system for coding agents. It tells an agent:
-
-- how to classify frontend tasks by size and risk;
-- when to keep work lightweight;
-- when to create a goal contract or execution plan;
-- when to use bounded verification loops;
-- how to extract implementation specs from screenshots;
-- how to implement frontend layouts from approved specs;
-- how to debug from evidence rather than guesses;
-- how to refactor without changing behavior;
-- how to review work with severity and evidence;
-- how to run visual QA only when rendered evidence is actually needed;
-- how to preserve project-local facts in `.agents/project/**`;
-- how to avoid unapproved packages, tooling, testing workflows, Figma workflows, broad rewrites, and production access.
-
-## What It Is Not
-
-This kit does not:
-
-- install packages automatically;
-- install MCP servers automatically;
-- create testing infrastructure by default;
-- create app source files during onboarding;
-- generate a full application from a vague idea without approval gates;
-- migrate routers, state layers, styling systems, build tools, or frameworks by default;
-- use live Figma inspection as part of the default screenshot-to-frontend workflow;
-- access production systems, secrets, or production data;
-- treat README content as runtime policy.
-
-## Supported Frontend Scope
-
-The primary target stack is:
+### Adapt the kit to a project
 
 ```text
-React
-Next.js
-CSS Modules
-Redux
-TanStack Query or TanStack Router
-Axios
-TypeScript
+адаптируйся
 ```
 
-Stack-specific implementation and architecture skills are strict about that scope. They should not pretend to support unrelated frameworks.
+or:
 
-Some workflows are framework-agnostic and can still apply to Astro, Vue, Svelte, static HTML/CSS, or another frontend stack when the task is about planning, design intake, visual QA, review, MCP/tool detection, documentation, or project-context adaptation.
+```text
+Adapt this .agents bundle to the current frontend project.
+```
 
-## How The Kit Works
+### Implement an approved UI spec
+
+```text
+Implement this approved Design Implementation Spec in the pricing page.
+Reuse existing components and CSS Modules. Do not install packages.
+```
+
+### Convert screenshots into an implementation spec
+
+```text
+Use these screenshots and copied inspect notes to write a Design Implementation Spec.
+Do not implement the page yet.
+```
+
+### Fix a frontend bug
+
+```text
+The settings page crashes after clicking Save.
+Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.
+```
+
+### Refactor safely
+
+```text
+Refactor this settings panel into smaller components without changing behavior.
+Preserve public props and rendered output.
+```
+
+### Review before merge
+
+```text
+Review this frontend change before merge.
+Check correctness, TypeScript safety, accessibility, performance, architecture, and verification honesty.
+Do not apply fixes.
+```
+
+### Run rendered visual QA
+
+```text
+Verify the implemented page against these screenshots at desktop, tablet, and 375px mobile.
+Report visual mismatches with viewport evidence.
+```
+
+### Check MCP/tooling gaps
+
+```text
+Check which MCP tools are missing for rendered visual QA.
+Report the official install sources. Do not install anything yet.
+```
+
+### Plan a new frontend project
+
+```text
+Plan the first version of a new Next.js app for this product idea.
+Do not scaffold yet.
+```
+
+## Architecture
 
 ### Source model
-
-The important layers are:
 
 | Layer | Path | Purpose |
 | --- | --- | --- |
@@ -232,8 +464,6 @@ The important layers are:
 
 ### Runtime flow
 
-The agent should follow this loop:
-
 ```text
 classify prompt
 -> choose workflow level
@@ -245,178 +475,7 @@ classify prompt
 -> report evidence and blockers
 ```
 
-The kit intentionally avoids reading every rule for every task. It uses progressive disclosure: load `AGENTS.md`, then the selected skill, then only the common rules and references that skill needs.
-
-### Workflow levels
-
-| Level | Use for | Behavior |
-| --- | --- | --- |
-| Fast Lookup | locating a file, answering a narrow repo question, checking one rule | No heavy planning. Read only enough to answer. |
-| Lightweight Workflow | one small bug, typo, styling tweak, obvious type error, direct local edit | Keep the task small. No durable plan unless it escalates. |
-| Standard Workflow | multi-file feature, meaningful bugfix, refactor, UI implementation, review | Use selected skills, relevant overlays, and verification. |
-| Deep Workflow | onboarding, greenfield planning, broad redesign, repeated failure, resumable work | Use goal contracts, execution plans, loop contracts, and local-only memory when useful. |
-
-## Main Capabilities
-
-### Project onboarding and context caching
-
-Use `project-onboarding-adapter` when adapting the kit to a project.
-
-It detects project shape, target-stack fit, routing, styling, state, verification commands, docs/MCP choices, and path indexes. It writes only local project overlays when approved.
-
-Useful prompt:
-
-```text
-адаптируйся
-```
-
-### Goal and execution planning
-
-Use `goal-planner` and `execution-plan-manager` for standard or deep work that needs explicit goal, scope, constraints, done criteria, task slices, context budget, verification per slice, blockers, and stop/resume state.
-
-Useful prompt:
-
-```text
-Define the goal and execution plan before implementing this dashboard redesign.
-```
-
-### Bounded agent loops
-
-Use `loop-workflow-planner` when work must repeat until measurable acceptance criteria pass.
-
-The loop contract defines objective, allowed scope, max attempts, retry strategy, verification, independent review, memory update, stop conditions, and escalation conditions.
-
-Useful prompt:
-
-```text
-Create a bounded loop contract for fixing the visual QA mismatches.
-Stop after three attempts or when the next step needs approval.
-```
-
-### Screenshot-to-frontend workflow
-
-Use this chain when a user supplies screenshots, inspect notes, or exported assets:
-
-```text
-design-screenshot-spec
--> frontend-design-director when visual judgment is needed
--> frontend-architecture-planner when ownership boundaries matter
--> frontend-layout-implementer
--> frontend-linter-manager when lint exists
--> frontend-visual-qa when rendered evidence is required
--> frontend-quality-reviewer when review is requested or risk is high
-```
-
-This workflow is screenshot-first and source-first. It does not use live Figma links, Figma MCP, FigJam, Figma file creation, Figma canvas editing, design-system generation, or Code Connect.
-
-### Design intelligence and design direction
-
-Use `frontend-design-intelligence` to ground a UI task in product category, page pattern, design dials, UX risks, and product-specific anti-patterns.
-
-Use `frontend-design-director` to create a Design Direction Contract with subject, audience, single job, lead thesis, visual position, typography roles, token stance, motion stance, interface copy voice, anti-template checks, implementation handoff, and visual acceptance criteria.
-
-Useful prompt:
-
-```text
-Make this landing page direction less generic before implementation.
-Ground it in the product category and define visual acceptance criteria.
-```
-
-### Architecture planning
-
-Use `frontend-architecture-planner` before code changes when route ownership, component boundaries, React state, Redux state, TanStack remote state, Axios adapters, form behavior, CSS Modules, or build/workspace boundaries matter.
-
-Useful prompt:
-
-```text
-Plan where this feature should live in the current Next.js project.
-Decide route, state, data, and CSS Modules boundaries before implementation.
-```
-
-### Layout implementation
-
-Use `frontend-layout-implementer` when an approved Design Implementation Spec or Design Direction Contract is ready.
-
-The implementer should reuse existing project conventions, CSS Modules, components, tokens, Redux/TanStack/Axios boundaries, and verification commands. It must not add dependencies, UI libraries, global tokens, architecture layers, or new styling systems without explicit approval.
-
-Useful prompt:
-
-```text
-Implement this Design Implementation Spec in the current React page.
-Reuse existing components and CSS Modules. Do not install packages.
-```
-
-### Bugfix debugging
-
-Use `frontend-bugfix-debugger` for UI/runtime errors, broken routes, hydration/client issues, styling regressions, responsive defects, TypeScript errors, or build defects that need evidence.
-
-The bugfix workflow starts from symptom, reproduction path, evidence, and one hypothesis. It fixes the smallest cause and verifies with the same failing command, route, interaction, or symptom when possible.
-
-Useful prompt:
-
-```text
-The settings page crashes after clicking Save.
-Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.
-```
-
-### Refactoring
-
-Use `frontend-refactor-surgeon` for behavior-preserving frontend refactors: component extraction, file reorganization, prop/interface cleanup, state simplification, TypeScript tightening, and duplication removal within a clear boundary.
-
-Useful prompt:
-
-```text
-Refactor this settings panel into smaller components without changing behavior.
-Preserve rendered output and public props.
-```
-
-### Lint verification
-
-Use `frontend-linter-manager` after code-changing frontend work when a lint command exists.
-
-It uses the smallest relevant existing lint command, classifies failures, repairs only related failures when safe, reruns the same command, and reports unresolved lint issues honestly.
-
-It does not add lint packages, scripts, or configuration unless the user explicitly asks for setup and approves the plan.
-
-### Visual QA
-
-Use `frontend-visual-qa` only when rendered browser evidence is required: screenshot comparison, viewport checks, overflow, visible interaction states, visual regression evidence, or console/runtime issues that affect the rendered UI.
-
-It must not open Browser or Playwright just to read font, spacing, color, or token values when source files or copied inspect values can answer the question.
-
-Useful prompt:
-
-```text
-Verify the implemented page against these screenshots at desktop, tablet, and 375px mobile.
-Report visual mismatches with viewport evidence.
-```
-
-### Quality review
-
-Use `frontend-quality-reviewer` for pass/fail review of frontend work. It checks correctness, maintainability, decomposition, TypeScript, security, performance, architecture fit, UX gates, verification honesty, and independent loop acceptance when relevant.
-
-It reports findings by severity and separates required fixes from optional improvements. It does not apply fixes unless the user asked for a combined review-and-fix task.
-
-Useful prompt:
-
-```text
-Review this implementation before merge.
-Give a pass, pass with concerns, or fail verdict with evidence.
-```
-
-### MCP and toolchain management
-
-Use `mcp-toolchain-manager` when a task needs tool capability detection, missing-tool reporting, official install source verification, approval-gated installation planning, or `.agents/project/mcp-profile.md` updates.
-
-It can reason about tools such as filesystem access, Playwright or Browser MCP, Context7, MDN, OpenAI developer docs, GitHub, visual diff, design references, or task management tools. It must not install tools or change configuration without explicit approval.
-
-### Skill authoring and bundle maintenance
-
-Use `agent-rules-skill-author` when changing this kit itself: `AGENTS.md`, `README.md`, `bundle-manifest.json`, `.codex-plugin/plugin.json`, `common/**`, `templates/**`, `project/**`, or `skills/**`.
-
-It keeps native skill metadata, local graph metadata, OpenAI YAML, references, validators, manifests, and README aligned.
-
-## Skill Map
+### Skill map
 
 | User need | Primary skill | Notes |
 | --- | --- | --- |
@@ -439,334 +498,49 @@ It keeps native skill metadata, local graph metadata, OpenAI YAML, references, v
 | Maintain the kit | `agent-rules-skill-author` | Skills, rules, manifests, README, validators. |
 | Plan new frontend project | `greenfield-project-builder` | Deep workflow; approval gates before scaffolding. |
 
-## Common Rules Worth Knowing
+### Release targets
 
-The agent does not normally read every common rule. These are loaded only when relevant.
+WebDev Agent Kit builds portable targets for:
 
-| Rule file | Purpose |
-| --- | --- |
-| `common/prompt-intent-routing-rules.md` | Choose Fast Lookup, Lightweight, Standard, or Deep workflow before loading skills. |
-| `common/lightweight-routing-policy.md` | Keep small tasks small and prevent unnecessary planning. |
-| `common/token-budget-rules.md` | Spend context on correctness instead of broad reading. |
-| `common/token-economy-rules.md` | Reduce context, thinking, and output waste without reducing quality. |
-| `common/context-compaction-rules.md` | Preserve only durable facts when work must stop and resume. |
-| `common/target-stack-policy.md` | Define target stack and unsupported stack boundaries. |
-| `common/framework-adaptation-policy.md` | Keep framework-agnostic skills usable without pretending all stacks are supported. |
-| `common/approved-patterns.md` | Source-first design intake, project-native implementation, decomposition, verification. |
-| `common/anti-patterns.md` | Bundle-wide prohibited defaults and anti-pattern categories. |
-| `common/ui-ux-priority-checklist.md` | Review UI risks in order: accessibility, states, layout, navigation/forms, performance, data, polish. |
-| `common/verification-loop-rules.md` | Use existing verification, classify failures, rerun honestly. |
-| `common/bounded-retry-rules.md` | Prevent repeated failed strategies and unbounded retries. |
-| `common/agent-loop-policy.md` | Platform-neutral loop contract for repeatable agent work. |
-| `common/documentation-maintenance.md` | Keep README, manifests, skills, graph links, and references consistent. |
+- Codex;
+- Claude.
 
-## Project Overlays
+Generated targets are built into `dist/**` and packaged as GitHub Release artifacts when a version tag is published.
 
-`.agents/project/**` is for host-project facts only. These files are local-only and should not be published with the reusable kit.
+The release workflow validates schemas, source bundle, skill evals, generated Codex target, generated Claude target, and excluded-path rules before publishing artifacts.
 
-Typical overlays:
+## Maintenance
 
-```text
-project/stack-profile.md
-project/architecture-map.md
-project/styling-profile.md
-project/verification-profile.md
-project/design-reference-profile.md
-project/mcp-profile.md
-project/approved-patterns.md
-project/anti-patterns.md
-project/react/path-index.md
-project/next/path-index.md
-project/active-goals.md
-project/active-plan.md
-project/progress-log.md
-project/decision-log.md
-project/loop-memory.md
-project/visual-memory.md
+### Validate the source bundle
+
+```bash
+python scripts/validate_source_bundle.py
 ```
 
-The purpose of overlays is token and quality control: the agent can read factual project summaries and path indexes instead of scanning the whole repository every time.
+### Build portable targets
 
-## Guardrails
-
-These rules are intentionally strict because the kit is meant to control coding agents, not merely advise them.
-
-### Approval required
-
-The agent must ask for approval before:
-
-- installing packages;
-- adding UI libraries;
-- adding state, data, form, styling, animation, chart, icon, testing, or build tooling;
-- changing package manager, scripts, bundler, monorepo tooling, or framework;
-- creating testing infrastructure;
-- changing auth persistence, session behavior, or data mutation flow;
-- scaffolding a new app;
-- touching production systems, secrets, or production data;
-- broad rewrites outside the requested scope.
-
-### Frontend state and data boundaries
-
-Default ownership:
-
-- local UI state stays in React components or local hooks;
-- Redux stores and mutates application objects only;
-- Redux must not own server communication, data processing, or domain workflow layers;
-- TanStack-owned remote data should not be duplicated into Redux unless the existing project convention requires it;
-- Axios clients and API adapters should be reused rather than replaced.
-
-### Code quality boundaries
-
-The agent should avoid:
-
-- variables created by appending `as const` to values instead of using explicit types;
-- anonymous exported components and unnamed behavior-bearing functions;
-- `useCallback` by default;
-- JSX-returning `renderXxx` helpers inside components;
-- unreadable nested array pipelines inside components;
-- unclear imperative loops for render-side orchestration;
-- unapproved test infrastructure;
-- comments added as a substitute for clear naming and structure.
-
-### Design and visual boundaries
-
-The agent should avoid:
-
-- generic SaaS heroes with gradient blobs;
-- fake metrics and decorative dashboards;
-- badges, grids, numbers, labels, and dividers that do not encode meaning;
-- motion used to hide weak layout;
-- animation libraries for simple transitions;
-- new icon packages when the project already has an icon system;
-- screenshots treated as exact design tokens unless values are copied from inspect panels or explicit notes.
-
-### Figma boundary
-
-The default workflow is screenshot-derived. The kit must not use Figma MCP, live Figma inspection, FigJam, Figma whiteboard, canvas editing, Figma file creation, design-system generation, or Code Connect.
-
-When the user supplies only a Figma URL, file key, or node ID, the agent should ask for screenshots, exported assets, copied inspect values, or a written brief.
-
-## Verification Model
-
-The kit prefers the smallest reliable existing evidence.
-
-Verification source order:
-
-1. exact acceptance criterion, failing command, reproduction, route, interaction, or existing regression test;
-2. commands recorded in `.agents/project/verification-profile.md` when present;
-3. existing lint, typecheck, build, test, or format-check commands relevant to the changed surface;
-4. rendered visual QA when visual behavior is in scope;
-5. manual source inspection only when executable verification is unavailable.
-
-For code-changing frontend work, lint should run when an existing lint command is available. If no lint command exists, the agent should say that lint was not run and explain the confidence impact.
-
-If verification fails, the agent must classify the failure:
-
-```text
-passed
-failed: related to current change
-failed: likely pre-existing
-failed: unrelated environment/tool issue
-blocked: required command or tool unavailable
-unknown: evidence insufficient
+```bash
+python scripts/build_skill_targets.py
 ```
 
-It must not switch to an easier command just to claim success.
+### Validate the full skill pack
 
-## Token Economy
-
-The kit includes token economy rules, but the goal is not to make the agent "think less".
-
-The goal is to reduce waste:
-
-- no broad repo scans before targeted search;
-- no all-skill reads for narrow tasks;
-- no heavy planning for micro-fixes;
-- no repeated conclusions;
-- no long process narration;
-- no full logs when one decisive line is enough.
-
-The agent must preserve:
-
-- acceptance criteria;
-- user constraints;
-- code semantics;
-- exact commands;
-- exact paths;
-- exact errors;
-- API names;
-- security warnings;
-- irreversible-action confirmations;
-- verification evidence;
-- known unknowns and blockers.
-
-Correctness wins over compactness.
-
-## MCP And Tooling
-
-MCP tools are optional capabilities, not automatic requirements for every task.
-
-Common capabilities referenced by skills include:
-
-```text
-filesystem_server
-playwright
-context7
-mdn
-openaiDeveloperDocs
-github
-browser/devtools
-visual-diff
-design-reference
+```bash
+python scripts/validate_skill_pack.py
 ```
 
-Rules:
+### Release
 
-- Use only tools required by the current workflow slice.
-- Report missing tools before falling back to lower-confidence checks.
-- Verify official install sources before proposing installation.
-- Ask for explicit approval before installing MCP servers or changing configuration.
-- Do not claim rendered browser QA if Browser or Playwright MCP is unavailable.
-- Do not use Figma MCP in this screenshot-derived bundle workflow.
+Push a version tag:
 
-## Example Workflows
-
-### Screenshot to implementation
-
-```text
-Use these screenshots and inspect notes to implement the pricing page in the current app.
-Match desktop and mobile. Do not use Figma MCP or install packages.
+```bash
+git tag v0.1.0
+git push origin v0.1.0
 ```
 
-Expected route:
+The release workflow builds and publishes portable Codex and Claude targets.
 
-```text
-design-screenshot-spec
--> frontend-design-director when visual judgment matters
--> frontend-architecture-planner when route/state/data ownership matters
--> frontend-layout-implementer
--> frontend-linter-manager
--> frontend-visual-qa
--> frontend-quality-reviewer when review is requested or risk is high
-```
-
-### Bugfix
-
-```text
-The dashboard route renders blank on mobile.
-Reproduce it and fix the smallest cause.
-```
-
-Expected route:
-
-```text
-frontend-bugfix-debugger
--> frontend-linter-manager when lint exists
--> frontend-visual-qa when rendered UI changed or the bug is visual
--> frontend-quality-reviewer when review is requested or risk is high
-```
-
-### Refactor
-
-```text
-Refactor this settings panel into smaller components without changing behavior.
-Preserve public props and rendered output.
-```
-
-Expected route:
-
-```text
-frontend-refactor-surgeon
--> frontend-linter-manager
--> frontend-visual-qa when rendered output risk exists
--> frontend-quality-reviewer when the refactor is broad or requested
-```
-
-### Review
-
-```text
-Review this frontend change before merge.
-Check correctness, TypeScript, accessibility, performance, architecture, and verification honesty.
-Do not apply fixes.
-```
-
-Expected route:
-
-```text
-frontend-quality-reviewer
-```
-
-### Greenfield planning
-
-```text
-Plan the first version of a new Next.js app for this product idea.
-Do not scaffold yet.
-```
-
-Expected route:
-
-```text
-goal-planner
--> greenfield-project-builder
--> frontend-architecture-planner when boundaries matter
--> execution-plan-manager after approval
--> project-onboarding-adapter for local overlays
-```
-
-## Troubleshooting
-
-### The agent ignores the kit
-
-Check that the host project has a root `AGENTS.md` pointer to `.agents/AGENTS.md`, and that the agent environment actually reads repository `AGENTS.md` files.
-
-### The agent reads too much
-
-Ask it to follow Fast Lookup or Lightweight Workflow. The routing rules tell it not to read all skills, all references, all common docs, README, generated `dist/**`, or broad source trees unless the task requires it.
-
-### The agent wants to install a package
-
-Ask for the approval gate. The agent must name the package or tool, reason, official source, exact action, expected validation, and risk before installation.
-
-### The agent asks for a Figma URL or tries live Figma inspection
-
-This kit is screenshot-derived by default. Provide screenshots, exported assets, copied inspect values, or written notes. Do not use Figma MCP unless you intentionally leave this bundle's default workflow.
-
-### Visual QA is blocked
-
-Rendered visual QA requires Browser or Playwright MCP availability in the current agent session. A local server or installed Playwright dependency alone is not enough to claim MCP-backed visual QA.
-
-### The project is not React or Next.js
-
-Use framework-agnostic skills where applicable: onboarding boundary detection, design screenshot spec, design intelligence, design direction, visual QA from browser evidence, quality review, lint manager, planning, loop contracts, MCP toolchain management, and skill authoring.
-
-Do not use React/Next-specific architecture or implementation guidance for unrelated stacks unless the supported scope is explicitly changed.
-
-## Distribution And Maintenance
-
-Source files are the source of truth:
-
-```text
-AGENTS.md
-README.md
-bundle-manifest.json
-.codex-plugin/plugin.json
-common/**
-examples/**
-skills/**
-templates/**
-```
-
-Generated or local-only paths are excluded:
-
-```text
-project/**
-dist/**
-docs/**
-.obsidian/**
-node_modules/**
-```
-
-Do not patch generated `dist/**` output directly. Update source files, then regenerate distribution output through the repository's release process when one is available.
+### Maintenance checklist
 
 When adding, renaming, or deleting skills:
 
@@ -779,44 +553,14 @@ When adding, renaming, or deleting skills:
 - run the local skill validator for changed skill packages when available;
 - check for stale skill names, stale paths, and prohibited Figma routing.
 
-## Repository Inventory
+## Contributing
 
-The current source bundle contains:
+Contributions should keep README, `AGENTS.md`, `bundle-manifest.json`, `.codex-plugin/plugin.json`, skills, references, validators, and release targets aligned.
 
-- one canonical runtime policy: `AGENTS.md`;
-- one human-facing guide: `README.md`;
-- one internal inventory: `bundle-manifest.json`;
-- one Codex plugin manifest: `.codex-plugin/plugin.json`;
-- reusable rules in `common/**`;
-- example workflows in `examples/**`;
-- 18 skill packages under `skills/**`;
-- templates under `templates/**`;
-- generated distribution output excluded from source editing;
-- local-only project overlays excluded from publication.
+Do not publish host-project facts from `.agents/project/**` into the reusable bundle.
 
-## Developer Checklist
+Do not patch generated `dist/**` output directly. Update source files, then regenerate distribution output through the repository release process.
 
-Before using the kit on a real project:
+## License
 
-```text
-[ ] `.agents/` exists in the host project.
-[ ] root `AGENTS.md` points to `.agents/AGENTS.md`.
-[ ] `адаптируйся` has been run or onboarding has been planned.
-[ ] `.agents/project/**` overlays reflect actual project facts.
-[ ] missing MCP/tool capabilities are known and accepted.
-[ ] package installation and tooling changes require explicit approval.
-[ ] verification commands are known or marked as unavailable.
-[ ] the current task has the right workflow level.
-```
-
-Before merging kit changes:
-
-```text
-[ ] README matches `AGENTS.md`, `bundle-manifest.json`, and `.codex-plugin/plugin.json`.
-[ ] Skill list matches actual `skills/**` directories.
-[ ] Skill references point to existing files.
-[ ] `agents/openai.yaml` matches skill triggers and tool dependencies.
-[ ] No host-project facts leaked into publishable docs.
-[ ] No Figma MCP dependency became part of the default workflow.
-[ ] Markdown and skill validation were run when available.
-```
+Apache-2.0. See [LICENSE](LICENSE).
