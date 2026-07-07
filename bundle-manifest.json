@@ -20,6 +20,7 @@
     "greenfield-project-builder",
     "loop-workflow-planner",
     "mcp-toolchain-manager",
+    "pattern-library-manager",
     "project-context-adapter",
     "project-onboarding-adapter"
   ],
@@ -31,7 +32,6 @@
     "project/**",
     "dist/**",
     "docs/**",
-    ".obsidian/**",
-    "node_modules/**"
+    ".obsidian/**"
   ]
 }
