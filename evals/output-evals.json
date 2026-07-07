@@ -39,6 +39,15 @@
       "reason": "Layout implementation output should prove scope control, project-native reuse, and verification."
     },
     {
+      "id": "frontend-refactor-surgeon.no-use-callback-output",
+      "prompt": "Fix this component where useCallback was added around a simple local handler.",
+      "skill": "frontend-refactor-surgeon",
+      "required_output_sections": ["Changed", "Behavior preserved", "Callback identity", "Verification", "Risks"],
+      "forbidden_behaviors": ["keep useCallback without evidence", "claim generic performance benefit", "add memoization to hide component shape issues"],
+      "risk_notes": ["Refactor output must prove that unnecessary useCallback was removed or justified with identity-sensitive evidence."],
+      "reason": "useCallback without a proven consumer is a React anti-pattern for this bundle."
+    },
+    {
       "id": "agent-rules-skill-author.bundle-maintenance-output",
       "prompt": "Update the agent bundle rules and validators for a new skill trigger boundary.",
       "skill": "agent-rules-skill-author",
