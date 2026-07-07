@@ -14,6 +14,10 @@ parent:
 related:
     - '[[common/tool-capability-model|Tool Capability Model]]'
     - '[[common/mcp-installation-policy|MCP Installation Policy]]'
+    - '[[templates/root-pointers/AGENTS.codex|Codex AGENTS Pointer Template]]'
+    - '[[templates/root-pointers/AGENTS.vs-code-codex|VS Code Codex AGENTS Pointer Template]]'
+    - '[[templates/root-pointers/AGENTS.cursor|Cursor AGENTS Pointer Template]]'
+    - '[[templates/root-pointers/CLAUDE.claude-code|Claude Code Pointer Template]]'
 depends_on: []
 ---
 
@@ -33,6 +37,17 @@ Use these defaults:
 - Generic clients: create only the pointer explicitly requested by the user or documented by the installed target.
 
 The root pointer must stay small. Do not mirror the full bundled policy into client-native files.
+
+## Pointer Templates
+
+Use the matching template when creating a new native pointer:
+
+- `templates/root-pointers/AGENTS.codex.md`.
+- `templates/root-pointers/AGENTS.vs-code-codex.md`.
+- `templates/root-pointers/AGENTS.cursor.md`.
+- `templates/root-pointers/CLAUDE.claude-code.md`.
+
+For VS Code Claude, use the Claude Code pointer shape until a stricter editor-specific template is added.
 
 ## Existing Entrypoint Rule
 
