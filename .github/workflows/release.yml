@@ -12,6 +12,7 @@ jobs:
   release:
     name: Build and publish portable targets
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +29,9 @@ jobs:
 
       - name: Validate schemas
         run: python scripts/validate_schemas.py
+
+      - name: Validate README boundary
+        run: python scripts/check_readme_boundary.py
 
       - name: Validate source bundle
         run: python scripts/validate_source_bundle.py
@@ -55,20 +59,40 @@ jobs:
           test -d dist/cursor
           test -d dist/vs-code-codex
           test -d dist/vs-code-claude
+
           test ! -e dist/codex/project
           test ! -e dist/claude/project
+          test ! -e dist/claude-code/project
+          test ! -e dist/cursor/project
+          test ! -e dist/vs-code-codex/project
+          test ! -e dist/vs-code-claude/project
+
           test ! -e dist/codex/bundle-manifest.json
           test ! -e dist/claude/bundle-manifest.json
+          test ! -e dist/claude-code/bundle-manifest.json
+          test ! -e dist/cursor/bundle-manifest.json
+          test ! -e dist/vs-code-codex/bundle-manifest.json
+          test ! -e dist/vs-code-claude/bundle-manifest.json
+
           test -f dist/codex/LICENSE
           test -f dist/claude/LICENSE
+          test -f dist/claude-code/LICENSE
+          test -f dist/cursor/LICENSE
+          test -f dist/vs-code-codex/LICENSE
+          test -f dist/vs-code-claude/LICENSE
+
           test -f dist/codex/.codex-plugin/plugin.json
           test -f dist/vs-code-codex/.codex-plugin/plugin.json
+
           test -f dist/claude-code/CLAUDE.md
           test -f dist/vs-code-claude/CLAUDE.md
           test -f dist/cursor/.cursor/rules/webdev-agent-kit.mdc
+
           test ! -e dist/claude/.codex-plugin
           test ! -e dist/claude-code/.codex-plugin
+          test ! -e dist/cursor/.codex-plugin
           test ! -e dist/vs-code-claude/.codex-plugin
+
           if find dist -path '*/.obsidian/*' -o -path '*/node_modules/*' -o -path '*/project/*' | grep .; then
             echo 'Generated targets contain excluded local or generated paths.'
             exit 1
@@ -77,11 +101,14 @@ jobs:
       - name: Package release artifacts
         run: |
           mkdir -p release-artifacts
+
           for target in codex claude-code cursor vs-code-codex vs-code-claude; do
             tar -czf "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" -C dist "${target}"
             cp "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" "release-artifacts/webdev-agent-kit-${target}.tar.gz"
           done
+
           (cd release-artifacts && sha256sum *.tar.gz > SHA256SUMS)
+
           cat > release-artifacts/RELEASE_NOTES.md <<'NOTES'
           WebDev Agent Kit portable release artifacts.
 
@@ -95,6 +122,7 @@ jobs:
 
           Validation performed:
           - schema validation
+          - README boundary validation
           - source bundle validation
           - skill eval validation
           - portable target build
@@ -102,6 +130,9 @@ jobs:
           - Claude target validation
           - excluded-path inspection
           NOTES
+
+          echo 'Release artifacts:'
+          find release-artifacts -maxdepth 1 -type f -print | sort
 
       - name: Upload release artifact bundle
         uses: actions/upload-artifact@v4
@@ -113,18 +144,28 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            release-artifacts/webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz \
-            release-artifacts/webdev-agent-kit-claude-code-${GITHUB_REF_NAME}.tar.gz \
-            release-artifacts/webdev-agent-kit-cursor-${GITHUB_REF_NAME}.tar.gz \
-            release-artifacts/webdev-agent-kit-vs-code-codex-${GITHUB_REF_NAME}.tar.gz \
-            release-artifacts/webdev-agent-kit-vs-code-claude-${GITHUB_REF_NAME}.tar.gz \
-            release-artifacts/webdev-agent-kit-codex.tar.gz \
-            release-artifacts/webdev-agent-kit-claude-code.tar.gz \
-            release-artifacts/webdev-agent-kit-cursor.tar.gz \
-            release-artifacts/webdev-agent-kit-vs-code-codex.tar.gz \
-            release-artifacts/webdev-agent-kit-vs-code-claude.tar.gz \
-            release-artifacts/SHA256SUMS \
-            --title "WebDev Agent Kit ${GITHUB_REF_NAME}" \
-            --notes-file release-artifacts/RELEASE_NOTES.md \
-            --verify-tag
+          files=(
+            "release-artifacts/webdev-agent-kit-codex-${GITHUB_REF_NAME}.tar.gz"
+            "release-artifacts/webdev-agent-kit-claude-code-${GITHUB_REF_NAME}.tar.gz"
+            "release-artifacts/webdev-agent-kit-cursor-${GITHUB_REF_NAME}.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-codex-${GITHUB_REF_NAME}.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-claude-${GITHUB_REF_NAME}.tar.gz"
+            "release-artifacts/webdev-agent-kit-codex.tar.gz"
+            "release-artifacts/webdev-agent-kit-claude-code.tar.gz"
+            "release-artifacts/webdev-agent-kit-cursor.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-codex.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-claude.tar.gz"
+            "release-artifacts/SHA256SUMS"
+          )
+
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            echo "Release ${GITHUB_REF_NAME} already exists. Uploading assets with --clobber."
+            gh release upload "${GITHUB_REF_NAME}" "${files[@]}" --clobber
+          else
+            echo "Release ${GITHUB_REF_NAME} does not exist. Creating release."
+            gh release create "${GITHUB_REF_NAME}" \
+              "${files[@]}" \
+              --title "WebDev Agent Kit ${GITHUB_REF_NAME}" \
+              --notes-file release-artifacts/RELEASE_NOTES.md \
+              --verify-tag
+          fi
