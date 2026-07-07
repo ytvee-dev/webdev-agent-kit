@@ -17,6 +17,8 @@ related:
     - '[[common/frontend-implementation-boundaries|Frontend Implementation Boundaries]]'
     - '[[common/host-project-documentation-boundary|Host Project Documentation Boundary]]'
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
+    - '[[common/anti-patterns/no-console-file-read-before-filesystem-mcp|Filesystem First File Reads]]'
+    - '[[common/anti-patterns/no-host-readme-or-docs-edits-without-approval|Host Docs Approval Boundary]]'
     - '[[skills/design-screenshot-spec/SKILL|Design Screenshot Spec]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
