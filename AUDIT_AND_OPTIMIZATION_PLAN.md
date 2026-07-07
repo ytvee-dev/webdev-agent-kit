@@ -22,7 +22,7 @@ depends_on: []
 
 # Audit And Optimization Status
 
-This document is the current status record for the audit and optimization pass that led to WebDev Agent Kit `v0.1.0`. It replaces the original audit roadmap as the active source of truth for what is complete and what remains open.
+This document is the current status record for WebDev Agent Kit audit, optimization, and release-readiness work. It replaces the original audit roadmap as the active source of truth for what is complete and what remains open.
 
 ## Review Role
 
@@ -30,21 +30,23 @@ Use the role of Principal AI Systems Architect and Staff Developer Experience En
 
 ## Current Release Status
 
-`v0.1.0` is the first release-ready baseline for WebDev Agent Kit.
+`v0.1.0` is the first release-ready baseline for WebDev Agent Kit. The `updates` branch is the release-preparation branch for the next release.
 
-The release baseline includes:
+The release-preparation baseline now includes:
 
 - source-bundle validation;
 - schema validation;
-- initial skill trigger evals;
-- initial skill output evals;
-- Codex and Claude portable target builds;
+- skill trigger and output evals;
+- Codex, Claude, Claude Code, Cursor, VS Code Codex, and VS Code Claude target builds;
 - Codex and Claude target validation;
 - release workflow for tagged artifacts;
 - Apache License 2.0;
 - contribution and security governance;
 - blocking Ruff lint, Ruff format, yamllint, and markdownlint quality gates;
 - README runtime exclusion and human-only boundary;
+- host-project README and documentation edit boundary;
+- README-boundary validator;
+- Markdown link checker workflow;
 - host compatibility matrix for source, Codex, Claude, Copilot, Cursor, Windsurf, and generic coding-agent adaptations.
 
 ## Completed Work
@@ -53,6 +55,7 @@ The release baseline includes:
 
 - `AGENTS.md` is the canonical runtime policy entrypoint.
 - `README.md` is human-facing only and excluded from agent runtime, routing, source inventory, and validation.
+- Host-project README and docs must not be edited during normal implementation, bugfix, refactor, onboarding, visual QA, or review work.
 - `skills/**` contains executable skill instructions.
 - `common/**` contains reusable runtime rules.
 - `templates/**` contains optional local artifact templates.
@@ -63,14 +66,17 @@ The release baseline includes:
 
 - `bundle-manifest.json` tracks source skill inventory, target paths, and publish exclusions.
 - `.codex-plugin/plugin.json` is the Codex plugin entrypoint.
-- `scripts/build_skill_targets.py` builds `dist/codex` and `dist/claude`.
-- Codex target includes `.codex-plugin/plugin.json` and `skills/*/agents/openai.yaml`.
-- Claude target excludes Codex-only `.codex-plugin` and `agents/openai.yaml` metadata.
+- `scripts/build_skill_targets.py` builds legacy `dist/codex` and `dist/claude` plus client-specific `dist/claude-code`, `dist/cursor`, `dist/vs-code-codex`, and `dist/vs-code-claude` targets.
+- Codex-like targets include `.codex-plugin/plugin.json` and `skills/*/agents/openai.yaml`.
+- Claude-like targets exclude Codex-only `.codex-plugin` and `agents/openai.yaml` metadata.
 - `project/**`, `.obsidian/**`, `node_modules/**`, and internal generated/source-only artifacts are excluded from distribution targets.
+- The release workflow publishes stable and versioned client artifacts for Codex, Claude Code, Cursor, VS Code Codex, and VS Code Claude.
 
 ### Validation And CI
 
-- `scripts/validate_skill_pack.py` orchestrates schema validation, source validation, eval validation, target build, and target validation.
+- `scripts/validate_skill_pack.py` orchestrates schema validation, README-boundary validation, source validation, eval validation, target build, and target validation.
+- `scripts/check_readme_boundary.py` prevents runtime instructions from telling agents to read, inspect, route from, or update host-project README files.
+- `scripts/check_links.py` checks local Markdown links and supports scheduled external checks.
 - `scripts/validate_schemas.py` provides the first schema-first validation pass for bundle metadata, skill frontmatter, OpenAI agent metadata, and graph docs.
 - `scripts/validate_source_bundle.py` validates graph metadata, source inventory, skill structure, stale names, license presence, and clean-checkout behavior.
 - `scripts/validate_skill_evals.py` validates trigger and output eval fixtures.
@@ -78,11 +84,13 @@ The release baseline includes:
 - `scripts/validate_claude_skill_pack.py` validates the generated Claude target.
 - `.github/workflows/skill-pack-ci.yml` runs structural validation on pull requests and relevant pushes.
 - `.github/workflows/quality-ci.yml` enforces Ruff lint, Ruff format, yamllint, and markdownlint quality gates.
+- `.github/workflows/link-check.yml` runs local Markdown link checks and scheduled external link checks.
 
 ### Eval Layer
 
-- `evals/trigger-evals.json` contains initial should-trigger and should-not-trigger routing fixtures for high-value skills.
-- `evals/output-evals.json` contains initial output contract fixtures for review, bugfix, visual QA, layout implementation, and bundle-maintenance workflows.
+- `evals/trigger-evals.json` contains should-trigger and should-not-trigger routing fixtures for high-value skills.
+- `evals/output-evals.json` contains output contract fixtures for review, bugfix, visual QA, layout implementation, callback memoization, and bundle-maintenance workflows.
+- Evals now cover CSS/background over-testing, repeated visual escalation, parallel status booleans, host documentation scope creep, and callback memoization misuse.
 - `schemas/eval-suite.schema.json` and `schemas/eval-case.schema.json` define eval fixture structure.
 
 ### Governance And Release
@@ -91,9 +99,20 @@ The release baseline includes:
 - `CHANGELOG.md` records release behavior and validation changes.
 - `CONTRIBUTING.md` documents contribution rules and review expectations.
 - `SECURITY.md` documents supply-chain and executable-instruction safety rules.
-- `.github/workflows/release.yml` builds and publishes Codex and Claude release artifacts from tags matching `v*.*.*`.
+- `.github/workflows/release.yml` builds and publishes client-specific release artifacts from tags matching `v*.*.*`.
 
 ## Still Open
+
+### P0: Finalize Host README Boundary Release Gate
+
+The policy exists and the validator exists. Before release, confirm the validator runs in CI on `updates`, pull requests, and `main` without false positives.
+
+Acceptance criteria:
+
+- `python scripts/check_readme_boundary.py` passes.
+- `python scripts/validate_skill_pack.py` runs the README-boundary validator.
+- CI fails if runtime files instruct agents to read, inspect, route from, derive project facts from, or update a host project's README.
+- Documentation may mention README only as a human-facing boundary or as an explicitly user-approved documentation task.
 
 ### P1: Replace Custom YAML Subset Parsing
 
@@ -114,12 +133,12 @@ The initial eval layer exists. Add more realistic fixtures before changing routi
 Acceptance criteria:
 
 - every high-value skill has multiple should-trigger and should-not-trigger cases;
-- output evals cover bugfix, visual QA, quality review, layout implementation, onboarding, and skill-authoring workflows;
-- near-miss prompts test over-planning, false design escalation, false bugfix escalation, and unsupported target-stack behavior.
+- output evals cover bugfix, visual QA, quality review, layout implementation, onboarding, pattern management, and skill-authoring workflows;
+- near-miss prompts test over-planning, false design escalation, false bugfix escalation, unsupported target-stack behavior, host-doc scope creep, and over-verification.
 
-### P1: Add Link Checking
+### P1: Finalize Link Checking
 
-Add a link checker for Markdown links and official-source references.
+A link checker now exists. Before release, confirm the workflow is green and decide whether official-source external failures should be blocking only on schedule or also on pull requests.
 
 Acceptance criteria:
 
@@ -127,6 +146,29 @@ Acceptance criteria:
 - generated `dist/**` and local-only `project/**` are excluded;
 - README remains human-only and is checked only as documentation, not as agent runtime source;
 - official-source references fail clearly when moved or unavailable.
+
+### P1: Publish Russian Installation Pages
+
+Create or publish Russian installation documentation for each supported client surface.
+
+Acceptance criteria:
+
+- Codex install page exists.
+- Claude Code install page exists.
+- Cursor install page exists.
+- VS Code Codex install page exists.
+- VS Code Claude install page exists.
+- Each page explains the archive, native pointer, MCP setup, fallback behavior, `адаптируйся`, validation, and troubleshooting.
+
+### P1: Add README Download Section
+
+Add human-facing download buttons or a download table to README for stable latest release artifacts.
+
+Acceptance criteria:
+
+- README links to stable latest artifacts for Codex, Claude Code, Cursor, VS Code Codex, and VS Code Claude.
+- README keeps the human-facing boundary clear and is not used as runtime policy.
+- Release artifacts and README links use the same names.
 
 ### P2: Usage-Trace Driven Rule Dedupe
 
