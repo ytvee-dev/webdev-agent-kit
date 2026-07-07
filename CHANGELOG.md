@@ -13,6 +13,7 @@ parent: []
 related:
     - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
+    - '[[docs/install/README|Installation Guides]]'
 depends_on: []
 ---
 
@@ -24,9 +25,26 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
+### Added
+
+- Added capability-first tool policy and portable tool capability metadata.
+- Added native client adaptation policy and local-only client/tool profile templates.
+- Added smart verification budget and diff-impact verification rules to avoid over-testing small visual changes.
+- Added host-project documentation boundary rules and README-boundary validation.
+- Added Markdown link checking and a scheduled link-check workflow.
+- Added stricter TypeScript and frontend anti-patterns for return types, arrow functions, destructuring, status modeling, test authoring, file reads, and callback memoization.
+- Added `pattern-library-manager` for reusable pattern and anti-pattern maintenance.
+- Added root pointer templates for Codex, VS Code Codex, Cursor, and Claude Code.
+- Added Russian draft installation guides under `docs/install/**`.
+
 ### Changed
 
-- Refreshed `AUDIT_AND_OPTIMIZATION_PLAN.md` into a current audit status tracker after `v0.1.0` and removed stale roadmap claims.
+- Toolchain management now reports missing capabilities, fallbacks, approval requirements, and confidence impact.
+- Project onboarding now records client and tool profile facts in local-only project overlays.
+- Target building now includes legacy Codex/Claude targets plus client-specific targets for Claude Code, Cursor, VS Code Codex, and VS Code Claude.
+- The release workflow now publishes stable and versioned client archives.
+- `common/anti-patterns/no-use-callback-by-default.md` now requires proof before callback memoization.
+- `AUDIT_AND_OPTIMIZATION_PLAN.md` now tracks next-release preparation state.
 
 ## 0.1.0 - 2026-07-06
 

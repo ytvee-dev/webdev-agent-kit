@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
 related:
+    - '[[common/anti-patterns/no-test-authoring-by-default|No Test Authoring By Default]]'
     - '[[common/verification-loop-rules|Verification Loop Rules]]'
 depends_on: []
 ---
@@ -20,24 +21,25 @@ depends_on: []
 
 ## Rule
 
-Use existing project tests and testing conventions when they are the smallest reliable evidence for changed behavior.
+Run existing project tests only when they are already part of the relevant verification path. Do not create or edit tests by default.
 
-Create or update a scoped regression test only when the user requests it, acceptance criteria require it, or the existing project convention makes it part of the approved task. Keep the test limited to changed behavior.
+Create or update tests only when the user explicitly asks for test authoring and approves the target scope.
 
 Do not add a testing framework, setup layer, script, dependency, broad fixture system, end-to-end suite, or visual-regression infrastructure without explicit user approval.
 
 ## Avoid
 
 - Adding test tooling merely because the agent prefers another framework.
+- Creating a regression test when the user asked only for an implementation fix.
 - Rewriting unrelated tests while implementing a feature or bugfix.
 - Treating a green unrelated test as proof that the changed behavior works.
-- Skipping a relevant existing test because the task did not create a new test.
+- Skipping a relevant existing verification command because no new test was requested.
 
 ## Verification
 
-- Run the relevant existing test when changed behavior is already covered.
-- Report the exact test command and result.
-- If a required regression test is out of scope or needs new infrastructure, report the gap and approval needed.
+- Run the relevant existing test only when changed behavior is already covered and the verification budget calls for it.
+- Report the exact test command and result when an existing test was run.
+- If a test would be useful but was not requested or would need new infrastructure, report the gap and approval needed.
 
 ## Apply When
 

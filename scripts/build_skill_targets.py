@@ -7,7 +7,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
-TARGETS = ("codex", "claude")
+TARGETS = (
+    "codex",
+    "claude",
+    "claude-code",
+    "cursor",
+    "vs-code-codex",
+    "vs-code-claude",
+)
+CODEX_LIKE_TARGETS = {"codex", "vs-code-codex"}
+CLAUDE_LIKE_TARGETS = {"claude-code", "vs-code-claude"}
 COPY_ROOT_FILES = (
     "AGENTS.md",
     "README.md",
@@ -15,6 +24,7 @@ COPY_ROOT_FILES = (
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
+    "tool-capabilities-manifest.json",
 )
 COPY_DIRS = ("common", "templates", "examples")
 
@@ -60,6 +70,23 @@ def copy_tree(src, dst):
     )
 
 
+def write_claude_pointer(target_root):
+    (target_root / "CLAUDE.md").write_text(
+        "# CLAUDE.md\n\nUse the project-local agent policy in `.agents/AGENTS.md`.\n",
+        encoding="utf-8",
+    )
+
+
+def write_cursor_rules(target_root):
+    rules_dir = target_root / ".cursor" / "rules"
+    rules_dir.mkdir(parents=True, exist_ok=True)
+    (rules_dir / "webdev-agent-kit.mdc").write_text(
+        "---\nalwaysApply: true\n---\n\n"
+        "Use the project-local WebDev Agent Kit policy in `.agents/AGENTS.md`.\n",
+        encoding="utf-8",
+    )
+
+
 def build_target(target):
     target_root = DIST / target
     if target_root.exists():
@@ -74,8 +101,12 @@ def build_target(target):
     for dir_name in COPY_DIRS:
         copy_tree(ROOT / dir_name, target_root / dir_name)
 
-    if target == "codex":
+    if target in CODEX_LIKE_TARGETS:
         copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
+    if target in CLAUDE_LIKE_TARGETS:
+        write_claude_pointer(target_root)
+    if target == "cursor":
+        write_cursor_rules(target_root)
 
     skills_src = ROOT / "skills"
     skills_dst = target_root / "skills"
@@ -89,19 +120,17 @@ def build_target(target):
         (dst / "SKILL.md").write_text(skill_text, encoding="utf-8")
         for resource_dir in ("references", "scripts", "assets"):
             copy_tree(skill_dir / resource_dir, dst / resource_dir)
-        if target == "codex" and (skill_dir / "agents").exists():
+        if target in CODEX_LIKE_TARGETS and (skill_dir / "agents").exists():
             copy_tree(skill_dir / "agents", dst / "agents")
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Build portable Codex and Claude skill-pack targets."
-    )
+    parser = argparse.ArgumentParser(description="Build portable skill-pack targets.")
     parser.add_argument(
         "--target",
         choices=TARGETS,
         action="append",
-        help="Build only the selected target; repeat to build both.",
+        help="Build only the selected target; repeat to build multiple targets.",
     )
     args = parser.parse_args()
 

@@ -15,13 +15,16 @@ def run(script):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Validate schemas, source metadata, skill evals, then build and validate Codex and Claude targets."
+        description="Validate schemas, source metadata, README boundaries, skill evals, then build and validate targets."
     )
     parser.parse_args()
 
     schema_code = run("validate_schemas.py")
     if schema_code:
         sys.exit(schema_code)
+    readme_boundary_code = run("check_readme_boundary.py")
+    if readme_boundary_code:
+        sys.exit(readme_boundary_code)
     source_code = run("validate_source_bundle.py")
     if source_code:
         sys.exit(source_code)

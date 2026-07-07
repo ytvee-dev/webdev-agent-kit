@@ -1,0 +1,89 @@
+{
+  "version": "0.1.0",
+  "capabilities": {
+    "project_files": {
+      "purpose": "Read and, when approved, write project files.",
+      "preferred_providers": ["filesystem_mcp"],
+      "fallback_providers": ["host_native_file_tools", "targeted_shell_read"],
+      "blocked_providers": []
+    },
+    "current_library_docs": {
+      "purpose": "Fetch current framework, library, package-manager, and build-tool documentation.",
+      "preferred_providers": ["context7_mcp"],
+      "fallback_providers": ["official_web_docs"],
+      "blocked_providers": []
+    },
+    "web_platform_docs": {
+      "purpose": "Fetch current HTML, CSS, Web API, accessibility, and browser compatibility documentation.",
+      "preferred_providers": ["mdn_mcp"],
+      "fallback_providers": ["official_mdn_web_docs"],
+      "blocked_providers": []
+    },
+    "rendered_visual_evidence": {
+      "purpose": "Open local pages, inspect rendered UI, resize viewports, and capture screenshots.",
+      "preferred_providers": ["playwright_mcp", "browser_mcp", "host_browser_tool"],
+      "fallback_providers": ["source_only_review_with_lower_confidence"],
+      "blocked_providers": ["local_playwright_package_as_mcp_proof"]
+    },
+    "codex_platform_docs": {
+      "purpose": "Fetch current Codex, AGENTS.md, skills, plugin, MCP, sandbox, and config documentation.",
+      "preferred_providers": ["openai_docs_mcp"],
+      "fallback_providers": ["official_openai_docs_web"],
+      "blocked_providers": []
+    },
+    "client_platform_docs": {
+      "purpose": "Fetch current Claude Code, Cursor, VS Code, or other client documentation when adaptation depends on host behavior.",
+      "preferred_providers": ["official_client_docs"],
+      "fallback_providers": [],
+      "blocked_providers": []
+    },
+    "repo_metadata": {
+      "purpose": "Read repository, PR, issue, review, label, release, and CI metadata.",
+      "preferred_providers": ["github_connector", "github_mcp"],
+      "fallback_providers": ["git_cli", "gh_cli_when_authenticated"],
+      "blocked_providers": []
+    },
+    "design_reference_files": {
+      "purpose": "Read user-supplied screenshots, exported assets, copied inspect values, and local visual references.",
+      "preferred_providers": ["visual_reference_mcp", "host_attachment_tools", "project_files"],
+      "fallback_providers": ["user_supplied_text_notes"],
+      "blocked_providers": []
+    },
+    "live_design_source": {
+      "purpose": "Inspect live design-tool sources.",
+      "preferred_providers": [],
+      "fallback_providers": [],
+      "blocked_providers": ["figma_mcp", "figjam_mcp", "live_design_tooling"]
+    }
+  },
+  "skills": {
+    "agent-rules-skill-author": {
+      "requires": ["project_files"],
+      "optional": ["codex_platform_docs", "client_platform_docs"]
+    },
+    "design-screenshot-spec": {
+      "requires": ["design_reference_files"],
+      "optional": ["web_platform_docs"]
+    },
+    "frontend-layout-implementer": {
+      "requires": ["project_files"],
+      "optional": ["current_library_docs", "web_platform_docs", "rendered_visual_evidence", "design_reference_files"]
+    },
+    "frontend-visual-qa": {
+      "requires_when_in_scope": ["rendered_visual_evidence"],
+      "optional": ["web_platform_docs", "design_reference_files"]
+    },
+    "mcp-toolchain-manager": {
+      "requires": ["project_files"],
+      "optional": ["codex_platform_docs", "client_platform_docs"]
+    },
+    "project-context-adapter": {
+      "requires": ["project_files"],
+      "optional": ["current_library_docs", "web_platform_docs"]
+    },
+    "project-onboarding-adapter": {
+      "requires": ["project_files"],
+      "optional": ["current_library_docs", "web_platform_docs", "client_platform_docs"]
+    }
+  }
+}

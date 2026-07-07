@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ytvee-dev/webdev-agent-kit/schemas/tool-capabilities-manifest.schema.json",
+  "title": "WebDev Agent Kit Tool Capabilities Manifest",
+  "type": "object",
+  "required": ["version", "capabilities", "skills"],
+  "properties": {
+    "version": {"type": "string", "minLength": 1, "maxLength": 40},
+    "capabilities": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["purpose", "preferred_providers", "fallback_providers", "blocked_providers"],
+        "properties": {
+          "purpose": {"type": "string", "minLength": 1, "maxLength": 500},
+          "preferred_providers": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          },
+          "fallback_providers": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          },
+          "blocked_providers": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "requires": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          },
+          "requires_when_in_scope": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          },
+          "optional": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          },
+          "blocked": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1, "maxLength": 120},
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
