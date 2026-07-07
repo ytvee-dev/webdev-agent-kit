@@ -7,8 +7,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
-TARGETS = ("codex", "claude-code", "cursor", "vs-code-codex", "vs-code-claude")
+TARGETS = (
+    "codex",
+    "claude",
+    "claude-code",
+    "cursor",
+    "vs-code-codex",
+    "vs-code-claude",
+)
 CODEX_LIKE_TARGETS = {"codex", "vs-code-codex"}
+CLAUDE_LIKE_TARGETS = {"claude-code", "vs-code-claude"}
 COPY_ROOT_FILES = (
     "AGENTS.md",
     "README.md",
@@ -62,6 +70,23 @@ def copy_tree(src, dst):
     )
 
 
+def write_claude_pointer(target_root):
+    (target_root / "CLAUDE.md").write_text(
+        "# CLAUDE.md\n\nUse the project-local agent policy in `.agents/AGENTS.md`.\n",
+        encoding="utf-8",
+    )
+
+
+def write_cursor_rules(target_root):
+    rules_dir = target_root / ".cursor" / "rules"
+    rules_dir.mkdir(parents=True, exist_ok=True)
+    (rules_dir / "webdev-agent-kit.mdc").write_text(
+        "---\nalwaysApply: true\n---\n\n"
+        "Use the project-local WebDev Agent Kit policy in `.agents/AGENTS.md`.\n",
+        encoding="utf-8",
+    )
+
+
 def build_target(target):
     target_root = DIST / target
     if target_root.exists():
@@ -78,12 +103,10 @@ def build_target(target):
 
     if target in CODEX_LIKE_TARGETS:
         copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
-
-    if target in {"claude-code", "vs-code-claude"}:
-        (target_root / "CLAUDE.md").write_text(
-            "# CLAUDE.md\n\nUse the project-local agent policy in `.agents/AGENTS.md`.\n",
-            encoding="utf-8",
-        )
+    if target in CLAUDE_LIKE_TARGETS:
+        write_claude_pointer(target_root)
+    if target == "cursor":
+        write_cursor_rules(target_root)
 
     skills_src = ROOT / "skills"
     skills_dst = target_root / "skills"
