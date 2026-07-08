@@ -72,10 +72,14 @@ def validate():
             errors.append(f"dist/codex is missing required root file: {relative_path}")
     for relative_path in FORBIDDEN_ROOT_FILES:
         if (TARGET / relative_path).exists():
-            errors.append(f"dist/codex must not include human-facing file: {relative_path}")
+            errors.append(
+                f"dist/codex must not include human-facing file: {relative_path}"
+            )
     for relative_path in FORBIDDEN_ROOT_DIRS:
         if (TARGET / relative_path).exists():
-            errors.append(f"dist/codex must not include human-facing directory: {relative_path}/")
+            errors.append(
+                f"dist/codex must not include human-facing directory: {relative_path}/"
+            )
     plugin_path = TARGET / ".codex-plugin" / "plugin.json"
     if not plugin_path.exists():
         errors.append("dist/codex is missing .codex-plugin/plugin.json")
