@@ -37,7 +37,14 @@
     },
     "targets": {
       "type": "object",
-      "required": ["codex", "claude"],
+      "required": [
+        "codex",
+        "claude",
+        "claude-code",
+        "cursor",
+        "vs-code-codex",
+        "vs-code-claude"
+      ],
       "properties": {
         "codex": {
           "type": "string",
@@ -46,6 +53,22 @@
         "claude": {
           "type": "string",
           "enum": ["dist/claude"]
+        },
+        "claude-code": {
+          "type": "string",
+          "enum": ["dist/claude-code"]
+        },
+        "cursor": {
+          "type": "string",
+          "enum": ["dist/cursor"]
+        },
+        "vs-code-codex": {
+          "type": "string",
+          "enum": ["dist/vs-code-codex"]
+        },
+        "vs-code-claude": {
+          "type": "string",
+          "enum": ["dist/vs-code-claude"]
         }
       },
       "additionalProperties": false
