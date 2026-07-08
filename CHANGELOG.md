@@ -25,8 +25,18 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
+### Added
+
+- Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
+
 ### Changed
 
+- Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.
+- Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
+- Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.
+- New skill templates now quote the placeholder `description` value so generated drafts do not start with invalid YAML.
+- README boundary wording now matches runtime policy: agents must not inspect host README content and must ask for excerpts instead.
+- Test authoring rules now explicitly block component, hook, function or unit, integration, E2E, snapshot, fixture, mock, and visual regression tests unless the user explicitly asks and approves the exact scope.
 - Runtime release archives now extract to a top-level `.agents/` directory regardless of client package.
 - Runtime targets no longer include human-facing root files: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, or `SECURITY.md`.
 - Runtime targets no longer include `examples/`.
