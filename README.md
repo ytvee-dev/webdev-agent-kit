@@ -50,7 +50,7 @@ templates/**
 project/** local overlays inside installed projects
 ```
 
-Agents must not read or edit a host project's README during normal implementation, bugfix, refactor, onboarding, visual QA, or review work unless the user explicitly asks for documentation work and approves the scope.
+Agents must not read, inspect, cite, route from, or edit a host project's README during runtime work. If the user asks about README content or edits, ask for the relevant excerpt or desired replacement text and propose human-facing copy from that provided material only.
 
 ## Quick Start
 
@@ -193,7 +193,7 @@ The bundle blocks common frontend-agent failure modes:
 - unapproved package installation;
 - unapproved MCP installation;
 - unapproved Figma MCP usage;
-- creating or editing tests by default;
+- creating or editing component, function, unit, integration, E2E, or visual regression tests by default;
 - moving server communication, domain workflow, or data processing into Redux by default;
 - parallel lifecycle booleans instead of one typed status discriminant;
 - `useCallback` without a proven identity-sensitive consumer;
@@ -247,11 +247,11 @@ python scripts/validate_skill_pack.py
 
 ### Release
 
-Push a version tag:
+Push the approved next SemVer tag:
 
 ```bash
-git tag v0.3.0
-git push origin v0.3.0
+git tag vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 The release workflow builds and publishes the client packages listed in the Download section.
