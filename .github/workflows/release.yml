@@ -60,26 +60,18 @@ jobs:
           test -d dist/vs-code-codex
           test -d dist/vs-code-claude
 
-          test ! -e dist/codex/project
-          test ! -e dist/claude/project
-          test ! -e dist/claude-code/project
-          test ! -e dist/cursor/project
-          test ! -e dist/vs-code-codex/project
-          test ! -e dist/vs-code-claude/project
-
-          test ! -e dist/codex/bundle-manifest.json
-          test ! -e dist/claude/bundle-manifest.json
-          test ! -e dist/claude-code/bundle-manifest.json
-          test ! -e dist/cursor/bundle-manifest.json
-          test ! -e dist/vs-code-codex/bundle-manifest.json
-          test ! -e dist/vs-code-claude/bundle-manifest.json
-
-          test -f dist/codex/LICENSE
-          test -f dist/claude/LICENSE
-          test -f dist/claude-code/LICENSE
-          test -f dist/cursor/LICENSE
-          test -f dist/vs-code-codex/LICENSE
-          test -f dist/vs-code-claude/LICENSE
+          for target in codex claude claude-code cursor vs-code-codex vs-code-claude; do
+            test -f "dist/${target}/AGENTS.md"
+            test -f "dist/${target}/LICENSE"
+            test -f "dist/${target}/tool-capabilities-manifest.json"
+            test ! -e "dist/${target}/project"
+            test ! -e "dist/${target}/bundle-manifest.json"
+            test ! -e "dist/${target}/README.md"
+            test ! -e "dist/${target}/CHANGELOG.md"
+            test ! -e "dist/${target}/CONTRIBUTING.md"
+            test ! -e "dist/${target}/SECURITY.md"
+            test ! -e "dist/${target}/examples"
+          done
 
           test -f dist/codex/.codex-plugin/plugin.json
           test -f dist/vs-code-codex/.codex-plugin/plugin.json
@@ -103,10 +95,20 @@ jobs:
           mkdir -p release-artifacts
 
           for target in codex claude-code cursor vs-code-codex vs-code-claude; do
-            tar -czf "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" -C dist "${target}"
+            rm -rf release-staging
+            mkdir -p release-staging
+            cp -a "dist/${target}" release-staging/.agents
+            tar -czf "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" -C release-staging .agents
             cp "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" "release-artifacts/webdev-agent-kit-${target}.tar.gz"
+
+            first_entry=$(tar -tzf "release-artifacts/webdev-agent-kit-${target}.tar.gz" | head -n 1)
+            if [ "${first_entry}" != ".agents/" ]; then
+              echo "Archive webdev-agent-kit-${target}.tar.gz must extract to .agents/ first, got ${first_entry}"
+              exit 1
+            fi
           done
 
+          rm -rf release-staging
           (cd release-artifacts && sha256sum *.tar.gz > SHA256SUMS)
 
           cat > release-artifacts/RELEASE_NOTES.md <<'NOTES'
@@ -120,6 +122,10 @@ jobs:
           - VS Code Claude target: `webdev-agent-kit-vs-code-claude.tar.gz`
           - Checksums: `SHA256SUMS`
 
+          Runtime archive shape:
+          - every archive extracts to a top-level `.agents/` directory
+          - human-facing docs and examples are excluded from runtime archives
+
           Validation performed:
           - schema validation
           - README boundary validation
@@ -129,6 +135,7 @@ jobs:
           - Codex target validation
           - Claude target validation
           - excluded-path inspection
+          - archive root inspection
           NOTES
 
           echo 'Release artifacts:'
