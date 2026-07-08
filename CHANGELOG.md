@@ -34,6 +34,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 ### Changed
 
 - Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
+- Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.
 - Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.
 - Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
 - Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.
