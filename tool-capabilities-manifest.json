@@ -22,8 +22,8 @@
     "rendered_visual_evidence": {
       "purpose": "Open local pages, inspect rendered UI, resize viewports, and capture screenshots.",
       "preferred_providers": ["playwright_mcp", "browser_mcp", "host_browser_tool"],
-      "fallback_providers": ["source_only_review_with_lower_confidence"],
-      "blocked_providers": ["local_playwright_package_as_mcp_proof"]
+      "fallback_providers": ["approved_out_of_sandbox_run", "source_only_review_with_lower_confidence"],
+      "blocked_providers": ["local_playwright_package_as_mcp_proof", "repeated_sandbox_blocked_dev_server"]
     },
     "codex_platform_docs": {
       "purpose": "Fetch current Codex, AGENTS.md, skills, plugin, MCP, sandbox, and config documentation.",
