@@ -19,14 +19,17 @@ CODEX_LIKE_TARGETS = {"codex", "vs-code-codex"}
 CLAUDE_LIKE_TARGETS = {"claude-code", "vs-code-claude"}
 COPY_ROOT_FILES = (
     "AGENTS.md",
-    "README.md",
     "LICENSE",
+    "tool-capabilities-manifest.json",
+)
+COPY_DIRS = ("common", "templates")
+HUMAN_FACING_ROOT_FILES = (
+    "README.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
-    "tool-capabilities-manifest.json",
 )
-COPY_DIRS = ("common", "templates", "examples")
+HUMAN_FACING_DIRS = ("examples",)
 
 
 def split_frontmatter(text):
@@ -87,6 +90,15 @@ def write_cursor_rules(target_root):
     )
 
 
+def validate_no_human_facing_files(target_root, target):
+    for file_name in HUMAN_FACING_ROOT_FILES:
+        if (target_root / file_name).exists():
+            raise RuntimeError(f"dist/{target} must not include {file_name}")
+    for dir_name in HUMAN_FACING_DIRS:
+        if (target_root / dir_name).exists():
+            raise RuntimeError(f"dist/{target} must not include {dir_name}/")
+
+
 def build_target(target):
     target_root = DIST / target
     if target_root.exists():
@@ -123,9 +135,11 @@ def build_target(target):
         if target in CODEX_LIKE_TARGETS and (skill_dir / "agents").exists():
             copy_tree(skill_dir / "agents", dst / "agents")
 
+    validate_no_human_facing_files(target_root, target)
+
 
 def main():
-    parser = argparse.ArgumentParser(description="Build portable skill-pack targets.")
+    parser = argparse.ArgumentParser(description="Build lean runtime skill-pack targets.")
     parser.add_argument(
         "--target",
         choices=TARGETS,
@@ -137,7 +151,7 @@ def main():
     targets = tuple(dict.fromkeys(args.target or TARGETS))
     for target in targets:
         build_target(target)
-    print(f"Built {', '.join(targets)} target(s) in {DIST}")
+    print(f"Built {', '.join(targets)} runtime target(s) in {DIST}")
 
 
 if __name__ == "__main__":
