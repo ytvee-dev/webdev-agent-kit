@@ -20,6 +20,8 @@ Choose the package for your client from the latest GitHub release:
 
 Checksums are published as `SHA256SUMS` in the same release.
 
+Each runtime archive extracts to a top-level `.agents/` directory.
+
 ## What It Is
 
 WebDev Agent Kit is not a UI library, component library, starter template, scaffolder, or test framework. It is a local instruction system that gives coding agents a safer operating model for frontend development.
@@ -54,20 +56,23 @@ Agents must not read or edit a host project's README during normal implementatio
 
 ### 1. Install a client package
 
-Download the matching package above and unpack it into `.agents/` inside your frontend project.
+Download the matching package above and extract it from the root of your frontend project. The archive creates `.agents/` automatically.
 
-Expected shape:
+Expected shape after extraction:
 
 ```text
 your-project/
 ├── AGENTS.md or CLAUDE.md
 └── .agents/
     ├── AGENTS.md
+    ├── LICENSE
     ├── common/
     ├── skills/
     ├── templates/
     └── tool-capabilities-manifest.json
 ```
+
+Runtime archives intentionally exclude human-facing project files such as `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `examples/`.
 
 ### 2. Add the native root pointer
 
@@ -204,6 +209,8 @@ The release workflow builds and publishes stable and versioned artifacts for:
 - VS Code Codex;
 - VS Code Claude.
 
+Every release artifact extracts to `.agents/` and excludes human-facing docs and examples from the runtime package.
+
 The workflow also keeps legacy `dist/codex` and `dist/claude` generated targets for current validators.
 
 ## Maintenance
@@ -243,8 +250,8 @@ python scripts/validate_skill_pack.py
 Push a version tag:
 
 ```bash
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.3.0
+git push origin v0.3.0
 ```
 
 The release workflow builds and publishes the client packages listed in the Download section.
