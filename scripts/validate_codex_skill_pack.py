@@ -17,12 +17,16 @@ FORBIDDEN_SKILL_TERMS = (
 )
 REQUIRED_ROOT_FILES = (
     "AGENTS.md",
-    "README.md",
     "LICENSE",
+    "tool-capabilities-manifest.json",
+)
+FORBIDDEN_ROOT_FILES = (
+    "README.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
 )
+FORBIDDEN_ROOT_DIRS = ("examples",)
 REQUIRED_COMMON_FILES = (
     "common/target-stack-policy.md",
     "common/anti-patterns.md",
@@ -66,6 +70,12 @@ def validate():
     for relative_path in REQUIRED_ROOT_FILES:
         if not (TARGET / relative_path).exists():
             errors.append(f"dist/codex is missing required root file: {relative_path}")
+    for relative_path in FORBIDDEN_ROOT_FILES:
+        if (TARGET / relative_path).exists():
+            errors.append(f"dist/codex must not include human-facing file: {relative_path}")
+    for relative_path in FORBIDDEN_ROOT_DIRS:
+        if (TARGET / relative_path).exists():
+            errors.append(f"dist/codex must not include human-facing directory: {relative_path}/")
     plugin_path = TARGET / ".codex-plugin" / "plugin.json"
     if not plugin_path.exists():
         errors.append("dist/codex is missing .codex-plugin/plugin.json")
@@ -118,7 +128,7 @@ def validate():
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Validate the generated Codex skill-pack target."
+        description="Validate the generated Codex runtime target."
     )
     parser.parse_args()
     errors = validate()
@@ -126,7 +136,7 @@ def main():
         for error in errors:
             print(error)
         sys.exit(1)
-    print("Codex skill pack target is valid.")
+    print("Codex runtime target is valid.")
 
 
 if __name__ == "__main__":
