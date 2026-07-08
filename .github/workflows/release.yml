@@ -28,7 +28,7 @@ jobs:
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
 
       - name: Validate schemas
-        run: python scripts/validate_schemas.py
+        run: python scripts/validate_schemas.py --strict-graph
 
       - name: Validate README boundary
         run: python scripts/check_readme_boundary.py
@@ -127,7 +127,7 @@ jobs:
           - human-facing docs and examples are excluded from runtime archives
 
           Validation performed:
-          - schema validation
+          - strict graph schema validation
           - README boundary validation
           - source bundle validation
           - skill eval validation
