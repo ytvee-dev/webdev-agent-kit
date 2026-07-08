@@ -25,6 +25,12 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
+### Changed
+
+- Restored repository-side installation guide drafts so README links and local link checks remain valid after release cleanup.
+
+## 0.2.3 - 2026-07-07
+
 ### Added
 
 - Added capability-first tool policy and portable tool capability metadata.
