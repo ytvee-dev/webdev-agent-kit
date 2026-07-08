@@ -1,6 +1,6 @@
 {
   "name": "webdev-agent-kit",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "license": "Apache-2.0",
   "description": "Internal source and distribution inventory for the WebDev Agent Kit skill bundle.",
   "skills": [
@@ -26,7 +26,11 @@
   ],
   "targets": {
     "codex": "dist/codex",
-    "claude": "dist/claude"
+    "claude": "dist/claude",
+    "claude-code": "dist/claude-code",
+    "cursor": "dist/cursor",
+    "vs-code-codex": "dist/vs-code-codex",
+    "vs-code-claude": "dist/vs-code-claude"
   },
   "excludes": [
     "project/**",
