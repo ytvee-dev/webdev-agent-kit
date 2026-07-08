@@ -34,6 +34,7 @@ related:
     - '[[common/stop-criteria-rules|Stop Criteria Rules]]'
     - '[[common/bounded-retry-rules|Bounded Retry Rules]]'
     - '[[common/verification-loop-rules|Verification Loop Rules]]'
+    - '[[common/windows-shell-sandbox-rules|Windows Shell Sandbox Rules]]'
     - '[[common/context-compaction-rules|Context Compaction Rules]]'
     - '[[common/independent-review-rules|Independent Review Rules]]'
     - '[[common/worktree-parallelism-rules|Worktree Parallelism Rules]]'
@@ -231,6 +232,7 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 - Use `context7` for current React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool documentation when needed.
 - Use `mdn` for current HTML, CSS, Web API, and browser compatibility facts.
 - Use Browser or Playwright MCP only for rendered visual QA tasks allowed by `common/rendered-visual-verification-policy.md`.
+- Read `common/windows-shell-sandbox-rules.md` before retrying npm, build, dev-server, browser, Vite, esbuild, SWC, or Playwright commands that fail with Windows shell policy or sandbox access errors.
 - Do not use Browser or Playwright MCP for font, token, color, spacing, or CSS-variable lookup when source files, copied inspect values, or specs can answer the question.
 - A running local app or installed Playwright dependency does not mean Browser or Playwright MCP is available.
 - Install missing MCP servers only after explicit user approval and only when the official install source has been verified.
