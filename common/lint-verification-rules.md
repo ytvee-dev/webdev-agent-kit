@@ -13,6 +13,7 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/frontend-linter-manager/SKILL|Frontend Linter Manager]]'
+    - '[[common/windows-shell-sandbox-rules|Windows Shell Sandbox Rules]]'
 depends_on: []
 ---
 
@@ -43,6 +44,14 @@ If no lint command exists, say that lint was not run and explain the impact.
 - README-only work.
 - Analysis-only work.
 
+## Windows Shell Fallback Rule
+
+On Windows, if `npm run <script>`, `pnpm <script>`, or `yarn <script>` fails because PowerShell blocks a `.ps1` shim, retry once with the equivalent `.cmd` command when available.
+
+Do not change PowerShell execution policy, dependencies, scripts, or config to bypass that block.
+
+If the `.cmd` fallback runs and produces lint output, classify that output normally. If it fails with the same shell or sandbox blocker, stop and report lint verification as blocked by environment.
+
 ## Setup Rule
 
 The agent may set up linting only when the user explicitly asks for it or approves a setup plan.
@@ -58,3 +67,5 @@ When the user asks to use the provided rules, use the uploaded flat ESLint model
 ## Reporting
 
 Every code-changing final response must report lint command, lint result, and unresolved lint issues. If lint was not run, report why.
+
+When a Windows shell or sandbox fallback was used, also report the original blocked command, fallback command, and verification impact.
