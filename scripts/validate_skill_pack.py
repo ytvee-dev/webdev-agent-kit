@@ -8,8 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(script):
-    result = subprocess.run([sys.executable, str(ROOT / "scripts" / script)], cwd=ROOT)
+def run(script, *args):
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / script), *args], cwd=ROOT
+    )
     return result.returncode
 
 
@@ -19,7 +21,7 @@ def main():
     )
     parser.parse_args()
 
-    schema_code = run("validate_schemas.py")
+    schema_code = run("validate_schemas.py", "--strict-graph")
     if schema_code:
         sys.exit(schema_code)
     readme_boundary_code = run("check_readme_boundary.py")
