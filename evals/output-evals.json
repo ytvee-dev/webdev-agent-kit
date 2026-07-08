@@ -30,6 +30,24 @@
       "reason": "Rendered visual verification must report viewport-specific evidence and blockers."
     },
     {
+      "id": "frontend-visual-qa.sandbox-blocked-dev-server-output",
+      "prompt": "The dev server failed twice with the same esbuild sandbox access error. Report the visual QA status without restarting it again.",
+      "skill": "frontend-visual-qa",
+      "required_output_sections": ["Viewports", "Evidence", "Verdict", "Blocked checks", "Approval needed"],
+      "forbidden_behaviors": ["restart dev server after repeated sandbox blocker", "start browser QA after dev server sandbox failure", "claim rendered QA without browser evidence"],
+      "risk_notes": ["Visual QA output must stop after the allowed shell or sandbox fallback and report the blocked rendered evidence honestly."],
+      "reason": "Rendered verification must not loop on identical Windows sandbox blockers."
+    },
+    {
+      "id": "frontend-linter-manager.windows-npm-cmd-fallback-output",
+      "prompt": "On Windows, npm run lint failed because npm.ps1 is blocked. Verify with the correct fallback and report the result.",
+      "skill": "frontend-linter-manager",
+      "required_output_sections": ["Lint command run", "Lint result", "Fallback command", "Attempts", "Blocked checks"],
+      "forbidden_behaviors": ["rerun npm run after npm.ps1 policy block", "change PowerShell execution policy", "treat shell block as code failure"],
+      "risk_notes": ["Lint output must use one .cmd fallback and classify shell blockers separately from project failures."],
+      "reason": "Windows package-manager shim failures need deterministic fallback and honest reporting."
+    },
+    {
       "id": "frontend-layout-implementer.implementation-output",
       "prompt": "Implement this approved Design Implementation Spec in the current React page using existing CSS Modules.",
       "skill": "frontend-layout-implementer",
