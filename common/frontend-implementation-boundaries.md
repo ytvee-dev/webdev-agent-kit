@@ -10,7 +10,9 @@ tags:
     - 'agents/common'
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
-related: []
+related:
+    - '[[common/anti-patterns/no-test-authoring-by-default|No Test Authoring By Default]]'
+    - '[[common/anti-patterns/no-unapproved-test-infrastructure|No Unapproved Test Infrastructure]]'
 depends_on: []
 ---
 
@@ -21,6 +23,8 @@ Use English instructions and Unix-style paths.
 Use existing CSS variables only.
 
 Create no new project tests.
+
+Do not create or edit component tests, hook tests, function or unit tests, integration tests, E2E tests, snapshots, fixtures, or mocks unless the user explicitly asks for test authoring and approves the exact target scope.
 
 Introduce no project-code loops except a named isolated utility when no practical alternative exists.
 
