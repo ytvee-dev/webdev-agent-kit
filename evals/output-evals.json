@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.3.0",
   "eval_type": "skill-output",
   "cases": [
     {
@@ -37,6 +37,15 @@
       "forbidden_behaviors": ["install packages without approval", "invent new styling system", "skip available lint verification"],
       "risk_notes": ["Implementation reports must make reuse and verification explicit."],
       "reason": "Layout implementation output should prove scope control, project-native reuse, and verification."
+    },
+    {
+      "id": "frontend-layout-implementer.no-component-test-authoring-output",
+      "prompt": "Implement this approved UI fix in the current React component. Do not write tests unless explicitly requested.",
+      "skill": "frontend-layout-implementer",
+      "required_output_sections": ["Changed", "Project conventions reused", "Verified", "Skipped", "Risks"],
+      "forbidden_behaviors": ["create component tests without explicit request", "create function or hook tests without explicit request", "add test infrastructure without approval"],
+      "risk_notes": ["Implementation output must explicitly report that component, helper, hook, or unit test authoring was skipped when not requested."],
+      "reason": "Frontend implementation must not create tests as a side effect of changing code."
     },
     {
       "id": "frontend-refactor-surgeon.no-use-callback-output",
