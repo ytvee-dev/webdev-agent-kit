@@ -182,6 +182,8 @@ Small CSS-only background, color, border-color, or decorative mask changes shoul
 
 Rendered visual QA is used only when browser evidence is explicitly required, the task is a visual implementation/review, or repeated visual failure justifies escalation.
 
+On Windows, PowerShell `.ps1` package-manager blocks and sandbox access errors must be classified separately from code failures. Agents may use one equivalent `.cmd` fallback or one approved out-of-sandbox attempt when available, then must stop and report blocked verification instead of repeating the same command class.
+
 ## Important Anti-Patterns
 
 The bundle blocks common frontend-agent failure modes:
@@ -194,6 +196,7 @@ The bundle blocks common frontend-agent failure modes:
 - unapproved MCP installation;
 - unapproved Figma MCP usage;
 - creating or editing component, function, unit, integration, E2E, or visual regression tests by default;
+- repeating npm, build, dev-server, browser, Vite, esbuild, SWC, or Playwright commands after the same Windows shell or sandbox blocker;
 - moving server communication, domain workflow, or data processing into Redux by default;
 - parallel lifecycle booleans instead of one typed status discriminant;
 - `useCallback` without a proven identity-sensitive consumer;
