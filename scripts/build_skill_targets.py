@@ -139,7 +139,9 @@ def build_target(target):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build lean runtime skill-pack targets.")
+    parser = argparse.ArgumentParser(
+        description="Build lean runtime skill-pack targets."
+    )
     parser.add_argument(
         "--target",
         choices=TARGETS,
