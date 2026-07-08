@@ -1,0 +1,60 @@
+name: publish-v023-assets
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build and upload v0.2.3 assets
+    if: contains(github.event.head_commit.message, 'Publish v0.2.3 assets')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate and build targets
+        run: |
+          python -m py_compile scripts/*.py
+          python -m py_compile skills/agent-rules-skill-author/scripts/*.py
+          python scripts/validate_schemas.py
+          python scripts/check_readme_boundary.py
+          python scripts/validate_source_bundle.py
+          python scripts/validate_skill_evals.py
+          python scripts/build_skill_targets.py
+          python scripts/validate_codex_skill_pack.py
+          python scripts/validate_claude_skill_pack.py
+          python scripts/validate_skill_pack.py
+
+      - name: Package assets
+        run: |
+          mkdir -p release-artifacts
+          for target in codex claude-code cursor vs-code-codex vs-code-claude; do
+            tar -czf "release-artifacts/webdev-agent-kit-${target}-v0.2.3.tar.gz" -C dist "${target}"
+            cp "release-artifacts/webdev-agent-kit-${target}-v0.2.3.tar.gz" "release-artifacts/webdev-agent-kit-${target}.tar.gz"
+          done
+          (cd release-artifacts && sha256sum *.tar.gz > SHA256SUMS)
+          find release-artifacts -maxdepth 1 -type f -print | sort
+
+      - name: Upload workflow artifact backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: webdev-agent-kit-v0.2.3-assets
+          path: release-artifacts/
+
+      - name: Attach assets to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.2.3
+          files: |
+            release-artifacts/*.tar.gz
+            release-artifacts/SHA256SUMS
