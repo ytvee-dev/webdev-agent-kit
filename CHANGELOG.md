@@ -27,6 +27,10 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Runtime release archives now extract to a top-level `.agents/` directory regardless of client package.
+- Runtime targets no longer include human-facing root files: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, or `SECURITY.md`.
+- Runtime targets no longer include `examples/`.
+- Codex and VS Code Codex targets keep `.codex-plugin/`; Claude Code, VS Code Claude, Cursor, and legacy Claude targets do not include it.
 - Restored repository-side installation guide drafts so README links and local link checks remain valid after release cleanup.
 
 ## 0.2.3 - 2026-07-07
