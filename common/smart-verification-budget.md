@@ -16,6 +16,7 @@ related:
     - '[[common/diff-impact-verification-rules|Diff Impact Verification Rules]]'
     - '[[common/mcp-availability-detection-rules|MCP Availability Detection Rules]]'
     - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
+    - '[[common/windows-shell-sandbox-rules|Windows Shell Sandbox Rules]]'
 depends_on: []
 ---
 
@@ -76,6 +77,8 @@ Do not escalate merely because tools are available.
 Do not start a local server or browser session after sufficient source or build evidence for a low-risk change unless rendered evidence is explicitly requested or the change remains visually risky.
 
 Do not run broad repository commands before changed-file checks for lightweight work.
+
+When a verification command fails because of Windows shell policy or sandbox access, read `common/windows-shell-sandbox-rules.md`, make only the allowed fallback attempt, then stop instead of escalating to repeated build, dev-server, or browser retries.
 
 ## Cost And Context Rule
 
