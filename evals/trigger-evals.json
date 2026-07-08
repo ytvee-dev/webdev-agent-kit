@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.3.0",
   "eval_type": "skill-trigger",
   "cases": [
     {
@@ -121,6 +121,16 @@
       "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "mcp-toolchain-manager"],
       "risk_notes": ["useCallback without a proven identity-sensitive consumer is an anti-pattern."],
       "reason": "The user asks for review of a React implementation quality issue."
+    },
+    {
+      "id": "anti-patterns.no-component-tests-by-default",
+      "prompt": "Review this React change. The agent created component and helper tests even though the user only asked for a UI fix.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": ["frontend-quality-reviewer"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "mcp-toolchain-manager"],
+      "risk_notes": ["Component, helper, hook, or unit tests must not be created as a side effect of implementation work."],
+      "reason": "The user asks for review of unauthorized test authoring during frontend implementation."
     },
     {
       "id": "docs.host-readme-not-edited-during-feature",
