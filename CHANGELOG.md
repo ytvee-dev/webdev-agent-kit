@@ -27,10 +27,13 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
+- Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
 
 ### Changed
 
+- Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
 - Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.
 - Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
 - Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.
