@@ -48,8 +48,8 @@ jobs:
       - name: Validate Codex target
         run: python scripts/validate_codex_skill_pack.py
 
-      - name: Validate Claude target
-        run: python scripts/validate_claude_skill_pack.py
+      - name: Validate Claude Code plugin target
+        run: python scripts/validate_claude_plugin_target.py
 
       - name: Run full validation orchestrator
         run: python scripts/validate_skill_pack.py
@@ -64,7 +64,6 @@ jobs:
           test -d dist/vs-code-claude
 
           for target in codex claude claude-code cursor vs-code-codex vs-code-claude; do
-            test -f "dist/${target}/AGENTS.md"
             test -f "dist/${target}/LICENSE"
             test -f "dist/${target}/tool-capabilities-manifest.json"
             test ! -e "dist/${target}/project"
@@ -76,11 +75,15 @@ jobs:
             test ! -e "dist/${target}/examples"
           done
 
+          test -f dist/codex/AGENTS.md
+          test -f dist/cursor/AGENTS.md
+          test -f dist/vs-code-codex/AGENTS.md
           test -f dist/codex/.codex-plugin/plugin.json
           test -f dist/vs-code-codex/.codex-plugin/plugin.json
 
-          test -f dist/claude-code/CLAUDE.md
-          test -f dist/vs-code-claude/CLAUDE.md
+          test -f dist/claude-code/.claude-plugin/plugin.json
+          test -f dist/claude/.claude-plugin/plugin.json
+          test -f dist/vs-code-claude/.claude-plugin/plugin.json
           test -f dist/cursor/.cursor/rules/webdev-agent-kit.mdc
 
           test ! -e dist/claude/.codex-plugin
@@ -97,7 +100,7 @@ jobs:
         run: |
           mkdir -p release-artifacts
 
-          for target in codex claude-code cursor vs-code-codex vs-code-claude; do
+          for target in codex cursor vs-code-codex; do
             rm -rf release-staging
             mkdir -p release-staging
             cp -a "dist/${target}" release-staging/.agents
@@ -107,6 +110,20 @@ jobs:
             first_entry=$(tar -tzf "release-artifacts/webdev-agent-kit-${target}.tar.gz" | head -n 1)
             if [ "${first_entry}" != ".agents/" ]; then
               echo "Archive webdev-agent-kit-${target}.tar.gz must extract to .agents/ first, got ${first_entry}"
+              exit 1
+            fi
+          done
+
+          for target in claude-code vs-code-claude; do
+            rm -rf release-staging
+            mkdir -p release-staging/webdev-agent-kit
+            cp -a "dist/${target}/." release-staging/webdev-agent-kit/
+            tar -czf "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" -C release-staging webdev-agent-kit
+            cp "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" "release-artifacts/webdev-agent-kit-${target}.tar.gz"
+
+            first_entry=$(tar -tzf "release-artifacts/webdev-agent-kit-${target}.tar.gz" | head -n 1)
+            if [ "${first_entry}" != "webdev-agent-kit/" ]; then
+              echo "Archive webdev-agent-kit-${target}.tar.gz must extract to a plugin root first, got ${first_entry}"
               exit 1
             fi
           done
@@ -126,7 +143,8 @@ jobs:
           - Checksums: `SHA256SUMS`
 
           Runtime archive shape:
-          - every archive extracts to a top-level `.agents/` directory
+          - Codex and Cursor project archives extract to a top-level `.agents/` directory
+          - Claude archives extract to a native `webdev-agent-kit/` plugin root
           - human-facing docs and examples are excluded from runtime archives
 
           Validation performed:
@@ -136,7 +154,7 @@ jobs:
           - skill eval validation
           - portable target build
           - Codex target validation
-          - Claude target validation
+          - Claude Code plugin and alias validation
           - excluded-path inspection
           - archive root inspection
           NOTES

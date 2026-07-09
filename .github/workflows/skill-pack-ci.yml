@@ -121,8 +121,8 @@ jobs:
       - name: Validate Codex target
         run: python scripts/validate_codex_skill_pack.py
 
-      - name: Validate Claude target
-        run: python scripts/validate_claude_skill_pack.py
+      - name: Validate Claude Code plugin target
+        run: python scripts/validate_claude_plugin_target.py
 
       - name: Full validation orchestrator smoke check
         id: validate_full

@@ -40,7 +40,7 @@ def main():
     if build_code:
         sys.exit(build_code)
     codex_code = run("validate_codex_skill_pack.py")
-    claude_code = run("validate_claude_skill_pack.py")
+    claude_code = run("validate_claude_plugin_target.py")
     sys.exit(codex_code or claude_code)
 
 

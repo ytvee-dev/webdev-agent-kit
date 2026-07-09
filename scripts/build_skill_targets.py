@@ -7,16 +7,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
-TARGETS = (
-    "codex",
-    "claude",
-    "claude-code",
-    "cursor",
-    "vs-code-codex",
-    "vs-code-claude",
-)
-CODEX_LIKE_TARGETS = {"codex", "vs-code-codex"}
-CLAUDE_LIKE_TARGETS = {"claude-code", "vs-code-claude"}
+MANIFEST = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"))
+CANONICAL_TARGETS = tuple(MANIFEST["targets"])
+TARGET_ALIASES = MANIFEST["target_aliases"]
+TARGETS = CANONICAL_TARGETS + tuple(TARGET_ALIASES)
 COPY_ROOT_FILES = (
     "AGENTS.md",
     "LICENSE",
@@ -62,22 +56,29 @@ def portable_skill_text(source_text):
     )
 
 
-def copy_tree(src, dst):
+def copy_tree(src, dst, *, strip_graph_frontmatter=False):
     if not src.exists():
         return
-    shutil.copytree(
-        src,
-        dst,
-        dirs_exist_ok=True,
-        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
-    )
-
-
-def write_claude_pointer(target_root):
-    (target_root / "CLAUDE.md").write_text(
-        "# CLAUDE.md\n\nUse the project-local agent policy in `.agents/AGENTS.md`.\n",
-        encoding="utf-8",
-    )
+    for source_path in sorted(src.rglob("*")):
+        if source_path.name == "__pycache__" or source_path.suffix in {
+            ".pyc",
+            ".pyo",
+        }:
+            continue
+        relative_path = source_path.relative_to(src)
+        destination_path = dst / relative_path
+        if source_path.is_dir():
+            destination_path.mkdir(parents=True, exist_ok=True)
+            continue
+        destination_path.parent.mkdir(parents=True, exist_ok=True)
+        if strip_graph_frontmatter and source_path.suffix == ".md":
+            frontmatter, body = split_frontmatter(
+                source_path.read_text(encoding="utf-8-sig")
+            )
+            if frontmatter.get("id"):
+                destination_path.write_text(body.lstrip(), encoding="utf-8")
+                continue
+        shutil.copy2(source_path, destination_path)
 
 
 def write_cursor_rules(target_root):
@@ -99,27 +100,15 @@ def validate_no_human_facing_files(target_root, target):
             raise RuntimeError(f"dist/{target} must not include {dir_name}/")
 
 
-def build_target(target):
+def prepare_target_root(target):
     target_root = DIST / target
     if target_root.exists():
         shutil.rmtree(target_root)
     target_root.mkdir(parents=True)
+    return target_root
 
-    for file_name in COPY_ROOT_FILES:
-        src = ROOT / file_name
-        if src.exists():
-            shutil.copy2(src, target_root / file_name)
 
-    for dir_name in COPY_DIRS:
-        copy_tree(ROOT / dir_name, target_root / dir_name)
-
-    if target in CODEX_LIKE_TARGETS:
-        copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
-    if target in CLAUDE_LIKE_TARGETS:
-        write_claude_pointer(target_root)
-    if target == "cursor":
-        write_cursor_rules(target_root)
-
+def copy_skills(target_root, *, include_codex_metadata, strip_graph_frontmatter):
     skills_src = ROOT / "skills"
     skills_dst = target_root / "skills"
     skills_dst.mkdir(parents=True, exist_ok=True)
@@ -131,11 +120,77 @@ def build_target(target):
         )
         (dst / "SKILL.md").write_text(skill_text, encoding="utf-8")
         for resource_dir in ("references", "scripts", "assets"):
-            copy_tree(skill_dir / resource_dir, dst / resource_dir)
-        if target in CODEX_LIKE_TARGETS and (skill_dir / "agents").exists():
+            copy_tree(
+                skill_dir / resource_dir,
+                dst / resource_dir,
+                strip_graph_frontmatter=strip_graph_frontmatter,
+            )
+        if include_codex_metadata and (skill_dir / "agents").exists():
             copy_tree(skill_dir / "agents", dst / "agents")
 
+
+def build_project_target(target):
+    target_root = prepare_target_root(target)
+
+    for file_name in COPY_ROOT_FILES:
+        src = ROOT / file_name
+        if src.exists():
+            shutil.copy2(src, target_root / file_name)
+
+    for dir_name in COPY_DIRS:
+        copy_tree(ROOT / dir_name, target_root / dir_name)
+
+    if target == "codex":
+        copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
+    if target == "cursor":
+        write_cursor_rules(target_root)
+
+    copy_skills(
+        target_root,
+        include_codex_metadata=target == "codex",
+        strip_graph_frontmatter=False,
+    )
+
     validate_no_human_facing_files(target_root, target)
+
+
+def build_claude_plugin_target():
+    target = "claude-code"
+    target_root = prepare_target_root(target)
+
+    for file_name in ("LICENSE", "tool-capabilities-manifest.json"):
+        shutil.copy2(ROOT / file_name, target_root / file_name)
+
+    copy_tree(ROOT / ".claude-plugin", target_root / ".claude-plugin")
+    for dir_name in COPY_DIRS:
+        copy_tree(
+            ROOT / dir_name,
+            target_root / dir_name,
+            strip_graph_frontmatter=True,
+        )
+    copy_skills(
+        target_root,
+        include_codex_metadata=False,
+        strip_graph_frontmatter=True,
+    )
+
+    validate_no_human_facing_files(target_root, target)
+
+
+def build_canonical_target(target):
+    if target == "claude-code":
+        build_claude_plugin_target()
+        return
+    build_project_target(target)
+
+
+def build_alias(alias):
+    canonical = TARGET_ALIASES[alias]
+    canonical_root = DIST / canonical
+    alias_root = DIST / alias
+    if alias_root.exists():
+        shutil.rmtree(alias_root)
+    shutil.copytree(canonical_root, alias_root)
 
 
 def main():
@@ -150,10 +205,16 @@ def main():
     )
     args = parser.parse_args()
 
-    targets = tuple(dict.fromkeys(args.target or TARGETS))
-    for target in targets:
-        build_target(target)
-    print(f"Built {', '.join(targets)} runtime target(s) in {DIST}")
+    requested_targets = tuple(dict.fromkeys(args.target or TARGETS))
+    built_canonical_targets = set()
+    for target in requested_targets:
+        canonical = TARGET_ALIASES.get(target, target)
+        if canonical not in built_canonical_targets:
+            build_canonical_target(canonical)
+            built_canonical_targets.add(canonical)
+        if target in TARGET_ALIASES:
+            build_alias(target)
+    print(f"Built {', '.join(requested_targets)} runtime target(s) in {DIST}")
 
 
 if __name__ == "__main__":

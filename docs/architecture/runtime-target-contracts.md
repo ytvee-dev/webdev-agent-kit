@@ -74,14 +74,17 @@ and release behavior come from the canonical target.
 - validator existence;
 - plugin and project-bundle install-mode consistency.
 
-Artifact layout, archive extraction, and native client discovery validators are
-added with the corresponding target builders. A release must eventually pass
-both contract validation and target artifact validation.
+`scripts/validate_claude_plugin_target.py` validates the native Claude Code
+plugin layout, portable skill metadata, stripped graph metadata, Codex-only
+metadata exclusions, alias identity, and plugin/source version alignment.
+Project-bundle layout and extraction validators are added with their target
+builders. A release must pass both contract validation and the target artifact
+validator.
 
 ## Migration State
 
-The contract is declared before target builders are migrated. During the
-`v0.3.0` branch, temporary generated layouts may still reflect the older shared
-archive model. They are not release-ready until the Claude plugin, Codex
-project bundle, Cursor project bundle, alias build, and archive validators match
-this document.
+The Claude Code builder now emits a native self-contained plugin and its aliases
+reuse the canonical artifact byte-for-byte. During the `v0.3.0` branch, Codex
+and Cursor generated layouts may still reflect the older shared archive model.
+They are not release-ready until their project-bundle builders and archive
+validators match this document.

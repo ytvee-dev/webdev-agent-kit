@@ -33,7 +33,7 @@ Use these defaults:
 
 - Codex and VS Code Codex: root `AGENTS.md` points to `.agents/AGENTS.md`.
 - Cursor: root `AGENTS.md` points to `.agents/AGENTS.md`; Cursor rules may also point to the same policy when the Cursor target is installed.
-- Claude Code and VS Code Claude: root `CLAUDE.md` points to or imports `.agents/AGENTS.md`; create root `AGENTS.md` only when the user approves cross-agent compatibility.
+- Claude Code and VS Code Claude: native skills come from the installed plugin. When the project also has shared `.agents` policy, root `CLAUDE.md` imports it with exactly `@.agents/AGENTS.md`; create or merge that import only after user approval. Create root `AGENTS.md` only when the user approves cross-agent compatibility.
 - Generic clients: create only the pointer explicitly requested by the user or documented by the installed target.
 
 The root pointer must stay small. Do not mirror the full bundled policy into client-native files.
@@ -47,7 +47,7 @@ Use the matching template when creating a new native pointer:
 - `templates/root-pointers/AGENTS.cursor.md`.
 - `templates/root-pointers/CLAUDE.claude-code.md`.
 
-For VS Code Claude, use the Claude Code pointer shape until a stricter editor-specific template is added.
+For VS Code Claude, use the Claude Code import shape until a stricter editor-specific template is added. Do not duplicate plugin skills into `.agents/skills`.
 
 ## Existing Entrypoint Rule
 
@@ -80,5 +80,6 @@ Client adaptation is local host-project state. Keep detected client facts in `pr
 - Native pointers must be minimal.
 - Existing host instructions must not be overwritten without approval.
 - Claude targets must not depend on Codex-only `agents/openai.yaml` files for capability discovery.
+- Claude plugin installation must not silently create or replace project instructions.
 - Cursor and VS Code setup must be documented as client setup, not mandatory runtime policy.
 - MCP setup remains approval-gated and capability-first.

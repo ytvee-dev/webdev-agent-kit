@@ -23,9 +23,17 @@ depends_on: []
 webdev-agent-kit-vs-code-claude.tar.gz
 ```
 
-Распакуйте архив в `.agents/` внутри frontend-проекта.
+Распакуйте каталог `webdev-agent-kit/` вне проекта и подключите его через нативный Claude Code plugin flow, доступный в текущей интеграции VS Code. В plugin root должны находиться `.claude-plugin/plugin.json` и `skills/`.
 
-Создайте root `CLAUDE.md`, который указывает на `.agents/AGENTS.md`.
+Не копируйте plugin skills в `.agents/skills`.
+
+Если проект отдельно использует `.agents/AGENTS.md`, предложите импортировать эту политику одной строкой в root `CLAUDE.md`:
+
+```text
+@.agents/AGENTS.md
+```
+
+Создавать или менять существующий `CLAUDE.md` можно только после явного согласия пользователя.
 
 После установки запустите:
 

@@ -91,7 +91,7 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 3. Apply `common/client-adaptation-policy.md` to choose the native host pointer:
    - Codex and VS Code Codex create or refresh root `AGENTS.md` pointing to `.agents/AGENTS.md`.
    - Cursor creates or refreshes root `AGENTS.md`; Cursor rules may point to `.agents/AGENTS.md` when the Cursor target is installed.
-   - Claude Code and VS Code Claude create or refresh root `CLAUDE.md` pointing to or importing `.agents/AGENTS.md`; create root `AGENTS.md` only with user approval for cross-agent compatibility.
+   - Claude Code and VS Code Claude use native plugin skill discovery. If shared project policy already exists under `.agents`, propose the exact `@.agents/AGENTS.md` import for root `CLAUDE.md`; create or merge it only with user approval. Do not copy plugin skills into `.agents/skills`. Create root `AGENTS.md` only with user approval for cross-agent compatibility.
 4. If an expected pointer already exists, do not overwrite it. Propose a merge when existing instructions are non-empty or ambiguous.
 5. Detect whether the host project is existing, new/empty, or partially initialized.
 6. Detect target-stack fit from manifests, configs, lockfiles, source roots, routes, styles, and entrypoints.
@@ -125,7 +125,7 @@ Unknowns
 
 - `project/**` overlays remain local-only.
 - `project/client-profile.md` and `project/mcp-profile.md` are created from templates and marked local-only in copied overlays.
-- Native pointers remain small and point to `.agents/AGENTS.md` instead of mirroring the full policy.
+- Native pointers remain small. Claude uses the exact `@.agents/AGENTS.md` import when shared project policy is approved; other pointers reference `.agents/AGENTS.md` instead of mirroring the full policy.
 - Existing host instructions are not overwritten without approval.
 - Host README files and host docs are not edited during onboarding.
 - Loop memory stores tried, verified, and open facts only in local-only project files.

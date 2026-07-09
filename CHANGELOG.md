@@ -30,6 +30,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added machine-readable runtime contracts for canonical Codex, Claude Code, and Cursor targets.
 - Added `scripts/validate_target_contracts.py` to enforce canonical target, alias, entrypoint, skill-root, output, and validator declarations.
 - Added `docs/architecture/runtime-target-contracts.md` as the human-readable target contract.
+- Added a native Claude Code plugin manifest and structural artifact validator.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
 - Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
@@ -38,6 +39,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 - Replaced independent client target entries with three canonical targets and explicit compatibility aliases.
 - Defined Claude Code as a native plugin target and VS Code client packages as aliases of their canonical runtimes.
+- Claude Code now builds as a self-contained native plugin with portable skill frontmatter, stripped source graph metadata, and no Codex-only plugin or UI metadata.
+- Legacy `claude` and `vs-code-claude` outputs now reuse the canonical `claude-code` artifact exactly.
+- Claude project-policy onboarding now uses the exact `@.agents/AGENTS.md` import and requires approval before creating or merging host instructions.
 - README now documents Windows shell and sandbox verification behavior as a user-facing boundary.
 - Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
 - Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.
