@@ -3,7 +3,7 @@
   "$id": "https://github.com/ytvee-dev/webdev-agent-kit/schemas/bundle-manifest.schema.json",
   "title": "WebDev Agent Kit Bundle Manifest",
   "type": "object",
-  "required": ["name", "version", "license", "description", "skills", "targets", "excludes"],
+  "required": ["name", "version", "license", "description", "skills", "targets", "target_aliases", "excludes"],
   "properties": {
     "name": {
       "type": "string",
@@ -37,41 +37,51 @@
     },
     "targets": {
       "type": "object",
-      "required": [
-        "codex",
-        "claude",
-        "claude-code",
-        "cursor",
-        "vs-code-codex",
-        "vs-code-claude"
-      ],
-      "properties": {
-        "codex": {
-          "type": "string",
-          "enum": ["dist/codex"]
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "kind",
+          "output",
+          "install_mode",
+          "entrypoint",
+          "skills_root",
+          "validator"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["project-bundle", "plugin"]
+          },
+          "output": {
+            "type": "string",
+            "pattern": "^dist/[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "install_mode": {
+            "type": "string",
+            "enum": ["project-root-extract", "plugin-install"]
+          },
+          "entrypoint": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]+$"
+          },
+          "skills_root": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]+$"
+          },
+          "validator": {
+            "type": "string",
+            "pattern": "^scripts/[a-z0-9_]+\\.py$"
+          }
         },
-        "claude": {
-          "type": "string",
-          "enum": ["dist/claude"]
-        },
-        "claude-code": {
-          "type": "string",
-          "enum": ["dist/claude-code"]
-        },
-        "cursor": {
-          "type": "string",
-          "enum": ["dist/cursor"]
-        },
-        "vs-code-codex": {
-          "type": "string",
-          "enum": ["dist/vs-code-codex"]
-        },
-        "vs-code-claude": {
-          "type": "string",
-          "enum": ["dist/vs-code-claude"]
-        }
-      },
-      "additionalProperties": false
+        "additionalProperties": false
+      }
+    },
+    "target_aliases": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
     },
     "excludes": {
       "type": "array",

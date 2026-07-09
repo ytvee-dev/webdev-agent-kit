@@ -49,6 +49,9 @@ jobs:
         if: steps.validate_schemas.outputs.status != '0'
         run: exit ${{ steps.validate_schemas.outputs.status }}
 
+      - name: Validate runtime target contracts
+        run: python scripts/validate_target_contracts.py
+
       - name: Validate README boundary
         id: validate_readme_boundary
         run: |

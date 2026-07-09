@@ -6,9 +6,12 @@
 /dist/
 /dist/**
 
-# Removed internal notes. Keep installable pack source-first.
-/docs/
-/docs/**
+# Publish only maintained installation and architecture documentation.
+/docs/*
+!/docs/install/
+!/docs/install/**
+!/docs/architecture/
+!/docs/architecture/**
 
 # Local helper checkout state. Never publish old helper sync trees.
 /upstream/

@@ -24,6 +24,9 @@ def main():
     schema_code = run("validate_schemas.py", "--strict-graph")
     if schema_code:
         sys.exit(schema_code)
+    target_contract_code = run("validate_target_contracts.py")
+    if target_contract_code:
+        sys.exit(target_contract_code)
     readme_boundary_code = run("check_readme_boundary.py")
     if readme_boundary_code:
         sys.exit(readme_boundary_code)

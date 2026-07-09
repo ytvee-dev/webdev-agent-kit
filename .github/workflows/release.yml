@@ -30,6 +30,9 @@ jobs:
       - name: Validate schemas
         run: python scripts/validate_schemas.py --strict-graph
 
+      - name: Validate runtime target contracts
+        run: python scripts/validate_target_contracts.py
+
       - name: Validate README boundary
         run: python scripts/check_readme_boundary.py
 

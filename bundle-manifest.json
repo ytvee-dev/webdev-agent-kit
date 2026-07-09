@@ -25,12 +25,35 @@
     "project-onboarding-adapter"
   ],
   "targets": {
-    "codex": "dist/codex",
-    "claude": "dist/claude",
-    "claude-code": "dist/claude-code",
-    "cursor": "dist/cursor",
-    "vs-code-codex": "dist/vs-code-codex",
-    "vs-code-claude": "dist/vs-code-claude"
+    "claude-code": {
+      "kind": "plugin",
+      "output": "dist/claude-code",
+      "install_mode": "plugin-install",
+      "entrypoint": ".claude-plugin/plugin.json",
+      "skills_root": "skills",
+      "validator": "scripts/validate_target_contracts.py"
+    },
+    "codex": {
+      "kind": "project-bundle",
+      "output": "dist/codex",
+      "install_mode": "project-root-extract",
+      "entrypoint": ".agents/AGENTS.md",
+      "skills_root": ".agents/skills",
+      "validator": "scripts/validate_target_contracts.py"
+    },
+    "cursor": {
+      "kind": "project-bundle",
+      "output": "dist/cursor",
+      "install_mode": "project-root-extract",
+      "entrypoint": ".cursor/rules/webdev-agent-kit.mdc",
+      "skills_root": ".agents/skills",
+      "validator": "scripts/validate_target_contracts.py"
+    }
+  },
+  "target_aliases": {
+    "claude": "claude-code",
+    "vs-code-claude": "claude-code",
+    "vs-code-codex": "codex"
   },
   "excludes": [
     "project/**",
