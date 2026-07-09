@@ -52,7 +52,14 @@ and release behavior come from the canonical target.
 
 ## Source And Runtime Boundaries
 
-- Source `skills/**` and `common/**` remain client-neutral authoring sources.
+- `common/core/runtime-core-policy.md` owns the compact client-neutral behavior.
+- `profiles/react-typescript/PROFILE.md` activates stack defaults only from
+  repository evidence and defers details to owning common rules.
+- `adapters/**` owns only native discovery, entrypoints, tool registries,
+  sandbox, and configuration differences. Each generated target ships one
+  canonical adapter; aliases reuse it.
+- Source `skills/**` remains portable authoring source. Claude-generated skills
+  load the core, conditional profile, and matching adapter explicitly.
 - Codex-only `agents/openai.yaml` metadata is emitted only for Codex-compatible
   plugin or skill targets.
 - Claude Code receives a self-contained native plugin and must not depend on
@@ -80,6 +87,10 @@ metadata exclusions, alias identity, and plugin/source version alignment.
 Project-bundle layout and extraction validators are added with their target
 builders. A release must pass both contract validation and the target artifact
 validator.
+
+`scripts/validate_runtime_layers.py` enforces the layer inventory, prevents
+client-specific terms in the core and project profile, caps their context size,
+and checks that generated targets contain exactly one matching adapter.
 
 ## Migration State
 

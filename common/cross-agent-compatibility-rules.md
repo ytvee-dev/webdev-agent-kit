@@ -12,6 +12,9 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
+    - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
     - '[[common/portable-skill-core-contract|Portable Skill Core Contract]]'
     - '[[docs/architecture/runtime-target-contracts|Runtime Target Contracts]]'
 depends_on: []
@@ -28,7 +31,10 @@ hosts.
 Use one portable source with three canonical runtime targets:
 
 ```text
-skills/**             portable skill source
+common/core/**        compact portable behavior
+profiles/**           evidence-gated project defaults
+adapters/**           thin client differences
+skills/**             portable procedures
 dist/codex/**         Codex project bundle
 dist/claude-code/**   Claude Code plugin
 dist/cursor/**        Cursor project bundle
@@ -54,7 +60,7 @@ runtime implementations.
 
 | Host | Supported artifact | Compatibility status | Notes |
 | --- | --- | --- | --- |
-| Source bundle | `AGENTS.md`, `common/**`, `skills/**`, `templates/**`, `examples/**`, validators, schemas, and evals | Canonical | Use this layer for authoring, validation, review, and release builds. Do not treat generated `dist/**` as source. |
+| Source bundle | `AGENTS.md`, `common/**`, `profiles/**`, `adapters/**`, `skills/**`, `templates/**`, `examples/**`, validators, schemas, and evals | Canonical | Use this layer for authoring, validation, review, and release builds. Do not treat generated `dist/**` as source. |
 | Codex | `dist/codex/**` project bundle with `.agents/AGENTS.md` and `.agents/skills/**` after extraction | Canonical target | Keep Codex-only plugin and UI metadata out of Claude output. |
 | Claude Code | `dist/claude-code/**` self-contained plugin with `.claude-plugin/plugin.json` and `skills/**` | Canonical target | Use native plugin discovery. Do not depend on `.agents/skills`, `agents/openai.yaml`, or `.codex-plugin`. |
 | GitHub Copilot | Human-selected repository/custom-instruction adaptation | Advisory compatibility | Reuse source policies manually where applicable. Do not assume native skill-package semantics, graph metadata, or Codex plugin metadata. |
@@ -64,8 +70,9 @@ runtime implementations.
 
 ## Portability Rules
 
-- Treat `AGENTS.md`, `common/**`, `skills/**`, `templates/**`, `examples/**`,
-  schemas, validators, and evals as the publishable source model.
+- Treat `AGENTS.md`, `common/**`, `profiles/**`, `adapters/**`, `skills/**`,
+  `templates/**`, `examples/**`, schemas, validators, and evals as the
+  publishable source model.
 - Treat `README.md` as human-facing only. Do not use it as agent runtime,
   routing, validation, inventory, or compatibility source material.
 - Treat `project/**` as host-project local overlay state. Never publish it in
@@ -84,6 +91,8 @@ runtime implementations.
 
 - Keep rich `.agents` graph metadata in source files.
 - Generate portable `SKILL.md` frontmatter for distribution targets.
+- Ship the portable core, default profile, and exactly one matching canonical
+  adapter in every generated target.
 - Include `agents/openai.yaml` only in Codex-compatible skill or plugin output.
 - Include `.codex-plugin/plugin.json` only in Codex plugin output; do not expose
   the internal `bundle-manifest.json` as a platform manifest.

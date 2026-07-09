@@ -15,6 +15,8 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[skills/project-onboarding-adapter/references/adaptation-checklist|Adaptation Checklist]]'
     - '[[skills/project-onboarding-adapter/references/path-audit-checklist|Path Audit Checklist]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
@@ -60,9 +62,9 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 ## Required Context
 
 1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect only the minimal pointer section; do not read host README files.
-2. Read bundle-local `AGENTS.md`.
-3. Read `common/client-adaptation-policy.md`.
-4. Read `common/target-stack-policy.md`.
+2. Read bundle-local `AGENTS.md` and `common/core/runtime-core-policy.md`.
+3. Read `common/client-adaptation-policy.md` and only the adapter for the resolved canonical target.
+4. Read `profiles/react-typescript/PROFILE.md` and its owning policies only when repository evidence confirms the profile.
 5. Read `common/skill-applicability-policy.md` when the detected or suspected stack is outside the target stack.
 6. Read `common/tool-capability-model.md` and `tool-capabilities-manifest.json` for capability selection.
 7. Read `common/context-compaction-rules.md` when loop memory or resumable workflow setup is requested.
@@ -83,15 +85,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 ## Workflow
 
 1. Classify whether this is Plan Mode or approved execution.
-2. Detect the installed package target or current client surface:
-   - Codex or VS Code Codex;
-   - Claude Code or VS Code Claude;
-   - Cursor;
-   - generic or unknown client.
-3. Apply `common/client-adaptation-policy.md` to choose the native host pointer:
-   - Codex and VS Code Codex create or refresh root `AGENTS.md` pointing to `.agents/AGENTS.md`.
-   - Cursor creates or refreshes root `AGENTS.md`; Cursor rules may point to `.agents/AGENTS.md` when the Cursor target is installed.
-   - Claude Code and VS Code Claude use native plugin skill discovery. If shared project policy already exists under `.agents`, propose the exact `@.agents/AGENTS.md` import for root `CLAUDE.md`; create or merge it only with user approval. Do not copy plugin skills into `.agents/skills`. Create root `AGENTS.md` only with user approval for cross-agent compatibility.
+2. Detect the installed target or current client surface. In source, resolve aliases through `bundle-manifest.json`; in a generated target, use its sole shipped adapter.
+3. Read that one client adapter and apply its native discovery, pointer, tool, sandbox, and configuration rules. For a generic or unknown client, create no pointer unless the user explicitly requests one.
 4. If an expected pointer already exists, do not overwrite it. Propose a merge when existing instructions are non-empty or ambiguous.
 5. Detect whether the host project is existing, new/empty, or partially initialized.
 6. Detect target-stack fit from manifests, configs, lockfiles, source roots, routes, styles, and entrypoints.

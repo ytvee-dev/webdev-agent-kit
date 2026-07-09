@@ -27,6 +27,9 @@ def main():
     target_contract_code = run("validate_target_contracts.py")
     if target_contract_code:
         sys.exit(target_contract_code)
+    runtime_layer_code = run("validate_runtime_layers.py")
+    if runtime_layer_code:
+        sys.exit(runtime_layer_code)
     readme_boundary_code = run("check_readme_boundary.py")
     if readme_boundary_code:
         sys.exit(readme_boundary_code)
@@ -39,6 +42,9 @@ def main():
     build_code = run("build_skill_targets.py")
     if build_code:
         sys.exit(build_code)
+    generated_layer_code = run("validate_runtime_layers.py", "--generated")
+    if generated_layer_code:
+        sys.exit(generated_layer_code)
     codex_code = run("validate_codex_skill_pack.py")
     claude_code = run("validate_claude_plugin_target.py")
     sys.exit(codex_code or claude_code)

@@ -12,14 +12,16 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[common/cross-agent-compatibility-rules|Cross-Agent Compatibility Rules]]'
 depends_on: []
 ---
 
 # Portable Skill Core Contract
 
-Purpose: define the skill content that can be emitted for Codex and Claude
-targets without relying on `.agents` graph metadata.
+Purpose: define skill content that can be emitted across runtime targets without
+depending on source graph metadata or client-specific installation behavior.
 
 ## Portable Requirements
 

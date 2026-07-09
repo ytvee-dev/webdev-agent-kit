@@ -11,6 +11,9 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
+    - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/skill-applicability-policy|Skill Applicability Policy]]'
     - '[[common/rendered-visual-verification-policy|Rendered Visual Verification Policy]]'
@@ -52,21 +55,32 @@ depends_on: []
 
 # AGENTS.md
 
-This is the canonical runtime policy entrypoint for this `.agents` bundle. Paths are bundle-local paths rooted at `.agents` itself, such as `AGENTS.md`, `skills/**`, `common/**`, and `project/**`.
+This is the canonical runtime policy entrypoint for this `.agents` bundle. Paths are bundle-local paths rooted at `.agents` itself, such as `AGENTS.md`, `common/**`, `profiles/**`, `adapters/**`, `skills/**`, and `project/**`.
 
 The host repository root `AGENTS.md` is managed only by `project-onboarding-adapter`. Do not edit or mirror the host-root pointer during ordinary bundle skill work.
 
+## Runtime Policy Layers
+
+Apply only the layers needed for the current task, in this order:
+
+1. `common/core/runtime-core-policy.md` for client-neutral authority, safety, evidence, execution, verification, and concise output.
+2. `profiles/react-typescript/PROFILE.md` only when repository evidence confirms that the target-stack defaults apply.
+3. The single matching file under `adapters/` for client discovery, native pointers, tool registry, sandbox, and configuration differences.
+4. Local project conventions and `project/**` facts for the affected surface.
+5. The smallest matching skill and only its required references.
+
+Local project conventions may override profile defaults. They must not override user constraints, approval gates, safety rules, or verification honesty. Generated targets ship only their matching adapter; aliases reuse the canonical adapter.
+
 ## Target Stack
 
-WebDev Agent Kit targets React, Next.js, CSS Modules, Redux, TanStack, and Axios for stack-specific implementation, architecture, greenfield, state, data, and styling guidance.
-
-Do not present unrelated frontend frameworks, UI libraries, app generators, styling systems, or testing workflows as supported defaults. If the host project is outside the target stack, distinguish unsupported stack-specific work from framework-agnostic bundle skills. Read `common/skill-applicability-policy.md` before deciding that no skill applies.
-
-Non-target frontend projects may still use design intake, visual direction, rendered visual QA, frontend quality review, existing lint verification, planning, MCP, project context, onboarding, and skill-authoring workflows when their triggers match. Do not apply React, Next.js, CSS Modules, Redux, TanStack, or Axios implementation rules to those projects by default.
+The default target stack is declared by `profiles/react-typescript/PROFILE.md`. Activate it from repository evidence, then load only the owning policies needed by the changed surface. Use `common/skill-applicability-policy.md` for framework-agnostic work outside that profile.
 
 ## Runtime Source Model
 
 - `AGENTS.md` is the canonical publishable policy file for agent runtime.
+- `common/core/**` contains the portable client-neutral runtime contract.
+- `profiles/**` contains evidence-gated project and stack defaults.
+- `adapters/**` contains only client discovery, entrypoint, tool, sandbox, and configuration differences.
 - `skills/**` contains executable skill instructions.
 - `common/**` contains reusable runtime rules.
 - `templates/**` contains optional local artifact templates.
@@ -81,7 +95,7 @@ Agents must never read `README.md` under any circumstance.
 
 - Do not open, search, summarize, cite, route from, validate from, or treat `README.md` as context.
 - Do not use `README.md` for task classification, skill selection, onboarding, project context refresh, bundle maintenance, verification, source inventory, or generated-target validation.
-- Use `AGENTS.md`, `bundle-manifest.json`, `skills/**`, `common/**`, `templates/**`, and local-only `project/**` overlays as the available source model instead.
+- Use `AGENTS.md`, `bundle-manifest.json`, `common/core/**`, `profiles/**`, `adapters/**`, `skills/**`, `common/**`, `templates/**`, and local-only `project/**` overlays as the available source model instead.
 - If a user asks about README content, ask the user to paste the relevant excerpt or desired replacement text. Do not inspect `README.md`.
 - If a human-facing README change is needed, propose the text in the final response for a human maintainer to apply. Do not autonomously read or edit `README.md`.
 
@@ -144,14 +158,14 @@ Use `Deep Workflow` only for new project creation, architecture design, stack mi
 
 After task and scale classification:
 
-1. Read this `AGENTS.md`.
-2. If the task is `Fast Lookup`, read `common/lightweight-routing-policy.md`, search narrowly, inspect only the top relevant files or snippets, answer, and stop unless escalation is justified.
-3. Read `common/target-stack-policy.md` when stack scope matters.
-4. Read `common/skill-applicability-policy.md` when the project is outside the target stack or the task can be solved by design, QA, review, lint, planning, MCP, onboarding, context, or skill-authoring without stack-specific implementation rules.
-5. Select relevant skills from the skill metadata and the skill map below. The user must not need to name a skill.
-6. Read only selected `skills/**/SKILL.md` files.
-7. Read only references and project files needed for the classified task.
-8. If no repo-local skill matches, handle the task with base Codex behavior and relevant project context.
+1. Read this `AGENTS.md` and `common/core/runtime-core-policy.md`.
+2. Read the matching generated adapter when client behavior affects the task.
+3. If the task is `Fast Lookup`, read `common/lightweight-routing-policy.md`, search narrowly, inspect only the top relevant files or snippets, answer, and stop unless escalation is justified.
+4. Read `profiles/react-typescript/PROFILE.md` only when target-stack evidence exists, then load only relevant owning policies.
+5. Read `common/skill-applicability-policy.md` when the project is outside the target stack or the task can be solved by framework-agnostic workflows.
+6. Select relevant skills from the skill metadata and the skill map below. The user must not need to name a skill.
+7. Read only selected `skills/**/SKILL.md` files and required references.
+8. If no repo-local skill matches, use the host agent's base behavior with relevant project context and the portable core.
 
 Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing. Never read `README.md` for any non-routing task either.
 
@@ -198,7 +212,7 @@ design-screenshot-spec
 -> frontend-design-intelligence when product/page pattern or design dials need grounding
 -> frontend-design-director when visual judgment is needed
 -> loop-workflow-planner when bounded retry or measurable iteration is required
--> base Codex implementation using inspected local project conventions
+-> base agent implementation using inspected local project conventions
 -> frontend-linter-manager when code changed and an existing lint command is available
 -> frontend-visual-qa when a local app and browser tooling are available
 -> frontend-quality-reviewer when quality review is requested or required by the loop contract
@@ -241,7 +255,7 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 ## Frontend Implementation Rules
 
 - Detect whether the task is within React, Next.js, CSS Modules, Redux, TanStack, or Axios before applying stack-specific rules.
-- When the project is outside the target stack, do not suppress framework-agnostic skills that match the user request; use base Codex behavior for source edits and apply only local project conventions plus browser-platform rules.
+- When the project is outside the target stack, do not suppress framework-agnostic skills that match the user request; use the host agent's base behavior for source edits and apply only local project conventions plus browser-platform rules.
 - Reuse existing project components, routes, styles, data boundaries, tokens, layout patterns, and verification commands before introducing new ones.
 - Apply component decomposition rules regardless of framework, router, state layer, data layer, or styling system.
 - Apply CSS Modules specificity rules when CSS Modules are changed.
@@ -253,7 +267,7 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 
 ## Documentation Rules
 
-- Keep reusable instructions in `common/**` or `skills/**`.
+- Keep portable behavior in `common/core/**`, project defaults in `profiles/**`, client differences in `adapters/**`, and reusable procedures in `common/**` or `skills/**`.
 - Keep host-project facts in `project/**`.
 - Keep loop memory and verified loop learnings in local-only `project/**` files.
 - Keep MCP and official documentation capability facts in `project/mcp-profile.md`.

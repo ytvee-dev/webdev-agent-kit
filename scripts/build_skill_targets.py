@@ -11,6 +11,10 @@ MANIFEST = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"
 CANONICAL_TARGETS = tuple(MANIFEST["targets"])
 TARGET_ALIASES = MANIFEST["target_aliases"]
 TARGETS = CANONICAL_TARGETS + tuple(TARGET_ALIASES)
+PORTABLE_CORE = MANIFEST["portable_core"]
+DEFAULT_PROFILE = MANIFEST["default_profile"]
+PROFILE_PATH = MANIFEST["profiles"][DEFAULT_PROFILE]
+ADAPTER_PATHS = MANIFEST["adapters"]
 COPY_ROOT_FILES = (
     "AGENTS.md",
     "LICENSE",
@@ -44,16 +48,30 @@ def split_frontmatter(text):
     return data, body
 
 
-def portable_skill_text(source_text):
+def portable_skill_text(source_text, runtime_prelude=None):
     frontmatter, body = split_frontmatter(source_text)
     name = frontmatter.get("name", "").strip("'\"")
     description = frontmatter.get("description", "").strip("'\"")
     if not name or not description:
         raise ValueError("SKILL.md must contain name and description")
+    portable_body = body.lstrip()
+    if runtime_prelude:
+        portable_body = f"{runtime_prelude}\n\n{portable_body}"
     return (
         f"---\nname: {json.dumps(name, ensure_ascii=False)}\n"
-        f"description: {json.dumps(description, ensure_ascii=False)}\n---\n\n{body.lstrip()}"
+        f"description: {json.dumps(description, ensure_ascii=False)}\n---\n\n"
+        f"{portable_body}"
     )
+
+
+def copy_file(src, dst, *, strip_graph_frontmatter=False):
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    if strip_graph_frontmatter and src.suffix == ".md":
+        frontmatter, body = split_frontmatter(src.read_text(encoding="utf-8-sig"))
+        if frontmatter.get("id"):
+            dst.write_text(body.lstrip(), encoding="utf-8")
+            return
+    shutil.copy2(src, dst)
 
 
 def copy_tree(src, dst, *, strip_graph_frontmatter=False):
@@ -70,15 +88,11 @@ def copy_tree(src, dst, *, strip_graph_frontmatter=False):
         if source_path.is_dir():
             destination_path.mkdir(parents=True, exist_ok=True)
             continue
-        destination_path.parent.mkdir(parents=True, exist_ok=True)
-        if strip_graph_frontmatter and source_path.suffix == ".md":
-            frontmatter, body = split_frontmatter(
-                source_path.read_text(encoding="utf-8-sig")
-            )
-            if frontmatter.get("id"):
-                destination_path.write_text(body.lstrip(), encoding="utf-8")
-                continue
-        shutil.copy2(source_path, destination_path)
+        copy_file(
+            source_path,
+            destination_path,
+            strip_graph_frontmatter=strip_graph_frontmatter,
+        )
 
 
 def write_cursor_rules(target_root):
@@ -108,7 +122,22 @@ def prepare_target_root(target):
     return target_root
 
 
-def copy_skills(target_root, *, include_codex_metadata, strip_graph_frontmatter):
+def copy_runtime_layers(target_root, target, *, strip_graph_frontmatter):
+    for relative_path in (PORTABLE_CORE, PROFILE_PATH, ADAPTER_PATHS[target]):
+        copy_file(
+            ROOT / relative_path,
+            target_root / relative_path,
+            strip_graph_frontmatter=strip_graph_frontmatter,
+        )
+
+
+def copy_skills(
+    target_root,
+    *,
+    include_codex_metadata,
+    strip_graph_frontmatter,
+    runtime_prelude=None,
+):
     skills_src = ROOT / "skills"
     skills_dst = target_root / "skills"
     skills_dst.mkdir(parents=True, exist_ok=True)
@@ -116,7 +145,8 @@ def copy_skills(target_root, *, include_codex_metadata, strip_graph_frontmatter)
         dst = skills_dst / skill_dir.name
         dst.mkdir(parents=True)
         skill_text = portable_skill_text(
-            (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+            (skill_dir / "SKILL.md").read_text(encoding="utf-8"),
+            runtime_prelude=runtime_prelude,
         )
         (dst / "SKILL.md").write_text(skill_text, encoding="utf-8")
         for resource_dir in ("references", "scripts", "assets"):
@@ -145,6 +175,7 @@ def build_project_target(target):
     if target == "cursor":
         write_cursor_rules(target_root)
 
+    copy_runtime_layers(target_root, target, strip_graph_frontmatter=False)
     copy_skills(
         target_root,
         include_codex_metadata=target == "codex",
@@ -168,10 +199,16 @@ def build_claude_plugin_target():
             target_root / dir_name,
             strip_graph_frontmatter=True,
         )
+    copy_runtime_layers(target_root, target, strip_graph_frontmatter=True)
     copy_skills(
         target_root,
         include_codex_metadata=False,
         strip_graph_frontmatter=True,
+        runtime_prelude=(
+            "Runtime layers: apply `common/core/runtime-core-policy.md`, then "
+            "activate `profiles/react-typescript/PROFILE.md` only from repository "
+            "evidence; use `adapters/claude-code.md` for client-specific behavior."
+        ),
     )
 
     validate_no_human_facing_files(target_root, target)

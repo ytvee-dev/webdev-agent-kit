@@ -3,6 +3,16 @@
   "version": "0.3.0",
   "license": "Apache-2.0",
   "description": "Internal source and distribution inventory for the WebDev Agent Kit skill bundle.",
+  "portable_core": "common/core/runtime-core-policy.md",
+  "default_profile": "react-typescript",
+  "profiles": {
+    "react-typescript": "profiles/react-typescript/PROFILE.md"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.md",
+    "codex": "adapters/codex.md",
+    "cursor": "adapters/cursor.md"
+  },
   "skills": [
     "agent-rules-skill-author",
     "design-screenshot-spec",
@@ -31,7 +41,7 @@
       "install_mode": "plugin-install",
       "entrypoint": ".claude-plugin/plugin.json",
       "skills_root": "skills",
-      "validator": "scripts/validate_target_contracts.py"
+      "validator": "scripts/validate_claude_plugin_target.py"
     },
     "codex": {
       "kind": "project-bundle",

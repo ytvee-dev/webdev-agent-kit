@@ -33,6 +33,9 @@ jobs:
       - name: Validate runtime target contracts
         run: python scripts/validate_target_contracts.py
 
+      - name: Validate runtime policy layers
+        run: python scripts/validate_runtime_layers.py
+
       - name: Validate README boundary
         run: python scripts/check_readme_boundary.py
 
@@ -44,6 +47,9 @@ jobs:
 
       - name: Build portable targets
         run: python scripts/build_skill_targets.py
+
+      - name: Validate generated runtime policy layers
+        run: python scripts/validate_runtime_layers.py --generated
 
       - name: Validate Codex target
         run: python scripts/validate_codex_skill_pack.py
@@ -149,6 +155,7 @@ jobs:
 
           Validation performed:
           - strict graph schema validation
+          - runtime core, profile, and adapter boundary validation
           - README boundary validation
           - source bundle validation
           - skill eval validation

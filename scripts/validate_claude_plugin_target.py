@@ -21,6 +21,9 @@ FORBIDDEN_SKILL_TERMS = (
 REQUIRED_ROOT_FILES = (
     ".claude-plugin/plugin.json",
     "LICENSE",
+    "adapters/claude-code.md",
+    "common/core/runtime-core-policy.md",
+    "profiles/react-typescript/PROFILE.md",
     "tool-capabilities-manifest.json",
 )
 FORBIDDEN_ROOT_PATHS = (
@@ -112,15 +115,11 @@ def validate_aliases(errors):
 def validate():
     errors = []
     if not TARGET.exists():
-        return [
-            "dist/claude-code does not exist; run scripts/build_skill_targets.py"
-        ]
+        return ["dist/claude-code does not exist; run scripts/build_skill_targets.py"]
 
     for relative_path in REQUIRED_ROOT_FILES:
         if not (TARGET / relative_path).is_file():
-            errors.append(
-                f"dist/claude-code is missing required file: {relative_path}"
-            )
+            errors.append(f"dist/claude-code is missing required file: {relative_path}")
     for relative_path in FORBIDDEN_ROOT_PATHS:
         if (TARGET / relative_path).exists():
             errors.append(f"dist/claude-code must not include {relative_path}")
@@ -158,6 +157,16 @@ def validate():
             )
         if not values.get("name") or not values.get("description"):
             errors.append(f"{skill.relative_to(ROOT)} needs name and description")
+        skill_text = skill.read_text(encoding="utf-8-sig")
+        for runtime_layer in (
+            "common/core/runtime-core-policy.md",
+            "profiles/react-typescript/PROFILE.md",
+            "adapters/claude-code.md",
+        ):
+            if runtime_layer not in skill_text:
+                errors.append(
+                    f"{skill.relative_to(ROOT)} does not load {runtime_layer}"
+                )
 
     for markdown_path in TARGET.rglob("*.md"):
         try:
@@ -165,9 +174,8 @@ def validate():
         except Exception as exc:
             errors.append(str(exc))
             continue
-        if (
-            markdown_path.name != "SKILL.md"
-            and GRAPH_FRONTMATTER_KEYS.intersection(keys)
+        if markdown_path.name != "SKILL.md" and GRAPH_FRONTMATTER_KEYS.intersection(
+            keys
         ):
             errors.append(
                 f"{markdown_path.relative_to(ROOT)} exposes source graph frontmatter"

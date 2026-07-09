@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[common/skill-applicability-policy|Skill Applicability Policy]]'
     - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
     - '[[common/framework-source-map|Framework Source Map]]'
@@ -19,6 +20,8 @@ depends_on: []
 ---
 
 # Target Stack Policy
+
+This policy is owned by `profiles/react-typescript/PROFILE.md`. Activate it only after repository evidence confirms that the profile applies.
 
 WebDev Agent Kit targets React, Next.js, CSS Modules, Redux, TanStack, and Axios for stack-specific implementation, architecture, greenfield, state, data, and styling guidance.
 
