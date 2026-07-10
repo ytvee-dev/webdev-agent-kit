@@ -1,6 +1,6 @@
 ---
 name: frontend-design-intelligence
-description: Use for standard or deep UI work when product category, page pattern, design dials, domain-specific UX risks, or design anti-patterns need grounding before a Design Direction Contract. Produces a compact brief only; does not implement code or install tools.
+description: 'Ground standard or deep UI work in product category, page pattern, design dials, domain UX risks, and anti-patterns before visual direction. Produces a brief, not code or tool setup.'
 id: 'agents.skills.frontend-design-intelligence.skill'
 title: 'Frontend Design Intelligence'
 doc_type: 'skill'

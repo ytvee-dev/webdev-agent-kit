@@ -1,6 +1,6 @@
 ---
 name: agent-rules-skill-author
-description: Use when creating, evaluating, or editing this .agents WebDev Agent Kit bundle, repo-local agent rules, AGENTS.md, common/**, project/**, or skills/**. Focus on precise skill authoring, trigger boundaries, source-backed instructions, progressive disclosure, validation, and layer-correct docs.
+description: 'Create, evaluate, or edit this .agents WebDev Agent Kit, including AGENTS.md, common/**, project/**, skills/**, metadata, validators, and progressive-disclosure rules.'
 id: 'agents.skills.agent-rules-skill-author.skill'
 title: 'Agent Rules And Skill Author'
 doc_type: 'skill'

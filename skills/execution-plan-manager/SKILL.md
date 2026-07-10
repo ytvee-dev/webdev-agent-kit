@@ -1,6 +1,6 @@
 ---
 name: execution-plan-manager
-description: Use for standard or deep frontend work that needs an execution plan, task slices, checkpoint rules, loop handoff decisions, and stop/resume state after a goal is defined. Do not use for lightweight micro-fixes or isolated direct edits unless the task escalates.
+description: 'Plan standard or deep frontend execution after the goal is defined, including task slices, checkpoints, loop handoffs, and stop/resume state. Skip lightweight isolated edits.'
 id: 'agents.skills.execution-plan-manager.skill'
 title: 'Execution Plan Manager'
 doc_type: 'skill'

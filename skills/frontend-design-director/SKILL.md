@@ -1,6 +1,6 @@
 ---
 name: frontend-design-director
-description: Use for standard or deep frontend UI work that needs subject-grounded visual direction, redesign, visual polish, design critique, anti-template checks, or design handoff before implementation. Do not use for purely technical micro-fixes or isolated code edits.
+description: 'Set subject-grounded visual direction for standard or deep UI work, redesign, polish, critique, anti-template review, or design handoff. Skip technical micro-fixes and isolated code edits.'
 id: 'agents.skills.frontend-design-director.skill'
 title: 'Frontend Design Director'
 doc_type: 'skill'

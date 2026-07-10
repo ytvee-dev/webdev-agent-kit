@@ -1,6 +1,6 @@
 ---
 name: loop-workflow-planner
-description: 'Use for standard or deep work that needs a platform-neutral bounded agent loop: measurable acceptance criteria, verification, retry limits, independent review, memory update, and stop conditions. Do not use for Fast Lookup, tiny direct edits, one-off explanations, or platform-specific loop commands alone.'
+description: 'Define a platform-neutral bounded loop for standard or deep work using measurable acceptance criteria, verification, retry limits, independent review, memory, and stop conditions. Skip lookups, tiny edits, and one-off explanations.'
 id: 'agents.skills.loop-workflow-planner.skill'
 title: 'Loop Workflow Planner'
 doc_type: 'skill'

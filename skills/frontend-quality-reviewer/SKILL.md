@@ -1,6 +1,6 @@
 ---
 name: frontend-quality-reviewer
-description: Use for evidence-backed frontend quality review of code, UI implementation, architecture boundaries, TypeScript, security, performance, verification, decomposition, UX gates, independent loop judgment, and anti-slop concerns. Produces pass, pass with concerns, or fail. Do not use to perform broad rewrites, create tests, install tools, or implement fixes unless separately requested.
+description: 'Review frontend quality from evidence across code, UI, architecture, TypeScript, security, performance, verification, decomposition, UX, and anti-slop concerns. Returns pass, concerns, or fail without implementing unrequested fixes.'
 id: 'agents.skills.frontend-quality-reviewer.skill'
 title: 'Frontend Quality Reviewer'
 doc_type: 'skill'

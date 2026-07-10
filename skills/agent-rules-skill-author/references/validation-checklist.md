@@ -56,6 +56,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
   for fragile workflows.
 - `description` is a string, avoids angle brackets, and stays within 1024
   characters.
+- Bundle discovery descriptions pass the per-skill and aggregate context
+  budgets without deleting decisive trigger boundaries.
 - Expected output format or report shape is explicit when output structure
   matters.
 - The validation model fits the workflow: objective checks for objective work,

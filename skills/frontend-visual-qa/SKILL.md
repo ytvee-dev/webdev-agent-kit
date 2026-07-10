@@ -1,6 +1,6 @@
 ---
 name: frontend-visual-qa
-description: 'Use after frontend visual implementation only when rendered visual evidence is required: screenshot comparison, responsive layout, overflow, visible interaction states, or visual regression evidence. Supports bounded repair loops when fixes are in scope. Use Browser or Playwright MCP only for those rendered visual QA tasks. Do not use it for static style lookup, font checks by computed styles, routine code review, lint, typecheck, build, onboarding, or MCP detection.'
+description: 'Verify rendered frontend evidence after implementation, including screenshot comparison, responsiveness, overflow, visible states, and scoped visual regression. Use available browser tooling only; exclude static lookup, routine code review, lint, builds, onboarding, and tool detection.'
 id: 'agents.skills.frontend-visual-qa.skill'
 title: 'Frontend Visual QA'
 doc_type: 'skill'

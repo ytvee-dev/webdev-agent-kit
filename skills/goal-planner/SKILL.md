@@ -1,6 +1,6 @@
 ---
 name: goal-planner
-description: Use for standard or deep frontend work that needs a clear user goal, scope, constraints, and done criteria before implementation. Do not use for micro-fixes, obvious type errors, tiny styling changes, or isolated direct edits unless the task escalates.
+description: 'Define user goal, scope, constraints, and done criteria before standard or deep frontend work. Skip micro-fixes, obvious type errors, tiny styling changes, and isolated direct edits.'
 id: 'agents.skills.goal-planner.skill'
 title: 'Goal Planner'
 doc_type: 'skill'

@@ -1,6 +1,6 @@
 ---
 name: frontend-linter-manager
-description: Use when a code-changing frontend task needs lint verification, lint repair loops for related failures, or when the user explicitly asks to add lint setup. Prefer existing project lint commands. Do not change dependencies, scripts, or config files without explicit user approval.
+description: 'Run scoped frontend lint verification, repair related lint failures, or plan explicitly requested lint setup. Prefer existing commands; dependencies, scripts, and config changes require approval.'
 id: 'agents.skills.frontend-linter-manager.skill'
 title: 'Frontend Linter Manager'
 doc_type: 'skill'

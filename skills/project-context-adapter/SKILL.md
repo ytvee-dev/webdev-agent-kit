@@ -1,6 +1,6 @@
 ---
 name: project-context-adapter
-description: Use when project overlays or frontend path indexes under project/** need refresh after stack, routing, styling, assets, verification commands, docs/MCP selection, design-reference boundaries, patterns, anti-patterns, or source ownership changes. Keep facts local-only and framework-agnostic; do not rewrite reusable skills for project-specific details.
+description: 'Refresh local-only project/** facts and frontend path indexes after stack, routing, styling, asset, verification, docs/tool, design-reference, pattern, or ownership changes. Do not put project facts in reusable skills.'
 id: 'agents.skills.project-context-adapter.skill'
 title: 'Project Context Adapter'
 doc_type: 'skill'

@@ -112,8 +112,8 @@ def validate_source_layers(manifest, errors):
     profile_path = profiles.get(default_profile) if isinstance(profiles, dict) else None
     profile = read_text(profile_path, errors) if isinstance(profile_path, str) else ""
 
-    validate_neutral_layer("portable core", core, 500, errors)
-    validate_neutral_layer("react-typescript profile", profile, 450, errors)
+    validate_neutral_layer("portable core", core, 400, errors)
+    validate_neutral_layer("react-typescript profile", profile, 350, errors)
     for heading in CORE_HEADINGS:
         if f"## {heading}" not in core:
             errors.append(f"portable core is missing heading: {heading}")
@@ -123,8 +123,8 @@ def validate_source_layers(manifest, errors):
     if isinstance(adapters, dict):
         for target, relative_path in adapters.items():
             adapter = read_text(relative_path, errors)
-            if len(adapter.split()) > 300:
-                errors.append(f"{relative_path} exceeds the 300-word adapter budget")
+            if len(adapter.split()) > 225:
+                errors.append(f"{relative_path} exceeds the 225-word adapter budget")
             for marker in ADAPTER_MARKERS.get(target, ()):
                 if marker not in adapter:
                     errors.append(f"{relative_path} is missing client marker: {marker}")

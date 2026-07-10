@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: Use when adapting this .agents bundle to a host frontend project with native client pointers, local-only project overlays, target-stack detection, skill applicability notes, docs/MCP capability selection, client profile creation, verification facts, optional loop-memory setup, and frontend context cache. Do not create app source files or overwrite host instructions without approval.
+description: 'Adapt this .agents bundle to a frontend project using approved native pointers, local-only overlays, stack detection, skill applicability, tool capabilities, client and verification facts, optional loop memory, and context cache. Do not create app code or overwrite instructions.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'

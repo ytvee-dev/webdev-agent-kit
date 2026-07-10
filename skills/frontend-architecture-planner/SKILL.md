@@ -1,6 +1,6 @@
 ---
 name: frontend-architecture-planner
-description: Use for standard or deep React/Next.js work that needs architecture planning, ownership boundaries, routing/state/data/styling/form/build decisions, migration risk assessment, or implementation handoff. Do not use for unrelated frontend stacks, micro-fixes, direct isolated edits, or purely visual design direction.
+description: 'Plan architecture and ownership for standard or deep React/Next.js work across routing, state, data, styling, forms, builds, migrations, and implementation handoff. Skip micro-fixes and unrelated stacks.'
 id: 'agents.skills.frontend-architecture-planner.skill'
 title: 'Frontend Architecture Planner'
 doc_type: 'skill'

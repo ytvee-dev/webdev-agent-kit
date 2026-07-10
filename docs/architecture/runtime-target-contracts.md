@@ -68,6 +68,9 @@ and release behavior come from the canonical target.
   published inside a reusable plugin.
 - Generated targets exclude human-facing repository docs, local overlays,
   caches, dependencies, and internal bundle manifests.
+- Generated targets strip source graph frontmatter from policy, common,
+  profile, adapter, template, and reference Markdown. Generated skills retain
+  only portable `name` and `description` frontmatter.
 
 ## Validation Boundary
 
@@ -91,6 +94,9 @@ validator.
 `scripts/validate_runtime_layers.py` enforces the layer inventory, prevents
 client-specific terms in the core and project profile, caps their context size,
 and checks that generated targets contain exactly one matching adapter.
+`scripts/validate_context_budgets.py` caps the compact entrypoint, runtime
+layers, skill-discovery descriptions, and generated skill prelude while also
+rejecting source graph metadata in runtime artifacts.
 
 ## Migration State
 

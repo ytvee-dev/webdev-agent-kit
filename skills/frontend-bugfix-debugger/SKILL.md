@@ -1,6 +1,6 @@
 ---
 name: frontend-bugfix-debugger
-description: Use for evidence-first frontend bugfixes, unclear UI/runtime errors, broken routes, styling regressions, hydration/client issues, and small defects that need symptom reproduction before code changes. Supports bounded retry when verification fails. Do not use for planned refactors, broad redesigns, quality review only, test generation, or backend-only debugging.
+description: 'Diagnose and fix frontend defects from evidence, including unclear UI/runtime errors, broken routes, styling regressions, and hydration or client issues. Reproduce before editing; exclude planned refactors and backend-only debugging.'
 id: 'agents.skills.frontend-bugfix-debugger.skill'
 title: 'Frontend Bugfix Debugger'
 doc_type: 'skill'

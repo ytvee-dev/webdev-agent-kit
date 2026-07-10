@@ -38,6 +38,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added a targeted README read/edit policy, technical evidence hierarchy, and six cross-model README behavior evals.
 - Added a test change policy and eight evals separating existing-test maintenance from new tests and infrastructure.
 - Added full 19-skill capability coverage, strict capability metadata validation, and eight cross-client capability behavior evals.
+- Added deterministic budgets for the always-on entrypoint, runtime layers, skill-discovery descriptions, and Claude skill prelude.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
 - Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
@@ -59,6 +60,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.
 - Codex `agents/openai.yaml` files now contain only UI and invocation metadata; optional MCP and native-provider candidates live exclusively in the client-neutral capability manifest.
 - Capability availability now requires current-registry, validated-profile, or user-supplied-reference evidence; package, config, and provider names are explicitly non-proof.
+- Replaced the long always-on policy catalog with a 19-skill compact index and progressive-disclosure routes while preserving detailed rules in owning common docs and skills.
+- Compressed all skill discovery descriptions and stripped source graph frontmatter from every generated target.
 - Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.
 - Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
 - Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.

@@ -48,6 +48,9 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
   important `when not` boundary when overlap risk is real.
 - Mention concrete task shapes in the description, not only broad topics.
 - Keep `description` non-empty and under 1024 characters.
+- For this bundle, keep each discovery description within 45 words and the
+  aggregate inventory within `scripts/validate_context_budgets.py`; preserve
+  full trigger and exclusion detail in the `SKILL.md` body.
 - Front-load the most important trigger words because long skill lists may
   shorten descriptions before matching.
 - Keep descriptions dense and informative. Codex includes skill descriptions in

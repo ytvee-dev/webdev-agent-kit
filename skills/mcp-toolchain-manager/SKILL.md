@@ -1,6 +1,6 @@
 ---
 name: mcp-toolchain-manager
-description: Use when frontend work needs tool capability detection, missing-tool reporting, official install source verification, approval-gated MCP installation planning, or project/mcp-profile.md updates. Prefer declared capabilities over server-name assumptions. Do not install tools, run package installs, or change configs without explicit user approval.
+description: 'Detect frontend tool capabilities, report gaps, verify official setup sources, plan approval-gated MCP changes, or update project/mcp-profile.md. Prefer capabilities over provider names; never install or configure without approval.'
 id: 'agents.skills.mcp-toolchain-manager.skill'
 title: 'MCP Toolchain Manager'
 doc_type: 'skill'

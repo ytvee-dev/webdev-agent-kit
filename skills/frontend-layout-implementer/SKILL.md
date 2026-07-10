@@ -1,6 +1,6 @@
 ---
 name: frontend-layout-implementer
-description: Use when implementing a Design Implementation Spec or screenshot-derived visual spec in a React or Next.js project using existing CSS Modules, Redux, TanStack, and Axios conventions. Supports bounded verification handoff when measurable iteration is required. Do not use for unrelated frontend stacks, Figma MCP, new styling systems, or implementation before design intent is specified.
+description: 'Implement an approved Design Implementation Spec or screenshot-derived spec in React/Next.js using existing CSS Modules, Redux, TanStack, and Axios conventions. Excludes unrelated stacks, live design tools, and new styling systems.'
 id: 'agents.skills.frontend-layout-implementer.skill'
 title: 'Frontend Layout Implementer'
 doc_type: 'skill'

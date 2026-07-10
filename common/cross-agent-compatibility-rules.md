@@ -90,6 +90,8 @@ runtime implementations.
 ## Rules
 
 - Keep rich `.agents` graph metadata in source files.
+- Strip source graph metadata from every generated target so maintenance links
+  do not consume runtime context.
 - Generate portable `SKILL.md` frontmatter for distribution targets.
 - Ship the portable core, default profile, and exactly one matching canonical
   adapter in every generated target.

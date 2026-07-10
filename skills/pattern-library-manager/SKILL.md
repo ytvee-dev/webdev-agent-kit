@@ -1,6 +1,6 @@
 ---
 name: pattern-library-manager
-description: Use when adding, tightening, or documenting reusable approved patterns and anti-patterns in common/**, including bad/good code examples, source-backed example proposals, user approval for examples, graph links, eval updates, and validation. Do not use for project-specific patterns; keep those in local-only project/** overlays.
+description: 'Add or tighten reusable approved patterns and anti-patterns in common/** with source-backed examples, approvals, graph links, evals, and validation. Keep project-specific patterns in local-only project/**.'
 id: 'agents.skills.pattern-library-manager.skill'
 title: 'Pattern Library Manager'
 doc_type: 'skill'

@@ -1,6 +1,6 @@
 ---
 name: greenfield-project-builder
-description: Use for deep frontend work that starts a new frontend project or plans a first vertical slice from a product idea. It creates a greenfield plan and approval gates before any scaffold. Do not use for existing-project micro-fixes, automatic scaffolding, package installation, UI library setup, or testing workflows.
+description: 'Plan a new frontend project or first vertical slice from a product idea, with approval gates before scaffolding. Excludes existing-project micro-fixes, automatic scaffolds, package installation, UI libraries, and test setup.'
 id: 'agents.skills.greenfield-project-builder.skill'
 title: 'Greenfield Project Builder'
 doc_type: 'skill'

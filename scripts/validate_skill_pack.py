@@ -30,6 +30,9 @@ def main():
     capability_code = run("validate_tool_capabilities.py")
     if capability_code:
         sys.exit(capability_code)
+    context_budget_code = run("validate_context_budgets.py")
+    if context_budget_code:
+        sys.exit(context_budget_code)
     precedence_code = run("validate_policy_precedence.py")
     if precedence_code:
         sys.exit(precedence_code)
@@ -54,6 +57,9 @@ def main():
     generated_layer_code = run("validate_runtime_layers.py", "--generated")
     if generated_layer_code:
         sys.exit(generated_layer_code)
+    generated_context_code = run("validate_context_budgets.py", "--generated")
+    if generated_context_code:
+        sys.exit(generated_context_code)
     codex_code = run("validate_codex_skill_pack.py")
     claude_code = run("validate_claude_plugin_target.py")
     sys.exit(codex_code or claude_code)

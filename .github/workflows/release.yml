@@ -36,6 +36,9 @@ jobs:
       - name: Validate tool capability metadata
         run: python scripts/validate_tool_capabilities.py
 
+      - name: Validate source context budgets
+        run: python scripts/validate_context_budgets.py
+
       - name: Validate policy precedence
         run: python scripts/validate_policy_precedence.py
 
@@ -59,6 +62,9 @@ jobs:
 
       - name: Validate generated runtime policy layers
         run: python scripts/validate_runtime_layers.py --generated
+
+      - name: Validate generated context budgets
+        run: python scripts/validate_context_budgets.py --generated
 
       - name: Validate Codex target
         run: python scripts/validate_codex_skill_pack.py
@@ -166,6 +172,7 @@ jobs:
           - strict graph schema validation
           - centralized policy precedence validation
           - complete client-neutral tool capability metadata validation
+          - compact entrypoint and skill-discovery context budget validation
           - test change and infrastructure boundary validation
           - runtime core, profile, and adapter boundary validation
           - README boundary validation

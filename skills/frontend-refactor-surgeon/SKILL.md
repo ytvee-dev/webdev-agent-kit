@@ -1,6 +1,6 @@
 ---
 name: frontend-refactor-surgeon
-description: Use for behavior-preserving frontend refactors with clear boundaries, including component extraction, file reorganization, prop/interface cleanup, state simplification, and TypeScript tightening. Supports bounded verification loops for related failures. Do not use for bugfixes, feature work, broad rewrites, redesign, package installation, or behavior changes without approval.
+description: 'Perform bounded, behavior-preserving frontend refactors such as component extraction, file moves, prop or interface cleanup, state simplification, and TypeScript tightening. Excludes bugfixes, features, redesign, packages, and unapproved behavior changes.'
 id: 'agents.skills.frontend-refactor-surgeon.skill'
 title: 'Frontend Refactor Surgeon'
 doc_type: 'skill'

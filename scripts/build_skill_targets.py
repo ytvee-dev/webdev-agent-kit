@@ -28,6 +28,10 @@ HUMAN_FACING_ROOT_FILES = (
     "SECURITY.md",
 )
 HUMAN_FACING_DIRS = ("examples",)
+CLAUDE_RUNTIME_PRELUDE = (
+    "Apply `common/core/runtime-core-policy.md`, evidence-gated "
+    "`profiles/react-typescript/PROFILE.md`, and `adapters/claude-code.md`."
+)
 
 
 def split_frontmatter(text):
@@ -165,21 +169,29 @@ def build_project_target(target):
     for file_name in COPY_ROOT_FILES:
         src = ROOT / file_name
         if src.exists():
-            shutil.copy2(src, target_root / file_name)
+            copy_file(
+                src,
+                target_root / file_name,
+                strip_graph_frontmatter=file_name == "AGENTS.md",
+            )
 
     for dir_name in COPY_DIRS:
-        copy_tree(ROOT / dir_name, target_root / dir_name)
+        copy_tree(
+            ROOT / dir_name,
+            target_root / dir_name,
+            strip_graph_frontmatter=True,
+        )
 
     if target == "codex":
         copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
     if target == "cursor":
         write_cursor_rules(target_root)
 
-    copy_runtime_layers(target_root, target, strip_graph_frontmatter=False)
+    copy_runtime_layers(target_root, target, strip_graph_frontmatter=True)
     copy_skills(
         target_root,
         include_codex_metadata=target == "codex",
-        strip_graph_frontmatter=False,
+        strip_graph_frontmatter=True,
     )
 
     validate_no_human_facing_files(target_root, target)
@@ -204,11 +216,7 @@ def build_claude_plugin_target():
         target_root,
         include_codex_metadata=False,
         strip_graph_frontmatter=True,
-        runtime_prelude=(
-            "Runtime layers: apply `common/core/runtime-core-policy.md`, then "
-            "activate `profiles/react-typescript/PROFILE.md` only from repository "
-            "evidence; use `adapters/claude-code.md` for client-specific behavior."
-        ),
+        runtime_prelude=CLAUDE_RUNTIME_PRELUDE,
     )
 
     validate_no_human_facing_files(target_root, target)

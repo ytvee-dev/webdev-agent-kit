@@ -46,9 +46,11 @@ Before changing bundle docs or skills:
 
 ## Markdown Rules
 
-- Every Markdown file in this bundle must keep graph frontmatter current.
+- Every source Markdown file in this bundle must keep graph frontmatter current.
 - In `SKILL.md`, keep `name` and `description` first.
 - Treat graph frontmatter as navigation metadata only.
+- Strip graph navigation metadata from every generated runtime target; keep only
+  portable `name` and `description` frontmatter on generated skills.
 - Keep binding workflow instructions in the document body.
 - Update manifests and owning graph links when skill names, workflow, routing, or publishable source structure changes.
 - Update an existing `README.md` only when the current user explicitly requests that README change, verify technical claims against higher evidence, and keep the edit separate from runtime policy changes.
