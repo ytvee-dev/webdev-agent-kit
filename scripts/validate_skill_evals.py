@@ -15,6 +15,7 @@ POLICY_CONFLICT_EVALS = EVAL_DIR / "policy-conflict-evals.json"
 README_POLICY_EVALS = EVAL_DIR / "readme-policy-evals.json"
 TEST_POLICY_EVALS = EVAL_DIR / "test-policy-evals.json"
 TOOL_CAPABILITY_EVALS = EVAL_DIR / "tool-capability-evals.json"
+CROSS_MODEL_EVALS = EVAL_DIR / "cross-model-evals.json"
 WORKFLOW_LEVELS = {
     "Fast Lookup",
     "Lightweight Workflow",
@@ -93,6 +94,21 @@ REQUIRED_OUTPUT_BOILERPLATE_CONTROLS = {
     "name selected skills or internal workflow",
     "include raw or long command logs",
 }
+CROSS_MODEL_FAMILIES = {"gpt", "claude"}
+CROSS_MODEL_CLIENTS = {"codex", "claude-code"}
+CROSS_MODEL_DIMENSIONS = {
+    "routing",
+    "context-economy",
+    "readme-boundary",
+    "test-boundary",
+    "policy-precedence",
+    "capability-resolution",
+    "verification-evidence",
+    "output-economy",
+    "onboarding",
+    "scope-control",
+}
+CLIENT_TERMS = ("codex", "claude", ".agents", ".claude-plugin")
 
 
 def load_actual_skills(errors):
@@ -425,6 +441,68 @@ def validate_tool_capability_case(label, case, capability_names, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
+def validate_cross_model_case(label, case, actual_skills, errors):
+    require_case_keys(
+        label,
+        case,
+        (
+            "parity_dimension",
+            "model_families",
+            "client_targets",
+            "workflow_level",
+            "portable_expectation",
+            "client_expectations",
+            "required_facts",
+            "forbidden_behaviors",
+            "max_words",
+            "reason",
+        ),
+        errors,
+    )
+
+    if set(case.get("model_families", [])) != CROSS_MODEL_FAMILIES:
+        errors.append(f"{label}: model_families must cover gpt and claude")
+    if set(case.get("client_targets", [])) != CROSS_MODEL_CLIENTS:
+        errors.append(f"{label}: client_targets must cover codex and claude-code")
+
+    primary = case.get("expected_primary_skill")
+    if primary is not None and primary not in actual_skills:
+        errors.append(f"{label}: expected_primary_skill is unknown: {primary}")
+
+    workflow_level = case.get("workflow_level")
+    max_words = case.get("max_words")
+    allowed_words = OUTPUT_WORD_LIMITS.get(workflow_level)
+    if allowed_words is not None and (
+        not isinstance(max_words, int) or max_words > allowed_words
+    ):
+        errors.append(
+            f"{label}: max_words must be at most {allowed_words} for {workflow_level}"
+        )
+
+    expectation = case.get("portable_expectation", "")
+    if isinstance(expectation, str):
+        found_terms = [term for term in CLIENT_TERMS if term in expectation.lower()]
+        if found_terms:
+            errors.append(
+                f"{label}: portable_expectation contains client-specific terms: "
+                f"{', '.join(found_terms)}"
+            )
+
+    client_expectations = case.get("client_expectations", {})
+    if not isinstance(client_expectations, dict) or set(client_expectations) != (
+        CROSS_MODEL_CLIENTS
+    ):
+        errors.append(f"{label}: client_expectations must define both clients only")
+
+    facts = case.get("required_facts", [])
+    if not isinstance(facts, list) or len(facts) < 2:
+        errors.append(f"{label}: required_facts should define at least 2 facts")
+
+    forbidden = case.get("forbidden_behaviors", [])
+    if not isinstance(forbidden, list) or len(forbidden) < 2:
+        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+
+
 def validate_suite(
     path,
     expected_type,
@@ -458,6 +536,17 @@ def validate_suite(
         errors.append(f"{relative}: test-policy suite needs at least 6 cases")
     if expected_type == "tool-capability" and len(cases) < 7:
         errors.append(f"{relative}: tool-capability suite needs at least 7 cases")
+    if expected_type == "cross-model" and len(cases) < 10:
+        errors.append(f"{relative}: cross-model suite needs at least 10 cases")
+    if expected_type == "cross-model":
+        dimensions = {
+            case.get("parity_dimension") for case in cases if isinstance(case, dict)
+        }
+        missing_dimensions = sorted(CROSS_MODEL_DIMENSIONS - dimensions)
+        if missing_dimensions:
+            errors.append(
+                f"{relative}: missing parity dimensions: {missing_dimensions}"
+            )
 
     for index, case in enumerate(cases):
         label = f"{relative}: cases[{index}]"
@@ -485,6 +574,8 @@ def validate_suite(
             validate_test_policy_case(label, case, errors)
         elif expected_type == "tool-capability":
             validate_tool_capability_case(label, case, capability_names, errors)
+        elif expected_type == "cross-model":
+            validate_cross_model_case(label, case, actual_skills, errors)
 
 
 def validate():
@@ -558,6 +649,16 @@ def validate():
     validate_suite(
         TOOL_CAPABILITY_EVALS,
         "tool-capability",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        capability_names,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        CROSS_MODEL_EVALS,
+        "cross-model",
         suite_schema,
         case_schema,
         actual_skills,

@@ -40,6 +40,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added full 19-skill capability coverage, strict capability metadata validation, and eight cross-client capability behavior evals.
 - Added deterministic budgets for the always-on entrypoint, runtime layers, skill-discovery descriptions, and Claude skill prelude.
 - Added fact-based output evals and deterministic final-answer budgets, including a 180-word cap for lightweight workflows.
+- Added a 12-case GPT/Claude parity suite covering routing, context, README, tests, precedence, capabilities, verification, output, onboarding, and scope control.
 - Added independent Codex project, Codex plugin, Claude plugin, and Cursor target validators plus source/generated version consistency checks.
 - Added deterministic release archive construction and extracted archive fixtures for native paths, exclusions, links, checksums, and root-instruction safety.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.

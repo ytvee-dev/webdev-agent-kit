@@ -246,6 +246,63 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 500
+    },
+    "parity_dimension": {
+      "type": "string",
+      "enum": [
+        "routing",
+        "context-economy",
+        "readme-boundary",
+        "test-boundary",
+        "policy-precedence",
+        "capability-resolution",
+        "verification-evidence",
+        "output-economy",
+        "onboarding",
+        "scope-control"
+      ]
+    },
+    "model_families": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["gpt", "claude"]
+      }
+    },
+    "client_targets": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["codex", "claude-code"]
+      }
+    },
+    "portable_expectation": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "client_expectations": {
+      "type": "object",
+      "required": ["codex", "claude-code"],
+      "properties": {
+        "codex": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        },
+        "claude-code": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

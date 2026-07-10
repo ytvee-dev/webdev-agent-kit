@@ -11,7 +11,7 @@
     },
     "eval_type": {
       "type": "string",
-      "enum": ["skill-trigger", "skill-output", "policy-conflict", "readme-policy", "test-policy", "tool-capability"]
+      "enum": ["skill-trigger", "skill-output", "policy-conflict", "readme-policy", "test-policy", "tool-capability", "cross-model"]
     },
     "cases": {
       "type": "array",
