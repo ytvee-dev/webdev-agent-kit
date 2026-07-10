@@ -11,12 +11,23 @@ ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "evals"
 TRIGGER_EVALS = EVAL_DIR / "trigger-evals.json"
 OUTPUT_EVALS = EVAL_DIR / "output-evals.json"
+POLICY_CONFLICT_EVALS = EVAL_DIR / "policy-conflict-evals.json"
 WORKFLOW_LEVELS = {
     "Fast Lookup",
     "Lightweight Workflow",
     "Standard Workflow",
     "Deep Workflow",
 }
+POLICY_PRECEDENCE = (
+    "system-client-security-sandbox",
+    "current-user-request",
+    "confirmed-scope-approvals",
+    "host-project-instructions",
+    "verified-project-facts",
+    "selected-skill-workflow",
+    "active-frontend-profile",
+    "generic-kit-defaults",
+)
 
 
 def load_actual_skills(errors):
@@ -142,6 +153,43 @@ def validate_output_case(label, case, actual_skills, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
+def validate_policy_conflict_case(label, case, errors):
+    require_case_keys(
+        label,
+        case,
+        (
+            "conflict_sources",
+            "expected_precedence",
+            "expected_behavior",
+            "forbidden_behaviors",
+            "reason",
+        ),
+        errors,
+    )
+
+    sources = case.get("conflict_sources", [])
+    if not isinstance(sources, list) or len(sources) < 2:
+        errors.append(f"{label}: conflict_sources must contain at least 2 levels")
+        return
+    unknown = [source for source in sources if source not in POLICY_PRECEDENCE]
+    if unknown:
+        errors.append(
+            f"{label}: conflict_sources contains unknown levels: {', '.join(unknown)}"
+        )
+        return
+
+    expected = case.get("expected_precedence")
+    actual = min(sources, key=POLICY_PRECEDENCE.index)
+    if expected != actual:
+        errors.append(
+            f"{label}: expected_precedence must be highest listed level {actual!r}"
+        )
+
+    forbidden = case.get("forbidden_behaviors", [])
+    if not isinstance(forbidden, list) or len(forbidden) < 2:
+        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+
+
 def validate_suite(
     path,
     expected_type,
@@ -166,6 +214,8 @@ def validate_suite(
     if not isinstance(cases, list):
         errors.append(f"{relative}: cases must be a list")
         return
+    if expected_type == "policy-conflict" and len(cases) < 5:
+        errors.append(f"{relative}: policy-conflict suite needs at least 5 cases")
 
     for index, case in enumerate(cases):
         label = f"{relative}: cases[{index}]"
@@ -185,6 +235,8 @@ def validate_suite(
             validate_trigger_case(label, case, actual_skills, errors)
         elif expected_type == "skill-output":
             validate_output_case(label, case, actual_skills, errors)
+        elif expected_type == "policy-conflict":
+            validate_policy_conflict_case(label, case, errors)
 
 
 def validate():
@@ -210,6 +262,15 @@ def validate():
     validate_suite(
         OUTPUT_EVALS,
         "skill-output",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        POLICY_CONFLICT_EVALS,
+        "policy-conflict",
         suite_schema,
         case_schema,
         actual_skills,

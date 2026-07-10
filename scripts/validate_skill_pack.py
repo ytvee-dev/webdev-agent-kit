@@ -27,6 +27,9 @@ def main():
     target_contract_code = run("validate_target_contracts.py")
     if target_contract_code:
         sys.exit(target_contract_code)
+    precedence_code = run("validate_policy_precedence.py")
+    if precedence_code:
+        sys.exit(precedence_code)
     runtime_layer_code = run("validate_runtime_layers.py")
     if runtime_layer_code:
         sys.exit(runtime_layer_code)

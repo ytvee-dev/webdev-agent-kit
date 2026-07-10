@@ -25,8 +25,9 @@ Use this guide when drafting or tightening agent rules.
 
 ## Decide the rule type first
 
-- Use repo-wide policy in `AGENTS.md` for precedence, required reading order,
-  global prohibitions, and skill discovery.
+- Use `AGENTS.md` for required reading order, global prohibitions, and skill
+  discovery. Keep the ordered authority contract only in
+  `common/policy-precedence.md`.
 - Use `.agents/common/*.md` for generic reusable bundle rules, approved
   patterns, anti-patterns, and bundle-maintenance policy that may be published
   upstream.
@@ -53,10 +54,12 @@ Use this guide when drafting or tightening agent rules.
 ## Conflict handling
 
 - Read existing rules before writing new ones.
+- Resolve instruction authority through `common/policy-precedence.md`; do not
+  copy or reorder that list inside a skill, profile, adapter, or reference.
 - If two rules overlap, keep the stronger and clearer rule and remove or tighten
   the weaker one.
-- If repo-wide policy and skill guidance differ, align the skill to the repo
-  policy unless the user explicitly wants the repo policy changed.
+- If guidance differs, apply the central precedence contract and align the
+  lower-level source without broadening the requested change.
 
 ## Useful rule templates
 

@@ -69,6 +69,42 @@
         "maxLength": 160
       }
     },
+    "conflict_sources": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "system-client-security-sandbox",
+          "current-user-request",
+          "confirmed-scope-approvals",
+          "host-project-instructions",
+          "verified-project-facts",
+          "selected-skill-workflow",
+          "active-frontend-profile",
+          "generic-kit-defaults"
+        ]
+      }
+    },
+    "expected_precedence": {
+      "type": "string",
+      "enum": [
+        "system-client-security-sandbox",
+        "current-user-request",
+        "confirmed-scope-approvals",
+        "host-project-instructions",
+        "verified-project-facts",
+        "selected-skill-workflow",
+        "active-frontend-profile",
+        "generic-kit-defaults"
+      ]
+    },
+    "expected_behavior": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
     "risk_notes": {
       "type": "array",
       "items": {

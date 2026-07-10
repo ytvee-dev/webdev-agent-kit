@@ -52,6 +52,9 @@ jobs:
       - name: Validate runtime target contracts
         run: python scripts/validate_target_contracts.py
 
+      - name: Validate policy precedence
+        run: python scripts/validate_policy_precedence.py
+
       - name: Validate runtime policy layers
         run: python scripts/validate_runtime_layers.py
 

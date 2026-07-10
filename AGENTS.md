@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[common/policy-precedence|Policy Precedence]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
@@ -61,15 +62,15 @@ The host repository root `AGENTS.md` is managed only by `project-onboarding-adap
 
 ## Runtime Policy Layers
 
-Apply only the layers needed for the current task, in this order:
+Load only the layers needed for the current task:
 
 1. `common/core/runtime-core-policy.md` for client-neutral authority, safety, evidence, execution, verification, and concise output.
-2. `profiles/react-typescript/PROFILE.md` only when repository evidence confirms that the target-stack defaults apply.
-3. The single matching file under `adapters/` for client discovery, native pointers, tool registry, sandbox, and configuration differences.
-4. Local project conventions and `project/**` facts for the affected surface.
+2. The single matching file under `adapters/` for client discovery, native pointers, tool registry, sandbox, and configuration differences.
+3. `profiles/react-typescript/PROFILE.md` only when repository evidence confirms that the target-stack defaults apply.
+4. Local project conventions and verified `project/**` facts for the affected surface.
 5. The smallest matching skill and only its required references.
 
-Local project conventions may override profile defaults. They must not override user constraints, approval gates, safety rules, or verification honesty. Generated targets ship only their matching adapter; aliases reuse the canonical adapter.
+This is context loading order, not instruction authority. Resolve conflicts through `common/policy-precedence.md`; do not duplicate its ordered contract inside skills. Generated targets ship only their matching adapter, and aliases reuse the canonical adapter.
 
 ## Target Stack
 

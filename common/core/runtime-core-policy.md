@@ -13,6 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/policy-precedence|Policy Precedence]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[common/token-economy-rules|Token Economy Rules]]'
 depends_on: []
@@ -24,13 +25,7 @@ Purpose: define the small, client-neutral behavior that every runtime target app
 
 ## Authority And Evidence
 
-Use this order when instructions or evidence conflict:
-
-1. The user's current request and explicit constraints.
-2. Safety, approval, privacy, and irreversible-action boundaries.
-3. Verified repository source, configuration, and executable evidence.
-4. The active project profile and reusable workflow rules.
-5. General defaults.
+Resolve instruction conflicts through `common/policy-precedence.md`. Keep that ordered contract centralized; skills, profiles, and adapters must not redefine it.
 
 Separate verified facts from inference. Do not claim success, availability, or verification without evidence. Project conventions may override profile defaults, but they never override user constraints, approval gates, safety rules, or verification honesty.
 
