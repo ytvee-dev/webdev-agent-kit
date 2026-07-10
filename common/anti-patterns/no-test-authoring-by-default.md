@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
 related:
+    - '[[common/test-policy|Test Change And Verification Policy]]'
     - '[[common/anti-patterns/no-unapproved-test-infrastructure|No Unapproved Test Infrastructure]]'
     - '[[common/verification-loop-rules|Verification Loop Rules]]'
 depends_on: []
@@ -21,13 +22,13 @@ depends_on: []
 
 ## Rule
 
-Do not create or modify tests by default.
+Do not create new tests by default.
 
-This includes component tests, hook tests, function or unit tests, integration tests, snapshots, fixtures, mocks, visual regression suites, and end-to-end flows.
+This includes new component, hook, function, unit, integration, E2E, snapshot, fixture, mock, and visual-regression cases.
 
-Run existing verification commands when relevant, but create or change tests only when the user explicitly asks for test authoring and approves the exact target scope.
+Run relevant existing tests. Maintain an existing test only when it directly covers a confirmed behavior contract changed by the approved task, as defined in `common/test-policy.md`.
 
-If a test would be useful but was not requested, report the verification gap and ask for approval instead of writing the test.
+If a new regression test would be useful but was not requested, propose its exact scope only when the missing coverage is a material verification gap.
 
 ## Avoid
 
@@ -41,7 +42,12 @@ If a test would be useful but was not requested, report the verification gap and
 
 ```text
 User: Add a regression test for this bug.
-Agent: Proposes the exact test scope and changes only after approval.
+Agent: Adds the smallest local regression case using existing test infrastructure.
+```
+
+```text
+User: Change this confirmed validation contract and update its existing tests.
+Agent: Updates only the directly affected assertions and runs the relevant test command.
 ```
 
 ## Bad
@@ -53,14 +59,10 @@ describe('Background', () => {
 });
 ```
 
-## Good
+## Reporting
 
-```text
-Changed: one CSS module.
-Verified: changed-file formatting.
-Skipped: component and function test authoring was not requested.
-```
+Do not mention skipped test authoring for a CSS-only or unrelated code change. Report tests only when they were run, changed, blocked, explicitly requested, or represent a material gap.
 
 ## Apply When
 
-Use this whenever an agent considers creating or editing tests, test scripts, test dependencies, fixtures, mocks, snapshots, or test infrastructure.
+Use this whenever an agent considers creating a test or changing an existing test, test script, dependency, fixture, mock, snapshot, or test infrastructure.

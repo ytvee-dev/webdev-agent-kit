@@ -15,6 +15,7 @@ parent:
 related:
     - '[[common/policy-precedence|Policy Precedence]]'
     - '[[common/readme-policy|README Read And Edit Policy]]'
+    - '[[common/test-policy|Test Change And Verification Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[common/token-economy-rules|Token Economy Rules]]'
 depends_on: []
@@ -43,7 +44,7 @@ For approved changes:
 
 ## Safety And Approval
 
-Require explicit user approval before installing dependencies or tools, changing configuration outside the requested scope, creating test infrastructure, replacing existing project instructions, performing irreversible actions, or contacting external people or systems.
+Require explicit user approval before installing dependencies or tools, changing configuration outside the requested scope, creating test infrastructure, replacing existing project instructions, performing irreversible actions, or contacting external people or systems. Apply `common/test-policy.md` to distinguish infrastructure and new-test authoring from relevant existing-test maintenance.
 
 When required authority or product intent is missing, report the blocker and ask for the smallest decision that unblocks correct work.
 

@@ -36,6 +36,9 @@ jobs:
       - name: Validate policy precedence
         run: python scripts/validate_policy_precedence.py
 
+      - name: Validate test policy
+        run: python scripts/validate_test_policy.py
+
       - name: Validate runtime policy layers
         run: python scripts/validate_runtime_layers.py
 
@@ -159,6 +162,7 @@ jobs:
           Validation performed:
           - strict graph schema validation
           - centralized policy precedence validation
+          - test change and infrastructure boundary validation
           - runtime core, profile, and adapter boundary validation
           - README boundary validation
           - source bundle validation

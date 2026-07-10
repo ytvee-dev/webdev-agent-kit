@@ -138,6 +138,41 @@
         ]
       }
     },
+    "test_action": {
+      "type": "string",
+      "enum": [
+        "css-only-change",
+        "run-existing-test",
+        "update-existing-contract-test",
+        "explicit-regression-test",
+        "unapproved-infrastructure",
+        "unrelated-full-suite",
+        "propose-regression-test",
+        "fix-existing-tests"
+      ]
+    },
+    "expected_run_existing": {
+      "type": "boolean"
+    },
+    "expected_edit_existing": {
+      "type": "boolean"
+    },
+    "expected_create_new": {
+      "type": "boolean"
+    },
+    "expected_change_infrastructure": {
+      "type": "boolean"
+    },
+    "expected_reporting": {
+      "type": "string",
+      "enum": [
+        "omit-test-line",
+        "report-command-result",
+        "report-changes-and-result",
+        "report-material-gap",
+        "request-approval"
+      ]
+    },
     "risk_notes": {
       "type": "array",
       "items": {

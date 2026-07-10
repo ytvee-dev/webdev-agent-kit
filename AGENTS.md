@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[common/test-policy|Test Change And Verification Policy]]'
     - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[common/policy-precedence|Policy Precedence]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
@@ -263,7 +264,8 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 - Apply CSS Modules specificity rules when CSS Modules are changed.
 - Apply conditional UX gates for forms, navigation, data visualization, icons, and mobile responsive behavior when those surfaces are touched.
 - Use bounded verification loops only when acceptance criteria, retry limit, and stop conditions are defined.
-- Do not add packages, styling systems, global tokens, generated scaffolds, architecture layers, UI libraries, or testing workflows without explicit user approval.
+- Apply `common/test-policy.md`: run relevant existing tests; maintain an existing test only for a confirmed changed contract; require an explicit request for new tests and approval for test infrastructure.
+- Do not add packages, styling systems, global tokens, generated scaffolds, architecture layers, UI libraries, or testing infrastructure without explicit user approval.
 - Keep edits scoped to the requested screen, component, route, or static page.
 - Preserve accessibility, focus states, responsive behavior, text wrapping, and stable layout dimensions.
 

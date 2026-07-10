@@ -13,6 +13,7 @@ TRIGGER_EVALS = EVAL_DIR / "trigger-evals.json"
 OUTPUT_EVALS = EVAL_DIR / "output-evals.json"
 POLICY_CONFLICT_EVALS = EVAL_DIR / "policy-conflict-evals.json"
 README_POLICY_EVALS = EVAL_DIR / "readme-policy-evals.json"
+TEST_POLICY_EVALS = EVAL_DIR / "test-policy-evals.json"
 WORKFLOW_LEVELS = {
     "Fast Lookup",
     "Lightweight Workflow",
@@ -36,6 +37,40 @@ README_EXPECTATIONS = {
     "project-onboarding": (True, False),
     "unrelated-code-change": (False, False),
     "explicit-readme-edit": (True, True),
+}
+TEST_EXPECTATIONS = {
+    "css-only-change": (False, False, False, False, "omit-test-line"),
+    "run-existing-test": (True, False, False, False, "report-command-result"),
+    "update-existing-contract-test": (
+        True,
+        True,
+        False,
+        False,
+        "report-changes-and-result",
+    ),
+    "explicit-regression-test": (
+        True,
+        False,
+        True,
+        False,
+        "report-changes-and-result",
+    ),
+    "unapproved-infrastructure": (False, False, False, False, "request-approval"),
+    "unrelated-full-suite": (False, False, False, False, "omit-test-line"),
+    "propose-regression-test": (
+        False,
+        False,
+        False,
+        False,
+        "report-material-gap",
+    ),
+    "fix-existing-tests": (
+        True,
+        True,
+        False,
+        False,
+        "report-changes-and-result",
+    ),
 }
 
 
@@ -248,6 +283,50 @@ def validate_readme_policy_case(label, case, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
+def validate_test_policy_case(label, case, errors):
+    require_case_keys(
+        label,
+        case,
+        (
+            "test_action",
+            "expected_run_existing",
+            "expected_edit_existing",
+            "expected_create_new",
+            "expected_change_infrastructure",
+            "expected_reporting",
+            "expected_behavior",
+            "forbidden_behaviors",
+            "reason",
+        ),
+        errors,
+    )
+
+    action = case.get("test_action")
+    if action not in TEST_EXPECTATIONS:
+        errors.append(f"{label}: unknown test_action {action!r}")
+        return
+
+    expected = TEST_EXPECTATIONS[action]
+    actual = (
+        case.get("expected_run_existing"),
+        case.get("expected_edit_existing"),
+        case.get("expected_create_new"),
+        case.get("expected_change_infrastructure"),
+        case.get("expected_reporting"),
+    )
+    if actual != expected:
+        errors.append(f"{label}: test-policy expectation must be {expected!r}")
+
+    if actual[3] and not actual[2]:
+        errors.append(
+            f"{label}: infrastructure change cannot be implied without authorized test work"
+        )
+
+    forbidden = case.get("forbidden_behaviors", [])
+    if not isinstance(forbidden, list) or len(forbidden) < 2:
+        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+
+
 def validate_suite(
     path,
     expected_type,
@@ -276,6 +355,8 @@ def validate_suite(
         errors.append(f"{relative}: policy-conflict suite needs at least 5 cases")
     if expected_type == "readme-policy" and len(cases) < 5:
         errors.append(f"{relative}: readme-policy suite needs at least 5 cases")
+    if expected_type == "test-policy" and len(cases) < 6:
+        errors.append(f"{relative}: test-policy suite needs at least 6 cases")
 
     for index, case in enumerate(cases):
         label = f"{relative}: cases[{index}]"
@@ -299,6 +380,8 @@ def validate_suite(
             validate_policy_conflict_case(label, case, errors)
         elif expected_type == "readme-policy":
             validate_readme_policy_case(label, case, errors)
+        elif expected_type == "test-policy":
+            validate_test_policy_case(label, case, errors)
 
 
 def validate():
@@ -342,6 +425,15 @@ def validate():
     validate_suite(
         README_POLICY_EVALS,
         "readme-policy",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        TEST_POLICY_EVALS,
+        "test-policy",
         suite_schema,
         case_schema,
         actual_skills,

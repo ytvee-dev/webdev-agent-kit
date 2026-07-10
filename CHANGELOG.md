@@ -36,6 +36,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added a centralized eight-level policy precedence contract and validator for forbidden absolute authority claims.
 - Added eight cross-client policy conflict evals covering every adjacent precedence boundary.
 - Added a targeted README read/edit policy, technical evidence hierarchy, and six cross-model README behavior evals.
+- Added a test change policy and eight evals separating existing-test maintenance from new tests and infrastructure.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
 - Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
@@ -51,6 +52,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Generated targets now ship the portable core, default profile, and exactly one canonical client adapter; Claude skills load those layers explicitly.
 - Runtime skills, profiles, adapters, and project facts now resolve instruction conflicts through one shared precedence contract.
 - README may now be read for relevant intent, setup, onboarding, audit, and drift questions, but it is never sufficient technical proof and cannot be edited without an explicit current user request.
+- Relevant existing tests may now be run and maintained for confirmed contract changes; new tests remain explicit-request-only, infrastructure remains approval-gated, and routine skipped-test output is removed.
 - README now documents Windows shell and sandbox verification behavior as a user-facing boundary.
 - Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
 - Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.

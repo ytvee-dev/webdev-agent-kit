@@ -13,6 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/test-policy|Test Change And Verification Policy]]'
     - '[[common/agent-loop-policy|Agent Loop Policy]]'
     - '[[common/stop-criteria-rules|Stop Criteria Rules]]'
     - '[[common/bounded-retry-rules|Bounded Retry Rules]]'
@@ -48,7 +49,7 @@ Use the smallest reliable existing evidence in this precedence order:
 4. rendered visual QA when visual behavior is in scope;
 5. manual source inspection only when executable verification is unavailable.
 
-Do not impose a generic command order over a verified project profile. Run relevant existing tests when they cover changed behavior; creating new test infrastructure still requires approval.
+Do not impose a generic command order over a verified project profile. Run relevant existing tests when they cover changed behavior. Existing-test maintenance, new test authoring, and infrastructure changes follow `common/test-policy.md`.
 
 Do not invent new scripts, package dependencies, testing frameworks, broad test suites, or CI jobs without explicit approval.
 

@@ -60,10 +60,10 @@
       "id": "frontend-layout-implementer.no-component-test-authoring-output",
       "prompt": "Implement this approved UI fix in the current React component. Do not write tests unless explicitly requested.",
       "skill": "frontend-layout-implementer",
-      "required_output_sections": ["Changed", "Project conventions reused", "Verified", "Skipped", "Risks"],
+      "required_output_sections": ["Changed", "Project conventions reused", "Verified", "Risks"],
       "forbidden_behaviors": ["create component tests without explicit request", "create function or hook tests without explicit request", "add test infrastructure without approval"],
-      "risk_notes": ["Implementation output must explicitly report that component, helper, hook, or unit test authoring was skipped when not requested."],
-      "reason": "Frontend implementation must not create tests as a side effect of changing code."
+      "risk_notes": ["Implementation output must not add a routine skipped-test line when test work was irrelevant and unrequested."],
+      "reason": "Frontend implementation must not create tests as a side effect or waste output tokens reporting irrelevant skipped authoring."
     },
     {
       "id": "frontend-refactor-surgeon.no-use-callback-output",

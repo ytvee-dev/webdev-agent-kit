@@ -30,6 +30,9 @@ def main():
     precedence_code = run("validate_policy_precedence.py")
     if precedence_code:
         sys.exit(precedence_code)
+    test_policy_code = run("validate_test_policy.py")
+    if test_policy_code:
+        sys.exit(test_policy_code)
     runtime_layer_code = run("validate_runtime_layers.py")
     if runtime_layer_code:
         sys.exit(runtime_layer_code)

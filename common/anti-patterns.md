@@ -45,7 +45,7 @@ Load only the template relevant to the current code risk:
 - `common/anti-patterns/no-render-functions.md` - do not create `renderXxx`, `xxxRender`, or similar JSX helpers.
 - `common/anti-patterns/no-nested-array-pipelines.md` - avoid unreadable chained collection expressions and split hard chains into named steps.
 - `common/anti-patterns/no-component-loops.md` - avoid unclear render-side mutation and orchestration loops while allowing clear local iteration.
-- `common/anti-patterns/no-test-authoring-by-default.md` - do not create or edit component, function, unit, integration, E2E, visual regression, fixture, mock, or snapshot tests unless the user explicitly asks and approves scope.
+- `common/anti-patterns/no-test-authoring-by-default.md` - do not create new tests without an explicit request; maintain existing tests only for a confirmed changed contract.
 - `common/anti-patterns/no-unapproved-test-infrastructure.md` - do not add test infrastructure without approval.
 - `common/anti-patterns/no-console-file-read-before-filesystem-mcp.md` - prefer the project file capability before shell file reads.
 - `common/anti-patterns/no-host-readme-or-docs-edits-without-approval.md` - do not edit host README or docs without explicit documentation approval.
@@ -60,7 +60,7 @@ Load only the template relevant to the current code risk:
 - Installing packages before checking whether project-native tools already solve the problem.
 - Adding packages, new styling systems, global tokens, theme layers, or generated scaffolds without explicit user approval.
 - Installing missing MCP servers without explicit user approval and a verified official install source.
-- Creating or editing component, function, unit, integration, E2E, visual regression, fixture, mock, or snapshot tests unless the user explicitly asks for test authoring and approves the scope.
+- Creating new component, function, unit, integration, E2E, visual regression, fixture, mock, or snapshot tests without an explicit request, or editing unrelated existing tests.
 - Creating app source files, framework configs, package manifests, routes, components, styles, or build scripts during new-project onboarding.
 - Replacing the project's frontend architecture with a preferred framework pattern that the project does not use.
 - Hardcoding broad reusable colors, spacing, typography, or config when an existing token or local owner exists.
