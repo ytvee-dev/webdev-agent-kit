@@ -435,12 +435,16 @@ def validate_tool_capability_case(label, case, capability_names, errors):
     providers = case.get("available_providers", [])
     if not isinstance(providers, list):
         errors.append(f"{label}: available_providers must be a list")
-    elif action in {
-        "client-parity",
-        "fallback-provider",
-        "native-provider",
-        "preferred-provider",
-    } and not providers:
+    elif (
+        action
+        in {
+            "client-parity",
+            "fallback-provider",
+            "native-provider",
+            "preferred-provider",
+        }
+        and not providers
+    ):
         errors.append(f"{label}: available provider evidence is required for {action}")
 
     forbidden = case.get("forbidden_behaviors", [])
