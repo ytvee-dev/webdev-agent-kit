@@ -33,6 +33,9 @@ def main():
     context_budget_code = run("validate_context_budgets.py")
     if context_budget_code:
         sys.exit(context_budget_code)
+    output_economy_code = run("validate_output_economy.py")
+    if output_economy_code:
+        sys.exit(output_economy_code)
     precedence_code = run("validate_policy_precedence.py")
     if precedence_code:
         sys.exit(precedence_code)

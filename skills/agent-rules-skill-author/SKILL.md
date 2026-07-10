@@ -84,6 +84,8 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Report:
 
 - files changed;

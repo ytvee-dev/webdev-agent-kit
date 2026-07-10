@@ -119,6 +119,8 @@ If a lightweight task reveals hidden scope, escalate first using `common/prompt-
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return or write a Goal Contract with:
 
 ```text

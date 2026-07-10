@@ -116,6 +116,8 @@ Do not use this skill as a required step for every frontend task. Use it only wh
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return or write a Design Direction Contract with:
 
 ```text

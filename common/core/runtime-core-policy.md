@@ -54,6 +54,6 @@ Run the smallest relevant available check for the changed surface. Prefer direct
 
 ## Output Economy
 
-Lead with the outcome. Default to a concise report containing only changed surfaces, decisive rationale, verification evidence, blockers, and one useful next step when needed.
+Apply `common/token-economy-rules.md`. Return only facts that affect the user's understanding, confidence, or next action. For changed work, default to `Changed`, `Verified`, and `Blocked` when applicable.
 
-Omit routine narration, repeated conclusions, decorative structure, and raw logs when a short exact result is sufficient. Never remove paths, commands, errors, risks, unknowns, or approval requirements merely to shorten output.
+Omit request restatement, skill names, workflow narration, empty headings, repeated conclusions, decorative structure, and raw logs. Never remove paths, commands, errors, risks, unknowns, failed or blocked verification, or approval requirements merely to shorten output.

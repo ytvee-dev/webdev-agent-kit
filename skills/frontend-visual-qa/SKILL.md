@@ -97,6 +97,8 @@ This skill is not a general style-inspection tool. It exists for screenshot comp
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Report:
 
 - rendered visual QA scope;

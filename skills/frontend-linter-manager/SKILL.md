@@ -91,6 +91,8 @@ Adapt the model to the host project after inspecting the existing package manage
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 ```text
 Lint command run:
 Lint result:

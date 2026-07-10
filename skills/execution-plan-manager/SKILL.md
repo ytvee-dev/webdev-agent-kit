@@ -99,6 +99,8 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return or write an Execution Plan with:
 
 ```text

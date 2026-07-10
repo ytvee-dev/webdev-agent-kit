@@ -151,6 +151,8 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return or write a Greenfield Project Plan with:
 
 ```text

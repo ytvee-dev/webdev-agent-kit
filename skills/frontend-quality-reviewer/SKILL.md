@@ -114,6 +114,8 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return findings first, ordered by severity:
 
 ```text

@@ -82,6 +82,17 @@ CAPABILITY_EXPECTATIONS = {
     "client-parity": ("available", False),
     "lightweight-no-audit": ("not-needed", False),
 }
+OUTPUT_WORD_LIMITS = {
+    "Fast Lookup": 120,
+    "Lightweight Workflow": 180,
+    "Standard Workflow": 240,
+    "Deep Workflow": 320,
+}
+REQUIRED_OUTPUT_BOILERPLATE_CONTROLS = {
+    "repeat or paraphrase the user request",
+    "name selected skills or internal workflow",
+    "include raw or long command logs",
+}
 
 
 def load_actual_skills(errors):
@@ -188,7 +199,15 @@ def validate_output_case(label, case, actual_skills, errors):
     require_case_keys(
         label,
         case,
-        ("skill", "required_output_sections", "forbidden_behaviors", "reason"),
+        (
+            "skill",
+            "workflow_level",
+            "required_facts",
+            "forbidden_boilerplate",
+            "max_words",
+            "must_report_verification",
+            "reason",
+        ),
         errors,
     )
 
@@ -196,15 +215,38 @@ def validate_output_case(label, case, actual_skills, errors):
     if skill and skill not in actual_skills:
         errors.append(f"{label}: skill is unknown: {skill}")
 
-    required_sections = case.get("required_output_sections", [])
-    if isinstance(required_sections, list) and len(required_sections) < 3:
+    if "required_output_sections" in case:
+        errors.append(f"{label}: required_output_sections is obsolete")
+
+    required_facts = case.get("required_facts", [])
+    if not isinstance(required_facts, list) or len(required_facts) < 3:
+        errors.append(f"{label}: required_facts should define at least 3 facts")
+
+    boilerplate = case.get("forbidden_boilerplate", [])
+    if not isinstance(boilerplate, list):
+        errors.append(f"{label}: forbidden_boilerplate must be a list")
+    else:
+        missing = sorted(REQUIRED_OUTPUT_BOILERPLATE_CONTROLS - set(boilerplate))
+        if missing:
+            errors.append(f"{label}: missing boilerplate controls: {missing}")
+
+    workflow_level = case.get("workflow_level")
+    max_words = case.get("max_words")
+    allowed_words = OUTPUT_WORD_LIMITS.get(workflow_level)
+    if allowed_words is not None and (
+        not isinstance(max_words, int) or max_words > allowed_words
+    ):
         errors.append(
-            f"{label}: required_output_sections should define at least 3 sections"
+            f"{label}: max_words must be at most {allowed_words} for {workflow_level}"
         )
 
-    forbidden = case.get("forbidden_behaviors", [])
-    if isinstance(forbidden, list) and len(forbidden) < 2:
-        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+    if case.get("must_report_verification") is not True:
+        errors.append(f"{label}: output eval must keep verification visible")
+    elif isinstance(required_facts, list) and not any(
+        any(term in fact.lower() for term in ("verif", "valid", "evidence"))
+        for fact in required_facts
+    ):
+        errors.append(f"{label}: required_facts must include verification evidence")
 
 
 def validate_policy_conflict_case(label, case, errors):

@@ -94,6 +94,8 @@ Do not use this skill for:
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Report:
 
 ```text

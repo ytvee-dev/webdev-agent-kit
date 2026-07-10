@@ -101,6 +101,8 @@ Read targeted README sections only when the refresh concerns project intent, set
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Report:
 
 - overlays updated;

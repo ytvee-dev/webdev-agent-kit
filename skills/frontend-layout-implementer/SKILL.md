@@ -113,6 +113,8 @@ Do not read generated `dist/**` during normal runtime.
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Report:
 
 - implemented spec scope;

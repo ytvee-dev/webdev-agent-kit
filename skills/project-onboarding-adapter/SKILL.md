@@ -103,6 +103,8 @@ Read targeted README sections only when they help identify project intent, setup
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 ```text
 Installed package target or detected client
 Native pointer action

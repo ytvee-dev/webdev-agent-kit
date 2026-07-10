@@ -73,10 +73,11 @@ def validate():
             if (
                 case.get("id")
                 == "frontend-layout-implementer.no-component-test-authoring-output"
-                and "Skipped" in case.get("required_output_sections", [])
+                and "report irrelevant skipped test work"
+                not in case.get("forbidden_boilerplate", [])
             ):
                 errors.append(
-                    "CSS/UI output eval must not require a Skipped test section"
+                    "CSS/UI output eval must forbid irrelevant skipped-test output"
                 )
 
     return errors

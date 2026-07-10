@@ -58,6 +58,9 @@ jobs:
       - name: Validate source context budgets
         run: python scripts/validate_context_budgets.py
 
+      - name: Validate output economy
+        run: python scripts/validate_output_economy.py
+
       - name: Validate policy precedence
         run: python scripts/validate_policy_precedence.py
 

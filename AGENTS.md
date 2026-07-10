@@ -78,4 +78,4 @@ Use targeted source or platform documentation only when current facts affect the
 
 Run the smallest relevant existing check for the changed surface. Bound retries, change strategy after a failed approach, and never claim a check, tool, screenshot, or result without evidence. Report exact blocked checks when no honest fallback exists.
 
-Lead with the outcome. Default to changed surfaces, decisive rationale, verification evidence, material risks or blockers, and one next decision only when needed. Omit routine narration, repeated conclusions, decorative sections, raw logs, and irrelevant skipped-work notes; preserve exact paths, commands, errors, unknowns, and approval needs.
+Apply `common/token-economy-rules.md`. Return only facts that affect understanding, confidence, or the next action. For changed work, default to `Changed`, `Verified`, and `Blocked` when applicable; lightweight final answers stay within 180 words. Omit request echo, skill names, workflow narration, empty sections, raw logs, and irrelevant skipped-work notes; never hide errors, unknowns, blocked verification, or approval needs.

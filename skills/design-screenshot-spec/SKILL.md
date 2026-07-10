@@ -106,6 +106,8 @@ frontend implementer.
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return a `Design Implementation Spec` with these sections:
 
 - `Source Inventory`

@@ -94,6 +94,14 @@ def validate_instance(value, schema, path="$"):
         if pattern and not re.search(pattern, value):
             errors.append(f"{path}: value {value!r} does not match pattern {pattern!r}")
 
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        minimum = schema.get("minimum")
+        maximum = schema.get("maximum")
+        if minimum is not None and value < minimum:
+            errors.append(f"{path}: value is less than minimum {minimum}")
+        if maximum is not None and value > maximum:
+            errors.append(f"{path}: value is greater than maximum {maximum}")
+
     if isinstance(value, list):
         min_items = schema.get("minItems")
         max_items = schema.get("maxItems")

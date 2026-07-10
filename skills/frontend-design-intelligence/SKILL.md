@@ -80,6 +80,8 @@ Do not use for Fast Lookup, tiny edits, purely technical bugfixes, code implemen
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 ```text
 Product Category
 Audience

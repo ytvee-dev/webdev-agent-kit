@@ -113,6 +113,8 @@ If a full repository command fails with unrelated pre-existing noise, stop broad
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 ```text
 Symptom:
 Evidence:

@@ -87,6 +87,8 @@ Use `frontend-bugfix-debugger` when the primary goal is to fix a defect.
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 ```text
 Refactor boundary:
 Behavior preserved:

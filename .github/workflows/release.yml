@@ -39,6 +39,9 @@ jobs:
       - name: Validate source context budgets
         run: python scripts/validate_context_budgets.py
 
+      - name: Validate output economy
+        run: python scripts/validate_output_economy.py
+
       - name: Validate policy precedence
         run: python scripts/validate_policy_precedence.py
 
@@ -173,6 +176,7 @@ jobs:
           - centralized policy precedence validation
           - complete client-neutral tool capability metadata validation
           - compact entrypoint and skill-discovery context budget validation
+          - fact-only final output and workflow word budget validation
           - test change and infrastructure boundary validation
           - runtime core, profile, and adapter boundary validation
           - README boundary validation

@@ -223,6 +223,8 @@ Notes
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Return a Toolchain Report with:
 
 ```text
