@@ -4,8 +4,3 @@ interface:
     default_prompt: 'Use $execution-plan-manager to split standard or deep frontend work into small verified slices with context budget, checkpoint rules, and stop/resume state.'
 policy:
     allow_implicit_invocation: true
-dependencies:
-    tools:
-        - type: 'mcp'
-          value: 'filesystem_server'
-          description: 'Read project overlays and write project/active-plan.md, progress-log.md, or decision-log.md only when durable planning is needed.'

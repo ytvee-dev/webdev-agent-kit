@@ -4,11 +4,3 @@ interface:
     default_prompt: 'Use $design-screenshot-spec to produce a Design Implementation Spec from supplied screenshots and inspect panels. This skill is framework-agnostic and can be used before implementation in React, Next.js, Astro, Vue, Svelte, static HTML, or another frontend stack.'
 policy:
     allow_implicit_invocation: true
-dependencies:
-    tools:
-        - type: 'mcp'
-          value: 'filesystem_server'
-          description: 'Read user-supplied local visual references when available.'
-        - type: 'mcp'
-          value: 'mdn'
-          description: 'Verify web platform facts when spec decisions depend on HTML, CSS, or browser behavior.'

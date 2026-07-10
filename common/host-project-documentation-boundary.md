@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[common/anti-patterns|Common Anti-Patterns]]'
 related:
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
 depends_on: []
 ---
@@ -39,13 +40,16 @@ Host-project documentation includes:
 
 ## Allowed Behavior
 
+- Read targeted README sections when relevant under `common/readme-policy.md`.
+- Use README claims to locate higher evidence, not as sufficient technical proof.
 - Propose documentation updates in the final report.
-- Edit documentation only when the user explicitly asks for documentation work and approves the target files or scope.
-- For this reusable kit's own README, treat it as human-facing documentation and edit it only when the user explicitly asks for public kit documentation work.
+- Edit an existing README only when the current user request explicitly asks to change that README.
+- Edit other documentation only when the user explicitly asks for documentation work and approves the target files or scope.
 
 ## Forbidden Behavior
 
 - Do not update host `README.md` because implementation changed.
+- Do not treat reading or auditing README as permission to edit it.
 - Do not edit `docs/**` as a side effect of code work.
 - Do not rewrite onboarding or architecture docs during project adaptation.
 - Do not treat documentation cleanup as harmless scope expansion.
@@ -53,5 +57,6 @@ Host-project documentation includes:
 ## Validation Gates
 
 - Documentation edits require explicit user validation.
-- Host documentation must not be used as a source for runtime routing or project facts unless the user specifically provides an excerpt.
+- README technical claims must be confirmed through higher evidence when available.
+- README/code or README/config drift must be reported instead of silently edited.
 - Final reports should state when useful documentation changes were proposed but not applied.

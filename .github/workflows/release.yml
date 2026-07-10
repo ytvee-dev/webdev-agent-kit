@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Build and publish portable targets
@@ -28,7 +32,39 @@ jobs:
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
 
       - name: Validate schemas
-        run: python scripts/validate_schemas.py
+        run: python scripts/validate_schemas.py --strict-graph
+
+      - name: Validate runtime target contracts
+        run: python scripts/validate_target_contracts.py
+
+      - name: Validate source version consistency
+        run: python scripts/validate_version_consistency.py
+
+      - name: Validate release tag and installation guides
+        run: |
+          python scripts/validate_release_tag.py --tag "${GITHUB_REF_NAME}"
+          python scripts/validate_install_guides.py
+          python scripts/build_release_notes.py \
+            --tag "${GITHUB_REF_NAME}" \
+            --output release-artifacts/RELEASE_NOTES.md
+
+      - name: Validate tool capability metadata
+        run: python scripts/validate_tool_capabilities.py
+
+      - name: Validate source context budgets
+        run: python scripts/validate_runtime_context_budget.py
+
+      - name: Validate output economy
+        run: python scripts/validate_output_economy.py
+
+      - name: Validate policy precedence
+        run: python scripts/validate_policy_precedence.py
+
+      - name: Validate test policy
+        run: python scripts/validate_test_policy.py
+
+      - name: Validate runtime policy layers
+        run: python scripts/validate_runtime_layers.py
 
       - name: Validate README boundary
         run: python scripts/check_readme_boundary.py
@@ -42,11 +78,26 @@ jobs:
       - name: Build portable targets
         run: python scripts/build_skill_targets.py
 
-      - name: Validate Codex target
-        run: python scripts/validate_codex_skill_pack.py
+      - name: Validate generated runtime policy layers
+        run: python scripts/validate_runtime_layers.py --generated
 
-      - name: Validate Claude target
-        run: python scripts/validate_claude_skill_pack.py
+      - name: Validate generated context budgets
+        run: python scripts/validate_runtime_context_budget.py --generated
+
+      - name: Validate generated version consistency
+        run: python scripts/validate_version_consistency.py --generated
+
+      - name: Validate Codex project target
+        run: python scripts/validate_codex_project_target.py
+
+      - name: Validate Codex plugin target
+        run: python scripts/validate_codex_plugin_target.py
+
+      - name: Validate Claude Code plugin target
+        run: python scripts/validate_claude_plugin_target.py
+
+      - name: Validate Cursor project target
+        run: python scripts/validate_cursor_target.py
 
       - name: Run full validation orchestrator
         run: python scripts/validate_skill_pack.py
@@ -60,32 +111,27 @@ jobs:
           test -d dist/vs-code-codex
           test -d dist/vs-code-claude
 
-          test ! -e dist/codex/project
-          test ! -e dist/claude/project
-          test ! -e dist/claude-code/project
-          test ! -e dist/cursor/project
-          test ! -e dist/vs-code-codex/project
-          test ! -e dist/vs-code-claude/project
+          for target in codex claude claude-code cursor vs-code-codex vs-code-claude; do
+            test -f "dist/${target}/LICENSE"
+            test -f "dist/${target}/tool-capabilities-manifest.json"
+            test ! -e "dist/${target}/project"
+            test ! -e "dist/${target}/bundle-manifest.json"
+            test ! -e "dist/${target}/README.md"
+            test ! -e "dist/${target}/CHANGELOG.md"
+            test ! -e "dist/${target}/CONTRIBUTING.md"
+            test ! -e "dist/${target}/SECURITY.md"
+            test ! -e "dist/${target}/examples"
+          done
 
-          test ! -e dist/codex/bundle-manifest.json
-          test ! -e dist/claude/bundle-manifest.json
-          test ! -e dist/claude-code/bundle-manifest.json
-          test ! -e dist/cursor/bundle-manifest.json
-          test ! -e dist/vs-code-codex/bundle-manifest.json
-          test ! -e dist/vs-code-claude/bundle-manifest.json
-
-          test -f dist/codex/LICENSE
-          test -f dist/claude/LICENSE
-          test -f dist/claude-code/LICENSE
-          test -f dist/cursor/LICENSE
-          test -f dist/vs-code-codex/LICENSE
-          test -f dist/vs-code-claude/LICENSE
-
+          test -f dist/codex/AGENTS.md
+          test -f dist/cursor/AGENTS.md
+          test -f dist/vs-code-codex/AGENTS.md
           test -f dist/codex/.codex-plugin/plugin.json
           test -f dist/vs-code-codex/.codex-plugin/plugin.json
 
-          test -f dist/claude-code/CLAUDE.md
-          test -f dist/vs-code-claude/CLAUDE.md
+          test -f dist/claude-code/.claude-plugin/plugin.json
+          test -f dist/claude/.claude-plugin/plugin.json
+          test -f dist/vs-code-claude/.claude-plugin/plugin.json
           test -f dist/cursor/.cursor/rules/webdev-agent-kit.mdc
 
           test ! -e dist/claude/.codex-plugin
@@ -101,35 +147,12 @@ jobs:
       - name: Package release artifacts
         run: |
           mkdir -p release-artifacts
-
-          for target in codex claude-code cursor vs-code-codex vs-code-claude; do
-            tar -czf "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" -C dist "${target}"
-            cp "release-artifacts/webdev-agent-kit-${target}-${GITHUB_REF_NAME}.tar.gz" "release-artifacts/webdev-agent-kit-${target}.tar.gz"
-          done
-
-          (cd release-artifacts && sha256sum *.tar.gz > SHA256SUMS)
-
-          cat > release-artifacts/RELEASE_NOTES.md <<'NOTES'
-          WebDev Agent Kit portable release artifacts.
-
-          Artifacts:
-          - Codex target: `webdev-agent-kit-codex.tar.gz`
-          - Claude Code target: `webdev-agent-kit-claude-code.tar.gz`
-          - Cursor target: `webdev-agent-kit-cursor.tar.gz`
-          - VS Code Codex target: `webdev-agent-kit-vs-code-codex.tar.gz`
-          - VS Code Claude target: `webdev-agent-kit-vs-code-claude.tar.gz`
-          - Checksums: `SHA256SUMS`
-
-          Validation performed:
-          - schema validation
-          - README boundary validation
-          - source bundle validation
-          - skill eval validation
-          - portable target build
-          - Codex target validation
-          - Claude target validation
-          - excluded-path inspection
-          NOTES
+          python scripts/build_release_archives.py \
+            --output release-artifacts \
+            --version "${GITHUB_REF_NAME}"
+          python scripts/validate_release_archive.py \
+            --directory release-artifacts \
+            --version "${GITHUB_REF_NAME}"
 
           echo 'Release artifacts:'
           find release-artifacts -maxdepth 1 -type f -print | sort

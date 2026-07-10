@@ -48,6 +48,9 @@ Use this guide when writing skill frontmatter and `agents/openai.yaml`.
   important `when not` boundary when overlap risk is real.
 - Mention concrete task shapes in the description, not only broad topics.
 - Keep `description` non-empty and under 1024 characters.
+- For this bundle, keep each discovery description within 45 words and the
+  aggregate inventory within `scripts/validate_context_budgets.py`; preserve
+  full trigger and exclusion detail in the `SKILL.md` body.
 - Front-load the most important trigger words because long skill lists may
   shorten descriptions before matching.
 - Keep descriptions dense and informative. Codex includes skill descriptions in
@@ -95,8 +98,9 @@ Before finalizing trigger wording for a new or broadened skill:
   If a skill should run from user intent, set it to `true` and avoid manual-only
   language in `SKILL.md`.
 - Treat `icon_small`, `icon_large`, and `brand_color` as optional UI fields.
-- Use `dependencies.tools` when the skill depends on MCP servers or another
-  explicit tool contract. Keep dependency metadata factual and narrow.
+- Use `dependencies.tools` only for a true hard Codex client-tool dependency
+  that no native or fallback provider can satisfy. Keep optional provider
+  candidates and cross-client requirements in `tool-capabilities-manifest.json`.
 - Prefer `skills/agent-rules-skill-author/scripts/generate_openai_yaml.py` when regenerating `.agents`
   `openai.yaml` files so quoting, length checks, and preserved policy fields
   stay consistent.
@@ -111,5 +115,5 @@ Before finalizing trigger wording for a new or broadened skill:
   `agents/openai.yaml` in the same change.
 - When trigger wording changes, refresh the trigger eval examples in the same
   pass so the boundary stays testable.
-- If `dependencies.tools` is present, keep it aligned with the real MCP or
-  connector dependency instead of speculative future tooling.
+- If `dependencies.tools` is present, verify that it is a hard client-specific
+  dependency rather than an optional MCP or native-provider candidate.

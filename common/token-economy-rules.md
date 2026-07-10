@@ -73,17 +73,17 @@ Do not reduce thinking by skipping root-cause analysis, accessibility checks, se
 
 ## Output Economy
 
-Default final reports should be compact and evidence-first.
+Default final reports are compact, fact-only, and evidence-first. Return only facts that affect the user's understanding, confidence, or next action.
 
-Prefer this shape:
+For tasks that changed or validated something, use this default shape:
 
 ```text
 Changed: files or surfaces
-Why: concise rationale
 Verified: command/check and result
 Blocked: missing tool/context, if any
-Next: only one useful next step, if needed
 ```
+
+Omit `Changed` when nothing changed and omit `Blocked` when nothing is blocked. Add one decision or next action only when the user must act. Verification must remain visible whenever it was run, failed, or was required but blocked.
 
 For lookup-only answers, prefer:
 
@@ -102,9 +102,23 @@ same conclusion in multiple sections
 decorative tables
 full logs when a short excerpt is decisive
 large before/after dumps unless requested
+repeating or paraphrasing the user request
+naming selected skills or internal workflow steps
+empty headings and fields
 ```
 
 Use tables only when comparison is the clearest compact form. Do not hide important caveats just to stay short.
+
+## Default Word Budgets
+
+- `Fast Lookup`: at most 120 words unless exact source material requires more.
+- `Lightweight Workflow`: at most 180 words.
+- `Standard Workflow`: at most 240 words for the final handoff.
+- `Deep Workflow`: at most 320 words for the final handoff.
+
+Named artifacts requested by the user, such as plans, specs, reviews, or contracts, may be longer. Their final handoff still follows the compact fact-only shape.
+
+Word limits never authorize hiding a blocker, failed verification, approval requirement, security issue, destructive-action warning, or uncertainty. Remove boilerplate before compressing evidence.
 
 ## Compression Boundaries
 

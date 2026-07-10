@@ -1,8 +1,18 @@
 {
   "name": "webdev-agent-kit",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "license": "Apache-2.0",
   "description": "Internal source and distribution inventory for the WebDev Agent Kit skill bundle.",
+  "portable_core": "common/core/runtime-core-policy.md",
+  "default_profile": "react-typescript",
+  "profiles": {
+    "react-typescript": "profiles/react-typescript/PROFILE.md"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.md",
+    "codex": "adapters/codex.md",
+    "cursor": "adapters/cursor.md"
+  },
   "skills": [
     "agent-rules-skill-author",
     "design-screenshot-spec",
@@ -25,8 +35,35 @@
     "project-onboarding-adapter"
   ],
   "targets": {
-    "codex": "dist/codex",
-    "claude": "dist/claude"
+    "claude-code": {
+      "kind": "plugin",
+      "output": "dist/claude-code",
+      "install_mode": "plugin-install",
+      "entrypoint": ".claude-plugin/plugin.json",
+      "skills_root": "skills",
+      "validator": "scripts/validate_claude_plugin_target.py"
+    },
+    "codex": {
+      "kind": "project-bundle",
+      "output": "dist/codex",
+      "install_mode": "project-root-extract",
+      "entrypoint": ".agents/AGENTS.md",
+      "skills_root": ".agents/skills",
+      "validator": "scripts/validate_codex_project_target.py"
+    },
+    "cursor": {
+      "kind": "project-bundle",
+      "output": "dist/cursor",
+      "install_mode": "project-root-extract",
+      "entrypoint": ".cursor/rules/webdev-agent-kit.mdc",
+      "skills_root": ".agents/skills",
+      "validator": "scripts/validate_cursor_target.py"
+    }
+  },
+  "target_aliases": {
+    "claude": "claude-code",
+    "vs-code-claude": "claude-code",
+    "vs-code-codex": "codex"
   },
   "excludes": [
     "project/**",

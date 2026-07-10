@@ -4,17 +4,3 @@ interface:
     default_prompt: 'Use $frontend-layout-implementer to implement a Design Implementation Spec in the current frontend project.'
 policy:
     allow_implicit_invocation: true
-dependencies:
-    tools:
-        - type: 'mcp'
-          value: 'filesystem_server'
-          description: 'Read project context, source files, and supplied local artifacts.'
-        - type: 'mcp'
-          value: 'context7'
-          description: 'Fetch current framework and library documentation.'
-        - type: 'mcp'
-          value: 'mdn'
-          description: 'Fetch current HTML, CSS, Web API, and browser compatibility docs.'
-        - type: 'mcp'
-          value: 'playwright'
-          description: 'Verify rendered frontend behavior and screenshots.'

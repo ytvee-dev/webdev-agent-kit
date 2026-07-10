@@ -1,6 +1,6 @@
 ---
 name: greenfield-project-builder
-description: Use for deep frontend work that starts a new frontend project or plans a first vertical slice from a product idea. It creates a greenfield plan and approval gates before any scaffold. Do not use for existing-project micro-fixes, automatic scaffolding, package installation, UI library setup, or testing workflows.
+description: 'Plan a new frontend project or first vertical slice from a product idea, with approval gates before scaffolding. Excludes existing-project micro-fixes, automatic scaffolds, package installation, UI libraries, and test setup.'
 id: 'agents.skills.greenfield-project-builder.skill'
 title: 'Greenfield Project Builder'
 doc_type: 'skill'
@@ -84,11 +84,11 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
    - `project/build-profile.md` when present;
    - `project/workspace-profile.md` when present;
    - `project/verification-profile.md` when present.
-8. Do not read human-facing `README.md` during normal runtime.
 
 ## Tool Contract
 
 - May inspect the repository root and selected workspace files to determine whether the target is empty, new, or inside an existing workspace.
+- Activate `openai_platform_docs` only when the planned product uses OpenAI APIs, ChatGPT Apps SDK, or Codex integration behavior.
 - May write local-only `project/**` overlays after approval or during approved onboarding.
 - May create a host-root `AGENTS.md` pointer only through `project-onboarding-adapter` rules.
 - May propose scaffold commands, but must not run them without explicit approval.
@@ -151,6 +151,8 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
     If approval is missing, return a plan and exact approval request instead of creating files.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Return or write a Greenfield Project Plan with:
 

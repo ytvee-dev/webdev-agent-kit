@@ -68,6 +68,8 @@ Purpose: record local-only host-client facts for this project.
 - available capabilities:
 - missing capabilities:
 - blocked capabilities:
+- availability evidence:
+- last validated:
 
 ## Fallbacks
 

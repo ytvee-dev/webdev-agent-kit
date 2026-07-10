@@ -31,8 +31,10 @@ Do not edit the host project's README or documentation files during normal imple
 
 ## Allowed
 
+- Read targeted README sections when relevant, then confirm technical claims through `common/readme-policy.md`.
 - Propose documentation updates in the final report.
-- Edit documentation only when the user explicitly asks for documentation work and approves the target files or scope.
+- Edit an existing README only when the current user request explicitly asks to change it.
+- Edit other documentation only when the user explicitly asks for documentation work and approves the target files or scope.
 
 ## Bad
 

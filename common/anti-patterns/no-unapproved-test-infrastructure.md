@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[common/anti-patterns/README|Anti-Pattern Templates]]'
 related:
+    - '[[common/test-policy|Test Change And Verification Policy]]'
     - '[[common/anti-patterns/no-test-authoring-by-default|No Test Authoring By Default]]'
     - '[[common/verification-loop-rules|Verification Loop Rules]]'
 depends_on: []
@@ -21,9 +22,9 @@ depends_on: []
 
 ## Rule
 
-Run existing project tests only when they are already part of the relevant verification path. Do not create or edit tests by default.
+Run existing project tests when they are part of the relevant verification path.
 
-Create or update tests only when the user explicitly asks for test authoring and approves the target scope.
+Maintain an existing directly affected test when a confirmed behavior contract changed. Creating a new test still requires an explicit current user request.
 
 Do not add a testing framework, setup layer, script, dependency, broad fixture system, end-to-end suite, or visual-regression infrastructure without explicit user approval.
 
@@ -31,6 +32,7 @@ Do not add a testing framework, setup layer, script, dependency, broad fixture s
 
 - Adding test tooling merely because the agent prefers another framework.
 - Creating a regression test when the user asked only for an implementation fix.
+- Creating a component or helper test as a side effect of changing the component or helper.
 - Rewriting unrelated tests while implementing a feature or bugfix.
 - Treating a green unrelated test as proof that the changed behavior works.
 - Skipping a relevant existing verification command because no new test was requested.
@@ -38,8 +40,9 @@ Do not add a testing framework, setup layer, script, dependency, broad fixture s
 ## Verification
 
 - Run the relevant existing test only when changed behavior is already covered and the verification budget calls for it.
+- Update the smallest existing assertion, fixture, mock, snapshot, import, or setup owned by a confirmed changed contract.
 - Report the exact test command and result when an existing test was run.
-- If a test would be useful but was not requested or would need new infrastructure, report the gap and approval needed.
+- Report a missing-test gap only when it is material; request approval before new tests or infrastructure.
 
 ## Apply When
 

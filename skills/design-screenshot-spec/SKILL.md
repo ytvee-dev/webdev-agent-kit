@@ -1,6 +1,6 @@
 ---
 name: design-screenshot-spec
-description: Use when the user supplies Figma screenshots, copied visual inspect panels, exported assets, or design notes and needs a strict Design Implementation Spec for frontend implementation. Do not use Figma MCP or live Figma links; ask for screenshots or source artifacts when only a URL, file key, node id, Figma whiteboard reference is provided.
+description: 'Turn user-supplied screenshots, copied inspect values, exports, assets, or design notes into a strict frontend Design Implementation Spec. Live design links alone are insufficient.'
 id: 'agents.skills.design-screenshot-spec.skill'
 title: 'Design Screenshot Spec'
 doc_type: 'skill'
@@ -105,6 +105,8 @@ frontend implementer.
     criteria.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Return a `Design Implementation Spec` with these sections:
 

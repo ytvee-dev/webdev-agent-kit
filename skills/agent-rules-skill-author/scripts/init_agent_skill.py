@@ -15,7 +15,7 @@ ALLOWED_RESOURCES = {"scripts", "references", "assets"}
 
 SKILL_TEMPLATE = """---
 name: {skill_name}
-description: [TODO: Explain what the skill does and when to use it.]
+description: "[TODO: Explain what the skill does and when to use it.]"
 id: 'agents.skills.{skill_name}.skill'
 title: '{skill_title}'
 doc_type: 'skill'

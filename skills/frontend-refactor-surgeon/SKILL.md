@@ -1,6 +1,6 @@
 ---
 name: frontend-refactor-surgeon
-description: Use for behavior-preserving frontend refactors with clear boundaries, including component extraction, file reorganization, prop/interface cleanup, state simplification, and TypeScript tightening. Supports bounded verification loops for related failures. Do not use for bugfixes, feature work, broad rewrites, redesign, package installation, or behavior changes without approval.
+description: 'Perform bounded, behavior-preserving frontend refactors such as component extraction, file moves, prop or interface cleanup, state simplification, and TypeScript tightening. Excludes bugfixes, features, redesign, packages, and unapproved behavior changes.'
 id: 'agents.skills.frontend-refactor-surgeon.skill'
 title: 'Frontend Refactor Surgeon'
 doc_type: 'skill'
@@ -59,13 +59,13 @@ Use `frontend-bugfix-debugger` when the primary goal is to fix a defect.
 7. Read `common/typescript-discipline.md`.
 8. Read relevant boundary docs such as `common/state-ownership-rules.md` when the refactor touches state.
 9. Read project overlays and affected source files needed to define the behavior boundary.
-10. Do not read `README.md` during normal runtime.
 
 ## Tool Contract
 
 - May inspect affected source, styles, configs, and project overlays.
 - May run existing lint, typecheck, build, or preview commands relevant to the refactor.
 - May use Browser or Playwright MCP when rendered output must be checked.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the preserved contract.
 - Must not install packages, add testing workflows, change build tooling, add UI libraries, or migrate frameworks without explicit approval.
 - Must not change production systems, secrets, or production data.
 
@@ -87,6 +87,8 @@ Use `frontend-bugfix-debugger` when the primary goal is to fix a defect.
 14. Stop and ask before behavior change, architecture expansion, dependency changes, or broad rewrite.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 ```text
 Refactor boundary:

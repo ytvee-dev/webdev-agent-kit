@@ -1,6 +1,6 @@
 ---
 name: pattern-library-manager
-description: Use when adding, tightening, or documenting reusable approved patterns and anti-patterns in common/**, including bad/good code examples, source-backed example proposals, user approval for examples, graph links, eval updates, and validation. Do not use for project-specific patterns; keep those in local-only project/** overlays.
+description: 'Add or tighten reusable approved patterns and anti-patterns in common/** with source-backed examples, approvals, graph links, evals, and validation. Keep project-specific patterns in local-only project/**.'
 id: 'agents.skills.pattern-library-manager.skill'
 title: 'Pattern Library Manager'
 doc_type: 'skill'
@@ -65,12 +65,12 @@ Do not use this skill for:
 5. Read `references/pattern-entry-template.md` before creating a new entry.
 6. Read `references/example-sourcing-policy.md` before adding code examples.
 7. Read `evals/trigger-evals.json` or `evals/output-evals.json` when routing or output behavior changes.
-8. Do not read host-project README or docs as source material unless the user pasted the relevant excerpt.
 
 ## Tool Contract
 
 - Use the `project_files` capability for repository file reads and writes.
 - May use official documentation or trusted maintainer sources to understand a pattern when examples are not supplied by the user.
+- Activate `openai_platform_docs` only when a reusable pattern depends on current OpenAI or Codex behavior.
 - Must propose sourced examples to the user before committing them when they come from external material or host-project-specific context.
 - Must write original, short examples instead of copying long third-party code.
 - Must not install packages, change runtime code, create tests, or modify host-project documentation.
@@ -94,6 +94,8 @@ Do not use this skill for:
 11. Run the relevant skill/bundle validators when available.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Report:
 

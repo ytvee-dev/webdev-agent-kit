@@ -4,11 +4,3 @@ interface:
     default_prompt: 'Use $frontend-visual-qa to verify rendered UI against a Design Implementation Spec and supplied screenshots. This skill is framework-agnostic when it works from browser evidence, screenshots, HTML, CSS, accessibility, and responsive behavior.'
 policy:
     allow_implicit_invocation: true
-dependencies:
-    tools:
-        - type: 'mcp'
-          value: 'playwright'
-          description: 'Open local pages, inspect runtime state, resize viewports, and capture screenshots.'
-        - type: 'mcp'
-          value: 'mdn'
-          description: 'Verify web platform behavior when visual QA depends on browser semantics.'

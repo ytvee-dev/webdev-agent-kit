@@ -29,8 +29,9 @@ Detect tool availability from these sources, in order:
 
 1. Current session tool registry when the client exposes one.
 2. Validated local-only `project/mcp-profile.md` facts.
-3. Client config files only when the user asked for onboarding, context refresh, or toolchain audit.
-4. Targeted manual report from the user.
+3. Direct user confirmation only for references the user supplied in the current task.
+
+Client config may be inspected during approved onboarding, context refresh, or toolchain audit, but it is discovery input until the provider is validated in the active client. A configured provider name is not availability evidence.
 
 ## Non-Proof Sources
 
@@ -43,6 +44,8 @@ These are not proof that an MCP server or browser capability is available:
 - a running local app;
 - an open network port;
 - a config file that has not been validated in the current client session.
+- `agents/openai.yaml` dependency or provider metadata;
+- a provider name without a callable tool.
 
 ## Lightweight Boundary
 
@@ -61,6 +64,8 @@ When a required capability is missing:
 2. Report the blocked check.
 3. Use the allowed fallback if it is honest.
 4. Do not install or configure tools without explicit approval.
+
+When an optional capability is missing, skip it or use its declared fallback. Do not turn the task into installation work.
 
 ## Visual QA Rule
 

@@ -49,15 +49,33 @@
       "minLength": 1,
       "maxLength": 64
     },
-    "required_output_sections": {
+    "required_facts": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": {
         "type": "string",
         "minLength": 1,
-        "maxLength": 80
+        "maxLength": 160
       }
+    },
+    "forbidden_boilerplate": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "max_words": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "must_report_verification": {
+      "type": "boolean"
     },
     "forbidden_behaviors": {
       "type": "array",
@@ -68,6 +86,155 @@
         "minLength": 1,
         "maxLength": 160
       }
+    },
+    "conflict_sources": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "system-client-security-sandbox",
+          "current-user-request",
+          "confirmed-scope-approvals",
+          "host-project-instructions",
+          "verified-project-facts",
+          "selected-skill-workflow",
+          "active-frontend-profile",
+          "generic-kit-defaults"
+        ]
+      }
+    },
+    "expected_precedence": {
+      "type": "string",
+      "enum": [
+        "system-client-security-sandbox",
+        "current-user-request",
+        "confirmed-scope-approvals",
+        "host-project-instructions",
+        "verified-project-facts",
+        "selected-skill-workflow",
+        "active-frontend-profile",
+        "generic-kit-defaults"
+      ]
+    },
+    "expected_behavior": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "readme_action": {
+      "type": "string",
+      "enum": [
+        "read-explain",
+        "verify-commands",
+        "drift-audit",
+        "project-onboarding",
+        "unrelated-code-change",
+        "explicit-readme-edit"
+      ]
+    },
+    "expected_read": {
+      "type": "boolean"
+    },
+    "expected_edit": {
+      "type": "boolean"
+    },
+    "required_evidence": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "readme",
+          "runtime-result",
+          "source-code",
+          "config",
+          "ci",
+          "package-scripts",
+          "lockfile"
+        ]
+      }
+    },
+    "test_action": {
+      "type": "string",
+      "enum": [
+        "css-only-change",
+        "run-existing-test",
+        "update-existing-contract-test",
+        "explicit-regression-test",
+        "unapproved-infrastructure",
+        "unrelated-full-suite",
+        "propose-regression-test",
+        "fix-existing-tests"
+      ]
+    },
+    "expected_run_existing": {
+      "type": "boolean"
+    },
+    "expected_edit_existing": {
+      "type": "boolean"
+    },
+    "expected_create_new": {
+      "type": "boolean"
+    },
+    "expected_change_infrastructure": {
+      "type": "boolean"
+    },
+    "expected_reporting": {
+      "type": "string",
+      "enum": [
+        "omit-test-line",
+        "report-command-result",
+        "report-changes-and-result",
+        "report-material-gap",
+        "request-approval"
+      ]
+    },
+    "capability_action": {
+      "type": "string",
+      "enum": [
+        "native-provider",
+        "preferred-provider",
+        "fallback-provider",
+        "missing-optional",
+        "missing-required",
+        "false-proof",
+        "install-request",
+        "client-parity",
+        "lightweight-no-audit"
+      ]
+    },
+    "required_capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+      }
+    },
+    "available_providers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+      }
+    },
+    "expected_status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "fallback-used",
+        "blocked",
+        "missing",
+        "unknown",
+        "not-needed"
+      ]
+    },
+    "expected_install": {
+      "type": "boolean"
     },
     "risk_notes": {
       "type": "array",
@@ -81,6 +248,63 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 500
+    },
+    "parity_dimension": {
+      "type": "string",
+      "enum": [
+        "routing",
+        "context-economy",
+        "readme-boundary",
+        "test-boundary",
+        "policy-precedence",
+        "capability-resolution",
+        "verification-evidence",
+        "output-economy",
+        "onboarding",
+        "scope-control"
+      ]
+    },
+    "model_families": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["gpt", "claude"]
+      }
+    },
+    "client_targets": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["codex", "claude-code"]
+      }
+    },
+    "portable_expectation": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "client_expectations": {
+      "type": "object",
+      "required": ["codex", "claude-code"],
+      "properties": {
+        "codex": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        },
+        "claude-code": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

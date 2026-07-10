@@ -1,6 +1,6 @@
 ---
 name: frontend-bugfix-debugger
-description: Use for evidence-first frontend bugfixes, unclear UI/runtime errors, broken routes, styling regressions, hydration/client issues, and small defects that need symptom reproduction before code changes. Supports bounded retry when verification fails. Do not use for planned refactors, broad redesigns, quality review only, test generation, or backend-only debugging.
+description: 'Diagnose and fix frontend defects from evidence, including unclear UI/runtime errors, broken routes, styling regressions, and hydration or client issues. Reproduce before editing; exclude planned refactors and backend-only debugging.'
 id: 'agents.skills.frontend-bugfix-debugger.skill'
 title: 'Frontend Bugfix Debugger'
 doc_type: 'skill'
@@ -61,7 +61,6 @@ If the user only asks for options or an approach, answer with options first and 
 6. Read `common/typescript-discipline.md` for non-trivial TypeScript work.
 7. Read relevant project overlays, especially `project/verification-profile.md` and path indexes, only when the task needs repository-specific verification commands or path facts.
 8. Read the error, log, route, component, styles, or source files needed for the active bug hypothesis.
-9. Do not read human-facing `README.md` during normal runtime.
 
 For a micro UI fix, default to the context budget in `common/lightweight-routing-policy.md`: owner component, adjacent styles, `package.json` only when dependency presence matters, config only after command failure, and no broad project scans.
 
@@ -70,6 +69,7 @@ For a micro UI fix, default to the context budget in `common/lightweight-routing
 - May run existing project commands needed to reproduce or verify the symptom.
 - May use Browser or Playwright MCP for rendered bug reproduction when available and justified by the task.
 - May use `context7` or official docs when current framework behavior affects the fix.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the defect or fix.
 - May use MDN when browser platform behavior affects the bug.
 - Must not install packages, add test workflows, change build tooling, or add UI libraries without explicit approval.
 - Must not interact with production systems, secrets, or production data.
@@ -113,6 +113,8 @@ Do not start a dev server after changed-file checks and build/type verification 
 If a full repository command fails with unrelated pre-existing noise, stop broad validation, run the smallest changed-file command if available, and report the pre-existing failure separately.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 ```text
 Symptom:

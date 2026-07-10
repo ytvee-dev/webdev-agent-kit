@@ -49,6 +49,36 @@ jobs:
         if: steps.validate_schemas.outputs.status != '0'
         run: exit ${{ steps.validate_schemas.outputs.status }}
 
+      - name: Validate runtime target contracts
+        run: python scripts/validate_target_contracts.py
+
+      - name: Validate source version consistency
+        run: python scripts/validate_version_consistency.py
+
+      - name: Validate release preparation
+        run: |
+          python scripts/validate_release_tag.py
+          python scripts/validate_install_guides.py
+          python scripts/build_release_notes.py --check
+
+      - name: Validate tool capability metadata
+        run: python scripts/validate_tool_capabilities.py
+
+      - name: Validate source context budgets
+        run: python scripts/validate_runtime_context_budget.py
+
+      - name: Validate output economy
+        run: python scripts/validate_output_economy.py
+
+      - name: Validate policy precedence
+        run: python scripts/validate_policy_precedence.py
+
+      - name: Validate test policy
+        run: python scripts/validate_test_policy.py
+
+      - name: Validate runtime policy layers
+        run: python scripts/validate_runtime_layers.py
+
       - name: Validate README boundary
         id: validate_readme_boundary
         run: |
@@ -115,11 +145,29 @@ jobs:
       - name: Build portable targets
         run: python scripts/build_skill_targets.py
 
-      - name: Validate Codex target
-        run: python scripts/validate_codex_skill_pack.py
+      - name: Validate generated runtime policy layers
+        run: python scripts/validate_runtime_layers.py --generated
 
-      - name: Validate Claude target
-        run: python scripts/validate_claude_skill_pack.py
+      - name: Validate generated context budgets
+        run: python scripts/validate_runtime_context_budget.py --generated
+
+      - name: Validate generated version consistency
+        run: python scripts/validate_version_consistency.py --generated
+
+      - name: Validate Codex project target
+        run: python scripts/validate_codex_project_target.py
+
+      - name: Validate Codex plugin target
+        run: python scripts/validate_codex_plugin_target.py
+
+      - name: Validate Claude Code plugin target
+        run: python scripts/validate_claude_plugin_target.py
+
+      - name: Validate Cursor project target
+        run: python scripts/validate_cursor_target.py
+
+      - name: Validate release archive fixtures
+        run: python scripts/validate_release_archive.py --build-fixtures
 
       - name: Full validation orchestrator smoke check
         id: validate_full

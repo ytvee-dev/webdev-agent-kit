@@ -14,6 +14,9 @@ parent:
 related:
     - '[[common/tool-capability-model|Tool Capability Model]]'
     - '[[common/mcp-installation-policy|MCP Installation Policy]]'
+    - '[[adapters/claude-code|Claude Code Client Adapter]]'
+    - '[[adapters/codex|Codex Client Adapter]]'
+    - '[[adapters/cursor|Cursor Client Adapter]]'
     - '[[templates/root-pointers/AGENTS.codex|Codex AGENTS Pointer Template]]'
     - '[[templates/root-pointers/AGENTS.vs-code-codex|VS Code Codex AGENTS Pointer Template]]'
     - '[[templates/root-pointers/AGENTS.cursor|Cursor AGENTS Pointer Template]]'
@@ -23,31 +26,19 @@ depends_on: []
 
 # Client Adaptation Policy
 
-Purpose: keep project adaptation native to the installed agent client while preserving one canonical bundle policy.
+Purpose: select the matching thin client adapter while preserving one portable core and one evidence-gated project profile.
 
 ## Native Entrypoint Rule
 
-During onboarding, detect the installed package target or current host client and create the smallest native pointer that the client reads by default.
+During source-bundle onboarding, detect the installed canonical target or compatibility alias and resolve it through `bundle-manifest.json`. A generated target does not include that internal manifest; read the sole adapter shipped under `adapters/` instead.
 
-Use these defaults:
+The adapter owns native discovery, pointer syntax, tool-registry interpretation, sandbox details, and configuration paths. It must not redefine portable workflow, safety, verification, project-profile, or output policy.
 
-- Codex and VS Code Codex: root `AGENTS.md` points to `.agents/AGENTS.md`.
-- Cursor: root `AGENTS.md` points to `.agents/AGENTS.md`; Cursor rules may also point to the same policy when the Cursor target is installed.
-- Claude Code and VS Code Claude: root `CLAUDE.md` points to or imports `.agents/AGENTS.md`; create root `AGENTS.md` only when the user approves cross-agent compatibility.
-- Generic clients: create only the pointer explicitly requested by the user or documented by the installed target.
-
-The root pointer must stay small. Do not mirror the full bundled policy into client-native files.
+Create only the smallest native pointer allowed by the matching adapter. Do not mirror the full bundled policy into client-native files.
 
 ## Pointer Templates
 
-Use the matching template when creating a new native pointer:
-
-- `templates/root-pointers/AGENTS.codex.md`.
-- `templates/root-pointers/AGENTS.vs-code-codex.md`.
-- `templates/root-pointers/AGENTS.cursor.md`.
-- `templates/root-pointers/CLAUDE.claude-code.md`.
-
-For VS Code Claude, use the Claude Code pointer shape until a stricter editor-specific template is added.
+Use only the pointer template linked by the matching adapter. Compatibility aliases reuse the canonical adapter and template behavior.
 
 ## Existing Entrypoint Rule
 
@@ -79,6 +70,7 @@ Client adaptation is local host-project state. Keep detected client facts in `pr
 
 - Native pointers must be minimal.
 - Existing host instructions must not be overwritten without approval.
-- Claude targets must not depend on Codex-only `agents/openai.yaml` files for capability discovery.
-- Cursor and VS Code setup must be documented as client setup, not mandatory runtime policy.
+- The selected adapter must match the canonical target after alias resolution.
+- Generated targets must not ship adapters for other clients.
+- Client installation must not silently create or replace project instructions.
 - MCP setup remains approval-gated and capability-first.

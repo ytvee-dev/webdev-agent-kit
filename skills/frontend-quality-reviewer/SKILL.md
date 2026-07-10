@@ -1,6 +1,6 @@
 ---
 name: frontend-quality-reviewer
-description: Use for evidence-backed frontend quality review of code, UI implementation, architecture boundaries, TypeScript, security, performance, verification, decomposition, UX gates, independent loop judgment, and anti-slop concerns. Produces pass, pass with concerns, or fail. Do not use to perform broad rewrites, create tests, install tools, or implement fixes unless separately requested.
+description: 'Review frontend quality from evidence across code, UI, architecture, TypeScript, security, performance, verification, decomposition, UX, and anti-slop concerns. Returns pass, concerns, or fail without implementing unrequested fixes.'
 id: 'agents.skills.frontend-quality-reviewer.skill'
 title: 'Frontend Quality Reviewer'
 doc_type: 'skill'
@@ -82,7 +82,6 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 10. Read `common/performance-review-rules.md` when performance claims are in scope.
 11. Read `common/build-tool-boundary-rules.md` and `common/lint-verification-rules.md` when code changed.
 12. Read affected source files, diffs, project overlays, loop contract, verification output, and rendered evidence needed for the review.
-13. Do not read `README.md` during normal runtime.
 
 ## Tool Contract
 
@@ -90,6 +89,7 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 - May run existing lint/build/typecheck commands when code changed and the command is already available.
 - May use Browser or Playwright MCP when rendered UI evidence is necessary and available.
 - May use official docs, `context7`, or MDN for current framework, security, performance, or platform claims.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects a review finding.
 - Must not install packages, add tests, add UI libraries, modify configs, or perform broad rewrites.
 - Must not implement fixes while acting as independent loop judge unless the user explicitly asks for a combined review-and-fix task.
 
@@ -114,6 +114,8 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 14. Report unknowns and blocked checks honestly.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Return findings first, ordered by severity:
 

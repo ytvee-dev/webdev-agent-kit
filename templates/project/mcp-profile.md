@@ -32,13 +32,15 @@ Purpose: record local-only MCP and tool capability facts for this project.
 
 ## Capability State
 
-| Capability | Status | Provider | Required By | Fallback | Confidence Impact |
-| --- | --- | --- | --- | --- | --- |
+| Capability | Status | Provider | Availability Evidence | Required By | Fallback | Confidence Impact |
+| --- | --- | --- | --- | --- | --- | --- |
+
+Allowed availability evidence: current session tool registry, validated project profile, or direct user confirmation for user-supplied references. Provider config alone is not evidence.
 
 ## Configured MCP Servers
 
-| Server | Client Name | Transport | Source | Trusted | Validation |
-| --- | --- | --- | --- | --- | --- |
+| Server | Client Name | Transport | Source | Trusted | Validation | Last Validated |
+| --- | --- | --- | --- | --- | --- | --- |
 
 ## Missing Capabilities
 

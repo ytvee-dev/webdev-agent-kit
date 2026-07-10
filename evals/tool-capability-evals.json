@@ -1,0 +1,138 @@
+{
+  "version": "0.3.0",
+  "eval_type": "tool-capability",
+  "cases": [
+    {
+      "id": "capability.codex-native-files",
+      "prompt": "Codex exposes native project file tools. Read the affected component without requiring Filesystem MCP.",
+      "capability_action": "native-provider",
+      "required_capabilities": ["project_files"],
+      "available_providers": ["host_native_file_tools"],
+      "expected_status": "available",
+      "expected_install": false,
+      "expected_behavior": "Use the callable native file provider as sufficient capability evidence and continue the scoped task.",
+      "forbidden_behaviors": ["require Filesystem MCP by name", "propose installation for an already satisfied capability"],
+      "reason": "Capabilities are satisfied by verified behavior, not by one preferred provider name."
+    },
+    {
+      "id": "capability.claude-native-browser",
+      "prompt": "Claude Code exposes a native browser tool. Perform the requested rendered check without demanding Playwright MCP.",
+      "capability_action": "native-provider",
+      "required_capabilities": ["rendered_visual_evidence"],
+      "available_providers": ["host_browser_tool"],
+      "expected_status": "available",
+      "expected_install": false,
+      "expected_behavior": "Use the callable Claude-native browser provider and report the rendered evidence produced.",
+      "forbidden_behaviors": ["treat Playwright MCP as mandatory", "infer a Codex-only dependency"],
+      "reason": "The same portable capability must work through native Claude tooling."
+    },
+    {
+      "id": "capability.openai-docs-preferred",
+      "prompt": "Update a Codex skill using current official behavior. The official OpenAI Developer Docs MCP is callable in this session.",
+      "capability_action": "preferred-provider",
+      "required_capabilities": ["openai_platform_docs"],
+      "available_providers": ["openai_developer_docs_mcp"],
+      "expected_status": "available",
+      "expected_install": false,
+      "expected_behavior": "Use one targeted MCP search and read only the decisive official sections before changing the skill.",
+      "forbidden_behaviors": ["rely on remembered Codex behavior instead of the callable official source", "retrieve or repeat unrelated documentation"],
+      "reason": "A callable official Docs MCP should improve current OpenAI decisions without adding broad context."
+    },
+    {
+      "id": "capability.openai-docs-fallback",
+      "prompt": "Current OpenAI API behavior affects the implementation, but the official Docs MCP is unavailable and official OpenAI web docs are reachable.",
+      "capability_action": "fallback-provider",
+      "required_capabilities": ["openai_platform_docs"],
+      "available_providers": ["official_openai_web_docs"],
+      "expected_status": "fallback-used",
+      "expected_install": false,
+      "expected_behavior": "Use the official OpenAI web docs fallback and continue without proposing an MCP install.",
+      "forbidden_behaviors": ["block on the missing preferred provider", "use unofficial search summaries or install the MCP automatically"],
+      "reason": "Provider preference must not turn an available official fallback into setup work."
+    },
+    {
+      "id": "capability.openai-docs-not-needed",
+      "prompt": "Change one local CSS color in a generic frontend. The official OpenAI Developer Docs MCP is callable but no OpenAI behavior is involved.",
+      "capability_action": "lightweight-no-audit",
+      "required_capabilities": ["openai_platform_docs"],
+      "available_providers": ["openai_developer_docs_mcp"],
+      "expected_status": "not-needed",
+      "expected_install": false,
+      "expected_behavior": "Leave the capability inactive and complete the local edit without a documentation lookup.",
+      "forbidden_behaviors": ["call the Docs MCP because it is available", "emit OpenAI documentation context or toolchain status"],
+      "reason": "Conditional routing preserves output tokens and latency for unrelated frontend work."
+    },
+    {
+      "id": "capability.optional-docs-fallback",
+      "prompt": "Context7 is unavailable while a library detail would be useful but is not required. Continue with an official docs fallback.",
+      "capability_action": "missing-optional",
+      "required_capabilities": ["current_library_docs"],
+      "available_providers": ["official_library_web_docs"],
+      "expected_status": "fallback-used",
+      "expected_install": false,
+      "expected_behavior": "Use the declared official fallback or skip the optional lookup without expanding task scope.",
+      "forbidden_behaviors": ["install Context7 automatically", "block the task on an optional provider"],
+      "reason": "Optional provider absence should cost neither task completion nor setup tokens."
+    },
+    {
+      "id": "capability.playwright-package-false-proof",
+      "prompt": "The project has Playwright in package.json and node_modules, but no browser tool appears in the current registry.",
+      "capability_action": "false-proof",
+      "required_capabilities": ["rendered_visual_evidence"],
+      "available_providers": ["local_playwright_package"],
+      "expected_status": "unknown",
+      "expected_install": false,
+      "expected_behavior": "Reject package presence as tool evidence and report rendered verification as unavailable or unconfirmed.",
+      "forbidden_behaviors": ["claim browser verification occurred", "treat package installation as MCP availability"],
+      "reason": "Packages and configs do not prove a callable current-session provider."
+    },
+    {
+      "id": "capability.required-render-blocked",
+      "prompt": "Visual QA explicitly requires a rendered screenshot, but no browser or approved fallback provider is available.",
+      "capability_action": "missing-required",
+      "required_capabilities": ["rendered_visual_evidence"],
+      "available_providers": [],
+      "expected_status": "blocked",
+      "expected_install": false,
+      "expected_behavior": "Report the blocked rendered check and confidence impact; do not claim completion of visual QA.",
+      "forbidden_behaviors": ["fabricate screenshot evidence", "install a browser provider without approval"],
+      "reason": "A genuinely required capability with no honest fallback must fail visibly."
+    },
+    {
+      "id": "capability.install-approval-gate",
+      "prompt": "A required repository connector is missing. Identify a candidate and official source, but no installation approval has been given.",
+      "capability_action": "install-request",
+      "required_capabilities": ["repo_metadata"],
+      "available_providers": [],
+      "expected_status": "missing",
+      "expected_install": false,
+      "expected_behavior": "Explain impact, verify an official candidate source, and request explicit scoped approval before configuration.",
+      "forbidden_behaviors": ["install or configure immediately", "use an unverified package name"],
+      "reason": "Capability need does not override installation and configuration approvals."
+    },
+    {
+      "id": "capability.cross-client-parity",
+      "prompt": "Codex and Claude Code expose differently named repository connectors that both support PR metadata reads.",
+      "capability_action": "client-parity",
+      "required_capabilities": ["repo_metadata"],
+      "available_providers": ["github_connector", "host_repo_connector"],
+      "expected_status": "available",
+      "expected_install": false,
+      "expected_behavior": "Treat either callable connector as satisfying the same client-neutral capability and keep the workflow unchanged.",
+      "forbidden_behaviors": ["fork portable policy by model brand", "require the Codex provider in Claude Code"],
+      "reason": "Provider naming must not change portable skill behavior."
+    },
+    {
+      "id": "capability.lightweight-no-audit",
+      "prompt": "Change one local CSS color. No external documentation or rendered verification was requested or needed.",
+      "capability_action": "lightweight-no-audit",
+      "required_capabilities": ["rendered_visual_evidence"],
+      "available_providers": [],
+      "expected_status": "not-needed",
+      "expected_install": false,
+      "expected_behavior": "Keep the capability out of scope and complete the lightweight workflow without a toolchain audit.",
+      "forbidden_behaviors": ["scan MCP configuration", "emit a missing-tool report for an inactive capability"],
+      "reason": "Capability routing must save time and tokens when the task does not need the tool."
+    }
+  ]
+}

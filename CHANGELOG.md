@@ -14,6 +14,7 @@ related:
     - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[docs/install/README|Installation Guides]]'
+    - '[[docs/release/0.3.0-checklist|0.3.0 Release Checklist]]'
 depends_on: []
 ---
 
@@ -25,9 +26,64 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
+### Added
+
+- Added machine-readable runtime contracts for canonical Codex, Claude Code, and Cursor targets.
+- Added `scripts/validate_target_contracts.py` to enforce canonical target, alias, entrypoint, skill-root, output, and validator declarations.
+- Added `docs/architecture/runtime-target-contracts.md` as the human-readable target contract.
+- Added a native Claude Code plugin manifest and structural artifact validator.
+- Added a compact portable runtime core, evidence-gated React/TypeScript profile, and thin Claude Code, Codex, and Cursor adapters.
+- Added runtime-layer validation for client neutrality, context budgets, manifest alignment, and generated adapter selection.
+- Added a centralized eight-level policy precedence contract and validator for forbidden absolute authority claims.
+- Added eight cross-client policy conflict evals covering every adjacent precedence boundary.
+- Added a targeted README read/edit policy, technical evidence hierarchy, and six cross-model README behavior evals.
+- Added a test change policy and eight evals separating existing-test maintenance from new tests and infrastructure.
+- Added full 19-skill capability coverage, strict capability metadata validation, and eleven cross-client capability behavior evals.
+- Added deterministic budgets for the always-on entrypoint, runtime layers, skill-discovery descriptions, and Claude skill prelude.
+- Added fact-based output evals and deterministic final-answer budgets, including a 180-word cap for lightweight workflows.
+- Added a 12-case GPT/Claude parity suite covering routing, context, README, tests, precedence, capabilities, verification, output, onboarding, and scope control.
+- Added release-tag, installation-guide, and generated release-notes validation for the `0.3.0` release path.
+- Added independent Codex project, Codex plugin, Claude plugin, and Cursor target validators plus source/generated version consistency checks.
+- Added deterministic release archive construction and extracted archive fixtures for native paths, exclusions, links, checksums, and root-instruction safety.
+- Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
+- Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
+- Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
+
 ### Changed
 
-- Restored repository-side installation guide drafts so README links and local link checks remain valid after release cleanup.
+- Replaced independent client target entries with three canonical targets and explicit compatibility aliases.
+- Defined Claude Code as a native plugin target and VS Code client packages as aliases of their canonical runtimes.
+- Claude Code now builds as a self-contained native plugin with portable skill frontmatter, stripped source graph metadata, and no Codex-only plugin or UI metadata.
+- Legacy `claude` and `vs-code-claude` outputs now reuse the canonical `claude-code` artifact exactly.
+- Claude project-policy onboarding now uses the exact `@.agents/AGENTS.md` import and requires approval before creating or merging host instructions.
+- Runtime routing now loads core, project profile, client adapter, local conventions, and task skill as separate progressive-disclosure layers.
+- Generated targets now ship the portable core, default profile, and exactly one canonical client adapter; Claude skills load those layers explicitly.
+- Runtime skills, profiles, adapters, and project facts now resolve instruction conflicts through one shared precedence contract.
+- README may now be read for relevant intent, setup, onboarding, audit, and drift questions, but it is never sufficient technical proof and cannot be edited without an explicit current user request.
+- Relevant existing tests may now be run and maintained for confirmed contract changes; new tests remain explicit-request-only, infrastructure remains approval-gated, and routine skipped-test output is removed.
+- README now documents Windows shell and sandbox verification behavior as a user-facing boundary.
+- Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
+- Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.
+- Codex `agents/openai.yaml` files now contain only UI and invocation metadata; optional MCP and native-provider candidates live exclusively in the client-neutral capability manifest.
+- Current OpenAI API, ChatGPT Apps SDK, and Codex lookups now use conditional `openai_platform_docs` routing: prefer the callable official OpenAI Developer Docs MCP, fall back to official web docs, and skip unrelated frontend work.
+- Capability availability now requires current-registry, validated-profile, or user-supplied-reference evidence; package, config, and provider names are explicitly non-proof.
+- Replaced the long always-on policy catalog with a 19-skill compact index and progressive-disclosure routes while preserving detailed rules in owning common docs and skills.
+- Compressed all skill discovery descriptions and stripped source graph frontmatter from every generated target.
+- Final responses now default to `Changed`, `Verified`, and `Blocked` facts while omitting request echo, skill narration, empty headings, and raw logs.
+- Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.
+- Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
+- Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.
+- New skill templates now quote the placeholder `description` value so generated drafts do not start with invalid YAML.
+- Test authoring rules now explicitly block component, hook, function or unit, integration, E2E, snapshot, fixture, mock, and visual regression tests unless the user explicitly asks and approves the exact scope.
+- Codex archives extract runtime under `.agents/`; Cursor archives place shared runtime under `.agents/` and native rules under root `.cursor/`; Claude archives retain their native plugin root.
+- Installation guides now follow the extracted archive roots, prevent `.agents/.agents` nesting, and document persistent Claude skills-directory plugins.
+- Tagged releases now fail when the tag differs from source version metadata and use the validated Unreleased changelog section as release notes.
+- Archive validation now requires all stable/versioned pairs, byte equality, exact checksum inventory, and duplicate-free checksum entries.
+- Root README installation, archive-root, and evidence-policy guidance now matches the validated `0.3.0` runtime contracts.
+- Runtime targets no longer include human-facing root files: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, or `SECURITY.md`.
+- Runtime targets no longer include `examples/`.
+- Codex and VS Code Codex targets keep `.codex-plugin/`; Claude Code, VS Code Claude, Cursor, and legacy Claude targets do not include it.
+- Repository-side installation guides remain human-facing and are excluded from generated runtime targets.
 
 ## 0.2.3 - 2026-07-07
 

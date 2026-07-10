@@ -17,6 +17,4 @@ depends_on: []
 
 # CLAUDE.md
 
-Use the project-local agent policy in `.agents/AGENTS.md`.
-
-Do not duplicate the full policy here.
+@.agents/AGENTS.md

@@ -94,6 +94,14 @@ def validate_instance(value, schema, path="$"):
         if pattern and not re.search(pattern, value):
             errors.append(f"{path}: value {value!r} does not match pattern {pattern!r}")
 
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        minimum = schema.get("minimum")
+        maximum = schema.get("maximum")
+        if minimum is not None and value < minimum:
+            errors.append(f"{path}: value is less than minimum {minimum}")
+        if maximum is not None and value > maximum:
+            errors.append(f"{path}: value is greater than maximum {maximum}")
+
     if isinstance(value, list):
         min_items = schema.get("minItems")
         max_items = schema.get("maxItems")
@@ -179,6 +187,17 @@ def validate_bundle_manifest(schema, errors):
         )
 
 
+def validate_tool_capabilities_manifest(schema, errors):
+    path = ROOT / "tool-capabilities-manifest.json"
+    try:
+        manifest = load_json(path)
+    except Exception as exc:
+        errors.append(f"tool-capabilities-manifest.json: cannot parse JSON: {exc}")
+        return
+
+    validate_with_schema("tool-capabilities-manifest.json", manifest, schema, errors)
+
+
 def validate_skills(schema, errors):
     for skill_dir in sorted(
         path for path in (ROOT / "skills").iterdir() if path.is_dir()
@@ -254,10 +273,12 @@ def validate(strict_graph=False):
         skill_schema = load_json(schema_path("skill-frontmatter"))
         openai_schema = load_json(schema_path("openai-agent"))
         graph_schema = load_json(schema_path("graph-doc"))
+        tool_capabilities_schema = load_json(schema_path("tool-capabilities-manifest"))
     except Exception as exc:
         return [f"schemas: cannot load required schema files: {exc}"]
 
     validate_bundle_manifest(bundle_schema, errors)
+    validate_tool_capabilities_manifest(tool_capabilities_schema, errors)
     validate_skills(skill_schema, errors)
     validate_openai_metadata(openai_schema, errors)
     if strict_graph:

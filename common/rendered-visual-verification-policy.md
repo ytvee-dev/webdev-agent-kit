@@ -15,6 +15,7 @@ related:
     - '[[common/smart-verification-budget|Smart Verification Budget]]'
     - '[[common/diff-impact-verification-rules|Diff Impact Verification Rules]]'
     - '[[common/mcp-availability-detection-rules|MCP Availability Detection Rules]]'
+    - '[[common/windows-shell-sandbox-rules|Windows Shell Sandbox Rules]]'
     - '[[skills/frontend-visual-qa/SKILL|Frontend Visual QA]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
 depends_on: []
@@ -56,6 +57,10 @@ Read `common/mcp-availability-detection-rules.md` before checking Browser or Pla
 A running local app, open port, lockfile entry, and installed Playwright dependency do not mean Browser or Playwright MCP is available.
 
 If the MCP or host browser capability required for rendered visual QA is missing, report the missing capability and blocked checks. Do not claim tool-based visual QA from a local Playwright dependency unless the user explicitly approved that fallback for the current task.
+
+If the local app or dev server cannot start because of a Windows shell policy or sandbox access blocker, read `common/windows-shell-sandbox-rules.md`. Use only the allowed fallback and then report rendered QA as blocked if the same environment class fails again.
+
+Do not start browser QA after the dev server failed to start for a shell or sandbox reason.
 
 ## Impact Boundary
 

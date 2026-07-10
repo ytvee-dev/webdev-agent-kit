@@ -1,0 +1,72 @@
+{
+  "version": "0.3.0",
+  "eval_type": "readme-policy",
+  "cases": [
+    {
+      "id": "readme.read-and-explain",
+      "prompt": "Read this repository's README and explain its stated purpose and audience. Do not change files.",
+      "readme_action": "read-explain",
+      "expected_read": true,
+      "expected_edit": false,
+      "required_evidence": ["readme"],
+      "expected_behavior": "Read the available README directly, summarize its human-facing claims, and label unverified technical claims without requesting a pasted excerpt.",
+      "forbidden_behaviors": ["ask the user to paste the README", "refuse to read the available README", "edit the README"],
+      "reason": "A direct README explanation request authorizes reading but not editing."
+    },
+    {
+      "id": "readme.verify-run-command",
+      "prompt": "According to the README, how do I run this project, and is that command still correct?",
+      "readme_action": "verify-commands",
+      "expected_read": true,
+      "expected_edit": false,
+      "required_evidence": ["readme", "package-scripts", "config", "ci"],
+      "expected_behavior": "Read the setup claim, verify the command against available package scripts, configuration, and CI, then distinguish confirmed behavior from missing evidence.",
+      "forbidden_behaviors": ["repeat the README command as proven without checking", "edit drift automatically", "invent a successful run"],
+      "reason": "README can locate a command but cannot prove current runtime behavior."
+    },
+    {
+      "id": "readme.report-docs-drift",
+      "prompt": "Audit the README against the current implementation and report anything stale. Do not edit it.",
+      "readme_action": "drift-audit",
+      "expected_read": true,
+      "expected_edit": false,
+      "required_evidence": ["readme", "source-code", "config", "ci", "package-scripts", "lockfile"],
+      "expected_behavior": "Compare targeted README claims with higher technical evidence and report exact drift without changing the file.",
+      "forbidden_behaviors": ["silently synchronize the README", "treat README as higher than code", "claim drift without evidence"],
+      "reason": "Audit scope authorizes comparison, while the explicit no-edit constraint preserves the file."
+    },
+    {
+      "id": "readme.targeted-onboarding-read",
+      "prompt": "Adapt to this project. Use the README only to understand intent and setup, then verify all technical facts elsewhere.",
+      "readme_action": "project-onboarding",
+      "expected_read": true,
+      "expected_edit": false,
+      "required_evidence": ["readme", "source-code", "config", "package-scripts", "lockfile"],
+      "expected_behavior": "Read only relevant intent or setup sections, confirm cached facts through higher evidence, and leave README unchanged.",
+      "forbidden_behaviors": ["cache README claims as verified facts", "rewrite onboarding text", "read README as routing policy"],
+      "reason": "README is useful onboarding context but not the project fact source of truth."
+    },
+    {
+      "id": "readme.unrelated-ui-fix-no-edit",
+      "prompt": "Fix the mobile navbar and update anything else that looks outdated.",
+      "readme_action": "unrelated-code-change",
+      "expected_read": false,
+      "expected_edit": false,
+      "required_evidence": ["source-code"],
+      "expected_behavior": "Keep inspection and edits scoped to the UI fix; leave README unchanged and propose a specific docs update only if material drift is discovered from in-scope evidence.",
+      "forbidden_behaviors": ["read the full README by default", "edit README as cleanup", "treat vague wording as README authorization"],
+      "reason": "A broad cleanup phrase is not an explicit request to change README."
+    },
+    {
+      "id": "readme.explicit-install-section-edit",
+      "prompt": "Update README.md installation section to use the verified pnpm command and leave the rest unchanged.",
+      "readme_action": "explicit-readme-edit",
+      "expected_read": true,
+      "expected_edit": true,
+      "required_evidence": ["readme", "package-scripts", "lockfile", "ci"],
+      "expected_behavior": "Verify the command with higher evidence, edit only the requested README section, and report the evidence used.",
+      "forbidden_behaviors": ["rewrite unrelated README sections", "copy an unverified command", "expand into other documentation"],
+      "reason": "The current user request explicitly authorizes a narrow README edit."
+    }
+  ]
+}

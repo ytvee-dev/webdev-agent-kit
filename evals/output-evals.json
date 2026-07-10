@@ -1,60 +1,105 @@
 {
-  "version": "0.1.0",
+  "version": "0.3.0",
   "eval_type": "skill-output",
   "cases": [
     {
       "id": "frontend-quality-reviewer.review-output-contract",
       "prompt": "Review this frontend change before merge. Do not apply fixes.",
       "skill": "frontend-quality-reviewer",
-      "required_output_sections": ["Verdict", "Findings", "Severity", "Evidence", "Required fixes", "Verification gaps"],
-      "forbidden_behaviors": ["apply fixes without user request", "invent verification results", "ignore unresolved risk"],
-      "risk_notes": ["Review output must separate required fixes from optional improvements."],
-      "reason": "The review skill needs a consistent evidence-backed verdict shape."
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["verdict and highest-severity findings", "file or runtime evidence", "required fixes", "verification gaps or blockers when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "add praise or optional commentary before findings"],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "Review output should prioritize actionable evidence and keep verification gaps visible."
     },
     {
       "id": "frontend-bugfix-debugger.smallest-fix-output",
       "prompt": "The settings page crashes after clicking Save. Reproduce it, fix the smallest cause, and rerun the relevant check.",
       "skill": "frontend-bugfix-debugger",
-      "required_output_sections": ["Symptom", "Reproduction", "Root cause", "Changed", "Verified", "Risks"],
-      "forbidden_behaviors": ["skip reproduction when tools are available", "change unrelated behavior", "claim verification without evidence"],
-      "risk_notes": ["Bugfix reports must distinguish verified fixes from blocked or unavailable checks."],
-      "reason": "Bugfix output must preserve evidence, root cause, exact changes, and verification state."
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["verified symptom and root cause", "changed surface", "verification command and result", "blockers or remaining risk when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "list routine attempts that did not affect the result"],
+      "max_words": 220,
+      "must_report_verification": true,
+      "reason": "A bugfix handoff needs root cause, scope, and evidence without process narration."
     },
     {
       "id": "frontend-visual-qa.viewport-evidence-output",
       "prompt": "Verify the implemented page against screenshots at desktop, tablet, and 375px mobile.",
       "skill": "frontend-visual-qa",
-      "required_output_sections": ["Viewports", "Evidence", "Mismatches", "Verdict", "Blocked checks"],
-      "forbidden_behaviors": ["claim rendered QA without browser evidence", "treat source inspection as screenshot verification", "hide missing tool blockers"],
-      "risk_notes": ["Visual QA must be explicit when Browser or Playwright MCP is unavailable."],
-      "reason": "Rendered visual verification must report viewport-specific evidence and blockers."
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["viewports and rendered evidence", "material mismatches", "verification verdict", "blocked checks when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "claim rendered QA from source inspection"],
+      "max_words": 220,
+      "must_report_verification": true,
+      "reason": "Visual QA must preserve viewport evidence and blockers while omitting a verbose checklist."
+    },
+    {
+      "id": "frontend-visual-qa.sandbox-blocked-dev-server-output",
+      "prompt": "The dev server failed twice with the same esbuild sandbox access error. Report the visual QA status without restarting it again.",
+      "skill": "frontend-visual-qa",
+      "workflow_level": "Lightweight Workflow",
+      "required_facts": ["failed verification command class", "exact blocking error", "rendered QA status", "approval or next decision when needed"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "describe repeated attempts after the stop condition"],
+      "max_words": 180,
+      "must_report_verification": true,
+      "reason": "A blocked visual check needs one decisive error and status, not another retry narrative."
+    },
+    {
+      "id": "frontend-linter-manager.windows-npm-cmd-fallback-output",
+      "prompt": "On Windows, npm run lint failed because npm.ps1 is blocked. Verify with the correct fallback and report the result.",
+      "skill": "frontend-linter-manager",
+      "workflow_level": "Lightweight Workflow",
+      "required_facts": ["fallback lint command", "verification result", "unresolved lint or shell blocker when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "narrate successful setup steps"],
+      "max_words": 160,
+      "must_report_verification": true,
+      "reason": "Lint output should expose the exact fallback and result in a compact handoff."
     },
     {
       "id": "frontend-layout-implementer.implementation-output",
       "prompt": "Implement this approved Design Implementation Spec in the current React page using existing CSS Modules.",
       "skill": "frontend-layout-implementer",
-      "required_output_sections": ["Changed", "Spec source", "Project conventions reused", "Verified", "Risks"],
-      "forbidden_behaviors": ["install packages without approval", "invent new styling system", "skip available lint verification"],
-      "risk_notes": ["Implementation reports must make reuse and verification explicit."],
-      "reason": "Layout implementation output should prove scope control, project-native reuse, and verification."
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["changed files or surfaces", "material project conventions reused", "verification command and result", "spec deviation or blocker when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "list every convention inspected"],
+      "max_words": 220,
+      "must_report_verification": true,
+      "reason": "Implementation output should prove scope, reuse, and verification without echoing the workflow."
+    },
+    {
+      "id": "frontend-layout-implementer.no-component-test-authoring-output",
+      "prompt": "Implement this approved UI fix in the current React component. Do not write tests unless explicitly requested.",
+      "skill": "frontend-layout-implementer",
+      "workflow_level": "Lightweight Workflow",
+      "required_facts": ["changed component surface", "verification result", "remaining risk or blocker when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "report irrelevant skipped test work"],
+      "max_words": 160,
+      "must_report_verification": true,
+      "reason": "A small UI fix should not spend output tokens explaining that unrequested tests were skipped."
     },
     {
       "id": "frontend-refactor-surgeon.no-use-callback-output",
       "prompt": "Fix this component where useCallback was added around a simple local handler.",
       "skill": "frontend-refactor-surgeon",
-      "required_output_sections": ["Changed", "Behavior preserved", "Callback identity", "Verification", "Risks"],
-      "forbidden_behaviors": ["keep useCallback without evidence", "claim generic performance benefit", "add memoization to hide component shape issues"],
-      "risk_notes": ["Refactor output must prove that unnecessary useCallback was removed or justified with identity-sensitive evidence."],
-      "reason": "useCallback without a proven consumer is a React anti-pattern for this bundle."
+      "workflow_level": "Lightweight Workflow",
+      "required_facts": ["changed callback boundary", "behavior-preservation evidence", "verification result", "remaining risk when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "claim a generic performance improvement"],
+      "max_words": 160,
+      "must_report_verification": true,
+      "reason": "The refactor handoff should state the identity decision and evidence directly."
     },
     {
       "id": "agent-rules-skill-author.bundle-maintenance-output",
       "prompt": "Update the agent bundle rules and validators for a new skill trigger boundary.",
       "skill": "agent-rules-skill-author",
-      "required_output_sections": ["Files changed", "Trigger changes", "Validation", "Risks", "Follow-up"],
-      "forbidden_behaviors": ["use README as runtime policy", "skip manifest alignment", "leave stale graph links unchecked"],
-      "risk_notes": ["Bundle-maintenance output must report policy, graph, validator, and manifest impacts."],
-      "reason": "Skill authoring changes need concise operational reporting and validation evidence."
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["changed rules or metadata", "trigger or contract impact", "validation result", "unresolved risk or blocker when present"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "list unchanged bundle areas"],
+      "max_words": 220,
+      "must_report_verification": true,
+      "reason": "Bundle maintenance needs a compact evidence-backed change report rather than process narration."
     }
   ]
 }

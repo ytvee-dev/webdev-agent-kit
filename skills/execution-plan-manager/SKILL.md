@@ -1,6 +1,6 @@
 ---
 name: execution-plan-manager
-description: Use for standard or deep frontend work that needs an execution plan, task slices, checkpoint rules, loop handoff decisions, and stop/resume state after a goal is defined. Do not use for lightweight micro-fixes or isolated direct edits unless the task escalates.
+description: 'Plan standard or deep frontend execution after the goal is defined, including task slices, checkpoints, loop handoffs, and stop/resume state. Skip lightweight isolated edits.'
 id: 'agents.skills.execution-plan-manager.skill'
 title: 'Execution Plan Manager'
 doc_type: 'skill'
@@ -74,7 +74,6 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
 7. Read the current goal contract from the response, user request, or `project/active-goals.md` when present and relevant.
 8. Read only project overlays needed to slice the task safely, such as `project/stack-profile.md`, `project/architecture-map.md`, `project/styling-profile.md`, or `project/verification-profile.md`.
 9. Read affected source files only when slicing cannot be done safely without them.
-10. Do not read human-facing documentation unless the task changes that documentation.
 
 ## Tool Contract
 
@@ -99,6 +98,8 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
 10. When invoked after execution, compare plan and result, including completed scope, skipped scope, deviations, verification evidence, loop attempts, stop condition, and next step.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Return or write an Execution Plan with:
 

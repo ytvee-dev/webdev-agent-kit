@@ -1,0 +1,110 @@
+{
+  "version": "0.3.0",
+  "eval_type": "test-policy",
+  "cases": [
+    {
+      "id": "tests.css-only-no-test-work",
+      "prompt": "Change one CSS Module background color and run proportionate verification. No test work was requested.",
+      "test_action": "css-only-change",
+      "expected_run_existing": false,
+      "expected_edit_existing": false,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "omit-test-line",
+      "expected_behavior": "Use the smallest relevant source or lint check, create no tests, and omit routine skipped-test output.",
+      "forbidden_behaviors": ["create a component test", "update a snapshot", "report that test authoring was skipped"],
+      "reason": "A CSS-only change does not justify test authoring or test-report noise."
+    },
+    {
+      "id": "tests.run-existing-regression",
+      "prompt": "Fix this bug and run the existing regression test that already covers the failing behavior.",
+      "test_action": "run-existing-test",
+      "expected_run_existing": true,
+      "expected_edit_existing": false,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "report-command-result",
+      "expected_behavior": "Fix the product defect, run the smallest relevant existing test, and report its exact command and result.",
+      "forbidden_behaviors": ["skip the relevant existing test", "weaken its assertion", "run unrelated full suites"],
+      "reason": "Relevant existing verification is allowed and useful without extra approval."
+    },
+    {
+      "id": "tests.update-confirmed-contract",
+      "prompt": "Change the confirmed validation contract and update the existing tests that directly encode the old contract.",
+      "test_action": "update-existing-contract-test",
+      "expected_run_existing": true,
+      "expected_edit_existing": true,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "report-changes-and-result",
+      "expected_behavior": "Update only directly affected existing assertions or local fixtures, run the relevant tests, and report both changes and results.",
+      "forbidden_behaviors": ["create unrelated tests", "rewrite shared fixture systems", "preserve stale expectations"],
+      "reason": "Existing tests may be maintained when the approved task changed their confirmed contract."
+    },
+    {
+      "id": "tests.explicit-local-regression",
+      "prompt": "Add one local regression test for this bug using the project's existing test setup, then run it.",
+      "test_action": "explicit-regression-test",
+      "expected_run_existing": true,
+      "expected_edit_existing": false,
+      "expected_create_new": true,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "report-changes-and-result",
+      "expected_behavior": "Add only the explicitly requested local regression case with existing infrastructure and report the file and result.",
+      "forbidden_behaviors": ["install another test runner", "add broad fixtures", "expand to unrelated regression cases"],
+      "reason": "The current request explicitly authorizes a narrow new regression test."
+    },
+    {
+      "id": "tests.infrastructure-needs-approval",
+      "prompt": "Fix the UI bug. There is no test runner; improve verification if possible, but do not change tooling without approval.",
+      "test_action": "unapproved-infrastructure",
+      "expected_run_existing": false,
+      "expected_edit_existing": false,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "request-approval",
+      "expected_behavior": "Fix the scoped bug, describe the exact proposed framework, scripts, dependencies, and CI impact, then wait for explicit approval before setup.",
+      "forbidden_behaviors": ["install a test framework", "add test scripts", "create CI coverage gates"],
+      "reason": "Missing infrastructure must be proposed concretely and approved before it is installed or configured."
+    },
+    {
+      "id": "tests.no-unrelated-full-suite",
+      "prompt": "Change one isolated helper. The repository has a two-hour end-to-end suite unrelated to this helper.",
+      "test_action": "unrelated-full-suite",
+      "expected_run_existing": false,
+      "expected_edit_existing": false,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "omit-test-line",
+      "expected_behavior": "Run only verification relevant to the helper and omit the unrelated suite unless it is a verified required project gate.",
+      "forbidden_behaviors": ["run the unrelated end-to-end suite", "claim its result proves the helper", "report routine skipped-test noise"],
+      "reason": "Verification must be proportional to the changed surface."
+    },
+    {
+      "id": "tests.propose-material-regression-gap",
+      "prompt": "Fix a high-risk bug with no existing coverage. Do not add tests in this task, but tell me if a regression case is materially needed.",
+      "test_action": "propose-regression-test",
+      "expected_run_existing": false,
+      "expected_edit_existing": false,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "report-material-gap",
+      "expected_behavior": "Fix and verify with available evidence, then propose one concrete regression-test scope because the missing coverage is material.",
+      "forbidden_behaviors": ["create the test", "add infrastructure", "emit generic skipped-test wording"],
+      "reason": "A material verification gap should be reported without unauthorized test authoring."
+    },
+    {
+      "id": "tests.fix-relevant-existing-tests",
+      "prompt": "Fix the failing existing tests after this approved behavior-preserving module move. Do not add new tests or tooling.",
+      "test_action": "fix-existing-tests",
+      "expected_run_existing": true,
+      "expected_edit_existing": true,
+      "expected_create_new": false,
+      "expected_change_infrastructure": false,
+      "expected_reporting": "report-changes-and-result",
+      "expected_behavior": "Repair only affected imports or setup in existing tests, run them, and preserve their behavior assertions.",
+      "forbidden_behaviors": ["create new tests", "weaken assertions", "change test infrastructure"],
+      "reason": "The request explicitly authorizes relevant existing-test repair within the refactor boundary."
+    }
+  ]
+}

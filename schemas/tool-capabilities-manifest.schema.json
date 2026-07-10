@@ -11,9 +11,22 @@
       "minProperties": 1,
       "additionalProperties": {
         "type": "object",
-        "required": ["purpose", "preferred_providers", "fallback_providers", "blocked_providers"],
+        "required": ["purpose", "availability_evidence", "preferred_providers", "fallback_providers", "blocked_providers"],
         "properties": {
           "purpose": {"type": "string", "minLength": 1, "maxLength": 500},
+          "availability_evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "enum": [
+                "current_session_tool_registry",
+                "direct_user_confirmation",
+                "validated_project_profile"
+              ]
+            },
+            "uniqueItems": true
+          },
           "preferred_providers": {
             "type": "array",
             "items": {"type": "string", "minLength": 1, "maxLength": 120},
@@ -35,8 +48,10 @@
     },
     "skills": {
       "type": "object",
+      "minProperties": 1,
       "additionalProperties": {
         "type": "object",
+        "required": ["requires", "requires_when_in_scope", "optional", "blocked"],
         "properties": {
           "requires": {
             "type": "array",

@@ -98,21 +98,26 @@ Map the detected stack to official documentation and MCP sources:
 Never use or install Figma MCP, whiteboard, live-design inspection, Figma
 canvas, Figma file creation, design-system generation, or Code Connect tooling.
 
-## MCP Dependency Scan
+## Capability Scan
 
-Scan every `skills/*/agents/openai.yaml` and collect `dependencies.tools`.
+Read `tool-capabilities-manifest.json` and collect the declarations for skills
+that apply to the detected project. Scan all skills only for an explicitly
+requested full toolchain audit. `agents/openai.yaml` is Codex UI and invocation
+metadata, not the capability source of truth.
 
 Record:
 
-- required tool name;
+- required, conditional, optional, or blocked capability;
 - declaring skill package;
-- purpose from the dependency description;
-- whether the tool is active in the current session;
-- whether the tool is configured in the host Codex environment when that can be
-  safely inspected;
+- purpose and provider candidates from the capability manifest;
+- whether a satisfying native, connector, MCP, or fallback provider is callable
+  in the current session or validated in the project profile;
 - whether the tool is optional, required, missing, approved for installation,
   installed, skipped, or blocked;
 - official install source or command when verified.
+
+Do not treat provider names, packages, config entries, or Codex-only metadata as
+availability evidence. Missing optional providers do not trigger installation.
 
 Report missing official MCP servers before installing them. Install only after
 explicit user approval. Stop and ask when an official install source or command

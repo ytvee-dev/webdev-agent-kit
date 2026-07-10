@@ -1,6 +1,6 @@
 ---
 name: frontend-layout-implementer
-description: Use when implementing a Design Implementation Spec or screenshot-derived visual spec in a React or Next.js project using existing CSS Modules, Redux, TanStack, and Axios conventions. Supports bounded verification handoff when measurable iteration is required. Do not use for unrelated frontend stacks, Figma MCP, new styling systems, or implementation before design intent is specified.
+description: 'Implement an approved Design Implementation Spec or screenshot-derived spec in React/Next.js using existing CSS Modules, Redux, TanStack, and Axios conventions. Excludes unrelated stacks, live design tools, and new styling systems.'
 id: 'agents.skills.frontend-layout-implementer.skill'
 title: 'Frontend Layout Implementer'
 doc_type: 'skill'
@@ -74,7 +74,7 @@ When the user asks to keep iterating until measurable visual, lint, build, or ro
 10. Read affected source files, styles, components, routes, and configs.
 11. Read `references/implementation-rules.md` when present.
 
-Do not read `README.md` or `dist/**` during normal runtime.
+Do not read generated `dist/**` during normal runtime.
 
 ## Tool Contract
 
@@ -82,6 +82,7 @@ Do not read `README.md` or `dist/**` during normal runtime.
 - Use Design Spec MCP when available; otherwise use the supplied spec text or user-approved local artifact.
 - Use Visual Reference MCP when available; otherwise use attached or local image files supplied by the user.
 - Use `context7` for React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool docs when implementation depends on current behavior.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the implementation.
 - Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility facts.
 - Use rendered visual QA only when screenshot comparison, viewport evidence, overflow checks, or visible state verification are in scope.
 - Use Visual Diff MCP when available during final visual comparison.
@@ -112,6 +113,8 @@ Do not read `README.md` or `dist/**` during normal runtime.
 20. Use `frontend-quality-reviewer` before final reporting when the user asks for review, the implementation has significant surface area, a loop contract requires independent review, or the plan requires a quality pass.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Report:
 

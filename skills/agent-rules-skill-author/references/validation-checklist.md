@@ -56,6 +56,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
   for fragile workflows.
 - `description` is a string, avoids angle brackets, and stays within 1024
   characters.
+- Bundle discovery descriptions pass the per-skill and aggregate context
+  budgets without deleting decisive trigger boundaries.
 - Expected output format or report shape is explicit when output structure
   matters.
 - The validation model fits the workflow: objective checks for objective work,
@@ -70,7 +72,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - `agents/openai.yaml` exists, is parseable, and aligns with the skill intent.
 - `interface.short_description` stays within 25-64 characters.
 - If `interface.default_prompt` is present, it mentions `$skill-name`.
-- If `dependencies.tools` is present, it documents real tool dependencies.
+- If `dependencies.tools` is present, it documents a true hard client-tool
+  dependency; optional providers remain in the capability manifest.
 - No changed files exist outside `.agents/` except the repository root
   `AGENTS.md` when repo-wide policy, skill discovery, or upstream bundle
   maintenance changed.
@@ -85,9 +88,9 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - Branch switching examples include a dirty-tree and unmerged path guard.
 - Removed skill names, stale paths, and outdated references were searched across
   `.agents`.
-- `.agents/README.md` was updated or explicitly checked when documentation
-  changes affected user-facing workflow, skill lists, path policy, or
-  sync/publication instructions.
+- An existing README stayed unchanged unless the current user explicitly
+  requested that README edit. When README was in scope, technical claims were
+  checked against higher evidence and drift was reported.
 - No auxiliary docs such as `README.md` or `CHANGELOG.md` were added to the
   skill package.
 - `agents/openai.yaml` matches the skill trigger and intent.

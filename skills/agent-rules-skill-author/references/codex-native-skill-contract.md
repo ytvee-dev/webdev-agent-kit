@@ -122,8 +122,10 @@ Rules to preserve:
 - Quote string values when generating YAML.
 - Keep `short_description` concise and within 25-64 characters.
 - If `default_prompt` is present, make it short and include `$skill-name`.
-- Use `dependencies.tools` when the skill depends on MCP servers or other
-  explicit tool contracts. Keep these dependencies factual and narrow.
+- Use `dependencies.tools` only when a hard Codex tool dependency cannot be
+  satisfied by another native, connector, MCP, or allowed fallback provider.
+- Keep cross-client capabilities and optional provider candidates in
+  `tool-capabilities-manifest.json`; client metadata is not availability proof.
 
 ## Local toolkit contract
 

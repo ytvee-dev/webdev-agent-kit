@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: Use when adapting this .agents bundle to a host frontend project with native client pointers, local-only project overlays, target-stack detection, skill applicability notes, docs/MCP capability selection, client profile creation, verification facts, optional loop-memory setup, and frontend context cache. Do not create app source files or overwrite host instructions without approval.
+description: 'Adapt this .agents bundle to a frontend project using approved native pointers, local-only overlays, stack detection, skill applicability, tool capabilities, client and verification facts, optional loop memory, and context cache. Do not create app code or overwrite instructions.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'
@@ -15,6 +15,9 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[common/readme-policy|README Read And Edit Policy]]'
+    - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[skills/project-onboarding-adapter/references/adaptation-checklist|Adaptation Checklist]]'
     - '[[skills/project-onboarding-adapter/references/path-audit-checklist|Path Audit Checklist]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
@@ -59,10 +62,10 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 
 ## Required Context
 
-1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect only the minimal pointer section; do not read host README files.
-2. Read bundle-local `AGENTS.md`.
-3. Read `common/client-adaptation-policy.md`.
-4. Read `common/target-stack-policy.md`.
+1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect only the minimal pointer section.
+2. Read bundle-local `AGENTS.md` and `common/core/runtime-core-policy.md`.
+3. Read `common/client-adaptation-policy.md` and only the adapter for the resolved canonical target.
+4. Read `profiles/react-typescript/PROFILE.md` and its owning policies only when repository evidence confirms the profile.
 5. Read `common/skill-applicability-policy.md` when the detected or suspected stack is outside the target stack.
 6. Read `common/tool-capability-model.md` and `tool-capabilities-manifest.json` for capability selection.
 7. Read `common/context-compaction-rules.md` when loop memory or resumable workflow setup is requested.
@@ -70,11 +73,14 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 9. Inspect only relevant manifests, configs, source entrypoints, routes, styles, assets, and verification scripts.
 10. Read `templates/project/client-profile.md` and `templates/project/mcp-profile.md` before creating those local-only profiles.
 
+Read targeted README sections only when they help identify project intent, setup guidance, or documentation drift. Apply `common/readme-policy.md`, and confirm every cached technical fact through manifests, config, source, CI, package scripts, lockfiles, or real results.
+
 ## Tool Contract
 
 - Use the `project_files` capability when available. Prefer configured filesystem/project-files MCP for direct project file reads; use host-native file tools when available; use targeted shell reads only as the fallback.
 - Use MDN for HTML, CSS, Web APIs, accessibility, and browser behavior when official web platform facts matter.
 - Use `context7` only for detected target-stack libraries or tooling when current docs matter.
+- Activate `openai_platform_docs` only when current Codex client, plugin, skill, MCP, or configuration behavior affects onboarding.
 - Determine Browser or Playwright availability from the current session tool registry or validated `project/mcp-profile.md` facts. Do not invoke either tool during onboarding or MCP detection.
 - Do not infer MCP availability from `package.json`, lockfiles, `node_modules`, a running local app, or Playwright dependencies.
 - Do not use Figma MCP.
@@ -83,15 +89,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 ## Workflow
 
 1. Classify whether this is Plan Mode or approved execution.
-2. Detect the installed package target or current client surface:
-   - Codex or VS Code Codex;
-   - Claude Code or VS Code Claude;
-   - Cursor;
-   - generic or unknown client.
-3. Apply `common/client-adaptation-policy.md` to choose the native host pointer:
-   - Codex and VS Code Codex create or refresh root `AGENTS.md` pointing to `.agents/AGENTS.md`.
-   - Cursor creates or refreshes root `AGENTS.md`; Cursor rules may point to `.agents/AGENTS.md` when the Cursor target is installed.
-   - Claude Code and VS Code Claude create or refresh root `CLAUDE.md` pointing to or importing `.agents/AGENTS.md`; create root `AGENTS.md` only with user approval for cross-agent compatibility.
+2. Detect the installed target or current client surface. In source, resolve aliases through `bundle-manifest.json`; in a generated target, use its sole shipped adapter.
+3. Read that one client adapter and apply its native discovery, pointer, tool, sandbox, and configuration rules. For a generic or unknown client, create no pointer unless the user explicitly requests one.
 4. If an expected pointer already exists, do not overwrite it. Propose a merge when existing instructions are non-empty or ambiguous.
 5. Detect whether the host project is existing, new/empty, or partially initialized.
 6. Detect target-stack fit from manifests, configs, lockfiles, source roots, routes, styles, and entrypoints.
@@ -104,6 +103,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 13. In approved execution mode, create or update only the approved pointer and local-only overlays, then run available validation checks.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 ```text
 Installed package target or detected client
@@ -125,9 +126,9 @@ Unknowns
 
 - `project/**` overlays remain local-only.
 - `project/client-profile.md` and `project/mcp-profile.md` are created from templates and marked local-only in copied overlays.
-- Native pointers remain small and point to `.agents/AGENTS.md` instead of mirroring the full policy.
+- Native pointers remain small. Claude uses the exact `@.agents/AGENTS.md` import when shared project policy is approved; other pointers reference `.agents/AGENTS.md` instead of mirroring the full policy.
 - Existing host instructions are not overwritten without approval.
-- Host README files and host docs are not edited during onboarding.
+- README may supply targeted context but never the sole technical fact; README and host docs are not edited during onboarding unless the current user explicitly requests that documentation change.
 - Loop memory stores tried, verified, and open facts only in local-only project files.
 - Non-target frontend overlays do not claim React/Next implementation support.
 - Non-target frontend projects list applicable framework-agnostic skills instead of reporting the whole bundle unusable.
@@ -157,11 +158,13 @@ Should not trigger:
 ## Reference Map
 
 - `common/client-adaptation-policy.md`
+- `common/codex-official-docs-policy.md`
 - `common/tool-capability-model.md`
 - `common/mcp-installation-policy.md`
 - `common/target-stack-policy.md`
 - `common/skill-applicability-policy.md`
 - `common/context-compaction-rules.md`
+- `common/readme-policy.md`
 - `tool-capabilities-manifest.json`
 - `templates/project/client-profile.md`
 - `templates/project/mcp-profile.md`

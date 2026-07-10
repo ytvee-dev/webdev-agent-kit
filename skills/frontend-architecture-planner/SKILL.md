@@ -1,6 +1,6 @@
 ---
 name: frontend-architecture-planner
-description: Use for standard or deep React/Next.js work that needs architecture planning, ownership boundaries, routing/state/data/styling/form/build decisions, migration risk assessment, or implementation handoff. Do not use for unrelated frontend stacks, micro-fixes, direct isolated edits, or purely visual design direction.
+description: 'Plan architecture and ownership for standard or deep React/Next.js work across routing, state, data, styling, forms, builds, migrations, and implementation handoff. Skip micro-fixes and unrelated stacks.'
 id: 'agents.skills.frontend-architecture-planner.skill'
 title: 'Frontend Architecture Planner'
 doc_type: 'skill'
@@ -80,12 +80,13 @@ Do not use this skill for:
 5. Read only relevant boundary rules for the task.
 6. Read relevant project overlays when present: stack, architecture, styling, verification, docs, build, workspace, state, and data-fetching profiles.
 7. Read affected source files only when architectural boundaries cannot be planned from overlays.
-8. Do not read human-facing `README.md` or generated `dist/**` during normal runtime.
+8. Do not read generated `dist/**` during normal runtime.
 
 ## Tool Contract
 
 - May use filesystem access to inspect relevant project overlays and affected source files.
 - May use `context7` for React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool documentation when architecture depends on current behavior.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the architecture.
 - May use MDN for platform constraints that affect architecture, such as forms, browser APIs, accessibility, and CSS behavior.
 - Must not install packages, UI libraries, state libraries, data libraries, form libraries, or MCP servers.
 - Must not change project source files, configs, package manager files, or build tooling.
@@ -105,6 +106,8 @@ Do not use this skill for:
 10. Hand off to `execution-plan-manager` or the relevant implementation skill.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Return or write a Frontend Architecture Plan with:
 

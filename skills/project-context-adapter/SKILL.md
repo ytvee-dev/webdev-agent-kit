@@ -1,6 +1,6 @@
 ---
 name: project-context-adapter
-description: Use when project overlays or frontend path indexes under project/** need refresh after stack, routing, styling, assets, verification commands, docs/MCP selection, design-reference boundaries, patterns, anti-patterns, or source ownership changes. Keep facts local-only and framework-agnostic; do not rewrite reusable skills for project-specific details.
+description: 'Refresh local-only project/** facts and frontend path indexes after stack, routing, styling, asset, verification, docs/tool, design-reference, pattern, or ownership changes. Do not put project facts in reusable skills.'
 id: 'agents.skills.project-context-adapter.skill'
 title: 'Project Context Adapter'
 doc_type: 'skill'
@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
     - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
@@ -46,7 +47,7 @@ implement screenshot-derived specs without scanning the whole repository.
 - Project structure, routes, entrypoints, styling systems, assets, or
   verification commands changed.
 - A new frontend stack fact was discovered during implementation.
-- Current skill MCP dependencies, available MCP servers, or official
+- Current skill capability declarations, available providers, or official
   documentation choices changed.
 - Design-reference boundaries, approved patterns, or anti-patterns changed.
 - Path indexes no longer match actual source files.
@@ -65,9 +66,11 @@ implement screenshot-derived specs without scanning the whole repository.
 3. Read `common/documentation-maintenance.md`.
 4. Read existing `project/**` overlays.
 5. Inspect relevant manifests, configs, entrypoints, routes, components,
-   styles, assets, skill `agents/openai.yaml` files, and verification scripts.
+   styles, assets, `tool-capabilities-manifest.json`, and verification scripts.
 6. Read `references/extraction-checklist.md`.
 7. Read `references/sync-procedure.md`.
+
+Read targeted README sections only when the refresh concerns project intent, setup guidance, or documentation drift. Use `common/readme-policy.md` and confirm cached technical facts through higher evidence.
 
 ## Tool Contract
 
@@ -76,6 +79,7 @@ implement screenshot-derived specs without scanning the whole repository.
   unavailable.
 - Use `context7` and MDN only when refreshing official documentation choices or
   stack-specific pattern notes that depend on current external docs.
+- Activate `openai_platform_docs` only when refreshed project facts depend on current OpenAI or Codex behavior.
 - Do not use Figma MCP.
 - Edit only `project/**` unless the user also requests bundle skill or policy
   changes.
@@ -84,7 +88,7 @@ implement screenshot-derived specs without scanning the whole repository.
 
 1. Determine which project facts changed.
 2. Update only affected overlays or path indexes.
-3. Refresh `project/mcp-profile.md` when skill dependencies, installed MCP
+3. Refresh `project/mcp-profile.md` when skill capabilities, validated providers
    servers, official docs choices, or verification capabilities changed.
 4. Refresh `project/design-reference-profile.md` when screenshot, exported
    asset, copied inspect, or design-source boundaries changed.
@@ -97,6 +101,8 @@ implement screenshot-derived specs without scanning the whole repository.
 8. Verify updated facts against actual files or official documentation sources.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Report:
 
@@ -111,12 +117,15 @@ Report:
 
 - `project/**` files must remain local-only.
 - Path indexes must point to existing files or explicitly mark missing owners.
-- `project/mcp-profile.md` must match current `skills/*/agents/openai.yaml`
-  dependency declarations when it is touched.
+- `project/mcp-profile.md` must match active declarations in
+  `tool-capabilities-manifest.json` when it is touched; provider config alone
+  must not be recorded as availability.
 - `project/design-reference-profile.md` must not imply live design-tool access.
 - Patterns and anti-patterns must cite real local code facts or official
   documentation choices, not generic preferences.
 - Reusable skills must not receive host-specific facts.
+- README claims must not become project facts without confirmation from source, config, CI, package scripts, lockfiles, official documentation, or real results.
+- Context refresh must not edit README unless the current user explicitly requests that README change.
 - No Figma MCP or Figma whiteboard workflow may be introduced.
 
 ## Trigger Evals
@@ -137,3 +146,4 @@ Should not trigger:
 
 - `references/extraction-checklist.md`
 - `references/sync-procedure.md`
+- `common/readme-policy.md`

@@ -1,6 +1,6 @@
 ---
 name: frontend-design-director
-description: Use for standard or deep frontend UI work that needs subject-grounded visual direction, redesign, visual polish, design critique, anti-template checks, or design handoff before implementation. Do not use for purely technical micro-fixes or isolated code edits.
+description: 'Set subject-grounded visual direction for standard or deep UI work, redesign, polish, critique, anti-template review, or design handoff. Skip technical micro-fixes and isolated code edits.'
 id: 'agents.skills.frontend-design-director.skill'
 title: 'Frontend Design Director'
 doc_type: 'skill'
@@ -115,6 +115,8 @@ Do not use this skill as a required step for every frontend task. Use it only wh
 12. Prepare verification handoff with visual acceptance criteria for `frontend-visual-qa` or `frontend-quality-reviewer`.
 
 ## Output Contract
+
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
 
 Return or write a Design Direction Contract with:
 

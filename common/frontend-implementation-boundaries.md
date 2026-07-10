@@ -10,7 +10,10 @@ tags:
     - 'agents/common'
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
-related: []
+related:
+    - '[[common/test-policy|Test Change And Verification Policy]]'
+    - '[[common/anti-patterns/no-test-authoring-by-default|No Test Authoring By Default]]'
+    - '[[common/anti-patterns/no-unapproved-test-infrastructure|No Unapproved Test Infrastructure]]'
 depends_on: []
 ---
 
@@ -20,7 +23,7 @@ Use English instructions and Unix-style paths.
 
 Use existing CSS variables only.
 
-Create no new project tests.
+Create no new project tests unless the current user explicitly requests the named test scope. Maintain an existing directly affected test only when the approved task changed its confirmed behavior contract; follow `common/test-policy.md`.
 
 Introduce no project-code loops except a named isolated utility when no practical alternative exists.
 

@@ -24,13 +24,13 @@ depends_on:
 1. Read the current `AGENTS.md`.
 2. Inspect stack and tooling files.
 3. Inspect route structure, shared components, styling, and validation helpers.
-4. Inspect current `skills/*/agents/openai.yaml` dependency declarations when
-   MCP or documentation capability facts may have changed.
+4. Inspect current `tool-capabilities-manifest.json` declarations when MCP,
+   native-tool, or documentation capability facts may have changed.
 5. Build or refresh framework-specific path indexes so common request types map
    to concrete project paths before broad repo scanning is needed.
 6. Update `.agents/project/**` with factual repo details only.
-7. Keep `project/mcp-profile.md` aligned with required, available, missing,
-   optional, approved, installed, skipped, or blocked MCP capabilities.
+7. Keep `project/mcp-profile.md` aligned with required, conditional, optional,
+   and blocked capabilities plus availability evidence for active providers.
 8. Keep `project/design-reference-profile.md` focused on screenshot, exported
    asset, copied inspect, and design-reference boundaries; do not imply live
    design-tool access.
