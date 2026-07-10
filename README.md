@@ -20,7 +20,11 @@ Choose the package for your client from the latest GitHub release:
 
 Checksums are published as `SHA256SUMS` in the same release.
 
-Each runtime archive extracts to a top-level `.agents/` directory.
+Archive roots are client-specific:
+
+- Codex and VS Code Codex extract to project-root `.agents/`;
+- Cursor extracts to project-root `.agents/` and `.cursor/`;
+- Claude Code and VS Code Claude extract as a native `webdev-agent-kit/` plugin.
 
 ## What It Is
 
@@ -36,9 +40,25 @@ Use it when you want your coding agent to:
 - verify changes with real evidence and proportional effort;
 - preserve project-specific conventions across repeated work.
 
+## How It Improves Agent Work
+
+The kit uses one client-neutral runtime core, thin native client adapters, and 19
+task skills. It helps GPT/Codex and Claude-based agents:
+
+- load the smallest relevant policy and skill instead of the whole rule set;
+- resolve instruction conflicts through one explicit precedence order;
+- use verified project evidence before generic frontend defaults;
+- select tools by capability instead of provider name;
+- keep verification proportional to the changed surface;
+- return compact, fact-only handoffs with visible results and blockers.
+
+Static GPT/Claude parity evals cover routing, README and test boundaries, tool
+fallbacks, verification honesty, scope control, and output economy.
+
 ## README Boundary
 
-This README is a human-facing guide only. It is not runtime policy, not routing context, not skill inventory, and not project context for agents.
+This README is a human-facing guide only. It is not runtime policy, routing
+context, skill inventory, target-layout authority, or project context for agents.
 
 Runtime policy lives in:
 
@@ -50,33 +70,77 @@ templates/**
 project/** local overlays inside installed projects
 ```
 
-Agents must not read, inspect, cite, route from, or edit a host project's README during runtime work. If the user asks about README content or edits, ask for the relevant excerpt or desired replacement text and propose human-facing copy from that provided material only.
+Agents may read the relevant README sections when the task concerns project
+intent, setup, onboarding, an audit, or documentation drift. They should not read
+README by default for routing or every code change.
+
+README is not sufficient technical proof. Runtime results, source code,
+configuration, CI, package scripts, and lockfiles outrank README claims. If they
+conflict, use the higher evidence and report the documentation drift.
+
+Reading does not authorize editing. An existing README must not be edited unless
+the current user explicitly requests that README change. When authorized, keep
+the change human-facing and verify technical claims against higher evidence. See
+the [README read and edit policy](common/readme-policy.md).
 
 ## Quick Start
 
-### 1. Install a client package
+### 1. Verify And Extract A Client Package
 
-Download the matching package above and extract it from the root of your frontend project. The archive creates `.agents/` automatically.
+Download the matching archive and verify it against `SHA256SUMS` from the same
+release.
 
-Expected shape after extraction:
+For Codex or VS Code Codex, extract from the frontend project root. The archive
+creates `.agents/` automatically.
+
+For Cursor, also extract from the project root. The archive creates both
+`.agents/` and `.cursor/`. Do not extract a project archive inside an existing
+`.agents/`, because that creates `.agents/.agents/`.
+
+Expected project-bundle shape:
 
 ```text
 your-project/
-├── AGENTS.md or CLAUDE.md
-└── .agents/
-    ├── AGENTS.md
-    ├── LICENSE
-    ├── common/
-    ├── skills/
-    ├── templates/
-    └── tool-capabilities-manifest.json
+├── .agents/
+│   ├── AGENTS.md
+│   ├── LICENSE
+│   ├── common/
+│   ├── skills/
+│   ├── templates/
+│   └── tool-capabilities-manifest.json
+└── .cursor/                         Cursor only
+    └── rules/webdev-agent-kit.mdc
 ```
 
-Runtime archives intentionally exclude human-facing project files such as `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `examples/`.
+For Claude Code or VS Code Claude, extract from `~/.claude/skills/` for a
+persistent personal skills-directory plugin. The archive must produce:
 
-### 2. Add the native root pointer
+```text
+~/.claude/skills/webdev-agent-kit/
+├── .claude-plugin/
+│   └── plugin.json
+├── adapters/
+├── common/
+├── profiles/
+├── skills/
+├── templates/
+└── tool-capabilities-manifest.json
+```
 
-Codex, VS Code Codex, and Cursor use a small root `AGENTS.md`:
+Claude Code discovers it as `webdev-agent-kit@skills-dir` after restart. For a
+one-session local check, use:
+
+```text
+claude --plugin-dir /absolute/path/to/webdev-agent-kit
+```
+
+Runtime archives intentionally exclude human-facing repository files such as
+`README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `examples/`.
+
+### 2. Preserve Native Project Instructions
+
+For Codex and VS Code Codex, a project may use a minimal root `AGENTS.md`
+pointer:
 
 ```md
 # AGENTS.md
@@ -84,17 +148,24 @@ Codex, VS Code Codex, and Cursor use a small root `AGENTS.md`:
 Use the project-local agent policy in `.agents/AGENTS.md`.
 ```
 
-Claude Code and VS Code Claude use a small root `CLAUDE.md`:
+Add or merge this pointer only with explicit user confirmation. Never overwrite
+existing root instructions.
 
-```md
-# CLAUDE.md
+Cursor already receives `.cursor/rules/webdev-agent-kit.mdc`, which points to
+the shared project policy. Claude Code discovers skills through the native
+plugin and does not require `.agents/skills` or a root pointer.
 
-Use the project-local agent policy in `.agents/AGENTS.md`.
+If a Claude project separately uses `.agents/AGENTS.md`, propose this exact
+root `CLAUDE.md` import:
+
+```text
+@.agents/AGENTS.md
 ```
 
-Do not duplicate the full `.agents/AGENTS.md` policy into the root pointer.
+Create or merge it only after explicit user approval. Plugin installation never
+authorizes project-instruction edits.
 
-### 3. Ask the agent to adapt
+### 3. Ask The Agent To Adapt
 
 ```text
 адаптируйся
@@ -103,28 +174,30 @@ Do not duplicate the full `.agents/AGENTS.md` policy into the root pointer.
 or:
 
 ```text
-Adapt this .agents bundle to the current frontend project.
+Adapt the installed WebDev Agent Kit to the current frontend project.
 ```
 
 Expected onboarding result:
 
-- the agent detects the client and frontend stack;
-- creates or refreshes local-only `.agents/project/**` overlays when approved;
-- records client facts in `project/client-profile.md`;
-- records tool capability facts in `project/mcp-profile.md`;
-- does not create app source files;
-- does not install packages or MCP servers;
-- does not edit host README or docs without explicit documentation approval.
+- the agent detects the installed client target and frontend stack from evidence;
+- creates or refreshes only approved local `.agents/project/**` overlays;
+- records client and tool capability facts without treating provider names as proof;
+- preserves existing project instructions and application source;
+- does not install packages, MCP servers, or test infrastructure without approval;
+- does not edit an existing README without an explicit current request.
 
 ## Installation Guides
 
-Russian draft installation guides are tracked in the repository and can be copied to the GitHub Wiki:
+Maintained Russian installation guides:
 
 - [Codex](docs/install/ru-codex.md)
 - [Claude Code](docs/install/ru-claude-code.md)
 - [Cursor](docs/install/ru-cursor.md)
 - [VS Code Codex](docs/install/ru-vscode-codex.md)
 - [VS Code Claude](docs/install/ru-vscode-claude.md)
+
+The guide index also records the archive root and native entrypoint for every
+release target: [Installation Guides](docs/install/README.md).
 
 ## Main Workflows
 
@@ -204,15 +277,20 @@ The bundle blocks common frontend-agent failure modes:
 
 ## Release Targets
 
-The release workflow builds and publishes stable and versioned artifacts for:
+The release workflow builds stable and versioned artifacts for three canonical
+runtime contracts and two compatibility aliases:
 
-- Codex;
-- Claude Code;
-- Cursor;
-- VS Code Codex;
-- VS Code Claude.
+| Download | Contract | Archive root |
+| --- | --- | --- |
+| Codex | Canonical project bundle | `.agents/` |
+| Claude Code | Canonical native plugin | `webdev-agent-kit/` |
+| Cursor | Canonical project bundle | `.agents/` and `.cursor/` |
+| VS Code Codex | Codex alias | `.agents/` |
+| VS Code Claude | Claude Code alias | `webdev-agent-kit/` |
 
-Every release artifact extracts to `.agents/` and excludes human-facing docs and examples from the runtime package.
+All runtime targets exclude human-facing docs and examples. Stable and versioned
+archive pairs must be byte-identical, and `SHA256SUMS` must contain exactly all
+ten release archives without duplicates or unexpected entries.
 
 The workflow also keeps legacy `dist/codex` and `dist/claude` generated targets for current validators.
 
@@ -250,11 +328,12 @@ python scripts/validate_skill_pack.py
 
 ### Release
 
-Push the approved next SemVer tag:
+Validate the tag against source metadata, then push it only after approval:
 
 ```bash
-git tag vX.Y.Z
-git push origin vX.Y.Z
+python scripts/validate_release_tag.py --tag v0.3.0
+git tag v0.3.0
+git push origin v0.3.0
 ```
 
 The release workflow builds and publishes the client packages listed in the Download section.

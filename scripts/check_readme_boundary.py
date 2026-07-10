@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 POLICY_PATH = ROOT / "common" / "readme-policy.md"
 SCAN_ROOTS = (
+    ROOT / "README.md",
     ROOT / "AGENTS.md",
     ROOT / "common",
     ROOT / "profiles",
@@ -18,7 +19,12 @@ SCAN_ROOTS = (
     ROOT / "examples",
 )
 EXCLUDED_PARTS = {"dist", "project", "node_modules", ".obsidian"}
-EXCLUDED_FILES = {ROOT / "README.md"}
+README_REQUIRED_PHRASES = (
+    "Agents may read the relevant README sections when the task concerns",
+    "README is not sufficient technical proof.",
+    "Reading does not authorize editing.",
+    "An existing README must not be edited unless the current user explicitly requests that README change.",
+)
 EVIDENCE_ORDER = (
     "Real run or test result.",
     "Source code, configuration, or CI.",
@@ -100,11 +106,7 @@ def markdown_files() -> list[Path]:
             files.append(root)
         elif root.exists():
             files.extend(sorted(root.rglob("*.md")))
-    return [
-        path
-        for path in files
-        if path not in EXCLUDED_FILES and not (set(path.parts) & EXCLUDED_PARTS)
-    ]
+    return [path for path in files if not (set(path.parts) & EXCLUDED_PARTS)]
 
 
 def has_negative_guard(line: str) -> bool:
@@ -139,6 +141,16 @@ def check_policy_contract() -> list[str]:
     for phrase in ("common/readme-policy.md", "Reading never authorizes editing"):
         if phrase not in agents:
             errors.append(f"AGENTS.md is missing README boundary: {phrase}")
+
+    readme_path = ROOT / "README.md"
+    if not readme_path.is_file():
+        errors.append("README.md is required as human-facing documentation")
+    else:
+        readme = readme_path.read_text(encoding="utf-8-sig")
+        normalized_readme = " ".join(readme.split())
+        for phrase in README_REQUIRED_PHRASES:
+            if phrase not in normalized_readme:
+                errors.append(f"README.md is missing boundary: {phrase}")
     return errors
 
 
