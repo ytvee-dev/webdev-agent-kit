@@ -78,6 +78,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Codex archives extract runtime under `.agents/`; Cursor archives place shared runtime under `.agents/` and native rules under root `.cursor/`; Claude archives retain their native plugin root.
 - Installation guides now follow the extracted archive roots, prevent `.agents/.agents` nesting, and document persistent Claude skills-directory plugins.
 - Tagged releases now fail when the tag differs from source version metadata and use the validated Unreleased changelog section as release notes.
+- Release runs now validate notes without writing generated Markdown into the source tree, then create `RELEASE_NOTES.md` only during artifact packaging.
 - Archive validation now requires all stable/versioned pairs, byte equality, exact checksum inventory, and duplicate-free checksum entries.
 - Root README installation, archive-root, and evidence-policy guidance now matches the validated `0.3.0` runtime contracts.
 - Runtime targets no longer include human-facing root files: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, or `SECURITY.md`.
