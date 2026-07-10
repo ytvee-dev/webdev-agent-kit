@@ -163,9 +163,7 @@ def copy_skills(
             copy_tree(skill_dir / "agents", dst / "agents")
 
 
-def build_project_target(target):
-    target_root = prepare_target_root(target)
-
+def copy_project_target_base(target_root, target, *, include_codex_metadata):
     for file_name in COPY_ROOT_FILES:
         src = ROOT / file_name
         if src.exists():
@@ -182,19 +180,32 @@ def build_project_target(target):
             strip_graph_frontmatter=True,
         )
 
-    if target == "codex":
-        copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
-    if target == "cursor":
-        write_cursor_rules(target_root)
-
     copy_runtime_layers(target_root, target, strip_graph_frontmatter=True)
     copy_skills(
         target_root,
-        include_codex_metadata=target == "codex",
+        include_codex_metadata=include_codex_metadata,
         strip_graph_frontmatter=True,
     )
 
     validate_no_human_facing_files(target_root, target)
+
+
+def build_codex_plugin_target(target_root):
+    copy_tree(ROOT / ".codex-plugin", target_root / ".codex-plugin")
+
+
+def build_codex_project_target():
+    target = "codex"
+    target_root = prepare_target_root(target)
+    copy_project_target_base(target_root, target, include_codex_metadata=True)
+    build_codex_plugin_target(target_root)
+
+
+def build_cursor_project_target():
+    target = "cursor"
+    target_root = prepare_target_root(target)
+    copy_project_target_base(target_root, target, include_codex_metadata=False)
+    write_cursor_rules(target_root)
 
 
 def build_claude_plugin_target():
@@ -226,7 +237,13 @@ def build_canonical_target(target):
     if target == "claude-code":
         build_claude_plugin_target()
         return
-    build_project_target(target)
+    if target == "codex":
+        build_codex_project_target()
+        return
+    if target == "cursor":
+        build_cursor_project_target()
+        return
+    raise ValueError(f"Unknown canonical target: {target}")
 
 
 def build_alias(alias):

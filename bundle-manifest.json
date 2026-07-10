@@ -49,7 +49,7 @@
       "install_mode": "project-root-extract",
       "entrypoint": ".agents/AGENTS.md",
       "skills_root": ".agents/skills",
-      "validator": "scripts/validate_target_contracts.py"
+      "validator": "scripts/validate_codex_project_target.py"
     },
     "cursor": {
       "kind": "project-bundle",
@@ -57,7 +57,7 @@
       "install_mode": "project-root-extract",
       "entrypoint": ".cursor/rules/webdev-agent-kit.mdc",
       "skills_root": ".agents/skills",
-      "validator": "scripts/validate_target_contracts.py"
+      "validator": "scripts/validate_cursor_target.py"
     }
   },
   "target_aliases": {

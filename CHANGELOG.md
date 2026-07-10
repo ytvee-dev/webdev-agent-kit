@@ -40,6 +40,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added full 19-skill capability coverage, strict capability metadata validation, and eight cross-client capability behavior evals.
 - Added deterministic budgets for the always-on entrypoint, runtime layers, skill-discovery descriptions, and Claude skill prelude.
 - Added fact-based output evals and deterministic final-answer budgets, including a 180-word cap for lightweight workflows.
+- Added independent Codex project, Codex plugin, Claude plugin, and Cursor target validators plus source/generated version consistency checks.
+- Added deterministic release archive construction and extracted archive fixtures for native paths, exclusions, links, checksums, and root-instruction safety.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
 - Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
@@ -70,7 +72,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - New skill templates now quote the placeholder `description` value so generated drafts do not start with invalid YAML.
 - README boundary wording now matches runtime policy: agents must not inspect host README content and must ask for excerpts instead.
 - Test authoring rules now explicitly block component, hook, function or unit, integration, E2E, snapshot, fixture, mock, and visual regression tests unless the user explicitly asks and approves the exact scope.
-- Runtime release archives now extract to a top-level `.agents/` directory regardless of client package.
+- Codex archives extract runtime under `.agents/`; Cursor archives place shared runtime under `.agents/` and native rules under root `.cursor/`; Claude archives retain their native plugin root.
 - Runtime targets no longer include human-facing root files: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, or `SECURITY.md`.
 - Runtime targets no longer include `examples/`.
 - Codex and VS Code Codex targets keep `.codex-plugin/`; Claude Code, VS Code Claude, Cursor, and legacy Claude targets do not include it.

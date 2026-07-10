@@ -27,10 +27,13 @@ def main():
     target_contract_code = run("validate_target_contracts.py")
     if target_contract_code:
         sys.exit(target_contract_code)
+    version_code = run("validate_version_consistency.py")
+    if version_code:
+        sys.exit(version_code)
     capability_code = run("validate_tool_capabilities.py")
     if capability_code:
         sys.exit(capability_code)
-    context_budget_code = run("validate_context_budgets.py")
+    context_budget_code = run("validate_runtime_context_budget.py")
     if context_budget_code:
         sys.exit(context_budget_code)
     output_economy_code = run("validate_output_economy.py")
@@ -60,12 +63,24 @@ def main():
     generated_layer_code = run("validate_runtime_layers.py", "--generated")
     if generated_layer_code:
         sys.exit(generated_layer_code)
-    generated_context_code = run("validate_context_budgets.py", "--generated")
+    generated_context_code = run("validate_runtime_context_budget.py", "--generated")
     if generated_context_code:
         sys.exit(generated_context_code)
-    codex_code = run("validate_codex_skill_pack.py")
+    generated_version_code = run("validate_version_consistency.py", "--generated")
+    if generated_version_code:
+        sys.exit(generated_version_code)
+    codex_project_code = run("validate_codex_project_target.py")
+    codex_plugin_code = run("validate_codex_plugin_target.py")
     claude_code = run("validate_claude_plugin_target.py")
-    sys.exit(codex_code or claude_code)
+    cursor_code = run("validate_cursor_target.py")
+    archive_code = run("validate_release_archive.py", "--build-fixtures")
+    sys.exit(
+        codex_project_code
+        or codex_plugin_code
+        or claude_code
+        or cursor_code
+        or archive_code
+    )
 
 
 if __name__ == "__main__":

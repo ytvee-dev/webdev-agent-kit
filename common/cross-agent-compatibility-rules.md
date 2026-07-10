@@ -100,6 +100,8 @@ runtime implementations.
   the internal `bundle-manifest.json` as a platform manifest.
 - Build Claude Code as a self-contained native plugin with
   `.claude-plugin/plugin.json` and `skills/**`.
+- Package Cursor shared runtime under `.agents/**` but keep native
+  `.cursor/rules/**` at the extracted host root.
 - Keep Claude Code output free of Codex-only plugin and UI metadata.
 - Keep target aliases declarative and reuse the canonical target implementation.
 - Do not include `project/**`, local-only overlays, host-project facts, build
@@ -107,3 +109,5 @@ runtime implementations.
 - Do not package UI component library skills or testing skills.
 - Require target contract validation before building generated output.
 - Require native artifact validation before publishing a canonical target.
+- Extract and validate every release archive before publication; directory
+  validation alone is insufficient.

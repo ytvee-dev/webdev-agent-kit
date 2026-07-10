@@ -84,24 +84,35 @@ and release behavior come from the canonical target.
 - validator existence;
 - plugin and project-bundle install-mode consistency.
 
-`scripts/validate_claude_plugin_target.py` validates the native Claude Code
-plugin layout, portable skill metadata, stripped graph metadata, Codex-only
-metadata exclusions, alias identity, and plugin/source version alignment.
-Project-bundle layout and extraction validators are added with their target
-builders. A release must pass both contract validation and the target artifact
-validator.
+Target construction is split into `build_codex_project_target()`,
+`build_codex_plugin_target()`, `build_claude_plugin_target()`, and
+`build_cursor_project_target()` so native packaging rules cannot leak between
+clients.
+
+`scripts/validate_codex_project_target.py`,
+`scripts/validate_codex_plugin_target.py`,
+`scripts/validate_claude_plugin_target.py`, and
+`scripts/validate_cursor_target.py` validate their native target contracts
+independently. `scripts/validate_version_consistency.py` aligns source and
+generated versions.
+
+`scripts/validate_release_archive.py` builds and extracts release fixtures,
+then verifies native skill paths, internal links, exclusions, checksum entries,
+single `.agents` nesting, and preservation of existing host-root instructions.
+Cursor archives place shared runtime under `.agents/` and native rules under
+root `.cursor/`; Claude skills remain inside the native plugin root.
 
 `scripts/validate_runtime_layers.py` enforces the layer inventory, prevents
 client-specific terms in the core and project profile, caps their context size,
 and checks that generated targets contain exactly one matching adapter.
-`scripts/validate_context_budgets.py` caps the compact entrypoint, runtime
+`scripts/validate_runtime_context_budget.py` exposes the release gate backed by
+`scripts/validate_context_budgets.py`; it caps the compact entrypoint, runtime
 layers, skill-discovery descriptions, and generated skill prelude while also
 rejecting source graph metadata in runtime artifacts.
 
-## Migration State
+## Release-Ready State
 
-The Claude Code builder now emits a native self-contained plugin and its aliases
-reuse the canonical artifact byte-for-byte. During the `v0.3.0` branch, Codex
-and Cursor generated layouts may still reflect the older shared archive model.
-They are not release-ready until their project-bundle builders and archive
-validators match this document.
+Codex project and plugin surfaces, the native Claude Code plugin, and the Cursor
+project target have independent builders and validators. Compatibility aliases
+reuse canonical generated content. Release publication is gated by extracted
+archive fixtures rather than directory inspection alone.
