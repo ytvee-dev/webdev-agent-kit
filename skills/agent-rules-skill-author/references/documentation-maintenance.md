@@ -14,7 +14,7 @@ tags:
 parent:
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
 related:
-    []
+    - '[[common/readme-policy|README Read And Edit Policy]]'
 depends_on:
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
 ---
@@ -27,7 +27,8 @@ Use this workflow when the task changes `.agents/`, a skill package, repo agent 
 
 - `AGENTS.md`, `common/**`, `skills/**`, manifests, validators, templates, and examples are agent-maintenance sources.
 - `.agents/README.md` is human-facing documentation.
-- Keep README edits separate from routing, runtime policy, and skill validation work.
+- Read README only when relevant under `common/readme-policy.md`.
+- Keep README edits separate from routing, runtime policy, and skill validation work; do not edit an existing README without an explicit current user request.
 
 ## Workflow
 
@@ -38,4 +39,5 @@ Use this workflow when the task changes `.agents/`, a skill package, repo agent 
 5. Keep host-project facts in `.agents/project/**`.
 6. Validate changed skill packages.
 7. Search changed docs for stale skill names and prohibited Figma or Jam routing.
-8. Report changed files, validation results, and any human-facing README edits separately.
+8. When README is in scope, verify technical claims through higher evidence and report drift.
+9. Report changed files, validation results, and any explicitly requested human-facing README edits separately.

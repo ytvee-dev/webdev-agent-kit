@@ -61,7 +61,6 @@ If the user only asks for options or an approach, answer with options first and 
 6. Read `common/typescript-discipline.md` for non-trivial TypeScript work.
 7. Read relevant project overlays, especially `project/verification-profile.md` and path indexes, only when the task needs repository-specific verification commands or path facts.
 8. Read the error, log, route, component, styles, or source files needed for the active bug hypothesis.
-9. Do not read human-facing `README.md` during normal runtime.
 
 For a micro UI fix, default to the context budget in `common/lightweight-routing-policy.md`: owner component, adjacent styles, `package.json` only when dependency presence matters, config only after command failure, and no broad project scans.
 

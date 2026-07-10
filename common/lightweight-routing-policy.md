@@ -43,7 +43,7 @@ For a fast path task:
 1. Read `AGENTS.md` only when routing is unclear or the task may change files.
 2. Search narrowly first.
 3. Read only the top relevant files or snippets.
-4. Do not read all skills, all common rules, all references, all project overlays, `README.md`, or `dist/**`.
+4. Do not read all skills, all common rules, all references, all project overlays, or `dist/**`. Read only targeted README sections when the prompt concerns README, setup guidance, or documentation drift, and confirm technical claims through higher evidence.
 5. Do not invoke planning, architecture, onboarding, MCP audit, visual QA, quality review, or documentation-maintenance workflows.
 6. Do not run validation commands unless files were changed or the user asked for verification.
 7. Answer with findings and cite the exact files or paths inspected.

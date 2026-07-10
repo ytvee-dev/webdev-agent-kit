@@ -12,6 +12,7 @@ EVAL_DIR = ROOT / "evals"
 TRIGGER_EVALS = EVAL_DIR / "trigger-evals.json"
 OUTPUT_EVALS = EVAL_DIR / "output-evals.json"
 POLICY_CONFLICT_EVALS = EVAL_DIR / "policy-conflict-evals.json"
+README_POLICY_EVALS = EVAL_DIR / "readme-policy-evals.json"
 WORKFLOW_LEVELS = {
     "Fast Lookup",
     "Lightweight Workflow",
@@ -28,6 +29,14 @@ POLICY_PRECEDENCE = (
     "active-frontend-profile",
     "generic-kit-defaults",
 )
+README_EXPECTATIONS = {
+    "read-explain": (True, False),
+    "verify-commands": (True, False),
+    "drift-audit": (True, False),
+    "project-onboarding": (True, False),
+    "unrelated-code-change": (False, False),
+    "explicit-readme-edit": (True, True),
+}
 
 
 def load_actual_skills(errors):
@@ -190,6 +199,55 @@ def validate_policy_conflict_case(label, case, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
+def validate_readme_policy_case(label, case, errors):
+    require_case_keys(
+        label,
+        case,
+        (
+            "readme_action",
+            "expected_read",
+            "expected_edit",
+            "required_evidence",
+            "expected_behavior",
+            "forbidden_behaviors",
+            "reason",
+        ),
+        errors,
+    )
+
+    action = case.get("readme_action")
+    if action not in README_EXPECTATIONS:
+        errors.append(f"{label}: unknown readme_action {action!r}")
+        return
+    expected_read, expected_edit = README_EXPECTATIONS[action]
+    if case.get("expected_read") is not expected_read:
+        errors.append(f"{label}: expected_read must be {expected_read} for {action}")
+    if case.get("expected_edit") is not expected_edit:
+        errors.append(f"{label}: expected_edit must be {expected_edit} for {action}")
+
+    evidence = case.get("required_evidence", [])
+    if not isinstance(evidence, list) or not evidence:
+        errors.append(f"{label}: required_evidence must be a non-empty list")
+    elif expected_read and "readme" not in evidence:
+        errors.append(f"{label}: README-reading cases must include readme evidence")
+
+    if action in {"verify-commands", "drift-audit", "project-onboarding"}:
+        higher_evidence = {
+            "runtime-result",
+            "source-code",
+            "config",
+            "ci",
+            "package-scripts",
+            "lockfile",
+        }
+        if not higher_evidence.intersection(evidence):
+            errors.append(f"{label}: README claim needs higher technical evidence")
+
+    forbidden = case.get("forbidden_behaviors", [])
+    if not isinstance(forbidden, list) or len(forbidden) < 2:
+        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+
+
 def validate_suite(
     path,
     expected_type,
@@ -216,6 +274,8 @@ def validate_suite(
         return
     if expected_type == "policy-conflict" and len(cases) < 5:
         errors.append(f"{relative}: policy-conflict suite needs at least 5 cases")
+    if expected_type == "readme-policy" and len(cases) < 5:
+        errors.append(f"{relative}: readme-policy suite needs at least 5 cases")
 
     for index, case in enumerate(cases):
         label = f"{relative}: cases[{index}]"
@@ -237,6 +297,8 @@ def validate_suite(
             validate_output_case(label, case, actual_skills, errors)
         elif expected_type == "policy-conflict":
             validate_policy_conflict_case(label, case, errors)
+        elif expected_type == "readme-policy":
+            validate_readme_policy_case(label, case, errors)
 
 
 def validate():
@@ -271,6 +333,15 @@ def validate():
     validate_suite(
         POLICY_CONFLICT_EVALS,
         "policy-conflict",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        README_POLICY_EVALS,
+        "readme-policy",
         suite_schema,
         case_schema,
         actual_skills,

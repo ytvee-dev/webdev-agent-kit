@@ -105,6 +105,39 @@
       "minLength": 1,
       "maxLength": 500
     },
+    "readme_action": {
+      "type": "string",
+      "enum": [
+        "read-explain",
+        "verify-commands",
+        "drift-audit",
+        "project-onboarding",
+        "unrelated-code-change",
+        "explicit-readme-edit"
+      ]
+    },
+    "expected_read": {
+      "type": "boolean"
+    },
+    "expected_edit": {
+      "type": "boolean"
+    },
+    "required_evidence": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "readme",
+          "runtime-result",
+          "source-code",
+          "config",
+          "ci",
+          "package-scripts",
+          "lockfile"
+        ]
+      }
+    },
     "risk_notes": {
       "type": "array",
       "items": {

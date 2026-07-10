@@ -74,7 +74,7 @@ When the user asks to keep iterating until measurable visual, lint, build, or ro
 10. Read affected source files, styles, components, routes, and configs.
 11. Read `references/implementation-rules.md` when present.
 
-Do not read `README.md` or `dist/**` during normal runtime.
+Do not read generated `dist/**` during normal runtime.
 
 ## Tool Contract
 

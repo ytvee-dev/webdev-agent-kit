@@ -84,7 +84,6 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
    - `project/build-profile.md` when present;
    - `project/workspace-profile.md` when present;
    - `project/verification-profile.md` when present.
-8. Do not read human-facing `README.md` during normal runtime.
 
 ## Tool Contract
 

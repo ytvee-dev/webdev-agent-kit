@@ -13,6 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
@@ -36,7 +37,7 @@ When two applicable instructions conflict, the higher level wins:
 7. Active frontend profile.
 8. Generic kit defaults.
 
-This order resolves instruction authority, not factual truth. Use the owning evidence policy to decide which technical claim is proven.
+This order resolves instruction authority, not factual truth. Use `common/readme-policy.md` for README claims and its technical evidence hierarchy.
 
 ## Resolution Rules
 

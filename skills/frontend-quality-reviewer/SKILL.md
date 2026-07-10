@@ -82,7 +82,6 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 10. Read `common/performance-review-rules.md` when performance claims are in scope.
 11. Read `common/build-tool-boundary-rules.md` and `common/lint-verification-rules.md` when code changed.
 12. Read affected source files, diffs, project overlays, loop contract, verification output, and rendered evidence needed for the review.
-13. Do not read `README.md` during normal runtime.
 
 ## Tool Contract
 

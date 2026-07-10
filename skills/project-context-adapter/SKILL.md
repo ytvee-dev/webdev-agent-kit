@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
     - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
@@ -69,6 +70,8 @@ implement screenshot-derived specs without scanning the whole repository.
 6. Read `references/extraction-checklist.md`.
 7. Read `references/sync-procedure.md`.
 
+Read targeted README sections only when the refresh concerns project intent, setup guidance, or documentation drift. Use `common/readme-policy.md` and confirm cached technical facts through higher evidence.
+
 ## Tool Contract
 
 - Use Project Context MCP when available.
@@ -117,6 +120,8 @@ Report:
 - Patterns and anti-patterns must cite real local code facts or official
   documentation choices, not generic preferences.
 - Reusable skills must not receive host-specific facts.
+- README claims must not become project facts without confirmation from source, config, CI, package scripts, lockfiles, official documentation, or real results.
+- Context refresh must not edit README unless the current user explicitly requests that README change.
 - No Figma MCP or Figma whiteboard workflow may be introduced.
 
 ## Trigger Evals
@@ -137,3 +142,4 @@ Should not trigger:
 
 - `references/extraction-checklist.md`
 - `references/sync-procedure.md`
+- `common/readme-policy.md`

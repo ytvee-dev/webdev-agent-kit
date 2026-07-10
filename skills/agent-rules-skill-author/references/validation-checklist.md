@@ -85,9 +85,9 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - Branch switching examples include a dirty-tree and unmerged path guard.
 - Removed skill names, stale paths, and outdated references were searched across
   `.agents`.
-- `.agents/README.md` was updated or explicitly checked when documentation
-  changes affected user-facing workflow, skill lists, path policy, or
-  sync/publication instructions.
+- An existing README stayed unchanged unless the current user explicitly
+  requested that README edit. When README was in scope, technical claims were
+  checked against higher evidence and drift was reported.
 - No auxiliary docs such as `README.md` or `CHANGELOG.md` were added to the
   skill package.
 - `agents/openai.yaml` matches the skill trigger and intent.

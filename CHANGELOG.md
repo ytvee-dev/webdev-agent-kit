@@ -35,6 +35,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added runtime-layer validation for client neutrality, context budgets, manifest alignment, and generated adapter selection.
 - Added a centralized eight-level policy precedence contract and validator for forbidden absolute authority claims.
 - Added eight cross-client policy conflict evals covering every adjacent precedence boundary.
+- Added a targeted README read/edit policy, technical evidence hierarchy, and six cross-model README behavior evals.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
 - Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
@@ -49,6 +50,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Runtime routing now loads core, project profile, client adapter, local conventions, and task skill as separate progressive-disclosure layers.
 - Generated targets now ship the portable core, default profile, and exactly one canonical client adapter; Claude skills load those layers explicitly.
 - Runtime skills, profiles, adapters, and project facts now resolve instruction conflicts through one shared precedence contract.
+- README may now be read for relevant intent, setup, onboarding, audit, and drift questions, but it is never sufficient technical proof and cannot be edited without an explicit current user request.
 - README now documents Windows shell and sandbox verification behavior as a user-facing boundary.
 - Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
 - Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.

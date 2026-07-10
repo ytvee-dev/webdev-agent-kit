@@ -65,7 +65,6 @@ Do not use this skill for:
 5. Read `references/pattern-entry-template.md` before creating a new entry.
 6. Read `references/example-sourcing-policy.md` before adding code examples.
 7. Read `evals/trigger-evals.json` or `evals/output-evals.json` when routing or output behavior changes.
-8. Do not read host-project README or docs as source material unless the user pasted the relevant excerpt.
 
 ## Tool Contract
 

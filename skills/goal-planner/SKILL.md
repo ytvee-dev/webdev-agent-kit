@@ -71,7 +71,6 @@ If a lightweight task reveals hidden scope, escalate first using `common/prompt-
 4. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
 5. Read only project overlays that are needed to understand the goal boundary, such as `project/stack-profile.md`, `project/architecture-map.md`, or `project/design-reference-profile.md`.
 6. Read affected source files only when the goal cannot be stated without them.
-7. Do not read human-facing documentation unless the task changes that documentation.
 
 ## Tool Contract
 

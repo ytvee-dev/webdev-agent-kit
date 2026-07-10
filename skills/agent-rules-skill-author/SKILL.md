@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[common/rule-audit-findings|Rule Audit Findings]]'
     - '[[skills/agent-rules-skill-author/references/documentation-maintenance|Documentation Maintenance Workflow]]'
     - '[[skills/agent-rules-skill-author/references/codex-native-skill-contract|Codex Native Skill Contract]]'
@@ -58,7 +59,7 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 2. Confirm the classified task is `skill-documentation-refactor`, `documentation`, or another `.agents` rule-maintenance task.
 3. Read `common/documentation-maintenance.md`.
 4. Read affected `common/**`, `skills/**`, `project/**`, manifests, validators, templates, examples, and root pointer files for the requested change.
-5. Exclude `README.md` from agent context gathering unless the user explicitly asks for a README documentation edit.
+5. Apply `common/readme-policy.md`: read targeted README sections when the request concerns README, public setup guidance, or docs/implementation drift; verify technical claims through higher evidence.
 6. Read relevant references from this skill only when their topic is in scope.
 7. Read current OpenAI Codex docs when native skill behavior, `AGENTS.md`, MCP, plugins, or `agents/openai.yaml` behavior may have changed.
 
@@ -72,7 +73,7 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 ## Workflow
 
 1. Classify the target layer: `AGENTS.md`, manifests, validators, `common/**`, `project/**`, `templates/**`, `examples/**`, or `skills/**`.
-2. Treat README changes as user-facing documentation work only, never as runtime policy or routing input.
+2. Treat README as optional human-facing context, never runtime policy or validator truth. Do not edit it unless the current user explicitly requests that README change.
 3. Confirm whether a new skill is needed or an existing skill/reference/common rule should be edited.
 4. Define trigger surface, non-trigger cases, inputs, outputs, defaults, tool contract, failure modes, and validation gates.
 5. Keep skill packages in the standard section order used by this bundle.
@@ -97,7 +98,7 @@ Report:
 - New references are linked from the owning `SKILL.md`.
 - `agents/openai.yaml` matches skill trigger, scope, and factual tool dependencies.
 - No Figma MCP or Figma whiteboard workflow is introduced.
-- README is not used as runtime policy, routing input, validation source, or fallback context.
+- README is not used as runtime policy, routing input, validator truth, or sole technical evidence, and is not edited without an explicit current user request.
 
 ## Trigger Evals
 
@@ -136,6 +137,7 @@ For new skills, use the local scaffolder only after the workflow, resources, com
 - `references/skill-quality-rubric.md`
 - `references/trigger-and-metadata.md`
 - `references/validation-checklist.md`
+- `common/readme-policy.md`
 - `references/figma-derived-conventions.md`
 - `references/source-backed-prompting.md`
 - `references/documentation-maintenance.md`

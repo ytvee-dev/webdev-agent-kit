@@ -79,8 +79,8 @@
       "prompt": "Update the agent bundle rules and validators for a new skill trigger boundary.",
       "skill": "agent-rules-skill-author",
       "required_output_sections": ["Files changed", "Trigger changes", "Validation", "Risks", "Follow-up"],
-      "forbidden_behaviors": ["use README as runtime policy", "skip manifest alignment", "leave stale graph links unchecked"],
-      "risk_notes": ["Bundle-maintenance output must report policy, graph, validator, and manifest impacts."],
+      "forbidden_behaviors": ["use README as runtime policy or sole technical evidence", "edit README without an explicit current user request", "skip manifest alignment", "leave stale graph links unchecked"],
+      "risk_notes": ["Bundle-maintenance output must report policy, graph, validator, manifest, and any README evidence or edit-authorization impacts."],
       "reason": "Skill authoring changes need concise operational reporting and validation evidence."
     }
   ]

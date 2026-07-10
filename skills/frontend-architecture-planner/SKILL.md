@@ -80,7 +80,7 @@ Do not use this skill for:
 5. Read only relevant boundary rules for the task.
 6. Read relevant project overlays when present: stack, architecture, styling, verification, docs, build, workspace, state, and data-fetching profiles.
 7. Read affected source files only when architectural boundaries cannot be planned from overlays.
-8. Do not read human-facing `README.md` or generated `dist/**` during normal runtime.
+8. Do not read generated `dist/**` during normal runtime.
 
 ## Tool Contract
 

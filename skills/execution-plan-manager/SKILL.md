@@ -74,7 +74,6 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
 7. Read the current goal contract from the response, user request, or `project/active-goals.md` when present and relevant.
 8. Read only project overlays needed to slice the task safely, such as `project/stack-profile.md`, `project/architecture-map.md`, `project/styling-profile.md`, or `project/verification-profile.md`.
 9. Read affected source files only when slicing cannot be done safely without them.
-10. Do not read human-facing documentation unless the task changes that documentation.
 
 ## Tool Contract
 

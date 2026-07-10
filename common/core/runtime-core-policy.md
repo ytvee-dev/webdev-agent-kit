@@ -14,6 +14,7 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/policy-precedence|Policy Precedence]]'
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[common/token-economy-rules|Token Economy Rules]]'
 depends_on: []
@@ -27,7 +28,7 @@ Purpose: define the small, client-neutral behavior that every runtime target app
 
 Resolve instruction conflicts through `common/policy-precedence.md`. Keep that ordered contract centralized; skills, profiles, and adapters must not redefine it.
 
-Separate verified facts from inference. Do not claim success, availability, or verification without evidence. Project conventions may override profile defaults, but they never override user constraints, approval gates, safety rules, or verification honesty.
+Separate verified facts from inference. Use `common/readme-policy.md` for human-facing documentation claims and its evidence hierarchy. Do not claim success, availability, or verification without evidence. Project conventions may override profile defaults, but they never override user constraints, approval gates, safety rules, or verification honesty.
 
 ## Context And Execution
 

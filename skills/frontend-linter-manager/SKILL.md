@@ -51,7 +51,6 @@ Do not use this skill for planning-only, design-only, documentation-only, README
 3. Read `common/lint-verification-rules.md` and `common/windows-shell-sandbox-rules.md` before rerunning a command that failed because of Windows shell policy or sandbox access.
 4. Read `common/verification-loop-rules.md` and `common/bounded-retry-rules.md` when lint repair is in scope.
 5. Read only files needed to understand the package manager or workspace boundary.
-6. Do not read human-facing `README.md` during normal runtime.
 
 ## Tool Contract
 

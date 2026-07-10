@@ -16,6 +16,7 @@ tags:
 parent: []
 related:
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
     - '[[skills/project-onboarding-adapter/references/adaptation-checklist|Adaptation Checklist]]'
     - '[[skills/project-onboarding-adapter/references/path-audit-checklist|Path Audit Checklist]]'
@@ -61,7 +62,7 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 
 ## Required Context
 
-1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect only the minimal pointer section; do not read host README files.
+1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect only the minimal pointer section.
 2. Read bundle-local `AGENTS.md` and `common/core/runtime-core-policy.md`.
 3. Read `common/client-adaptation-policy.md` and only the adapter for the resolved canonical target.
 4. Read `profiles/react-typescript/PROFILE.md` and its owning policies only when repository evidence confirms the profile.
@@ -71,6 +72,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 8. Read existing `project/**` overlays when present.
 9. Inspect only relevant manifests, configs, source entrypoints, routes, styles, assets, and verification scripts.
 10. Read `templates/project/client-profile.md` and `templates/project/mcp-profile.md` before creating those local-only profiles.
+
+Read targeted README sections only when they help identify project intent, setup guidance, or documentation drift. Apply `common/readme-policy.md`, and confirm every cached technical fact through manifests, config, source, CI, package scripts, lockfiles, or real results.
 
 ## Tool Contract
 
@@ -122,7 +125,7 @@ Unknowns
 - `project/client-profile.md` and `project/mcp-profile.md` are created from templates and marked local-only in copied overlays.
 - Native pointers remain small. Claude uses the exact `@.agents/AGENTS.md` import when shared project policy is approved; other pointers reference `.agents/AGENTS.md` instead of mirroring the full policy.
 - Existing host instructions are not overwritten without approval.
-- Host README files and host docs are not edited during onboarding.
+- README may supply targeted context but never the sole technical fact; README and host docs are not edited during onboarding unless the current user explicitly requests that documentation change.
 - Loop memory stores tried, verified, and open facts only in local-only project files.
 - Non-target frontend overlays do not claim React/Next implementation support.
 - Non-target frontend projects list applicable framework-agnostic skills instead of reporting the whole bundle unusable.
@@ -157,6 +160,7 @@ Should not trigger:
 - `common/target-stack-policy.md`
 - `common/skill-applicability-policy.md`
 - `common/context-compaction-rules.md`
+- `common/readme-policy.md`
 - `tool-capabilities-manifest.json`
 - `templates/project/client-profile.md`
 - `templates/project/mcp-profile.md`

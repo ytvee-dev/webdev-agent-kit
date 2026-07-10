@@ -59,7 +59,6 @@ Use `frontend-bugfix-debugger` when the primary goal is to fix a defect.
 7. Read `common/typescript-discipline.md`.
 8. Read relevant boundary docs such as `common/state-ownership-rules.md` when the refactor touches state.
 9. Read project overlays and affected source files needed to define the behavior boundary.
-10. Do not read `README.md` during normal runtime.
 
 ## Tool Contract
 

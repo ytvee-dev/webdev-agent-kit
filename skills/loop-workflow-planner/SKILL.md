@@ -76,7 +76,7 @@ Do not use for:
 9. Read the current Goal Contract, Execution Plan, user request, or `project/active-goals.md` when present.
 10. Read `project/verification-profile.md` when verification commands matter.
 
-Do not read unrelated skills, human-facing `README.md`, or generated `dist/**` during normal runtime.
+Do not read unrelated skills or generated `dist/**` during normal runtime.
 
 ## Tool Contract
 

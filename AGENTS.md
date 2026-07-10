@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[common/policy-precedence|Policy Precedence]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
@@ -86,19 +87,19 @@ The default target stack is declared by `profiles/react-typescript/PROFILE.md`. 
 - `common/**` contains reusable runtime rules.
 - `templates/**` contains optional local artifact templates.
 - `project/**` contains host-project facts and stays local-only.
-- `README.md` is a human-facing repository description and usage guide only. It is not runtime context, not a routing source, not a policy source, not a skill inventory source, and not a validation source for agents.
+- `README.md` is optional human-facing context governed by `common/readme-policy.md`; it is never runtime authority or sufficient technical proof.
 - `dist/**` is generated distribution output and must not be used as source of truth.
 - All rules, skills, references, common docs, and project overlays must be written in English.
 
-## README Runtime Boundary
+## README Read And Edit Boundary
 
-Agents must never read `README.md` under any circumstance.
+`README.md` may be read when relevant after task classification: for a direct README question, project intent, setup or run guidance, onboarding, audit work, or documentation drift.
 
-- Do not open, search, summarize, cite, route from, validate from, or treat `README.md` as context.
-- Do not use `README.md` for task classification, skill selection, onboarding, project context refresh, bundle maintenance, verification, source inventory, or generated-target validation.
-- Use `AGENTS.md`, `bundle-manifest.json`, `common/core/**`, `profiles/**`, `adapters/**`, `skills/**`, `common/**`, `templates/**`, and local-only `project/**` overlays as the available source model instead.
-- If a user asks about README content, ask the user to paste the relevant excerpt or desired replacement text. Do not inspect `README.md`.
-- If a human-facing README change is needed, propose the text in the final response for a human maintainer to apply. Do not autonomously read or edit `README.md`.
+- Do not read README by default or use it for routing, skill selection, package inventory, target layout, runtime policy, or validator truth.
+- Confirm technical README claims through the evidence hierarchy in `common/readme-policy.md`; report drift when higher evidence disagrees.
+- If the user asks to read or explain README, inspect it directly instead of requesting a pasted excerpt.
+- Reading never authorizes editing. Do not create or change an existing README unless the current user request explicitly asks to change that README.
+- When an unrequested README update would help, leave the file unchanged and report one concise proposal.
 
 ## Natural Language Commands
 
@@ -168,7 +169,7 @@ After task and scale classification:
 7. Read only selected `skills/**/SKILL.md` files and required references.
 8. If no repo-local skill matches, use the host agent's base behavior with relevant project context and the portable core.
 
-Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing. Never read `README.md` for any non-routing task either.
+Do not read all skills, all references, all common docs, all overlays, `README.md`, or `dist/**` for routing. Read targeted README sections only under `common/readme-policy.md` after routing.
 
 ## Skill Map
 
@@ -275,7 +276,7 @@ Do not insert planning, MCP, design direction, architecture, design intelligence
 - Keep screenshot, exported asset, copied inspect, and design-reference boundaries in `project/design-reference-profile.md`.
 - Keep every runtime Markdown file in this bundle graph-linkable with YAML frontmatter. `README.md` is excluded because it is human-only.
 - In `SKILL.md`, keep `name` and `description` first, followed by graph metadata.
-- Do not read or autonomously update `README.md`. Propose human-facing README text to the user instead.
+- Read README only when relevant under `common/readme-policy.md`. Never create or edit it without an explicit current user request for that README change.
 - Do not publish or copy `project/**` facts into reusable bundle docs.
 
 ## Verification
@@ -285,5 +286,5 @@ For skill and documentation changes:
 1. Validate changed skills with `python skills/agent-rules-skill-author/scripts/validate_agent_skill.py skills/<skill-name>` when available.
 2. Search for stale deleted skill names and prohibited Figma/Jam routing.
 3. Search changed rules and overlays for non-English rule text.
-4. Check that human-facing docs and actual `skills/**` directories agree only when those docs changed, without reading `README.md`.
+4. If README is explicitly in scope, verify its technical claims against manifests, source, config, CI, package scripts, lockfiles, or real results; otherwise leave it unchanged.
 5. Run Markdown formatting checks when available.

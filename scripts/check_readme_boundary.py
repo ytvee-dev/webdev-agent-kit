@@ -7,40 +7,89 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+POLICY_PATH = ROOT / "common" / "readme-policy.md"
 SCAN_ROOTS = (
     ROOT / "AGENTS.md",
     ROOT / "common",
+    ROOT / "profiles",
+    ROOT / "adapters",
     ROOT / "skills",
     ROOT / "templates",
     ROOT / "examples",
 )
 EXCLUDED_PARTS = {"dist", "project", "node_modules", ".obsidian"}
 EXCLUDED_FILES = {ROOT / "README.md"}
-
-PROHIBITED_PATTERNS = (
-    re.compile(r"\bread\s+`?README\.md`?", re.IGNORECASE),
-    re.compile(r"\bopen\s+`?README\.md`?", re.IGNORECASE),
-    re.compile(r"\binspect\s+`?README\.md`?", re.IGNORECASE),
-    re.compile(r"\bscan\s+`?README\.md`?", re.IGNORECASE),
-    re.compile(r"\bsearch\s+`?README\.md`?", re.IGNORECASE),
-    re.compile(r"\buse\s+`?README\.md`?\s+for\s+project\s+context", re.IGNORECASE),
-    re.compile(r"\buse\s+`?README\.md`?\s+for\s+routing", re.IGNORECASE),
-    re.compile(r"\bderive\s+project\s+facts\s+from\s+`?README\.md`?", re.IGNORECASE),
-    re.compile(r"\bupdate\s+`?README\.md`?\s+(?:after|during|as)", re.IGNORECASE),
+EVIDENCE_ORDER = (
+    "Real run or test result.",
+    "Source code, configuration, or CI.",
+    "Package scripts or lockfile.",
+    "README.",
+    "Assumption.",
 )
-
-ALLOWED_CONTEXT_PATTERNS = (
+ABSOLUTE_READ_BANS = (
     re.compile(
-        r"do\s+not\s+(?:read|open|inspect|scan|search|edit|update|autonomously\s+update)\s+`?README\.md`?",
+        r"\bnever\s+(?:read|open|inspect|scan|search)\s+(?:the\s+)?`?README(?:\.md)?`?",
         re.IGNORECASE,
     ),
     re.compile(
-        r"never\s+(?:read|open|inspect|scan|search|edit|update)\s+`?README\.md`?",
+        r"\bmust\s+not\s+(?:read|open|inspect|scan|search)\s+(?:the\s+)?`?README(?:\.md)?`?",
         re.IGNORECASE,
     ),
-    re.compile(r"`?README\.md`?\s+is\s+(?:a\s+)?human-facing", re.IGNORECASE),
-    re.compile(r"not\s+(?:runtime|routing|policy|validation|context)", re.IGNORECASE),
-    re.compile(r"propose\s+.*README", re.IGNORECASE),
+    re.compile(
+        r"\bdo\s+not\s+(?:read|open|inspect|scan|search)\s+.*README.*(?:under\s+any\s+circumstance|during\s+normal\s+runtime|unless\s+the\s+user)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\bexclude\s+`?README(?:\.md)?`?\s+from\s+(?:agent\s+)?context",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\bask\s+the\s+user\s+to\s+paste\s+.*README",
+        re.IGNORECASE,
+    ),
+)
+POSITIVE_AUTHORITY_PATTERNS = (
+    re.compile(
+        r"\bREADME\s+is\s+(?:the\s+)?(?:runtime|routing|policy|validation)\s+(?:source|truth|input)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\buse\s+README\s+as\s+(?:the\s+)?(?:only|sole|authoritative)\s+(?:source|truth|evidence)",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\brely\s+(?:only|solely)\s+on\s+README", re.IGNORECASE),
+    re.compile(
+        r"\bderive\s+(?:runtime|project|technical)\s+facts\s+from\s+README",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\buse\s+README\s+for\s+(?:routing|skill selection|validation|package inventory)",
+        re.IGNORECASE,
+    ),
+)
+AUTOMATIC_EDIT_PATTERNS = (
+    re.compile(
+        r"\b(?:automatically|autonomously)\s+(?:edit|update|rewrite|sync)\s+.*README",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:edit|update|rewrite|sync)\s+.*README.*(?:after|during|as\s+a\s+side\s+effect|whenever)\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\bkeep\s+.*README.*in\s+sync\b", re.IGNORECASE),
+)
+NEGATIVE_GUARDS = (
+    "do not",
+    "does not",
+    "must not",
+    "never",
+    "not sufficient",
+    "not used",
+    "without an explicit",
+    "unless the user",
+    "unless the current user",
+    "only when the user",
+    "only when the current user",
 )
 
 
@@ -49,10 +98,8 @@ def markdown_files() -> list[Path]:
     for root in SCAN_ROOTS:
         if root.is_file():
             files.append(root)
-            continue
-        if not root.exists():
-            continue
-        files.extend(sorted(root.rglob("*.md")))
+        elif root.exists():
+            files.extend(sorted(root.rglob("*.md")))
     return [
         path
         for path in files
@@ -60,36 +107,71 @@ def markdown_files() -> list[Path]:
     ]
 
 
-def is_allowed_context(line: str) -> bool:
-    return any(pattern.search(line) for pattern in ALLOWED_CONTEXT_PATTERNS)
+def has_negative_guard(line: str) -> bool:
+    lowered = line.lower()
+    return any(guard in lowered for guard in NEGATIVE_GUARDS)
+
+
+def check_policy_contract() -> list[str]:
+    if not POLICY_PATH.is_file():
+        return ["common/readme-policy.md is required"]
+
+    errors: list[str] = []
+    text = POLICY_PATH.read_text(encoding="utf-8-sig")
+    for phrase in (
+        "may be read when relevant",
+        "must not be edited unless the user's current request explicitly asks to change that README",
+    ):
+        if phrase not in text:
+            errors.append(f"common/readme-policy.md is missing required rule: {phrase}")
+
+    previous_position = -1
+    for index, evidence in enumerate(EVIDENCE_ORDER, start=1):
+        numbered = f"{index}. {evidence}"
+        position = text.find(numbered)
+        if position == -1:
+            errors.append(f"README evidence hierarchy is missing: {numbered}")
+        elif position <= previous_position:
+            errors.append("README evidence hierarchy is out of order")
+        previous_position = position
+
+    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8-sig")
+    for phrase in ("common/readme-policy.md", "Reading never authorizes editing"):
+        if phrase not in agents:
+            errors.append(f"AGENTS.md is missing README boundary: {phrase}")
+    return errors
 
 
 def check_file(path: Path) -> list[str]:
     errors: list[str] = []
+    relative = path.relative_to(ROOT).as_posix()
     for index, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), 1):
-        if "README" not in line:
+        if "README" not in line.upper():
             continue
-        if is_allowed_context(line):
-            continue
-        for pattern in PROHIBITED_PATTERNS:
+        for pattern in ABSOLUTE_READ_BANS:
             if pattern.search(line):
-                relative = path.relative_to(ROOT).as_posix()
                 errors.append(
-                    f"{relative}:{index}: prohibited README runtime instruction: {line.strip()}"
+                    f"{relative}:{index}: absolute README read ban: {line.strip()}"
                 )
-                break
+        if not has_negative_guard(line):
+            for pattern in (*POSITIVE_AUTHORITY_PATTERNS, *AUTOMATIC_EDIT_PATTERNS):
+                if pattern.search(line):
+                    errors.append(
+                        f"{relative}:{index}: unsafe README authority/edit rule: {line.strip()}"
+                    )
+                    break
     return errors
 
 
 def main() -> None:
-    errors: list[str] = []
+    errors = check_policy_contract()
     for path in markdown_files():
         errors.extend(check_file(path))
     if errors:
         for error in errors:
             print(error)
         sys.exit(1)
-    print("README boundary validation passed.")
+    print("README read/edit boundary and evidence hierarchy are valid.")
 
 
 if __name__ == "__main__":

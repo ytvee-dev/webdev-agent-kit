@@ -159,8 +159,8 @@
       "expected_primary_skill": "frontend-bugfix-debugger",
       "should_trigger": ["frontend-bugfix-debugger"],
       "should_not_trigger": ["agent-rules-skill-author", "project-context-adapter", "mcp-toolchain-manager"],
-      "risk_notes": ["The agent must not treat vague extra cleanup as approval to edit host README.md or docs."],
-      "reason": "Host documentation edits require explicit user validation."
+      "risk_notes": ["The agent must not treat vague extra cleanup as approval to edit host README.md or docs; README reading is unnecessary unless a relevant documentation claim must be checked."],
+      "reason": "An existing README requires an explicit current user request before editing."
     },
     {
       "id": "project-onboarding-adapter.adapt-command",
