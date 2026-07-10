@@ -50,7 +50,7 @@ Use Agent Skills Specification material only as secondary context after OpenAI-n
 
 - Keep instructions explicit, direct, and constraint-heavy when behavior must be reliable.
 - Use clear sections when prompts mix rules, examples, and context.
-- For OpenAI, Codex, Apps SDK, MCP, model, or tool behavior, use official OpenAI docs or configured OpenAI Docs MCP first.
+- For OpenAI, Codex, Apps SDK, MCP, model, or tool behavior, activate `openai_platform_docs`: prefer the callable official OpenAI Developer Docs MCP, then its official web fallback.
 - Treat skill descriptions as the main trigger surface; test realistic positive and near-miss negative examples before broadening descriptions.
 - Use progressive disclosure: keep core workflow in `SKILL.md`, and link references only when the agent needs them.
 - Prefer eval-minded iteration over speculative wording.

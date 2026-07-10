@@ -75,16 +75,18 @@ Do not use this skill to implement frontend code, write tests, scaffold projects
 3. Read `common/mcp-installation-policy.md` when installation or configuration is in scope.
 4. Read `common/prompt-intent-routing-rules.md` when workflow level is unclear.
 5. Read `tool-capabilities-manifest.json` for selected skills and capabilities.
-6. Read selected `agents/openai.yaml` files only when Codex UI or invocation metadata matters; never use them as capability declarations or availability evidence.
-7. Read `project/mcp-profile.md` when it exists and the task needs durable tool state.
-8. Read `project/verification-profile.md` only when verification commands influence tool needs.
-9. Do not read all skills or all YAML files during normal routing.
+6. Read `common/codex-official-docs-policy.md` only when `openai_platform_docs` is active.
+7. Read selected `agents/openai.yaml` files only when Codex UI or invocation metadata matters; never use them as capability declarations or availability evidence.
+8. Read `project/mcp-profile.md` when it exists and the task needs durable tool state.
+9. Read `project/verification-profile.md` only when verification commands influence tool needs.
+10. Do not read all skills or all YAML files during normal routing.
 
 ## Tool Contract
 
 - May read `tool-capabilities-manifest.json`, selected skill metadata, Codex UI metadata when relevant, and local-only `project/mcp-profile.md`.
 - May read or update `project/mcp-profile.md` when durable tool state is needed.
 - May search official documentation only to verify installation sources or current client/tool docs.
+- For active OpenAI questions, prefer a callable official OpenAI Developer Docs MCP provider, then the official web fallback; do not call either for generic frontend facts.
 - Must prefer declared capabilities over server-name assumptions.
 - Must not install MCP servers without explicit user approval.
 - Must not change Codex, Claude, Cursor, VS Code, MCP, shell, package manager, or project configuration without explicit user approval.
@@ -104,7 +106,7 @@ command_execution
 current_library_docs
 web_platform_docs
 rendered_visual_evidence
-codex_platform_docs
+openai_platform_docs
 client_platform_docs
 repo_metadata
 design_reference_files
@@ -281,6 +283,7 @@ Should not trigger:
 
 ## Reference Map
 
+- `common/codex-official-docs-policy.md`
 - `common/tool-capability-model.md`
 - `common/mcp-installation-policy.md`
 - `tool-capabilities-manifest.json`

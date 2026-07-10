@@ -88,6 +88,7 @@ Do not use this skill when `frontend-architecture-planner` is enough for an exis
 ## Tool Contract
 
 - May inspect the repository root and selected workspace files to determine whether the target is empty, new, or inside an existing workspace.
+- Activate `openai_platform_docs` only when the planned product uses OpenAI APIs, ChatGPT Apps SDK, or Codex integration behavior.
 - May write local-only `project/**` overlays after approval or during approved onboarding.
 - May create a host-root `AGENTS.md` pointer only through `project-onboarding-adapter` rules.
 - May propose scaffold commands, but must not run them without explicit approval.

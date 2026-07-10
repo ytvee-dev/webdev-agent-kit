@@ -66,7 +66,7 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 ## Tool Contract
 
 - Use filesystem reads and targeted search for local bundle facts.
-- Use official OpenAI Codex docs for current skill and MCP behavior.
+- Activate `openai_platform_docs` when current OpenAI or Codex behavior affects the change; follow `common/codex-official-docs-policy.md`.
 - Use `context7` and `mdn` only when authoring rules depend on current framework or web platform behavior.
 - Do not use Figma MCP for this bundle.
 
@@ -143,6 +143,7 @@ For new skills, use the local scaffolder only after the workflow, resources, com
 - `references/trigger-and-metadata.md`
 - `references/validation-checklist.md`
 - `common/readme-policy.md`
+- `common/codex-official-docs-policy.md`
 - `references/figma-derived-conventions.md`
 - `references/source-backed-prompting.md`
 - `references/documentation-maintenance.md`

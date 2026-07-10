@@ -89,6 +89,7 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 - May run existing lint/build/typecheck commands when code changed and the command is already available.
 - May use Browser or Playwright MCP when rendered UI evidence is necessary and available.
 - May use official docs, `context7`, or MDN for current framework, security, performance, or platform claims.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects a review finding.
 - Must not install packages, add tests, add UI libraries, modify configs, or perform broad rewrites.
 - Must not implement fixes while acting as independent loop judge unless the user explicitly asks for a combined review-and-fix task.
 

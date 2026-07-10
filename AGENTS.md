@@ -72,7 +72,7 @@ Select skills from their `name` and `description`; the user need not name one. F
 
 Preserve unrelated user work. Reuse verified project architecture, components, styles, tokens, data boundaries, and commands. Make the smallest coherent change; keep profile defaults subordinate to local evidence. Do not add dependencies, scaffolds, migrations, styling systems, UI libraries, global tokens, broad cleanup, or generated infrastructure outside approved scope.
 
-Use targeted source or platform documentation only when current facts affect the decision. Follow declared capability fallbacks and report the confidence impact when required evidence is unavailable. Keep durable host facts local in `project/**`.
+Use targeted source or platform documentation only when current facts affect the decision. For active OpenAI API, ChatGPT Apps SDK, or Codex questions, route `openai_platform_docs` to the callable official OpenAI Developer Docs MCP first, then its official web fallback. Skip that lookup for generic frontend or local repository facts. Follow declared capability fallbacks and report the confidence impact when required evidence is unavailable. Keep durable host facts local in `project/**`.
 
 ## Verification And Output
 

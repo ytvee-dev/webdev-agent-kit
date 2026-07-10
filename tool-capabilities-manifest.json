@@ -8,13 +8,6 @@
       "fallback_providers": ["official_client_web_docs"],
       "blocked_providers": ["unverified_setup_guides"]
     },
-    "codex_platform_docs": {
-      "purpose": "Fetch current Codex, AGENTS.md, skills, plugin, MCP, sandbox, and configuration documentation.",
-      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
-      "preferred_providers": ["openai_docs_connector"],
-      "fallback_providers": ["official_openai_web_docs"],
-      "blocked_providers": ["unofficial_codex_setup_sources"]
-    },
     "command_execution": {
       "purpose": "Run existing local lint, typecheck, build, test, format, and project commands within active approval and sandbox boundaries.",
       "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
@@ -42,6 +35,13 @@
       "preferred_providers": [],
       "fallback_providers": [],
       "blocked_providers": ["figjam_mcp", "figma_mcp", "live_design_tooling"]
+    },
+    "openai_platform_docs": {
+      "purpose": "Fetch current official OpenAI API, ChatGPT Apps SDK, Codex, model, tool, MCP, sandbox, skill, plugin, and configuration documentation.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["openai_developer_docs_mcp"],
+      "fallback_providers": ["official_openai_web_docs"],
+      "blocked_providers": ["unofficial_openai_setup_sources"]
     },
     "project_files": {
       "purpose": "Read and, when approved, write project files through any verified host-native, connector, MCP, or shell provider.",
@@ -75,7 +75,7 @@
   "skills": {
     "agent-rules-skill-author": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["client_platform_docs", "codex_platform_docs", "repo_metadata"],
+      "requires_when_in_scope": ["client_platform_docs", "openai_platform_docs", "repo_metadata"],
       "optional": [],
       "blocked": []
     },
@@ -93,13 +93,13 @@
     },
     "frontend-architecture-planner": {
       "requires": ["project_files"],
-      "requires_when_in_scope": [],
+      "requires_when_in_scope": ["openai_platform_docs"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": []
     },
     "frontend-bugfix-debugger": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence"],
+      "requires_when_in_scope": ["command_execution", "openai_platform_docs", "rendered_visual_evidence"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": []
     },
@@ -117,7 +117,7 @@
     },
     "frontend-layout-implementer": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["command_execution", "design_reference_files", "rendered_visual_evidence"],
+      "requires_when_in_scope": ["command_execution", "design_reference_files", "openai_platform_docs", "rendered_visual_evidence"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": ["live_design_source"]
     },
@@ -129,13 +129,13 @@
     },
     "frontend-quality-reviewer": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence", "repo_metadata"],
+      "requires_when_in_scope": ["command_execution", "openai_platform_docs", "rendered_visual_evidence", "repo_metadata"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": []
     },
     "frontend-refactor-surgeon": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence"],
+      "requires_when_in_scope": ["command_execution", "openai_platform_docs", "rendered_visual_evidence"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": []
     },
@@ -153,7 +153,7 @@
     },
     "greenfield-project-builder": {
       "requires": [],
-      "requires_when_in_scope": ["project_files"],
+      "requires_when_in_scope": ["openai_platform_docs", "project_files"],
       "optional": ["client_platform_docs", "current_library_docs"],
       "blocked": []
     },
@@ -165,25 +165,25 @@
     },
     "mcp-toolchain-manager": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["client_platform_docs", "codex_platform_docs", "repo_metadata"],
+      "requires_when_in_scope": ["client_platform_docs", "openai_platform_docs", "repo_metadata"],
       "optional": [],
       "blocked": ["live_design_source"]
     },
     "pattern-library-manager": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["codex_platform_docs"],
+      "requires_when_in_scope": ["openai_platform_docs"],
       "optional": [],
       "blocked": []
     },
     "project-context-adapter": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["command_execution"],
+      "requires_when_in_scope": ["command_execution", "openai_platform_docs"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": ["live_design_source"]
     },
     "project-onboarding-adapter": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["client_platform_docs", "command_execution", "design_reference_files"],
+      "requires_when_in_scope": ["client_platform_docs", "command_execution", "design_reference_files", "openai_platform_docs"],
       "optional": ["current_library_docs", "web_platform_docs"],
       "blocked": ["live_design_source"]
     }

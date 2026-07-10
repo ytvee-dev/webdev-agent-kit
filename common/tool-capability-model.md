@@ -14,6 +14,7 @@ parent:
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
 related:
     - '[[common/mcp-installation-policy|MCP Installation Policy]]'
+    - '[[common/codex-official-docs-policy|OpenAI And Codex Official Docs Policy]]'
 depends_on: []
 ---
 
@@ -32,7 +33,7 @@ Use this vocabulary in runtime rules, toolchain reports, and `project/mcp-profil
 - `current_library_docs` - fetch current React, Next.js, Redux, TanStack, Axios, TypeScript, package-manager, or build-tool documentation.
 - `web_platform_docs` - fetch current HTML, CSS, Web API, accessibility, and browser compatibility documentation.
 - `rendered_visual_evidence` - open a local app, inspect rendered UI, resize viewports, capture screenshots, and report browser-visible state.
-- `codex_platform_docs` - fetch current Codex, AGENTS.md, skills, plugin, MCP, sandbox, or config documentation.
+- `openai_platform_docs` - fetch current official OpenAI API, ChatGPT Apps SDK, Codex, model, tool, MCP, sandbox, skill, plugin, or configuration documentation.
 - `client_platform_docs` - fetch current Claude Code, Cursor, VS Code, or other host-client documentation when adaptation depends on client behavior.
 - `repo_metadata` - inspect repository, PR, issue, review, label, release, and CI metadata.
 - `design_reference_files` - read user-supplied screenshots, exported assets, copied inspect values, and local visual references.
@@ -55,6 +56,8 @@ Map an active capability to providers in this order:
 4. Blocked, with explicit confidence impact, when no honest fallback exists.
 
 The provider may be a native GPT/Codex tool, a native Claude Code tool, a host connector, an MCP server, or an allowed shell fallback. No provider class has special authority.
+
+For `openai_platform_docs`, prefer a callable official OpenAI Developer Docs MCP provider, regardless of its client-specific configured name. Use the official OpenAI web docs fallback when the MCP provider is unavailable. Activate this capability only when current OpenAI behavior can affect the task; provider availability alone must not trigger a lookup.
 
 Do not treat a provider name, package, lockfile entry, config entry, or `agents/openai.yaml` declaration as proof that the capability is available. Availability evidence is limited to:
 

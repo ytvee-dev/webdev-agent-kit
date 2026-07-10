@@ -70,6 +70,7 @@ Do not use this skill for:
 
 - Use the `project_files` capability for repository file reads and writes.
 - May use official documentation or trusted maintainer sources to understand a pattern when examples are not supplied by the user.
+- Activate `openai_platform_docs` only when a reusable pattern depends on current OpenAI or Codex behavior.
 - Must propose sourced examples to the user before committing them when they come from external material or host-project-specific context.
 - Must write original, short examples instead of copying long third-party code.
 - Must not install packages, change runtime code, create tests, or modify host-project documentation.

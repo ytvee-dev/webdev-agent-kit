@@ -27,6 +27,42 @@
       "reason": "The same portable capability must work through native Claude tooling."
     },
     {
+      "id": "capability.openai-docs-preferred",
+      "prompt": "Update a Codex skill using current official behavior. The official OpenAI Developer Docs MCP is callable in this session.",
+      "capability_action": "preferred-provider",
+      "required_capabilities": ["openai_platform_docs"],
+      "available_providers": ["openai_developer_docs_mcp"],
+      "expected_status": "available",
+      "expected_install": false,
+      "expected_behavior": "Use one targeted MCP search and read only the decisive official sections before changing the skill.",
+      "forbidden_behaviors": ["rely on remembered Codex behavior instead of the callable official source", "retrieve or repeat unrelated documentation"],
+      "reason": "A callable official Docs MCP should improve current OpenAI decisions without adding broad context."
+    },
+    {
+      "id": "capability.openai-docs-fallback",
+      "prompt": "Current OpenAI API behavior affects the implementation, but the official Docs MCP is unavailable and official OpenAI web docs are reachable.",
+      "capability_action": "fallback-provider",
+      "required_capabilities": ["openai_platform_docs"],
+      "available_providers": ["official_openai_web_docs"],
+      "expected_status": "fallback-used",
+      "expected_install": false,
+      "expected_behavior": "Use the official OpenAI web docs fallback and continue without proposing an MCP install.",
+      "forbidden_behaviors": ["block on the missing preferred provider", "use unofficial search summaries or install the MCP automatically"],
+      "reason": "Provider preference must not turn an available official fallback into setup work."
+    },
+    {
+      "id": "capability.openai-docs-not-needed",
+      "prompt": "Change one local CSS color in a generic frontend. The official OpenAI Developer Docs MCP is callable but no OpenAI behavior is involved.",
+      "capability_action": "lightweight-no-audit",
+      "required_capabilities": ["openai_platform_docs"],
+      "available_providers": ["openai_developer_docs_mcp"],
+      "expected_status": "not-needed",
+      "expected_install": false,
+      "expected_behavior": "Leave the capability inactive and complete the local edit without a documentation lookup.",
+      "forbidden_behaviors": ["call the Docs MCP because it is available", "emit OpenAI documentation context or toolchain status"],
+      "reason": "Conditional routing preserves output tokens and latency for unrelated frontend work."
+    },
+    {
       "id": "capability.optional-docs-fallback",
       "prompt": "Context7 is unavailable while a library detail would be useful but is not required. Continue with an official docs fallback.",
       "capability_action": "missing-optional",

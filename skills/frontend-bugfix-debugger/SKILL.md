@@ -69,6 +69,7 @@ For a micro UI fix, default to the context budget in `common/lightweight-routing
 - May run existing project commands needed to reproduce or verify the symptom.
 - May use Browser or Playwright MCP for rendered bug reproduction when available and justified by the task.
 - May use `context7` or official docs when current framework behavior affects the fix.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the defect or fix.
 - May use MDN when browser platform behavior affects the bug.
 - Must not install packages, add test workflows, change build tooling, or add UI libraries without explicit approval.
 - Must not interact with production systems, secrets, or production data.

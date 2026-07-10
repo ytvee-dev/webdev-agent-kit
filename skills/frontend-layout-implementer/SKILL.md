@@ -82,6 +82,7 @@ Do not read generated `dist/**` during normal runtime.
 - Use Design Spec MCP when available; otherwise use the supplied spec text or user-approved local artifact.
 - Use Visual Reference MCP when available; otherwise use attached or local image files supplied by the user.
 - Use `context7` for React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool docs when implementation depends on current behavior.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the implementation.
 - Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility facts.
 - Use rendered visual QA only when screenshot comparison, viewport evidence, overflow checks, or visible state verification are in scope.
 - Use Visual Diff MCP when available during final visual comparison.

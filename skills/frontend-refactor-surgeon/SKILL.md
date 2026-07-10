@@ -65,6 +65,7 @@ Use `frontend-bugfix-debugger` when the primary goal is to fix a defect.
 - May inspect affected source, styles, configs, and project overlays.
 - May run existing lint, typecheck, build, or preview commands relevant to the refactor.
 - May use Browser or Playwright MCP when rendered output must be checked.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the preserved contract.
 - Must not install packages, add testing workflows, change build tooling, add UI libraries, or migrate frameworks without explicit approval.
 - Must not change production systems, secrets, or production data.
 

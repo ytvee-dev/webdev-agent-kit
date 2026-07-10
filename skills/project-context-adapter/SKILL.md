@@ -79,6 +79,7 @@ Read targeted README sections only when the refresh concerns project intent, set
   unavailable.
 - Use `context7` and MDN only when refreshing official documentation choices or
   stack-specific pattern notes that depend on current external docs.
+- Activate `openai_platform_docs` only when refreshed project facts depend on current OpenAI or Codex behavior.
 - Do not use Figma MCP.
 - Edit only `project/**` unless the user also requests bundle skill or policy
   changes.

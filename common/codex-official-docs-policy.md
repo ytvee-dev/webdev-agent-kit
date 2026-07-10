@@ -1,6 +1,6 @@
 ---
 id: 'agents.common.codex-official-docs-policy'
-title: 'Codex Official Docs Policy'
+title: 'OpenAI And Codex Official Docs Policy'
 doc_type: 'common-rule'
 layer: 'common'
 status: 'active'
@@ -19,9 +19,9 @@ related:
 depends_on: []
 ---
 
-# Codex Official Docs Policy
+# OpenAI And Codex Official Docs Policy
 
-Purpose: keep Codex-specific rules source-backed without duplicating official links across every skill.
+Purpose: keep OpenAI and Codex-specific rules source-backed without duplicating official links across every skill.
 
 ## Official Sources
 
@@ -35,6 +35,8 @@ Use these official OpenAI sources as the source of truth when changing Codex beh
 - Sandbox: https://developers.openai.com/codex/concepts/sandboxing
 - MCP for Codex: https://developers.openai.com/codex/mcp
 - Agent Skills: https://developers.openai.com/codex/skills
+- OpenAI Developer Docs MCP: https://developers.openai.com/learn/docs-mcp
+- OpenAI Developer Docs MCP server: https://developers.openai.com/mcp
 - OpenAI Developers Videos: https://developers.openai.com/learn/videos
 
 ## When To Read Which Source
@@ -45,14 +47,25 @@ Use these official OpenAI sources as the source of truth when changing Codex beh
 - Read Config Basics when changing `.codex/config.toml`, project config guidance, profile behavior, model defaults, approval policy, sandbox settings, or MCP configuration locations.
 - Read Sandbox when changing rules about autonomous command execution, approval flow, network access, filesystem boundaries, or safety gates.
 - Read MCP for Codex when changing MCP server guidance, official install source checks, MCP transport assumptions, OAuth, tool instructions, or `project/mcp-profile.md` behavior.
+- Read OpenAI Developer Docs MCP when changing its provider mapping, supported documentation scope, client setup, or fallback behavior.
 - Read Codex CLI or Quickstart when changing installation, first-run, CLI usage, IDE usage, or onboarding instructions.
 - Use OpenAI Developers Videos only as supplementary learning material. Do not treat video titles as binding runtime policy unless the same rule is backed by docs.
+
+## Retrieval Route And Budget
+
+Activate `openai_platform_docs` only when current OpenAI API, ChatGPT Apps SDK, Codex, model, tool, MCP, skill, plugin, sandbox, or configuration behavior can change the answer or implementation.
+
+1. If the current session exposes the official OpenAI Developer Docs MCP, use one targeted search and read only the decisive page sections.
+2. Otherwise use the declared official OpenAI web docs fallback.
+3. If neither route is available, state the affected unknown or confidence limit instead of relying on memory.
+
+The Docs MCP is read-only and documentation-only. It cannot call the OpenAI API, inspect account state, or prove live API behavior. Do not invoke it for generic frontend work, stable local facts, or questions already answered by verified repository evidence. Summarize only decision-relevant facts; do not dump retrieved pages into context or output.
 
 ## Bundle Rules
 
 - Keep official OpenAI links centralized here or in the owning skill-author reference. Do not paste the full link list into every skill.
 - A skill may point to this policy when it depends on current Codex-native behavior.
-- For OpenAI, Codex, ChatGPT, Apps SDK, MCP, model, or tool behavior, check current official OpenAI docs or an approved OpenAI Docs MCP source instead of relying on memory.
+- For OpenAI, Codex, ChatGPT, Apps SDK, MCP, model, or tool behavior, follow the `openai_platform_docs` route instead of relying on memory.
 - Keep host-project facts about installed tools, missing MCP servers, available docs sources, and accepted fallbacks in `project/mcp-profile.md`, not in reusable bundle docs.
 - Do not use unofficial blog posts, search summaries, generated guesses, or random package names as authority for Codex setup, MCP installation, permissions, or skill packaging.
 

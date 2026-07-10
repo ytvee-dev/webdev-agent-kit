@@ -80,6 +80,7 @@ Read targeted README sections only when they help identify project intent, setup
 - Use the `project_files` capability when available. Prefer configured filesystem/project-files MCP for direct project file reads; use host-native file tools when available; use targeted shell reads only as the fallback.
 - Use MDN for HTML, CSS, Web APIs, accessibility, and browser behavior when official web platform facts matter.
 - Use `context7` only for detected target-stack libraries or tooling when current docs matter.
+- Activate `openai_platform_docs` only when current Codex client, plugin, skill, MCP, or configuration behavior affects onboarding.
 - Determine Browser or Playwright availability from the current session tool registry or validated `project/mcp-profile.md` facts. Do not invoke either tool during onboarding or MCP detection.
 - Do not infer MCP availability from `package.json`, lockfiles, `node_modules`, a running local app, or Playwright dependencies.
 - Do not use Figma MCP.
@@ -157,6 +158,7 @@ Should not trigger:
 ## Reference Map
 
 - `common/client-adaptation-policy.md`
+- `common/codex-official-docs-policy.md`
 - `common/tool-capability-model.md`
 - `common/mcp-installation-policy.md`
 - `common/target-stack-policy.md`

@@ -86,6 +86,7 @@ Do not use this skill for:
 
 - May use filesystem access to inspect relevant project overlays and affected source files.
 - May use `context7` for React, Next.js, Redux, TanStack, Axios, TypeScript, or build-tool documentation when architecture depends on current behavior.
+- Activate `openai_platform_docs` only when current OpenAI API or ChatGPT Apps SDK behavior affects the architecture.
 - May use MDN for platform constraints that affect architecture, such as forms, browser APIs, accessibility, and CSS behavior.
 - Must not install packages, UI libraries, state libraries, data libraries, form libraries, or MCP servers.
 - Must not change project source files, configs, package manager files, or build tooling.

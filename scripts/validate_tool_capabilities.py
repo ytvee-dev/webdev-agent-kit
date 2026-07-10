@@ -31,7 +31,24 @@ FORBIDDEN_PROVIDER_DEPENDENCIES = {
     "filesystem_server",
     "mdn",
     "openaiDeveloperDocs",
+    "openai_developer_docs_mcp",
     "playwright",
+}
+OPENAI_DOCS_CAPABILITY = "openai_platform_docs"
+OPENAI_DOCS_PROVIDER = "openai_developer_docs_mcp"
+OPENAI_DOCS_FALLBACK = "official_openai_web_docs"
+OPENAI_DOCS_SCOPED_SKILLS = {
+    "agent-rules-skill-author",
+    "frontend-architecture-planner",
+    "frontend-bugfix-debugger",
+    "frontend-layout-implementer",
+    "frontend-quality-reviewer",
+    "frontend-refactor-surgeon",
+    "greenfield-project-builder",
+    "mcp-toolchain-manager",
+    "pattern-library-manager",
+    "project-context-adapter",
+    "project-onboarding-adapter",
 }
 
 
@@ -80,6 +97,29 @@ def validate():
         )
 
     capability_names = set(capabilities)
+    if "codex_platform_docs" in capabilities:
+        errors.append(
+            "tool-capabilities-manifest.json: use openai_platform_docs for the "
+            "official OpenAI documentation surface"
+        )
+
+    openai_docs = capabilities.get(OPENAI_DOCS_CAPABILITY)
+    if not isinstance(openai_docs, dict):
+        errors.append(
+            "tool-capabilities-manifest.json: openai_platform_docs is required"
+        )
+    else:
+        if OPENAI_DOCS_PROVIDER not in openai_docs.get("preferred_providers", []):
+            errors.append(
+                "tool-capabilities-manifest.json: openai_platform_docs must prefer "
+                "openai_developer_docs_mcp"
+            )
+        if OPENAI_DOCS_FALLBACK not in openai_docs.get("fallback_providers", []):
+            errors.append(
+                "tool-capabilities-manifest.json: openai_platform_docs must fall back "
+                "to official_openai_web_docs"
+            )
+
     for name, capability in capabilities.items():
         label = f"tool-capabilities-manifest.json: capabilities.{name}"
         evidence = capability.get("availability_evidence", [])
@@ -126,6 +166,15 @@ def validate():
                     errors.append(
                         f"{label}: {left_name} and {right_name} overlap: {overlap}"
                     )
+
+    for skill_name in sorted(OPENAI_DOCS_SCOPED_SKILLS):
+        scoped = skills.get(skill_name, {}).get("requires_when_in_scope", [])
+        if OPENAI_DOCS_CAPABILITY not in scoped:
+            errors.append(
+                "tool-capabilities-manifest.json: "
+                f"skills.{skill_name}.requires_when_in_scope must include "
+                "openai_platform_docs"
+            )
 
     for skill_name in expected_skills:
         skill_dir = ROOT / "skills" / skill_name
