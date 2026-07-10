@@ -26,6 +26,8 @@ Purpose: keep MCP setup deliberate, source-backed, client-specific, and safe.
 
 The bundle may detect required capabilities and propose MCP server candidates, but it must not install, enable, authenticate, or configure an MCP server without explicit user approval in the current task.
 
+Provider candidates in `tool-capabilities-manifest.json` are options, not installation requirements. A missing optional provider does not justify an install proposal. Propose setup only when the user asked for tool setup or a required active capability has no honest fallback.
+
 Approval must name:
 
 - capability being satisfied;

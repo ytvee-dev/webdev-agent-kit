@@ -52,6 +52,9 @@ jobs:
       - name: Validate runtime target contracts
         run: python scripts/validate_target_contracts.py
 
+      - name: Validate tool capability metadata
+        run: python scripts/validate_tool_capabilities.py
+
       - name: Validate policy precedence
         run: python scripts/validate_policy_precedence.py
 

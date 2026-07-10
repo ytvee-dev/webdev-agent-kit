@@ -47,7 +47,7 @@ implement screenshot-derived specs without scanning the whole repository.
 - Project structure, routes, entrypoints, styling systems, assets, or
   verification commands changed.
 - A new frontend stack fact was discovered during implementation.
-- Current skill MCP dependencies, available MCP servers, or official
+- Current skill capability declarations, available providers, or official
   documentation choices changed.
 - Design-reference boundaries, approved patterns, or anti-patterns changed.
 - Path indexes no longer match actual source files.
@@ -66,7 +66,7 @@ implement screenshot-derived specs without scanning the whole repository.
 3. Read `common/documentation-maintenance.md`.
 4. Read existing `project/**` overlays.
 5. Inspect relevant manifests, configs, entrypoints, routes, components,
-   styles, assets, skill `agents/openai.yaml` files, and verification scripts.
+   styles, assets, `tool-capabilities-manifest.json`, and verification scripts.
 6. Read `references/extraction-checklist.md`.
 7. Read `references/sync-procedure.md`.
 
@@ -87,7 +87,7 @@ Read targeted README sections only when the refresh concerns project intent, set
 
 1. Determine which project facts changed.
 2. Update only affected overlays or path indexes.
-3. Refresh `project/mcp-profile.md` when skill dependencies, installed MCP
+3. Refresh `project/mcp-profile.md` when skill capabilities, validated providers
    servers, official docs choices, or verification capabilities changed.
 4. Refresh `project/design-reference-profile.md` when screenshot, exported
    asset, copied inspect, or design-source boundaries changed.
@@ -114,8 +114,9 @@ Report:
 
 - `project/**` files must remain local-only.
 - Path indexes must point to existing files or explicitly mark missing owners.
-- `project/mcp-profile.md` must match current `skills/*/agents/openai.yaml`
-  dependency declarations when it is touched.
+- `project/mcp-profile.md` must match active declarations in
+  `tool-capabilities-manifest.json` when it is touched; provider config alone
+  must not be recorded as availability.
 - `project/design-reference-profile.md` must not imply live design-tool access.
 - Patterns and anti-patterns must cite real local code facts or official
   documentation choices, not generic preferences.

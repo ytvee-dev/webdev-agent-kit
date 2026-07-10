@@ -1,89 +1,191 @@
 {
   "version": "0.3.0",
   "capabilities": {
-    "project_files": {
-      "purpose": "Read and, when approved, write project files.",
-      "preferred_providers": ["filesystem_mcp"],
-      "fallback_providers": ["host_native_file_tools", "targeted_shell_read"],
-      "blocked_providers": []
+    "client_platform_docs": {
+      "purpose": "Fetch current host-client installation, plugin, instruction, tool, and configuration documentation.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["host_native_docs_tools"],
+      "fallback_providers": ["official_client_web_docs"],
+      "blocked_providers": ["unverified_setup_guides"]
+    },
+    "codex_platform_docs": {
+      "purpose": "Fetch current Codex, AGENTS.md, skills, plugin, MCP, sandbox, and configuration documentation.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["openai_docs_connector"],
+      "fallback_providers": ["official_openai_web_docs"],
+      "blocked_providers": ["unofficial_codex_setup_sources"]
+    },
+    "command_execution": {
+      "purpose": "Run existing local lint, typecheck, build, test, format, and project commands within active approval and sandbox boundaries.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["host_native_command_tools"],
+      "fallback_providers": ["approved_shell_execution"],
+      "blocked_providers": ["repeated_blocked_command", "unapproved_out_of_sandbox_execution"]
     },
     "current_library_docs": {
       "purpose": "Fetch current framework, library, package-manager, and build-tool documentation.",
-      "preferred_providers": ["context7_mcp"],
-      "fallback_providers": ["official_web_docs"],
-      "blocked_providers": []
-    },
-    "web_platform_docs": {
-      "purpose": "Fetch current HTML, CSS, Web API, accessibility, and browser compatibility documentation.",
-      "preferred_providers": ["mdn_mcp"],
-      "fallback_providers": ["official_mdn_web_docs"],
-      "blocked_providers": []
-    },
-    "rendered_visual_evidence": {
-      "purpose": "Open local pages, inspect rendered UI, resize viewports, and capture screenshots.",
-      "preferred_providers": ["playwright_mcp", "browser_mcp", "host_browser_tool"],
-      "fallback_providers": ["approved_out_of_sandbox_run", "source_only_review_with_lower_confidence"],
-      "blocked_providers": ["local_playwright_package_as_mcp_proof", "repeated_sandbox_blocked_dev_server"]
-    },
-    "codex_platform_docs": {
-      "purpose": "Fetch current Codex, AGENTS.md, skills, plugin, MCP, sandbox, and config documentation.",
-      "preferred_providers": ["openai_docs_mcp"],
-      "fallback_providers": ["official_openai_docs_web"],
-      "blocked_providers": []
-    },
-    "client_platform_docs": {
-      "purpose": "Fetch current Claude Code, Cursor, VS Code, or other client documentation when adaptation depends on host behavior.",
-      "preferred_providers": ["official_client_docs"],
-      "fallback_providers": [],
-      "blocked_providers": []
-    },
-    "repo_metadata": {
-      "purpose": "Read repository, PR, issue, review, label, release, and CI metadata.",
-      "preferred_providers": ["github_connector", "github_mcp"],
-      "fallback_providers": ["git_cli", "gh_cli_when_authenticated"],
-      "blocked_providers": []
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["context7_mcp", "host_native_library_docs"],
+      "fallback_providers": ["official_library_web_docs"],
+      "blocked_providers": ["unverified_blog_or_search_summary"]
     },
     "design_reference_files": {
       "purpose": "Read user-supplied screenshots, exported assets, copied inspect values, and local visual references.",
-      "preferred_providers": ["visual_reference_mcp", "host_attachment_tools", "project_files"],
+      "availability_evidence": ["current_session_tool_registry", "direct_user_confirmation", "validated_project_profile"],
+      "preferred_providers": ["host_attachment_tools", "project_files"],
       "fallback_providers": ["user_supplied_text_notes"],
-      "blocked_providers": []
+      "blocked_providers": ["live_design_tool_guess"]
     },
     "live_design_source": {
-      "purpose": "Inspect live design-tool sources.",
+      "purpose": "Inspect or modify live design-tool sources; blocked for the default screenshot-only bundle flow.",
+      "availability_evidence": ["current_session_tool_registry"],
       "preferred_providers": [],
       "fallback_providers": [],
-      "blocked_providers": ["figma_mcp", "figjam_mcp", "live_design_tooling"]
+      "blocked_providers": ["figjam_mcp", "figma_mcp", "live_design_tooling"]
+    },
+    "project_files": {
+      "purpose": "Read and, when approved, write project files through any verified host-native, connector, MCP, or shell provider.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["filesystem_mcp", "host_native_file_tools"],
+      "fallback_providers": ["targeted_shell_read"],
+      "blocked_providers": ["provider_name_without_callable_tool"]
+    },
+    "rendered_visual_evidence": {
+      "purpose": "Open local pages, inspect rendered UI, resize viewports, capture screenshots, and report browser-visible state.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["browser_mcp", "host_browser_tool", "playwright_mcp"],
+      "fallback_providers": ["approved_out_of_sandbox_run", "source_only_review_with_lower_confidence"],
+      "blocked_providers": ["local_playwright_package_as_tool_proof", "repeated_sandbox_blocked_dev_server"]
+    },
+    "repo_metadata": {
+      "purpose": "Read repository, PR, issue, review, label, release, and CI metadata.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["github_connector", "github_mcp", "host_repo_connector"],
+      "fallback_providers": ["gh_cli_when_authenticated", "git_cli"],
+      "blocked_providers": ["unauthenticated_private_repo_assumption"]
+    },
+    "web_platform_docs": {
+      "purpose": "Fetch current HTML, CSS, Web API, accessibility, and browser compatibility documentation.",
+      "availability_evidence": ["current_session_tool_registry", "validated_project_profile"],
+      "preferred_providers": ["host_native_web_docs", "mdn_mcp"],
+      "fallback_providers": ["official_mdn_web_docs"],
+      "blocked_providers": ["unverified_browser_compatibility_claim"]
     }
   },
   "skills": {
     "agent-rules-skill-author": {
       "requires": ["project_files"],
-      "optional": ["codex_platform_docs", "client_platform_docs"]
+      "requires_when_in_scope": ["client_platform_docs", "codex_platform_docs", "repo_metadata"],
+      "optional": [],
+      "blocked": []
     },
     "design-screenshot-spec": {
       "requires": ["design_reference_files"],
-      "optional": ["web_platform_docs"]
+      "requires_when_in_scope": ["web_platform_docs"],
+      "optional": [],
+      "blocked": ["live_design_source"]
+    },
+    "execution-plan-manager": {
+      "requires": [],
+      "requires_when_in_scope": ["project_files"],
+      "optional": [],
+      "blocked": []
+    },
+    "frontend-architecture-planner": {
+      "requires": ["project_files"],
+      "requires_when_in_scope": [],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": []
+    },
+    "frontend-bugfix-debugger": {
+      "requires": ["project_files"],
+      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": []
+    },
+    "frontend-design-director": {
+      "requires": [],
+      "requires_when_in_scope": ["design_reference_files", "project_files", "rendered_visual_evidence"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": ["live_design_source"]
+    },
+    "frontend-design-intelligence": {
+      "requires": [],
+      "requires_when_in_scope": ["design_reference_files", "project_files"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": ["live_design_source"]
     },
     "frontend-layout-implementer": {
       "requires": ["project_files"],
-      "optional": ["current_library_docs", "web_platform_docs", "rendered_visual_evidence", "design_reference_files"]
+      "requires_when_in_scope": ["command_execution", "design_reference_files", "rendered_visual_evidence"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": ["live_design_source"]
+    },
+    "frontend-linter-manager": {
+      "requires": ["command_execution", "project_files"],
+      "requires_when_in_scope": [],
+      "optional": [],
+      "blocked": []
+    },
+    "frontend-quality-reviewer": {
+      "requires": ["project_files"],
+      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence", "repo_metadata"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": []
+    },
+    "frontend-refactor-surgeon": {
+      "requires": ["project_files"],
+      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": []
     },
     "frontend-visual-qa": {
-      "requires_when_in_scope": ["rendered_visual_evidence"],
-      "optional": ["web_platform_docs", "design_reference_files"]
+      "requires": ["rendered_visual_evidence"],
+      "requires_when_in_scope": ["command_execution", "project_files"],
+      "optional": ["design_reference_files", "web_platform_docs"],
+      "blocked": ["live_design_source"]
+    },
+    "goal-planner": {
+      "requires": [],
+      "requires_when_in_scope": ["project_files"],
+      "optional": [],
+      "blocked": []
+    },
+    "greenfield-project-builder": {
+      "requires": [],
+      "requires_when_in_scope": ["project_files"],
+      "optional": ["client_platform_docs", "current_library_docs"],
+      "blocked": []
+    },
+    "loop-workflow-planner": {
+      "requires": [],
+      "requires_when_in_scope": ["project_files"],
+      "optional": [],
+      "blocked": []
     },
     "mcp-toolchain-manager": {
       "requires": ["project_files"],
-      "optional": ["codex_platform_docs", "client_platform_docs"]
+      "requires_when_in_scope": ["client_platform_docs", "codex_platform_docs", "repo_metadata"],
+      "optional": [],
+      "blocked": ["live_design_source"]
+    },
+    "pattern-library-manager": {
+      "requires": ["project_files"],
+      "requires_when_in_scope": ["codex_platform_docs"],
+      "optional": [],
+      "blocked": []
     },
     "project-context-adapter": {
       "requires": ["project_files"],
-      "optional": ["current_library_docs", "web_platform_docs"]
+      "requires_when_in_scope": ["command_execution"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": ["live_design_source"]
     },
     "project-onboarding-adapter": {
       "requires": ["project_files"],
-      "optional": ["current_library_docs", "web_platform_docs", "client_platform_docs"]
+      "requires_when_in_scope": ["client_platform_docs", "command_execution", "design_reference_files"],
+      "optional": ["current_library_docs", "web_platform_docs"],
+      "blocked": ["live_design_source"]
     }
   }
 }

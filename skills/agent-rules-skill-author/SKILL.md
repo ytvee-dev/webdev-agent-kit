@@ -77,7 +77,8 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 3. Confirm whether a new skill is needed or an existing skill/reference/common rule should be edited.
 4. Define trigger surface, non-trigger cases, inputs, outputs, defaults, tool contract, failure modes, and validation gates.
 5. Keep skill packages in the standard section order used by this bundle.
-6. Keep graph frontmatter and `agents/openai.yaml` synchronized.
+6. Keep graph frontmatter and Codex UI/invocation metadata synchronized; keep
+   capability declarations in `tool-capabilities-manifest.json`.
 7. Remove stale links after renames or deletions.
 8. Validate changed skill packages and run documentation checks.
 
@@ -96,7 +97,9 @@ Report:
 - `name` and `description` stay first in `SKILL.md` frontmatter.
 - Every skill has `Purpose`, `When To Use`, `When Not To Use`, `Required Context`, `Tool Contract`, `Workflow`, `Output Contract`, `Validation Gates`, `Trigger Evals`, and `Reference Map`.
 - New references are linked from the owning `SKILL.md`.
-- `agents/openai.yaml` matches skill trigger, scope, and factual tool dependencies.
+- `agents/openai.yaml` matches skill UI and invocation policy. Only true hard
+  client-tool dependencies belong there; optional providers belong in the
+  capability manifest.
 - No Figma MCP or Figma whiteboard workflow is introduced.
 - README is not used as runtime policy, routing input, validator truth, or sole technical evidence, and is not edited without an explicit current user request.
 

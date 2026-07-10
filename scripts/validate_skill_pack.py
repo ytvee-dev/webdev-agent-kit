@@ -27,6 +27,9 @@ def main():
     target_contract_code = run("validate_target_contracts.py")
     if target_contract_code:
         sys.exit(target_contract_code)
+    capability_code = run("validate_tool_capabilities.py")
+    if capability_code:
+        sys.exit(capability_code)
     precedence_code = run("validate_policy_precedence.py")
     if precedence_code:
         sys.exit(precedence_code)

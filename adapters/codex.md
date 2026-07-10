@@ -26,6 +26,7 @@ Purpose: map portable behavior to Codex instruction, skill, tool, and sandbox co
 - Project policy entrypoint after extraction: `.agents/AGENTS.md` through the approved root `AGENTS.md` pointer.
 - Project skill root: `.agents/skills`.
 - Native skill UI metadata: `skills/*/agents/openai.yaml` when present in the Codex target.
+- Capability declarations: `tool-capabilities-manifest.json`; `agents/openai.yaml` is not capability-availability evidence.
 
 ## Project Instructions
 
@@ -33,7 +34,7 @@ Root `AGENTS.md` stays a minimal pointer to `.agents/AGENTS.md`. Create or merge
 
 ## Tool And Sandbox Boundary
 
-Use the active Codex tool registry as capability evidence. Treat sandbox restrictions and approval policy as separate controls. Ask before crossing approval boundaries, and report blocked checks after the bounded fallback defined by portable policy.
+Use the active Codex tool registry or validated project profile as capability evidence. A native Codex tool can satisfy a capability without a named MCP server. Treat sandbox restrictions and approval policy as separate controls. Ask before crossing approval boundaries, and report blocked checks after the bounded fallback defined by portable policy.
 
 ## Output Boundary
 

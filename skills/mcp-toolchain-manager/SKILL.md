@@ -75,14 +75,14 @@ Do not use this skill to implement frontend code, write tests, scaffold projects
 3. Read `common/mcp-installation-policy.md` when installation or configuration is in scope.
 4. Read `common/prompt-intent-routing-rules.md` when workflow level is unclear.
 5. Read `tool-capabilities-manifest.json` for selected skills and capabilities.
-6. Read selected skill metadata and `agents/openai.yaml` files only when Codex-native metadata matters for the current client.
+6. Read selected `agents/openai.yaml` files only when Codex UI or invocation metadata matters; never use them as capability declarations or availability evidence.
 7. Read `project/mcp-profile.md` when it exists and the task needs durable tool state.
 8. Read `project/verification-profile.md` only when verification commands influence tool needs.
 9. Do not read all skills or all YAML files during normal routing.
 
 ## Tool Contract
 
-- May read `tool-capabilities-manifest.json`, selected skill metadata, selected `agents/openai.yaml`, and local-only `project/mcp-profile.md`.
+- May read `tool-capabilities-manifest.json`, selected skill metadata, Codex UI metadata when relevant, and local-only `project/mcp-profile.md`.
 - May read or update `project/mcp-profile.md` when durable tool state is needed.
 - May search official documentation only to verify installation sources or current client/tool docs.
 - Must prefer declared capabilities over server-name assumptions.
@@ -100,6 +100,7 @@ Expected high-value capabilities:
 
 ```text
 project_files
+command_execution
 current_library_docs
 web_platform_docs
 rendered_visual_evidence
@@ -127,7 +128,8 @@ Core does not mean always installed or always used. Use only what the current wo
 
 2. Collect required capability declarations.
    - Inspect `tool-capabilities-manifest.json` for selected skills.
-   - Inspect `agents/openai.yaml` only when Codex-native metadata must be aligned.
+   - Treat it as the only bundle source for required, conditional, optional, and blocked capabilities.
+   - Inspect `agents/openai.yaml` only when Codex UI or invocation metadata must be aligned.
    - Record required, required-when-in-scope, optional, and blocked capabilities.
    - Do not scan every skill unless onboarding or full toolchain audit is explicitly requested.
 
@@ -139,8 +141,9 @@ Core does not mean always installed or always used. Use only what the current wo
    - Explicitly blocked.
 
 4. Compare capabilities with available providers.
-   - Available in the current session.
-   - Available as a native host capability.
+   - Callable in the current session registry, including native host tools.
+   - Recorded as validated in the local-only project profile.
+   - Directly confirmed by the user only for supplied design references.
    - Missing.
    - Approved for install.
    - Installed and validated.
@@ -153,6 +156,7 @@ Core does not mean always installed or always used. Use only what the current wo
    - State the allowed fallback and confidence level when fallback is allowed.
    - Do not claim tool-based verification if the provider is missing.
    - Do not treat `package.json`, lockfiles, local Playwright dependencies, or a running dev server as proof of MCP availability.
+   - Do not treat client config, provider names, or `agents/openai.yaml` as proof of availability.
 
 6. Verify official install source when installation is relevant.
    - Use accepted sources from `common/mcp-installation-policy.md`.
@@ -205,6 +209,7 @@ Tool entry shape:
 Capability
 Status
 Provider
+Availability Evidence
 Required By
 Reason
 Current Task Need
@@ -250,7 +255,8 @@ Before finishing, verify:
 - fallback confidence is honest;
 - `project/mcp-profile.md` was updated only when durable state is useful;
 - server names were not treated as capabilities;
-- local dependencies or running servers were not reported as MCP availability;
+- local dependencies, config entries, provider names, or running servers were not reported as MCP availability;
+- optional provider absence did not trigger installation work;
 - no UI component library or testing skill was introduced;
 - no production systems or secrets were accessed.
 

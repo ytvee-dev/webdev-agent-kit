@@ -33,7 +33,7 @@ Plugin installation does not authorize project-file edits. If the project separa
 
 ## Tool Boundary
 
-Detect tools from the current Claude Code registry and verified project capability facts. Do not infer tool availability from package dependencies or another client's metadata. Use the portable fallback when a capability is absent and report the resulting verification limit.
+Detect tools from the current Claude Code registry and verified project capability facts. A native Claude Code tool can satisfy a capability without a named MCP server. Do not infer availability from packages, config, provider names, or another client's metadata. Use the portable fallback when a capability is absent and report the resulting verification limit.
 
 ## Output Boundary
 

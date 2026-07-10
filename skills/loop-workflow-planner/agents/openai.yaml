@@ -4,8 +4,3 @@ interface:
     default_prompt: 'Use $loop-workflow-planner to define a platform-neutral bounded loop with measurable acceptance criteria, retry limits, review, memory, and stop conditions.'
 policy:
     allow_implicit_invocation: true
-dependencies:
-    tools:
-        - type: 'mcp'
-          value: 'filesystem_server'
-          description: 'Read project overlays and verification profiles, and write durable local loop contracts only when needed.'

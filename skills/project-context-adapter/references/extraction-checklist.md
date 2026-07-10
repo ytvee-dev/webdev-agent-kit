@@ -29,9 +29,10 @@ depends_on:
 - Validation libraries
 - Verification commands
 - Official documentation sources selected for the detected stack
-- MCP dependency scan from `skills/*/agents/openai.yaml`
+- Capability declaration scan from `tool-capabilities-manifest.json`
 - Required, available, missing, optional, approved, installed, skipped, or
   blocked MCP capabilities
+- Availability evidence from the current registry or validated project profile
 - Shared architecture patterns
 - Local anti-patterns
 - Screenshot, exported asset, copied inspect, and design-reference constraints

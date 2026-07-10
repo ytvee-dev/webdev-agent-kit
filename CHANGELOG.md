@@ -37,6 +37,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added eight cross-client policy conflict evals covering every adjacent precedence boundary.
 - Added a targeted README read/edit policy, technical evidence hierarchy, and six cross-model README behavior evals.
 - Added a test change policy and eight evals separating existing-test maintenance from new tests and infrastructure.
+- Added full 19-skill capability coverage, strict capability metadata validation, and eight cross-client capability behavior evals.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
 - Added trigger and output eval coverage for Windows shell and sandbox verification blockers.
 - Added trigger and output eval coverage for unauthorized component, helper, hook, or function test authoring during frontend implementation.
@@ -56,6 +57,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - README now documents Windows shell and sandbox verification behavior as a user-facing boundary.
 - Lint, bounded retry, smart verification, rendered visual QA, and linter skill rules now stop repeated verification attempts after Windows shell or sandbox blockers and require honest blocked-check reporting.
 - Tool capability metadata now represents approved out-of-sandbox fallback and repeated sandbox-blocked dev-server limits for rendered visual evidence.
+- Codex `agents/openai.yaml` files now contain only UI and invocation metadata; optional MCP and native-provider candidates live exclusively in the client-neutral capability manifest.
+- Capability availability now requires current-registry, validated-profile, or user-supplied-reference evidence; package, config, and provider names are explicitly non-proof.
 - Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.
 - Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
 - Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.

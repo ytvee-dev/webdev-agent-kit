@@ -14,6 +14,7 @@ OUTPUT_EVALS = EVAL_DIR / "output-evals.json"
 POLICY_CONFLICT_EVALS = EVAL_DIR / "policy-conflict-evals.json"
 README_POLICY_EVALS = EVAL_DIR / "readme-policy-evals.json"
 TEST_POLICY_EVALS = EVAL_DIR / "test-policy-evals.json"
+TOOL_CAPABILITY_EVALS = EVAL_DIR / "tool-capability-evals.json"
 WORKFLOW_LEVELS = {
     "Fast Lookup",
     "Lightweight Workflow",
@@ -71,6 +72,15 @@ TEST_EXPECTATIONS = {
         False,
         "report-changes-and-result",
     ),
+}
+CAPABILITY_EXPECTATIONS = {
+    "native-provider": ("available", False),
+    "missing-optional": ("fallback-used", False),
+    "missing-required": ("blocked", False),
+    "false-proof": ("unknown", False),
+    "install-request": ("missing", False),
+    "client-parity": ("available", False),
+    "lightweight-no-audit": ("not-needed", False),
 }
 
 
@@ -327,12 +337,59 @@ def validate_test_policy_case(label, case, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
+def validate_tool_capability_case(label, case, capability_names, errors):
+    require_case_keys(
+        label,
+        case,
+        (
+            "capability_action",
+            "required_capabilities",
+            "available_providers",
+            "expected_status",
+            "expected_install",
+            "expected_behavior",
+            "forbidden_behaviors",
+            "reason",
+        ),
+        errors,
+    )
+
+    action = case.get("capability_action")
+    if action not in CAPABILITY_EXPECTATIONS:
+        errors.append(f"{label}: unknown capability_action {action!r}")
+        return
+
+    expected = CAPABILITY_EXPECTATIONS[action]
+    actual = (case.get("expected_status"), case.get("expected_install"))
+    if actual != expected:
+        errors.append(f"{label}: capability expectation must be {expected!r}")
+
+    required = case.get("required_capabilities", [])
+    if not isinstance(required, list) or not required:
+        errors.append(f"{label}: required_capabilities must be a non-empty list")
+    else:
+        unknown = sorted(set(required) - capability_names)
+        if unknown:
+            errors.append(f"{label}: unknown capabilities {unknown}")
+
+    providers = case.get("available_providers", [])
+    if not isinstance(providers, list):
+        errors.append(f"{label}: available_providers must be a list")
+    elif action in {"native-provider", "client-parity"} and not providers:
+        errors.append(f"{label}: available provider evidence is required for {action}")
+
+    forbidden = case.get("forbidden_behaviors", [])
+    if not isinstance(forbidden, list) or len(forbidden) < 2:
+        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+
+
 def validate_suite(
     path,
     expected_type,
     suite_schema,
     case_schema,
     actual_skills,
+    capability_names,
     seen_ids,
     errors,
 ):
@@ -357,6 +414,8 @@ def validate_suite(
         errors.append(f"{relative}: readme-policy suite needs at least 5 cases")
     if expected_type == "test-policy" and len(cases) < 6:
         errors.append(f"{relative}: test-policy suite needs at least 6 cases")
+    if expected_type == "tool-capability" and len(cases) < 7:
+        errors.append(f"{relative}: tool-capability suite needs at least 7 cases")
 
     for index, case in enumerate(cases):
         label = f"{relative}: cases[{index}]"
@@ -382,11 +441,20 @@ def validate_suite(
             validate_readme_policy_case(label, case, errors)
         elif expected_type == "test-policy":
             validate_test_policy_case(label, case, errors)
+        elif expected_type == "tool-capability":
+            validate_tool_capability_case(label, case, capability_names, errors)
 
 
 def validate():
     errors = []
     actual_skills = load_actual_skills(errors)
+    try:
+        capability_names = set(
+            load_json(ROOT / "tool-capabilities-manifest.json").get("capabilities", {})
+        )
+    except Exception as exc:
+        errors.append(f"tool-capabilities-manifest.json: cannot parse: {exc}")
+        capability_names = set()
 
     try:
         suite_schema = load_json(schema_path("eval-suite"))
@@ -401,6 +469,7 @@ def validate():
         suite_schema,
         case_schema,
         actual_skills,
+        capability_names,
         seen_ids,
         errors,
     )
@@ -410,6 +479,7 @@ def validate():
         suite_schema,
         case_schema,
         actual_skills,
+        capability_names,
         seen_ids,
         errors,
     )
@@ -419,6 +489,7 @@ def validate():
         suite_schema,
         case_schema,
         actual_skills,
+        capability_names,
         seen_ids,
         errors,
     )
@@ -428,6 +499,7 @@ def validate():
         suite_schema,
         case_schema,
         actual_skills,
+        capability_names,
         seen_ids,
         errors,
     )
@@ -437,6 +509,17 @@ def validate():
         suite_schema,
         case_schema,
         actual_skills,
+        capability_names,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        TOOL_CAPABILITY_EVALS,
+        "tool-capability",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        capability_names,
         seen_ids,
         errors,
     )

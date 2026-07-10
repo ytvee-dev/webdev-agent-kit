@@ -173,6 +173,49 @@
         "request-approval"
       ]
     },
+    "capability_action": {
+      "type": "string",
+      "enum": [
+        "native-provider",
+        "missing-optional",
+        "missing-required",
+        "false-proof",
+        "install-request",
+        "client-parity",
+        "lightweight-no-audit"
+      ]
+    },
+    "required_capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+      }
+    },
+    "available_providers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+      }
+    },
+    "expected_status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "fallback-used",
+        "blocked",
+        "missing",
+        "unknown",
+        "not-needed"
+      ]
+    },
+    "expected_install": {
+      "type": "boolean"
+    },
     "risk_notes": {
       "type": "array",
       "items": {

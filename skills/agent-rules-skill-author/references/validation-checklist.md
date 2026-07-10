@@ -70,7 +70,8 @@ Use this checklist before and after editing repo-local agent rules or skills.
 - `agents/openai.yaml` exists, is parseable, and aligns with the skill intent.
 - `interface.short_description` stays within 25-64 characters.
 - If `interface.default_prompt` is present, it mentions `$skill-name`.
-- If `dependencies.tools` is present, it documents real tool dependencies.
+- If `dependencies.tools` is present, it documents a true hard client-tool
+  dependency; optional providers remain in the capability manifest.
 - No changed files exist outside `.agents/` except the repository root
   `AGENTS.md` when repo-wide policy, skill discovery, or upstream bundle
   maintenance changed.

@@ -58,9 +58,12 @@ Before changing bundle docs or skills:
 - Keep skill packages limited to `SKILL.md`, `agents/openai.yaml`, and needed `references/**`, `scripts/**`, or `assets/**`.
 - Do not add auxiliary `README.md`, `CHANGELOG.md`, or quick-reference files inside skill packages.
 - Keep references linked from the owning `SKILL.md`.
-- Keep `agents/openai.yaml` aligned with the trigger, scope, and tool contract.
+- Keep `agents/openai.yaml` aligned with Codex UI and invocation policy. Keep
+  cross-client capability requirements in `tool-capabilities-manifest.json`.
 - Do not declare Figma MCP dependencies in this bundle.
-- When onboarding or context refresh changes MCP dependencies, scan current `skills/*/agents/openai.yaml` files and update `project/mcp-profile.md`.
+- When onboarding or context refresh changes capability facts, read
+  `tool-capabilities-manifest.json` and update `project/mcp-profile.md` from
+  current-registry or validated-profile evidence.
 
 ## Validation
 

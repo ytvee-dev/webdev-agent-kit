@@ -61,8 +61,8 @@ Flag these as drift in the adaptation plan:
 - `agents/openai.yaml` paths without matching skill folders;
 - references named in `SKILL.md` that do not exist;
 - files under `.agents/project/**` described as publishable;
-- missing `project/mcp-profile.md` or stale MCP dependency facts after
-  `skills/*/agents/openai.yaml` changed;
+- missing `project/mcp-profile.md` or stale capability facts after
+  `tool-capabilities-manifest.json` changed;
 - missing `project/design-reference-profile.md` or remaining references to the
   old design-source overlay after the neutral design-reference overlay is
   adopted;

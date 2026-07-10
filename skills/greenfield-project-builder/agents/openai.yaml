@@ -4,14 +4,3 @@ interface:
     default_prompt: 'Use $greenfield-project-builder to turn a product idea or empty repository into a safe frontend project plan, first vertical slice, stack assumptions, approval gates, and onboarding handoff before scaffolding.'
 policy:
     allow_implicit_invocation: true
-dependencies:
-    tools:
-        - type: 'mcp'
-          value: 'filesystem_server'
-          description: 'Inspect empty or new project structure and write local-only project overlays only after approval or during approved onboarding.'
-        - type: 'mcp'
-          value: 'context7'
-          description: 'Fetch current official framework documentation when stack planning depends on framework behavior.'
-        - type: 'mcp'
-          value: 'openaiDeveloperDocs'
-          description: 'Verify current Codex, skills, plugins, and project onboarding guidance when needed.'

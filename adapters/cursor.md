@@ -33,7 +33,7 @@ Keep the Cursor rule and root pointer minimal. Create or merge them only after e
 
 ## Tool Boundary
 
-Detect tools from the active Cursor registry and verified project capability facts. Do not infer availability from package dependencies or another client's configuration. Use portable fallbacks and report unavailable verification honestly.
+Detect tools from the active Cursor registry and verified project capability facts. A native Cursor tool can satisfy a capability without a named MCP server. Do not infer availability from packages, config, provider names, or another client's metadata. Use portable fallbacks and report unavailable verification honestly.
 
 ## Output Boundary
 
