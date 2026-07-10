@@ -1,0 +1,126 @@
+name: recover-v0.3.0-release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/recover-v0.3.0.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    name: Rebuild and publish v0.3.0
+    if: github.event.before == '3399deb94baa027bd62e51cd62f48eb65a7f8788'
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: v0.3.0
+      RELEASE_SHA: 3399deb94baa027bd62e51cd62f48eb65a7f8788
+      OLD_TAG_OBJECT: 4fe38c5975d9d0801d6958628aeb66a36a60ec3a
+      OLD_RELEASE_SHA: b35e3185927a134e47e450fb6131d4e258f39f2f
+
+    steps:
+      - name: Checkout fixed release commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate fixed release commit
+        run: |
+          test "$(git rev-parse HEAD)" = "${RELEASE_SHA}"
+          python -m py_compile scripts/*.py
+          python -m py_compile skills/agent-rules-skill-author/scripts/*.py
+          python scripts/validate_release_tag.py --tag "${RELEASE_TAG}"
+          python scripts/validate_install_guides.py
+          python scripts/build_release_notes.py \
+            --tag "${RELEASE_TAG}" \
+            --check
+          python scripts/validate_skill_pack.py
+
+      - name: Build and validate release artifacts
+        run: |
+          mkdir -p release-artifacts
+          python scripts/build_release_notes.py \
+            --tag "${RELEASE_TAG}" \
+            --output release-artifacts/RELEASE_NOTES.md
+          python scripts/build_release_archives.py \
+            --output release-artifacts \
+            --version "${RELEASE_TAG}"
+          python scripts/validate_release_archive.py \
+            --directory release-artifacts \
+            --version "${RELEASE_TAG}"
+
+      - name: Move release tag with lease protection
+        run: |
+          remote_tag="$(git ls-remote origin "refs/tags/${RELEASE_TAG}" | awk '{print $1}')"
+          remote_target="$(git ls-remote origin "refs/tags/${RELEASE_TAG}^{}" | awk '{print $1}')"
+
+          if [ "${remote_target}" = "${RELEASE_SHA}" ]; then
+            echo "${RELEASE_TAG} already targets ${RELEASE_SHA}."
+          elif [ "${remote_tag}" = "${OLD_TAG_OBJECT}" ] && \
+            [ "${remote_target}" = "${OLD_RELEASE_SHA}" ]; then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git tag -d "${RELEASE_TAG}"
+            git tag -a "${RELEASE_TAG}" "${RELEASE_SHA}" \
+              -m "WebDev Agent Kit ${RELEASE_TAG}"
+            git push \
+              --force-with-lease="refs/tags/${RELEASE_TAG}:${OLD_TAG_OBJECT}" \
+              origin "refs/tags/${RELEASE_TAG}"
+          else
+            echo "Refusing to move unexpected ${RELEASE_TAG} state."
+            echo "Remote tag object: ${remote_tag}"
+            echo "Remote target: ${remote_target}"
+            exit 1
+          fi
+
+          test "$(git ls-remote origin "refs/tags/${RELEASE_TAG}^{}" | awk '{print $1}')" = \
+            "${RELEASE_SHA}"
+
+      - name: Upload recovery artifact bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: webdev-agent-kit-release-${{ env.RELEASE_TAG }}
+          path: release-artifacts/
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          files=(
+            "release-artifacts/webdev-agent-kit-codex-${RELEASE_TAG}.tar.gz"
+            "release-artifacts/webdev-agent-kit-claude-code-${RELEASE_TAG}.tar.gz"
+            "release-artifacts/webdev-agent-kit-cursor-${RELEASE_TAG}.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-codex-${RELEASE_TAG}.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-claude-${RELEASE_TAG}.tar.gz"
+            "release-artifacts/webdev-agent-kit-codex.tar.gz"
+            "release-artifacts/webdev-agent-kit-claude-code.tar.gz"
+            "release-artifacts/webdev-agent-kit-cursor.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-codex.tar.gz"
+            "release-artifacts/webdev-agent-kit-vs-code-claude.tar.gz"
+            "release-artifacts/SHA256SUMS"
+          )
+
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release upload "${RELEASE_TAG}" "${files[@]}" --clobber
+            gh release edit "${RELEASE_TAG}" \
+              --title "WebDev Agent Kit ${RELEASE_TAG}" \
+              --notes-file release-artifacts/RELEASE_NOTES.md
+          else
+            gh release create "${RELEASE_TAG}" \
+              "${files[@]}" \
+              --title "WebDev Agent Kit ${RELEASE_TAG}" \
+              --notes-file release-artifacts/RELEASE_NOTES.md \
+              --verify-tag
+          fi
+
+          test "$(gh release view "${RELEASE_TAG}" --json assets --jq '.assets | length')" = 11
+          gh release view "${RELEASE_TAG}" --json url --jq '.url'
