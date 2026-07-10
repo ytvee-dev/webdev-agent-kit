@@ -9,7 +9,7 @@ import tarfile
 import tempfile
 from pathlib import Path, PurePosixPath
 
-from build_release_archives import RELEASE_TARGETS, build_archives
+from build_release_archives import RELEASE_TARGETS, VERSION_PATTERN, build_archives
 
 ROOT = Path(__file__).resolve().parents[1]
 CLAUDE_TARGETS = {"claude-code", "vs-code-claude"}
@@ -189,34 +189,72 @@ def validate_archive(path, target):
     return errors
 
 
-def validate_checksums(directory, errors):
+def expected_archive_names(version):
+    names = set()
+    for target in RELEASE_TARGETS:
+        names.add(f"webdev-agent-kit-{target}.tar.gz")
+        names.add(f"webdev-agent-kit-{target}-{version}.tar.gz")
+    return names
+
+
+def validate_checksums(directory, expected_names, errors):
     checksum_path = directory / "SHA256SUMS"
     if not checksum_path.is_file():
         errors.append("Release directory is missing SHA256SUMS")
         return
     expected = {}
     for line in checksum_path.read_text(encoding="utf-8").splitlines():
-        parts = line.split(maxsplit=1)
-        if len(parts) != 2:
+        match = re.fullmatch(r"([0-9a-f]{64})  ([^\s]+)", line)
+        if match is None:
             errors.append(f"Malformed checksum line: {line}")
             continue
-        digest, name = parts
-        expected[name.strip()] = digest
-    for path in sorted(directory.glob("*.tar.gz")):
-        actual = hashlib.sha256(path.read_bytes()).hexdigest()
-        if expected.get(path.name) != actual:
-            errors.append(f"Checksum mismatch or missing entry for {path.name}")
-
-
-def validate_directory(directory):
-    errors = []
-    for target in RELEASE_TARGETS:
-        path = directory / f"webdev-agent-kit-{target}.tar.gz"
-        if not path.is_file():
-            errors.append(f"Missing stable archive for {target}")
+        digest, name = match.groups()
+        if name in expected:
+            errors.append(f"Duplicate checksum entry for {name}")
             continue
-        errors.extend(validate_archive(path, target))
-    validate_checksums(directory, errors)
+        expected[name] = digest
+
+    missing = sorted(expected_names - set(expected))
+    unexpected = sorted(set(expected) - expected_names)
+    if missing:
+        errors.append(f"SHA256SUMS is missing archives: {', '.join(missing)}")
+    if unexpected:
+        errors.append(
+            f"SHA256SUMS contains unexpected entries: {', '.join(unexpected)}"
+        )
+
+    for name in sorted(expected_names):
+        path = directory / name
+        if not path.is_file():
+            continue
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if expected.get(name) != actual:
+            errors.append(f"Checksum mismatch or missing entry for {name}")
+
+
+def validate_directory(directory, version):
+    errors = []
+    if not VERSION_PATTERN.fullmatch(version):
+        return [f"Invalid release directory version: {version}"]
+
+    expected_names = expected_archive_names(version)
+    actual_names = {path.name for path in directory.glob("*.tar.gz")}
+    missing = sorted(expected_names - actual_names)
+    unexpected = sorted(actual_names - expected_names)
+    if missing:
+        errors.append(f"Missing release archives: {', '.join(missing)}")
+    if unexpected:
+        errors.append(f"Unexpected release archives: {', '.join(unexpected)}")
+
+    for target in RELEASE_TARGETS:
+        stable = directory / f"webdev-agent-kit-{target}.tar.gz"
+        versioned = directory / f"webdev-agent-kit-{target}-{version}.tar.gz"
+        if not stable.is_file() or not versioned.is_file():
+            continue
+        if stable.read_bytes() != versioned.read_bytes():
+            errors.append(f"{target}: stable and versioned archives differ")
+        errors.extend(validate_archive(stable, target))
+    validate_checksums(directory, expected_names, errors)
     return errors
 
 
@@ -232,6 +270,10 @@ def main():
     group.add_argument("--build-fixtures", action="store_true")
     group.add_argument("--archive", type=Path)
     parser.add_argument("--target", choices=RELEASE_TARGETS)
+    parser.add_argument(
+        "--version",
+        help="Version suffix for --directory. Defaults to v<source version>.",
+    )
     args = parser.parse_args()
 
     if args.archive:
@@ -239,13 +281,15 @@ def main():
             parser.error("--archive requires --target")
         errors = validate_archive(args.archive, args.target)
     elif args.directory:
-        errors = validate_directory(args.directory)
+        version = args.version or f"v{load_manifest().get('version')}"
+        errors = validate_directory(args.directory, version)
     else:
         version = load_manifest().get("version")
         with tempfile.TemporaryDirectory() as temp_dir:
             directory = Path(temp_dir)
-            build_archives(directory, f"v{version}-fixture")
-            errors = validate_directory(directory)
+            release_version = f"v{version}"
+            build_archives(directory, release_version)
+            errors = validate_directory(directory, release_version)
 
     if errors:
         for error in errors:

@@ -6,12 +6,14 @@
 /dist/
 /dist/**
 
-# Publish only maintained installation and architecture documentation.
+# Publish only maintained installation, architecture, and release documentation.
 /docs/*
 !/docs/install/
 !/docs/install/**
 !/docs/architecture/
 !/docs/architecture/**
+!/docs/release/
+!/docs/release/**
 
 # Local helper checkout state. Never publish old helper sync trees.
 /upstream/

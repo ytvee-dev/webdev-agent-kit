@@ -3,7 +3,7 @@ id: 'agents.docs.install.ru-cursor'
 title: 'Cursor Install Guide'
 doc_type: 'user-guide'
 layer: 'docs'
-status: 'draft'
+status: 'active'
 publishable: true
 local_only: false
 tags:
@@ -18,26 +18,33 @@ depends_on: []
 
 # Установка WebDev Agent Kit для Cursor
 
-Скачайте архив:
+Скачайте стабильный или версионный архив из одного GitHub Release:
 
 ```text
 webdev-agent-kit-cursor.tar.gz
+webdev-agent-kit-cursor-v0.3.0.tar.gz
 ```
 
-Распакуйте архив в `.agents/` внутри frontend-проекта.
+Сверьте SHA-256 выбранного файла с `SHA256SUMS`. Распакуйте архив из корня
+frontend-проекта: архив сам создаёт `.agents/` и нативный `.cursor/`.
 
-Создайте root `AGENTS.md`:
+Проверьте обязательные пути:
 
-```md
-# AGENTS.md
-
-Use the project-local agent policy in `.agents/AGENTS.md`.
+```text
+.agents/AGENTS.md
+.agents/skills/
+.cursor/rules/webdev-agent-kit.mdc
 ```
 
-После установки запустите:
+Не распаковывайте архив внутри `.agents/`: это создаст ошибочный путь
+`.agents/.agents/`. Не заменяйте существующие root-инструкции; нативное правило
+Cursor уже указывает на общую project policy.
+
+Откройте новую Cursor Agent-сессию из корня проекта и запустите:
 
 ```text
 адаптируйся
 ```
 
-Если нужные tool capabilities доступны, агент использует их. Если capability отсутствует, агент использует fallback и честно указывает ограничения.
+Если нужные tool capabilities доступны, агент использует их. Если capability
+отсутствует, агент использует fallback и честно указывает ограничения.

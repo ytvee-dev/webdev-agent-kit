@@ -243,7 +243,8 @@ def validate_skill_path_mentions(errors):
     actual = {path.name for path in skill_directories()}
     for path in markdown_files():
         text = path.read_text(encoding="utf-8-sig")
-        for name in re.findall(r"(?:\.agents/)?skills/([a-z0-9-]+)/", text):
+        pattern = r"(?<![A-Za-z0-9._/-])(?:\.agents/)?skills/([a-z0-9-]+)/"
+        for name in re.findall(pattern, text):
             if name == "skills":
                 continue
             if name not in actual:

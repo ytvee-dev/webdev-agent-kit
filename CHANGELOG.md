@@ -14,6 +14,7 @@ related:
     - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[docs/install/README|Installation Guides]]'
+    - '[[docs/release/0.3.0-checklist|0.3.0 Release Checklist]]'
 depends_on: []
 ---
 
@@ -41,6 +42,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added deterministic budgets for the always-on entrypoint, runtime layers, skill-discovery descriptions, and Claude skill prelude.
 - Added fact-based output evals and deterministic final-answer budgets, including a 180-word cap for lightweight workflows.
 - Added a 12-case GPT/Claude parity suite covering routing, context, README, tests, precedence, capabilities, verification, output, onboarding, and scope control.
+- Added release-tag, installation-guide, and generated release-notes validation for the `0.3.0` release path.
 - Added independent Codex project, Codex plugin, Claude plugin, and Cursor target validators plus source/generated version consistency checks.
 - Added deterministic release archive construction and extracted archive fixtures for native paths, exclusions, links, checksums, and root-instruction safety.
 - Added `common/windows-shell-sandbox-rules.md` for Windows PowerShell package-manager fallbacks and sandbox-blocked build, dev-server, and browser verification.
@@ -71,13 +73,15 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Expanded bundle manifest target metadata and schema validation to include `codex`, `claude`, `claude-code`, `cursor`, `vs-code-codex`, and `vs-code-claude` generated targets.
 - Release workflow and full validation orchestrator now run schema validation with `--strict-graph`.
 - New skill templates now quote the placeholder `description` value so generated drafts do not start with invalid YAML.
-- README boundary wording now matches runtime policy: agents must not inspect host README content and must ask for excerpts instead.
 - Test authoring rules now explicitly block component, hook, function or unit, integration, E2E, snapshot, fixture, mock, and visual regression tests unless the user explicitly asks and approves the exact scope.
 - Codex archives extract runtime under `.agents/`; Cursor archives place shared runtime under `.agents/` and native rules under root `.cursor/`; Claude archives retain their native plugin root.
+- Installation guides now follow the extracted archive roots, prevent `.agents/.agents` nesting, and document persistent Claude skills-directory plugins.
+- Tagged releases now fail when the tag differs from source version metadata and use the validated Unreleased changelog section as release notes.
+- Archive validation now requires all stable/versioned pairs, byte equality, exact checksum inventory, and duplicate-free checksum entries.
 - Runtime targets no longer include human-facing root files: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, or `SECURITY.md`.
 - Runtime targets no longer include `examples/`.
 - Codex and VS Code Codex targets keep `.codex-plugin/`; Claude Code, VS Code Claude, Cursor, and legacy Claude targets do not include it.
-- Restored repository-side installation guide drafts so README links and local link checks remain valid after release cleanup.
+- Repository-side installation guides remain human-facing and are excluded from generated runtime targets.
 
 ## 0.2.3 - 2026-07-07
 

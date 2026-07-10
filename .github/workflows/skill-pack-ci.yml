@@ -55,6 +55,12 @@ jobs:
       - name: Validate source version consistency
         run: python scripts/validate_version_consistency.py
 
+      - name: Validate release preparation
+        run: |
+          python scripts/validate_release_tag.py
+          python scripts/validate_install_guides.py
+          python scripts/build_release_notes.py --check
+
       - name: Validate tool capability metadata
         run: python scripts/validate_tool_capabilities.py
 

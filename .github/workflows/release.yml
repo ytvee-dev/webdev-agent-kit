@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Build and publish portable targets
@@ -35,6 +39,14 @@ jobs:
 
       - name: Validate source version consistency
         run: python scripts/validate_version_consistency.py
+
+      - name: Validate release tag and installation guides
+        run: |
+          python scripts/validate_release_tag.py --tag "${GITHUB_REF_NAME}"
+          python scripts/validate_install_guides.py
+          python scripts/build_release_notes.py \
+            --tag "${GITHUB_REF_NAME}" \
+            --output release-artifacts/RELEASE_NOTES.md
 
       - name: Validate tool capability metadata
         run: python scripts/validate_tool_capabilities.py
@@ -138,44 +150,9 @@ jobs:
           python scripts/build_release_archives.py \
             --output release-artifacts \
             --version "${GITHUB_REF_NAME}"
-          python scripts/validate_release_archive.py --directory release-artifacts
-
-          cat > release-artifacts/RELEASE_NOTES.md <<'NOTES'
-          WebDev Agent Kit portable release artifacts.
-
-          Artifacts:
-          - Codex target: `webdev-agent-kit-codex.tar.gz`
-          - Claude Code target: `webdev-agent-kit-claude-code.tar.gz`
-          - Cursor target: `webdev-agent-kit-cursor.tar.gz`
-          - VS Code Codex target: `webdev-agent-kit-vs-code-codex.tar.gz`
-          - VS Code Claude target: `webdev-agent-kit-vs-code-claude.tar.gz`
-          - Checksums: `SHA256SUMS`
-
-          Runtime archive shape:
-          - Codex project archives extract to a top-level `.agents/` directory
-          - Cursor archives extract shared runtime to `.agents/` and native rules to root `.cursor/`
-          - Claude archives extract to a native `webdev-agent-kit/` plugin root
-          - human-facing docs and examples are excluded from runtime archives
-
-          Validation performed:
-          - strict graph schema validation
-          - centralized policy precedence validation
-          - complete client-neutral tool capability metadata validation
-          - compact entrypoint and skill-discovery context budget validation
-          - fact-only final output and workflow word budget validation
-          - test change and infrastructure boundary validation
-          - runtime core, profile, and adapter boundary validation
-          - README boundary validation
-          - source bundle validation
-          - skill eval validation
-          - portable target build
-          - source and generated version consistency
-          - Codex project and plugin validation
-          - Claude Code plugin and alias validation
-          - Cursor project validation
-          - excluded-path inspection
-          - archive fixture extraction, native-path, link, and overwrite-safety validation
-          NOTES
+          python scripts/validate_release_archive.py \
+            --directory release-artifacts \
+            --version "${GITHUB_REF_NAME}"
 
           echo 'Release artifacts:'
           find release-artifacts -maxdepth 1 -type f -print | sort

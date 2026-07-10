@@ -30,6 +30,15 @@ def main():
     version_code = run("validate_version_consistency.py")
     if version_code:
         sys.exit(version_code)
+    release_tag_code = run("validate_release_tag.py")
+    if release_tag_code:
+        sys.exit(release_tag_code)
+    install_guide_code = run("validate_install_guides.py")
+    if install_guide_code:
+        sys.exit(install_guide_code)
+    release_notes_code = run("build_release_notes.py", "--check")
+    if release_notes_code:
+        sys.exit(release_notes_code)
     capability_code = run("validate_tool_capabilities.py")
     if capability_code:
         sys.exit(capability_code)
