@@ -15,6 +15,7 @@ related:
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[docs/install/README|Installation Guides]]'
     - '[[docs/release/0.3.0-checklist|0.3.0 Release Checklist]]'
+    - '[[docs/release/0.4.0-checklist|0.4.0 Release Checklist]]'
 depends_on: []
 ---
 
@@ -45,6 +46,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   and blocking PR and release CI gates for planning drift.
 - Added generated-target planning parity checks for shared rules, templates,
   skill bodies, alias artifacts, and context budgets.
+- Added 48 cross-client planning smoke checks covering eight portable workflow
+  contracts across all six generated runtime targets.
 
 ### Changed
 
@@ -60,6 +63,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   creating slices; bounded loops and checkpoints reuse the same plan identifiers.
 - Planning evals validate static fixture contracts and cross-client expectations;
   they do not claim to prove live model behavior.
+- Aligned manifests, eval fixtures, installation guides, and release validation
+  with the `0.4.0` release candidate.
 
 ## 0.3.0 - 2026-07-10
 

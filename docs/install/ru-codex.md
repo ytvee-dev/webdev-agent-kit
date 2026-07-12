@@ -23,7 +23,7 @@ depends_on: []
 
 ```text
 webdev-agent-kit-codex.tar.gz
-webdev-agent-kit-codex-v0.3.0.tar.gz
+webdev-agent-kit-codex-v0.4.0.tar.gz
 ```
 
 Сверьте SHA-256 выбранного файла с `SHA256SUMS`. Распакуйте архив из корня

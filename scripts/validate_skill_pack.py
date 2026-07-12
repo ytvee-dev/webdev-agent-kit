@@ -81,6 +81,9 @@ def main():
     planning_target_code = run("validate_planning_target_parity.py")
     if planning_target_code:
         sys.exit(planning_target_code)
+    planning_smoke_code = run("validate_planning_smoke.py")
+    if planning_smoke_code:
+        sys.exit(planning_smoke_code)
     generated_version_code = run("validate_version_consistency.py", "--generated")
     if generated_version_code:
         sys.exit(generated_version_code)

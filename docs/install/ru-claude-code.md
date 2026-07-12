@@ -17,7 +17,7 @@ depends_on: []
 # Установка WebDev Agent Kit для Claude Code
 
 Скачайте `webdev-agent-kit-claude-code.tar.gz` или версионный
-`webdev-agent-kit-claude-code-v0.3.0.tar.gz` из одного GitHub Release и сверьте
+`webdev-agent-kit-claude-code-v0.4.0.tar.gz` из одного GitHub Release и сверьте
 SHA-256 с `SHA256SUMS`.
 
 Для постоянного личного подключения распакуйте архив из

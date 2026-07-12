@@ -1,6 +1,6 @@
 {
   "name": "webdev-agent-kit",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Portable frontend workflow skills for planning, implementation, review, and visual QA.",
   "author": {
     "name": "Yevgeniy Tyan"

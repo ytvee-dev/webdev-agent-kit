@@ -157,6 +157,9 @@ jobs:
       - name: Validate planning target parity
         run: python scripts/validate_planning_target_parity.py
 
+      - name: Run cross-client planning smoke checks
+        run: python scripts/validate_planning_smoke.py
+
       - name: Validate generated version consistency
         run: python scripts/validate_version_consistency.py --generated
 
