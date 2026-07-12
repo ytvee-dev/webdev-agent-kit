@@ -25,6 +25,9 @@ Use this template only as the source pattern for local-only `project/loop-memory
 
 ```text
 attempt:
+goal: G-###
+criteria: AC-###
+slices: S-###
 change or experiment:
 verification:
 result:
@@ -45,4 +48,5 @@ reusable rule:
 unresolved question:
 blocked check:
 next safe strategy:
+next slice: S-###
 ```

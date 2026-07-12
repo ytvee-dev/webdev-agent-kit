@@ -37,6 +37,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   conflict, approval, and verification gaps.
 - Added post-implementation convergence with evidence-backed gap types, stable
   findings, and append-only durable-plan passes.
+- Added shared review, loop, checkpoint, decision, and resume fields that keep
+  goal, criterion, slice, convergence, and verification state aligned.
 
 ### Changed
 
@@ -48,6 +50,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   mode and keeps analysis findings outside durable plan and source files.
 - Execution planning now supports `converge` mode without changing application
   files, rewriting prior plan history, or adding empty success passes.
+- Independent review now judges active criteria and coverage evidence without
+  creating slices; bounded loops and checkpoints reuse the same plan identifiers.
 
 ## 0.3.0 - 2026-07-10
 

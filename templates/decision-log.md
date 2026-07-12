@@ -34,6 +34,12 @@ Approval:
 
 Affected Criteria:
 
+Criteria Change: unchanged | added | amended | superseded
+
+Supersedes Criteria:
+
+Replacement Criteria:
+
 Affected Slices:
 
 Impact:

@@ -32,10 +32,14 @@ Completed Slice:
 
 Criteria Covered:
 
+Convergence Pass:
+
 Files Changed:
 
 Verification:
 
 Skipped Or Deferred:
+
+Next Slice ID:
 
 Next Step:

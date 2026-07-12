@@ -22,6 +22,10 @@ depends_on: []
 
 # Loop Workflow Contract
 
+Goal ID: G-###
+
+Target Slices: S-###
+
 ## Objective
 
 ...
@@ -60,6 +64,17 @@ one-pass verification | bounded retry | goal-based loop | open exploration
 what changes after a failed attempt:
 what must not be repeated:
 what counts as unrelated failure:
+```
+
+## Attempt Record
+
+```text
+attempt:
+criteria: AC-###
+slices: S-###
+changed strategy:
+evidence:
+result:
 ```
 
 ## Verification
@@ -109,4 +124,5 @@ files changed:
 checks run:
 results:
 remaining risks:
+next slice: S-###
 ```
