@@ -1,6 +1,6 @@
 interface:
     display_name: 'Execution Plan Manager'
-    short_description: 'Create, resume, or analyze plans'
-    default_prompt: 'Use $execution-plan-manager to create, resume, or read-only analyze a standard or deep frontend execution plan with traceable slices and verification.'
+    short_description: 'Create, analyze, or converge plans'
+    default_prompt: 'Use $execution-plan-manager to create, resume, read-only analyze, or post-implementation converge a standard or deep frontend execution plan.'
 policy:
     allow_implicit_invocation: true

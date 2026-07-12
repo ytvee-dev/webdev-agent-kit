@@ -35,6 +35,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added a deterministic read-only planning analysis mode with stable findings,
   severity-based handoff gates, and checks for coverage, scope, ownership,
   conflict, approval, and verification gaps.
+- Added post-implementation convergence with evidence-backed gap types, stable
+  findings, and append-only durable-plan passes.
 
 ### Changed
 
@@ -44,6 +46,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Checkpoints, decisions, compaction, and loop contracts now preserve the same goal, criterion, and slice identifiers instead of creating parallel completion models.
 - Execution planning now selects an explicit `create`, `resume`, or `analyze`
   mode and keeps analysis findings outside durable plan and source files.
+- Execution planning now supports `converge` mode without changing application
+  files, rewriting prior plan history, or adding empty success passes.
 
 ## 0.3.0 - 2026-07-10
 

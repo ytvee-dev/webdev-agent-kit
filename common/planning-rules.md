@@ -14,6 +14,7 @@ parent:
 related:
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
     - '[[common/planning-analysis-rules|Planning Analysis Rules]]'
+    - '[[common/convergence-rules|Convergence Rules]]'
     - '[[templates/execution-plan|Execution Plan Template]]'
 depends_on: []
 ---
@@ -49,6 +50,11 @@ Do not use `ENABLER` for generic setup, speculative infrastructure, broad
 research, package installation, or work that has no approved downstream slice.
 Approval gates still apply to dependencies, tools, configuration, tests, and
 architecture changes.
+
+An append-only convergence pass may add `S-### [F-###]` only to review
+unrequested work that has no valid acceptance criterion. The slice must cite the
+conflicting scope constraint and end in an explicit justify-or-remove decision;
+it does not count as criterion coverage.
 
 ## Identifier Boundaries
 
@@ -96,3 +102,7 @@ Before standard or deep implementation begins, use
 `common/planning-analysis-rules.md` when the execution plan has multiple slices,
 approval boundaries, shared file ownership, or unresolved assumptions. The
 analysis pass is read-only and does not repair the plan.
+
+After implementation, use `common/convergence-rules.md` to compare active intent
+with evidence and append only genuinely remaining work. Never pre-create an
+empty convergence section in a durable plan.

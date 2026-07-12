@@ -1,6 +1,6 @@
 ---
 name: execution-plan-manager
-description: 'Create, resume, or analyze standard and deep frontend execution plans with traceable slices, verification, and stop/resume state. Skip lightweight isolated edits.'
+description: 'Create, resume, analyze, or converge standard and deep frontend execution plans with traceable slices, evidence, and stop/resume state. Skip lightweight isolated edits.'
 id: 'agents.skills.execution-plan-manager.skill'
 title: 'Execution Plan Manager'
 doc_type: 'skill'
@@ -20,6 +20,7 @@ related:
     - '[[skills/loop-workflow-planner/SKILL|Loop Workflow Planner]]'
     - '[[common/planning-rules|Planning Rules]]'
     - '[[common/planning-analysis-rules|Planning Analysis Rules]]'
+    - '[[common/convergence-rules|Convergence Rules]]'
     - '[[common/execution-loops|Execution Loops]]'
     - '[[common/agent-loop-policy|Agent Loop Policy]]'
     - '[[common/token-budget-rules|Token Budget Rules]]'
@@ -37,7 +38,7 @@ depends_on:
 
 ## Purpose
 
-Create, resume, and analyze execution plans for standard or deep frontend work after the goal is defined.
+Create, resume, analyze, and converge execution plans for standard or deep frontend work after the goal is defined.
 
 This skill prevents large tasks from becoming unbounded development sessions. It splits work into small verified slices, selects the minimum useful context budget, records stop/resume state when needed, and decides whether a slice needs a one-pass check, bounded retry loop, goal-based loop, independent review, or durable memory handoff.
 
@@ -70,16 +71,17 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
 2. Read `common/prompt-intent-routing-rules.md` when task scale is not obvious.
 3. Read `common/planning-rules.md`.
 4. Read `common/planning-analysis-rules.md` only in `analyze` mode.
-5. Read `common/checkpoint-rules.md` when durable stop/resume state is needed.
-6. Read `common/agent-loop-policy.md` when the plan may need measurable iteration.
-7. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
-8. Read the current goal contract from the response, user request, or `project/active-goals.md` when present and relevant.
-9. Read only project overlays needed to slice the task safely, such as `project/stack-profile.md`, `project/architecture-map.md`, `project/styling-profile.md`, or `project/verification-profile.md`.
-10. Read affected source files only when slicing or analysis cannot be done safely without them.
+5. Read `common/convergence-rules.md` only in `converge` mode.
+6. Read `common/checkpoint-rules.md` when durable stop/resume state is needed.
+7. Read `common/agent-loop-policy.md` when the plan may need measurable iteration.
+8. Confirm the workflow level is `Standard Workflow` or `Deep Workflow`.
+9. Read the current goal contract from the response, user request, or `project/active-goals.md` when present and relevant.
+10. Read only project overlays needed to slice the task safely, such as `project/stack-profile.md`, `project/architecture-map.md`, `project/styling-profile.md`, or `project/verification-profile.md`.
+11. Read affected source files only when slicing, analysis, or convergence cannot be done safely without them.
 
 ## Tool Contract
 
-- Use filesystem access only when a durable execution plan, progress log, loop contract, or stop/resume state must be written or updated.
+- Use filesystem access only when a durable execution plan, progress log, loop contract, or stop/resume state must be written or updated. In `converge` mode, write only the append-only active-plan section allowed by `common/convergence-rules.md`.
 - Do not use MCP installation checks from this skill.
 - Do not use Browser, Playwright, Visual Diff, Figma, or design-tool MCP from this skill.
 - Do not install packages or tools.
@@ -95,32 +97,38 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
    - `resume`: continue the existing plan without changing stable identifiers;
    - `analyze`: run the read-only pre-implementation checks in
      `common/planning-analysis-rules.md`;
-   - `converge`: reserved for post-implementation plan convergence; follow its
-     owning rules when available.
+   - `converge`: compare completed implementation and evidence with confirmed
+     intent under `common/convergence-rules.md`.
 4. In `analyze` mode, inspect the confirmed goal, plan, decisions, scope
    boundaries, and minimum affected context. Return deterministic findings and
    stop the implementation handoff for `blocking` or `high` severity. Do not
    edit files or remediate findings. Then finish this skill.
-5. In `create` or `resume` mode, choose compact response-only planning for
+5. In `converge` mode, first reconcile any changed current request in `create`
+   or `resume` mode. Otherwise compare only active intent with implementation
+   and verification evidence, return stable `F-###` findings, and never change
+   implementation files. For a durable plan, append one convergence pass only
+   when actionable findings exist; with zero findings, preserve it byte-for-byte.
+   Then finish this skill.
+6. In `create` or `resume` mode, choose compact response-only planning for
    standard tasks that can finish in one or two slices, or durable planning for
    deep or resumable tasks.
-6. Choose context budget: `Glance`, `Scoped`, or `Deep`.
-7. Split into small independently verifiable slices.
+7. Choose context budget: `Glance`, `Scoped`, or `Deep`.
+8. Split into small independently verifiable slices.
    - For durable plans, assign stable zero-padded `S-###` identifiers.
    - Map each slice to one or more `AC-###` criteria.
    - Label a non-criterion slice `ENABLER` and name the approved downstream
      slices it unlocks.
    - Do not renumber or reuse slice identifiers after execution begins.
-8. Add verification per slice using the smallest relevant check already available in the project or active skill.
-9. Build the coverage map for durable plans.
+9. Add verification per slice using the smallest relevant check already available in the project or active skill.
+10. Build the coverage map for durable plans.
    - Map every active `AC-###` to at least one `S-###` and one verification source.
    - Use only `planned`, `in-progress`, `verified`, `blocked`, or `superseded`.
    - Do not treat a completed slice as verification evidence.
    - Keep `ENABLER` slices linked through their downstream dependencies instead
      of using them as criterion coverage.
-10. Decide whether a loop contract is needed. Use `loop-workflow-planner` when a slice must repeat until measurable acceptance criteria pass, when verification failure repair is in scope, when repeated failure already happened, when independent review should judge completion, or when loop memory is needed.
-11. Add stop/resume state for durable plans, including current phase, last completed slice, next exact step, files to inspect next, checks to run next, loop contract or retry limit when relevant, blockers, and risks.
-12. Hand off to the smallest relevant skill. Route measurable iteration to `loop-workflow-planner` before implementation.
+11. Decide whether a loop contract is needed. Use `loop-workflow-planner` when a slice must repeat until measurable acceptance criteria pass, when verification failure repair is in scope, when repeated failure already happened, when independent review should judge completion, or when loop memory is needed.
+12. Add stop/resume state for durable plans, including current phase, last completed slice, next exact step, files to inspect next, checks to run next, loop contract or retry limit when relevant, blockers, and risks.
+13. Hand off to the smallest relevant skill. Route measurable iteration to `loop-workflow-planner` before implementation.
 
 ## Output Contract
 
@@ -152,6 +160,8 @@ Durable task slices use `S-### [AC-###]`. A justified enabling slice uses
 only when they contain at most two direct slices and need no resume state.
 Durable coverage maps reference criterion and slice identifiers, verification
 evidence, and one canonical coverage state without duplicating criterion prose.
+An append-only convergence review of unrequested work may use `S-### [F-###]`
+under `common/convergence-rules.md`; it never counts as criterion coverage.
 
 For durable plans, write or update:
 
@@ -177,6 +187,18 @@ Implementation Handoff: proceed | stop
 Limit the table to 20 rows and aggregate the remainder. Do not write analysis
 results into the durable plan or application files.
 
+In `converge` mode, return only:
+
+```text
+Convergence Status: aligned | gaps-found | intent-reconciliation-required
+Findings: F-### | Type | Severity | Source | Evidence | Remaining Work
+Plan Update: unchanged | appended Convergence Pass N
+Next Step
+```
+
+For response-only work, report findings without creating a plan file. For
+durable work, add new slices only through the append-only convergence contract.
+
 ## Validation Gates
 
 Before finishing, verify:
@@ -186,8 +208,13 @@ Before finishing, verify:
 - exactly one plan mode was selected;
 - `analyze` mode made no writes, used stable findings, checked every required
   analysis category, and stopped handoff for blocking or high findings;
-- slices are small and independently verifiable;
-- durable slices have stable identifiers and map to criteria or justified
+- `converge` mode used current intent, cited evidence, made no implementation
+  changes, preserved finding identity, and did not replace independent review;
+- zero convergence findings left the durable plan byte-for-byte unchanged;
+- actionable durable convergence appended one pass, allocated identifiers after
+  the current maximum, and preserved all prior plan content;
+- `create` and `resume` slices are small and independently verifiable;
+- durable `create` and `resume` slices have stable identifiers and map to criteria or justified
   downstream work;
 - every active durable criterion has slice and verification coverage;
 - `verified` coverage has actual evidence and `blocked` coverage names the
@@ -209,6 +236,8 @@ Should trigger:
 - "Create an execution plan for this redesign after the goal is clear."
 - "We need to implement this feature in slices without losing progress."
 - "Plan the task and decide whether it needs a bounded loop."
+- "Analyze this plan for gaps before implementation without changing it."
+- "Compare the finished implementation with the active plan and append only the remaining work."
 
 Should not trigger:
 
@@ -225,6 +254,7 @@ Should not trigger:
 - `common/prompt-intent-routing-rules.md` - workflow weight selection and escalation/de-escalation rules.
 - `common/planning-rules.md` - context budget and task slice rules.
 - `common/planning-analysis-rules.md` - read-only pre-implementation plan checks and finding contract.
+- `common/convergence-rules.md` - post-implementation comparison and append-only plan update contract.
 - `common/checkpoint-rules.md` - stop/resume state rules.
 - `common/agent-loop-policy.md` - bounded loop policy.
 - `templates/execution-plan.md` - durable execution plan template.
