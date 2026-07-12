@@ -28,9 +28,13 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added stable goal, acceptance-criterion, and execution-slice identifiers for durable standard and deep planning contracts.
+- Added explicit `ENABLER` slices that must name the approved downstream work they unlock.
+
 ### Changed
 
 - Tagged release validation now requires non-empty `Unreleased` notes while ordinary branch validation continues to allow a clean post-release section.
+- Goal and execution plan templates now preserve criterion and slice identity across implementation, retry, and resume workflows without adding planning ceremony to lightweight work.
 
 ## 0.3.0 - 2026-07-10
 

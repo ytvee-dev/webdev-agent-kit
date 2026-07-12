@@ -107,7 +107,10 @@ If a lightweight task reveals hidden scope, escalate first using `common/prompt-
    - keep reusable instructions in English.
 
 5. Define Done When.
-   Done criteria must be observable. Use only criteria relevant to the task.
+   - Done criteria must be observable outcomes, not implementation activity.
+   - For a durable goal, assign stable zero-padded identifiers such as `AC-001`.
+   - Do not renumber or reuse durable criterion identifiers after execution begins.
+   - Use only criteria relevant to the task.
 
 6. Choose output mode.
    - For standard tasks, output a compact goal contract in the response unless a durable file is genuinely useful.
@@ -136,7 +139,9 @@ Current Status
 Next Skill Or Next Step
 ```
 
-For compact response-only contracts, omit `Goal ID` only when no durable tracking is needed.
+For durable goals, format Done When as `AC-###` criteria. For compact
+response-only contracts, omit `Goal ID` and criterion identifiers only when no
+durable tracking, resume state, or multi-slice traceability is needed.
 
 ## Validation Gates
 
@@ -147,6 +152,7 @@ Before finishing, verify:
 - scope and out-of-scope are explicit;
 - constraints are not generic filler;
 - Done When is observable;
+- durable criteria have unique, stable `AC-###` identifiers;
 - no source files were changed;
 - no tools or packages were installed;
 - persistent project files were created only for genuinely multi-step or resumable work.

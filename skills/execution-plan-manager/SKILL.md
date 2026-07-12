@@ -91,6 +91,11 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
 3. Choose plan mode: compact response-only planning for standard tasks that can finish in one or two slices, durable planning for deep or resumable tasks.
 4. Choose context budget: `Glance`, `Scoped`, or `Deep`.
 5. Split into small independently verifiable slices.
+   - For durable plans, assign stable zero-padded `S-###` identifiers.
+   - Map each slice to one or more `AC-###` criteria.
+   - Label a non-criterion slice `ENABLER` and name the approved downstream
+     slices it unlocks.
+   - Do not renumber or reuse slice identifiers after execution begins.
 6. Add verification per slice using the smallest relevant check already available in the project or active skill.
 7. Decide whether a loop contract is needed. Use `loop-workflow-planner` when a slice must repeat until measurable acceptance criteria pass, when verification failure repair is in scope, when repeated failure already happened, when independent review should judge completion, or when loop memory is needed.
 8. Add stop/resume state for durable plans, including current phase, last completed slice, next exact step, files to inspect next, checks to run next, loop contract or retry limit when relevant, blockers, and risks.
@@ -121,6 +126,10 @@ Stop Point
 Next Skill Or Next Step
 ```
 
+Durable task slices use `S-### [AC-###]`. A justified enabling slice uses
+`S-### [ENABLER -> S-###]`. Compact response-only plans may omit identifiers
+only when they contain at most two direct slices and need no resume state.
+
 For durable plans, write or update:
 
 ```text
@@ -139,6 +148,8 @@ Before finishing, verify:
 - the task was not a lightweight prompt;
 - a goal exists or the task was routed to `goal-planner`;
 - slices are small and independently verifiable;
+- durable slices have stable identifiers and map to criteria or justified
+  downstream work;
 - context budget is explicit;
 - loop handoff is explicit when bounded retry or measurable iteration is required;
 - persistent files were created only for durable standard or deep work;

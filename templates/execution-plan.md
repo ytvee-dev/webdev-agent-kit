@@ -20,6 +20,8 @@ depends_on: []
 
 Goal:
 
+Goal ID: G-###
+
 Done When:
 
 Workflow Level:
@@ -29,6 +31,8 @@ Context Budget:
 Current Phase:
 
 Task Slices:
+
+- S-### [AC-###]:
 
 Allowed Files Or Surfaces:
 
