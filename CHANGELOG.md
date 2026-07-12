@@ -51,6 +51,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Release target inspection now distinguishes legitimate `templates/project/**`
+  source templates from forbidden root `project/**` runtime state.
 - Tagged release validation now requires non-empty `Unreleased` notes while ordinary branch validation continues to allow a clean post-release section.
 - Goal and execution plan templates now preserve criterion and slice identity across implementation, retry, and resume workflows without adding planning ceremony to lightweight work.
 - Goal planning now uses verified context before asking and skips repeated, low-impact, safely inferable, or purely implementation-level questions.

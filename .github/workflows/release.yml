@@ -149,7 +149,8 @@ jobs:
           test ! -e dist/cursor/.codex-plugin
           test ! -e dist/vs-code-claude/.codex-plugin
 
-          if find dist -path '*/.obsidian/*' -o -path '*/node_modules/*' -o -path '*/project/*' | grep .; then
+          if find dist \( -path '*/.obsidian/*' -o -path '*/node_modules/*' \) | grep . \
+            || find dist -mindepth 2 -maxdepth 2 -type d -name project | grep .; then
             echo 'Generated targets contain excluded local or generated paths.'
             exit 1
           fi
