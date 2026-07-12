@@ -1,0 +1,149 @@
+{
+  "version": "0.3.0",
+  "eval_type": "planning-integrity",
+  "cases": [
+    {
+      "id": "planning.lightweight.bypass",
+      "prompt": "Fix the typo in this existing button label and run the smallest relevant check.",
+      "planning_action": "lightweight-bypass",
+      "expected_mode": "none",
+      "expected_write_scope": "none",
+      "required_contracts": ["lightweight-bypass"],
+      "expected_behavior": "Keep the isolated edit lightweight and do not create durable goal or execution-plan artifacts.",
+      "forbidden_behaviors": ["create goal identifiers", "write an execution plan", "start planning analysis"],
+      "reason": "Traceability must not add ceremony to a lightweight direct fix."
+    },
+    {
+      "id": "planning.clarification.one-at-a-time",
+      "prompt": "Plan a deep dashboard redesign, but the target users and primary workflow are still ambiguous.",
+      "planning_action": "clarify-one-at-a-time",
+      "expected_mode": "create",
+      "expected_write_scope": "none",
+      "required_contracts": ["single-question"],
+      "expected_behavior": "Ask the single highest-impact material question and wait before asking another or finalizing the goal.",
+      "forbidden_behaviors": ["ask a batch of questions", "write an assumed goal", "ask implementation trivia"],
+      "reason": "Sequential clarification should reduce ambiguity without front-loading a questionnaire."
+    },
+    {
+      "id": "planning.clarification.three-question-limit",
+      "prompt": "Continue clarifying this deep plan after three material questions have already been answered.",
+      "planning_action": "clarify-limit",
+      "expected_mode": "create",
+      "expected_write_scope": "goal-contract",
+      "required_contracts": ["three-question-limit"],
+      "expected_behavior": "Stop at three clarification questions, record accepted answers, and proceed with explicit assumptions or blockers.",
+      "forbidden_behaviors": ["ask a fourth routine question", "discard accepted answers", "hide a blocking ambiguity"],
+      "reason": "The clarification gate has a deterministic upper bound."
+    },
+    {
+      "id": "planning.coverage.every-criterion",
+      "prompt": "Create a durable execution plan for three active acceptance criteria before implementation begins.",
+      "planning_action": "coverage-complete",
+      "expected_mode": "create",
+      "expected_write_scope": "active-plan",
+      "required_contracts": ["criterion-slice-verification"],
+      "expected_behavior": "Map every active AC identifier to at least one stable slice and one named verification source.",
+      "forbidden_behaviors": ["leave an active criterion uncovered", "treat a completed slice as verification", "duplicate criterion prose"],
+      "reason": "Coverage makes the durable plan traceable and independently checkable."
+    },
+    {
+      "id": "planning.enabler.downstream-dependencies",
+      "prompt": "Add a non-user-facing discovery slice needed before two approved implementation slices.",
+      "planning_action": "enabler-dependencies",
+      "expected_mode": "create",
+      "expected_write_scope": "active-plan",
+      "required_contracts": ["enabler-downstream"],
+      "expected_behavior": "Label the slice ENABLER and name the approved downstream slice identifiers it unlocks.",
+      "forbidden_behaviors": ["claim criterion coverage", "add generic setup", "omit downstream slices"],
+      "reason": "Enabling work needs a bounded dependency purpose rather than invented acceptance coverage."
+    },
+    {
+      "id": "planning.analysis.read-only",
+      "prompt": "Analyze this durable plan for gaps before implementation and do not change any files.",
+      "planning_action": "analyze-read-only",
+      "expected_mode": "analyze",
+      "expected_write_scope": "none",
+      "required_contracts": ["read-only-analysis"],
+      "expected_behavior": "Return deterministic PA findings from the confirmed plan and evidence without editing or auto-remediating it.",
+      "forbidden_behaviors": ["edit the plan", "implement a recommendation", "install a tool"],
+      "reason": "Pre-implementation analysis must remain repeatable and read-only."
+    },
+    {
+      "id": "planning.analysis.blocking-gap",
+      "prompt": "Analyze a plan where critical AC-002 has no slice or verification source.",
+      "planning_action": "analyze-blocking-gap",
+      "expected_mode": "analyze",
+      "expected_write_scope": "none",
+      "required_contracts": ["blocking-handoff"],
+      "expected_behavior": "Report the uncovered criterion with evidence and stop implementation handoff until the plan is repaired.",
+      "forbidden_behaviors": ["allow implementation to proceed", "silently add a slice", "mark the criterion verified"],
+      "reason": "Blocking coverage gaps must prevent an unsafe implementation handoff."
+    },
+    {
+      "id": "planning.convergence.append-only",
+      "prompt": "Compare the completed implementation with the durable plan and record two remaining acceptance gaps.",
+      "planning_action": "converge-append-only",
+      "expected_mode": "converge",
+      "expected_write_scope": "active-plan-append",
+      "required_contracts": ["append-only-pass"],
+      "expected_behavior": "Append one convergence pass with stable findings and new slice identifiers after the existing maximum.",
+      "forbidden_behaviors": ["rewrite prior slices", "renumber identifiers", "change implementation files"],
+      "reason": "Remaining work should be added without erasing execution history."
+    },
+    {
+      "id": "planning.convergence.clean-noop",
+      "prompt": "Converge a completed implementation whose active criteria all have passing evidence and no remaining gaps.",
+      "planning_action": "converge-clean-noop",
+      "expected_mode": "converge",
+      "expected_write_scope": "none",
+      "required_contracts": ["byte-identical-noop"],
+      "expected_behavior": "Report alignment and leave the durable plan byte-for-byte unchanged.",
+      "forbidden_behaviors": ["append an empty pass", "add a success timestamp", "reformat the plan"],
+      "reason": "A clean convergence pass must not create noisy plan churn."
+    },
+    {
+      "id": "planning.precedence.current-request",
+      "prompt": "The saved plan excludes settings, but the current user request explicitly adds the named settings surface.",
+      "planning_action": "current-request-reconcile",
+      "expected_mode": "resume",
+      "expected_write_scope": "active-plan",
+      "required_contracts": ["current-request-precedence"],
+      "expected_behavior": "Reconcile the current scoped request into goal and plan state before convergence while preserving unrelated approval gates.",
+      "forbidden_behaviors": ["follow the stale plan", "converge against old intent", "infer broader settings approval"],
+      "reason": "Durable artifacts cannot override a newer direct user request."
+    },
+    {
+      "id": "planning.review.no-plan-mutation",
+      "prompt": "Independently review AC-001 and AC-002 after implementation and report remaining work.",
+      "planning_action": "review-no-slices",
+      "expected_mode": "none",
+      "expected_write_scope": "none",
+      "required_contracts": ["reviewer-no-plan-mutation"],
+      "expected_behavior": "Judge each criterion from coverage evidence and hand remaining work to convergence without creating slices.",
+      "forbidden_behaviors": ["append a slice", "renumber the plan", "implement review fixes"],
+      "reason": "Independent judgment and remaining-work planning must stay separate."
+    },
+    {
+      "id": "planning.resume.stable-identifiers",
+      "prompt": "Resume a bounded retry after S-004 failed verification for AC-003 and the previous run checkpointed.",
+      "planning_action": "resume-stable-ids",
+      "expected_mode": "resume",
+      "expected_write_scope": "active-plan",
+      "required_contracts": ["stable-resume-identifiers"],
+      "expected_behavior": "Reuse AC-003 and S-004 across retry history, evidence, progress, and the exact next-slice pointer.",
+      "forbidden_behaviors": ["create replacement identifiers", "start a second status model", "repeat the failed strategy without new evidence"],
+      "reason": "Loop and resume state must preserve one traceable planning model."
+    },
+    {
+      "id": "planning.portability.client-parity",
+      "prompt": "Read-only analyze the same durable plan in Codex and Claude Code and return equivalent blocking findings.",
+      "planning_action": "client-parity",
+      "expected_mode": "analyze",
+      "expected_write_scope": "none",
+      "required_contracts": ["cross-client-portability"],
+      "expected_behavior": "Apply the same planning modes, identifiers, severity gate, and no-write boundary on both supported clients.",
+      "forbidden_behaviors": ["require a host-specific planning command", "change findings by client", "edit the plan"],
+      "reason": "Planning integrity is a portable contract rather than a client-specific feature."
+    }
+  ]
+}

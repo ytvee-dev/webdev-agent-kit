@@ -15,6 +15,7 @@ POLICY_CONFLICT_EVALS = EVAL_DIR / "policy-conflict-evals.json"
 README_POLICY_EVALS = EVAL_DIR / "readme-policy-evals.json"
 TEST_POLICY_EVALS = EVAL_DIR / "test-policy-evals.json"
 TOOL_CAPABILITY_EVALS = EVAL_DIR / "tool-capability-evals.json"
+PLANNING_INTEGRITY_EVALS = EVAL_DIR / "planning-workflow-evals.json"
 CROSS_MODEL_EVALS = EVAL_DIR / "cross-model-evals.json"
 WORKFLOW_LEVELS = {
     "Fast Lookup",
@@ -85,6 +86,37 @@ CAPABILITY_EXPECTATIONS = {
     "client-parity": ("available", False),
     "lightweight-no-audit": ("not-needed", False),
 }
+PLANNING_EXPECTATIONS = {
+    "lightweight-bypass": ("none", "none", "lightweight-bypass"),
+    "clarify-one-at-a-time": ("create", "none", "single-question"),
+    "clarify-limit": ("create", "goal-contract", "three-question-limit"),
+    "coverage-complete": (
+        "create",
+        "active-plan",
+        "criterion-slice-verification",
+    ),
+    "enabler-dependencies": ("create", "active-plan", "enabler-downstream"),
+    "analyze-read-only": ("analyze", "none", "read-only-analysis"),
+    "analyze-blocking-gap": ("analyze", "none", "blocking-handoff"),
+    "converge-append-only": (
+        "converge",
+        "active-plan-append",
+        "append-only-pass",
+    ),
+    "converge-clean-noop": ("converge", "none", "byte-identical-noop"),
+    "current-request-reconcile": (
+        "resume",
+        "active-plan",
+        "current-request-precedence",
+    ),
+    "review-no-slices": ("none", "none", "reviewer-no-plan-mutation"),
+    "resume-stable-ids": (
+        "resume",
+        "active-plan",
+        "stable-resume-identifiers",
+    ),
+    "client-parity": ("analyze", "none", "cross-client-portability"),
+}
 OUTPUT_WORD_LIMITS = {
     "Fast Lookup": 120,
     "Lightweight Workflow": 180,
@@ -109,6 +141,7 @@ CROSS_MODEL_DIMENSIONS = {
     "output-economy",
     "onboarding",
     "scope-control",
+    "planning-integrity",
 }
 CLIENT_TERMS = ("codex", "claude", ".agents", ".claude-plugin")
 
@@ -452,6 +485,46 @@ def validate_tool_capability_case(label, case, capability_names, errors):
         errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
 
 
+def validate_planning_integrity_case(label, case, errors):
+    require_case_keys(
+        label,
+        case,
+        (
+            "planning_action",
+            "expected_mode",
+            "expected_write_scope",
+            "required_contracts",
+            "expected_behavior",
+            "forbidden_behaviors",
+            "reason",
+        ),
+        errors,
+    )
+
+    action = case.get("planning_action")
+    if action not in PLANNING_EXPECTATIONS:
+        errors.append(f"{label}: unknown planning_action {action!r}")
+        return
+
+    expected_mode, expected_write_scope, required_contract = (
+        PLANNING_EXPECTATIONS[action]
+    )
+    actual = (case.get("expected_mode"), case.get("expected_write_scope"))
+    expected = (expected_mode, expected_write_scope)
+    if actual != expected:
+        errors.append(f"{label}: planning expectation must be {expected!r}")
+
+    contracts = case.get("required_contracts", [])
+    if contracts != [required_contract]:
+        errors.append(
+            f"{label}: required_contracts must be [{required_contract!r}]"
+        )
+
+    forbidden = case.get("forbidden_behaviors", [])
+    if not isinstance(forbidden, list) or len(forbidden) < 2:
+        errors.append(f"{label}: forbidden_behaviors should define at least 2 controls")
+
+
 def validate_cross_model_case(label, case, actual_skills, errors):
     require_case_keys(
         label,
@@ -547,6 +620,25 @@ def validate_suite(
         errors.append(f"{relative}: test-policy suite needs at least 6 cases")
     if expected_type == "tool-capability" and len(cases) < 7:
         errors.append(f"{relative}: tool-capability suite needs at least 7 cases")
+    if expected_type == "planning-integrity":
+        actions = {
+            case.get("planning_action") for case in cases if isinstance(case, dict)
+        }
+        missing_actions = sorted(set(PLANNING_EXPECTATIONS) - actions)
+        extra_actions = sorted(
+            action
+            for action in actions
+            if isinstance(action, str) and action not in PLANNING_EXPECTATIONS
+        )
+        if len(cases) != len(PLANNING_EXPECTATIONS):
+            errors.append(
+                f"{relative}: planning-integrity suite needs exactly "
+                f"{len(PLANNING_EXPECTATIONS)} cases"
+            )
+        if missing_actions:
+            errors.append(f"{relative}: missing planning actions: {missing_actions}")
+        if extra_actions:
+            errors.append(f"{relative}: unknown planning actions: {extra_actions}")
     if expected_type == "cross-model" and len(cases) < 10:
         errors.append(f"{relative}: cross-model suite needs at least 10 cases")
     if expected_type == "cross-model":
@@ -585,6 +677,8 @@ def validate_suite(
             validate_test_policy_case(label, case, errors)
         elif expected_type == "tool-capability":
             validate_tool_capability_case(label, case, capability_names, errors)
+        elif expected_type == "planning-integrity":
+            validate_planning_integrity_case(label, case, errors)
         elif expected_type == "cross-model":
             validate_cross_model_case(label, case, actual_skills, errors)
 
@@ -660,6 +754,16 @@ def validate():
     validate_suite(
         TOOL_CAPABILITY_EVALS,
         "tool-capability",
+        suite_schema,
+        case_schema,
+        actual_skills,
+        capability_names,
+        seen_ids,
+        errors,
+    )
+    validate_suite(
+        PLANNING_INTEGRITY_EVALS,
+        "planning-integrity",
         suite_schema,
         case_schema,
         actual_skills,

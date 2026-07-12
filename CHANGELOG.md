@@ -39,6 +39,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   findings, and append-only durable-plan passes.
 - Added shared review, loop, checkpoint, decision, and resume fields that keep
   goal, criterion, slice, convergence, and verification state aligned.
+- Added a 13-case planning-integrity eval suite plus Codex and Claude Code parity
+  coverage for portable, read-only plan analysis.
 
 ### Changed
 
@@ -52,6 +54,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   files, rewriting prior plan history, or adding empty success passes.
 - Independent review now judges active criteria and coverage evidence without
   creating slices; bounded loops and checkpoints reuse the same plan identifiers.
+- Planning evals validate static fixture contracts and cross-client expectations;
+  they do not claim to prove live model behavior.
 
 ## 0.3.0 - 2026-07-10
 
