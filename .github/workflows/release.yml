@@ -88,6 +88,9 @@ jobs:
       - name: Validate generated context budgets
         run: python scripts/validate_runtime_context_budget.py --generated
 
+      - name: Validate planning target parity
+        run: python scripts/validate_planning_target_parity.py
+
       - name: Validate generated version consistency
         run: python scripts/validate_version_consistency.py --generated
 

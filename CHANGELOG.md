@@ -43,6 +43,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   coverage for portable, read-only plan analysis.
 - Added deterministic planning-integrity validation, in-memory negative fixtures,
   and blocking PR and release CI gates for planning drift.
+- Added generated-target planning parity checks for shared rules, templates,
+  skill bodies, alias artifacts, and context budgets.
 
 ### Changed
 
