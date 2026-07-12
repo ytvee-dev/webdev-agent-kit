@@ -506,9 +506,9 @@ def validate_planning_integrity_case(label, case, errors):
         errors.append(f"{label}: unknown planning_action {action!r}")
         return
 
-    expected_mode, expected_write_scope, required_contract = (
-        PLANNING_EXPECTATIONS[action]
-    )
+    expected_mode, expected_write_scope, required_contract = PLANNING_EXPECTATIONS[
+        action
+    ]
     actual = (case.get("expected_mode"), case.get("expected_write_scope"))
     expected = (expected_mode, expected_write_scope)
     if actual != expected:
@@ -516,9 +516,7 @@ def validate_planning_integrity_case(label, case, errors):
 
     contracts = case.get("required_contracts", [])
     if contracts != [required_contract]:
-        errors.append(
-            f"{label}: required_contracts must be [{required_contract!r}]"
-        )
+        errors.append(f"{label}: required_contracts must be [{required_contract!r}]")
 
     forbidden = case.get("forbidden_behaviors", [])
     if not isinstance(forbidden, list) or len(forbidden) < 2:

@@ -76,9 +76,7 @@ def require_phrases(
     missing = [phrase for phrase in phrases if phrase not in text]
     if missing:
         missing_text = ", ".join(repr(item) for item in missing)
-        errors.append(
-            f"{contract}: {relative} is missing {missing_text}"
-        )
+        errors.append(f"{contract}: {relative} is missing {missing_text}")
 
 
 def parse_json_document(
@@ -329,9 +327,7 @@ def validate_documents(documents: dict[str, str]) -> list[str]:
     if isinstance(planning_suite, dict):
         cases = planning_suite.get("cases", [])
         actions = {
-            case.get("planning_action")
-            for case in cases
-            if isinstance(case, dict)
+            case.get("planning_action") for case in cases if isinstance(case, dict)
         }
         if planning_suite.get("eval_type") != "planning-integrity":
             errors.append("planning eval suite: eval_type must be planning-integrity")
@@ -341,9 +337,7 @@ def validate_documents(documents: dict[str, str]) -> list[str]:
                 "are required"
             )
 
-    cross_model = parse_json_document(
-        documents, "evals/cross-model-evals.json", errors
-    )
+    cross_model = parse_json_document(documents, "evals/cross-model-evals.json", errors)
     if isinstance(cross_model, dict):
         dimensions = {
             case.get("parity_dimension")
@@ -493,9 +487,7 @@ def validate_negative_fixtures(documents: dict[str, str]) -> list[str]:
     planning_suite["cases"] = planning_suite["cases"][:-1]
     mutated = dict(documents)
     mutated["evals/planning-workflow-evals.json"] = json.dumps(planning_suite)
-    if not any(
-        "planning eval suite" in error for error in validate_documents(mutated)
-    ):
+    if not any("planning eval suite" in error for error in validate_documents(mutated)):
         errors.append("negative fixture planning-evals: missing case was accepted")
 
     manifest = json.loads(documents["bundle-manifest.json"])
