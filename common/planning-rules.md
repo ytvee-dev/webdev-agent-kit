@@ -13,6 +13,7 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[skills/execution-plan-manager/SKILL|Execution Plan Manager]]'
+    - '[[common/planning-analysis-rules|Planning Analysis Rules]]'
     - '[[templates/execution-plan|Execution Plan Template]]'
 depends_on: []
 ---
@@ -90,3 +91,8 @@ planned | in-progress | verified | blocked | superseded
   repeated failure.
 
 Use the smallest budget that can produce a correct result.
+
+Before standard or deep implementation begins, use
+`common/planning-analysis-rules.md` when the execution plan has multiple slices,
+approval boundaries, shared file ownership, or unresolved assumptions. The
+analysis pass is read-only and does not repair the plan.

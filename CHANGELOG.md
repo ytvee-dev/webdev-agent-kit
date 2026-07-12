@@ -32,6 +32,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added explicit `ENABLER` slices that must name the approved downstream work they unlock.
 - Added a compact clarification gate for standard and deep goals that asks at most three material questions, one at a time, and integrates accepted answers into the goal contract.
 - Added durable coverage maps linking acceptance criteria to execution slices, verification evidence, and canonical planning states.
+- Added a deterministic read-only planning analysis mode with stable findings,
+  severity-based handoff gates, and checks for coverage, scope, ownership,
+  conflict, approval, and verification gaps.
 
 ### Changed
 
@@ -39,6 +42,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Goal and execution plan templates now preserve criterion and slice identity across implementation, retry, and resume workflows without adding planning ceremony to lightweight work.
 - Goal planning now uses verified context before asking and skips repeated, low-impact, safely inferable, or purely implementation-level questions.
 - Checkpoints, decisions, compaction, and loop contracts now preserve the same goal, criterion, and slice identifiers instead of creating parallel completion models.
+- Execution planning now selects an explicit `create`, `resume`, or `analyze`
+  mode and keeps analysis findings outside durable plan and source files.
 
 ## 0.3.0 - 2026-07-10
 
