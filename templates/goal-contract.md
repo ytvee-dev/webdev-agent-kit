@@ -18,7 +18,7 @@ depends_on: []
 
 # Goal Contract
 
-Goal ID:
+Goal ID: G-###
 
 User Goal:
 
@@ -30,7 +30,11 @@ Out Of Scope:
 
 Constraints:
 
+Clarifications:
+
 Done When:
+
+- AC-###:
 
 Workflow Level:
 

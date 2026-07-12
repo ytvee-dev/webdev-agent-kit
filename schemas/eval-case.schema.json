@@ -236,6 +236,55 @@
     "expected_install": {
       "type": "boolean"
     },
+    "planning_action": {
+      "type": "string",
+      "enum": [
+        "lightweight-bypass",
+        "clarify-one-at-a-time",
+        "clarify-limit",
+        "coverage-complete",
+        "enabler-dependencies",
+        "analyze-read-only",
+        "analyze-blocking-gap",
+        "converge-append-only",
+        "converge-clean-noop",
+        "current-request-reconcile",
+        "review-no-slices",
+        "resume-stable-ids",
+        "client-parity"
+      ]
+    },
+    "expected_mode": {
+      "type": "string",
+      "enum": ["none", "create", "resume", "analyze", "converge"]
+    },
+    "expected_write_scope": {
+      "type": "string",
+      "enum": ["none", "response-only", "goal-contract", "active-plan", "active-plan-append"]
+    },
+    "required_contracts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "lightweight-bypass",
+          "single-question",
+          "three-question-limit",
+          "criterion-slice-verification",
+          "enabler-downstream",
+          "read-only-analysis",
+          "blocking-handoff",
+          "append-only-pass",
+          "byte-identical-noop",
+          "current-request-precedence",
+          "reviewer-no-plan-mutation",
+          "stable-resume-identifiers",
+          "cross-client-portability"
+        ]
+      }
+    },
     "risk_notes": {
       "type": "array",
       "items": {
@@ -261,7 +310,8 @@
         "verification-evidence",
         "output-economy",
         "onboarding",
-        "scope-control"
+        "scope-control",
+        "planning-integrity"
       ]
     },
     "model_families": {

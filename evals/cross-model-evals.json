@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "eval_type": "cross-model",
   "cases": [
     {
@@ -210,6 +210,24 @@
       "forbidden_behaviors": ["edit the branch", "post a review", "contact a contributor", "pad the answer with praise"],
       "max_words": 220,
       "reason": "The same read-only scope must survive different tool affordances."
+    },
+    {
+      "id": "cross-model.planning.read-only-analysis",
+      "prompt": "Analyze this durable execution plan for uncovered acceptance criteria before implementation. Do not change files.",
+      "parity_dimension": "planning-integrity",
+      "model_families": ["gpt", "claude"],
+      "client_targets": ["codex", "claude-code"],
+      "workflow_level": "Deep Workflow",
+      "expected_primary_skill": "execution-plan-manager",
+      "portable_expectation": "Select analyze mode, preserve criterion and slice identifiers, return equivalent evidence-backed findings, and stop implementation for blocking or high gaps without writing files.",
+      "client_expectations": {
+        "codex": "Use the portable execution-plan skill and return findings without relying on a native planning command.",
+        "claude-code": "Use the portable plugin skill and return findings without relying on a native planning command."
+      },
+      "required_facts": ["plan readiness and stable findings", "criterion coverage evidence", "implementation handoff status"],
+      "forbidden_behaviors": ["edit the plan", "auto-remediate findings", "use client-specific identifiers"],
+      "max_words": 280,
+      "reason": "Planning analysis must preserve the same read-only integrity contract across both canonical clients."
     }
   ]
 }

@@ -45,6 +45,7 @@ Every loop must define:
 objective
 allowed scope
 acceptance criteria
+goal, criterion, and target slice identifiers when present
 verification source
 maximum attempts or turns
 retry strategy
@@ -86,6 +87,9 @@ Use only for deep research, experiments, or broad discovery with explicit budget
 - Never run an unbounded loop.
 - Never use vague quality as the only stop condition.
 - Never repeat the same failed patch or hypothesis without new evidence.
+- Reference the affected `AC-###` and `S-###` in every retry attempt when a
+  durable plan exists.
+- Never redefine active criteria or renumber slices inside a loop contract.
 - Never expand scope, install packages, add tools, change build systems, or create testing workflows without explicit approval.
 - Stop when acceptance criteria pass, the attempt limit is reached, scope changes are required, or required verification is blocked.
 

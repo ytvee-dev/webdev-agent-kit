@@ -106,14 +106,36 @@ If a lightweight task reveals hidden scope, escalate first using `common/prompt-
    - keep host-project facts in `project/**`;
    - keep reusable instructions in English.
 
-5. Define Done When.
-   Done criteria must be observable. Use only criteria relevant to the task.
+5. Resolve material ambiguity when needed.
+   - Scan only for choices that change scope, critical interaction states,
+     data or state ownership, responsive or accessibility behavior, external
+     integration or security, or verification.
+   - Use the current request, confirmed decisions, host instructions, and
+     verified project evidence before asking.
+   - Rank candidates by impact and uncertainty, then ask exactly one question
+     at a time and no more than three in one goal-definition pass.
+   - Prefer mutually exclusive choices or a constrained short answer. Recommend
+     an option only when evidence supports it.
+   - Stop when material ambiguity is resolved, the user asks to proceed, or the
+     limit is reached.
+   - If the limit is reached with a material blocker unresolved, record the
+     blocker instead of silently guessing.
+   - Apply each answer immediately to Scope, Out Of Scope, Constraints, or Done
+     When. Keep only a compact Clarifications record for durable goals.
+   - Do not ask the user to repeat known information, confirm a verifiable fact,
+     choose low-impact styling, or decide safe plan-level implementation detail.
 
-6. Choose output mode.
+6. Define Done When.
+   - Done criteria must be observable outcomes, not implementation activity.
+   - For a durable goal, assign stable zero-padded identifiers such as `AC-001`.
+   - Do not renumber or reuse durable criterion identifiers after execution begins.
+   - Use only criteria relevant to the task.
+
+7. Choose output mode.
    - For standard tasks, output a compact goal contract in the response unless a durable file is genuinely useful.
    - For deep tasks, create or update `project/active-goals.md` when the environment and user-approved workflow allow local file writes.
 
-7. Hand off.
+8. Hand off.
    - For multi-step work, hand off to `execution-plan-manager` when available.
    - For direct standard work, hand off to the relevant frontend skill with the compact goal contract.
 
@@ -130,13 +152,17 @@ Product Intent
 Scope
 Out Of Scope
 Constraints
+Clarifications
 Done When
 Workflow Level
 Current Status
 Next Skill Or Next Step
 ```
 
-For compact response-only contracts, omit `Goal ID` only when no durable tracking is needed.
+Omit Clarifications when no material question was asked. For durable goals,
+format Done When as `AC-###` criteria. For compact
+response-only contracts, omit `Goal ID` and criterion identifiers only when no
+durable tracking, resume state, or multi-slice traceability is needed.
 
 ## Validation Gates
 
@@ -146,7 +172,12 @@ Before finishing, verify:
 - the goal is stated in user-outcome terms;
 - scope and out-of-scope are explicit;
 - constraints are not generic filler;
+- clarification asks at most three material questions, one at a time, and does
+  not repeat known or verifiable information;
+- accepted answers are integrated into the goal instead of remaining only in a
+  question log;
 - Done When is observable;
+- durable criteria have unique, stable `AC-###` identifiers;
 - no source files were changed;
 - no tools or packages were installed;
 - persistent project files were created only for genuinely multi-step or resumable work.
@@ -159,6 +190,7 @@ Should trigger:
 - "Plan the frontend architecture for a new analytics section."
 - "Create a new project structure for this product idea, but do not scaffold yet."
 - "This is a big redesign; define the goal and constraints before implementation."
+- "Clarify only the decisions that would materially change this checkout flow."
 
 Should not trigger:
 
@@ -167,6 +199,7 @@ Should not trigger:
 - "Fix the broken margin in this component."
 - "Rename this prop in one file."
 - "Run visual QA on this implemented page."
+- "Pick any reasonable spacing and continue."
 
 ## Reference Map
 

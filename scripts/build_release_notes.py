@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CHANGELOG = ROOT / "CHANGELOG.md"
 
 
-def unreleased_body():
+def unreleased_body(require_content=False):
     lines = CHANGELOG.read_text(encoding="utf-8-sig").splitlines()
     try:
         start = lines.index("## Unreleased") + 1
@@ -23,16 +23,18 @@ def unreleased_body():
     body = "\n".join(lines[start:end]).strip()
     if "### Added" not in body or "### Changed" not in body:
         raise ValueError("Unreleased notes must contain Added and Changed sections")
+    if require_content and not any(line.startswith("- ") for line in body.splitlines()):
+        raise ValueError("Unreleased notes must contain at least one release item")
     return body
 
 
-def build_notes(tag):
+def build_notes(tag, require_content=False):
     errors = validate_tag(tag)
     if errors:
         raise ValueError("; ".join(errors))
     return (
         f"# WebDev Agent Kit {tag}\n\n"
-        f"{unreleased_body()}\n\n"
+        f"{unreleased_body(require_content=require_content)}\n\n"
         "## Installation\n\n"
         "Verify the selected archive against `SHA256SUMS`. Extract Codex and "
         "Cursor archives from the project root; they create `.agents/` "
@@ -53,6 +55,11 @@ def main():
         action="store_true",
         help="Validate generated notes without writing a file.",
     )
+    parser.add_argument(
+        "--require-content",
+        action="store_true",
+        help="Require at least one release item in the Unreleased section.",
+    )
     args = parser.parse_args()
     if args.output and args.check:
         parser.error("--output and --check are mutually exclusive")
@@ -61,7 +68,7 @@ def main():
 
     try:
         tag = args.tag or f"v{load_version()}"
-        notes = build_notes(tag)
+        notes = build_notes(tag, require_content=args.require_content)
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(notes, encoding="utf-8")

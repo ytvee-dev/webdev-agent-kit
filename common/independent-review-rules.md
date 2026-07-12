@@ -14,6 +14,8 @@ parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
     - '[[common/agent-loop-policy|Agent Loop Policy]]'
+    - '[[common/planning-rules|Planning Rules]]'
+    - '[[common/convergence-rules|Convergence Rules]]'
     - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
     - '[[skills/loop-workflow-planner/SKILL|Loop Workflow Planner]]'
 depends_on: []
@@ -58,8 +60,18 @@ separate required fixes from optional improvements
 cite concrete evidence for blocking or high findings
 avoid broad rewrite
 avoid implementing fixes unless explicitly requested
+preserve existing goal, criterion, slice, and finding identifiers
+report remaining work without adding or renumbering plan slices
 ```
+
+The reviewer judges active `AC-###` criteria against coverage and verification
+evidence. It does not create a second acceptance model or mutate the execution
+plan. When review exposes remaining work, hand the evidence to
+`execution-plan-manager` in `converge` mode; convergence alone may append new
+slices under `common/convergence-rules.md`.
 
 ## Validation Gate
 
-Independent review is valid only when it evaluates the acceptance criteria and evidence instead of merely restating the implementer's summary.
+Independent review is valid only when it evaluates the acceptance criteria and
+evidence instead of merely restating the implementer's summary. Review findings
+must not add, remove, reorder, renumber, or mark plan slices.

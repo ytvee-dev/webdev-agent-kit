@@ -20,6 +20,8 @@ depends_on: []
 
 Goal:
 
+Goal ID: G-###
+
 Done When:
 
 Workflow Level:
@@ -30,11 +32,19 @@ Current Phase:
 
 Task Slices:
 
+- S-### [AC-###]:
+
 Allowed Files Or Surfaces:
 
 Tools Allowed:
 
 Verification Per Slice:
+
+Coverage:
+
+| Criterion | Slices | Verification | Status |
+| --- | --- | --- | --- |
+| AC-### | S-### | existing check or evidence | planned |
 
 Blockers:
 

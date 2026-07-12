@@ -74,7 +74,8 @@ Do not use for:
 7. Read `common/independent-review-rules.md` when review is needed.
 8. Read `common/worktree-parallelism-rules.md` only when parallel agents, branches, or worktrees are considered.
 9. Read the current Goal Contract, Execution Plan, user request, or `project/active-goals.md` when present.
-10. Read `project/verification-profile.md` when verification commands matter.
+10. Read the active coverage map and target `S-###` slices when a durable plan exists.
+11. Read `project/verification-profile.md` when verification commands matter.
 
 Do not read unrelated skills or generated `dist/**` during normal runtime.
 
@@ -92,18 +93,23 @@ Do not read unrelated skills or generated `dist/**` during normal runtime.
 
 1. Confirm task scale. Stop if the task is Fast Lookup or lightweight without repeated failure.
 2. Confirm or derive the objective from an existing goal, execution plan, or explicit user request.
-3. Convert vague completion language into measurable acceptance criteria.
-4. Define allowed scope and out-of-scope changes.
-5. Select loop type: one-pass verification, bounded retry, goal-based loop, or open exploration.
-6. Set maximum attempts or turns.
-7. Define verification commands, rendered checks, or manual evidence sources.
-8. Define retry strategy and what must change after a failed attempt.
-9. Define stop and escalation conditions.
-10. Decide whether independent review is required.
-11. Decide whether loop memory is needed and where it belongs.
-12. Decide whether parallel work is safe; default to no parallelism.
-13. Produce a Loop Workflow Contract.
-14. Hand off to the next smallest relevant skill.
+3. Reuse the active Goal Contract `AC-###` criteria when present. Otherwise,
+   convert vague completion language into measurable acceptance criteria without
+   creating a competing set of criteria.
+4. Reference the target `S-###` slices when a durable execution plan exists.
+   Do not add, reorder, renumber, or mark slices from the loop contract.
+5. Define allowed scope and out-of-scope changes.
+6. Select loop type: one-pass verification, bounded retry, goal-based loop, or open exploration.
+7. Set maximum attempts or turns.
+8. Define verification commands, rendered checks, or manual evidence sources.
+9. Define retry strategy and what must change after a failed attempt. Every
+   durable retry record must name the affected `AC-###` and `S-###`.
+10. Define stop and escalation conditions.
+11. Decide whether independent review is required.
+12. Decide whether loop memory is needed and where it belongs.
+13. Decide whether parallel work is safe; default to no parallelism.
+14. Produce a Loop Workflow Contract.
+15. Hand off to the next smallest relevant skill.
 
 ## Output Contract
 
@@ -113,9 +119,11 @@ Return or write:
 
 ```text
 Loop Workflow Contract
+Goal ID
 Objective
 Allowed Scope
 Acceptance Criteria
+Target Slices
 Loop Type
 Max Attempts Or Turns
 Retry Strategy
@@ -125,8 +133,14 @@ Memory Update
 Stop Conditions
 Escalation Conditions
 Final Evidence
+Next Slice
 Next Skill Or Next Step
 ```
+
+When a Goal Contract exists, preserve its `AC-###` identifiers in the loop
+contract, verification evidence, retry history, and final report.
+When an Execution Plan exists, preserve its `S-###` identifiers in target scope,
+retry history, memory, review handoff, and resume state.
 
 Use `templates/loop-workflow-contract.md` for durable loop contracts.
 
@@ -134,6 +148,9 @@ Use `templates/loop-workflow-contract.md` for durable loop contracts.
 
 - The loop must be bounded.
 - Acceptance criteria must be measurable enough for an independent reviewer.
+- Existing goal criterion identifiers must be reused instead of redefined.
+- Existing slice identifiers must be referenced instead of redefined or mutated.
+- Every durable retry attempt must identify its affected criteria and slices.
 - Verification must rely on existing project commands or available rendered checks.
 - Retry strategy must prevent repeating the same failed approach.
 - Independent review must be defined when material risk exists.

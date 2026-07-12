@@ -32,6 +32,7 @@ current objective
 accepted constraints
 allowed scope
 acceptance criteria
+stable goal, criterion, slice, and finding identifiers when present
 files read
 files changed
 commands or checks run
@@ -68,6 +69,10 @@ Open: unresolved questions and safe next strategies
 ```
 
 Do not store guesses as verified facts. Convert failures into reusable rules only after evidence supports them.
+
+When durable identifiers exist, preserve them exactly across summaries,
+checkpoints, and loop memory. Do not renumber `G-###`, `AC-###`, or `S-###`
+during compaction.
 
 ## Anti-Bloat Rules
 

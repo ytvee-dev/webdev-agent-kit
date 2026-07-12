@@ -15,6 +15,7 @@ related:
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[docs/install/README|Installation Guides]]'
     - '[[docs/release/0.3.0-checklist|0.3.0 Release Checklist]]'
+    - '[[docs/release/0.4.0-checklist|0.4.0 Release Checklist]]'
 depends_on: []
 ---
 
@@ -25,6 +26,47 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Added stable goal, acceptance-criterion, and execution-slice identifiers for durable standard and deep planning contracts.
+- Added explicit `ENABLER` slices that must name the approved downstream work they unlock.
+- Added a compact clarification gate for standard and deep goals that asks at most three material questions, one at a time, and integrates accepted answers into the goal contract.
+- Added durable coverage maps linking acceptance criteria to execution slices, verification evidence, and canonical planning states.
+- Added a deterministic read-only planning analysis mode with stable findings,
+  severity-based handoff gates, and checks for coverage, scope, ownership,
+  conflict, approval, and verification gaps.
+- Added post-implementation convergence with evidence-backed gap types, stable
+  findings, and append-only durable-plan passes.
+- Added shared review, loop, checkpoint, decision, and resume fields that keep
+  goal, criterion, slice, convergence, and verification state aligned.
+- Added a 13-case planning-integrity eval suite plus Codex and Claude Code parity
+  coverage for portable, read-only plan analysis.
+- Added deterministic planning-integrity validation, in-memory negative fixtures,
+  and blocking PR and release CI gates for planning drift.
+- Added generated-target planning parity checks for shared rules, templates,
+  skill bodies, alias artifacts, and context budgets.
+- Added 48 cross-client planning smoke checks covering eight portable workflow
+  contracts across all six generated runtime targets.
+
+### Changed
+
+- Tagged release validation now requires non-empty `Unreleased` notes while ordinary branch validation continues to allow a clean post-release section.
+- Goal and execution plan templates now preserve criterion and slice identity across implementation, retry, and resume workflows without adding planning ceremony to lightweight work.
+- Goal planning now uses verified context before asking and skips repeated, low-impact, safely inferable, or purely implementation-level questions.
+- Checkpoints, decisions, compaction, and loop contracts now preserve the same goal, criterion, and slice identifiers instead of creating parallel completion models.
+- Execution planning now selects an explicit `create`, `resume`, or `analyze`
+  mode and keeps analysis findings outside durable plan and source files.
+- Execution planning now supports `converge` mode without changing application
+  files, rewriting prior plan history, or adding empty success passes.
+- Independent review now judges active criteria and coverage evidence without
+  creating slices; bounded loops and checkpoints reuse the same plan identifiers.
+- Planning evals validate static fixture contracts and cross-client expectations;
+  they do not claim to prove live model behavior.
+- Aligned manifests, eval fixtures, installation guides, and release validation
+  with the `0.4.0` release candidate.
+
+## 0.3.0 - 2026-07-10
 
 ### Added
 

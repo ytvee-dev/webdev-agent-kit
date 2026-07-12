@@ -51,6 +51,9 @@ def main():
     precedence_code = run("validate_policy_precedence.py")
     if precedence_code:
         sys.exit(precedence_code)
+    planning_integrity_code = run("validate_planning_integrity.py")
+    if planning_integrity_code:
+        sys.exit(planning_integrity_code)
     test_policy_code = run("validate_test_policy.py")
     if test_policy_code:
         sys.exit(test_policy_code)
@@ -75,6 +78,12 @@ def main():
     generated_context_code = run("validate_runtime_context_budget.py", "--generated")
     if generated_context_code:
         sys.exit(generated_context_code)
+    planning_target_code = run("validate_planning_target_parity.py")
+    if planning_target_code:
+        sys.exit(planning_target_code)
+    planning_smoke_code = run("validate_planning_smoke.py")
+    if planning_smoke_code:
+        sys.exit(planning_smoke_code)
     generated_version_code = run("validate_version_consistency.py", "--generated")
     if generated_version_code:
         sys.exit(generated_version_code)

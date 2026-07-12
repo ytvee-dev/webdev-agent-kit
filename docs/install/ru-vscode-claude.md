@@ -22,7 +22,7 @@ VS Code Claude использует тот же нативный plugin contract
 
 ```text
 webdev-agent-kit-vs-code-claude.tar.gz
-webdev-agent-kit-vs-code-claude-v0.3.0.tar.gz
+webdev-agent-kit-vs-code-claude-v0.4.0.tar.gz
 ```
 
 Сверьте SHA-256 выбранного файла с `SHA256SUMS`. Для постоянного личного
