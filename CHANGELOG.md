@@ -28,6 +28,14 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+### Changed
+
+- Tagged release validation now requires non-empty `Unreleased` notes while ordinary branch validation continues to allow a clean post-release section.
+
+## 0.3.0 - 2026-07-10
+
+### Added
+
 - Added machine-readable runtime contracts for canonical Codex, Claude Code, and Cursor targets.
 - Added `scripts/validate_target_contracts.py` to enforce canonical target, alias, entrypoint, skill-root, output, and validator declarations.
 - Added `docs/architecture/runtime-target-contracts.md` as the human-readable target contract.

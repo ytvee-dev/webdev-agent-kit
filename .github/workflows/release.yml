@@ -46,7 +46,8 @@ jobs:
           python scripts/validate_install_guides.py
           python scripts/build_release_notes.py \
             --tag "${GITHUB_REF_NAME}" \
-            --check
+            --check \
+            --require-content
 
       - name: Validate tool capability metadata
         run: python scripts/validate_tool_capabilities.py
@@ -149,7 +150,8 @@ jobs:
           mkdir -p release-artifacts
           python scripts/build_release_notes.py \
             --tag "${GITHUB_REF_NAME}" \
-            --output release-artifacts/RELEASE_NOTES.md
+            --output release-artifacts/RELEASE_NOTES.md \
+            --require-content
           python scripts/build_release_archives.py \
             --output release-artifacts \
             --version "${GITHUB_REF_NAME}"
