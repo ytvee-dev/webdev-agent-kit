@@ -37,6 +37,7 @@ explicit approvals required:
 ## Acceptance Criteria
 
 ```text
+criterion: AC-###
 success condition:
 verification source:
 failure condition:

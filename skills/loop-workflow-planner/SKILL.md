@@ -92,7 +92,9 @@ Do not read unrelated skills or generated `dist/**` during normal runtime.
 
 1. Confirm task scale. Stop if the task is Fast Lookup or lightweight without repeated failure.
 2. Confirm or derive the objective from an existing goal, execution plan, or explicit user request.
-3. Convert vague completion language into measurable acceptance criteria.
+3. Reuse the active Goal Contract `AC-###` criteria when present. Otherwise,
+   convert vague completion language into measurable acceptance criteria without
+   creating a competing set of criteria.
 4. Define allowed scope and out-of-scope changes.
 5. Select loop type: one-pass verification, bounded retry, goal-based loop, or open exploration.
 6. Set maximum attempts or turns.
@@ -128,12 +130,16 @@ Final Evidence
 Next Skill Or Next Step
 ```
 
+When a Goal Contract exists, preserve its `AC-###` identifiers in the loop
+contract, verification evidence, retry history, and final report.
+
 Use `templates/loop-workflow-contract.md` for durable loop contracts.
 
 ## Validation Gates
 
 - The loop must be bounded.
 - Acceptance criteria must be measurable enough for an independent reviewer.
+- Existing goal criterion identifiers must be reused instead of redefined.
 - Verification must rely on existing project commands or available rendered checks.
 - Retry strategy must prevent repeating the same failed approach.
 - Independent review must be defined when material risk exists.

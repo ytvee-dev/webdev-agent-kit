@@ -32,4 +32,8 @@ Rejected Alternatives:
 
 Approval:
 
+Affected Criteria:
+
+Affected Slices:
+
 Impact:

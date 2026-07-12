@@ -40,6 +40,12 @@ Tools Allowed:
 
 Verification Per Slice:
 
+Coverage:
+
+| Criterion | Slices | Verification | Status |
+| --- | --- | --- | --- |
+| AC-### | S-### | existing check or evidence | planned |
+
 Blockers:
 
 Risks:

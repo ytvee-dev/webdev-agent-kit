@@ -31,12 +31,14 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added stable goal, acceptance-criterion, and execution-slice identifiers for durable standard and deep planning contracts.
 - Added explicit `ENABLER` slices that must name the approved downstream work they unlock.
 - Added a compact clarification gate for standard and deep goals that asks at most three material questions, one at a time, and integrates accepted answers into the goal contract.
+- Added durable coverage maps linking acceptance criteria to execution slices, verification evidence, and canonical planning states.
 
 ### Changed
 
 - Tagged release validation now requires non-empty `Unreleased` notes while ordinary branch validation continues to allow a clean post-release section.
 - Goal and execution plan templates now preserve criterion and slice identity across implementation, retry, and resume workflows without adding planning ceremony to lightweight work.
 - Goal planning now uses verified context before asking and skips repeated, low-impact, safely inferable, or purely implementation-level questions.
+- Checkpoints, decisions, compaction, and loop contracts now preserve the same goal, criterion, and slice identifiers instead of creating parallel completion models.
 
 ## 0.3.0 - 2026-07-10
 

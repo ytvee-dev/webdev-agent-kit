@@ -22,9 +22,15 @@ depends_on: []
 
 Date:
 
+Goal ID:
+
 Goal:
 
+Slice ID:
+
 Completed Slice:
+
+Criteria Covered:
 
 Files Changed:
 

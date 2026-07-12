@@ -56,6 +56,32 @@ architecture changes.
   direct slices and do not require resume state or cross-slice traceability.
 - `Fast Lookup` and `Lightweight Workflow` do not create execution plans or IDs.
 
+## Coverage Map
+
+Every durable plan must map active acceptance criteria to implementation slices
+and verification without copying the full criterion text:
+
+```text
+AC-001 -> S-001, S-002 -> existing check or rendered evidence -> planned
+```
+
+Allowed coverage states are:
+
+```text
+planned | in-progress | verified | blocked | superseded
+```
+
+- Every active `AC-###` must map to at least one `S-###` and one verification
+  source before implementation begins.
+- `ENABLER` slices appear through their downstream dependency links; they do not
+  substitute for criterion coverage.
+- Mark a criterion `verified` only after the named evidence passes. A completed
+  slice or checked box alone is not verification.
+- Record the exact missing command, tool, context, or approval for `blocked`.
+- Link `superseded` criteria to their replacement instead of deleting history.
+- Keep the map compact: reference identifiers and evidence, not duplicated goal
+  or plan prose.
+
 ## Context Budget
 
 - `Glance`: routing, status, or shallow explanation.
