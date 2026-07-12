@@ -30,6 +30,8 @@ Out Of Scope:
 
 Constraints:
 
+Clarifications:
+
 Done When:
 
 - AC-###:
