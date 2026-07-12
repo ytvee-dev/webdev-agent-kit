@@ -121,11 +121,13 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
    - Do not renumber or reuse slice identifiers after execution begins.
 9. Add verification per slice using the smallest relevant check already available in the project or active skill.
 10. Build the coverage map for durable plans.
-   - Map every active `AC-###` to at least one `S-###` and one verification source.
-   - Use only `planned`, `in-progress`, `verified`, `blocked`, or `superseded`.
-   - Do not treat a completed slice as verification evidence.
-   - Keep `ENABLER` slices linked through their downstream dependencies instead
-     of using them as criterion coverage.
+
+    - Map every active `AC-###` to at least one `S-###` and one verification source.
+    - Use only `planned`, `in-progress`, `verified`, `blocked`, or `superseded`.
+    - Do not treat a completed slice as verification evidence.
+    - Keep `ENABLER` slices linked through their downstream dependencies instead
+      of using them as criterion coverage.
+
 11. Decide whether a loop contract is needed. Use `loop-workflow-planner` when a slice must repeat until measurable acceptance criteria pass, when verification failure repair is in scope, when repeated failure already happened, when independent review should judge completion, or when loop memory is needed.
 12. Add stop/resume state for durable plans, including current phase, last completed slice, next exact step, files to inspect next, checks to run next, loop contract or retry limit when relevant, blockers, and risks.
 13. Hand off to the smallest relevant skill. Route measurable iteration to `loop-workflow-planner` before implementation.
