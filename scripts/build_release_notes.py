@@ -23,9 +23,7 @@ def unreleased_body(require_content=False):
     body = "\n".join(lines[start:end]).strip()
     if "### Added" not in body or "### Changed" not in body:
         raise ValueError("Unreleased notes must contain Added and Changed sections")
-    if require_content and not any(
-        line.startswith("- ") for line in body.splitlines()
-    ):
+    if require_content and not any(line.startswith("- ") for line in body.splitlines()):
         raise ValueError("Unreleased notes must contain at least one release item")
     return body
 
