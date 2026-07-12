@@ -41,6 +41,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
   goal, criterion, slice, convergence, and verification state aligned.
 - Added a 13-case planning-integrity eval suite plus Codex and Claude Code parity
   coverage for portable, read-only plan analysis.
+- Added deterministic planning-integrity validation, in-memory negative fixtures,
+  and blocking PR and release CI gates for planning drift.
 
 ### Changed
 

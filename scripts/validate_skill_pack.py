@@ -51,6 +51,9 @@ def main():
     precedence_code = run("validate_policy_precedence.py")
     if precedence_code:
         sys.exit(precedence_code)
+    planning_integrity_code = run("validate_planning_integrity.py")
+    if planning_integrity_code:
+        sys.exit(planning_integrity_code)
     test_policy_code = run("validate_test_policy.py")
     if test_policy_code:
         sys.exit(test_policy_code)

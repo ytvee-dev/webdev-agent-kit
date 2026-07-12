@@ -61,6 +61,9 @@ jobs:
       - name: Validate policy precedence
         run: python scripts/validate_policy_precedence.py
 
+      - name: Validate planning integrity
+        run: python scripts/validate_planning_integrity.py
+
       - name: Validate test policy
         run: python scripts/validate_test_policy.py
 
