@@ -9,8 +9,11 @@ ROOT = Path(__file__).resolve().parents[1]
 INSTALL_DIR = ROOT / "docs" / "install"
 VIDEO_PLACEHOLDER = "Installation video coming soon."
 VSCODE_CODEX_VIDEO = (
-    '<video controls src="https://res.cloudinary.com/duyqvi0ig/video/upload/'
-    'v1783954898/vscode-codex_tpg1aq.mp4"></video>'
+    "[![Watch the VS Code Codex installation guide]"
+    "(https://res.cloudinary.com/duyqvi0ig/video/upload/"
+    "so_0,w_1280,c_limit,q_auto/v1783954898/vscode-codex_tpg1aq.jpg)]"
+    "(https://res.cloudinary.com/duyqvi0ig/video/upload/"
+    "v1783954898/vscode-codex_tpg1aq.mp4)"
 )
 GUIDE_CONTRACTS = {
     "codex": (

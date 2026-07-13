@@ -87,12 +87,13 @@ stable and versioned names of one target contain identical bytes.
 
 ## Quick Start
 
-Detailed installation instructions will be provided as videos:
+Detailed installation instructions are available, with videos published as
+they are completed:
 
 - [Codex — installation video coming soon](docs/install/codex.md)
 - [Claude Code — installation video coming soon](docs/install/claude-code.md)
 - [Cursor — installation video coming soon](docs/install/cursor.md)
-- [VS Code Codex — installation video coming soon](docs/install/vscode-codex.md)
+- [VS Code Codex — installation guide and video](docs/install/vscode-codex.md)
 - [VS Code Claude — installation video coming soon](docs/install/vscode-claude.md)
 
 The consolidated installation index is available in
