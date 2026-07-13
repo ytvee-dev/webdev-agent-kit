@@ -122,6 +122,37 @@ existing project instructions without approval. It does not create application
 source files or install packages, MCP servers, frameworks, or other tools
 automatically.
 
+For the best adaptation result:
+
+1. Add the repository-aware prompt from
+   [Custom instructions](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Custom-instructions)
+   to your coding client's personal or custom instructions. Keep the
+   project-local instructions enabled: the custom prompt complements them and
+   tells the agent to discover and follow the repository's own rules.
+2. Ask the agent to audit the tool capabilities available in the current
+   session and verify the recommended MCP servers or equivalent native tools.
+   Configuration alone is not proof that a server is available; the capability
+   must be callable or previously validated for the project.
+
+Recommended integrations depend on the project and active task:
+
+| Capability | Recommended provider | When it helps |
+| --- | --- | --- |
+| Current framework and library documentation | Context7 MCP | React, Next.js, TypeScript, package, CLI, and build-tool questions |
+| Rendered visual evidence | Browser or Playwright MCP | Opening the local app, checking responsive states, and capturing screenshots |
+| Next.js runtime diagnostics | Next DevTools MCP | Compatible Next.js projects only |
+
+The kit still works without MCP servers. Native file tools and targeted shell
+commands can support onboarding, planning, source changes, code review, and
+existing lint, typecheck, build, or test commands. Official web documentation
+can replace documentation MCP tools when needed. Without a callable browser
+provider, rendered visual QA, viewport checks, and screenshot evidence are
+unavailable; the agent can only perform source-level review and must report the
+lower confidence. Without Next DevTools MCP, Next.js runtime inspection is
+unavailable, but normal source work and project commands still work. Missing
+optional tools should be reported and skipped or replaced with an honest
+fallback, never installed automatically.
+
 ## Smart Context Cache and Token Efficiency
 
 The context cache is a set of verified project profiles and path indexes, not a
