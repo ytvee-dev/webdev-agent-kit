@@ -57,4 +57,4 @@ depends_on: []
 
 ## Video Installation Guide
 
-<video controls src="https://res.cloudinary.com/duyqvi0ig/video/upload/v1783954898/vscode-codex_tpg1aq.mp4"></video>
+[![Watch the VS Code Codex installation guide](https://res.cloudinary.com/duyqvi0ig/video/upload/so_0,w_1280,c_limit,q_auto/v1783954898/vscode-codex_tpg1aq.jpg)](https://res.cloudinary.com/duyqvi0ig/video/upload/v1783954898/vscode-codex_tpg1aq.mp4)
