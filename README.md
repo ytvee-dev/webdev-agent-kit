@@ -22,6 +22,8 @@
 - [What Changes After Installation](#what-changes-after-installation)
 - [Supported Clients](#supported-clients)
 - [Quick Start](#quick-start)
+- [Adapt the Kit to Your Project](#adapt-the-kit-to-your-project)
+- [Smart Context Cache and Token Efficiency](#smart-context-cache-and-token-efficiency)
 - [Verifying the Installation](#verifying-the-installation)
 - [Practical Scenarios](#practical-scenarios)
 - [Core Skills](#core-skills)
@@ -95,6 +97,64 @@ Detailed installation instructions will be provided as videos:
 
 The consolidated installation index is available in
 [Installation Guides](docs/install/README.md).
+
+## Adapt the Kit to Your Project
+
+After installation, open the project root in your coding agent and run this
+prompt once:
+
+```text
+Adapt this .agents bundle to my project.
+```
+
+The onboarding workflow detects the active client, project shape, framework,
+routes, styling system, verification commands, and available tool
+capabilities. It then creates or refreshes local-only `.agents/project/**`
+profiles and path indexes for the detected stack, architecture, styling,
+verification, design references, client, and tool capabilities.
+
+React and Next.js projects receive stack-specific path indexes. Other frontend
+stacks receive a limited profile that records the detected boundary and keeps
+only the framework-agnostic workflows that still apply.
+
+Onboarding keeps the native instruction pointer small and does not overwrite
+existing project instructions without approval. It does not create application
+source files or install packages, MCP servers, frameworks, or other tools
+automatically.
+
+## Smart Context Cache and Token Efficiency
+
+The context cache is a set of verified project profiles and path indexes, not a
+build cache or a cache of model responses. Onboarding creates the initial
+context, and later tasks consult the relevant overlays before searching the
+repository broadly. This gives the agent direct paths to known routes,
+components, styles, patterns, verification commands, and tool capabilities.
+
+When project facts change, the context workflow refreshes only the affected
+profiles and indexes. For example, after changing routes, components, styling,
+verification commands, documentation choices, or tool capabilities, use:
+
+```text
+Refresh project context after this layout change.
+```
+
+Token usage is reduced by selecting the smallest applicable workflow, starting
+from cached paths, using targeted searches, loading only the matching skill and
+required references, and stopping once there is enough evidence for the next
+safe action. Reports remain evidence-first and omit irrelevant logs, repeated
+conclusions, and process narration while preserving commands, errors,
+verification results, risks, and blockers.
+
+For long or resumable work, compact summaries preserve the objective,
+constraints, acceptance criteria, decisions, files and checks involved,
+verification results, blockers, and the next exact step. Optional loop memory
+organizes durable progress as `Tried`, `Verified`, and `Open`, so another session
+can continue without reconstructing the task from scratch.
+
+Cached facts remain local-only and never override current source code,
+configuration, CI, or real verification results. Stale facts must be refreshed,
+and the kit does not promise a fixed percentage of token savings; it reduces
+waste by avoiding unnecessary context and repeated repository scans.
 
 ## Verifying the Installation
 
