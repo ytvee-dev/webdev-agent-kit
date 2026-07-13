@@ -1,0 +1,68 @@
+name: Client compatibility report
+description: Report installation, discovery, archive, sandbox, or target-specific compatibility problems.
+title: "[Compatibility]: "
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Preliminary checks
+      options:
+        - label: I verified the archive against SHA256SUMS.
+          required: true
+        - label: I searched existing issues for this client and version.
+          required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: Target
+      options:
+        - Codex
+        - Claude Code
+        - Cursor
+        - VS Code Codex
+        - VS Code Claude
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Kit version and archive
+      placeholder: v0.4.0, webdev-agent-kit-codex.tar.gz
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Include OS, shell, client version, and installation mode.
+      placeholder: Windows 11, PowerShell, Codex extension, project-root extract
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected contract
+      description: List the expected paths, discovery result, or client behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Include exact errors and relevant paths.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Commands and checks
+      description: List exact commands and distinguish passed, failed, blocked, and skipped checks.
+    validations:
+      required: true

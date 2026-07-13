@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import sys
 from pathlib import Path
 
@@ -8,41 +7,20 @@ from build_release_archives import RELEASE_TARGETS
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTALL_DIR = ROOT / "docs" / "install"
+VIDEO_PLACEHOLDER = "Installation video coming soon."
 GUIDE_CONTRACTS = {
-    "codex": (
-        "ru-codex.md",
-        (".agents/AGENTS.md", ".agents/skills/", ".agents/.codex-plugin/plugin.json"),
-    ),
-    "claude-code": (
-        "ru-claude-code.md",
-        (
-            "~/.claude/skills/webdev-agent-kit/.claude-plugin/plugin.json",
-            "~/.claude/skills/webdev-agent-kit/skills/",
-            "claude --plugin-dir",
-        ),
-    ),
-    "cursor": (
-        "ru-cursor.md",
-        (".agents/AGENTS.md", ".agents/skills/", ".cursor/rules/webdev-agent-kit.mdc"),
-    ),
+    "codex": ("codex.md", "Install WebDev Agent Kit for Codex"),
+    "claude-code": ("claude-code.md", "Install WebDev Agent Kit for Claude Code"),
+    "cursor": ("cursor.md", "Install WebDev Agent Kit for Cursor"),
     "vs-code-codex": (
-        "ru-vscode-codex.md",
-        (".agents/AGENTS.md", ".agents/skills/", ".agents/.codex-plugin/plugin.json"),
+        "vscode-codex.md",
+        "Install WebDev Agent Kit for VS Code Codex",
     ),
     "vs-code-claude": (
-        "ru-vscode-claude.md",
-        (
-            "~/.claude/skills/webdev-agent-kit/.claude-plugin/plugin.json",
-            "~/.claude/skills/webdev-agent-kit/skills/",
-            "/plugins",
-        ),
+        "vscode-claude.md",
+        "Install WebDev Agent Kit for VS Code Claude",
     ),
 }
-
-
-def load_version():
-    manifest = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"))
-    return manifest["version"]
 
 
 def validate():
@@ -54,11 +32,10 @@ def validate():
     index = index_path.read_text(encoding="utf-8-sig")
     if "status: 'active'" not in index:
         errors.append("docs/install/README.md must be active")
-    if "not runtime policy" not in index and "не runtime policy" not in index:
+    if "not runtime policy" not in index:
         errors.append("Installation index must remain explicitly human-facing")
 
-    version = load_version()
-    for target, (file_name, required_paths) in GUIDE_CONTRACTS.items():
+    for file_name, heading in GUIDE_CONTRACTS.values():
         path = INSTALL_DIR / file_name
         if not path.is_file():
             errors.append(f"Missing installation guide: {path.relative_to(ROOT)}")
@@ -67,21 +44,14 @@ def validate():
             errors.append(f"Installation index does not link {file_name}")
 
         text = path.read_text(encoding="utf-8-sig")
-        stable = f"webdev-agent-kit-{target}.tar.gz"
-        versioned = f"webdev-agent-kit-{target}-v{version}.tar.gz"
         for required in (
             "status: 'active'",
-            stable,
-            versioned,
-            "SHA256SUMS",
-            *required_paths,
+            f"# {heading}",
+            f"> {VIDEO_PLACEHOLDER}",
         ):
             if required not in text:
-                errors.append(f"{file_name}: missing install contract {required!r}")
+                errors.append(f"{file_name}: missing guide contract {required!r}")
 
-        lowered = text.lower()
-        if "распакуйте архив в `.agents/`" in lowered:
-            errors.append(f"{file_name}: archive must not be extracted inside .agents")
         if "status: 'draft'" in text:
             errors.append(f"{file_name}: release guide must not remain draft")
 
@@ -94,7 +64,7 @@ def main():
         for error in errors:
             print(error)
         sys.exit(1)
-    print("Installation guides match release target and archive contracts.")
+    print("Installation video placeholders match release targets.")
 
 
 if __name__ == "__main__":

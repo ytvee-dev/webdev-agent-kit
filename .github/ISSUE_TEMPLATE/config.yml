@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ytvee-dev/webdev-agent-kit/security/policy
+    about: Report vulnerabilities through the private process in SECURITY.md.
+  - name: Code of Conduct concern
+    url: https://github.com/ytvee-dev/webdev-agent-kit/blob/main/CODE_OF_CONDUCT.md
+    about: Review the private reporting process before sharing sensitive details.

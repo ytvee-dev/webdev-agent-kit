@@ -18,7 +18,10 @@ from skill_common import (  # noqa: E402
 )
 
 SCHEMA_DIR = ROOT / "schemas"
-HUMAN_ONLY_MARKDOWN_FILES = {"README.md"}
+HUMAN_ONLY_MARKDOWN_FILES = {
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    "README.md",
+}
 
 
 class SchemaError(Exception):

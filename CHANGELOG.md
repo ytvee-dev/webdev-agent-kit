@@ -29,6 +29,10 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Added an open-source community foundation with governance, support, roadmap,
+  conduct, ownership, issue forms, and pull request guidance.
+- Added structured issue intake for agent behavior, client compatibility,
+  features, skills, and support questions.
 - Added stable goal, acceptance-criterion, and execution-slice identifiers for durable standard and deep planning contracts.
 - Added explicit `ENABLER` slices that must name the approved downstream work they unlock.
 - Added a compact clarification gate for standard and deep goals that asks at most three material questions, one at a time, and integrates accepted answers into the goal contract.
@@ -51,6 +55,14 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Reworked the root README as an English user-facing product guide with a logo,
+  two badges, and a linked table of contents while keeping runtime policy and
+  technical authority in their owning source layers.
+- Translated installation guides to English, moved them from `ru-*` filenames to
+  neutral client paths, replaced detailed steps with per-client video
+  placeholders, and aligned links and validators with the new paths.
+- Expanded contribution and security guidance for public participation,
+  risk-based review, supported releases, and coordinated disclosure.
 - Release target inspection now distinguishes legitimate `templates/project/**`
   source templates from forbidden root `project/**` runtime state.
 - Tagged release validation now requires non-empty `Unreleased` notes while ordinary branch validation continues to allow a clean post-release section.

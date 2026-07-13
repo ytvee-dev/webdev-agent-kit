@@ -1,0 +1,71 @@
+name: Skill, profile, or adapter proposal
+description: Propose a new workflow or a high-risk change that requires governance review.
+title: "[Proposal]: "
+body:
+  - type: markdown
+    attributes:
+      value: Read GOVERNANCE.md before submitting. Do not begin implementation until scope and acceptance criteria are accepted.
+  - type: dropdown
+    id: proposal_type
+    attributes:
+      label: Proposal type
+      options:
+        - New skill
+        - New profile
+        - New client adapter
+        - Runtime core or policy change
+        - Packaging or release contract change
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Recurring user problem or failure mode
+    validations:
+      required: true
+  - type: textarea
+    id: existing_gap
+    attributes:
+      label: Why existing workflows are insufficient
+      description: Explain why an existing skill or rule cannot safely cover this case.
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: Should-trigger examples
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: non_trigger
+    attributes:
+      label: Near-miss examples that must not trigger
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Affected contracts
+      description: List clients, stacks, layers, capabilities, manifests, and generated targets.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation and acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Compatibility, migration, and security risks
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true

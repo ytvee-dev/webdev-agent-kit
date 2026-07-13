@@ -1,351 +1,240 @@
-# WebDev Agent Kit
+<p align="center">
+  <img src="https://res.cloudinary.com/duyqvi0ig/image/upload/v1783949530/webdev-agent-kit-badge_ei4113.png" alt="WebDev Agent Kit" width="900">
+</p>
 
-A project-local operating kit for frontend coding agents.
+<h1 align="center">WebDev Agent Kit</h1>
 
-WebDev Agent Kit helps AI coding agents plan, implement, debug, refactor, review, and visually verify frontend work without broad rewrites, unapproved packages, fake verification, over-testing small tasks, or generic UI output.
+<p align="center">
+  <strong>A cross-platform frontend kit for Codex, Claude Code, and Cursor.</strong><br>
+  WebDev Agent Kit helps AI coding agents work predictably and safely with existing frontend projects.
+</p>
 
-Built for frontend projects that use React, Next.js, TypeScript, CSS Modules, Redux, TanStack, and Axios.
+<p align="center">
+  <img src="https://img.shields.io/badge/Skills-19-0ea5e9?style=flat-square" alt="Skills: 19">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" alt="License: Apache-2.0"></a>
+</p>
 
-## Download
+---
 
-Choose the package for your client from the latest GitHub release:
+## Table of Contents
 
-| Client | Download |
-| --- | --- |
-| Codex | [Download Codex package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-codex.tar.gz) |
-| Claude Code | [Download Claude Code package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-claude-code.tar.gz) |
-| Cursor | [Download Cursor package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-cursor.tar.gz) |
-| VS Code — Codex | [Download VS Code Codex package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-codex.tar.gz) |
-| VS Code — Claude | [Download VS Code Claude package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-claude.tar.gz) |
+- [Who It Is For](#who-it-is-for)
+- [What Changes After Installation](#what-changes-after-installation)
+- [Supported Clients](#supported-clients)
+- [Quick Start](#quick-start)
+- [Verifying the Installation](#verifying-the-installation)
+- [Practical Scenarios](#practical-scenarios)
+- [Core Skills](#core-skills)
+- [Architecture](#architecture)
+- [Project Validation](#project-validation)
+- [Contributing](#contributing)
+- [README Boundary](#readme-boundary)
+- [License](#license)
 
-Checksums are published as `SHA256SUMS` in the same release.
+## Who It Is For
 
-Archive roots are client-specific:
+WebDev Agent Kit is an open-source set of local rules. You continue using the
+familiar Codex, Claude Code, or Cursor, while connecting them to a shared
+standard for working with projects.
 
-- Codex and VS Code Codex extract to project-root `.agents/`;
-- Cursor extracts to project-root `.agents/` and `.cursor/`;
-- Claude Code and VS Code Claude extract as a native `webdev-agent-kit/` plugin.
+WebDev Agent Kit is intended for frontend developers and teams that use AI
+coding agents in React and Next.js projects and want to:
 
-## What It Is
-
-WebDev Agent Kit is not a UI library, component library, starter template, scaffolder, or test framework. It is a local instruction system that gives coding agents a safer operating model for frontend development.
-
-Use it when you want your coding agent to:
-
-- understand the current frontend project before changing it;
-- choose the right workflow for the task;
+- preserve the existing architecture and local conventions;
 - keep small tasks small;
-- avoid unapproved packages, tooling changes, and broad rewrites;
-- use MCP/tools only when their declared capabilities are available;
-- verify changes with real evidence and proportional effort;
-- preserve project-specific conventions across repeated work.
+- avoid broad rewrites and unapproved dependencies;
+- receive verification proportional to the change;
+- use the same baseline rules across different coding agents;
+- see real results and blockers instead of confident assumptions.
 
-## How It Improves Agent Work
+The stack profile supports React, Next.js, TypeScript, and the existing CSS
+Modules, Redux, TanStack, and Axios in the project. General planning, review,
+visual verification, and tooling workflows may apply more broadly, but the kit
+does not transfer React rules to another stack by analogy.
 
-The kit uses one client-neutral runtime core, thin native client adapters, and 19
-task skills. It helps GPT/Codex and Claude-based agents:
+## What Changes After Installation
 
-- load the smallest relevant policy and skill instead of the whole rule set;
-- resolve instruction conflicts through one explicit precedence order;
-- use verified project evidence before generic frontend defaults;
-- select tools by capability instead of provider name;
-- keep verification proportional to the changed surface;
-- return compact, fact-only handoffs with visible results and blockers.
+The agent receives a local decision-making system that:
 
-Static GPT/Claude parity evals cover routing, README and test boundaries, tool
-fallbacks, verification honesty, scope control, and output economy.
+- classifies the task and selects the smallest applicable workflow;
+- reads only the context required for the next safe action;
+- prefers facts from source files, configuration, and CI over general advice;
+- requests permission before installing packages, changing infrastructure, or
+  taking other actions outside the task;
+- performs the smallest meaningful verification of the changed surface;
+- separates related failures from existing ones and honestly reports unavailable
+  checks.
 
-## README Boundary
+The kit does not guarantee error-free model behavior. It makes the expected
+behavior, boundaries, and result verification explicit and auditable.
 
-This README is a human-facing guide only. It is not runtime policy, routing
-context, skill inventory, target-layout authority, or project context for agents.
+## Supported Clients
 
-Runtime policy lives in:
+Download the package for your client from the latest GitHub Release:
 
-```text
-AGENTS.md
-common/**
-skills/**
-templates/**
-project/** local overlays inside installed projects
-```
+| Client | Contract | Download |
+| --- | --- | --- |
+| Codex | Project bundle | [Codex package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-codex.tar.gz) |
+| Claude Code | Native plugin | [Claude Code package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-claude-code.tar.gz) |
+| Cursor | Project bundle + native rule | [Cursor package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-cursor.tar.gz) |
+| VS Code — Codex | Codex contract alias | [VS Code Codex package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-codex.tar.gz) |
+| VS Code — Claude | Claude Code contract alias | [VS Code Claude package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-claude.tar.gz) |
 
-Agents may read the relevant README sections when the task concerns project
-intent, setup, onboarding, an audit, or documentation drift. They should not read
-README by default for routing or every code change.
-
-README is not sufficient technical proof. Runtime results, source code,
-configuration, CI, package scripts, and lockfiles outrank README claims. If they
-conflict, use the higher evidence and report the documentation drift.
-
-Reading does not authorize editing. An existing README must not be edited unless
-the current user explicitly requests that README change. When authorized, keep
-the change human-facing and verify technical claims against higher evidence. See
-the [README read and edit policy](common/readme-policy.md).
+For each archive, the same release includes a checksum in `SHA256SUMS`. The
+stable and versioned names of one target contain identical bytes.
 
 ## Quick Start
 
-### 1. Verify And Extract A Client Package
+Detailed installation instructions will be provided as videos:
 
-Download the matching archive and verify it against `SHA256SUMS` from the same
-release.
+- [Codex — installation video coming soon](docs/install/codex.md)
+- [Claude Code — installation video coming soon](docs/install/claude-code.md)
+- [Cursor — installation video coming soon](docs/install/cursor.md)
+- [VS Code Codex — installation video coming soon](docs/install/vscode-codex.md)
+- [VS Code Claude — installation video coming soon](docs/install/vscode-claude.md)
 
-For Codex or VS Code Codex, extract from the frontend project root. The archive
-creates `.agents/` automatically.
+The consolidated installation index is available in
+[Installation Guides](docs/install/README.md).
 
-For Cursor, also extract from the project root. The archive creates both
-`.agents/` and `.cursor/`. Do not extract a project archive inside an existing
-`.agents/`, because that creates `.agents/.agents/`.
+## Verifying the Installation
 
-Expected project-bundle shape:
-
-```text
-your-project/
-├── .agents/
-│   ├── AGENTS.md
-│   ├── LICENSE
-│   ├── common/
-│   ├── skills/
-│   ├── templates/
-│   └── tool-capabilities-manifest.json
-└── .cursor/                         Cursor only
-    └── rules/webdev-agent-kit.mdc
-```
-
-For Claude Code or VS Code Claude, extract from `~/.claude/skills/` for a
-persistent personal skills-directory plugin. The archive must produce:
+Use this read-only smoke prompt:
 
 ```text
-~/.claude/skills/webdev-agent-kit/
-├── .claude-plugin/
-│   └── plugin.json
-├── adapters/
-├── common/
-├── profiles/
-├── skills/
-├── templates/
-└── tool-capabilities-manifest.json
+Verify the WebDev Agent Kit installation.
+Do not change the source code.
+Show the detected client, stack, available capabilities,
+local rules, and unavailable checks.
 ```
 
-Claude Code discovers it as `webdev-agent-kit@skills-dir` after restart. For a
-one-session local check, use:
+The response should contain facts about the detected target, confirmed stack,
+available tool capabilities, local overlays, and verification constraints. A
+missing tool must be reported as unavailable rather than presented as
+successfully used.
+
+## Practical Scenarios
+
+### Small CSS Change
+
+The kit directs the agent to make a local change and verify the affected
+surface. A decorative change should not automatically trigger an architecture
+plan, full build, development server, and browser QA.
+
+### Fixing a Frontend Bug
+
+The workflow first requires gathering evidence and forming one testable
+hypothesis, then fixing the smallest root cause and separating related failures
+from existing ones. An example request is available in
+[bugfix-refactor-review.md](examples/bugfix-refactor-review.md).
+
+### Building an Interface from Screenshots
+
+Screenshots and inspect notes are first converted into an implementation spec.
+The kit then applies visual direction, architecture, implementation, lint,
+rendered visual QA, and review only where they are actually needed. The full
+pipeline is shown in
+[screenshot-to-frontend.md](examples/screenshot-to-frontend.md).
+
+## Core Skills
+
+The bundle includes a client-neutral runtime core, an evidence-gated
+React/TypeScript profile, thin client adapters, and 19 task skills.
+
+| Task | Primary workflow |
+| --- | --- |
+| Adapt the kit to a project | `project-onboarding-adapter` |
+| Refresh local context | `project-context-adapter` |
+| Define a goal and plan | `goal-planner`, `execution-plan-manager` |
+| Plan a bounded loop | `loop-workflow-planner` |
+| Convert screenshots into a spec | `design-screenshot-spec` |
+| Establish visual direction | `frontend-design-intelligence`, `frontend-design-director` |
+| Design and implement UI | `frontend-architecture-planner`, `frontend-layout-implementer` |
+| Fix a defect | `frontend-bugfix-debugger` |
+| Perform a safe refactor | `frontend-refactor-surgeon` |
+| Check lint and UI | `frontend-linter-manager`, `frontend-visual-qa` |
+| Conduct an independent review | `frontend-quality-reviewer` |
+| Manage the capability model | `mcp-toolchain-manager` |
+| Evolve the bundle itself | `agent-rules-skill-author` |
+
+The tool model is based on capabilities, not provider names. A skill may require
+`project_files`, `current_library_docs`, `rendered_visual_evidence`, or another
+capability; it may be provided by an MCP server, native tool, connector, or
+approved fallback. The presence of a package or configuration does not prove
+that a tool is available.
+
+## Architecture
 
 ```text
-claude --plugin-dir /absolute/path/to/webdev-agent-kit
+AGENTS.md                         compact runtime entrypoint
+common/core/                     portable client-neutral core
+profiles/react-typescript/       evidence-gated stack defaults
+adapters/                        Codex, Claude Code, and Cursor differences
+skills/                          19 task workflows
+templates/                       goal, plan, loop, and project contracts
+schemas/                         machine-readable source contracts
+evals/                           static behavior fixtures
+scripts/                         validation, packaging, and release tooling
+docs/                            human-facing guides
 ```
 
-Runtime archives intentionally exclude human-facing repository files such as
-`README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `examples/`.
+`bundle-manifest.json` is the machine-readable source of target contracts.
+Generated `dist/**` is build output, not source truth. Project-local facts are
+stored in `.agents/project/**` in the installed project and are not published in
+the reusable bundle.
 
-### 2. Preserve Native Project Instructions
+## Project Validation
 
-For Codex and VS Code Codex, a project may use a minimal root `AGENTS.md`
-pointer:
-
-```md
-# AGENTS.md
-
-Use the project-local agent policy in `.agents/AGENTS.md`.
-```
-
-Add or merge this pointer only with explicit user confirmation. Never overwrite
-existing root instructions.
-
-Cursor already receives `.cursor/rules/webdev-agent-kit.mdc`, which points to
-the shared project policy. Claude Code discovers skills through the native
-plugin and does not require `.agents/skills` or a root pointer.
-
-If a Claude project separately uses `.agents/AGENTS.md`, propose this exact
-root `CLAUDE.md` import:
-
-```text
-@.agents/AGENTS.md
-```
-
-Create or merge it only after explicit user approval. Plugin installation never
-authorizes project-instruction edits.
-
-### 3. Ask The Agent To Adapt
-
-```text
-адаптируйся
-```
-
-or:
-
-```text
-Adapt the installed WebDev Agent Kit to the current frontend project.
-```
-
-Expected onboarding result:
-
-- the agent detects the installed client target and frontend stack from evidence;
-- creates or refreshes only approved local `.agents/project/**` overlays;
-- records client and tool capability facts without treating provider names as proof;
-- preserves existing project instructions and application source;
-- does not install packages, MCP servers, or test infrastructure without approval;
-- does not edit an existing README without an explicit current request.
-
-## Installation Guides
-
-Maintained Russian installation guides:
-
-- [Codex](docs/install/ru-codex.md)
-- [Claude Code](docs/install/ru-claude-code.md)
-- [Cursor](docs/install/ru-cursor.md)
-- [VS Code Codex](docs/install/ru-vscode-codex.md)
-- [VS Code Claude](docs/install/ru-vscode-claude.md)
-
-The guide index also records the archive root and native entrypoint for every
-release target: [Installation Guides](docs/install/README.md).
-
-## Main Workflows
-
-| User need | Primary skill | Notes |
-| --- | --- | --- |
-| Adapt the kit to a project | `project-onboarding-adapter` | Creates or refreshes local-only project overlays when approved. |
-| Refresh stale project context | `project-context-adapter` | Updates only affected `.agents/project/**` facts. |
-| Define a goal before work | `goal-planner` | Standard/deep work only. Not for tiny fixes. |
-| Split work into slices | `execution-plan-manager` | Adds context budget, verification per slice, stop/resume state. |
-| Plan bounded iteration | `loop-workflow-planner` | Required for measurable retry loops and independent review contracts. |
-| Convert screenshots into spec | `design-screenshot-spec` | Screenshot/inspect/assets only. No live Figma workflow. |
-| Ground design choices | `frontend-design-intelligence` | Product category, page pattern, design dials, anti-patterns. |
-| Define visual direction | `frontend-design-director` | Design Direction Contract before implementation. |
-| Plan frontend architecture | `frontend-architecture-planner` | React/Next target-stack architecture decisions. |
-| Implement approved UI spec | `frontend-layout-implementer` | React/Next implementation with existing project conventions. |
-| Fix frontend defects | `frontend-bugfix-debugger` | Evidence-first, one hypothesis, smallest fix. |
-| Refactor safely | `frontend-refactor-surgeon` | Behavior-preserving refactors only. |
-| Run lint verification | `frontend-linter-manager` | Uses existing lint command; no setup without approval. |
-| Verify rendered UI | `frontend-visual-qa` | Rendered evidence only when visual QA is in scope. |
-| Review frontend quality | `frontend-quality-reviewer` | Evidence-backed verdict and severity labels. |
-| Manage MCP/tool capability | `mcp-toolchain-manager` | Missing tools, official sources, approval gates. |
-| Maintain reusable patterns | `pattern-library-manager` | Adds or tightens approved patterns and anti-patterns with examples. |
-| Maintain the kit | `agent-rules-skill-author` | Skills, rules, manifests, validators, and packaging. |
-| Plan new frontend project | `greenfield-project-builder` | Deep workflow; approval gates before scaffolding. |
-
-## Tool And MCP Model
-
-The kit is capability-first, not server-name-first.
-
-A skill declares a capability such as:
-
-```text
-project_files
-current_library_docs
-web_platform_docs
-rendered_visual_evidence
-repo_metadata
-```
-
-The current client may satisfy that capability through MCP, native tools, a connector, or a targeted fallback.
-
-Rules:
-
-- use declared MCP/tools when they are available;
-- do not pretend a missing tool is available;
-- do not infer MCP availability from package files, lockfiles, local dependencies, open ports, or a running app;
-- do not install or configure MCP servers without explicit approval and verified official sources;
-- report blocked checks and confidence impact when falling back.
-
-## Verification Model
-
-Verification should be proportional to the change.
-
-Small CSS-only background, color, border-color, or decorative mask changes should not trigger full repository lint, typecheck, dev server startup, route discovery, or browser QA by default.
-
-Rendered visual QA is used only when browser evidence is explicitly required, the task is a visual implementation/review, or repeated visual failure justifies escalation.
-
-On Windows, PowerShell `.ps1` package-manager blocks and sandbox access errors must be classified separately from code failures. Agents may use one equivalent `.cmd` fallback or one approved out-of-sandbox attempt when available, then must stop and report blocked verification instead of repeating the same command class.
-
-## Important Anti-Patterns
-
-The bundle blocks common frontend-agent failure modes:
-
-- broad rewrites from narrow requests;
-- unnecessary planning for tiny fixes;
-- fake verification claims;
-- generic SaaS UI defaults;
-- unapproved package installation;
-- unapproved MCP installation;
-- unapproved Figma MCP usage;
-- creating or editing component, function, unit, integration, E2E, or visual regression tests by default;
-- repeating npm, build, dev-server, browser, Vite, esbuild, SWC, or Playwright commands after the same Windows shell or sandbox blocker;
-- moving server communication, domain workflow, or data processing into Redux by default;
-- parallel lifecycle booleans instead of one typed status discriminant;
-- `useCallback` without a proven identity-sensitive consumer;
-- editing host README or docs as implementation scope creep.
-
-## Release Targets
-
-The release workflow builds stable and versioned artifacts for three canonical
-runtime contracts and two compatibility aliases:
-
-| Download | Contract | Archive root |
-| --- | --- | --- |
-| Codex | Canonical project bundle | `.agents/` |
-| Claude Code | Canonical native plugin | `webdev-agent-kit/` |
-| Cursor | Canonical project bundle | `.agents/` and `.cursor/` |
-| VS Code Codex | Codex alias | `.agents/` |
-| VS Code Claude | Claude Code alias | `webdev-agent-kit/` |
-
-All runtime targets exclude human-facing docs and examples. Stable and versioned
-archive pairs must be byte-identical, and `SHA256SUMS` must contain exactly all
-ten release archives without duplicates or unexpected entries.
-
-The workflow also keeps legacy `dist/codex` and `dist/claude` generated targets for current validators.
-
-## Maintenance
-
-### Validate the source bundle
+Primary commands:
 
 ```bash
 python scripts/validate_source_bundle.py
-```
-
-### Validate README boundary
-
-```bash
 python scripts/check_readme_boundary.py
-```
-
-### Check Markdown links
-
-```bash
 python scripts/check_links.py
-```
-
-### Build portable targets
-
-```bash
-python scripts/build_skill_targets.py
-```
-
-### Validate the full skill pack
-
-```bash
+python scripts/validate_install_guides.py
 python scripts/validate_skill_pack.py
 ```
 
-### Release
-
-Validate the tag against source metadata, then push it only after approval:
-
-```bash
-python scripts/validate_release_tag.py --tag v0.3.0
-git tag v0.3.0
-git push origin v0.3.0
-```
-
-The release workflow builds and publishes the client packages listed in the Download section.
+CI separately checks Markdown, YAML, Python, schemas, graph links, tool
+capabilities, runtime layers, context budgets, generated targets, and release
+archives.
 
 ## Contributing
 
-Contributions should keep README, `AGENTS.md`, `bundle-manifest.json`, `.codex-plugin/plugin.json`, skills, references, validators, and release targets aligned.
+Reproducible cases of incorrect agent behavior, compatibility reports,
+negative-trigger evals, documentation improvements, and archive checks in real
+projects are especially useful.
 
-Do not publish host-project facts from `.agents/project/**` into the reusable bundle.
+- [Contributing Guide](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Governance](GOVERNANCE.md)
+- [Support](SUPPORT.md)
+- [Roadmap](ROADMAP.md)
+- [Security Policy](SECURITY.md)
 
-Do not patch generated `dist/**` output directly. Update source files, then regenerate distribution output through the repository release process.
+Before opening a pull request, run the checks relevant to the changed layer and
+provide the exact commands and results. Changes to the runtime core, scripts,
+packaging, and approval boundaries require stricter review than documentation
+fixes and examples.
+
+## README Boundary
+
+This README is a user-facing guide. It is not runtime policy, routing input,
+source truth for the skill inventory or target layout, or project context for
+agents. Runtime rules live in `AGENTS.md`, `common/**`, `skills/**`,
+`templates/**`, and local `project/**` overlays.
+
+Agents may read the relevant README sections when the task concerns project
+intent, installation, onboarding, an audit, or documentation drift. README is
+not sufficient technical proof. Runtime results, source code, configuration,
+CI, package scripts, and lockfiles have higher priority.
+
+Reading does not authorize editing. An existing README must not be edited unless
+the current user explicitly requests that README change. Authorized edits must
+remain user-facing documentation, and their technical claims must be verified
+against stronger evidence. The full contract is documented in the
+[README read and edit policy](common/readme-policy.md).
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE).
+WebDev Agent Kit is distributed under the Apache-2.0 license. See
+[LICENSE](LICENSE).

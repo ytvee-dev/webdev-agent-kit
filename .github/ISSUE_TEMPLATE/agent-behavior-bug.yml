@@ -1,0 +1,104 @@
+name: Agent behavior bug
+description: Report reproducible coding-agent behavior that violates an expected kit rule.
+title: "[Behavior]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for providing a reproducible case. Remove secrets, private source, customer data, and personal information before submitting.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Preliminary checks
+      options:
+        - label: I searched existing issues for the same behavior.
+          required: true
+        - label: I can share this report and its evidence publicly.
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: WebDev Agent Kit version
+      description: Provide the release tag, commit, or archive name.
+      placeholder: v0.4.0
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: Agent or client
+      options:
+        - Codex
+        - Claude Code
+        - Cursor
+        - VS Code Codex
+        - VS Code Claude
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: stack
+    attributes:
+      label: Project stack
+      description: List relevant frameworks, languages, state, styling, and build tools.
+      placeholder: Next.js, TypeScript, CSS Modules
+    validations:
+      required: true
+  - type: textarea
+    id: prompt
+    attributes:
+      label: User request or minimal prompt
+      description: Share the smallest prompt that reproduces the behavior.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Describe the workflow, boundary, or result you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Describe what the agent did instead.
+    validations:
+      required: true
+  - type: input
+    id: workflow
+    attributes:
+      label: Selected workflow or skill
+      description: Provide the detected workflow if known; otherwise write unknown.
+    validations:
+      required: true
+  - type: textarea
+    id: tools
+    attributes:
+      label: Tool availability
+      description: List available, unavailable, and blocked capabilities or tools.
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files changed
+      description: List changed paths or state that no files were changed.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification evidence
+      description: List exact commands, results, screenshots, and blocked or skipped checks.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction or public fixture
+      description: Link a public repository or provide enough sanitized context to reproduce.
+    validations:
+      required: false

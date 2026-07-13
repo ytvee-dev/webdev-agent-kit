@@ -38,7 +38,10 @@ REMOVED_TERMS = (
     "react-state-workflow",
     "frontend-review-and-fix",
 )
-HUMAN_ONLY_MARKDOWN_FILES = {"README.md"}
+HUMAN_ONLY_MARKDOWN_FILES = {
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    "README.md",
+}
 LOCAL_ONLY_WIKILINK_PREFIXES = ("project/",)
 OPTIONAL_ORPHAN_PATH_PREFIXES = ("examples/",)
 
