@@ -76,6 +76,8 @@ def validate_member_inventory(target, members):
             errors.append(f"{target}: Claude plugin must not use .agents/skills")
         if "webdev-agent-kit/.claude-plugin/plugin.json" not in names:
             errors.append(f"{target}: native Claude plugin manifest is missing")
+        if "webdev-agent-kit/.claude-plugin/marketplace.json" not in names:
+            errors.append(f"{target}: Claude marketplace manifest is missing")
         if any("/.codex-plugin/" in name for name in names):
             errors.append(f"{target}: Claude archive contains Codex plugin metadata")
     else:
@@ -148,6 +150,36 @@ def extract_and_validate(target, archive, members, destination):
             != version
         ):
             errors.append(f"{target}: native plugin version mismatch")
+
+    if target in CLAUDE_TARGETS:
+        marketplace_path = runtime_root / ".claude-plugin" / "marketplace.json"
+        try:
+            marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            plugins = marketplace.get("plugins")
+            if marketplace.get("name") != "webdev-agent-kit":
+                errors.append(f"{target}: Claude marketplace name mismatch")
+            if not isinstance(plugins, list) or len(plugins) != 1:
+                errors.append(
+                    f"{target}: Claude marketplace must contain exactly one plugin"
+                )
+            else:
+                entry = plugins[0]
+                if entry.get("name") != "webdev-agent-kit":
+                    errors.append(f"{target}: Claude marketplace plugin name mismatch")
+                if entry.get("source") != "./":
+                    errors.append(f"{target}: Claude marketplace source must be './'")
+                marketplace_root = (runtime_root / entry.get("source", "")).resolve()
+                if (
+                    not marketplace_root.is_relative_to(runtime_root.resolve())
+                    or not (
+                        marketplace_root / ".claude-plugin" / "plugin.json"
+                    ).is_file()
+                ):
+                    errors.append(
+                        f"{target}: Claude marketplace source does not resolve to the plugin root"
+                    )
+        except Exception as exc:
+            errors.append(f"{target}: cannot validate Claude marketplace: {exc}")
 
     for markdown in runtime_root.rglob("*.md"):
         text = markdown.read_text(encoding="utf-8-sig")

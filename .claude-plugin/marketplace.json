@@ -1,0 +1,12 @@
+{
+  "name": "webdev-agent-kit",
+  "owner": {
+    "name": "Yevgeniy Tyan"
+  },
+  "plugins": [
+    {
+      "name": "webdev-agent-kit",
+      "source": "./"
+    }
+  ]
+}

@@ -7,29 +7,35 @@ from build_release_archives import RELEASE_TARGETS
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTALL_DIR = ROOT / "docs" / "install"
-VIDEO_PLACEHOLDER = "Installation video coming soon."
+CURSOR_VIDEO = (
+    "[![Watch the Cursor installation video guide]"
+    "(https://res.cloudinary.com/duyqvi0ig/video/upload/"
+    "so_0,w_1280,c_limit,q_auto/v1784235087/cursor_qj5lqq.jpg)]"
+    "(https://res.cloudinary.com/duyqvi0ig/video/upload/"
+    "v1784235087/cursor_qj5lqq.mp4)"
+)
 VSCODE_CODEX_VIDEO = (
-    "[![Watch the VS Code Codex installation guide]"
+    "[![Watch the VS Code Codex installation video guide]"
     "(https://res.cloudinary.com/duyqvi0ig/video/upload/"
-    "so_0,w_1280,c_limit,q_auto/v1783954898/vscode-codex_tpg1aq.jpg)]"
+    "so_0,w_1280,c_limit,q_auto/v1784235091/vs-code-codex_ilqrde.jpg)]"
     "(https://res.cloudinary.com/duyqvi0ig/video/upload/"
-    "v1783954898/vscode-codex_tpg1aq.mp4)"
+    "v1784235091/vs-code-codex_ilqrde.mp4)"
 )
 GUIDE_CONTRACTS = {
     "codex": (
         "codex.md",
         "Install WebDev Agent Kit for Codex",
-        f"> {VIDEO_PLACEHOLDER}",
+        None,
     ),
     "claude-code": (
         "claude-code.md",
         "Install WebDev Agent Kit for Claude Code",
-        f"> {VIDEO_PLACEHOLDER}",
+        None,
     ),
     "cursor": (
         "cursor.md",
         "Install WebDev Agent Kit for Cursor",
-        f"> {VIDEO_PLACEHOLDER}",
+        CURSOR_VIDEO,
     ),
     "vs-code-codex": (
         "vscode-codex.md",
@@ -39,9 +45,49 @@ GUIDE_CONTRACTS = {
     "vs-code-claude": (
         "vscode-claude.md",
         "Install WebDev Agent Kit for VS Code Claude",
-        f"> {VIDEO_PLACEHOLDER}",
+        None,
     ),
 }
+GUIDE_REQUIRED_TERMS = {
+    "codex": (
+        "webdev-agent-kit-codex.tar.gz",
+        "/.agents/",
+        "/AGENTS.md",
+        ".agents/project/",
+    ),
+    "claude-code": (
+        "webdev-agent-kit-claude-code.tar.gz",
+        ".claude-plugin/marketplace.json",
+        "claude plugin marketplace add",
+        "webdev-agent-kit@webdev-agent-kit",
+        "--scope user",
+    ),
+    "cursor": (
+        "webdev-agent-kit-cursor.tar.gz",
+        "/.agents/",
+        "/.cursor/rules/webdev-agent-kit.mdc",
+        ".agents/project/",
+    ),
+    "vs-code-codex": (
+        "webdev-agent-kit-vs-code-codex.tar.gz",
+        "/.agents/",
+        "/AGENTS.md",
+        ".agents/project/",
+    ),
+    "vs-code-claude": (
+        "webdev-agent-kit-vs-code-claude.tar.gz",
+        ".claude-plugin/marketplace.json",
+        "/plugins",
+        "Install for you",
+        "webdev-agent-kit@webdev-agent-kit",
+    ),
+}
+VIDEO_TERMS = ("video", "видео")
+
+
+def contains_video_term(text):
+    lowered = text.lower()
+    return any(term in lowered for term in VIDEO_TERMS)
 
 
 def validate():
@@ -56,7 +102,7 @@ def validate():
     if "not runtime policy" not in index:
         errors.append("Installation index must remain explicitly human-facing")
 
-    for file_name, heading, video_contract in GUIDE_CONTRACTS.values():
+    for target, (file_name, heading, video_contract) in GUIDE_CONTRACTS.items():
         path = INSTALL_DIR / file_name
         if not path.is_file():
             errors.append(f"Missing installation guide: {path.relative_to(ROOT)}")
@@ -65,16 +111,43 @@ def validate():
             errors.append(f"Installation index does not link {file_name}")
 
         text = path.read_text(encoding="utf-8-sig")
-        for required in (
-            "status: 'active'",
-            f"# {heading}",
-            video_contract,
-        ):
+        for required in ("status: 'active'", f"# {heading}"):
             if required not in text:
                 errors.append(f"{file_name}: missing guide contract {required!r}")
+        for required in GUIDE_REQUIRED_TERMS[target]:
+            if required not in text:
+                errors.append(f"{file_name}: missing installation step {required!r}")
+
+        if video_contract is None:
+            if contains_video_term(text):
+                errors.append(
+                    f"{file_name}: installation video is allowed only for "
+                    "Cursor and VS Code Codex"
+                )
+        elif video_contract not in text:
+            errors.append(f"{file_name}: missing video contract {video_contract!r}")
 
         if "status: 'draft'" in text:
             errors.append(f"{file_name}: release guide must not remain draft")
+
+    for forbidden in (
+        "Codex — video guide",
+        "Claude Code — video guide",
+        "VS Code Claude — video guide",
+    ):
+        if forbidden in index:
+            errors.append(
+                f"docs/install/README.md: forbidden video entry {forbidden!r}"
+            )
+
+    root_readme = (ROOT / "README.md").read_text(encoding="utf-8-sig")
+    for forbidden in (
+        "[Codex — video",
+        "[Claude Code — video",
+        "[VS Code Claude — video",
+    ):
+        if forbidden in root_readme:
+            errors.append(f"README.md: forbidden video entry {forbidden!r}")
 
     return errors
 
@@ -85,7 +158,7 @@ def main():
         for error in errors:
             print(error)
         sys.exit(1)
-    print("Installation guide video contracts match release targets.")
+    print("Installation guides and client video contracts are valid.")
 
 
 if __name__ == "__main__":

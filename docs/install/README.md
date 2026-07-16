@@ -9,26 +9,36 @@ local_only: false
 tags:
     - 'docs/install'
 parent:
-    - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
+    - '[[docs/README|WebDev Agent Kit Documentation]]'
 related:
-    - '[[docs/install/codex|Codex Install Guide]]'
-    - '[[docs/install/claude-code|Claude Code Install Guide]]'
-    - '[[docs/install/cursor|Cursor Install Guide]]'
-    - '[[docs/install/vscode-codex|VS Code Codex Install Guide]]'
-    - '[[docs/install/vscode-claude|VS Code Claude Install Guide]]'
+    - '[[docs/install/codex|Install for Codex]]'
+    - '[[docs/install/claude-code|Install for Claude Code]]'
+    - '[[docs/install/cursor|Install for Cursor]]'
+    - '[[docs/install/vscode-codex|Install for VS Code Codex]]'
+    - '[[docs/install/vscode-claude|Install for VS Code Claude]]'
+    - '[[docs/mcp/README|MCP for WebDev Agent Kit]]'
 depends_on: []
 ---
 
 # Installation Guides
 
-Detailed installation instructions will be provided as videos.
+[← All documentation](../README.md) · [MCP setup](../mcp/README.md)
 
-- [Codex — video coming soon](codex.md)
-- [Claude Code — video coming soon](claude-code.md)
-- [Cursor — video coming soon](cursor.md)
-- [VS Code Codex — video coming soon](vscode-codex.md)
-- [VS Code Claude — video coming soon](vscode-claude.md)
+Choose a client:
 
-These are human-facing installation instructions, not runtime policy or target
-layout authority. `bundle-manifest.json`, the target builder, and archive
-validators define the release contract.
+- [Codex](codex.md)
+- [Claude Code](claude-code.md)
+- [Cursor](cursor.md)
+- [VS Code Codex](vscode-codex.md)
+- [VS Code Claude](vscode-claude.md)
+
+## Video Guides
+
+- [Cursor — text and video guide](cursor.md)
+- [VS Code Codex — text and video guide](vscode-codex.md)
+
+These are user-facing installation guides, not runtime policy or the source of
+truth for target package structure. The release contract is defined by
+`bundle-manifest.json`, the target package builder, and the archive validators.
+
+[← All documentation](../README.md) · [MCP for WebDev Agent Kit](../mcp/README.md)

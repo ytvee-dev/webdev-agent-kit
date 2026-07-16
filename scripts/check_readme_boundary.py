@@ -20,10 +20,10 @@ SCAN_ROOTS = (
 )
 EXCLUDED_PARTS = {"dist", "project", "node_modules", ".obsidian"}
 README_REQUIRED_PHRASES = (
-    "Agents may read the relevant README sections when the task concerns",
-    "README is not sufficient technical proof.",
+    "Agents may read relevant README sections when the task concerns",
+    "README is not sufficient as technical evidence.",
     "Reading does not authorize editing.",
-    "An existing README must not be edited unless the current user explicitly requests that README change.",
+    "An existing README must not be edited unless the user's current request explicitly asks to change that README.",
 )
 EVIDENCE_ORDER = (
     "Real run or test result.",
@@ -53,6 +53,10 @@ ABSOLUTE_READ_BANS = (
         r"\bask\s+the\s+user\s+to\s+paste\s+.*README",
         re.IGNORECASE,
     ),
+    re.compile(
+        r"\bникогда\s+не\s+(?:читай|открывай|проверяй|сканируй|ищи)\s+.*README",
+        re.IGNORECASE,
+    ),
 )
 POSITIVE_AUTHORITY_PATTERNS = (
     re.compile(
@@ -72,6 +76,10 @@ POSITIVE_AUTHORITY_PATTERNS = (
         r"\buse\s+README\s+for\s+(?:routing|skill selection|validation|package inventory)",
         re.IGNORECASE,
     ),
+    re.compile(
+        r"\bREADME\s+является\s+(?:единственным\s+)?(?:runtime-)?(?:источником|истиной|входом)",
+        re.IGNORECASE,
+    ),
 )
 AUTOMATIC_EDIT_PATTERNS = (
     re.compile(
@@ -83,6 +91,10 @@ AUTOMATIC_EDIT_PATTERNS = (
         re.IGNORECASE,
     ),
     re.compile(r"\bkeep\s+.*README.*in\s+sync\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:автоматически|автономно)\s+(?:редактировать|обновлять|переписывать|синхронизировать)\s+.*README",
+        re.IGNORECASE,
+    ),
 )
 NEGATIVE_GUARDS = (
     "do not",
@@ -96,6 +108,11 @@ NEGATIVE_GUARDS = (
     "unless the current user",
     "only when the user",
     "only when the current user",
+    "не является",
+    "недостаточно",
+    "не разрешает",
+    "нельзя",
+    "только если",
 )
 
 

@@ -242,6 +242,37 @@ def validate_skill_inventory(errors):
             errors.append(f"skills/{skill_dir.name}: {output}")
 
 
+def validate_claude_marketplace(errors):
+    plugin_path = ROOT / ".claude-plugin" / "plugin.json"
+    marketplace_path = ROOT / ".claude-plugin" / "marketplace.json"
+    try:
+        plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+        marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        errors.append(f"Invalid Claude plugin marketplace metadata: {exc}")
+        return
+
+    if marketplace.get("name") != plugin.get("name"):
+        errors.append("Claude marketplace name must match the plugin name")
+    if marketplace.get("owner", {}).get("name") != plugin.get("author", {}).get("name"):
+        errors.append("Claude marketplace owner must match the plugin author")
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list) or len(plugins) != 1:
+        errors.append("Claude marketplace must contain exactly one plugin")
+        return
+    entry = plugins[0]
+    if entry.get("name") != plugin.get("name"):
+        errors.append("Claude marketplace entry must match the plugin name")
+    if entry.get("source") != "./":
+        errors.append("Claude marketplace plugin source must be './'")
+    plugin_root = (ROOT / entry.get("source", "")).resolve()
+    if (
+        not plugin_root.is_relative_to(ROOT.resolve())
+        or not (plugin_root / ".claude-plugin" / "plugin.json").is_file()
+    ):
+        errors.append("Claude marketplace entry does not resolve to the plugin root")
+
+
 def validate_skill_path_mentions(errors):
     actual = {path.name for path in skill_directories()}
     for path in markdown_files():
@@ -283,6 +314,7 @@ def validate():
     validate_license(errors)
     validate_markdown(errors)
     validate_skill_inventory(errors)
+    validate_claude_marketplace(errors)
     validate_skill_path_mentions(errors)
     validate_positive_project_paths(errors)
     return errors

@@ -20,6 +20,7 @@ FORBIDDEN_SKILL_TERMS = (
 )
 REQUIRED_ROOT_FILES = (
     ".claude-plugin/plugin.json",
+    ".claude-plugin/marketplace.json",
     "LICENSE",
     "adapters/claude-code.md",
     "common/core/runtime-core-policy.md",
@@ -88,6 +89,9 @@ def validate_manifest(errors):
         plugin = json.loads(
             (TARGET / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")
         )
+        marketplace = json.loads(
+            (TARGET / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8")
+        )
     except Exception as exc:
         errors.append(f"Cannot read Claude plugin metadata: {exc}")
         return
@@ -99,6 +103,26 @@ def validate_manifest(errors):
             errors.append(
                 f"Claude plugin manifest {field} must match bundle-manifest.json"
             )
+
+    if marketplace.get("name") != plugin.get("name"):
+        errors.append("Claude marketplace name must match the plugin name")
+    if marketplace.get("owner", {}).get("name") != plugin.get("author", {}).get("name"):
+        errors.append("Claude marketplace owner must match the plugin author")
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list) or len(plugins) != 1:
+        errors.append("Claude marketplace must contain exactly one plugin")
+        return
+    entry = plugins[0]
+    if entry.get("name") != plugin.get("name"):
+        errors.append("Claude marketplace entry must match the plugin name")
+    if entry.get("source") != "./":
+        errors.append("Claude marketplace plugin source must be './'")
+    plugin_root = (TARGET / entry.get("source", "")).resolve()
+    if (
+        not plugin_root.is_relative_to(TARGET.resolve())
+        or not (plugin_root / ".claude-plugin" / "plugin.json").is_file()
+    ):
+        errors.append("Claude marketplace entry does not resolve to the plugin root")
 
 
 def validate_aliases(errors):
