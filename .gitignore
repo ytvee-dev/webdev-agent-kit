@@ -6,10 +6,13 @@
 /dist/
 /dist/**
 
-# Publish only maintained installation, architecture, and release documentation.
+# Publish only maintained documentation indexes, guides, architecture, and release notes.
 /docs/*
+!/docs/README.md
 !/docs/install/
 !/docs/install/**
+!/docs/mcp/
+!/docs/mcp/**
 !/docs/architecture/
 !/docs/architecture/**
 !/docs/release/
