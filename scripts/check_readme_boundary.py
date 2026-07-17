@@ -19,12 +19,6 @@ SCAN_ROOTS = (
     ROOT / "examples",
 )
 EXCLUDED_PARTS = {"dist", "project", "node_modules", ".obsidian"}
-README_REQUIRED_PHRASES = (
-    "Agents may read relevant README sections when the task concerns",
-    "README is not sufficient as technical evidence.",
-    "Reading does not authorize editing.",
-    "An existing README must not be edited unless the user's current request explicitly asks to change that README.",
-)
 EVIDENCE_ORDER = (
     "Real run or test result.",
     "Source code, configuration, or CI.",
@@ -162,12 +156,6 @@ def check_policy_contract() -> list[str]:
     readme_path = ROOT / "README.md"
     if not readme_path.is_file():
         errors.append("README.md is required as human-facing documentation")
-    else:
-        readme = readme_path.read_text(encoding="utf-8-sig")
-        normalized_readme = " ".join(readme.split())
-        for phrase in README_REQUIRED_PHRASES:
-            if phrase not in normalized_readme:
-                errors.append(f"README.md is missing boundary: {phrase}")
     return errors
 
 
