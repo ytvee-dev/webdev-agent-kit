@@ -27,14 +27,13 @@
 - [Smart Context Cache and Token Savings](#smart-context-cache-and-token-savings)
 - [Verifying the Installation](#verifying-the-installation)
 - [Practical Scenarios](#practical-scenarios)
-  - [A Small CSS Change](#a-small-css-change)
-  - [Fixing a Frontend Bug](#fixing-a-frontend-bug)
-  - [Building an Interface from Screenshots](#building-an-interface-from-screenshots)
+	- [A Small CSS Change](#a-small-css-change)
+	- [Fixing a Frontend Bug](#fixing-a-frontend-bug)
+	- [Building an Interface from Screenshots](#building-an-interface-from-screenshots)
 - [Core Skills](#core-skills)
 - [Architecture](#architecture)
 - [Project Validation](#project-validation)
 - [Contributing](#contributing)
-- [README Boundaries](#readme-boundaries)
 - [License](#license)
 
 ## Who This Kit Is For
@@ -323,24 +322,6 @@ Before opening a pull request, run the checks appropriate to the changed layer
 and provide the exact commands and results. Changes to the runtime core, scripts,
 packaging, and permission boundaries require stricter review than documentation
 and example changes.
-
-## README Boundaries
-
-This README is a user guide. It is not runtime policy, a routing entrypoint, the
-source of truth for the skill inventory or target structure, or project context
-for agents. Runtime rules live in `AGENTS.md`, `common/**`, `skills/**`,
-`templates/**`, and local `project/**` overlays.
-
-Agents may read relevant README sections when the task concerns project purpose,
-installation, onboarding, auditing, or documentation drift. README is not
-sufficient as technical evidence. Runtime outputs, source files, configuration,
-CI, package scripts, and lockfiles have higher authority.
-
-Reading does not authorize editing. An existing README must not be edited unless
-the user's current request explicitly asks to change that README. Allowed edits
-must remain user documentation, and their technical claims must be verified
-against stronger sources. The full contract is in the
-[README read and edit policy](common/readme-policy.md).
 
 ## License
 
