@@ -5,11 +5,12 @@ import argparse
 import hashlib
 import json
 import os
+import platform
 import shutil
 import signal
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ROOT / "evals/live/scenarios.json"
@@ -38,20 +39,37 @@ def prepare(case, target, output):
     generated = ROOT / "dist" / target
     if not generated.is_dir():
         raise ValueError("Build portable targets before preparing a run")
+    for name, content in case.get("files", {}).items():
+        path = PurePosixPath(name)
+        if (
+            not name
+            or name != path.as_posix()
+            or not path.parts
+            or path.is_absolute()
+            or ".." in path.parts
+            or "\\" in name
+            or ":" in name
+            or not isinstance(content, str)
+            or path.parts[0] in {"webdev-agent-kit", ".cursor"}
+            or (path.parts[0] == ".agents" and path.parts[1:2] != ("project",))
+        ):
+            raise ValueError(f"Unsafe scenario fixture path: {name}")
     output.mkdir(parents=True, exist_ok=False)
     workspace = output / "workspace"
     shutil.copytree(ROOT / "evals/live/fixture", workspace)
     kit = workspace / ("webdev-agent-kit" if target == "claude-code" else ".agents")
     shutil.copytree(generated, kit)
+    if target == "cursor":
+        shutil.move(str(kit / ".cursor"), str(workspace / ".cursor"))
     # Explicit prompt routing works across clients without overwriting host pointers.
     entry = kit.relative_to(workspace) / (
         "common/core/runtime-core-policy.md" if target == "claude-code" else "AGENTS.md"
     )
     if not (workspace / entry).is_file():
         raise ValueError("Generated target is missing runtime instructions")
-    context = kit / "project"
+    context = workspace / ".agents/project"
     if case["id"] in {"domain", "resume"}:
-        context.mkdir(exist_ok=True)
+        context.mkdir(parents=True, exist_ok=True)
     if case["id"] == "domain":
         (context / "domain-glossary.md").write_text(
             "# Confirmed domain vocabulary\n"
@@ -75,10 +93,17 @@ def prepare(case, target, output):
             "Coverage: AC-001 -> S-001 -> CSS inspection -> verified; "
             "AC-002 -> S-002 -> save/reload -> planned.\n"
         )
+    for name, content in case.get("files", {}).items():
+        path = workspace / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+    if case["id"].startswith("screenshot-"):
+        shutil.copytree(ROOT / "evals/live/reference", output / "reference")
     prompt = output / "prompt.txt"
     prompt.write_text(
         f"Read {entry.as_posix()} and the matching skill. "
         f"Resolve bundle-relative paths under {kit.relative_to(workspace)}. "
+        "Resolve local project facts under host .agents/project/. "
         "Work only in this disposable fixture. No external writes or installs.\n"
         "The page can be served with python -m http.server 8765 --bind 127.0.0.1 "
         "from the workspace if browser evidence is needed.\n\n" + case["prompt"] + "\n"
@@ -124,6 +149,9 @@ def main():
     parser.add_argument("--target", choices=["codex", "claude-code", "cursor"])
     parser.add_argument("--output", type=Path)
     parser.add_argument("--client", default="unrecorded")
+    parser.add_argument("--client-version", default="unrecorded")
+    parser.add_argument("--shell", default="unrecorded")
+    parser.add_argument("--capability", action="append", default=[])
     parser.add_argument("--model", default="unrecorded")
     parser.add_argument("--timeout", type=float, default=600)
     parser.add_argument("command", nargs=argparse.REMAINDER)
@@ -145,6 +173,9 @@ def main():
     commit = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True
     ).stdout.strip()
+    source_status = subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ROOT, capture_output=True, text=True
+    )
     result = {
         "case": args.case,
         "target": args.target,
@@ -152,7 +183,14 @@ def main():
             "version"
         ],
         "kit_commit": commit,
+        "kit_source_dirty": bool(source_status.stdout.strip())
+        if source_status.returncode == 0
+        else None,
         "client": args.client,
+        "client_version": args.client_version,
+        "os": platform.system(),
+        "shell": args.shell,
+        "reported_capabilities": args.capability,
         "model": args.model,
         "status": "not-run",
         "behavior_assessment": "unverified",

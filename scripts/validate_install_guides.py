@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import sys
 from pathlib import Path
 
@@ -90,8 +91,35 @@ def contains_video_term(text):
     return any(term in lowered for term in VIDEO_TERMS)
 
 
+def validate_install_matrix(text, manifest):
+    errors = []
+    rows = {}
+    for line in text.splitlines():
+        cells = [cell.strip().strip("`") for cell in line.split("|")[1:-1]]
+        if len(cells) == 4 and cells[0] in RELEASE_TARGETS:
+            if cells[0] in rows:
+                errors.append(f"Duplicate install matrix target: {cells[0]}")
+            rows[cells[0]] = cells[1]
+    for target in RELEASE_TARGETS:
+        canonical = manifest["target_aliases"].get(target, target)
+        if rows.get(target) != canonical:
+            errors.append(f"Install matrix alias mismatch: {target} -> {canonical}")
+    return errors
+
+
 def validate():
     errors = []
+    manifest = json.loads((ROOT / "bundle-manifest.json").read_text())
+    first_run = (INSTALL_DIR / "first-run.md").read_text()
+    errors.extend(validate_install_matrix(first_run, manifest))
+    for old, new in (
+        ("| `vs-code-codex` | `codex`", "| `vs-code-codex` | `cursor`"),
+        ("| `vs-code-claude` | `claude-code`", "| `vs-code-claude` | `codex`"),
+    ):
+        if not validate_install_matrix(first_run.replace(old, new), manifest):
+            errors.append("Install matrix failed to detect a changed alias")
+    if not (INSTALL_DIR / "upgrade.md").is_file():
+        errors.append("Missing upgrade and rollback guide")
     if set(GUIDE_CONTRACTS) != set(RELEASE_TARGETS):
         errors.append("Installation guide targets must match release targets")
 
@@ -111,6 +139,9 @@ def validate():
             errors.append(f"Installation index does not link {file_name}")
 
         text = path.read_text(encoding="utf-8-sig")
+        for link in ("(first-run.md)", "(upgrade.md)"):
+            if link not in text:
+                errors.append(f"{file_name}: missing shared installation guide {link}")
         for required in ("status: 'active'", f"# {heading}"):
             if required not in text:
                 errors.append(f"{file_name}: missing guide contract {required!r}")

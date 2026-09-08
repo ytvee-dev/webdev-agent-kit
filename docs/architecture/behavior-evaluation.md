@@ -10,6 +10,8 @@ tags: []
 parent:
   - "[[AGENTS|Canonical Agent Policy]]"
 related:
+  - "[[docs/architecture/field-evidence]]"
+  - "[[docs/architecture/reproducible-workflows]]"
   - "[[docs/release/0.5.0-checklist]]"
 depends_on: []
 ---
@@ -77,7 +79,8 @@ the independent project/client reports in Governance.
 The dependency-free HTML/JavaScript page deliberately contains a local-storage
 persistence defect. It supports CSS scope, debugging, review, blocked-browser,
 resume, prototype, glossary, vertical planning, and assumption-analysis cases.
-Only resume/domain cases receive the relevant local context. The runner captures
+Cases receive only their declared synthetic context; local overlays live under
+host `.agents/project/`, including for native plugins. The runner captures
 fixture changes and includes kit changes so policy tampering is visible.
 
 ## Validation
@@ -93,3 +96,20 @@ The workflows use original kit-specific wording informed by
 throwaway prototypes, writer/reviewer context separation, tracer-bullet tasks,
 domain vocabulary, and feedback loops. Existing kit permissions and lightweight
 routing remain authoritative.
+
+## Field-Derived Cases
+
+See [reproducible workflows](reproducible-workflows.md) for bugfix, screenshot,
+review, migration, and blocked-verification examples. The
+[field evidence guide](field-evidence.md) separates supplied configuration
+snapshots from observed agent runs. Screenshot cases require the operator to
+capture and attach actual reference PNGs before starting the client.
+
+Record `--client-version`, `--shell`, and repeatable `--capability` values when
+using an adapter. These are operator-reported metadata, not verified tool
+availability. `result.json` records the runner OS automatically; if an adapter
+runs a remote client, record that client's OS separately in the assessment.
+`kit_source_dirty` flags uncommitted source changes; the retained file hashes
+describe the actual prepared runtime. A source commit alone does not identify
+an uncommitted candidate. Cursor fixtures place native rules at the host root,
+matching the archive contract.

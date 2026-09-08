@@ -30,11 +30,21 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- First-run checks, upgrade/rollback guidance, canonical alias matrix, and reproducible screenshot, bugfix, review, and verification examples.
+- Project fact provenance and verification templates; sanitized findings from two real-project configuration snapshots, with no live success claims.
+- Host instruction migration with reachable local rules, verbatim backup, coverage map, and repeat-run preservation (issue #66).
+- Design-system reuse and component substitution guidance, plus purpose-specific naming that preserves external API contracts (issue #66 comments).
+
 - Experimental `frontend-prototype-explorer` for bounded, disposable UI and state experiments, with observations, user judgments, and decision handoff.
 - Optional product-domain glossary template integrated into onboarding, refresh, planning, implementation, and review.
-- Nine reproducible live behavior scenarios, a dependency-free frontend fixture, and a client-neutral opt-in runner with retained evidence. Static and synthetic checks do not claim real client success.
+- Nineteen reproducible live behavior scenarios, a dependency-free frontend fixture, and a client-neutral opt-in runner with retained evidence. Static and synthetic checks do not claim real client success.
 
 ### Changed
+
+- Native plugin onboarding and context refresh resolve host overlays outside the plugin and avoid dangling shared-policy pointers.
+- Contributor reports capture client/model/OS, evidence kind, repeat outcomes, and installation stages; checksum failures are reportable.
+- Release validation rejects unsafe Windows paths, duplicate/case-colliding members, unexpected roots, and unsafe archive types before extraction; preservation fixtures include local plans and unrelated client rules.
+- Live preparation checks cover all canonical targets, isolated screenshot references, fixture path safety, and run provenance. Windows logs remain synthetic until exercised on real clients.
 
 - Independent review now distinguishes fresh context from same-session self-review and can seek reproducible counterexamples without forcing findings.
 - Feature plans prefer demonstrable frontend scenarios and explicit slice blockers; analysis checks dependencies and high-impact assumptions without extending the question limit.

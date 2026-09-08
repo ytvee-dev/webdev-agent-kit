@@ -29,6 +29,8 @@ Purpose: record local-only MCP and tool capability facts for this project.
 - config scope:
 - config file:
 - last checked:
+- client/session evidence:
+- kit version and checked source revision:
 
 ## Capability State
 
@@ -36,6 +38,12 @@ Purpose: record local-only MCP and tool capability facts for this project.
 | --- | --- | --- | --- | --- | --- | --- |
 
 Allowed availability evidence: current session tool registry, validated project profile, or direct user confirmation for user-supplied references. Provider config alone is not evidence.
+
+For each required capability, distinguish configured/discoverable, callable in
+the current session, and successfully used for a specific check. Record last
+actual result, evidence location, and refresh condition. Historical results do
+not prove present availability. Leave unused checks `not-run`; do not launch a
+browser or app to fill this table during onboarding.
 
 ## Configured MCP Servers
 

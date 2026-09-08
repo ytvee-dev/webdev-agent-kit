@@ -37,9 +37,53 @@ def validate():
                 )
                 if not prompt.is_file():
                     errors.append(f"{target}/{case['id']}: missing prompt")
+                for name, content in case.get("files", {}).items():
+                    if (workspace / name).read_text(encoding="utf-8") != content:
+                        errors.append(f"{target}/{case['id']}: fixture content lost")
+                if case["id"] in {"resume", "domain"}:
+                    if not (workspace / ".agents/project").is_dir():
+                        errors.append(f"{target}/{case['id']}: host context missing")
+                if target == "claude-code":
+                    if (workspace / "webdev-agent-kit/project").exists():
+                        errors.append(f"{case['id']}: host facts leaked into plugin")
+                if target == "cursor":
+                    rule = workspace / ".cursor/rules/webdev-agent-kit.mdc"
+                    if not rule.is_file() or (workspace / ".agents/.cursor").exists():
+                        errors.append(
+                            f"{case['id']}: Cursor native discovery root broken"
+                        )
+                if case["id"].startswith("screenshot-"):
+                    reference = workspace.parent / "reference/index.html"
+                    if not reference.is_file() or (workspace / "reference").exists():
+                        errors.append(f"{case['id']}: reference isolation broken")
                 if case["id"] == "resume":
                     if "background: navy" not in (workspace / "index.html").read_text():
                         errors.append(f"{target}: completed resume slice lost")
+        for number, name in enumerate(
+            (
+                "../escape",
+                "/absolute",
+                "C:/escape",
+                "dir\\escape",
+                ".",
+                "dir/../escape",
+                "dir//file",
+                ".agents/AGENTS.md",
+                "webdev-agent-kit/common/policy.md",
+                ".cursor/rules/webdev-agent-kit.mdc",
+            )
+        ):
+            output = root / f"invalid-{number}"
+            case = {"id": "invalid", "prompt": "invalid", "files": {name: "bad"}}
+            try:
+                prepare(case, "codex", output)
+            except ValueError:
+                if output.exists():
+                    errors.append(
+                        f"Invalid fixture wrote output before rejection: {name}"
+                    )
+            else:
+                errors.append(f"Unsafe scenario path accepted: {name}")
         adapter = root / "synthetic.py"
         adapter.write_text(
             "import sys, time\nfrom pathlib import Path\n"
@@ -68,6 +112,12 @@ def validate():
                 str(output),
                 "--timeout",
                 "0.2" if mode == "timeout" else "10",
+                "--client-version",
+                "synthetic-1",
+                "--shell",
+                "synthetic-shell",
+                "--capability",
+                "project_files",
             ]
             if mode == "launch":
                 command += ["--", str(root / "missing-adapter")]
@@ -75,6 +125,13 @@ def validate():
                 command += ["--", sys.executable, str(adapter), mode]
             proc = subprocess.run(command, capture_output=True, text=True)
             result = json.loads((output / "result.json").read_text())
+            if (
+                result["client_version"] != "synthetic-1"
+                or result["shell"] != "synthetic-shell"
+                or result["reported_capabilities"] != ["project_files"]
+                or not result["os"]
+            ):
+                errors.append(f"{mode}: run provenance metadata lost")
             if (
                 result["status"] != expected
                 or result["behavior_assessment"] != "unverified"

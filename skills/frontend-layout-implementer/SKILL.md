@@ -15,6 +15,8 @@ tags:
     - 'frontend/layout'
 parent: []
 related:
+    - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
+    - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[skills/frontend-layout-implementer/references/implementation-rules|Implementation Rules]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/approved-patterns|Approved Patterns]]'
@@ -75,6 +77,11 @@ When the user asks to keep iterating until measurable visual, lint, build, or ro
 11. Read `references/implementation-rules.md` when present.
 
 Do not read generated `dist/**` during normal runtime.
+
+When shared UI or compatible component wrappers are in scope, read
+`common/frontend-design-system-rules.md` and
+`common/component-substitution-rules.md`. Apply purpose-specific naming from
+`common/frontend-implementation-boundaries.md` to changed project-owned code.
 
 ## Tool Contract
 

@@ -15,6 +15,8 @@ tags:
     - 'workflow/quality-review'
 parent: []
 related:
+    - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
+    - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[common/review-severity-model|Review Severity Model]]'
     - '[[common/approved-patterns|Approved Patterns]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
@@ -86,6 +88,11 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 11. Read `common/performance-review-rules.md` when performance claims are in scope.
 12. Read `common/build-tool-boundary-rules.md` and `common/lint-verification-rules.md` when code changed.
 13. Read affected source files, diffs, project overlays, loop contract, verification output, and rendered evidence needed for the review.
+
+When shared UI or compatible component wrappers are in scope, read
+`common/frontend-design-system-rules.md` and
+`common/component-substitution-rules.md`. Apply purpose-specific naming from
+`common/frontend-implementation-boundaries.md` to changed project-owned code.
 
 ## Tool Contract
 

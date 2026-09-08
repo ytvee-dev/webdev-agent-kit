@@ -11,6 +11,10 @@ tags:
     - 'planning/public'
 parent: []
 related:
+    - '[[docs/install/first-run]]'
+    - '[[docs/install/upgrade]]'
+    - '[[docs/architecture/field-evidence]]'
+    - '[[docs/architecture/reproducible-workflows]]'
     - '[[README|WebDev Agent Kit]]'
     - '[[GOVERNANCE|Project Governance]]'
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
@@ -26,23 +30,31 @@ is recorded in `CHANGELOG.md`.
 
 ## Current
 
-- Improve first-time installation and adaptation clarity.
-- Publish reproducible examples of scoped fixes, screenshot-driven frontend
-  work, review, and verification behavior.
-- Stabilize the `0.4.x` runtime, planning contracts, and release artifacts.
-- Collect real agent-behavior and client-compatibility reports.
-- Keep Codex, Claude Code, Cursor, and VS Code alias documentation aligned with
-  their validated target contracts.
+- Prepare `0.5.0` while retaining the `0.4.x` target contracts and local plans.
+- Validate first-run and upgrade guidance against real client installations;
+  [first-run checks](docs/install/first-run.md) and
+  [upgrade/rollback](docs/install/upgrade.md) are implemented in the release candidate.
+- Exercise the public [reproducible workflows](docs/architecture/reproducible-workflows.md)
+  for scoped fixes, screenshots, review, migration, and verification boundaries.
+- Collect actual agent-behavior and client-compatibility runs through the expanded
+  issue forms. [Field evidence](docs/architecture/field-evidence.md) currently
+  contains two configuration snapshots, not cross-client behavior passes.
+- Keep Codex, Claude Code, Cursor, and VS Code aliases aligned with their
+  canonical contracts; installation and archive validation remain release gates.
 
 ## Next
 
 - Expand live behavior evidence without weakening deterministic static evals.
-- Improve upgrade, migration, and compatibility guidance between releases.
-- Add focused React and Next.js workflows only where repeated user evidence
-  demonstrates a distinct gap.
-- Improve contributor fixtures for triggers, near misses, Windows sandbox
-  behavior, and release archive installation.
-- Refine community patterns and anti-patterns from public, reproducible cases.
+  The runner records provenance; completed adapters still require human assessment.
+- Confirm upgrade and rollback across published versions with retained local
+  overlays, host instruction migration, and native client discovery evidence.
+- Add focused React and Next.js workflows only when repeated user runs show a
+  distinct gap. Two React/Vite configurations do not meet that threshold.
+- Exercise Windows shell/sandbox fixtures on actual Windows clients. Synthetic
+  log replays and Windows archive-path rejection are contributor checks, not
+  proof of real sandbox compatibility.
+- Refine community patterns and anti-patterns from public, reproducible cases,
+  preserving failures and near misses alongside successful runs.
 
 ## Exploring
 

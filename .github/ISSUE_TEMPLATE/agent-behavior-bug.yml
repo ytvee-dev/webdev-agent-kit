@@ -20,7 +20,7 @@ body:
     attributes:
       label: WebDev Agent Kit version
       description: Provide the release tag, commit, or archive name.
-      placeholder: v0.4.0
+      placeholder: v0.5.0
     validations:
       required: true
   - type: dropdown
@@ -100,5 +100,30 @@ body:
     attributes:
       label: Minimal reproduction or public fixture
       description: Link a public repository or provide enough sanitized context to reproduce.
+    validations:
+      required: false
+  - type: dropdown
+    id: evidence-kind
+    attributes:
+      label: Evidence kind
+      options:
+        - Observed agent run
+        - Observed installation
+        - Configuration snapshot
+        - Synthetic replay
+    validations:
+      required: true
+  - type: input
+    id: client-model
+    attributes:
+      label: Client version and model
+      description: Include client surface, exact version, model ID, OS, and shell; use unknown when unavailable.
+    validations:
+      required: true
+  - type: textarea
+    id: repetition
+    attributes:
+      label: Repetitions and retained evidence
+      description: Include fresh-session runs, failures and successes, trace locations, and any near-miss prompt. Never count a fixture as a live pass.
     validations:
       required: false

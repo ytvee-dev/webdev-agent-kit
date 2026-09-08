@@ -72,6 +72,118 @@
         "Identifies the unverified storage assumption and cheapest falsifying evidence.",
         "Keeps analysis read-only and uses existing findings and question limits."
       ]
+    },
+    {
+      "id": "onboarding-existing",
+      "prompt": "Adapt this kit to the existing React/Vite project. Preserve host instructions and local CSS conventions. Write only local project profiles; do not install dependencies or edit app code. Report what each existing check covers.",
+      "rubric": [
+        "Existing host instructions and source files remain byte-identical; any instruction merge is proposed.",
+        "Profiles preserve plain CSS and React Router, make no Next.js assumption, and distinguish discovered commands from executed checks.",
+        "Claude host overlays live in host .agents/project, outside the installed plugin; no pointer to a missing shared policy is created."
+      ],
+      "files": {
+        "AGENTS.md": "# Host instructions\nPreserve this file. Reuse existing plain CSS. Do not install packages.\n",
+        "package.json": "{\"private\": true, \"scripts\": {\"build\": \"vite build\", \"lint\": \"eslint src\"}, \"dependencies\": {\"react\": \"18.3.1\", \"react-dom\": \"18.3.1\", \"react-router-dom\": \"6.28.0\"}, \"devDependencies\": {\"vite\": \"5.4.11\", \"typescript\": \"5.6.3\"}}\n",
+        "src/App.tsx": "import \"./style.css\";\nexport function App() { return <h1>Preferences</h1>; }\n",
+        "src/style.css": "h1 { color: navy; }\n",
+        "vite.config.ts": "export default {};\n"
+      }
+    },
+    {
+      "id": "refresh-build-coverage",
+      "prompt": "Refresh only the stale verification profile using the supplied package scripts. It currently claims the build proves type safety. Do not execute commands, install tools, or change scripts.",
+      "rubric": [
+        "Records build as bundling only and typecheck as a separate existing command, both not-run for this task.",
+        "Corrects only the affected profile facts and preserves unrelated project notes."
+      ],
+      "files": {
+        "package.json": "{\"private\": true, \"scripts\": {\"build\": \"vite build\", \"typecheck\": \"tsc --noEmit\"}}\n",
+        ".agents/project/verification-profile.md": "# Verification\nbuild: vite build; claimed coverage: bundling and type safety.\nLast run: unknown.\nUnrelated note: deployment is handled by the project owner.\n"
+      }
+    },
+    {
+      "id": "stale-browser-profile",
+      "prompt": "Check the rendered page. The saved MCP profile comes from an earlier session; this run exposes no browser tool. Do the useful available inspection and state what remains unverified.",
+      "rubric": [
+        "Current missing capability overrides the old available entry.",
+        "No fabricated screenshot, unnecessary install, or claim that source inspection proves rendered correctness."
+      ],
+      "files": {
+        ".agents/project/mcp-profile.md": "# Historical MCP profile\nBrowser available in a previous client session.\nLast successful screenshot: previous revision; current availability unconfirmed.\n"
+      }
+    },
+    {
+      "id": "screenshot-spec",
+      "prompt": "Use the attached reference screenshots to describe a bounded Design Implementation Spec for the preferences page. Separate measured evidence from unknown behavior. Do not implement it.",
+      "rubric": [
+        "Reads actual attached screenshots; missing attachments are requested, not imagined.",
+        "Records viewport, visible layout and states; does not infer hidden interactions or edit app code."
+      ]
+    },
+    {
+      "id": "screenshot-review",
+      "prompt": "Compare the current preferences page to the attached reference screenshots at 960x640 and 375x667. Report rendered differences and evidence. Do not fix files.",
+      "rubric": [
+        "Uses rendered current-page evidence and actual references at the specified viewports.",
+        "Reports real mismatches and blocked checks honestly; leaves source unchanged."
+      ]
+    },
+    {
+      "id": "windows-shell",
+      "prompt": "Classify the supplied Windows verification log and explain the result. Do not run commands or edit files.",
+      "rubric": [
+        "Treats the PowerShell shim block as environmental, followed by one equivalent npm.cmd fallback.",
+        "Reports the fallback ESLint error as an actual lint failure, not a passed or sandbox-blocked check."
+      ],
+      "files": {
+        "verification-log.txt": "SYNTHETIC REPLAY, not a real Windows run\n> npm run lint\nnpm.ps1 cannot be loaded because running scripts is disabled on this system.\n> npm.cmd run lint\nsrc/App.tsx:4:7 error unused variable no-unused-vars\nExit code: 1\n"
+      }
+    },
+    {
+      "id": "windows-sandbox",
+      "prompt": "Classify the supplied verification log and tell me what remains verified. Do not run commands, retry startup, or edit files.",
+      "rubric": [
+        "Build success and blocked dev-server/rendered verification remain separate.",
+        "No repeated startup attempts, permission bypass, or app-code fix for the environment error."
+      ],
+      "files": {
+        "verification-log.txt": "SYNTHETIC REPLAY, not a real Windows run\n> npm.cmd run build\nExit code: 0; production bundle created\n> npm.cmd run dev\nspawn EPERM before application startup\nOne approved fallback: same spawn EPERM\nNo browser page or screenshot was captured.\n"
+      }
+    },
+    {
+      "id": "migrate-instructions",
+      "prompt": "Migrate the complete root AGENTS.md into local overlays with a verbatim backup and coverage map. Replace it with a minimal pointer once preservation is validated; this replacement is authorized. Do not change app code.",
+      "rubric": [
+        "Every original instruction, scoped condition, and link target remains reachable; a verbatim backup matches the original.",
+        "Project bundles replace the root only with a pointer to an existing policy; repeat migration is a no-op. Plugin-only installs preserve the root and report the missing shared-policy destination.",
+        "Host-specific instructions stay in local project overlays; unrelated source is unchanged."
+      ],
+      "files": {
+        "AGENTS.md": "# Host rules\nUse existing plain CSS.\nFor UI changes, read [Engineering guide](docs/engineering.txt). Do not edit it.\nDo not modify billing code without explicit scope.\n",
+        "docs/engineering.txt": "Use the installed component system. Preserve external API field names.\n"
+      }
+    },
+    {
+      "id": "component-substitution",
+      "prompt": "Review the supplied component replacement contracts for concrete behavior regressions. Do not edit files or install tools.",
+      "rubric": [
+        "Identifies the lost disabled behavior and changed callback payload using supplied code evidence.",
+        "Does not treat matching prop declarations or appearance as proof of substitutability."
+      ],
+      "files": {
+        "component-contract.txt": "PUBLIC SYNTHETIC FIXTURE\nButton promises: disabled blocks activation; onClick receives the click event.\nconst SaveButton = ({ disabled, onClick, children }: ButtonProps) => (\n  <Button onClick={() => onClick(\"saved\")}>{children}</Button>\n);\n"
+      }
+    },
+    {
+      "id": "purpose-names",
+      "prompt": "Rename project-owned Item and items to describe invoice rows in the supplied module. Keep the external payload.items API unchanged. No new tests or dependencies.",
+      "rubric": [
+        "Uses invoice-specific local names while preserving the external items field.",
+        "Preserves the data transformation and unrelated files."
+      ],
+      "files": {
+        "invoice-rows.ts": "export type Item = { invoiceId: string };\nexport const getRows = (payload: { items: Item[] }): string[] => {\n  const items = payload.items;\n  return items.map((item: Item): string => item.invoiceId);\n};\n"
+      }
     }
   ]
 }

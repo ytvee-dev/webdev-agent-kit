@@ -12,12 +12,17 @@ tags:
 parent:
     - '[[docs/install/README|Installation Guides]]'
 related:
+    - '[[docs/install/first-run|First Run And Installation Checks]]'
+    - '[[docs/install/upgrade|Upgrade And Rollback]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
     - '[[docs/mcp/codex-vscode|MCP in VS Code Codex]]'
 depends_on: []
 ---
 
 # Install WebDev Agent Kit for VS Code Codex
+
+Before extracting, complete the [first-run checks](first-run.md). For an existing
+installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 
 1. Download the latest
    [VS Code Codex package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-codex.tar.gz).

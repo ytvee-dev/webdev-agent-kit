@@ -31,10 +31,11 @@ Plan Mode.
 - If missing, plan to create it as a stable pointer to `.agents/AGENTS.md`.
 - If present, check whether it mirrors `.agents/AGENTS.md`, points elsewhere,
   or contains unrelated host instructions.
-- Plan to keep only the stable pointer unless the canonical policy path itself
-  changes.
-- During approved execution, update the host-root `AGENTS.md` only when it is
-  missing, stale, or mirrors bundle policy instead of pointing to it.
+- Preserve unrelated host instructions. Propose a merge for an existing pointer;
+  being stale or verbose does not itself authorize replacement.
+- Use the selected adapter's native contract. A Claude plugin does not require
+  a host pointer for native skill discovery. Create a shared-policy pointer
+  only when its destination exists and its use is approved.
 
 ## Project Shape And Stack Detection
 
@@ -66,6 +67,12 @@ Collect:
 - screenshot, exported asset, copied inspect, and design-reference constraints
   when present;
 - test, lint, typecheck, formatting, build, and preview commands.
+
+Use `common/project-fact-provenance-rules.md` and the verification profile
+template. Record script expansions, source revision, and coverage separately
+from last executed results. Preserve required engineering-document references,
+installed design-system versions, and local styling conventions; do not import
+from a neighboring reference checkout or assume Next.js from tool availability.
 
 Detect stack in this order:
 

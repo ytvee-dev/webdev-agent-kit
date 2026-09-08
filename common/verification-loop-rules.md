@@ -55,6 +55,11 @@ Do not invent new scripts, package dependencies, testing frameworks, broad test 
 
 ## Failure Classification
 
+Before relying on a cached command, inspect its current script expansion and
+covered checks under `common/project-fact-provenance-rules.md`. Record discovered
+commands as `not-run`; bundling does not imply type checking, tests, or rendered
+verification. Preserve the exact command and scope in the evidence.
+
 Classify verification output as:
 
 ```text

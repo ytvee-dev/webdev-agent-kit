@@ -34,7 +34,27 @@ def load_manifest():
 
 def safe_member_name(name):
     path = PurePosixPath(name)
-    return bool(name) and not path.is_absolute() and ".." not in path.parts
+    return (
+        bool(name)
+        and not path.is_absolute()
+        and "\\" not in name
+        and ":" not in name
+        and not re.search(r'[<>"|?*\x00-\x1f]', name)
+        and all(part not in {"", ".", ".."} for part in name.rstrip("/").split("/"))
+        and all(part == part.rstrip(" .") for part in path.parts)
+        and all(
+            part.split(".")[0].upper()
+            not in {
+                "CON",
+                "PRN",
+                "AUX",
+                "NUL",
+                *(f"COM{number}" for number in range(1, 10)),
+                *(f"LPT{number}" for number in range(1, 10)),
+            }
+            for part in path.parts
+        )
+    )
 
 
 def validate_member_inventory(target, members):
@@ -44,11 +64,26 @@ def validate_member_inventory(target, members):
     if not names or names[0].rstrip("/") != expected_first:
         errors.append(f"{target}: first archive entry must be {expected_first}")
 
+    seen = set()
     for member in members:
         name = member.name
         if not safe_member_name(name):
             errors.append(f"{target}: unsafe archive member {name!r}")
             continue
+        normalized = name.rstrip("/").casefold()
+        if normalized in seen:
+            errors.append(
+                f"{target}: duplicate or case-colliding archive member {name}"
+            )
+        seen.add(normalized)
+        allowed_root = name == expected_first or name.startswith(expected_first + "/")
+        cursor_rule = target == "cursor" and name in {
+            ".cursor",
+            ".cursor/rules",
+            ".cursor/rules/webdev-agent-kit.mdc",
+        }
+        if not allowed_root and not cursor_rule:
+            errors.append(f"{target}: unexpected archive root or client file {name}")
         if member.issym() or member.islnk():
             errors.append(
                 f"{target}: links are not allowed in release archives: {name}"
@@ -107,8 +142,11 @@ def extract_and_validate(target, archive, members, destination):
     sentinels = {
         destination / "AGENTS.md": "existing host AGENTS\n",
         destination / "CLAUDE.md": "existing host CLAUDE\n",
+        destination / ".agents/project/active-plan.md": "existing local plan\n",
+        destination / ".cursor/rules/team.mdc": "unrelated team rule\n",
     }
     for path, content in sentinels.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
     archive.extractall(destination, members=members, filter="data")
     for path, content in sentinels.items():
@@ -229,6 +267,50 @@ def expected_archive_names(version):
     return names
 
 
+def validate_rejection_fixtures():
+    """Reject unsafe inventories before any extraction, including Windows names."""
+    errors = []
+    baseline = [
+        tarfile.TarInfo(name)
+        for name in (
+            ".agents",
+            ".agents/AGENTS.md",
+            ".agents/.codex-plugin/plugin.json",
+        )
+    ]
+    baseline[0].type = tarfile.DIRTYPE
+    if validate_member_inventory("codex", baseline):
+        errors.append("Valid inventory control was rejected")
+    for name in (
+        "../outside",
+        "/absolute",
+        "C:/outside",
+        ".agents\\..\\outside",
+        ".agents/file:stream",
+        ".agents/./file",
+        ".agents//file",
+        ".agents/trailing.",
+        ".agents/AGENTS.md",
+        ".agents/agents.MD",
+        ".agents/CON.txt",
+        ".agents/invalid?name",
+        "unowned/file",
+        ".agents/project/private.md",
+        ".agents/.agents/AGENTS.md",
+        "AGENTS.md",
+        ".cursor/rules/unrelated.mdc",
+    ):
+        if not validate_member_inventory("codex", baseline + [tarfile.TarInfo(name)]):
+            errors.append(f"Unsafe archive fixture was accepted: {name}")
+    for kind in (tarfile.SYMTYPE, tarfile.LNKTYPE, tarfile.FIFOTYPE):
+        member = tarfile.TarInfo(".agents/link")
+        member.type = kind
+        member.linkname = "../outside"
+        if not validate_member_inventory("codex", baseline + [member]):
+            errors.append(f"Unsupported archive type was accepted: {kind!r}")
+    return errors
+
+
 def validate_checksums(directory, expected_names, errors):
     checksum_path = directory / "SHA256SUMS"
     if not checksum_path.is_file():
@@ -322,6 +404,8 @@ def main():
             release_version = f"v{version}"
             build_archives(directory, release_version)
             errors = validate_directory(directory, release_version)
+
+    errors.extend(validate_rejection_fixtures())
 
     if errors:
         for error in errors:

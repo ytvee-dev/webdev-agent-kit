@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
     - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
     - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
@@ -60,7 +61,7 @@ implement screenshot-derived specs without scanning the whole repository.
 
 ## Required Context
 
-1. Read `AGENTS.md`.
+1. Read `AGENTS.md` when shipped, or the native plugin's generated runtime prelude. Resolve local overlays under host `.agents/project/`, not inside a shared plugin installation.
 2. Confirm the classified task is `project-context-refresh` or a project
    context cache update required by another task.
 3. Read `common/documentation-maintenance.md`.
@@ -69,6 +70,7 @@ implement screenshot-derived specs without scanning the whole repository.
    styles, assets, `tool-capabilities-manifest.json`, and verification scripts.
 6. Read `references/extraction-checklist.md`.
 7. Read `references/sync-procedure.md`.
+8. Read `common/project-fact-provenance-rules.md`; preserve unrefreshed dates and mark unexecuted checks `not-run`.
 
 Read targeted README sections only when the refresh concerns project intent, setup guidance, or documentation drift. Use `common/readme-policy.md` and confirm cached technical facts through higher evidence.
 

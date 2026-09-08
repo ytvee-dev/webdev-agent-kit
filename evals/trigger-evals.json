@@ -217,6 +217,91 @@
       "should_trigger": ["frontend-quality-reviewer"],
       "should_not_trigger": ["frontend-visual-qa", "frontend-prototype-explorer"],
       "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "onboarding.migrate-root-instructions",
+      "prompt": "Migrate all existing root AGENTS.md instructions into local .agents/project overlays, retain a backup, and replace the root with a minimal pointer. This replacement is authorized.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "project-onboarding-adapter",
+      "should_trigger": [
+        "project-onboarding-adapter"
+      ],
+      "should_not_trigger": [
+        "project-context-adapter",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "Explicit migration requires complete rule preservation before pointer replacement."
+      ],
+      "reason": "Explicit migration requires complete rule preservation before pointer replacement."
+    },
+    {
+      "id": "onboarding.near-miss-context-refresh",
+      "prompt": "Refresh only the stale verification overlay after the build script changed. Preserve root AGENTS.md and do not reinitialize the kit.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "project-context-adapter",
+      "should_trigger": [
+        "project-context-adapter"
+      ],
+      "should_not_trigger": [
+        "project-onboarding-adapter",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "A narrow context refresh must not restart onboarding or migrate root instructions."
+      ],
+      "reason": "Refreshing one affected profile is not an instruction migration."
+    },
+    {
+      "id": "naming.domain-rename",
+      "prompt": "Rename the project-owned Item and items in this workspace selector to domain-specific names without changing behavior. Preserve the external items API field.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-refactor-surgeon",
+      "should_trigger": [
+        "frontend-refactor-surgeon"
+      ],
+      "should_not_trigger": [
+        "greenfield-project-builder",
+        "frontend-design-director"
+      ],
+      "risk_notes": [
+        "A bounded local naming refactor preserves external contracts."
+      ],
+      "reason": "A bounded local naming refactor preserves external contracts."
+    },
+    {
+      "id": "review.component-substitution",
+      "prompt": "Review whether SaveButton can replace Button: its wrapper drops disabled and changes the onClick payload. Do not edit code.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-refactor-surgeon"
+      ],
+      "risk_notes": [
+        "Substitution review checks observable guarantees, not just matching types."
+      ],
+      "reason": "Substitution review checks observable guarantees, not just matching types."
+    },
+    {
+      "id": "design-system.installed-api",
+      "prompt": "Implement this approved dialog spec using the installed design system. A separate checkout is newer; verify available props and reuse the existing Modal portal.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-layout-implementer",
+      "should_trigger": [
+        "frontend-layout-implementer"
+      ],
+      "should_not_trigger": [
+        "greenfield-project-builder",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "Installed component contracts own implementation; a reference checkout does not authorize new APIs."
+      ],
+      "reason": "Installed component contracts own implementation; a reference checkout does not authorize new APIs."
     }
   ]
 }

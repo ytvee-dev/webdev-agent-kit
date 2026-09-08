@@ -40,6 +40,7 @@ Purpose: preserve type safety and local readability during frontend fixes, refac
 - Model one lifecycle or async state with one typed status discriminant, not parallel boolean flags.
 - Keep public types stable during refactors unless the behavior change is approved.
 - Align with local `tsconfig` and nearby patterns before generic advice.
+- Use purpose-specific project-owned names under `common/frontend-implementation-boundaries.md`; preserve external API names and contract compatibility.
 
 ## Status Modeling
 

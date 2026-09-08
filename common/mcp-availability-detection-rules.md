@@ -33,6 +33,12 @@ Detect tool availability from these sources, in order:
 
 Client config may be inspected during approved onboarding, context refresh, or toolchain audit, but it is discovery input until the provider is validated in the active client. A configured provider name is not availability evidence.
 
+Historical profile entries do not establish current-session availability. When
+a required capability affects the task, confirm it against the current registry
+or callable tool. Record discovery separately from successful use; neither a
+registry entry nor an old screenshot proves that the current check passed.
+Apply `common/project-fact-provenance-rules.md` during profile refresh.
+
 ## Non-Proof Sources
 
 These are not proof that an MCP server or browser capability is available:
