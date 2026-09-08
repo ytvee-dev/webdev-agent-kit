@@ -146,6 +146,21 @@ Praise:
 
 Use file and line references for code findings whenever available.
 
+## Review Evidence Boundary
+
+Record review context as `fresh-context` or `self-review` following
+`common/independent-review-rules.md`. A separate skill pass alone is not fresh.
+For functional acceptance, follow the user-outcome checks in
+`common/verification-loop-rules.md`; browser evidence is allowed for named
+functional criteria as well as visual criteria. Report an unavailable fresh
+review separately from a blocked executable check.
+
+## Domain Terms
+
+When affected product terms have a glossary, load that domain under
+`common/domain-glossary-rules.md`. Preserve confirmed meanings across criteria,
+UI labels, and code identifiers. Do not silently resolve material ambiguity.
+
 ## Validation Gates
 
 - Every blocking or high claim must cite concrete evidence.

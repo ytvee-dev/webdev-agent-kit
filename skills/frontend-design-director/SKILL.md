@@ -144,6 +144,13 @@ Next Skill Or Next Step
 
 Use `templates/design-direction-contract.md` for durable handoff when needed.
 
+## Unresolved Experimental Questions
+
+If a material UI or state choice remains unresolved after targeted source and
+documentation inspection, hand off one bounded question to
+`frontend-prototype-explorer`. Keep this planning skill read-only. Return the
+observed decision and its limitations to the existing plan or decision log.
+
 ## Validation Gates
 
 Before finishing, verify:

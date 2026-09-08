@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/domain-glossary-rules|Domain Glossary Rules]]'
     - '[[common/test-policy|Test Change And Verification Policy]]'
     - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[common/policy-precedence|Policy Precedence]]'

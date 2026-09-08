@@ -86,6 +86,27 @@ blocked checks
 confidence level
 ```
 
+## Functional Outcome Evidence
+
+For behavior changes, express acceptance as an action, observable result, and
+relevant persistence or side effect. Select only checks that can disprove the
+named criterion: save then reload; filter then Back; export then inspect the
+file; request error then retry. A success toast or green build alone does not
+prove persistence, navigation semantics, download contents, or recovery.
+
+Use the smallest existing test or direct executable check that proves the
+behavior. Browser-dependent criteria may use a callable browser under
+`common/rendered-visual-verification-policy.md`, even when no visuals changed.
+Implementation, debugging, or quality review owns functional checks; do not
+invoke visual QA solely because a browser is used.
+
+Stay on the affected local route and use disposable data. External writes,
+credentials, installations, and new tests retain their existing boundaries.
+If runtime evidence is required but unavailable, mark the criterion blocked or
+unknown; source inspection is useful but cannot be reported as a passed runtime
+check. Record the action, expected and observed outcomes, evidence location,
+and limitations against the existing acceptance identifier.
+
 ## Validation Gate
 
 A loop cannot be reported as successful unless the acceptance criteria pass or unresolved deviations are explicitly documented as out of scope, blocked, or user-approved.

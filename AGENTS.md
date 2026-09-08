@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[skills/frontend-prototype-explorer/SKILL|Frontend Prototype Explorer]]'
     - '[[common/runtime-policy-index|Runtime Policy Index]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
     - '[[common/policy-precedence|Policy Precedence]]'
@@ -63,7 +64,7 @@ Select skills from their `name` and `description`; the user need not name one. F
 ## Compact Skill Index
 
 - Plan: `goal-planner` defines outcomes; `execution-plan-manager` slices work; `loop-workflow-planner` governs bounded iteration.
-- Design: `design-screenshot-spec` converts supplied visual evidence; `frontend-design-intelligence` grounds product patterns; `frontend-design-director` sets visual direction.
+- Design: `design-screenshot-spec` converts supplied visual evidence; `frontend-design-intelligence` grounds product patterns; `frontend-design-director` sets visual direction; `frontend-prototype-explorer` tests unresolved UI or state decisions.
 - Build: `frontend-architecture-planner` defines ownership; `greenfield-project-builder` plans a first vertical slice; `frontend-layout-implementer` implements an approved spec in its target stack.
 - Quality: `frontend-bugfix-debugger` fixes evidence-first defects; `frontend-refactor-surgeon` preserves behavior; `frontend-linter-manager` runs or repairs scoped lint; `frontend-visual-qa` checks rendered evidence; `frontend-quality-reviewer` performs independent review.
 - Context and tooling: `project-onboarding-adapter` initializes pointers and local facts; `project-context-adapter` refreshes them; `mcp-toolchain-manager` maps tool capabilities; `pattern-library-manager` maintains reusable patterns; `agent-rules-skill-author` maintains this bundle.

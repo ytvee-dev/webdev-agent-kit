@@ -72,6 +72,9 @@ def main():
     build_code = run("build_skill_targets.py")
     if build_code:
         sys.exit(build_code)
+    behavior_code = run("validate_behavior_evals.py")
+    if behavior_code:
+        sys.exit(behavior_code)
     generated_layer_code = run("validate_runtime_layers.py", "--generated")
     if generated_layer_code:
         sys.exit(generated_layer_code)

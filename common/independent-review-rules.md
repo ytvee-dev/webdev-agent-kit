@@ -43,9 +43,9 @@ Standard or deep workflow classification alone does not require an independent r
 
 - Claude Code may use a fresh subagent, goal verifier, or review primitive when available.
 - Claude Agent SDK may use a separate evaluator or reviewer agent.
-- Codex or GPT-based coding agents should run a separate `frontend-quality-reviewer` pass or equivalent fresh review pass.
+- Codex or GPT-based coding agents should run `frontend-quality-reviewer` in a fresh session or isolated reviewer; otherwise label the pass self-review.
 - GitHub workflows may use PR review, diff review, comments, and CI evidence.
-- Generic agents should switch to review mode and avoid further implementation unless fixes are explicitly requested.
+- Generic agents without fresh-context support may perform self-review and report that independence is unavailable. A role switch does not create a fresh context.
 
 ## Reviewer Duties
 
@@ -69,6 +69,25 @@ evidence. It does not create a second acceptance model or mutate the execution
 plan. When review exposes remaining work, hand the evidence to
 `execution-plan-manager` in `converge` mode; convergence alone may append new
 slices under `common/convergence-rules.md`.
+
+## Context Isolation
+
+Use `fresh-context` only for a separate session or isolated reviewer that has
+not inherited the implementation conversation. Switching skills in the same
+conversation is `self-review`; describe missing independence when it affects
+confidence. Do not spawn agents unless the active client and task authorize it.
+
+Pass the diff, active criteria, relevant decision records and domain terms,
+verification evidence, and paths needed to inspect surrounding code. Do not
+forward the implementation transcript or use its conclusion as proof. Include
+intentional tradeoffs from decisions so the reviewer can judge them fairly.
+
+For material state, request, or navigation risk, seek a reproducible
+counterexample such as duplicate submission, stale response, or lost edits.
+A clean review is valid: never invent findings to satisfy a quota. Distinguish
+correctness and scope defects from preferences. If a combined review-and-fix
+request authorizes repairs, review the repaired diff in a fresh context before
+claiming independent verification of those repairs.
 
 ## Validation Gate
 

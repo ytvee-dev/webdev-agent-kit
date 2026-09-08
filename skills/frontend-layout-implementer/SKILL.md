@@ -128,6 +128,20 @@ Report:
 - lint and verification commands run;
 - rendered visual QA result, skipped reason, or blocker.
 
+## Domain Terms
+
+When affected product terms have a glossary, load that domain under
+`common/domain-glossary-rules.md`. Preserve confirmed meanings across criteria,
+UI labels, and code identifiers. Do not silently resolve material ambiguity.
+
+## Functional Acceptance
+
+For behavior changes, verify the user outcome under
+`common/verification-loop-rules.md`. A named browser-dependent functional
+criterion permits a scoped browser check under
+`common/rendered-visual-verification-policy.md` even without a visual change.
+Keep visual QA routed separately; report unverified runtime behavior honestly.
+
 ## Validation Gates
 
 - Implementation must follow inspected project conventions.

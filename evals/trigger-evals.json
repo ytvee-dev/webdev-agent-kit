@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "eval_type": "skill-trigger",
   "cases": [
     {
@@ -164,7 +164,7 @@
     },
     {
       "id": "project-onboarding-adapter.adapt-command",
-      "prompt": "адаптируйся",
+      "prompt": "\u0430\u0434\u0430\u043f\u0442\u0438\u0440\u0443\u0439\u0441\u044f",
       "workflow_level": "Deep Workflow",
       "expected_primary_skill": "project-onboarding-adapter",
       "should_trigger": ["project-onboarding-adapter"],
@@ -181,6 +181,42 @@
       "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "frontend-linter-manager"],
       "risk_notes": ["The user asks for goal definition before execution; implementation should not start yet."],
       "reason": "Standard or deep work needs an explicit goal contract before implementation."
+    },
+    {
+      "id": "evidence.prototype-ui",
+      "prompt": "Compare two interactive filter placements with synthetic data before choosing the interaction.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-prototype-explorer",
+      "should_trigger": ["frontend-prototype-explorer"],
+      "should_not_trigger": ["frontend-layout-implementer"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "evidence.prototype-state",
+      "prompt": "Build a throwaway cancel/retry state probe; do not change the production reducer.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-prototype-explorer",
+      "should_trigger": ["frontend-prototype-explorer"],
+      "should_not_trigger": ["frontend-bugfix-debugger"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "evidence.prototype-approved",
+      "prompt": "Implement the approved preview layout; the design choice is settled.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-layout-implementer",
+      "should_trigger": ["frontend-layout-implementer"],
+      "should_not_trigger": ["frontend-prototype-explorer"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "evidence.functional-save",
+      "prompt": "Review whether saving settings survives reload. Check the actual local behavior, without changing the UI.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": ["frontend-quality-reviewer"],
+      "should_not_trigger": ["frontend-visual-qa", "frontend-prototype-explorer"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
     }
   ]
 }

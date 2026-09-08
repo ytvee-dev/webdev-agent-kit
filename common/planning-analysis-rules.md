@@ -83,3 +83,21 @@ instead of copying long plan prose.
   not proof that implementation will satisfy the goal.
 - Lightweight workflows bypass planning analysis unless they have already been
   escalated to standard or deep work.
+
+## Assumptions And Dependencies
+
+For feature slices, inspect `blocked_by` references for missing identifiers,
+self-dependencies, and cycles. Confirm each `Demonstrates` names a user result.
+Use the existing `PA-###` findings and severity gate; do not create another plan.
+
+For consequential choices, rank uncertain assumptions by impact and cost of
+reversal. Check the primary user scenario and relevant interruption, duplicate
+action, delayed response, and recovery behavior. Read source or confirmed
+product decisions before asking the user. Name what could falsify an assumption
+and its cheapest evidence source; absence of evidence is not proof of failure.
+
+Return questions to `goal-planner` within its existing three-question limit.
+Do not turn this pass into a mandatory interview. If code and documentation
+cannot settle a material UI or state question, recommend a bounded
+`frontend-prototype-explorer` experiment; analysis itself remains read-only.
+Do not treat a successful experiment as production acceptance evidence.

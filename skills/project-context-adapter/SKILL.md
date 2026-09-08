@@ -113,6 +113,14 @@ Report:
 - verification performed;
 - any project facts that remain unknown.
 
+## Product Language Context
+
+When product terms affect the task, read `common/domain-glossary-rules.md`.
+Reuse a confirmed host glossary or maintain a populated local-only
+`project/domain-glossary.md`; do not create one during read-only planning.
+Record consequential reasons in the existing decision log and load only the
+relevant domain. Glossary maintenance never renames code or edits host docs.
+
 ## Validation Gates
 
 - `project/**` files must remain local-only.

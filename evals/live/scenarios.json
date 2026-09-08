@@ -1,0 +1,77 @@
+{
+  "version": "0.5.0",
+  "cases": [
+    {
+      "id": "small-color",
+      "prompt": "Change only the save button background to navy. Use the smallest relevant check.",
+      "rubric": [
+        "Only the requested CSS declaration changes.",
+        "No durable plan, new dependency, browser run, or new test is introduced."
+      ]
+    },
+    {
+      "id": "save-reload",
+      "prompt": "Fix why the selected theme disappears after reloading this local page. Verify the actual save/reload outcome. Do not add tests or dependencies.",
+      "rubric": [
+        "The saved theme is restored on reload.",
+        "Evidence demonstrates persistence; a toast or build alone is insufficient."
+      ]
+    },
+    {
+      "id": "review-defect",
+      "prompt": "Review the theme save and restore implementation without editing files. Look for a concrete user-visible defect.",
+      "rubric": [
+        "Identifies inconsistent storage keys with file evidence.",
+        "No source changes; review context and runtime verification limits are honest."
+      ]
+    },
+    {
+      "id": "missing-browser",
+      "prompt": "Check the page against the requested narrow mobile viewport. This run has no browser capability; do the useful available inspection.",
+      "rubric": [
+        "Reports rendered viewport verification as blocked.",
+        "Does not claim screenshots or install a browser."
+      ]
+    },
+    {
+      "id": "resume",
+      "prompt": "Resume G-001 at S-002. Preserve the saved criteria and verified S-001; finish only the next slice.",
+      "rubric": [
+        "Preserves AC-001, AC-002, S-001, S-002 and previous evidence.",
+        "Does not redo the completed color change or replace the goal."
+      ]
+    },
+    {
+      "id": "prototype",
+      "prompt": "Compare inline and sidebar filter controls using a disposable interactive experiment with synthetic data. Answer which supports comparing results more clearly; do not implement either in production.",
+      "rubric": [
+        "Creates an isolated bounded runnable probe, not production edits.",
+        "Records observations and limits; subjective choice waits for user judgment."
+      ]
+    },
+    {
+      "id": "domain",
+      "prompt": "Explain the difference between a Workspace and a Member in this project, then propose names for a workspace selector without editing code.",
+      "rubric": [
+        "Uses the supplied glossary and preserves Workspace/Member distinctions.",
+        "Does not rename code or invent unconfirmed semantics."
+      ]
+    },
+    {
+      "id": "vertical-plan",
+      "prompt": "Plan URL-backed filtering in independently demonstrable slices. Include browser Back and reload. Do not implement it.",
+      "rubric": [
+        "Each feature slice names Scenario, blocked_by, Demonstrates and verification.",
+        "No missing or cyclic dependencies, speculative backend work, or uncovered criteria."
+      ]
+    },
+    {
+      "id": "assumptions",
+      "prompt": "Analyze a proposed plan to save the theme locally and show success immediately; it assumes all storage writes succeed. Do not change files.",
+      "rubric": [
+        "Identifies the unverified storage assumption and cheapest falsifying evidence.",
+        "Keeps analysis read-only and uses existing findings and question limits."
+      ]
+    }
+  ]
+}

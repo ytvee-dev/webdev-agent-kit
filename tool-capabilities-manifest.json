@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "capabilities": {
     "client_platform_docs": {
       "purpose": "Fetch current host-client installation, plugin, instruction, tool, and configuration documentation.",
@@ -126,6 +126,12 @@
       "requires_when_in_scope": [],
       "optional": [],
       "blocked": []
+    },
+    "frontend-prototype-explorer": {
+      "requires": ["project_files"],
+      "requires_when_in_scope": ["command_execution", "rendered_visual_evidence"],
+      "optional": ["current_library_docs", "design_reference_files"],
+      "blocked": ["live_design_source"]
     },
     "frontend-quality-reviewer": {
       "requires": ["project_files"],

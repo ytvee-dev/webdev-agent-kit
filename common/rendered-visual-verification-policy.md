@@ -23,12 +23,13 @@ depends_on: []
 
 # Rendered Visual Verification Policy
 
-Purpose: keep rendered automation narrow, capability-aware, and tied to visual QA.
+Purpose: keep rendered automation narrow, capability-aware, and tied to named visual or functional acceptance criteria.
 
 ## Allowed Use
 
-Use Browser or Playwright only when rendered evidence is required:
+Use Browser or Playwright only when rendered or browser-dependent evidence is required:
 
+- verify a named functional user outcome under `common/verification-loop-rules.md`, such as save/reload, URL navigation, download content, or request recovery;
 - compare an implemented page with supplied screenshots or visual references;
 - capture desktop, tablet, or mobile screenshots for visual QA;
 - check responsive layout, wrapping, overflow, clipping, occlusion, or viewport fit;
@@ -72,4 +73,4 @@ Rendered QA must be limited to directly affected routes, components, states, and
 
 Read `common/smart-verification-budget.md` for lightweight and CSS-only changes.
 
-Tool availability does not make rendered QA mandatory. A browser check must have a named visual acceptance criterion, directly affected surface, repeated-failure signal, or explicit user request.
+Tool availability does not make rendered QA mandatory. A browser check must have a named visual or functional acceptance criterion, directly affected surface, repeated-failure signal, or explicit user request.

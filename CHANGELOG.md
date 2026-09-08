@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/0.5.0-checklist|0.5.0 Release Checklist]]'
     - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[docs/install/README|Installation Guides]]'
@@ -26,6 +27,21 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Experimental `frontend-prototype-explorer` for bounded, disposable UI and state experiments, with observations, user judgments, and decision handoff.
+- Optional product-domain glossary template integrated into onboarding, refresh, planning, implementation, and review.
+- Nine reproducible live behavior scenarios, a dependency-free frontend fixture, and a client-neutral opt-in runner with retained evidence. Static and synthetic checks do not claim real client success.
+
+### Changed
+
+- Independent review now distinguishes fresh context from same-session self-review and can seek reproducible counterexamples without forcing findings.
+- Feature plans prefer demonstrable frontend scenarios and explicit slice blockers; analysis checks dependencies and high-impact assumptions without extending the question limit.
+- Verification now permits scoped browser-dependent functional outcomes, including save/reload, URL navigation, downloads, and recovery, without requiring visual changes or new tests.
+- Source and portable-target metadata advance to 0.5.0 with 20 skills. Existing installation contracts, test-authoring permissions, and lightweight routing remain unchanged.
+
+## 0.4.0
 
 ### Added
 

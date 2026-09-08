@@ -33,6 +33,9 @@ Current Phase:
 Task Slices:
 
 - S-### [AC-###]:
+  - Scenario (feature work):
+  - blocked_by: none or prerequisite S-### identifiers
+  - Demonstrates (feature work):
 
 Allowed Files Or Surfaces:
 

@@ -314,8 +314,8 @@ def validate_documents(documents: dict[str, str]) -> list[str]:
     manifest = parse_json_document(documents, "bundle-manifest.json", errors)
     if isinstance(manifest, dict):
         skills = manifest.get("skills")
-        if not isinstance(skills, list) or len(skills) != 19:
-            errors.append("skill inventory: bundle-manifest.json must list 19 skills")
+        if not isinstance(skills, list) or len(skills) != 20:
+            errors.append("skill inventory: bundle-manifest.json must list 20 skills")
         elif "spec-driven-feature-manager" in skills:
             errors.append(
                 "skill inventory: spec-driven-feature-manager must not be added"
@@ -509,10 +509,10 @@ def validate() -> list[str]:
     skill_directories = sorted(
         path.name for path in (ROOT / "skills").iterdir() if path.is_dir()
     )
-    if len(skill_directories) != 19:
-        errors.append("skill inventory: source skills directory must contain 19 skills")
+    if len(skill_directories) != 20:
+        errors.append("skill inventory: source skills directory must contain 20 skills")
     if "spec-driven-feature-manager" in skill_directories:
-        errors.append("skill inventory: forbidden twentieth planning skill exists")
+        errors.append("skill inventory: forbidden duplicate planning skill exists")
 
     if not errors:
         errors.extend(validate_negative_fixtures(documents))

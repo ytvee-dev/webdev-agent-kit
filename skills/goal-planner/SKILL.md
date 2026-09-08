@@ -164,6 +164,12 @@ format Done When as `AC-###` criteria. For compact
 response-only contracts, omit `Goal ID` and criterion identifiers only when no
 durable tracking, resume state, or multi-slice traceability is needed.
 
+## Domain Terms
+
+When affected product terms have a glossary, load that domain under
+`common/domain-glossary-rules.md`. Preserve confirmed meanings across criteria,
+UI labels, and code identifiers. Do not silently resolve material ambiguity.
+
 ## Validation Gates
 
 Before finishing, verify:
