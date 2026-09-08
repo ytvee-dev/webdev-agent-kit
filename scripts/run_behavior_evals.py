@@ -44,7 +44,9 @@ def prepare(case, target, output):
     kit = workspace / ("webdev-agent-kit" if target == "claude-code" else ".agents")
     shutil.copytree(generated, kit)
     # Explicit prompt routing works across clients without overwriting host pointers.
-    entry = kit.relative_to(workspace) / "AGENTS.md"
+    entry = kit.relative_to(workspace) / (
+        "common/core/runtime-core-policy.md" if target == "claude-code" else "AGENTS.md"
+    )
     if not (workspace / entry).is_file():
         raise ValueError("Generated target is missing runtime instructions")
     context = kit / "project"
@@ -76,6 +78,7 @@ def prepare(case, target, output):
     prompt = output / "prompt.txt"
     prompt.write_text(
         f"Read {entry.as_posix()} and the matching skill. "
+        f"Resolve bundle-relative paths under {kit.relative_to(workspace)}. "
         "Work only in this disposable fixture. No external writes or installs.\n"
         "The page can be served with python -m http.server 8765 --bind 127.0.0.1 "
         "from the workspace if browser evidence is needed.\n\n" + case["prompt"] + "\n"

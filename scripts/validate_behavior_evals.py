@@ -7,7 +7,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from run_behavior_evals import ROOT, scenarios
+from run_behavior_evals import ROOT, prepare, scenarios
 
 
 def validate():
@@ -30,6 +30,16 @@ def validate():
     runner = ROOT / "scripts/run_behavior_evals.py"
     with tempfile.TemporaryDirectory(prefix="webdev-runner-check-") as temp:
         root = Path(temp)
+        for target in ("codex", "claude-code", "cursor"):
+            for case in cases:
+                workspace, prompt = prepare(
+                    case, target, root / f"{target}-{case['id']}"
+                )
+                if not prompt.is_file():
+                    errors.append(f"{target}/{case['id']}: missing prompt")
+                if case["id"] == "resume":
+                    if "background: navy" not in (workspace / "index.html").read_text():
+                        errors.append(f"{target}: completed resume slice lost")
         adapter = root / "synthetic.py"
         adapter.write_text(
             "import sys, time\nfrom pathlib import Path\n"

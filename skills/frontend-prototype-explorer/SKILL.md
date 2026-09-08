@@ -43,7 +43,9 @@ the decision and evidence, not an accidental production implementation.
 
 ## Required Context
 
-1. Read `AGENTS.md` and the confirmed question and constraints.
+1. Apply the active runtime entrypoint (`AGENTS.md` for project targets or
+   the native runtime prelude for plugin targets) and the confirmed question
+   and constraints.
 2. Inspect only the existing stack, commands, and affected ownership needed.
 3. Read `common/domain-glossary-rules.md` when domain terms matter.
 4. Read `common/verification-loop-rules.md` for executable observations and
