@@ -1,0 +1,32 @@
+name: release-audit-source
+
+on:
+  push:
+    branches: ['audit/release-1.1.0']
+    paths: ['.github/workflows/release-audit-source.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Archive tracked candidate source
+        run: git archive --format=tar HEAD > /tmp/webdev-source.tar
+      - uses: actions/checkout@v4
+        with:
+          repository: obra/superpowers
+          ref: b36e0829c6d0140e93cfef2ca599b1b07d4a7797
+          path: .upstream-audit
+          persist-credentials: false
+      - name: Archive pinned comparison source
+        run: git -C .upstream-audit archive --format=tar HEAD > /tmp/superpowers-source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-audit-source
+          path: /tmp/*-source.tar
+          retention-days: 1
