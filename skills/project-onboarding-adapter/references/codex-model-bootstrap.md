@@ -185,6 +185,12 @@ python .agents/skills/project-onboarding-adapter/scripts/configure_gpt_agents.py
 Rollback refuses to overwrite later user edits, including unrelated edits to
 a backed-up config. Stop and reconcile such conflicts manually with approval.
 Do not remove a stale setup lock without confirming that no installer is active.
+On Windows, the helper uses native Windows PowerShell (without profile or policy
+bypass) to protect each new transaction directory with a current-user-only
+inheritable ACL and reads it back before writing the journal. Failure blocks
+setup before configuration writes. POSIX uses directory mode 0700 and journal
+mode 0600. This affects only new recovery directories, never parent/global ACLs.
+
 Journals can contain original config bytes: protect them locally, never publish
 them or accept a journal from an untrusted source.
 

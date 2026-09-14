@@ -66,7 +66,11 @@ project or ambiguous TOML layout needs explicit reconciliation, not a workaround
 Local `.agents/project/` contains the request, human model-routing profile,
 managed hashes and restricted recovery journals. Keep these and `.codex/`
 out of public commits and release archives. Journals can contain original
-configuration bytes; do not share them. Existing Python 3.11+ can run the
+configuration bytes; do not share them. On POSIX, journals use 0600 inside a
+0700 directory. On Windows, native Windows PowerShell protects and verifies a
+current-user-only inheritable ACL before the journal is written; if unavailable
+or denied, setup stops without configuration writes. It does not change parent
+or global ACLs. Existing Python 3.11+ can run the
 included deterministic helper; no package installation is required.
 
 For exact request fields, dry-run/apply/rollback commands and collision rules,

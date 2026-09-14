@@ -52,6 +52,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Fixed
 
+- Protect Windows recovery journals with verified current-user ACLs before sensitive
+  writes, rather than assuming POSIX chmod bits apply; retain POSIX mode checks.
+
 - The installer no longer ignores an explicit `features.multi_agent = false`.
   Both known disabling gates are checked; only the selected approved local key
   may change. Trust, managed policy, global and primary model settings are untouched.

@@ -9,6 +9,7 @@ import json
 import os
 import re
 import stat
+import subprocess
 import sys
 import tempfile
 import tomllib
@@ -516,6 +517,64 @@ def atomic_write(root, relative, data):
         Path(temp).unlink(missing_ok=True)
 
 
+def protect_journal_directory(directory):
+    """Restrict this newly created transaction directory before writing any bytes.
+
+    Windows chmod only toggles read-only attributes; it is not ACL protection.
+    A native, non-interactive PowerShell command installs and reads back a
+    protected current-user-only inheritable DACL. Failure blocks installation.
+    No existing project, global, parent or trust permissions are changed.
+    """
+    if os.name != "nt":
+        os.chmod(directory, 0o700)
+        return
+    script = r"""
+$ErrorActionPreference = 'Stop'
+$path = $env:WDK_PRIVATE_JOURNAL_DIRECTORY
+$sid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User
+$acl = [System.Security.AccessControl.DirectorySecurity]::new()
+$acl.SetAccessRuleProtection($true, $false)
+$rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
+    $sid, 'FullControl', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
+$acl.AddAccessRule($rule)
+Set-Acl -LiteralPath $path -AclObject $acl
+$actual = Get-Acl -LiteralPath $path
+$rules = @($actual.GetAccessRules($true, $true,
+    [System.Security.Principal.SecurityIdentifier]))
+if (-not $actual.AreAccessRulesProtected -or $rules.Count -ne 1) {
+    throw 'Journal ACL is not protected'
+}
+$r = $rules[0]
+if ($r.IdentityReference.Value -ne $sid.Value -or $r.IsInherited -or
+    $r.AccessControlType -ne 'Allow' -or
+    $r.FileSystemRights -ne 'FullControl' -or
+    $r.InheritanceFlags -ne 'ContainerInherit, ObjectInherit') {
+    throw 'Journal ACL does not restrict access to the current user'
+}
+"""
+    system_root = os.environ.get("SystemRoot")
+    if not system_root:
+        raise ValueError("Cannot locate native Windows ACL tooling")
+    shell = Path(system_root) / "System32/WindowsPowerShell/v1.0/powershell.exe"
+    try:
+        result = subprocess.run(
+            [str(shell), "-NoProfile", "-NonInteractive", "-Command", script],
+            env={
+                **{k: v for k, v in os.environ.items() if k.lower() != "psmodulepath"},
+                "PSModulePath": str(shell.parent / "Modules"),
+                "WDK_PRIVATE_JOURNAL_DIRECTORY": str(directory),
+            },
+            capture_output=True,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise ValueError(
+            "Native journal ACL protection unavailable; no configuration written"
+        ) from exc
+    if result.returncode:
+        raise ValueError("Cannot protect Windows journal ACL; no configuration written")
+
+
 def apply(root, changes, writer=atomic_write):
     if not changes:
         return {"status": "unchanged", "activation": "unverified", "changed": []}
@@ -532,7 +591,7 @@ def apply(root, changes, writer=atomic_write):
                 raise ValueError(f"Concurrent change before installation: {path}")
         directory = safe_path(root, journal_path).parent
         directory.mkdir(parents=True, mode=0o700)
-        os.chmod(directory, 0o700)
+        protect_journal_directory(directory)
         journal = {
             p: {"before": encode(b), "after": digest(a)}
             for p, (b, a) in changes.items()

@@ -4,6 +4,7 @@
 import copy
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
@@ -11,6 +12,7 @@ import tempfile
 import tomllib
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 HELPER = ROOT / "skills/project-onboarding-adapter/scripts/configure_gpt_agents.py"
@@ -401,13 +403,62 @@ class InstallationTests(unittest.TestCase):
         before = snapshot(self.root)
         result = self.install()
         journal = self.root / kit.BACKUPS / result["transaction"] / "journal.json"
-        self.assertEqual(journal.stat().st_mode & 0o777, 0o600)
-        self.assertEqual(journal.parent.stat().st_mode & 0o777, 0o700)
+        if os.name == "nt":
+            # Read the real resulting FILE ACL, not chmod bits or the helper's report.
+            script = r"""
+$ErrorActionPreference = 'Stop'
+$a = Get-Acl -LiteralPath $env:WDK_TEST_JOURNAL
+$r = @($a.GetAccessRules($true, $true,
+    [System.Security.Principal.SecurityIdentifier]))
+@{ identities = @($r | ForEach-Object { $_.IdentityReference.Value });
+   current = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value;
+   rights = @($r | ForEach-Object { $_.FileSystemRights.ToString() });
+   types = @($r | ForEach-Object { $_.AccessControlType.ToString() })
+} | ConvertTo-Json -Compress
+"""
+            shell = (
+                Path(os.environ["SystemRoot"])
+                / "System32/WindowsPowerShell/v1.0/powershell.exe"
+            )
+            acl_result = subprocess.run(
+                [str(shell), "-NoProfile", "-NonInteractive", "-Command", script],
+                env={
+                    **{
+                        k: v
+                        for k, v in os.environ.items()
+                        if k.lower() != "psmodulepath"
+                    },
+                    "PSModulePath": str(shell.parent / "Modules"),
+                    "WDK_TEST_JOURNAL": str(journal),
+                },
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            acl = json.loads(acl_result.stdout)
+            self.assertEqual(acl["identities"], [acl["current"]])
+            self.assertEqual(acl["rights"], ["FullControl"])
+            self.assertEqual(acl["types"], ["Allow"])
+        else:
+            self.assertEqual(journal.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(journal.parent.stat().st_mode & 0o777, 0o700)
         kit.rollback(self.root, result["transaction"])
         self.assertEqual(before, snapshot(self.root))
         self.assertEqual(
             kit.rollback(self.root, result["transaction"])["status"], "unchanged"
         )
+
+    def test_journal_protection_failure_blocks_before_sensitive_writes(self):
+        self.put(kit.CONFIG, 'model = "existing-primary"\n# sensitive config fixture\n')
+        before = snapshot(self.root, recovery=True)
+        with patch.object(
+            kit, "protect_journal_directory", side_effect=ValueError("ACL denied")
+        ):
+            with self.assertRaises(ValueError):
+                self.install(request("registered"))
+        self.assertEqual(snapshot(self.root, recovery=True), before)
+        self.assertFalse((self.root / ".agents/project/.model-routing.lock").exists())
 
     def test_rollback_preserves_later_user_edits(self):
         result = self.install(request("registered"))
