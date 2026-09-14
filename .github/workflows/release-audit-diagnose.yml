@@ -10,16 +10,22 @@ jobs:
   diagnose:
     runs-on: windows-latest
     timeout-minutes: 5
+    env:
+      PYTHONUTF8: '1'
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - uses: actions/download-artifact@v4
         with:
           name: release-candidate
           run-id: 34863812369
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/candidate
-      - name: Diagnose ACL on empty disposable directory
-        shell: python
+      - name: Diagnose from the same PowerShell parent as failing tests
+        shell: pwsh
         run: |
+          @'
           import importlib.util, os, pathlib, subprocess, tarfile, tempfile
           source = pathlib.Path(os.environ['RUNNER_TEMP']) / 'acl-source'
           source.mkdir()
@@ -29,15 +35,27 @@ jobs:
           kit = importlib.util.module_from_spec(spec)
           spec.loader.exec_module(kit)
           original = subprocess.run
+          narrow = False
           def observed(*args, **kwargs):
+              if narrow:
+                  env = {k: v for k, v in kwargs['env'].items() if k.lower() != 'psmodulepath'}
+                  env['PSModulePath'] = str(pathlib.Path(os.environ['SystemRoot']) / 'System32/WindowsPowerShell/v1.0/Modules')
+                  kwargs['env'] = env
               result = original(*args, **kwargs)
-              print('Native ACL command exit:', result.returncode)
+              print('Narrow module path:', narrow, 'exit:', result.returncode)
               print('stdout:', result.stdout.decode(errors='replace'))
               print('stderr:', result.stderr.decode(errors='replace'))
               return result
           kit.subprocess.run = observed
           with tempfile.TemporaryDirectory() as root:
-              directory = pathlib.Path(root) / 'private-journal'
-              directory.mkdir()
-              kit.protect_journal_directory(directory)
-              print('Empty-directory ACL verification passed')
+              for isolate in [False, True]:
+                  narrow = isolate
+                  directory = pathlib.Path(root) / ('private-' + str(isolate))
+                  directory.mkdir()
+                  try:
+                      kit.protect_journal_directory(directory)
+                  except ValueError as exc:
+                      print('Guard stopped safely:', exc)
+                      if isolate:
+                          raise
+          '@ | python -
