@@ -1,0 +1,21 @@
+name: Source audit snapshot
+on:
+  push:
+    branches: ['audit/gpt-model-routing-v1']
+    paths: ['.github/workflows/source-audit-snapshot.yml']
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Archive tracked source only
+        run: git archive --format=tar HEAD -o source.tar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-audit-snapshot
+          path: source.tar
+          retention-days: 1
