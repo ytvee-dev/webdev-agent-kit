@@ -1,0 +1,403 @@
+#!/usr/bin/env python3
+"""Offline installer regressions. Catalog IDs are synthetic, not live models."""
+
+import copy
+import importlib.util
+import json
+import subprocess
+import sys
+import tempfile
+import tomllib
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+HELPER = ROOT / "skills/project-onboarding-adapter/scripts/configure_gpt_agents.py"
+SPEC = importlib.util.spec_from_file_location("configure_gpt_agents", HELPER)
+kit = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(kit)
+
+
+def request(fmt="standalone"):
+    roles = {}
+    for name in kit.ROLES:
+        small = name in {"wdk_lookup", "wdk_worker"}
+        roles[name] = {
+            "model": "gpt-fixture-economy" if small else "gpt-fixture-capable",
+            "effort": "low" if small else "high",
+            "reason": "Synthetic offline fixture; not an availability assertion",
+        }
+    return {
+        "schema_version": 1,
+        "client": "codex",
+        "client_version": "synthetic-fixture",
+        "auth_mode": "chatgpt",
+        "format": fmt,
+        "observed_at": "2026-09-14",
+        "availability_evidence": "Synthetic catalog, no model API calls",
+        "cost_basis": "Synthetic relative cost; no measured economic claim",
+        "models": {
+            "gpt-fixture-economy": {
+                "efforts": ["low", "medium"],
+                "modalities": ["text"],
+            },
+            "gpt-fixture-capable": {
+                "efforts": ["medium", "high"],
+                "modalities": ["text", "image"],
+            },
+        },
+        "roles": roles,
+    }
+
+
+def snapshot(root, recovery=False):
+    return {
+        p.relative_to(root).as_posix(): p.read_bytes()
+        for p in root.rglob("*")
+        if p.is_file() and (recovery or "model-routing-backups" not in p.parts)
+    }
+
+
+class InstallationTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name) / "host"
+        self.root.mkdir()
+        self.put(".agents/AGENTS.md", "Fixture policy")
+        self.put(".agents/adapters/codex.md", "Fixture adapter")
+
+    def put(self, path, data):
+        target = self.root / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data if isinstance(data, bytes) else data.encode())
+        return target
+
+    def install(self, req=None):
+        req = req or request()
+        return kit.apply(self.root, kit.plan(self.root, req))
+
+    def assertBlocked(self, req):
+        before = snapshot(self.root, recovery=True)
+        with self.assertRaises((ValueError, TypeError)):
+            kit.plan(self.root, req)
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+
+    def test_plan_has_zero_writes(self):
+        before = snapshot(self.root, recovery=True)
+        self.assertEqual(len(kit.plan(self.root, request())), 5)
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+        self.assertFalse((self.root / ".codex").exists())
+        self.assertFalse((self.root / ".agents/project").exists())
+
+    def test_standalone_install_and_same_input_noop(self):
+        result = self.install()
+        self.assertEqual(result["status"], "configured")
+        self.assertEqual(result["activation"], "unverified")
+        self.assertFalse((self.root / kit.CONFIG).exists())
+        for role, path in kit.role_paths("standalone").items():
+            data = tomllib.loads((self.root / path).read_text())
+            self.assertEqual(data["name"], role)
+            self.assertEqual(data["model"], request()["roles"][role]["model"])
+            self.assertIn(
+                "Do not change agent configuration", data["developer_instructions"]
+            )
+            self.assertNotIn("approval_policy", data)
+            if role in {"wdk_lookup", "wdk_reviewer"}:
+                self.assertEqual(data["sandbox_mode"], "read-only")
+            else:
+                self.assertNotIn("sandbox_mode", data)
+        before = snapshot(self.root, recovery=True)
+        self.assertEqual(self.install()["status"], "unchanged")
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+
+    def test_existing_primary_provider_mcp_security_and_global_preserved(self):
+        original = b'# user comment\r\nmodel="my-primary"\r\n[agents]\r\nmax_threads=1\r\n[mcp_servers.local]\r\ncommand="tool"\r\n[profiles.safe]\r\nsandbox_mode="read-only"\r\n'
+        self.put(kit.CONFIG, original)
+        global_config = Path(self.temp.name) / "global-config.toml"
+        global_config.write_text('model="global-primary"\n')
+        self.install()
+        self.assertEqual((self.root / kit.CONFIG).read_bytes(), original)
+        self.assertEqual(global_config.read_text(), 'model="global-primary"\n')
+
+    def test_registered_merge_preserves_comments_values_crlf(self):
+        original = b'# keep\r\nmodel="user-primary"\r\n[agents.custom]\r\ndescription="Mine"\r\n[profiles.safe]\r\nsandbox_mode="read-only"\r\n'
+        self.put(kit.CONFIG, original)
+        result = self.install(request("registered"))
+        current = (self.root / kit.CONFIG).read_bytes()
+        self.assertTrue(current.startswith(original))
+        self.assertNotIn(b"\n", current.replace(b"\r\n", b""))
+        data = tomllib.loads(current.decode())
+        self.assertEqual(data["model"], "user-primary")
+        self.assertEqual(data["agents"]["custom"]["description"], "Mine")
+        for role, path in kit.role_paths("registered").items():
+            self.assertEqual(
+                data["agents"][role]["config_file"], path.removeprefix(".codex/")
+            )
+            layer = tomllib.loads((self.root / path).read_text())
+            self.assertNotIn("name", layer)
+            self.assertNotIn("description", layer)
+        self.assertFalse((self.root / ".codex/agents").exists())
+        before = snapshot(self.root, recovery=True)
+        self.assertEqual(self.install(request("registered"))["status"], "unchanged")
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+        self.assertEqual(
+            kit.rollback(self.root, result["transaction"])["status"], "rolled-back"
+        )
+        self.assertEqual((self.root / kit.CONFIG).read_bytes(), original)
+
+    def test_registered_empty_config_and_missing_final_newline(self):
+        for content in (b"", b'# comment\nmodel="primary"'):
+            with self.subTest(content=content):
+                self.put(kit.CONFIG, content)
+                result = self.install(request("registered"))
+                self.assertEqual(
+                    self.install(request("registered"))["status"], "unchanged"
+                )
+                kit.rollback(self.root, result["transaction"])
+                self.assertEqual((self.root / kit.CONFIG).read_bytes(), content)
+
+    def test_validated_binding_update(self):
+        self.install()
+        req = request()
+        req["roles"]["wdk_lookup"]["effort"] = "medium"
+        result = self.install(req)
+        self.assertEqual(
+            set(result["changed"]),
+            {kit.STATE, kit.role_paths("standalone")["wdk_lookup"]},
+        )
+        self.assertEqual(result["activation"], "unverified")
+
+    def test_unrelated_user_config_edit_survives_role_update(self):
+        self.install(request("registered"))
+        path = self.root / kit.CONFIG
+        path.write_bytes(b'model="new-user-choice"\n' + path.read_bytes())
+        req = request("registered")
+        req["roles"]["wdk_worker"]["effort"] = "medium"
+        self.install(req)
+        self.assertEqual(tomllib.loads(path.read_text())["model"], "new-user-choice")
+
+    def test_wrong_client_auth_schema_format(self):
+        for key, value in (
+            ("client", "cursor"),
+            ("client", "claude-code"),
+            ("auth_mode", "unknown"),
+            ("schema_version", 2),
+            ("format", "guess"),
+        ):
+            with self.subTest(key=key, value=value):
+                req = request()
+                req[key] = value
+                self.assertBlocked(req)
+
+    def test_missing_or_extra_fields_and_empty_evidence(self):
+        for key in request():
+            req = request()
+            del req[key]
+            self.assertBlocked(req)
+        req = request()
+        req["api_key"] = "must-not-be-accepted"
+        self.assertBlocked(req)
+        for key in (
+            "availability_evidence",
+            "client_version",
+            "cost_basis",
+            "observed_at",
+        ):
+            req = request()
+            req[key] = ""
+            self.assertBlocked(req)
+
+    def test_missing_model_effort_non_gpt_and_modality(self):
+        for mutation in ("model", "effort", "nongpt", "modality", "empty", "roles"):
+            with self.subTest(mutation=mutation):
+                req = request()
+                if mutation == "model":
+                    req["roles"]["wdk_lookup"]["model"] = "gpt-not-in-catalog"
+                elif mutation == "effort":
+                    req["roles"]["wdk_lookup"]["effort"] = "unsupported"
+                elif mutation == "nongpt":
+                    req["models"]["not-gpt"] = copy.deepcopy(
+                        next(iter(req["models"].values()))
+                    )
+                elif mutation == "modality":
+                    req["models"]["gpt-fixture-economy"]["modalities"] = ["image"]
+                elif mutation == "empty":
+                    req["models"] = {}
+                else:
+                    del req["roles"]["wdk_reviewer"]
+                self.assertBlocked(req)
+
+    def test_disabled_and_invalid_config(self):
+        for config in (
+            "[agents]\nenabled=false\n",
+            "[agents]\nbad = [",
+            'agents="invalid"\n',
+        ):
+            with self.subTest(config=config):
+                self.put(kit.CONFIG, config)
+                self.assertBlocked(request())
+
+    def test_unowned_role_even_identical_is_not_adopted(self):
+        role = "wdk_worker"
+        self.put(
+            kit.role_paths("standalone")[role],
+            kit.render_role(role, request()["roles"][role], "standalone"),
+        )
+        self.assertBlocked(request())
+
+    def test_collision_name_inside_different_filename(self):
+        self.put(".codex/agents/personal.toml", 'name="wdk_worker"\n')
+        self.assertBlocked(request())
+        self.assertBlocked(request("registered"))
+
+    def test_collision_registration_and_reserved_state(self):
+        self.put(kit.CONFIG, '[agents.wdk_lookup]\ndescription="user-owned"\n')
+        self.assertBlocked(request())
+        (self.root / kit.CONFIG).unlink()
+        self.put(kit.STATE, "{}")
+        self.assertBlocked(request())
+
+    def test_user_drift_in_owned_file(self):
+        self.install()
+        self.put(kit.role_paths("standalone")["wdk_worker"], "# user changed this\n")
+        self.assertBlocked(request())
+
+    def test_managed_block_drift_and_duplicates(self):
+        self.install(request("registered"))
+        path = self.root / kit.CONFIG
+        data = path.read_text()
+        path.write_text(data.replace("description = ", "# comment\ndescription = ", 1))
+        self.assertBlocked(request("registered"))
+        path.write_text(data + data)
+        self.assertBlocked(request("registered"))
+
+    def test_format_switch_requires_migration(self):
+        self.install()
+        self.assertBlocked(request("registered"))
+
+    def test_no_installed_codex_bundle(self):
+        (self.root / ".agents/adapters/codex.md").unlink()
+        self.assertBlocked(request())
+
+    def test_symlink_and_hardlink_target_refused(self):
+        outside = Path(self.temp.name) / "outside"
+        outside.mkdir()
+        (self.root / ".codex").symlink_to(outside, target_is_directory=True)
+        self.assertBlocked(request())
+        self.assertEqual(list(outside.iterdir()), [])
+        (self.root / ".codex").unlink()
+        original = self.put("original", "# source")
+        target = self.root / kit.CONFIG
+        target.parent.mkdir()
+        target.hardlink_to(original)
+        self.assertBlocked(request())
+
+    def test_state_path_injection(self):
+        self.install()
+        path = self.root / kit.STATE
+        state = json.loads(path.read_text())
+        state["files"]["../../outside"] = "bad"
+        path.write_text(json.dumps(state))
+        self.assertBlocked(request())
+
+    def test_concurrent_change_before_apply_is_preserved(self):
+        changes = kit.plan(self.root, request())
+        target = next(iter(changes))
+        self.put(target, "# external edit")
+        with self.assertRaises(ValueError):
+            kit.apply(self.root, changes)
+        self.assertEqual((self.root / target).read_text(), "# external edit")
+        self.assertFalse((self.root / ".agents/project/.model-routing.lock").exists())
+
+    def test_mid_write_failure_rolls_back_before_and_after_write(self):
+        for after in (False, True):
+            with self.subTest(after=after):
+                before = snapshot(self.root)
+                calls = []
+
+                def failing_writer(root, path, data):
+                    calls.append(path)
+                    if len(calls) == 3 and not after:
+                        raise OSError("injected before write")
+                    kit.atomic_write(root, path, data)
+                    if len(calls) == 3:
+                        raise OSError("injected after write")
+
+                with self.assertRaises(OSError):
+                    kit.apply(
+                        self.root, kit.plan(self.root, request()), writer=failing_writer
+                    )
+                self.assertEqual(before, snapshot(self.root))
+                self.assertFalse(
+                    (self.root / ".agents/project/.model-routing.lock").exists()
+                )
+
+    def test_rollback_idempotent_and_backups_restricted(self):
+        before = snapshot(self.root)
+        result = self.install()
+        journal = self.root / kit.BACKUPS / result["transaction"] / "journal.json"
+        self.assertEqual(journal.stat().st_mode & 0o777, 0o600)
+        self.assertEqual(journal.parent.stat().st_mode & 0o777, 0o700)
+        kit.rollback(self.root, result["transaction"])
+        self.assertEqual(before, snapshot(self.root))
+        self.assertEqual(
+            kit.rollback(self.root, result["transaction"])["status"], "unchanged"
+        )
+
+    def test_rollback_preserves_later_user_edits(self):
+        result = self.install(request("registered"))
+        path = self.root / kit.CONFIG
+        path.write_text("# new user comment\n" + path.read_text())
+        before = snapshot(self.root, recovery=True)
+        with self.assertRaises(ValueError):
+            kit.rollback(self.root, result["transaction"])
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+
+    def test_rollback_rejects_path_injection(self):
+        result = self.install()
+        journal = self.root / kit.BACKUPS / result["transaction"] / "journal.json"
+        journal.write_text(
+            json.dumps({"../../outside": {"before": None, "after": None}})
+        )
+        with self.assertRaises(ValueError):
+            kit.rollback(self.root, result["transaction"])
+        with self.assertRaises(ValueError):
+            kit.rollback(self.root, "../../outside")
+
+    def test_lock_prevents_another_installer(self):
+        self.put(".agents/project/.model-routing.lock", "")
+        before = snapshot(self.root, recovery=True)
+        with self.assertRaises(FileExistsError):
+            self.install()
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+
+    def test_cli_dry_run_approval_and_configuration_status(self):
+        req = self.put(
+            ".agents/project/model-routing-request.json", json.dumps(request())
+        )
+        command = [
+            sys.executable,
+            str(HELPER),
+            "--root",
+            str(self.root),
+            "--request",
+            str(req),
+        ]
+        before = snapshot(self.root, recovery=True)
+        dry = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(dry.returncode, 0, dry.stderr)
+        self.assertEqual(json.loads(dry.stdout)["status"], "proposed")
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+        denied = subprocess.run([*command, "--apply"], capture_output=True, text=True)
+        self.assertNotEqual(denied.returncode, 0)
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+        applied = subprocess.run(
+            [*command, "--apply", "--approve"], capture_output=True, text=True
+        )
+        self.assertEqual(applied.returncode, 0, applied.stderr)
+        self.assertEqual(json.loads(applied.stdout)["activation"], "unverified")
+
+
+if __name__ == "__main__":
+    unittest.main()

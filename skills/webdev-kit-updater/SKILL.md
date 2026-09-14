@@ -141,3 +141,11 @@ Should not trigger:
   upgrade, or rollback; includes legacy bootstrap and bounded verification.
 - `common/host-instruction-migration-rules.md` - only when host-instruction
   migration is separately required and authorized.
+
+## Host Model Configuration Boundary
+
+Preserve host `.codex/` roles/configuration and local model-routing profile,
+request, state and backups. A kit update is not approval to change models or
+reinstall roles. Flag incompatible bootstrap/schema changes and stale runtime
+evidence; route separately approved reconfiguration through onboarding. Never
+copy generated agent configuration into a release or overwrite local bindings.

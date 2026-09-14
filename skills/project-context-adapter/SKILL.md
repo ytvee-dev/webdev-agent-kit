@@ -161,3 +161,11 @@ Should not trigger:
 - `references/extraction-checklist.md`
 - `references/sync-procedure.md`
 - `common/readme-policy.md`
+
+## Model Routing Drift
+
+When relevant client version, authentication mode, configuration, role paths or
+model availability changes, mark affected local model-routing evidence stale.
+Preserve `project/model-routing-profile.md`, request/state files and backups;
+do not refresh their model bindings automatically. Approved reconfiguration
+belongs to `project-onboarding-adapter` and its GPT bootstrap reference.

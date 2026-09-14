@@ -1,4 +1,4 @@
-﻿---
+---
 id: 'agents.skills.project-onboarding-adapter.references.adaptation-checklist'
 title: 'Adaptation Checklist'
 doc_type: 'skill-reference'
@@ -89,7 +89,8 @@ the intended frontend stack before writing stack-specific facts.
 
 For a new or empty project, do not create app source files. Create or refresh
 only the host-root pointer and local-only `project/**` overlays from known or
-user-provided intended stack facts.
+user-provided intended stack facts, except separately approved GPT role setup
+under the optional gate below.
 
 ## Official Documentation And MCP Selection
 
@@ -169,3 +170,13 @@ to run after implementation.
 The approved execution report must list files changed, MCP scan results,
 installation approvals or blockers, validation commands, and remaining unknown
 facts.
+
+## Optional GPT Routing Gate
+
+Ordinary onboarding and Plan Mode do not change model configuration. An explicit
+GPT setup request in Codex may additionally create approved host `.codex/` role
+files and a narrow registration block, following
+`skills/project-onboarding-adapter/references/codex-model-bootstrap.md`.
+Confirm availability, schema, collisions and preserved primary/security/MCP
+settings; validate dry-run, ownership, rollback and separate runtime activation.
+A missing client or model catalog is a blocker, not permission to guess.

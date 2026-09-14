@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[common/codex-model-routing-policy]]'
     - '[[skills/frontend-prototype-explorer/SKILL|Frontend Prototype Explorer]]'
     - '[[common/runtime-policy-index|Runtime Policy Index]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
@@ -26,7 +27,7 @@ depends_on: []
 
 ## Purpose
 
-This is the compact runtime entrypoint for the `.agents` bundle. It routes work to client-neutral core policy, an evidence-gated profile, verified project facts, and the smallest matching skill. Detailed rules stay in their owning `common/**` or skill reference and are loaded only when relevant.
+This compact `.agents` entrypoint routes work to portable core policy, an evidence-gated profile, verified project facts, and the smallest matching skill. Load detailed owning rules only when relevant.
 
 Bundle paths are rooted at `.agents`. Generated `dist/**` output is never source truth. The host-root instruction pointer is managed only by `project-onboarding-adapter` with explicit approval; ordinary bundle work must not replace it.
 
@@ -39,6 +40,9 @@ Require explicit approval before installing packages or tools, changing configur
 `README.md` may be read only when relevant under `common/readme-policy.md`, never as sole technical evidence or runtime authority. Reading never authorizes editing. Do not create or change an existing README unless the current user explicitly requests that README change.
 
 ## Context Loading And Workflow Scale
+
+In Codex, when a local model-routing profile exists, consult
+`common/codex-model-routing-policy.md` before broad reading or delegation.
 
 Classify before reading broadly:
 

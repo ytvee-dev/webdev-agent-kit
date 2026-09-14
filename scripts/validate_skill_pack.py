@@ -69,9 +69,17 @@ def main():
     eval_code = run("validate_skill_evals.py")
     if eval_code:
         sys.exit(eval_code)
+    routing_code = run("validate_model_routing.py")
+    if routing_code:
+        sys.exit(routing_code)
     build_code = run("build_skill_targets.py")
     if build_code:
         sys.exit(build_code)
+    routing_target_code = run(
+        "validate_model_routing.py", "--generated", "--skip-unit-tests"
+    )
+    if routing_target_code:
+        sys.exit(routing_target_code)
     behavior_code = run("validate_behavior_evals.py")
     if behavior_code:
         sys.exit(behavior_code)

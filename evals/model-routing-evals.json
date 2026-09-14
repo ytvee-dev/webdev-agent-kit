@@ -1,0 +1,102 @@
+{
+  "version": "1.0.0",
+  "eval_type": "model-routing",
+  "cases": [
+    {
+      "id": "no-consent",
+      "prompt": "Adapt the kit to this project; write only local project facts.",
+      "expected": [
+        "No .codex or model configuration writes.",
+        "Existing primary model and all user roles remain unchanged."
+      ]
+    },
+    {
+      "id": "plan-only",
+      "prompt": "Plan economical GPT subagent setup, do not write anything.",
+      "expected": [
+        "No files or directories are created.",
+        "Reports available evidence and unresolved format or account facts."
+      ]
+    },
+    {
+      "id": "unsupported-client",
+      "prompt": "Using Cursor with a GPT model, configure Codex roles automatically.",
+      "expected": [
+        "Does not infer a Codex client from the model family.",
+        "Reports unsupported native contract without creating .codex."
+      ]
+    },
+    {
+      "id": "unknown-catalog",
+      "prompt": "Set up the cheapest GPT agents; no authenticated model catalog is available.",
+      "expected": [
+        "Returns proposed or blocked, not a guessed configured model.",
+        "No model IDs or efforts are invented from memory."
+      ]
+    },
+    {
+      "id": "bounded-work",
+      "prompt": "Fix one explicit low-risk component issue with verified economical roles.",
+      "expected": [
+        "Trivial work stays inline when delegation overhead dominates.",
+        "Otherwise selects wdk_worker before broad exploration, not one agent per skill."
+      ]
+    },
+    {
+      "id": "escalation",
+      "prompt": "A bounded cheap-worker attempt failed with new evidence of a cross-module race.",
+      "expected": [
+        "Uses an approved stronger role only when the mismatch justifies it.",
+        "Preserves the shared remaining retry budget and original scope."
+      ]
+    },
+    {
+      "id": "environment-failure",
+      "prompt": "A worker failed because the sandbox denied access.",
+      "expected": [
+        "Reports a permissions blocker or approved fallback.",
+        "Does not retry with an expensive model or relax sandbox settings."
+      ]
+    },
+    {
+      "id": "review-isolation",
+      "prompt": "Review a material-risk diff independently after repairs.",
+      "expected": [
+        "Uses actual non-inheriting reviewer context or labels self-review.",
+        "Passes diff, criteria and checks, not the implementation transcript."
+      ]
+    },
+    {
+      "id": "image-capability",
+      "prompt": "Compare screenshots but the cheap role is text-only.",
+      "expected": [
+        "Uses only an approved image-capable verified role with the required tools.",
+        "Does not claim rendered verification from source review or text-only input."
+      ]
+    },
+    {
+      "id": "activation-proof",
+      "prompt": "The TOML names a model and the agent says it is using that model.",
+      "expected": [
+        "Does not mark runtime verified from TOML or self-report.",
+        "Requires observed native runtime metadata and matching configuration fingerprint."
+      ]
+    },
+    {
+      "id": "update-drift",
+      "prompt": "Upgrade the kit after the host client changed versions.",
+      "expected": [
+        "Preserves host role files, request, state and recovery backups.",
+        "Invalidates affected activation evidence without changing bindings."
+      ]
+    },
+    {
+      "id": "measured-cost",
+      "prompt": "Report the savings of routing without baseline runs.",
+      "expected": [
+        "Does not promise a percentage or mix credits with API currency.",
+        "Explains what comparable outcome measurements are absent."
+      ]
+    }
+  ]
+}
