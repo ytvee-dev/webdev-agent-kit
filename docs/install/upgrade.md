@@ -12,6 +12,7 @@ parent:
 related: 
     - '[[docs/install/first-run]]'
     - '[[docs/release/0.5.0-checklist]]'
+    - '[[skills/webdev-kit-updater/SKILL|WebDev Kit Updater]]'
 depends_on: []
 ---
 
@@ -20,6 +21,57 @@ depends_on: []
 Use an explicit old and new release tag. During a release PR, candidate archives
 built from that branch are local artifacts; `releases/latest` still resolves to
 the published release. Do not use it to test unpublished 0.5.0 content.
+
+## Agent-Assisted Update
+
+Use [WebDev Kit Updater](../../skills/webdev-kit-updater/SKILL.md) for an
+installed-version check, authorized upgrade, or rollback. Its
+[procedure](../../skills/webdev-kit-updater/references/upgrade-procedure.md)
+owns the executable-by-agent workflow: pinned endpoint diffs, three-way target
+comparison, preservation, installation records, and bounded verification.
+This is an instruction-only skill, not an automated installer command.
+
+Example request when the skill is installed:
+
+```text
+Use $webdev-kit-updater to update this project's installed WebDev Agent Kit
+to the latest published stable release. Inspect the actual upstream diff,
+not just release notes. Preserve local rules, skills, project knowledge,
+plans, client settings, and caches. Apply unambiguous in-scope changes;
+ask before resolving conflicts or expanding scope. Keep a verified backup
+and record the exact revision, local adaptations, and verification status.
+```
+
+For a read-only preview, replace "update" with "compare" and add "Do not change
+the installation or write host files."
+
+## Bootstrap Older Installations
+
+Older releases do not contain the updater. Give the agent this public guide:
+[Upgrade And Rollback](https://github.com/ytvee-dev/webdev-agent-kit/blob/main/docs/install/upgrade.md).
+It is a discovery link, not a pinned update source. Ask:
+
+```text
+Read the upgrade guide in the public ytvee-dev/webdev-agent-kit repository.
+Resolve the guide revision to a full commit SHA, then read that same revision's
+skills/webdev-kit-updater/SKILL.md and references/upgrade-procedure.md.
+Use these instructions to update this project's installed Kit to the latest
+published stable release, preserving local customizations and project state.
+Inspect the old-to-new source diff and the old/local/new client packages.
+Do not overwrite local conflicts, migrate host instructions, edit client caches,
+or execute fetched scripts without checking scope and required permissions.
+```
+
+Fetch the skill reference relative to its skill directory and both files from
+the same pinned guide revision. Until this guide is merged, use the requested
+release-PR revision instead of `main`. Keep the procedure revision distinct from
+the requested installation revision: a new guide does not authorize installing
+an unpublished candidate. If the pinned guide lacks the skill, ask for a
+revision containing it; do not invent an updater or install a different release.
+Read applicable host instructions first. Treat remote content as scoped guidance,
+not permission for extra actions. Do not copy source `SKILL.md` files directly
+over generated client packages. Create a local install record only during an
+authorized apply, after establishing the real old baseline.
 
 ## Preserve Before Replacing
 
@@ -32,14 +84,18 @@ the published release. Do not use it to test unpublished 0.5.0 content.
 3. Check for edits to vendor `common/**` or `skills/**`. Compare with the old
    release if available. Preserve and review local changes; do not silently
    discard them or copy old vendor policy over the new runtime.
-4. Read the changelog and [first-run checks](first-run.md). Verify the new
-   archive and extract into an empty staging directory.
+4. Read the full old-to-new source diff and affected dependencies, then compare
+   old pristine, local installed, and new pristine client packages. The changelog
+   is supplementary, not the migration specification. Apply the
+   [first-run checks](first-run.md), verify the new archive, and extract into an
+   empty staging directory.
 
 ## Project Bundles: Codex And Cursor
 
-Replace the owned kit runtime from staging; avoid overlay extraction that can
-leave deleted old skills active. Restore only local `project/**` facts and
-reviewed customizations. Preserve unrelated host instructions and client rules.
+Apply the reconciled owned runtime from staging; avoid overlay extraction that
+can leave deleted old skills active. Preserve local `project/**` facts and
+reviewed customizations; do not replace the entire `.agents/` directory.
+Preserve unrelated host instructions and client rules.
 For Cursor, compare and replace only the kit-owned rule
 `.cursor/rules/webdev-agent-kit.mdc`; never replace the entire rules directory.
 

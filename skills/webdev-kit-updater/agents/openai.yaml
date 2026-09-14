@@ -1,0 +1,6 @@
+interface:
+    display_name: "WebDev Kit Updater"
+    short_description: "Upgrade Kit while preserving local changes"
+    default_prompt: "Use $webdev-kit-updater to compare my installed Kit with the requested release using upstream diffs, preserve local changes, and apply only the authorized update."
+policy:
+    allow_implicit_invocation: true

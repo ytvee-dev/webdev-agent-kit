@@ -33,7 +33,8 @@
     "mcp-toolchain-manager",
     "pattern-library-manager",
     "project-context-adapter",
-    "project-onboarding-adapter"
+    "project-onboarding-adapter",
+    "webdev-kit-updater"
   ],
   "targets": {
     "claude-code": {

@@ -1,6 +1,6 @@
 ---
 name: agent-rules-skill-author
-description: 'Create, evaluate, or edit this .agents WebDev Agent Kit, including AGENTS.md, common/**, project/**, skills/**, metadata, validators, and progressive-disclosure rules.'
+description: 'Maintain WebDev Agent Kit source rules, skills, metadata, and validators. Excludes upgrading installed copies.'
 id: 'agents.skills.agent-rules-skill-author.skill'
 title: 'Agent Rules And Skill Author'
 doc_type: 'skill'
@@ -48,6 +48,7 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 
 ## When Not To Use
 
+- Updating an installed Kit from upstream releases: use `webdev-kit-updater`.
 - The user asks to write a design implementation spec from screenshots. Use `design-screenshot-spec`.
 - The user asks to implement a frontend layout from a spec. Use `frontend-layout-implementer`.
 - The user asks to visually verify rendered UI. Use `frontend-visual-qa`.

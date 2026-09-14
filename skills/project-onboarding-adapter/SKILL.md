@@ -57,6 +57,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 
 ## When Not To Use
 
+- An existing Kit needs a version update: use `webdev-kit-updater`, preserving
+  existing project overlays instead of repeating onboarding.
 - Ordinary screenshot-to-code implementation.
 - Narrow project overlay refresh after implementation.
 - Reusable skill authoring.

@@ -30,6 +30,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Instruction-only `webdev-kit-updater` and public bootstrap guidance for older
+  installations: pinned upstream diffs, three-way client-package reconciliation,
+  protected local state, conflict gates, installation records, and rollback.
 - Component-level design evidence with selected-layer/property attribution and
   a product decision register covering navigation, forms, states, persistence,
   responsive behavior, and motion. Unresolved choices are clarified with the user
@@ -60,7 +63,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Independent review now distinguishes fresh context from same-session self-review and can seek reproducible counterexamples without forcing findings.
 - Feature plans prefer demonstrable frontend scenarios and explicit slice blockers; analysis checks dependencies and high-impact assumptions without extending the question limit.
 - Verification now permits scoped browser-dependent functional outcomes, including save/reload, URL navigation, downloads, and recovery, without requiring visual changes or new tests.
-- Source and portable-target metadata advance to 0.5.0 with 20 skills. Existing installation contracts, test-authoring permissions, and lightweight routing remain unchanged.
+- Source and portable-target metadata advance to 0.5.0 with 21 skills. Existing installation contracts, test-authoring permissions, and lightweight routing remain unchanged.
 
 ## 0.4.0
 

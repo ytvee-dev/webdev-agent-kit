@@ -1,6 +1,6 @@
 ---
 name: project-context-adapter
-description: 'Refresh local-only project/** facts and frontend path indexes after stack, routing, styling, asset, verification, docs/tool, design-reference, pattern, or ownership changes. Do not put project facts in reusable skills.'
+description: 'Refresh local project/** facts and frontend path indexes after project or tooling changes. Excludes Kit version upgrades and reusable skill authoring.'
 id: 'agents.skills.project-context-adapter.skill'
 title: 'Project Context Adapter'
 doc_type: 'skill'
@@ -55,6 +55,8 @@ implement screenshot-derived specs without scanning the whole repository.
 
 ## When Not To Use
 
+- Upgrading the installed Kit version: use `webdev-kit-updater`; refresh only
+  facts its changed contracts invalidate.
 - First-time full onboarding in Plan Mode. Use `project-onboarding-adapter`.
 - Reusable skill authoring. Use `agent-rules-skill-author`.
 - Screenshot spec writing or implementation unless project facts changed.
