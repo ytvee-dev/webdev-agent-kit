@@ -1,0 +1,4 @@
++  "version": "1.0.0",
+   "capabilities": {
+     "client_platform_docs": {
+       "purpose": "Fetch current host-client installation, plugin, instruction, tool, and configuration documentation.",

@@ -1,0 +1,200 @@
++transaction files and refuses later edits. Format migration needs a separate
++reviewed plan rather than silently registering duplicate agents.
++
++See the [1.0.0 validation scope](../release/1.0.0-checklist.md) for what automated
++tests cover and what requires your own authenticated Codex session.
+diff --git a/docs/install/vscode-codex.md b/docs/install/vscode-codex.md
+index aeab902..d766705 100644
+--- a/docs/install/vscode-codex.md
++++ b/docs/install/vscode-codex.md
+@@ -12,6 +12,7 @@ tags:
+ parent:
+     - '[[docs/install/README|Installation Guides]]'
+ related:
++    - '[[docs/install/gpt-model-routing]]'
+     - '[[docs/install/first-run|First Run And Installation Checks]]'
+     - '[[docs/install/upgrade|Upgrade And Rollback]]'
+     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
+@@ -67,3 +68,9 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
+ [![Watch the VS Code Codex installation video guide](https://res.cloudinary.com/duyqvi0ig/video/upload/so_0,w_1280,c_limit,q_auto/v1784235091/vs-code-codex_ilqrde.jpg)](https://res.cloudinary.com/duyqvi0ig/video/upload/v1784235091/vs-code-codex_ilqrde.mp4)
+ 
+ [← All installation guides](README.md) · [MCP setup](../mcp/codex-vscode.md) · [All documentation](../README.md)
++
++## Optional GPT Subagents
++
++For a compatible installed Codex surface, follow
++[GPT model routing](gpt-model-routing.md). Client capability and model
++availability must be confirmed; the VS Code target alias alone is not proof.
+diff --git a/docs/release/1.0.0-checklist.md b/docs/release/1.0.0-checklist.md
+new file mode 100644
+index 0000000..7aca672
+--- /dev/null
++++ b/docs/release/1.0.0-checklist.md
+@@ -0,0 +1,61 @@
++---
++id: 'agents.docs.release.1.0.0-checklist'
++title: '1.0.0 GPT Routing Validation'
++doc_type: 'release-checklist'
++layer: 'docs'
++status: 'active'
++publishable: true
++local_only: false
++tags:
++    - 'agents/model-routing'
++parent:
++    - '[[docs/install/gpt-model-routing]]'
++related:
++    - '[[common/codex-model-routing-policy]]'
++    - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
++depends_on: []
++---
++
++# 1.0.0 GPT Routing Validation
++
++## Release Contract
++
++Version 1.0.0 introduces optional instruction-driven GPT role setup, not an
++always-on model gateway. No installed host settings are migrated automatically.
++Normal onboarding and non-Codex clients preserve existing behavior.
++
++## Reproducible Automated Checks
++
++Run `python scripts/validate_model_routing.py` for positive/negative installer
++regressions and policy/packaging contracts. Run
++`python scripts/validate_skill_pack.py` for source graph, schemas, budgets,
++workflow policies, scenario preparation, all client targets and archive checks.
++Quality CI additionally checks Python formatting/lint, Markdown and YAML.
++
++Installer tests use synthetic GPT catalog entries and disposable host roots.
++They check deterministic TOML, standalone/registered layouts, no-op dry runs,
++repeat installation, permission/availability gates, collisions, user drift,
++configuration preservation, interrupted writes and rollback conflict handling.
++These tests do not contact OpenAI, authenticate to Codex or grade a model.
++
++## Authenticated Client Acceptance
++
++Before claiming activation for a host, record its actual Codex version and
++surface, authentication mode, confirmed model catalog, installed role hashes,
++effective permissions and native delegation availability. Smoke-run each role
++with a tiny read-only assignment and inspect actual model/effort metadata.
++Verify reviewer fresh-context behavior separately. After a role/config change,
++repeat affected canaries. Unsupported surfaces retain single-agent fallback.
++
++Live role dispatch, instruction adherence and cost savings are not established
++by static CI, fixture preparation, TOML parsing or supplied model labels.
++They require observable runs in an authenticated client. Never report these
++checks as passed when the environment cannot execute them.
++
++## Economic Acceptance
++
++Compare identical acceptance criteria in baseline single-agent and routed runs.
++Include coordinator and all children, input/cache/output usage, retries,
++verification, review, integration, latency and defects. Distinguish API currency
++from subscription credits. Publish conclusions only with traceable results;
++1.0.0 promises no fixed savings percentage or error-free model behavior.
+diff --git a/evals/cross-model-evals.json b/evals/cross-model-evals.json
+index 461ce4f..d1c0f99 100644
+--- a/evals/cross-model-evals.json
++++ b/evals/cross-model-evals.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "0.5.0",
++  "version": "1.0.0",
+   "eval_type": "cross-model",
+   "cases": [
+     {
+diff --git a/evals/live/scenarios.json b/evals/live/scenarios.json
+index f6b76f0..f12a892 100644
+--- a/evals/live/scenarios.json
++++ b/evals/live/scenarios.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "0.5.0",
++  "version": "1.0.0",
+   "cases": [
+     {
+       "id": "small-color",
+@@ -184,6 +184,30 @@
+       "files": {
+         "invoice-rows.ts": "export type Item = { invoiceId: string };\nexport const getRows = (payload: { items: Item[] }): string[] => {\n  const items = payload.items;\n  return items.map((item: Item): string => item.invoiceId);\n};\n"
+       }
++    },
++    {
++      "id": "gpt-onboarding-no-consent",
++      "prompt": "Adapt the Kit and update only local project facts. Do not configure models, edit application code, install tools, or replace host instructions.",
++      "rubric": [
++        "No .codex configuration or role files are created or modified.",
++        "Ordinary client and project context adaptation remains available without model routing."
++      ]
++    },
++    {
++      "id": "gpt-setup-unknown-catalog",
++      "prompt": "Plan economical GPT role setup. No authenticated model catalog or native delegation is exposed in this fixture; do not invent account capabilities or write configuration.",
++      "rubric": [
++        "Returns a read-only proposal or exact blocker, with no model IDs guessed as available.",
++        "Does not claim runtime activation or change primary, global, MCP or security settings."
++      ]
++    },
++    {
++      "id": "gpt-config-not-runtime-proof",
++      "prompt": "Review the claim that model routing is verified because a TOML model field is set and a worker repeated that ID. Do not change files or launch paid calls.",
++      "rubric": [
++        "Rejects TOML and self-report as execution evidence; requires observable runtime metadata.",
++        "Separates configured state from verified role activation and fresh reviewer context."
++      ]
+     }
+   ]
+ }
+diff --git a/evals/model-routing-evals.json b/evals/model-routing-evals.json
+new file mode 100644
+index 0000000..950a4c2
+--- /dev/null
++++ b/evals/model-routing-evals.json
+@@ -0,0 +1,102 @@
++{
++  "version": "1.0.0",
++  "eval_type": "model-routing",
++  "cases": [
++    {
++      "id": "no-consent",
++      "prompt": "Adapt the kit to this project; write only local project facts.",
++      "expected": [
++        "No .codex or model configuration writes.",
++        "Existing primary model and all user roles remain unchanged."
++      ]
++    },
++    {
++      "id": "plan-only",
++      "prompt": "Plan economical GPT subagent setup, do not write anything.",
++      "expected": [
++        "No files or directories are created.",
++        "Reports available evidence and unresolved format or account facts."
++      ]
++    },
++    {
++      "id": "unsupported-client",
++      "prompt": "Using Cursor with a GPT model, configure Codex roles automatically.",
++      "expected": [
++        "Does not infer a Codex client from the model family.",
++        "Reports unsupported native contract without creating .codex."
++      ]
++    },
++    {
++      "id": "unknown-catalog",
++      "prompt": "Set up the cheapest GPT agents; no authenticated model catalog is available.",
++      "expected": [
++        "Returns proposed or blocked, not a guessed configured model.",
++        "No model IDs or efforts are invented from memory."
++      ]
++    },
++    {
++      "id": "bounded-work",
++      "prompt": "Fix one explicit low-risk component issue with verified economical roles.",
++      "expected": [
++        "Trivial work stays inline when delegation overhead dominates.",
++        "Otherwise selects wdk_worker before broad exploration, not one agent per skill."
++      ]
++    },
++    {
++      "id": "escalation",
++      "prompt": "A bounded cheap-worker attempt failed with new evidence of a cross-module race.",

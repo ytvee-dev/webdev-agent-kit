@@ -1,0 +1,200 @@
++| `wdk_complex` | Ambiguous cause or cross-boundary reasoning | No scope expansion |
++| `wdk_reviewer` | Material-risk independent review | No implementation |
++
++Choose the least costly verified adequate role, considering uncertainty,
++consequences, tool access, input modalities, context size and verification.
++Image work requires confirmed image support and real visual evidence tools;
++a text-only model cannot substitute for screenshot analysis. Retain the
++user's primary model and approved cost ceiling. No silent expensive fallback.
++
++## Delegation Contract
++
++Use the actual native delegation tool and the configured role name. A custom
++role's fixed model and effort are not overridden by prose; escalation selects
++a different approved role. Pass only the selected skill, goal and acceptance
++criteria, owned paths, constraints, decisive evidence, required tools, checks,
++and remaining attempt budget. Do not forward the full parent transcript.
++
++Only the coordinator delegates. Default to sequential work; use at most two
++concurrent children only for independent, explicitly bounded assignments, and
++honor stricter client limits. Never allow overlapping writers. Reuse returned
++evidence instead of redoing delegated exploration; verify integration once.
++
++## Escalation And Review
++
++Escalate on a concrete capability mismatch or new evidence, not merely failure.
++Permission, authentication and environment errors are blockers, not reasons to
++buy more reasoning. Use `common/bounded-retry-rules.md`: model changes do not
++reset the shared retry budget. No recursive delegation or endless repair loop.
++
++Independent review follows `common/independent-review-rules.md`, not every
++Standard or Deep task. Launch a non-inheriting fresh context using supported
++client controls; pass criteria, diff, decisions and verification evidence.
++Without real isolation label the pass self-review. After material repairs,
++review the repaired diff independently before claiming independent confidence.
++
++## Cost Evidence
++
++Compare total coordinator, child, cached-input, retry, review and integration
++usage per accepted outcome. Distinguish subscription credits from API money.
++Do not promise a savings percentage without comparable task results. Refresh
++model choices only through approved onboarding, not per task or kit update.
+diff --git a/common/codex-official-docs-policy.md b/common/codex-official-docs-policy.md
+index 07017a6..6352420 100644
+--- a/common/codex-official-docs-policy.md
++++ b/common/codex-official-docs-policy.md
+@@ -13,6 +13,7 @@ tags:
+ parent:
+     - '[[AGENTS|Canonical Agent Policy]]'
+ related:
++    - '[[common/codex-model-routing-policy]]'
+     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules Skill Author]]'
+     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
+     - '[[common/documentation-maintenance|Documentation Maintenance]]'
+@@ -86,3 +87,21 @@ When Codex-native behavior changes in this bundle:
+ 3. Avoid duplicating official URLs across unrelated skills.
+ 4. Update `project/mcp-profile.md` only for host-project tool facts.
+ 5. Report which official source was checked and which validation was run.
++
++## GPT Role Setup Sources
++
++For role configuration and model routing, read the decisive sections of:
++
++- Subagents: https://developers.openai.com/codex/subagents
++- Configuration reference: https://developers.openai.com/codex/config-reference
++- Model catalog: https://developers.openai.com/codex/models
++- App Server and available model metadata: https://developers.openai.com/codex/app-server
++- Codex usage and pricing: https://developers.openai.com/codex/pricing
++- API model selection: https://developers.openai.com/api/docs/guides/model-selection
++
++Contracts checked on 2026-09-14: standalone project agent TOMLs and registered
++role config layers are distinct formats; fixed custom-role model/effort have
++precedence; effective parent permissions still matter. Recheck the installed
++client's supported schema during onboarding. Official redirects to the Codex
++learning documentation remain primary sources. Never equate a public model
++catalog with live account availability or subscription credits with API prices.
+diff --git a/common/runtime-policy-index.md b/common/runtime-policy-index.md
+index 3f48bb3..75d1c92 100644
+--- a/common/runtime-policy-index.md
++++ b/common/runtime-policy-index.md
+@@ -12,6 +12,7 @@ tags:
+ parent:
+     - '[[AGENTS|Canonical Agent Policy]]'
+ related:
++    - '[[common/codex-model-routing-policy]]'
+     - '[[common/domain-glossary-rules|Domain Glossary Rules]]'
+     - '[[common/test-policy|Test Change And Verification Policy]]'
+     - '[[common/readme-policy|README Read And Edit Policy]]'
+diff --git a/docs/install/codex.md b/docs/install/codex.md
+index 9f9fc2a..c5d964a 100644
+--- a/docs/install/codex.md
++++ b/docs/install/codex.md
+@@ -12,6 +12,7 @@ tags:
+ parent:
+     - '[[docs/install/README|Installation Guides]]'
+ related:
++    - '[[docs/install/gpt-model-routing]]'
+     - '[[docs/install/first-run|First Run And Installation Checks]]'
+     - '[[docs/install/upgrade|Upgrade And Rollback]]'
+     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
+@@ -56,4 +57,9 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
+    Update the project context after these changes.
+    ```
+ 
++## Optional GPT Subagents
++
++Version 1.0.0 supports separately approved economical GPT role setup. Follow
++[GPT model routing](gpt-model-routing.md); ordinary adaptation does not enable it.
++
+ [← All installation guides](README.md) · [MCP for WebDev Agent Kit](../mcp/README.md) · [All documentation](../README.md)
+diff --git a/docs/install/gpt-model-routing.md b/docs/install/gpt-model-routing.md
+new file mode 100644
+index 0000000..911c062
+--- /dev/null
++++ b/docs/install/gpt-model-routing.md
+@@ -0,0 +1,90 @@
++---
++id: 'agents.docs.install.gpt-model-routing'
++title: 'Optional GPT Model Routing'
++doc_type: 'user-guide'
++layer: 'docs'
++status: 'active'
++publishable: true
++local_only: false
++tags:
++    - 'agents/model-routing'
++parent:
++    - '[[docs/install/codex]]'
++related:
++    - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
++    - '[[common/codex-model-routing-policy]]'
++    - '[[templates/project/model-routing-profile]]'
++    - '[[docs/release/1.0.0-checklist]]'
++depends_on: []
++---
++
++# Optional GPT Model Routing
++
++Version 1.0.0 adds opt-in, instruction-driven GPT subagents for a supported local
++Codex project bundle, including compatible Codex IDE surfaces. It does not
++change models in Claude or Cursor, replace the main session's model, or require
++an external router/API key. Existing onboarding remains unchanged.
++
++## Enable During Onboarding
++
++After normal installation, send:
++
++```text
++Adapt this kit to the project and configure economical GPT subagents in the
++project-local .codex directory. Preserve my main model, global configuration,
++MCP and security settings. Confirm model availability and show the narrow
++configuration plan before writing. Smoke-test activation when supported.
++```
++
++The agent selects models from your actual client catalog and records the cost
++basis and supported inputs/efforts. The reusable kit deliberately contains no
++fixed production model IDs. Subscription and API authentication can expose
++different catalogs; published model documentation alone is insufficient.
++
++Four roles cover bounded lookup, explicit implementation, complex reasoning
++and independent review. Skills still describe how to work. Instructions select
++a real role per action; trivial work remains inline, parallelism is bounded,
++and stronger models do not reset the existing retry budget.
++
++## Files And Safety
++
++The native format is checked against your installed client. Standalone roles
++live in `.codex/agents/`; registered configuration layers live in
++`.codex/wdk-agents/` with a narrow `.codex/config.toml` registration block.
++Do not configure the same role in both formats. Existing global/user roles,
++main-model defaults, approvals and MCP are preserved. Name conflicts stop setup.
++
++Local `.agents/project/` contains the request, human model-routing profile,
++managed hashes and restricted recovery journals. Keep these and `.codex/`
++out of public commits and release archives. Journals can contain original
++configuration bytes; do not share them. Existing Python 3.11+ can run the
++included deterministic helper; no package installation is required.
++
++For exact request fields, dry-run/apply/rollback commands and collision rules,
++see the [bootstrap reference](../../skills/project-onboarding-adapter/references/codex-model-bootstrap.md).
++Do not run placeholder model IDs. After interruptions, inspect the journal
++and state; do not delete a setup lock while another installer may still run.
++
++## Verify Activation, Not Just Files
++
++A written TOML means configured, not verified. The agent should refresh the
++client as documented, run tiny approved read-only canaries, and inspect actual
++model/effort and permissions from runtime metadata. A model's identity claim
++is not proof. Reviewer independence additionally requires fresh context.
++
++When the client, credentials or observable runtime metadata are unavailable,
++setup remains activation-unverified and the ordinary single-agent workflow
++continues. No invisible expensive fallback is allowed. Real savings must be
++measured across comparable accepted tasks, including coordinator and review
++cost, rather than promised from token rates alone.
++
++## Updates And Recovery
++
++Kit upgrades preserve installed role bindings. Client/auth/config changes mark
++activation evidence stale; request revalidation or reconfiguration explicitly.
++Repeated same-input setup is a no-op. Approved rollback restores only managed

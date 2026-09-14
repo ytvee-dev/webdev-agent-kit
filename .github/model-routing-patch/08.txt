@@ -1,0 +1,200 @@
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--generated", action="store_true")
++    parser.add_argument("--skip-unit-tests", action="store_true")
++    args = parser.parse_args()
++    errors = source_checks()
++    if args.generated:
++        errors += generated_checks()
++    if errors:
++        print("\n".join(errors))
++        return 1
++    if not args.skip_unit_tests:
++        result = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "scripts", "-p", "test_model_routing.py"], cwd=ROOT)
++        if result.returncode:
++            return result.returncode
++    print("GPT routing contracts and offline configuration checks passed; live model execution is not claimed.")
++    return 0
++
++
++if __name__ == "__main__":
++    sys.exit(main())
+diff --git a/scripts/validate_skill_pack.py b/scripts/validate_skill_pack.py
+index 587be9a..15663bb 100644
+--- a/scripts/validate_skill_pack.py
++++ b/scripts/validate_skill_pack.py
+@@ -69,9 +69,15 @@ def main():
+     eval_code = run("validate_skill_evals.py")
+     if eval_code:
+         sys.exit(eval_code)
++    routing_code = run("validate_model_routing.py")
++    if routing_code:
++        sys.exit(routing_code)
+     build_code = run("build_skill_targets.py")
+     if build_code:
+         sys.exit(build_code)
++    routing_target_code = run("validate_model_routing.py", "--generated", "--skip-unit-tests")
++    if routing_target_code:
++        sys.exit(routing_target_code)
+     behavior_code = run("validate_behavior_evals.py")
+     if behavior_code:
+         sys.exit(behavior_code)
+diff --git a/skills/project-context-adapter/SKILL.md b/skills/project-context-adapter/SKILL.md
+index 98f1c89..9cd2f50 100644
+--- a/skills/project-context-adapter/SKILL.md
++++ b/skills/project-context-adapter/SKILL.md
+@@ -161,3 +161,11 @@ Should not trigger:
+ - `references/extraction-checklist.md`
+ - `references/sync-procedure.md`
+ - `common/readme-policy.md`
++
++## Model Routing Drift
++
++When relevant client version, authentication mode, configuration, role paths or
++model availability changes, mark affected local model-routing evidence stale.
++Preserve `project/model-routing-profile.md`, request/state files and backups;
++do not refresh their model bindings automatically. Approved reconfiguration
++belongs to `project-onboarding-adapter` and its GPT bootstrap reference.
+diff --git a/skills/project-onboarding-adapter/SKILL.md b/skills/project-onboarding-adapter/SKILL.md
+index 219e2b2..cd28d46 100644
+--- a/skills/project-onboarding-adapter/SKILL.md
++++ b/skills/project-onboarding-adapter/SKILL.md
+@@ -15,6 +15,8 @@ tags:
+     - 'frontend/project-context'
+ parent: []
+ related:
++    - '[[templates/project/model-routing-profile]]'
++    - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
+     - '[[common/host-instruction-migration-rules|Host Instruction Migration]]'
+     - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
+     - '[[templates/project/verification-profile|Verification Profile Template]]'
+@@ -106,7 +108,18 @@ Read targeted README sections only when they help identify project intent, setup
+ 10. Read `tool-capabilities-manifest.json` for declared capability needs and cache required, available, missing, optional, approved, installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
+ 11. Cache detected client target, native pointer, skill support, and MCP config locations in `project/client-profile.md`.
+ 12. In Plan Mode, return the plan and stop.
+-13. In approved execution mode, create or update only the approved pointer and local-only overlays, then run available validation checks. Native plugins write host facts to host `.agents/project/`, never into the installed plugin. Do not create a pointer to a shared policy file that is not installed.
++13. In approved execution mode, create or update only the approved pointer and local-only overlays, plus GPT role configuration explicitly approved under the optional phase below, then run available validation checks. Native plugins write host facts to host `.agents/project/`, never into the installed plugin. Do not create a pointer to a shared policy file that is not installed.
++
++## Optional GPT Role Setup
++
++Only an explicit GPT-model setup request or approval activates
++`references/codex-model-bootstrap.md`, and only for a confirmed Codex client.
++Plan Mode and ordinary adaptation never write model settings. After the normal
++host checks, follow that reference to resolve available GPT models, inspect
++configuration scope, plan a narrow merge, install approved roles and validate
++activation separately. Use `templates/project/model-routing-profile.md` for
++local evidence. Keep primary/global models, security and MCP unchanged.
++Missing runtime evidence leaves routing inactive; no silent expensive fallback.
+ 
+ ## Output Contract
+ 
+@@ -147,6 +160,7 @@ relevant domain. Glossary maintenance never renames code or edits host docs.
+ - Non-target frontend overlays do not claim React/Next implementation support.
+ - Non-target frontend projects list applicable framework-agnostic skills instead of reporting the whole bundle unusable.
+ - Capability detection uses `tool-capabilities-manifest.json` and does not depend on Codex-only `agents/openai.yaml` files.
++- Optional GPT role setup has explicit approval and follows the bootstrap reference; written TOML is not runtime verification.
+ - No application source files are created during onboarding.
+ - No package, MCP, UI library, styling system, or framework change is made without explicit approval.
+ - Changed Markdown keeps graph frontmatter and English reusable rules.
+diff --git a/skills/project-onboarding-adapter/references/adaptation-checklist.md b/skills/project-onboarding-adapter/references/adaptation-checklist.md
+index cb5cb35..a0c448d 100644
+--- a/skills/project-onboarding-adapter/references/adaptation-checklist.md
++++ b/skills/project-onboarding-adapter/references/adaptation-checklist.md
+@@ -1,4 +1,4 @@
+-﻿---
++---
+ id: 'agents.skills.project-onboarding-adapter.references.adaptation-checklist'
+ title: 'Adaptation Checklist'
+ doc_type: 'skill-reference'
+@@ -89,7 +89,8 @@ the intended frontend stack before writing stack-specific facts.
+ 
+ For a new or empty project, do not create app source files. Create or refresh
+ only the host-root pointer and local-only `project/**` overlays from known or
+-user-provided intended stack facts.
++user-provided intended stack facts, except separately approved GPT role setup
++under the optional gate below.
+ 
+ ## Official Documentation And MCP Selection
+ 
+@@ -169,3 +170,13 @@ to run after implementation.
+ The approved execution report must list files changed, MCP scan results,
+ installation approvals or blockers, validation commands, and remaining unknown
+ facts.
++
++## Optional GPT Routing Gate
++
++Ordinary onboarding and Plan Mode do not change model configuration. An explicit
++GPT setup request in Codex may additionally create approved host `.codex/` role
++files and a narrow registration block, following
++`skills/project-onboarding-adapter/references/codex-model-bootstrap.md`.
++Confirm availability, schema, collisions and preserved primary/security/MCP
++settings; validate dry-run, ownership, rollback and separate runtime activation.
++A missing client or model catalog is a blocker, not permission to guess.
+diff --git a/skills/project-onboarding-adapter/references/codex-model-bootstrap.md b/skills/project-onboarding-adapter/references/codex-model-bootstrap.md
+new file mode 100644
+index 0000000..fea0bb5
+--- /dev/null
++++ b/skills/project-onboarding-adapter/references/codex-model-bootstrap.md
+@@ -0,0 +1,168 @@
++---
++id: 'agents.skills.project-onboarding-adapter.references.codex-model-bootstrap'
++title: 'Codex GPT Model Bootstrap'
++doc_type: 'skill-reference'
++layer: 'skill'
++status: 'active'
++publishable: true
++local_only: false
++tags:
++    - 'agents/model-routing'
++parent:
++    - '[[skills/project-onboarding-adapter/SKILL]]'
++related:
++    - '[[common/codex-model-routing-policy]]'
++    - '[[templates/project/model-routing-profile]]'
++    - '[[common/codex-official-docs-policy]]'
++depends_on: []
++---
++
++# Codex GPT Model Bootstrap
++
++Purpose: let onboarding instructions install approved project-local GPT roles;
++the optional helper only validates and writes files, never routes model calls.
++
++## Entry And Approval
++
++Run only when the user explicitly requests GPT model setup or approves the
++proposed configuration diff. Ordinary adaptation, kit updates, Plan Mode and
++non-Codex clients must not write model settings. Using GPT in Cursor is not
++proof of the Codex contract. Keep the existing primary model unchanged.
++
++Resolve the actual host root, installed Codex surface/version, authentication
++mode, active configuration precedence, project trust, writable boundaries,
++callable delegation and all effective agent names. Do not read credentials.
++Inspect relevant configuration fields, not a secret-bearing config dump.
++Use `common/codex-official-docs-policy.md` for current official contracts.
++Do not install software, trust a project, enable disabled agents, modify global
++settings or relax sandbox/approval controls as a setup workaround.
++
++## Resolve Models From Evidence
++
++Use an actually available client catalog, such as App Server `model/list` only
++when that interface is accessible, or confirmed client model-picker evidence.
++Never invent a callable `list_models` tool. Public documentation establishes
++model capabilities, not account availability. If availability, format or
++permissions cannot be established, return a proposal and the exact blocker.
++
++Select only confirmed GPT IDs with supported reasoning efforts. Record the
++observation date, client/version/auth mode, input modalities, availability
++source and cost basis. Compare current official subscription credits or API
++prices as appropriate; do not mix units or infer price from an ID suffix.
++Use task-fit evidence and expected total cost, not just the lowest token rate.
++Start with an economical model for bounded lookup/work and a more capable
++approved model for complex/review work when the catalog supports that split.
++The same model may serve several roles; do not claim savings without evidence.
++Use higher effort only when justified and supported. No permanent production
++model IDs belong in reusable instructions or templates.
++
++## Choose One Native Format
++
++Check the installed client's documentation/schema before writing:
++
