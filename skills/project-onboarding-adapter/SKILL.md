@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: 'Adapt this .agents bundle to a frontend project using approved native pointers, local-only overlays, stack detection, skill applicability, tool capabilities, client and verification facts, optional loop memory, and context cache. Do not create app code or overwrite instructions.'
+description: 'Adapt frontend projects with approved pointers, local-only stack, client, tool and verification facts, context cache, and loop memory. Configure economical GPT subagents only through explicitly approved Codex onboarding. Do not create app code or overwrite instructions.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'
@@ -49,10 +49,11 @@ Onboarding must also adapt natively to the installed client target. It creates o
 
 ## Natural Language Trigger Aliases
 
-Route adaptation, initialization, and project-context bootstrap commands to this skill, including `адаптируйся`, `инициализируй .agents`, and `Adapt this .agents bundle to my project.`
+Route adaptation, initialization, and project-context bootstrap commands to this skill, including `адаптируйся`, `инициализируй .agents`, and `Adapt this .agents bundle to my project.` Explicit `configure economical GPT subagents` or `настрой экономных GPT-субагентов` requests activate only the optional Codex setup phase.
 
 ## When To Use
 
+- The user explicitly requests economical GPT subagent setup or reconfiguration in a supported Codex project.
 - The user asks to adapt this bundle to a new React or Next.js project.
 - The user asks to adapt this bundle to a non-target frontend project while keeping applicable design, QA, review, lint, planning, MCP, context, and skill-authoring workflows.
 - The user asks to create or refresh the host-root pointer, native client pointer, local project overlays, MCP profile, client profile, design-reference profile, verification facts, loop memory, or path indexes.
@@ -169,6 +170,7 @@ relevant domain. Glossary maintenance never renames code or edits host docs.
 
 Should trigger:
 
+- "Configure economical GPT subagents for this Codex project."
 - "адаптируйся"
 - "Adapt this .agents bundle to my project."
 - "Plan onboarding for this frontend repo."
