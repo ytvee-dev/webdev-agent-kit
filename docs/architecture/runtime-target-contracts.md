@@ -10,10 +10,10 @@ tags:
     - 'docs/architecture'
     - 'packaging/contracts'
 parent:
-    - '[[common/cross-agent-compatibility-rules|Cross-Agent Compatibility Rules]]'
-related:
-    - '[[common/portable-skill-core-contract|Portable Skill Core Contract]]'
     - '[[docs/README|WebDev Agent Kit Documentation]]'
+related:
+    - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
+    - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
 depends_on: []
 ---
 
@@ -52,6 +52,21 @@ build or runtime behavior:
 
 An alias may keep a compatibility download name, but its content, validation,
 and release behavior come from the canonical target.
+
+## Portable Skill And Host Compatibility
+
+Every distributed skill keeps `SKILL.md`, portable `name` and `description`
+frontmatter, trigger-oriented descriptions, plain Markdown workflow instructions,
+and package-valid relative references. Shared skill workflows must not embed host
+project facts or client-specific installation commands. Source graph metadata is
+authoring-only and is stripped from generated targets unless a target validator
+explicitly permits it.
+
+Codex, Claude Code, and Cursor are canonical packaged targets. VS Code aliases
+reuse their canonical target behavior. Other coding-agent hosts may reuse the
+portable policies manually, but they are advisory compatibility surfaces until a
+dedicated adapter, validator, and release artifact exist. Generated output is
+never source truth and must be rebuilt from the source bundle.
 
 ## Source And Runtime Boundaries
 
