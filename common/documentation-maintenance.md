@@ -42,7 +42,8 @@ Before changing bundle docs or skills:
 - Keep `README.md` in the user-facing documentation layer. It may locate claims but is not routing input, runtime policy, validator truth, or sufficient technical evidence.
 - Keep all rules, skills, references, common docs, and project overlays written in English.
 - Keep MCP capability and official documentation facts in `project/mcp-profile.md`.
-- Keep screenshot, exported asset, copied inspect, and design-reference boundaries in `project/design-reference-profile.md`.
+- Keep inspected source identity, screenshot/export provenance, selected-layer
+  evidence, and live access limitations in `project/design-reference-profile.md`.
 
 ## Markdown Rules
 
@@ -62,7 +63,8 @@ Before changing bundle docs or skills:
 - Keep references linked from the owning `SKILL.md`.
 - Keep `agents/openai.yaml` aligned with Codex UI and invocation policy. Keep
   cross-client capability requirements in `tool-capabilities-manifest.json`.
-- Do not declare Figma MCP dependencies in this bundle.
+- Keep Figma MCP optional with browser/computer-use fallback in the capability
+  manifest, not a hard dependency in client skill metadata.
 - When onboarding or context refresh changes capability facts, read
   `tool-capabilities-manifest.json` and update `project/mcp-profile.md` from
   current-registry or validated-profile evidence.
@@ -72,7 +74,7 @@ Before changing bundle docs or skills:
 Before finishing documentation or skill changes:
 
 1. Validate each changed skill package.
-2. Search for stale removed skill names and prohibited Figma/Jam routing.
+2. Search for stale skill names, screenshot-only bans, and unintended design writes.
 3. Search changed docs and overlays for non-English rule text.
 4. Verify actual `skills/**` directories match `bundle-manifest.json` and `.codex-plugin/plugin.json`.
 5. Run Markdown formatting checks when available.

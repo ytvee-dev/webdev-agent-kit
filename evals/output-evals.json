@@ -1,7 +1,40 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "eval_type": "skill-output",
   "cases": [
+    {
+      "id": "design-screenshot-spec.selection-and-coverage",
+      "prompt": "Draft the design spec from screenshots where the text inside a button is selected, the parent frame has separate padding, and one panel is unreadable.",
+      "skill": "design-screenshot-spec",
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["source evidence and selected-layer identity for values", "separate label properties and parent padding", "component/state coverage and unreadable property gaps", "confidence labels and focused follow-up questions"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "attribute parent or mixed-selection properties to a child", "fabricate exact values from illegible text"],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "The compact handoff must point to detailed spec evidence without concealing missing selections."
+    },
+    {
+      "id": "frontend-design-intelligence.unresolved-product-decisions",
+      "prompt": "The inspected design shows a Save button, a dialog, and a toast but not how the dialog opens, closes, retains drafts, or handles failed saves. Three earlier product questions were answered; continue the review without coding.",
+      "skill": "frontend-design-intelligence",
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["inspected component evidence and missing behavior", "specific questions with user impact and proposal tradeoffs", "previously answered decisions preserved", "open decision IDs and blocked dependent implementation"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "stop clarification at three total questions", "silently choose backdrop dismissal or draft persistence", "treat silence as approval"],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "Question rounds must resolve real product gaps without replacing the user as decision maker."
+    },
+    {
+      "id": "frontend-layout-implementer.partial-design-readiness",
+      "prompt": "Implement the inspected screen. Static header details are confirmed, but navigation destination, form opening, and animation timing remain unanswered in the spec.",
+      "skill": "frontend-layout-implementer",
+      "workflow_level": "Standard Workflow",
+      "required_facts": ["confirmed independent scope", "unresolved behavior questions and dependent blockers", "verification of any completed work", "remaining design scope not claimed complete"],
+      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "invent navigation or animation defaults", "mark the entire design ready"],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "A partial handoff must preserve unresolved product decisions through implementation."
+    },
     {
       "id": "frontend-quality-reviewer.review-output-contract",
       "prompt": "Review this frontend change before merge. Do not apply fixes.",

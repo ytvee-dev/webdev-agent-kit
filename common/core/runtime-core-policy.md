@@ -23,7 +23,7 @@ depends_on: []
 
 # Portable Runtime Core Policy
 
-Purpose: define the small, client-neutral behavior that every runtime target applies before optional project profiles and local conventions.
+Purpose: define portable behavior before optional profiles and local conventions.
 
 ## Authority And Evidence
 
@@ -33,7 +33,11 @@ Separate verified facts from inference. Use `common/readme-policy.md` for human-
 
 ## Context And Execution
 
-Classify the task before reading broadly. Inspect the smallest authoritative context that determines the next safe action, stop reading when that action is clear, and load only the relevant skill references.
+Load `project/host-instructions.md` when present before task-specific defaults;
+it preserves migrated host rules and their original scope.
+
+Classify before reading. Inspect authoritative context until the next safe action
+is clear; load only relevant skill references.
 
 For approved changes:
 

@@ -27,7 +27,7 @@ Purpose: split frontend work into small, evidence-backed slices.
 
 - Identify durable execution slices as `S-###` and reference every acceptance
   criterion they cover, for example `S-001 [AC-001, AC-002]`.
-- Each slice must have one target surface and one verification method.
+- Each slice must have one coherent target scenario or surface and one named verification method.
 - Prefer component, route, bug hypothesis, spec handoff, or visual QA slices.
 - Do not combine architecture migration, dependency changes, and UI
   implementation in one slice.
@@ -106,3 +106,21 @@ analysis pass is read-only and does not repair the plan.
 After implementation, use `common/convergence-rules.md` to compare active intent
 with evidence and append only genuinely remaining work. Never pre-create an
 empty convergence section in a durable plan.
+
+## User-Scenario Slices
+
+For feature work, prefer a narrow demonstrable user scenario across the
+necessary frontend owners: component, state, and existing API adapter. Keep
+backend changes outside scope unless authorized. A slice should produce an
+observable result without waiting for unrelated layers to be built.
+
+For durable feature slices, record `Scenario`, `blocked_by` (stable `S-###`
+identifiers, or `none`), and `Demonstrates`. Start only when named prerequisites
+are completed with their required evidence. Never invent a missing API contract.
+Reject unknown dependencies, self-dependencies, and cycles during analysis.
+Preserve these fields on resume; legacy plans may add them only where needed.
+
+For example: first filter updates results; next filter survives reload through
+the URL; next reset and request-error recovery work. Keep mechanical refactors
+and small component changes surface-based. A scenario is not permission for
+migration, broad setup, or unrelated end-to-end infrastructure.

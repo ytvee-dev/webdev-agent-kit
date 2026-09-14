@@ -27,9 +27,14 @@ Purpose: record local-only host-client facts for this project.
 - client:
 - surface:
 - installed package target:
+- canonical target and selected alias:
+- kit version and archive/checksum or commit:
+- client version, OS, and shell:
 - confidence:
 - evidence:
 - last checked:
+- checked source revision:
+- refresh when:
 
 ## Native Entrypoint
 
@@ -52,6 +57,9 @@ Purpose: record local-only host-client facts for this project.
 - `.mcp.json`:
 
 ## Skill Support
+
+Record package installation, actual client discovery, and observed invocation
+separately. Use `not-run` for a skill that has not been exercised.
 
 - native skill support:
 - packaged target:

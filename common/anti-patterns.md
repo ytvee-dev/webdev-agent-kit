@@ -52,8 +52,12 @@ Load only the template relevant to the current code risk:
 
 ## Workflow Anti-Patterns
 
-- Using Figma MCP, live Figma inspection, Figma canvas editing, Figma file creation, Figma whiteboard, design-system generation, or Code Connect workflows.
-- Treating a Figma URL, file key, node id, or Figma whiteboard reference as sufficient source material.
+- Editing Figma canvases, creating files or whiteboards, generating design
+  systems, or writing Code Connect mappings during read-only design intake.
+- Treating a Figma URL as inspected evidence without opening its actual design,
+  or asking for screenshots before trying available MCP/browser read paths.
+- Assigning property-panel values to an unconfirmed selection, or inventing
+  product decisions from static screenshots instead of asking the user.
 - Implementing code before producing or receiving a `Design Implementation Spec`.
 - Guessing hidden component states, assets, token names, breakpoints, or interactions when the source material does not provide them.
 - Inventing CSS variables, tokens, theme names, breakpoint names, spacing names, typography names, or color names.

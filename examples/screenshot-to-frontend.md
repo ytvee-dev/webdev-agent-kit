@@ -39,7 +39,13 @@ design-screenshot-spec
 
 Expected exclusions:
 
-- no Figma MCP;
+- no live-provider lookup for screenshots without a link;
 - no UI component library install;
 - no testing workflow creation;
 - no package installation without approval.
+
+Inspect selected-layer identity before attributing panel values. Record unknown
+states and ask the user about unresolved product behavior before dependent code.
+When a Figma link is supplied instead, the same intake skill tries available
+MCP reads and then browser/computer use; it requests image fallback only after
+available live paths cannot supply the needed evidence.

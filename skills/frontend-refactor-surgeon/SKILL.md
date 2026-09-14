@@ -15,6 +15,8 @@ tags:
     - 'workflow/refactor'
 parent: []
 related:
+    - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
+    - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[common/refactor-safety-rules|Refactor Safety Rules]]'
     - '[[common/approved-patterns|Approved Patterns]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
@@ -59,6 +61,11 @@ Use `frontend-bugfix-debugger` when the primary goal is to fix a defect.
 7. Read `common/typescript-discipline.md`.
 8. Read relevant boundary docs such as `common/state-ownership-rules.md` when the refactor touches state.
 9. Read project overlays and affected source files needed to define the behavior boundary.
+
+When shared UI or compatible component wrappers are in scope, read
+`common/frontend-design-system-rules.md` and
+`common/component-substitution-rules.md`. Apply purpose-specific naming from
+`common/frontend-implementation-boundaries.md` to changed project-owned code.
 
 ## Tool Contract
 

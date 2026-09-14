@@ -87,4 +87,5 @@ Before finishing MCP setup work, verify:
 - missing capability impact was reported;
 - fallbacks were honest;
 - no production systems, secrets, or user accounts were accessed;
-- no Figma or live design-tool workflow was introduced as a fallback for this bundle.
+- design intake uses existing permitted MCP/browser read paths; no design writes,
+  access changes, or installations were introduced as an automatic fallback.

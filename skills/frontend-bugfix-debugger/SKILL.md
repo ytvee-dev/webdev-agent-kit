@@ -79,7 +79,7 @@ For a micro UI fix:
 - Do not use `context7` or MDN merely to confirm ordinary rendering-library usage when the project already has examples or installed package metadata.
 - Do not inspect MCP installation state.
 - Do not start a local server by default.
-- Do not invoke Browser or Playwright unless rendered evidence is explicitly requested, the route is reachable without new auth/session setup, and navigation tools are available.
+- Do not invoke Browser or Playwright unless rendered evidence is explicitly requested or required by a named functional acceptance criterion, the route is reachable without new auth/session setup, and navigation tools are available.
 
 ## Workflow
 

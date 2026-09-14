@@ -1,6 +1,6 @@
 ---
 name: frontend-layout-implementer
-description: 'Implement an approved Design Implementation Spec or screenshot-derived spec in React/Next.js using existing CSS Modules, Redux, TanStack, and Axios conventions. Excludes unrelated stacks, live design tools, and new styling systems.'
+description: 'Implement approved React/Next.js design specs using existing CSS Modules, Redux, TanStack, and Axios conventions. Route uninspected designs to intake and resolve product decisions before coding. Excludes unrelated stacks and styling systems.'
 id: 'agents.skills.frontend-layout-implementer.skill'
 title: 'Frontend Layout Implementer'
 doc_type: 'skill'
@@ -15,6 +15,9 @@ tags:
     - 'frontend/layout'
 parent: []
 related:
+    - '[[skills/design-screenshot-spec/references/product-behavior-review|Product Behavior Review]]'
+    - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
+    - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[skills/frontend-layout-implementer/references/implementation-rules|Implementation Rules]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/approved-patterns|Approved Patterns]]'
@@ -55,8 +58,9 @@ When the user asks to keep iterating until measurable visual, lint, build, or ro
 
 ## When Not To Use
 
-- The design intent has not been converted into a spec and the source is only screenshots. Use `design-screenshot-spec` first.
-- The user asks for live Figma inspection, Figma MCP, canvas edits, or Figma whiteboard workflows.
+- The design intent has not been converted into a spec from supplied links or
+  screenshots. Use `design-screenshot-spec` first, then resume requested code work.
+- The user asks only for live design inspection, canvas edits, or whiteboard work.
 - The project is outside the supported target stack unless the user explicitly changes scope.
 - The task is unrelated to frontend rendering or layout.
 
@@ -76,6 +80,11 @@ When the user asks to keep iterating until measurable visual, lint, build, or ro
 
 Do not read generated `dist/**` during normal runtime.
 
+When shared UI or compatible component wrappers are in scope, read
+`common/frontend-design-system-rules.md` and
+`common/component-substitution-rules.md`. Apply purpose-specific naming from
+`common/frontend-implementation-boundaries.md` to changed project-owned code.
+
 ## Tool Contract
 
 - Use Project Context MCP when available; otherwise read `project/**` and source files directly.
@@ -86,7 +95,7 @@ Do not read generated `dist/**` during normal runtime.
 - Use `mdn` for current HTML, CSS, Web API, accessibility, and compatibility facts.
 - Use rendered visual QA only when screenshot comparison, viewport evidence, overflow checks, or visible state verification are in scope.
 - Use Visual Diff MCP when available during final visual comparison.
-- Do not use Figma MCP.
+- Route live design reads through `design-screenshot-spec` and reuse its evidence.
 - If a named MCP is unavailable, report the missing capability before using a lower-confidence fallback.
 
 ## Workflow
@@ -94,7 +103,12 @@ Do not read generated `dist/**` during normal runtime.
 1. Confirm the task is within the supported target stack.
 2. Detect React/Next.js routing, CSS Modules ownership, Redux ownership, TanStack usage, Axios API adapter boundaries, and verification commands.
 3. Map the spec to existing project components, layout primitives, tokens, assets, styles, and UX patterns.
-4. Identify missing design details before editing. Ask only when the gap changes implementation.
+4. Check component coverage and the spec's product decision register before
+   editing. Use `skills/design-screenshot-spec/references/product-behavior-review.md`
+   through the owning skill for unresolved design or behavior. Ask the user to
+   resolve every needed product choice; implement only confirmed independent
+   scope. Do not invent transitions, form opening/dismissal, persistence, hidden
+   states, responsive choices, or animation defaults to complete the page.
 5. Use `frontend-architecture-planner` before editing when route, state, data, form, build, workspace, or shared component ownership is unclear or material.
 6. Use `loop-workflow-planner` before editing when the task requires bounded retry, independent review, loop memory, or measurable iteration beyond one implementation pass.
 7. Plan component decomposition before editing.
@@ -128,6 +142,20 @@ Report:
 - lint and verification commands run;
 - rendered visual QA result, skipped reason, or blocker.
 
+## Domain Terms
+
+When affected product terms have a glossary, load that domain under
+`common/domain-glossary-rules.md`. Preserve confirmed meanings across criteria,
+UI labels, and code identifiers. Do not silently resolve material ambiguity.
+
+## Functional Acceptance
+
+For behavior changes, verify the user outcome under
+`common/verification-loop-rules.md`. A named browser-dependent functional
+criterion permits a scoped browser check under
+`common/rendered-visual-verification-policy.md` even without a visual change.
+Keep visual QA routed separately; report unverified runtime behavior honestly.
+
 ## Validation Gates
 
 - Implementation must follow inspected project conventions.
@@ -136,7 +164,8 @@ Report:
 - Structural devices must encode meaning instead of decoration.
 - Form, navigation, data, icon, and mobile risks must be handled when present.
 - Bounded iteration must have measurable criteria, attempt limit, and stop conditions.
-- No Figma MCP use is allowed.
+- Source evidence and confirmed user decisions must cover the implemented slice;
+  unresolved dependent behavior is blocked, not silently filled from conventions.
 - No new package, styling system, global token, architecture layer, or UI library may appear without approval.
 - Code-changing implementation must run lint when an existing lint command is available.
 
@@ -155,6 +184,7 @@ Should not trigger:
 ## Reference Map
 
 - `common/target-stack-policy.md`
+- `skills/design-screenshot-spec/references/product-behavior-review.md`
 - `common/approved-patterns.md`
 - `common/anti-patterns.md`
 - `common/css-modules-specificity-rules.md`

@@ -1,6 +1,6 @@
 ---
 name: project-context-adapter
-description: 'Refresh local-only project/** facts and frontend path indexes after stack, routing, styling, asset, verification, docs/tool, design-reference, pattern, or ownership changes. Do not put project facts in reusable skills.'
+description: 'Refresh local project/** facts and frontend path indexes after project or tooling changes. Excludes Kit version upgrades and reusable skill authoring.'
 id: 'agents.skills.project-context-adapter.skill'
 title: 'Project Context Adapter'
 doc_type: 'skill'
@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
     - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[skills/project-context-adapter/references/extraction-checklist|Extraction Checklist]]'
     - '[[skills/project-context-adapter/references/sync-procedure|Sync Procedure]]'
@@ -54,13 +55,15 @@ implement screenshot-derived specs without scanning the whole repository.
 
 ## When Not To Use
 
+- Upgrading the installed Kit version: use `webdev-kit-updater`; refresh only
+  facts its changed contracts invalidate.
 - First-time full onboarding in Plan Mode. Use `project-onboarding-adapter`.
 - Reusable skill authoring. Use `agent-rules-skill-author`.
 - Screenshot spec writing or implementation unless project facts changed.
 
 ## Required Context
 
-1. Read `AGENTS.md`.
+1. Read `AGENTS.md` when shipped, or the native plugin's generated runtime prelude. Resolve local overlays under host `.agents/project/`, not inside a shared plugin installation.
 2. Confirm the classified task is `project-context-refresh` or a project
    context cache update required by another task.
 3. Read `common/documentation-maintenance.md`.
@@ -69,6 +72,7 @@ implement screenshot-derived specs without scanning the whole repository.
    styles, assets, `tool-capabilities-manifest.json`, and verification scripts.
 6. Read `references/extraction-checklist.md`.
 7. Read `references/sync-procedure.md`.
+8. Read `common/project-fact-provenance-rules.md`; preserve unrefreshed dates and mark unexecuted checks `not-run`.
 
 Read targeted README sections only when the refresh concerns project intent, setup guidance, or documentation drift. Use `common/readme-policy.md` and confirm cached technical facts through higher evidence.
 
@@ -113,6 +117,14 @@ Report:
 - verification performed;
 - any project facts that remain unknown.
 
+## Product Language Context
+
+When product terms affect the task, read `common/domain-glossary-rules.md`.
+Reuse a confirmed host glossary or maintain a populated local-only
+`project/domain-glossary.md`; do not create one during read-only planning.
+Record consequential reasons in the existing decision log and load only the
+relevant domain. Glossary maintenance never renames code or edits host docs.
+
 ## Validation Gates
 
 - `project/**` files must remain local-only.
@@ -120,13 +132,15 @@ Report:
 - `project/mcp-profile.md` must match active declarations in
   `tool-capabilities-manifest.json` when it is touched; provider config alone
   must not be recorded as availability.
-- `project/design-reference-profile.md` must not imply live design-tool access.
+- `project/design-reference-profile.md` must distinguish successful live reads
+  from image evidence and unverified historical access; preserve source/state IDs.
 - Patterns and anti-patterns must cite real local code facts or official
   documentation choices, not generic preferences.
 - Reusable skills must not receive host-specific facts.
 - README claims must not become project facts without confirmation from source, config, CI, package scripts, lockfiles, official documentation, or real results.
 - Context refresh must not edit README unless the current user explicitly requests that README change.
-- No Figma MCP or Figma whiteboard workflow may be introduced.
+- Context refresh records design evidence; live acquisition belongs to
+  `design-screenshot-spec`, and canvas/whiteboard writes remain outside refresh.
 
 ## Trigger Evals
 

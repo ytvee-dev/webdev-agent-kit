@@ -92,7 +92,8 @@ Do not use this skill to implement frontend code, write tests, scaffold projects
 - Must not change Codex, Claude, Cursor, VS Code, MCP, shell, package manager, or project configuration without explicit user approval.
 - Must not run package installs.
 - Must not access production systems or secrets.
-- Must not use Figma MCP unless the user explicitly requested a live Figma workflow and that workflow is outside the screenshot-only bundle boundary.
+- Route live design inspection to `design-screenshot-spec`; this skill maps
+  provider availability and does not acquire design content or edit canvases.
 
 ## Core Tool Capabilities
 
@@ -112,13 +113,15 @@ repo_metadata
 design_reference_files
 ```
 
-Blocked by default for this bundle's screenshot-only flow:
+Conditional design acquisition through `design-screenshot-spec`:
 
 ```text
 live_design_source
-figma_mcp
-figjam_mcp
 ```
+
+Prefer callable Figma MCP reads; fall back to browser/computer use with canvas
+pointer interaction and property-panel screenshots. Screenshot-only input needs
+no live provider. The capability excludes design writes and automatic setup.
 
 Core does not mean always installed or always used. Use only what the current workflow needs.
 

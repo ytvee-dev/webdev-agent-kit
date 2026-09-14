@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
 related:
+    - '[[common/host-instruction-migration-rules|Host Instruction Migration]]'
     - '[[common/tool-capability-model|Tool Capability Model]]'
     - '[[common/mcp-installation-policy|MCP Installation Policy]]'
     - '[[adapters/claude-code|Claude Code Client Adapter]]'
@@ -44,10 +45,16 @@ Use only the pointer template linked by the matching adapter. Compatibility alia
 
 If a host project already has `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/**`, or client config files:
 
-1. Inspect only the minimal pointer section needed for adaptation.
+1. Inspect the minimal pointer section for detection; read the whole file before proposing or performing a migration.
 2. Do not overwrite existing instructions.
 3. Propose a merge when existing instructions are non-empty or ambiguous.
 4. Require user approval before editing existing host instructions.
+
+Explicit instruction-migration requests already authorize the requested
+replacement. Apply `common/host-instruction-migration-rules.md`: preserve all
+rules in reachable local overlays, retain a verbatim backup and coverage map,
+validate them, then replace the root with the minimal pointer. Generic
+adaptation still proposes a merge before replacing nonempty instructions.
 
 ## Client Profile
 

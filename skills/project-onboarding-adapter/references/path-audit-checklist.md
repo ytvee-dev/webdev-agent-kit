@@ -74,9 +74,9 @@ Flag these as drift in the adaptation plan:
 - app source files, framework configs, package manifests, routes, components,
   styles, tests, or build scripts planned for creation during new-project
   onboarding.
-- Figma MCP, whiteboard, live-design inspection, canvas editing, file creation,
-  design-system generation, or Code Connect tooling listed as a required or
-  fallback dependency.
+- Figma MCP listed as a hard dependency without the design-intake browser
+  fallback, or canvas/file/whiteboard creation and mapping writes introduced
+  through design acquisition.
 
 ## Output Format
 

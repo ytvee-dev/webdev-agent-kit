@@ -137,6 +137,13 @@ Next Skill Or Next Step
 
 Omit irrelevant sections rather than filling them with generic text.
 
+## Unresolved Experimental Questions
+
+If a material UI or state choice remains unresolved after targeted source and
+documentation inspection, hand off one bounded question to
+`frontend-prototype-explorer`. Keep this planning skill read-only. Return the
+observed decision and its limitations to the existing plan or decision log.
+
 ## Validation Gates
 
 - The task actually needed architecture planning.

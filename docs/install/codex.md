@@ -12,6 +12,8 @@ tags:
 parent:
     - '[[docs/install/README|Installation Guides]]'
 related:
+    - '[[docs/install/first-run|First Run And Installation Checks]]'
+    - '[[docs/install/upgrade|Upgrade And Rollback]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
     - '[[common/mcp-installation-policy|MCP Installation Policy]]'
     - '[[docs/mcp/README|MCP for WebDev Agent Kit]]'
@@ -19,6 +21,9 @@ depends_on: []
 ---
 
 # Install WebDev Agent Kit for Codex
+
+Before extracting, complete the [first-run checks](first-run.md). For an existing
+installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 
 1. Download the latest
    [Codex package](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-codex.tar.gz).

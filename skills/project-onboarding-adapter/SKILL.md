@@ -15,6 +15,9 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[common/host-instruction-migration-rules|Host Instruction Migration]]'
+    - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
+    - '[[templates/project/verification-profile|Verification Profile Template]]'
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
     - '[[common/readme-policy|README Read And Edit Policy]]'
     - '[[profiles/react-typescript/PROFILE|React TypeScript Profile]]'
@@ -54,6 +57,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 
 ## When Not To Use
 
+- An existing Kit needs a version update: use `webdev-kit-updater`, preserving
+  existing project overlays instead of repeating onboarding.
 - Ordinary screenshot-to-code implementation.
 - Narrow project overlay refresh after implementation.
 - Reusable skill authoring.
@@ -62,8 +67,8 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 
 ## Required Context
 
-1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect only the minimal pointer section.
-2. Read bundle-local `AGENTS.md` and `common/core/runtime-core-policy.md`.
+1. Read the host-root native instruction pointer if present and needed for adaptation: `AGENTS.md`, `CLAUDE.md`, or client rules. Inspect the minimal pointer section for detection; read the entire file for requested migration using `common/host-instruction-migration-rules.md`.
+2. Read bundle-local `AGENTS.md` when shipped and `common/core/runtime-core-policy.md`. Native plugins use their generated skill prelude; do not require an absent shared-policy entrypoint.
 3. Read `common/client-adaptation-policy.md` and only the adapter for the resolved canonical target.
 4. Read `profiles/react-typescript/PROFILE.md` and its owning policies only when repository evidence confirms the profile.
 5. Read `common/skill-applicability-policy.md` when the detected or suspected stack is outside the target stack.
@@ -72,6 +77,7 @@ Route adaptation, initialization, and project-context bootstrap commands to this
 8. Read existing `project/**` overlays when present.
 9. Inspect only relevant manifests, configs, source entrypoints, routes, styles, assets, and verification scripts.
 10. Read `templates/project/client-profile.md` and `templates/project/mcp-profile.md` before creating those local-only profiles.
+11. Read `common/project-fact-provenance-rules.md` and `templates/project/verification-profile.md` before caching verification or capability facts.
 
 Read targeted README sections only when they help identify project intent, setup guidance, or documentation drift. Apply `common/readme-policy.md`, and confirm every cached technical fact through manifests, config, source, CI, package scripts, lockfiles, or real results.
 
@@ -91,7 +97,7 @@ Read targeted README sections only when they help identify project intent, setup
 1. Classify whether this is Plan Mode or approved execution.
 2. Detect the installed target or current client surface. In source, resolve aliases through `bundle-manifest.json`; in a generated target, use its sole shipped adapter.
 3. Read that one client adapter and apply its native discovery, pointer, tool, sandbox, and configuration rules. For a generic or unknown client, create no pointer unless the user explicitly requests one.
-4. If an expected pointer already exists, do not overwrite it. Propose a merge when existing instructions are non-empty or ambiguous.
+4. If an expected pointer already exists, preserve it unless replacement is explicitly authorized. For requested migration, preserve all host rules in reachable local overlays, retain a backup and coverage map, and validate before writing the minimal pointer. Otherwise propose a merge for nonempty or ambiguous instructions.
 5. Detect whether the host project is existing, new/empty, or partially initialized.
 6. Detect target-stack fit from manifests, configs, lockfiles, source roots, routes, styles, and entrypoints.
 7. If the project fits the target stack, plan or write normal `project/**` overlays for stack, architecture, styling, state, data, verification, design references, MCP profile, client profile, and path indexes.
@@ -100,7 +106,7 @@ Read targeted README sections only when they help identify project intent, setup
 10. Read `tool-capabilities-manifest.json` for declared capability needs and cache required, available, missing, optional, approved, installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
 11. Cache detected client target, native pointer, skill support, and MCP config locations in `project/client-profile.md`.
 12. In Plan Mode, return the plan and stop.
-13. In approved execution mode, create or update only the approved pointer and local-only overlays, then run available validation checks.
+13. In approved execution mode, create or update only the approved pointer and local-only overlays, then run available validation checks. Native plugins write host facts to host `.agents/project/`, never into the installed plugin. Do not create a pointer to a shared policy file that is not installed.
 
 ## Output Contract
 
@@ -121,6 +127,14 @@ Verification commands
 Validation run or blocked
 Unknowns
 ```
+
+## Product Language Context
+
+When product terms affect the task, read `common/domain-glossary-rules.md`.
+Reuse a confirmed host glossary or maintain a populated local-only
+`project/domain-glossary.md`; do not create one during read-only planning.
+Record consequential reasons in the existing decision log and load only the
+relevant domain. Glossary maintenance never renames code or edits host docs.
 
 ## Validation Gates
 

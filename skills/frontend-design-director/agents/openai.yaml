@@ -1,6 +1,6 @@
 interface:
     display_name: 'Frontend Design Director'
     short_description: 'Define frontend visual direction'
-    default_prompt: 'Use $frontend-design-director to define a subject-grounded visual direction, anti-template checks, and visual acceptance criteria before UI implementation.'
+    default_prompt: 'Use $frontend-design-director to propose a subject-grounded visual direction from inspected evidence, resolve open visual and product decisions with me, and define acceptance criteria before implementation.'
 policy:
     allow_implicit_invocation: true

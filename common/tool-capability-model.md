@@ -37,7 +37,8 @@ Use this vocabulary in runtime rules, toolchain reports, and `project/mcp-profil
 - `client_platform_docs` - fetch current Claude Code, Cursor, VS Code, or other host-client documentation when adaptation depends on client behavior.
 - `repo_metadata` - inspect repository, PR, issue, review, label, release, and CI metadata.
 - `design_reference_files` - read user-supplied screenshots, exported assets, copied inspect values, and local visual references.
-- `live_design_source` - inspect live design-tool files. This capability is blocked for the default screenshot-only bundle flow.
+- `live_design_source` - read supplied live designs and prototype behavior through
+  Figma MCP or browser/computer use, without modifying the source canvas.
 
 ## Provider Mapping
 
@@ -58,6 +59,16 @@ Map an active capability to providers in this order:
 The provider may be a native GPT/Codex tool, a native Claude Code tool, a host connector, an MCP server, or an allowed shell fallback. No provider class has special authority.
 
 For `openai_platform_docs`, prefer a callable official OpenAI Developer Docs MCP provider, regardless of its client-specific configured name. Use the official OpenAI web docs fallback when the MCP provider is unavailable. Activate this capability only when current OpenAI behavior can affect the task; provider availability alone must not trigger a lookup.
+
+For `live_design_source`, `design-screenshot-spec` owns acquisition, including
+handoffs from design direction, intelligence, and implementation. A supplied
+link activates MCP-first inspection and browser/computer-use fallback when MCP
+is missing, failing, or incomplete. Confirm file access with a scoped read;
+browser fallback needs screenshots and pointer interaction with the canvas and
+property panels. Native provider naming alone does not prove these controls.
+With supplied screenshots and no link, activate `design_reference_files` only.
+If both live paths fail, use supplied images and report the unverified live scope;
+image fallback is a change of evidence source, not successful live access.
 
 Do not treat a provider name, package, lockfile entry, config entry, or `agents/openai.yaml` declaration as proof that the capability is available. Availability evidence is limited to:
 
@@ -89,5 +100,7 @@ Validation:
 - Missing optional capabilities must use an honest fallback or be skipped; they must not trigger installation work.
 - Do not claim tool-based verification from a package dependency, lockfile entry, running local server, or config file alone.
 - Do not install or configure tools to satisfy a capability without explicit user approval and a verified official source.
-- Do not use Figma or live design-tool providers as fallback for this bundle's screenshot-only design flow.
+- Design intake allows scoped live reads, not canvas writes, generated design
+  systems, whiteboards, or new Code Connect mappings. Follow the active host's
+  tool/skill instructions and preserve user authentication boundaries.
 - Keep durable host-client and MCP facts in `project/mcp-profile.md`, not in reusable bundle rules.

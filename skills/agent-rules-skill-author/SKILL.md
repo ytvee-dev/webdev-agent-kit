@@ -1,6 +1,6 @@
 ---
 name: agent-rules-skill-author
-description: 'Create, evaluate, or edit this .agents WebDev Agent Kit, including AGENTS.md, common/**, project/**, skills/**, metadata, validators, and progressive-disclosure rules.'
+description: 'Maintain WebDev Agent Kit source rules, skills, metadata, and validators. Excludes upgrading installed copies.'
 id: 'agents.skills.agent-rules-skill-author.skill'
 title: 'Agent Rules And Skill Author'
 doc_type: 'skill'
@@ -48,6 +48,7 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 
 ## When Not To Use
 
+- Updating an installed Kit from upstream releases: use `webdev-kit-updater`.
 - The user asks to write a design implementation spec from screenshots. Use `design-screenshot-spec`.
 - The user asks to implement a frontend layout from a spec. Use `frontend-layout-implementer`.
 - The user asks to visually verify rendered UI. Use `frontend-visual-qa`.
@@ -68,7 +69,8 @@ Create or revise repo-local agent rules and `.agents`-compatible skill packages 
 - Use filesystem reads and targeted search for local bundle facts.
 - Activate `openai_platform_docs` when current OpenAI or Codex behavior affects the change; follow `common/codex-official-docs-policy.md`.
 - Use `context7` and `mdn` only when authoring rules depend on current framework or web platform behavior.
-- Do not use Figma MCP for this bundle.
+- Rule maintenance needs source/docs reads, not live Figma access. Encode live
+  design intake through `design-screenshot-spec` and the capability manifest.
 
 ## Workflow
 
@@ -102,7 +104,8 @@ Report:
 - `agents/openai.yaml` matches skill UI and invocation policy. Only true hard
   client-tool dependencies belong there; optional providers belong in the
   capability manifest.
-- No Figma MCP or Figma whiteboard workflow is introduced.
+- Live design intake remains read-only, MCP-first with browser fallback, and
+  does not introduce whiteboard/canvas writes or hard provider dependencies.
 - README is not used as runtime policy, routing input, validator truth, or sole technical evidence, and is not edited without an explicit current user request.
 
 ## Trigger Evals

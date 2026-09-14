@@ -21,14 +21,51 @@ depends_on:
 
 # Spec Extraction Checklist
 
+Sections cover source identity, selected-layer evidence, visual measurements,
+typography, responsive analysis, and confidence. Apply the same component-level
+ledger to MCP reads, browser inspection, and screenshot-only intake.
+
 ## Source Inventory
 
-- List each screenshot, exported asset, copied inspect panel, and written note.
+- List each link, successful MCP read, browser capture, supplied screenshot,
+  exported asset, copied inspect panel, and written note with a source ID.
 - Group artifacts by screen, component, viewport, and state.
 - Record each screenshot's visible or provided width, height, viewport or frame
   label, state, and screen or component ownership.
 - Record missing desktop, tablet, mobile, hover, focus, disabled, loading, empty,
   and error states.
+
+## Selected Layer And Property Evidence
+
+- First inspect the entire image: canvas, layer tree, selection outline,
+  breadcrumb, right-side properties, and any prototype panel. Identify what is
+  selected, not merely which component is visually prominent.
+- For each component capture source ID, frame/parent/layer path, node ID when
+  available, instance/variant/state, viewport, mode, and evidence location.
+- Attribute panel values only to the confirmed selection. Parent-frame padding
+  is not button padding; text fill is not a background; a selected icon's size
+  is not the surrounding control size. Mixed or multi-selected values stay
+  ambiguous until selection-specific evidence is available.
+- Read every relevant visible panel section and text run: typography (including
+  letter spacing), dimensions and sizing mode, padding/gap, constraints, fill
+  color and alpha, border, radii, shadow/blur, component properties, and tokens.
+  Record literal units and names rather than converting them from memory.
+- Use original-resolution images and crops/zoom supported by the host to read
+  small values. Preserve the image ID and crop location. Record device scale and
+  canvas zoom when known; screen pixels do not automatically equal CSS pixels.
+- Do not sample selection outlines, editor chrome, or anti-aliased text edges
+  as design colors. Readable property values are exact for that selection;
+  sampled colors and OCR remain estimates until visually confirmed.
+- Inspect each unique component/state; link repeated instances to the verified
+  base and record overrides. Do not extrapolate one selected component's values
+  across an entire screen merely because controls look similar.
+- When identity, units, or panel text cannot be read, mark the specific property
+  unknown and request a focused capture with both selection and panel visible.
+  Do not invent hidden layers, fonts, variants, token names, or exact hex values.
+
+Use a compact ledger row per component/state:
+
+`source | selection/parent | variant/state/mode | property/value/unit | evidence location | confidence | gap`
 
 ## Visual Extraction
 
@@ -64,7 +101,7 @@ depends_on:
 
 ## Typography Extraction
 
-- Prefer copied inspect panels, selected text properties, exported values, and
+- Prefer matching live properties, copied inspect panels, selected text properties, exported values, and
   explicit notes over screenshot estimates.
 - For each important text style, record family, weight, size, line height,
   alignment, transform, color, max width, and wrapping behavior when visible or
@@ -88,18 +125,20 @@ depends_on:
 - For every desktop reference, record left, right, top, and bottom edge anchors
   for major content and media, including which anchors stay attached to the
   viewport and which belong to an explicitly evidenced container.
-- State how the layout behaves beyond the widest reference viewport: which
+- Record evidenced behavior beyond the widest reference viewport: which
   regions remain edge-anchored, grow, cap, crop, or expose background.
-- Describe how the layout should stack, reflow, hide, resize, crop, or change
-  density between supplied widths.
-- When intermediate viewport sizes are not supplied, provide conservative
-  adaptive guidance and label it `screenshot-inferred`.
+- Describe observed stacking, reflow, hiding, resizing, cropping, and density
+  differences between supplied widths; frame dimensions alone prove no breakpoint.
+- When intermediate or wider behavior is not evidenced, label it `unknown` and
+  propose adaptive behavior for user confirmation. Keep proposals out of the
+  accepted implementation contract until answered.
 - Ask for another screenshot or confirmation when the missing intermediate
   behavior would materially change implementation.
 
 ## Confidence Labels
 
-- `source-provided`: copied inspect value, exported value, or explicit note.
+- `source-provided`: successful MCP property read, legible property panel for
+  the identified selection, copied inspect value, export, or explicit note.
 - `screenshot-inferred`: estimated from a visible screenshot.
 - `unknown`: not visible or not provided.
 
@@ -113,3 +152,5 @@ depends_on:
   implementation.
 - The final spec must include measured or inferred spacing, typography, and
   viewport behavior with confidence labels rather than generic descriptions.
+- Complete `product-behavior-review.md` after extraction; every unresolved
+  product/design choice blocks its dependent implementation until answered.

@@ -15,6 +15,8 @@ tags:
     - 'workflow/quality-review'
 parent: []
 related:
+    - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
+    - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[common/review-severity-model|Review Severity Model]]'
     - '[[common/approved-patterns|Approved Patterns]]'
     - '[[common/anti-patterns|Common Anti-Patterns]]'
@@ -87,6 +89,11 @@ If review finds required fixes, report them first. Do not apply fixes unless the
 12. Read `common/build-tool-boundary-rules.md` and `common/lint-verification-rules.md` when code changed.
 13. Read affected source files, diffs, project overlays, loop contract, verification output, and rendered evidence needed for the review.
 
+When shared UI or compatible component wrappers are in scope, read
+`common/frontend-design-system-rules.md` and
+`common/component-substitution-rules.md`. Apply purpose-specific naming from
+`common/frontend-implementation-boundaries.md` to changed project-owned code.
+
 ## Tool Contract
 
 - May inspect diffs, affected files, project overlays, loop contracts, and verification output.
@@ -145,6 +152,21 @@ Praise:
 ```
 
 Use file and line references for code findings whenever available.
+
+## Review Evidence Boundary
+
+Record review context as `fresh-context` or `self-review` following
+`common/independent-review-rules.md`. A separate skill pass alone is not fresh.
+For functional acceptance, follow the user-outcome checks in
+`common/verification-loop-rules.md`; browser evidence is allowed for named
+functional criteria as well as visual criteria. Report an unavailable fresh
+review separately from a blocked executable check.
+
+## Domain Terms
+
+When affected product terms have a glossary, load that domain under
+`common/domain-glossary-rules.md`. Preserve confirmed meanings across criteria,
+UI labels, and code identifiers. Do not silently resolve material ambiguity.
 
 ## Validation Gates
 

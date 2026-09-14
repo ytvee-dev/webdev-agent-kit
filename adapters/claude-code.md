@@ -19,7 +19,7 @@ depends_on:
 
 # Claude Code Client Adapter
 
-Purpose: map portable behavior to Claude Code discovery and project instructions without redefining workflow policy.
+Purpose: map portable policy to Claude Code discovery and project instructions.
 
 ## Discovery
 
@@ -31,9 +31,14 @@ Purpose: map portable behavior to Claude Code discovery and project instructions
 
 Plugin installation does not authorize project-file edits. If the project separately uses `.agents/AGENTS.md`, propose the exact root `CLAUDE.md` import `@.agents/AGENTS.md`. Create or merge it only after explicit user approval; never overwrite existing instructions.
 
+Resolve reusable paths under the plugin root and `project/**` under host
+`.agents/project/`. Never write host facts into the shared plugin.
+
 ## Tool Boundary
 
-Detect tools from the current Claude Code registry and verified project capability facts. A native Claude Code tool can satisfy a capability without a named MCP server. Do not infer availability from packages, config, provider names, or another client's metadata. Use the portable fallback when a capability is absent and report the resulting verification limit.
+Detect tools from the current registry and verified project facts. Native tools
+can satisfy capabilities. Packages, config, provider names, and another client's
+metadata do not prove availability. Use declared fallbacks and report limits.
 
 ## Output Boundary
 

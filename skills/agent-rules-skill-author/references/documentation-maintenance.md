@@ -38,6 +38,6 @@ Use this workflow when the task changes `.agents/`, a skill package, repo agent 
 4. Update graph links after any rename, move, or new reference.
 5. Keep host-project facts in `.agents/project/**`.
 6. Validate changed skill packages.
-7. Search changed docs for stale skill names and prohibited Figma or Jam routing.
+7. Search changed docs for stale skill names, screenshot-only bans, and unintended design writes.
 8. When README is in scope, verify technical claims through higher evidence and report drift.
 9. Report changed files, validation results, and any explicitly requested human-facing README edits separately.

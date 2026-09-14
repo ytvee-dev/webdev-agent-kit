@@ -119,6 +119,8 @@ If a lightweight task reveals hidden scope or repeated failure, escalate first u
    - Label a non-criterion slice `ENABLER` and name the approved downstream
      slices it unlocks.
    - Do not renumber or reuse slice identifiers after execution begins.
+   - For feature slices, record Scenario, blocked_by, and Demonstrates under
+     `common/planning-rules.md`; carry them through resume and analyze.
 9. Add verification per slice using the smallest relevant check already available in the project or active skill.
 10. Build the coverage map for durable plans.
 

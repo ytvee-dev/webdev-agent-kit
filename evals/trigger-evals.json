@@ -1,7 +1,57 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "eval_type": "skill-trigger",
   "cases": [
+    {
+      "id": "design-screenshot-spec.figma-link-intake",
+      "prompt": "Inspect the components and properties in this Figma frame before implementing it: https://www.figma.com/design/example/Checkout?node-id=10-20. Use the connected MCP if it works.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-prototype-explorer"],
+      "risk_notes": ["Inspect the supplied node and matching visual evidence before product review; a URL alone is a valid intake trigger."],
+      "reason": "Live design intake now belongs to the existing design spec skill."
+    },
+    {
+      "id": "design-screenshot-spec.browser-fallback",
+      "prompt": "Figma MCP is not working. Open my supplied frame link in the available browser, select its layers with the mouse, and inspect the properties before drafting the spec.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-layout-implementer"],
+      "risk_notes": ["Use current visual state and confirmed selection; do not install providers or ask for screenshots before trying the browser."],
+      "reason": "A missing preferred provider activates the existing permitted visual fallback."
+    },
+    {
+      "id": "design-screenshot-spec.selected-layer-properties",
+      "prompt": "These screenshots show a selected nested text layer and the properties panel. Work out which values belong to the label versus its parent button and list what is still unknown.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-design-director"],
+      "risk_notes": ["Parent padding, text fill, and control dimensions must not be conflated; no link requires no live provider."],
+      "reason": "Screenshot intake requires selection-aware component evidence."
+    },
+    {
+      "id": "frontend-design-intelligence.product-flow-gaps",
+      "prompt": "The design spec already records all inspected components. Review the creation flow and ask me about missing dialog opening, draft persistence, error recovery, and animation behavior before any implementation.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-design-intelligence",
+      "should_trigger": ["frontend-design-intelligence"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-prototype-explorer"],
+      "risk_notes": ["Recommendations are proposals; every unresolved dependent product choice needs a user answer."],
+      "reason": "Product review follows completed extraction and does not choose behavior on the user's behalf."
+    },
+    {
+      "id": "agent-rules-skill-author.design-intake-boundary",
+      "prompt": "Update the kit rules so Figma design intake stays read-only and excludes canvas creation; do not inspect or modify a design file.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "agent-rules-skill-author",
+      "should_trigger": ["agent-rules-skill-author"],
+      "should_not_trigger": ["design-screenshot-spec", "frontend-layout-implementer", "frontend-design-intelligence"],
+      "risk_notes": ["Rule maintenance must not invoke live design acquisition based on Figma keywords."],
+      "reason": "The expanded live-read trigger must not capture maintenance of the skill itself."
+    },
     {
       "id": "frontend-bugfix-debugger.mobile-blank-route",
       "prompt": "The dashboard route renders blank on mobile. Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.",
@@ -164,7 +214,7 @@
     },
     {
       "id": "project-onboarding-adapter.adapt-command",
-      "prompt": "адаптируйся",
+      "prompt": "\u0430\u0434\u0430\u043f\u0442\u0438\u0440\u0443\u0439\u0441\u044f",
       "workflow_level": "Deep Workflow",
       "expected_primary_skill": "project-onboarding-adapter",
       "should_trigger": ["project-onboarding-adapter"],
@@ -181,6 +231,127 @@
       "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "frontend-linter-manager"],
       "risk_notes": ["The user asks for goal definition before execution; implementation should not start yet."],
       "reason": "Standard or deep work needs an explicit goal contract before implementation."
+    },
+    {
+      "id": "evidence.prototype-ui",
+      "prompt": "Compare two interactive filter placements with synthetic data before choosing the interaction.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-prototype-explorer",
+      "should_trigger": ["frontend-prototype-explorer"],
+      "should_not_trigger": ["frontend-layout-implementer"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "evidence.prototype-state",
+      "prompt": "Build a throwaway cancel/retry state probe; do not change the production reducer.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-prototype-explorer",
+      "should_trigger": ["frontend-prototype-explorer"],
+      "should_not_trigger": ["frontend-bugfix-debugger"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "evidence.prototype-approved",
+      "prompt": "Implement the approved preview layout; the design choice is settled.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-layout-implementer",
+      "should_trigger": ["frontend-layout-implementer"],
+      "should_not_trigger": ["frontend-prototype-explorer"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "evidence.functional-save",
+      "prompt": "Review whether saving settings survives reload. Check the actual local behavior, without changing the UI.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": ["frontend-quality-reviewer"],
+      "should_not_trigger": ["frontend-visual-qa", "frontend-prototype-explorer"],
+      "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
+    },
+    {
+      "id": "onboarding.migrate-root-instructions",
+      "prompt": "Migrate all existing root AGENTS.md instructions into local .agents/project overlays, retain a backup, and replace the root with a minimal pointer. This replacement is authorized.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "project-onboarding-adapter",
+      "should_trigger": [
+        "project-onboarding-adapter"
+      ],
+      "should_not_trigger": [
+        "project-context-adapter",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "Explicit migration requires complete rule preservation before pointer replacement."
+      ],
+      "reason": "Explicit migration requires complete rule preservation before pointer replacement."
+    },
+    {
+      "id": "onboarding.near-miss-context-refresh",
+      "prompt": "Refresh only the stale verification overlay after the build script changed. Preserve root AGENTS.md and do not reinitialize the kit.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "project-context-adapter",
+      "should_trigger": [
+        "project-context-adapter"
+      ],
+      "should_not_trigger": [
+        "project-onboarding-adapter",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "A narrow context refresh must not restart onboarding or migrate root instructions."
+      ],
+      "reason": "Refreshing one affected profile is not an instruction migration."
+    },
+    {
+      "id": "naming.domain-rename",
+      "prompt": "Rename the project-owned Item and items in this workspace selector to domain-specific names without changing behavior. Preserve the external items API field.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-refactor-surgeon",
+      "should_trigger": [
+        "frontend-refactor-surgeon"
+      ],
+      "should_not_trigger": [
+        "greenfield-project-builder",
+        "frontend-design-director"
+      ],
+      "risk_notes": [
+        "A bounded local naming refactor preserves external contracts."
+      ],
+      "reason": "A bounded local naming refactor preserves external contracts."
+    },
+    {
+      "id": "review.component-substitution",
+      "prompt": "Review whether SaveButton can replace Button: its wrapper drops disabled and changes the onClick payload. Do not edit code.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-refactor-surgeon"
+      ],
+      "risk_notes": [
+        "Substitution review checks observable guarantees, not just matching types."
+      ],
+      "reason": "Substitution review checks observable guarantees, not just matching types."
+    },
+    {
+      "id": "design-system.installed-api",
+      "prompt": "Implement this approved dialog spec using the installed design system. A separate checkout is newer; verify available props and reuse the existing Modal portal.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-layout-implementer",
+      "should_trigger": [
+        "frontend-layout-implementer"
+      ],
+      "should_not_trigger": [
+        "greenfield-project-builder",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "Installed component contracts own implementation; a reference checkout does not authorize new APIs."
+      ],
+      "reason": "Installed component contracts own implementation; a reference checkout does not authorize new APIs."
     }
   ]
 }

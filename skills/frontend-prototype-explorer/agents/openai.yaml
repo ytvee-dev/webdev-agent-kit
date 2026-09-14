@@ -1,0 +1,6 @@
+interface:
+  display_name: "Frontend Prototype Explorer"
+  short_description: "Test UI and state decisions with disposable probes"
+  default_prompt: "Use $frontend-prototype-explorer to answer one unresolved frontend question with a disposable experiment."
+policy:
+  allow_implicit_invocation: true

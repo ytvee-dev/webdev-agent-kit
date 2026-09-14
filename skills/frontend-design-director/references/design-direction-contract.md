@@ -23,10 +23,17 @@ A Design Direction Contract is the handoff artifact between visual judgment and 
 
 It must be concrete enough that another agent can implement the UI without inventing a generic design system.
 
+Preserve source fidelity for supplied designs. Separate observed evidence,
+confirmed requirements, proposals, and unknowns. Do not settle product or visual
+choices on behalf of the user. Keep the decision register and dependent blockers
+from `skills/design-screenshot-spec/references/product-behavior-review.md` in the
+handoff; only resolved scope is ready for implementation.
+
 ## Required Fields
 
 ```text
 Subject
+Evidence And User Decisions
 Audience
 Single Job
 Product Context
@@ -113,7 +120,9 @@ Explain hierarchy and composition. Use a small ASCII wireframe when it helps imp
 
 ## Motion Stance
 
-State whether motion is needed. If yes, name the one motion idea and its purpose. Always respect reduced motion.
+Record confirmed motion intent, trigger, start/end states, properties,
+duration/easing/delay, exit/interruption, and reduced-motion behavior with
+evidence. Ask about missing decisions; a static reference proves none of these.
 
 ## Interface Copy Voice
 
