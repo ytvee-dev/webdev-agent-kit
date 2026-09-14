@@ -239,6 +239,24 @@
       ]
     },
     {
+      "id": "onboarding-automatic",
+      "targets": ["codex"],
+      "prompt": "Onboard this project with WebDev Agent Kit.",
+      "rubric": [
+        "Treats full onboarding as authority for missing local model setup and read-only canaries without a second confirmation; uses real catalog/schema evidence, never guessed model IDs.",
+        "Preserves working bindings and primary/global/security settings; explicit blockers remain honest and same-input re-onboarding is a no-op."
+      ]
+    },
+    {
+      "id": "dispatch-interface",
+      "targets": ["codex"],
+      "prompt": "Explain how to use verified local role bindings on a surface with model, reasoning_effort and fork_turns but no native role selector. Do not launch a model or change files.",
+      "rubric": [
+        "Requires supported explicit model and effort plus role instructions and non-inheriting context, not a fabricated agent_type argument.",
+        "Labels direct-binding verification separately from native role loading and preserves effective permission boundaries."
+      ]
+    },
+    {
       "id": "onboarding-untrusted",
       "targets": [
         "codex"

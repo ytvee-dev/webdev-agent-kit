@@ -32,7 +32,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
-- Explicit project-local native subagent activation in approved Codex onboarding,
+- Automatic missing project-local subagent setup during full Codex onboarding,
   with schema-backed key selection, bounded preview and read-only inspection.
 - Self-contained delegated task/report templates and a local review packager for
   complete task commits or scoped staged, unstaged and untracked changes.
@@ -45,6 +45,10 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 - Onboarding separates configuration, client refresh/discovery and observed
   four-role activation; absence of pre-setup delegation no longer skips setup.
+- Full onboarding no longer needs a separate GPT setup confirmation. Facts-only,
+  no-model-change, Plan Mode and update requests preserve model configuration.
+- Named-role and explicit model/effort dispatch use actual tool signatures and
+  separate runtime evidence; direct dispatch does not certify native role loading.
 - Existing task, review and authoring skills adopt file-based handoffs and
   structural-versus-behavioral evidence distinctions without overriding test scope.
 - User guides, README, upgrade notes and release checklist describe actual limits.
@@ -52,9 +56,12 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Fixed
 
+- Reject Windows junction/reparse-point escapes in role configuration, recovery
+  and review-artifact paths, including host-root ancestry, on Python 3.11+.
 - Protect Windows recovery journals with verified current-user ACLs before sensitive
   writes, rather than assuming POSIX chmod bits apply; retain POSIX mode checks.
-
+- Persist only journal DACL changes through native .NET access control, avoiding
+  Windows PowerShell Set-Acl's unnecessary SeSecurityPrivilege requirement.
 - The installer no longer ignores an explicit `features.multi_agent = false`.
   Both known disabling gates are checked; only the selected approved local key
   may change. Trust, managed policy, global and primary model settings are untouched.

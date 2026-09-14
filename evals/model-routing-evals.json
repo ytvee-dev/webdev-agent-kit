@@ -3,6 +3,22 @@
   "eval_type": "model-routing",
   "cases": [
     {
+      "id": "automatic-onboarding",
+      "prompt": "Onboard this Codex project. The real catalog and installed schema are available; no model roles exist yet.",
+      "expected": [
+        "Shows then applies missing local bindings and needed narrow enablement without a second confirmation; preserves primary/global/security settings.",
+        "Runs small read-only canaries, records actual per-mode metadata, and makes unchanged repeated onboarding a no-op. Missing evidence blocks only its affected stage."
+      ]
+    },
+    {
+      "id": "explicit-binding-interface",
+      "prompt": "Delegate a bounded slice using verified local bindings. This tool exposes model, reasoning_effort and fork_turns, but no agent_type or role selector.",
+      "expected": [
+        "Uses supported explicit model AND effort parameters with role instructions and non-inheriting context; does not invent a named-role argument.",
+        "Records explicit-binding separately; successful direct dispatch does not certify native role discovery or another client surface."
+      ]
+    },
+    {
       "id": "no-consent",
       "prompt": "Adapt the kit to this project; write only local project facts.",
       "expected": [

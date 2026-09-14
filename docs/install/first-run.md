@@ -95,9 +95,12 @@ compatibility. Do not run an app merely to claim onboarding success.
 Use the [compatibility report form](https://github.com/ytvee-dev/webdev-agent-kit/issues/new?template=compatibility-report.yml)
 with the exact failing step, client version, OS, shell, archive, and evidence.
 
-## Optional Codex Model Routing
+## Codex Model Routing
 
-During onboarding distinguish configured roles, enabled/discovered native
+Full Codex onboarding includes missing local model setup and tiny read-only
+checks without a second confirmation. Preserve existing working bindings;
+facts-only/no-model-change requests and Plan Mode do not enter this phase.
+Distinguish configured roles, enabled/discovered native
 subagents, and observed runtime activation. Use the
 [model-routing guide](gpt-model-routing.md) when roles remain inactive. Missing
 pre-setup delegation is not a reason to skip planning configuration; missing

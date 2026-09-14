@@ -155,16 +155,30 @@ def validate_request(request):
             raise ValueError(f"{role}: model or effort is not in the confirmed catalog")
 
 
+def reject_redirect(path):
+    """Reject Windows reparse points as well as POSIX links (Python 3.11+)."""
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        return
+    if stat.S_ISLNK(info.st_mode) or (
+        getattr(info, "st_file_attributes", 0)
+        & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    ):
+        raise ValueError("Refusing a symlink or reparse-point path")
+
+
 def safe_path(root, relative):
     """Reject links and nonregular targets; no writes outside the explicit host."""
     parts = Path(relative).parts
     if not parts or Path(relative).is_absolute() or ".." in parts:
         raise ValueError("Unsafe managed path")
+    for ancestor in (*reversed(root.absolute().parents), root.absolute()):
+        reject_redirect(ancestor)
     path = root
     for index, part in enumerate(parts):
         path = path / part
-        if path.is_symlink():
-            raise ValueError(f"Refusing symlink: {relative}")
+        reject_redirect(path)
         if path.exists():
             info = path.stat()
             if index < len(parts) - 1 and not stat.S_ISDIR(info.st_mode):
@@ -537,7 +551,9 @@ $acl.SetAccessRuleProtection($true, $false)
 $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
     $sid, 'FullControl', 'ContainerInherit, ObjectInherit', 'None', 'Allow')
 $acl.AddAccessRule($rule)
-Set-Acl -LiteralPath $path -AclObject $acl
+# Persist only modified access rules. Windows PowerShell Set-Acl can request
+# SeSecurityPrivilege for audit sections even though no SACL change is intended.
+[System.IO.DirectoryInfo]::new($path).SetAccessControl($acl)
 $actual = Get-Acl -LiteralPath $path
 $rules = @($actual.GetAccessRules($true, $true,
     [System.Security.Principal.SecurityIdentifier]))
@@ -675,6 +691,8 @@ def main():
     try:
         if not args.root.is_dir() or args.root.is_symlink():
             raise ValueError("Host root must be an existing real directory")
+        for ancestor in (*reversed(args.root.absolute().parents), args.root.absolute()):
+            reject_redirect(ancestor)
         root = args.root.resolve()
         if args.inspect:
             if args.request or args.apply or args.approve or args.rollback:

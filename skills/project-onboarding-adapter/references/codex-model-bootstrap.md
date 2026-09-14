@@ -22,12 +22,19 @@ depends_on: []
 Purpose: let onboarding instructions install approved project-local GPT roles;
 the optional helper only validates and writes files, never routes model calls.
 
+Sections: entry and approval; native enablement and loaded configuration; model
+evidence; native format; deterministic installation; dispatch interface;
+activation and smoke checks.
+
 ## Entry And Approval
 
-During Codex onboarding inspect the minimal local routing state and offer the
-missing setup/activation scope. Write only after an explicit GPT setup request
-and approval of the proposed configuration fields. Ordinary adaptation without
-that approval, kit updates, Plan Mode and non-Codex clients never write settings. Using GPT in Cursor is not
+Full Codex onboarding authorizes missing project-local roles, one supported
+enablement field when necessary, and tiny read-only canaries. Show the narrow
+change summary and proceed without a second confirmation. Explicit facts-only,
+no-model-change, preview/Plan Mode requests, kit updates and non-Codex clients
+never write settings or run canaries. Preserve working bindings and valid
+evidence; do not reselect models or rewrite state on unchanged onboarding.
+Using GPT in Cursor is not
 proof of the Codex contract. Keep the existing primary model unchanged.
 
 Resolve the actual host root, installed Codex surface/version, authentication
@@ -48,7 +55,7 @@ unneeded legacy flag. Check both `agents.enabled` and `features.multi_agent`
 when reading existing settings and resolve effective precedence. Never assume
 one true value overrides another false value or a managed restriction.
 
-Only an explicitly approved project-local activation change may set one
+Only an in-scope project-local activation change may set one
 supported key to true. Record its installed-schema evidence and show its old
 and proposed value. Do not change default subagent models, concurrency or other
 `[agents]` settings. If both keys disable agents, stop for a reviewed reconciliation
@@ -95,7 +102,7 @@ Do not register the same role twice or override a user/built-in/global role.
 Check names inside TOMLs, not only filenames. The helper checks local collisions;
 onboarding must also check the effective registry/global collisions. A format
 migration requires a separate reviewed plan; do not switch formats in place.
-Except for the separately approved enablement key, never change `[agents]`
+Except for the onboarding-scoped enablement key, never change `[agents]`
 defaults, primary model, providers, auth, MCP, network,
 trust, approval policy or concurrency settings as part of the narrow merge.
 Read-only role defaults do not override stronger live parent settings: verify
@@ -138,7 +145,7 @@ placeholder from evidence; never execute the example verbatim. The helper
 validates consistency, not the truth of supplied account/cost assertions.
 Keep request, profile, state and backups local and out of published archives.
 
-For a separately approved local enablement change only, add this optional
+For an onboarding-scoped local enablement change only, add this optional
 member to the request (choose the key supported by the installed schema):
 
 ```json
@@ -162,11 +169,12 @@ python .agents/skills/project-onboarding-adapter/scripts/configure_gpt_agents.py
 ```
 
 The dry-run lists changed paths and a bounded role/model/effort and gate preview,
-not a full secret-bearing config dump. After permission, add `--apply --approve`.
-The flag is not itself
-proof of user consent. Plan Mode never runs the write command.
+not a full secret-bearing config dump. For a full onboarding request, show that
+summary and use `--apply --approve` without a redundant confirmation. The flag
+acknowledges the existing request; it cannot authorize excluded actions or
+override host/client policy. Plan Mode never runs the write command.
 
-The helper refuses unowned files, user drift, malformed TOML, links, name
+The helper refuses unowned files, user drift, malformed TOML, links/reparse points, name
 collisions and disabled agents outside explicitly approved activation. It
 preserves unrelated configuration bytes
 and validates parsed values after the narrow merge. Same-input reruns are
@@ -194,6 +202,29 @@ mode 0600. This affects only new recovery directories, never parent/global ACLs.
 Journals can contain original config bytes: protect them locally, never publish
 them or accept a journal from an untrusted source.
 
+## Dispatch Interface
+
+Inspect the live tool signature, not a remembered API. Record one mode per
+client surface: `named-role`, `explicit-binding`, or `unsupported`.
+
+- Use `named-role` only when the native tool actually accepts/discovers the
+  custom role. Do not pass model overrides during its acceptance canary: this
+  must exercise the loaded role configuration.
+- If no role selector exists but explicit model AND effort are supported, use
+  `explicit-binding`: read the confirmed local binding, pass both supported
+  parameters and the role's instructions with a self-contained task. Use the
+  supported non-inheriting context option (for example, `fork_turns="none"`
+  only if that signature exposes it). Do not invent `agent_type` or confuse a
+  task/display name with native role selection. Permissions remain inherited;
+  a read-only instruction is not a sandbox guarantee.
+- Without a supported interface or verifiable metadata, mark that mode
+  unsupported/unverified and keep work on the primary agent.
+
+Direct-binding evidence verifies only that dispatch mode, not native role
+discovery or TOML activation. Never carry a CLI result over to an app surface
+without checking its own interface and evidence. Neither mode changes the
+primary model or authorizes delegation on trivial work.
+
 ## Activation And Smoke Checks
 
 Write `project/model-routing-profile.md` from its template. Preserve separate
@@ -215,13 +246,13 @@ owned hashes and reports gates/bindings; it cannot observe trust, account access
 higher-precedence policy, live permissions or a model execution. Reconcile those
 separately and retain the actual runtime evidence in the profile.
 
-With approved smoke-run scope, launch each configured role on a tiny read-only
+Within full onboarding scope, launch each configured role on a tiny read-only
 fixture, including workers, without implementation work. Bootstrap canaries
 are the explicit exception to the normal verified-role routing gate. Confirm
 role discovery, actual model/effort from runtime metadata, inherited tools and
 permissions, and fresh-context capability for the reviewer. The model's own
 identity claim, a `--model` label or TOML contents are not execution evidence.
-For each role record the expected binding beside the observed runtime model
+For each role and dispatch mode record the expected binding beside the observed runtime model
 and effort, child/run ID, clean-context mode, effective permissions, exact
 read-only result and evidence location. Read the same small existing synthetic
 fixture with every role; do not authorize application edits to test a worker.
@@ -233,5 +264,5 @@ routing. If metadata or an authenticated client is absent, leave activation
 unverified and use the existing single-agent workflow; do not fabricate success.
 
 Recheck only on client/auth/config drift, unavailable-model errors or an explicit
-request. Kit upgrades preserve host roles and profiles; they do not pick new
+request. Resume unfinished onboarding at its recorded step. Kit upgrades preserve host roles and profiles; they do not pick new
 models. Cost and quality comparisons require comparable accepted-outcome runs.

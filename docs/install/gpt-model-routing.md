@@ -1,6 +1,6 @@
 ---
 id: 'agents.docs.install.gpt-model-routing'
-title: 'Optional GPT Model Routing'
+title: 'Codex Onboarding Model Routing'
 doc_type: 'user-guide'
 layer: 'docs'
 status: 'active'
@@ -18,29 +18,29 @@ related:
 depends_on: []
 ---
 
-# Optional GPT Model Routing
+# Codex Onboarding Model Routing
 
-Version 1.1.0 extends the 1.0.0 opt-in GPT role setup with approved native
-activation and read-only configuration diagnostics. It supports a local Codex
+Version 1.1.0 includes missing GPT role setup, narrow native activation and
+read-only checks in full Codex onboarding, without a second confirmation.
+It supports a local Codex
 project bundle, including compatible Codex IDE surfaces, not GPT models running
 inside unrelated clients. It never replaces the main session's model or requires
-an external router/API key. Normal onboarding now identifies missing routing
-setup and offers its scope; it still does not change models without approval.
+an external router/API key. Existing working bindings are preserved. Facts-only,
+no-model-change, preview/Plan Mode requests and kit updates do not configure
+models or launch canaries. Genuine conflicts or missing authority still stop setup.
 
 ## Enable During Onboarding
 
 After normal installation, send:
 
 ```text
-Adapt this kit to the project and configure economical GPT subagents in the
-project-local .codex directory. Preserve my main model, global configuration,
-MCP and security settings. Confirm model availability and show the narrow
-configuration plan before writing, including the native subagent enablement
-key if needed. After I approve that diff, apply it, refresh the client and
-smoke-test all four roles. Do not change project trust or bypass managed policy.
+Onboard this project with WebDev Agent Kit.
 ```
 
-The agent selects models from your actual client catalog and records the cost
+That request includes local model setup and small read-only activation checks;
+the agent shows a bounded change summary, then acts without asking again.
+To exclude it, say "Update only project facts; do not change model configuration."
+The agent selects missing bindings from your actual client catalog and records the cost
 basis and supported inputs/efforts. The reusable kit deliberately contains no
 fixed production model IDs. Subscription and API authentication can expose
 different catalogs; published model documentation alone is insufficient.
@@ -57,7 +57,7 @@ live in `.codex/agents/`; registered configuration layers live in
 `.codex/wdk-agents/` with a narrow `.codex/config.toml` registration block.
 Do not configure the same role in both formats. Existing global/user roles,
 main-model defaults, approvals and MCP are preserved. Name conflicts stop setup.
-Only a separately approved enablement field may be changed alongside the roles:
+Only an onboarding-scoped enablement field may be changed alongside the roles:
 `agents.enabled` or `features.multi_agent`, selected from the installed schema.
 Current Codex documentation enables subagents by default, so a missing flag is
 not itself a defect. Another false gate, higher-precedence denial, untrusted
@@ -66,7 +66,8 @@ project or ambiguous TOML layout needs explicit reconciliation, not a workaround
 Local `.agents/project/` contains the request, human model-routing profile,
 managed hashes and restricted recovery journals. Keep these and `.codex/`
 out of public commits and release archives. Journals can contain original
-configuration bytes; do not share them. On POSIX, journals use 0600 inside a
+configuration bytes; do not share them. Symlinks and Windows reparse points,
+including junctions in managed paths or the host root, are refused. On POSIX, journals use 0600 inside a
 0700 directory. On Windows, native Windows PowerShell protects and verifies a
 current-user-only inheritable ACL before the journal is written; if unavailable
 or denied, setup stops without configuration writes. It does not change parent
@@ -77,6 +78,16 @@ For exact request fields, dry-run/apply/rollback commands and collision rules,
 see the [bootstrap reference](../../skills/project-onboarding-adapter/references/codex-model-bootstrap.md).
 Do not run placeholder model IDs. After interruptions, inspect the journal
 and state; do not delete a setup lock while another installer may still run.
+
+## Verify The Actual Dispatch Mode
+
+Some Codex surfaces select named native roles; others expose explicit model and
+effort parameters instead. Onboarding inspects the real tool signature and
+records `named-role`, `explicit-binding`, or `unsupported`. It never invents a
+role-selector argument. Direct dispatch carries the role's instructions and
+both confirmed binding values; reviewer context must be non-inheriting.
+Direct-binding success does not prove that native TOML roles loaded. Verify
+each mode on its own surface; never transfer a CLI claim to the desktop app.
 
 ## Verify Activation, Not Just Files
 
@@ -92,7 +103,7 @@ Native delegation need not exist before the configuration phase; it must exist
 after activation to perform canaries. Save the next onboarding step before a
 client restart. Project trust and managed policy remain controlled by the human
 and the client, not by kit instructions. The agent should refresh the
-client as documented, run tiny approved read-only canaries, and inspect actual
+client as documented, run the onboarding-scoped read-only canaries, and inspect actual
 model/effort and permissions from runtime metadata. A model's identity claim
 is not proof. Reviewer independence additionally requires fresh context.
 
@@ -114,7 +125,7 @@ reviewed plan rather than silently registering duplicate agents.
 
 | Observation | Action |
 | --- | --- |
-| Local native gate explicitly false | Preview a narrow schema-confirmed enablement change; apply only after its approval |
+| Local native gate explicitly false | During full onboarding, show and apply the narrow supported enablement; preserve higher-precedence restrictions |
 | Both known gates false or effective policy denies children | Reconcile effective configuration; never guess which flag wins |
 | Project is not trusted | Human uses the client's supported trust controls; the kit does not edit global trust |
 | Roles written but not discovered | Refresh/new session, confirm role format and effective registration |

@@ -23,7 +23,7 @@ def source_checks():
         "AGENTS.md": [POLICY, "before broad reading"],
         "adapters/codex.md": [POLICY, "codex-model-bootstrap.md"],
         "skills/project-onboarding-adapter/SKILL.md": [
-            "Optional GPT Role Setup",
+            "Codex Model Setup During Onboarding",
             "Plan Mode",
             "explicit",
         ],
@@ -90,6 +90,8 @@ def source_checks():
         "untrusted-config",
         "gate-conflict",
         "scoped-repair",
+        "automatic-onboarding",
+        "explicit-binding-interface",
     }
     if set(ids) != required_ids or len(ids) != len(set(ids)):
         errors.append("Routing eval coverage is incomplete or duplicated")

@@ -19,6 +19,37 @@ SPEC.loader.exec_module(kit)
 
 
 class ReviewPackageTests(unittest.TestCase):
+    @unittest.skipUnless(os.name == "nt", "Windows junction regression")
+    def test_junction_storage_rejected_before_artifact_write(self):
+        outside = Path(self.temp.name).parent / (Path(self.temp.name).name + "-outside")
+        outside.mkdir()
+        self.addCleanup(outside.rmdir)
+        link = self.root / ".agents/project/runs"
+        subprocess.run(
+            [
+                "powershell.exe",
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                "New-Item -ItemType Junction -Path $env:WDK_TEST_LINK "
+                "-Target $env:WDK_TEST_TARGET | Out-Null",
+            ],
+            env={
+                **os.environ,
+                "WDK_TEST_LINK": str(link),
+                "WDK_TEST_TARGET": str(outside),
+            },
+            check=True,
+            capture_output=True,
+            timeout=30,
+        )
+        self.addCleanup(link.rmdir)
+        # Path validation itself must refuse the redirected storage, without
+        # invoking the writer on the vulnerable implementation.
+        with self.assertRaises(ValueError):
+            kit.local_path(self.root, ".agents/project/runs/probe.diff")
+        self.assertEqual(list(outside.iterdir()), [])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -121,7 +152,7 @@ class ReviewPackageTests(unittest.TestCase):
                 self.capture(**options)
         self.assertFalse((self.root / ".agents/project/runs").exists())
 
-    def test_traversal_and_symlinks_rejected_without_writes(self):
+    def test_traversal_rejected_without_writes(self):
         for bad in (
             "../outside",
             "/tmp/outside",
@@ -131,11 +162,20 @@ class ReviewPackageTests(unittest.TestCase):
         ):
             with self.subTest(path=bad), self.assertRaises(ValueError):
                 self.capture(worktree=True, paths=[bad])
+
+    def test_symlink_storage_rejected_without_writes(self):
         outside = self.root / "outside"
         outside.mkdir()
-        (self.root / ".agents/project/runs").symlink_to(
-            outside, target_is_directory=True
-        )
+        try:
+            (self.root / ".agents/project/runs").symlink_to(
+                outside, target_is_directory=True
+            )
+        except OSError as exc:
+            if getattr(exc, "winerror", None) == 1314:
+                self.skipTest(
+                    "Host denies symlink creation; junction coverage runs separately"
+                )
+            raise
         with self.assertRaises(ValueError):
             self.capture()
         self.assertEqual(list(outside.iterdir()), [])

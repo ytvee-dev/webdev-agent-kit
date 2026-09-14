@@ -84,5 +84,11 @@ Project configuration can be ignored when untrusted. A role's read-only default
 does not replace verification of inherited permissions. These facts require
 runtime evidence; the local helper cannot certify them.
 
+Full Codex onboarding now includes missing local setup and canaries without a
+redundant approval prompt; explicit exclusions, trust and security boundaries
+still win. Native roles and explicit-binding tools need separate runtime
+evidence. Unlike Superpowers' broad autonomous rulings, unresolved consequential
+product decisions still require user input; tiny changes stay inline.
+
 See the [release checklist](../release/1.1.0-checklist.md) and
 [live evaluation guide](behavior-evaluation.md) for verification boundaries.

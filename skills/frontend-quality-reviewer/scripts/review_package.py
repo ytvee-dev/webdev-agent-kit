@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import subprocess
 import sys
 from pathlib import Path, PurePosixPath
@@ -31,6 +32,20 @@ def git(root, *args, ok=(0,)):
     return result.stdout
 
 
+def reject_redirect(path, allow_symlink=False):
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        return
+    if allow_symlink and stat.S_ISLNK(info.st_mode):
+        return  # Tracked link evidence uses readlink, never follows its target.
+    if stat.S_ISLNK(info.st_mode) or (
+        getattr(info, "st_file_attributes", 0)
+        & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    ):
+        raise ValueError("Refusing a symlink or reparse-point path")
+
+
 def local_path(root, value, allow_leaf_link=False):
     parts = PurePosixPath(value)
     if (
@@ -43,13 +58,12 @@ def local_path(root, value, allow_leaf_link=False):
         or ".git" in parts.parts
     ):
         raise ValueError("Expected a repository-relative path without traversal")
+    for ancestor in (*reversed(root.absolute().parents), root.absolute()):
+        reject_redirect(ancestor)
     current = root
     for index, part in enumerate(parts.parts):
         current /= part
-        if current.is_symlink() and not (
-            allow_leaf_link and index == len(parts.parts) - 1
-        ):
-            raise ValueError("Refusing a symlinked path")
+        reject_redirect(current, allow_leaf_link and index == len(parts.parts) - 1)
     return current
 
 
@@ -97,7 +111,10 @@ def snapshot(root, paths):
 
 
 def package(root, plan, base, head="HEAD", worktree=False, paths=()):
-    root = Path(root).resolve(strict=True)
+    raw_root = Path(root).absolute()
+    for ancestor in (*reversed(raw_root.parents), raw_root):
+        reject_redirect(ancestor)
+    root = raw_root.resolve(strict=True)
     actual = Path(git(root, "rev-parse", "--show-toplevel").decode().strip()).resolve()
     if actual != root:
         raise ValueError("--root must identify the actual worktree root")

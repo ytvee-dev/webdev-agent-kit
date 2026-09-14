@@ -25,7 +25,7 @@ credentials, complete config contents or unverified availability as fact.
 ## Environment And Approval
 
 - State: proposed / configured / activation-unverified / verified / blocked.
-- User-approved configuration scope and spending ceiling:
+- Onboarding request or explicit setup authority, exclusions and spending ceiling:
 - Client, surface, version, authentication mode and host root:
 - Native format and supporting official schema/docs observation:
 - Callable delegation, effective agent names and collision check:
@@ -42,6 +42,8 @@ For each of `wdk_lookup`, `wdk_worker`, `wdk_complex`, `wdk_reviewer`, record:
 - Configuration path, model ID, effort and selection rationale:
 - Input modalities and required tool capabilities:
 - Configuration status separately from runtime status:
+- Client-surface dispatch mode: named-role / explicit-binding / unsupported:
+- Observed tool signature and supported role/model/effort/context parameters:
 - Canary run ID, observed model/effort metadata and evidence location:
 - Effective permissions and instruction adherence:
 - Reviewer context isolation evidence, when relevant:
@@ -50,7 +52,8 @@ For each of `wdk_lookup`, `wdk_worker`, `wdk_complex`, `wdk_reviewer`, record:
 A role is eligible only when its runtime evidence and current configuration
 fingerprint match. Do not infer an executed model from its self-report, role
 name, request arguments or file contents. Partial activation does not verify
-other roles. A config change invalidates affected activation evidence.
+other roles or dispatch modes. Direct-binding evidence never certifies native
+role loading. A config change invalidates affected activation evidence.
 
 ## Ownership And Recovery
 

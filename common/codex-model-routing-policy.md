@@ -56,9 +56,12 @@ user's primary model and approved cost ceiling. No silent expensive fallback.
 
 ## Delegation Contract
 
-Use the actual native delegation tool and the configured role name. A custom
-role's fixed model and effort are not overridden by prose; escalation selects
-a different approved role. Pass only the selected skill, goal and acceptance
+Use the verified dispatch mode for this client surface. `named-role` selects a
+discovered custom role; `explicit-binding` passes its confirmed model AND effort
+and role instructions through supported parameters. A task name is not a role
+selector. Direct-binding evidence does not prove native configuration loading.
+Never invent parameters or reuse another surface's verification. A fixed role
+binding is not overridden by prose. Pass only the selected skill, goal and acceptance
 criteria, owned paths, constraints, decisive evidence, required tools, checks,
 and remaining attempt budget. Do not forward the full parent transcript.
 

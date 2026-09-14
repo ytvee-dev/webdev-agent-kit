@@ -202,17 +202,19 @@ unnecessary context and repeated repository scans.
 
 ## Economical GPT Subagents And Review Handoffs
 
-Codex onboarding can propose four project-local roles for bounded lookup,
+Full Codex onboarding configures missing project-local roles for bounded lookup,
 implementation, complex reasoning and independent review. Models and reasoning
 efforts come from the actual client catalog, not hardcoded production IDs.
-Version 1.1.0 also previews and applies a separately approved native subagent
+Version 1.1.0 also previews and applies a narrow supported native subagent
 activation field when needed. The primary model, global configuration, MCP,
 trust and security settings remain unchanged.
 
-Ask to configure economical GPT subagents during adaptation, inspect the proposed
-fields, then approve that scope. A written TOML is only configured: refresh the
+No separate setup command or second confirmation is needed. Existing working
+bindings remain unchanged; facts-only/no-model-change requests and Plan Mode
+exclude model setup and canaries. A written TOML is only configured: refresh the
 client and verify the actual child model, effort and permissions. Missing runtime
-evidence retains the ordinary single-agent workflow. See the
+evidence retains the ordinary single-agent workflow. Named-role and direct
+model/effort dispatch are verified separately for the actual client surface. See the
 [GPT routing guide](docs/install/gpt-model-routing.md) for commands and diagnosis.
 
 For justified delegated work, compact task packets preserve criteria, interfaces,

@@ -89,7 +89,7 @@ the intended frontend stack before writing stack-specific facts.
 
 For a new or empty project, do not create app source files. Create or refresh
 only the host-root pointer and local-only `project/**` overlays from known or
-user-provided intended stack facts, except separately approved GPT role setup
+user-provided intended stack facts, except onboarding-scoped Codex role setup
 under the optional gate below.
 
 ## Official Documentation And MCP Selection
@@ -171,11 +171,12 @@ The approved execution report must list files changed, MCP scan results,
 installation approvals or blockers, validation commands, and remaining unknown
 facts.
 
-## Optional GPT Routing Gate
+## Codex Routing Gate
 
-Ordinary onboarding and Plan Mode do not change model configuration. An explicit
-GPT setup request in Codex may additionally create approved host `.codex/` role
-files and a narrow registration block, following
+Full Codex onboarding includes missing host `.codex/` role configuration,
+necessary narrow enablement and tiny read-only activation checks without a
+second confirmation. Facts-only/no-model-change requests, Plan Mode and updates
+do not change bindings. Follow
 `skills/project-onboarding-adapter/references/codex-model-bootstrap.md`.
 Confirm availability, schema, collisions and preserved primary/security/MCP
 settings; validate dry-run, ownership, rollback and separate runtime activation.

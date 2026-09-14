@@ -91,9 +91,10 @@ separately. Use `not-run` for a skill that has not been exercised.
 
 ## Notes
 
-## Optional GPT Model Routing
+## Codex Onboarding Model Routing
 
-- Approved setup scope, or not requested:
+- Full onboarding/setup request, or explicit exclusion/facts-only scope:
+- Client surface and verified named-role/explicit-binding dispatch mode:
 - Native delegation and format evidence:
 - Local `project/model-routing-profile.md`, when created:
 - Configuration fingerprint and per-role runtime activation status:

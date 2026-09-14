@@ -149,8 +149,8 @@ published release tag or delete unrelated project files.
 All 21 skills and native targets are retained. Existing schema-1 role requests
 and managed state remain accepted; no role-format migration or model change is
 performed by an upgrade. Preserve host role files, state, profiles and journals.
-Use the [GPT routing guide](gpt-model-routing.md) only when explicitly approving
-activation or revalidating client/configuration drift. The optional activation
+Use the [GPT routing guide](gpt-model-routing.md) during a separately requested
+full onboarding or revalidation, not as an automatic upgrade side effect. The optional activation
 member adds one supported local gate, not global or main-model defaults.
 
 Existing canonical goals/plans stay in place. Plan-scoped handoff/review artifacts

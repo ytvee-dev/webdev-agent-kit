@@ -62,6 +62,39 @@ def snapshot(root, recovery=False):
 
 
 class InstallationTests(unittest.TestCase):
+    @unittest.skipUnless(os.name == "nt", "Windows junction regression")
+    def test_junction_parent_and_root_rejected_without_writes(self):
+        outside = Path(self.temp.name) / "outside"
+        outside.mkdir()
+        marker = outside / "keep.txt"
+        marker.write_text("unchanged")
+        junction = self.root / ".codex"
+        subprocess.run(
+            [
+                "powershell.exe",
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                "New-Item -ItemType Junction -Path $env:WDK_TEST_LINK "
+                "-Target $env:WDK_TEST_TARGET | Out-Null",
+            ],
+            env={
+                **os.environ,
+                "WDK_TEST_LINK": str(junction),
+                "WDK_TEST_TARGET": str(outside),
+            },
+            check=True,
+            capture_output=True,
+            timeout=30,
+        )
+        self.addCleanup(junction.rmdir)
+        with self.assertRaises(ValueError):
+            kit.plan(self.root, request())
+        with self.assertRaises(ValueError):
+            kit.inspection(junction)
+        self.assertEqual(marker.read_text(), "unchanged")
+        self.assertEqual([p.name for p in outside.iterdir()], ["keep.txt"])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -346,13 +379,22 @@ class InstallationTests(unittest.TestCase):
         (self.root / ".agents/adapters/codex.md").unlink()
         self.assertBlocked(request())
 
-    def test_symlink_and_hardlink_target_refused(self):
+    def test_symlink_target_refused(self):
         outside = Path(self.temp.name) / "outside"
         outside.mkdir()
-        (self.root / ".codex").symlink_to(outside, target_is_directory=True)
+        try:
+            (self.root / ".codex").symlink_to(outside, target_is_directory=True)
+        except OSError as exc:
+            if getattr(exc, "winerror", None) == 1314:
+                self.skipTest(
+                    "Host denies symlink creation; junction coverage runs separately"
+                )
+            raise
         self.assertBlocked(request())
         self.assertEqual(list(outside.iterdir()), [])
         (self.root / ".codex").unlink()
+
+    def test_hardlink_target_refused(self):
         original = self.put("original", "# source")
         target = self.root / kit.CONFIG
         target.parent.mkdir()

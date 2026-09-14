@@ -69,8 +69,10 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 
 [← All installation guides](README.md) · [MCP setup](../mcp/codex-vscode.md) · [All documentation](../README.md)
 
-## Optional GPT Subagents
+## GPT Subagents During Onboarding
 
 For a compatible installed Codex surface, follow
 [GPT model routing](gpt-model-routing.md). Client capability and model
 availability must be confirmed; the VS Code target alias alone is not proof.
+Full onboarding includes missing local setup and read-only checks without a
+second confirmation; facts-only and Plan Mode requests exclude this phase.

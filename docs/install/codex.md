@@ -57,12 +57,12 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
    Update the project context after these changes.
    ```
 
-## Optional GPT Subagents
+## GPT Subagents During Onboarding
 
-Version 1.1.0 offers economical GPT role setup and checks missing native
-activation during onboarding. Follow [GPT model routing](gpt-model-routing.md).
-Configuration writes still require explicit scope approval; Plan Mode is
-read-only. After writing, refresh the client and check actual child model/effort
+Version 1.1.0 includes missing economical GPT roles and narrow activation in full
+onboarding, without a second confirmation. Follow [GPT model routing](gpt-model-routing.md).
+Facts-only/no-model-change requests and Plan Mode do not write model settings.
+Preserve working bindings. After writing, refresh and check actual child model/effort
 metadata. A TOML file or inspector success alone does not activate routing.
 
 [← All installation guides](README.md) · [MCP for WebDev Agent Kit](../mcp/README.md) · [All documentation](../README.md)

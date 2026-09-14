@@ -43,7 +43,7 @@ The documents in this directory are intended for users and project maintainers. 
 
 ## Agent Execution And Routing
 
-- [GPT model routing and activation troubleshooting](install/gpt-model-routing.md)
+- [Automatic Codex onboarding, model routing and activation troubleshooting](install/gpt-model-routing.md)
 - [Superpowers comparison and adopted design choices](architecture/superpowers-adoption.md)
 - [Behavior evaluation and authenticated onboarding trials](architecture/behavior-evaluation.md)
 - [1.1.0 release acceptance checklist](release/1.1.0-checklist.md)
