@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[docs/install/README|Installation Guides]]'
 related:
+    - '[[docs/install/gpt-model-routing]]'
     - '[[docs/install/first-run|First Run And Installation Checks]]'
     - '[[docs/install/upgrade|Upgrade And Rollback]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
@@ -67,3 +68,9 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 [![Watch the VS Code Codex installation video guide](https://res.cloudinary.com/duyqvi0ig/video/upload/so_0,w_1280,c_limit,q_auto/v1784235091/vs-code-codex_ilqrde.jpg)](https://res.cloudinary.com/duyqvi0ig/video/upload/v1784235091/vs-code-codex_ilqrde.mp4)
 
 [← All installation guides](README.md) · [MCP setup](../mcp/codex-vscode.md) · [All documentation](../README.md)
+
+## Optional GPT Subagents
+
+For a compatible installed Codex surface, follow
+[GPT model routing](gpt-model-routing.md). Client capability and model
+availability must be confirmed; the VS Code target alias alone is not proof.

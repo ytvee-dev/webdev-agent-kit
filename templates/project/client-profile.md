@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[skills/project-onboarding-adapter/SKILL|Project Onboarding Adapter]]'
 related:
+    - '[[templates/project/model-routing-profile]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
 depends_on: []
 ---
@@ -89,3 +90,13 @@ separately. Use `not-run` for a skill that has not been exercised.
 ## Unknowns
 
 ## Notes
+
+## Optional GPT Model Routing
+
+- Approved setup scope, or not requested:
+- Native delegation and format evidence:
+- Local `project/model-routing-profile.md`, when created:
+- Configuration fingerprint and per-role runtime activation status:
+- Client/auth/config drift requiring revalidation:
+
+An absent or unverified model profile preserves normal single-agent behavior.

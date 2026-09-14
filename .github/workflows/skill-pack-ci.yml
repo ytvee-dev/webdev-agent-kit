@@ -27,6 +27,7 @@ jobs:
         run: |
           python -m py_compile scripts/*.py
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
+          python -m py_compile skills/project-onboarding-adapter/scripts/*.py
 
       - name: Validate schemas
         id: validate_schemas
@@ -144,6 +145,9 @@ jobs:
       - name: Fail if eval validation failed
         if: steps.validate_evals.outputs.status != '0'
         run: exit ${{ steps.validate_evals.outputs.status }}
+
+      - name: Validate GPT role setup and routing contracts
+        run: python scripts/validate_model_routing.py
 
       - name: Build portable targets
         run: python scripts/build_skill_targets.py

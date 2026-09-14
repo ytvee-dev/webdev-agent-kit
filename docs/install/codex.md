@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[docs/install/README|Installation Guides]]'
 related:
+    - '[[docs/install/gpt-model-routing]]'
     - '[[docs/install/first-run|First Run And Installation Checks]]'
     - '[[docs/install/upgrade|Upgrade And Rollback]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
@@ -55,5 +56,10 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
    ```text
    Update the project context after these changes.
    ```
+
+## Optional GPT Subagents
+
+Version 1.0.0 supports separately approved economical GPT role setup. Follow
+[GPT model routing](gpt-model-routing.md); ordinary adaptation does not enable it.
 
 [← All installation guides](README.md) · [MCP for WebDev Agent Kit](../mcp/README.md) · [All documentation](../README.md)

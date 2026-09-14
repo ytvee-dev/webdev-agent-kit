@@ -13,6 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/codex-model-routing-policy]]'
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules Skill Author]]'
     - '[[skills/mcp-toolchain-manager/SKILL|MCP Toolchain Manager]]'
     - '[[common/documentation-maintenance|Documentation Maintenance]]'
@@ -86,3 +87,21 @@ When Codex-native behavior changes in this bundle:
 3. Avoid duplicating official URLs across unrelated skills.
 4. Update `project/mcp-profile.md` only for host-project tool facts.
 5. Report which official source was checked and which validation was run.
+
+## GPT Role Setup Sources
+
+For role configuration and model routing, read the decisive sections of:
+
+- Subagents: https://developers.openai.com/codex/subagents
+- Configuration reference: https://developers.openai.com/codex/config-reference
+- Model catalog: https://developers.openai.com/codex/models
+- App Server and available model metadata: https://developers.openai.com/codex/app-server
+- Codex usage and pricing: https://developers.openai.com/codex/pricing
+- API model selection: https://developers.openai.com/api/docs/guides/model-selection
+
+Contracts checked on 2026-09-14: standalone project agent TOMLs and registered
+role config layers are distinct formats; fixed custom-role model/effort have
+precedence; effective parent permissions still matter. Recheck the installed
+client's supported schema during onboarding. Official redirects to the Codex
+learning documentation remain primary sources. Never equate a public model
+catalog with live account availability or subscription credits with API prices.

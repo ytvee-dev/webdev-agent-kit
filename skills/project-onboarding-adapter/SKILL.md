@@ -15,6 +15,8 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[templates/project/model-routing-profile]]'
+    - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
     - '[[common/host-instruction-migration-rules|Host Instruction Migration]]'
     - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
     - '[[templates/project/verification-profile|Verification Profile Template]]'
@@ -106,7 +108,18 @@ Read targeted README sections only when they help identify project intent, setup
 10. Read `tool-capabilities-manifest.json` for declared capability needs and cache required, available, missing, optional, approved, installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
 11. Cache detected client target, native pointer, skill support, and MCP config locations in `project/client-profile.md`.
 12. In Plan Mode, return the plan and stop.
-13. In approved execution mode, create or update only the approved pointer and local-only overlays, then run available validation checks. Native plugins write host facts to host `.agents/project/`, never into the installed plugin. Do not create a pointer to a shared policy file that is not installed.
+13. In approved execution mode, create or update only the approved pointer and local-only overlays, plus GPT role configuration explicitly approved under the optional phase below, then run available validation checks. Native plugins write host facts to host `.agents/project/`, never into the installed plugin. Do not create a pointer to a shared policy file that is not installed.
+
+## Optional GPT Role Setup
+
+Only an explicit GPT-model setup request or approval activates
+`references/codex-model-bootstrap.md`, and only for a confirmed Codex client.
+Plan Mode and ordinary adaptation never write model settings. After the normal
+host checks, follow that reference to resolve available GPT models, inspect
+configuration scope, plan a narrow merge, install approved roles and validate
+activation separately. Use `templates/project/model-routing-profile.md` for
+local evidence. Keep primary/global models, security and MCP unchanged.
+Missing runtime evidence leaves routing inactive; no silent expensive fallback.
 
 ## Output Contract
 
@@ -147,6 +160,7 @@ relevant domain. Glossary maintenance never renames code or edits host docs.
 - Non-target frontend overlays do not claim React/Next implementation support.
 - Non-target frontend projects list applicable framework-agnostic skills instead of reporting the whole bundle unusable.
 - Capability detection uses `tool-capabilities-manifest.json` and does not depend on Codex-only `agents/openai.yaml` files.
+- Optional GPT role setup has explicit approval and follows the bootstrap reference; written TOML is not runtime verification.
 - No application source files are created during onboarding.
 - No package, MCP, UI library, styling system, or framework change is made without explicit approval.
 - Changed Markdown keeps graph frontmatter and English reusable rules.

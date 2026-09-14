@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
 related:
+    - '[[common/codex-model-routing-policy]]'
     - '[[templates/root-pointers/AGENTS.codex|Codex AGENTS Pointer Template]]'
 depends_on:
     - '[[common/core/runtime-core-policy|Portable Runtime Core Policy]]'
@@ -19,23 +20,26 @@ depends_on:
 
 # Codex Client Adapter
 
-Purpose: map portable behavior to Codex instruction, skill, tool, and sandbox conventions without redefining workflow policy.
+Map portable behavior to Codex without redefining workflow policy.
 
-## Discovery
+## Discovery And Instructions
 
-- Project policy entrypoint after extraction: `.agents/AGENTS.md` through the approved root `AGENTS.md` pointer.
-- Project skill root: `.agents/skills`.
-- Native skill UI metadata: `skills/*/agents/openai.yaml` when present in the Codex target.
-- Capability declarations: `tool-capabilities-manifest.json`; `agents/openai.yaml` is not capability-availability evidence.
+Use `.agents/AGENTS.md` through the approved minimal root `AGENTS.md` pointer.
+Skills live in `.agents/skills`; `agents/openai.yaml` is UI metadata, not a model
+binding or capability proof. Preserve existing host instructions; create or
+merge a pointer only with explicit approval.
 
-## Project Instructions
+## Tools And Configuration
 
-Root `AGENTS.md` stays a minimal pointer to `.agents/AGENTS.md`. Create or merge it only after explicit user approval; never replace existing project instructions during ordinary bundle work.
+Use the active tool registry or validated project facts as capability evidence.
+Native tools can satisfy capabilities without MCP. Keep sandbox and approvals
+separate; never bypass either. Report blocked checks after bounded fallback.
 
-## Tool And Sandbox Boundary
+For approved GPT setup, onboarding uses its `references/codex-model-bootstrap.md`.
+For task delegation with a local model-routing profile, load
+`common/codex-model-routing-policy.md` before broad context. No config writes
+during ordinary work, silent model upgrades, or changes to global defaults.
 
-Use the active Codex tool registry or validated project profile as capability evidence. A native Codex tool can satisfy a capability without a named MCP server. Treat sandbox restrictions and approval policy as separate controls. Ask before crossing approval boundaries, and report blocked checks after the bounded fallback defined by portable policy.
+## Output
 
-## Output Boundary
-
-Use the portable core output contract. Mention Codex configuration, approvals, or sandbox details only when they affect the result or next decision.
+Use the portable output contract. Mention client details only when consequential.

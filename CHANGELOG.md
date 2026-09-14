@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/1.0.0-checklist|1.0.0 GPT Routing Validation]]'
     - '[[docs/release/0.5.0-checklist|0.5.0 Release Checklist]]'
     - '[[README|WebDev Agent Kit README]]'
     - '[[AGENTS|Canonical Agent Policy]]'
@@ -27,6 +28,40 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Opt-in instruction-driven GPT model routing for supported local Codex clients:
+  bounded lookup, implementation, complex reasoning and independent review roles.
+- Evidence-gated onboarding that selects available GPT IDs and supported efforts
+  instead of hardcoding production models or modifying the primary session.
+- Dependency-free role configuration helper with standalone and registered TOML
+  formats, no-write planning, ownership checks, repeat-run stability, restricted
+  recovery journals and conflict-aware rollback.
+- Local model-routing profile, activation canaries, routing/installation evals,
+  installer regressions and generated-target checks in normal release validation.
+
+### Changed
+
+- Runtime instructions consult optional routing before broad context loading;
+  trivial work stays inline and model escalation preserves the shared retry budget.
+- Onboarding permits only explicitly approved model configuration. Ordinary
+  adaptation, global defaults, primary models, MCP and security remain unchanged.
+- Context refresh flags model evidence drift; Kit updates preserve local roles,
+  profiles, requests, managed state and backups without automatic model upgrades.
+- Release validation includes GPT configuration checks; the existing publish
+  workflow can also be called for an explicit existing tag, without automatic
+  version-bump publishing.
+- Source and portable-target version metadata advance to 1.0.0 with 21 skills.
+
+### Validation Scope
+
+- Offline tests exercise configuration and recovery; scenario fixtures do not
+  claim authenticated Codex execution, real model identity or measured savings.
+- Runtime activation requires per-role observed metadata in the user's client;
+  missing evidence leaves single-agent fallback intact.
+
+## 0.5.0
 
 ### Added
 
