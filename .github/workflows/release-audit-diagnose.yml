@@ -1,0 +1,43 @@
+name: release-audit-windows-diagnostic
+on:
+  push:
+    branches: ['audit/release-1.1.0']
+    paths: ['.github/workflows/release-audit-diagnose.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-candidate
+          run-id: 34863812369
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/candidate
+      - name: Diagnose ACL on empty disposable directory
+        shell: python
+        run: |
+          import importlib.util, os, pathlib, subprocess, tarfile, tempfile
+          source = pathlib.Path(os.environ['RUNNER_TEMP']) / 'acl-source'
+          source.mkdir()
+          tarfile.open(pathlib.Path(os.environ['RUNNER_TEMP']) / 'candidate/release-candidate.tar').extractall(source, filter='data')
+          path = source / 'skills/project-onboarding-adapter/scripts/configure_gpt_agents.py'
+          spec = importlib.util.spec_from_file_location('kit', path)
+          kit = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(kit)
+          original = subprocess.run
+          def observed(*args, **kwargs):
+              result = original(*args, **kwargs)
+              print('Native ACL command exit:', result.returncode)
+              print('stdout:', result.stdout.decode(errors='replace'))
+              print('stderr:', result.stderr.decode(errors='replace'))
+              return result
+          kit.subprocess.run = observed
+          with tempfile.TemporaryDirectory() as root:
+              directory = pathlib.Path(root) / 'private-journal'
+              directory.mkdir()
+              kit.protect_journal_directory(directory)
+              print('Empty-directory ACL verification passed')
