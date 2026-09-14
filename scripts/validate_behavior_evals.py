@@ -17,6 +17,17 @@ def validate():
     if len(ids) != len(set(ids)) or not all(ids):
         errors.append("Live scenario IDs must be present and unique")
     for case in cases:
+        targets = case.get("targets", ["codex", "claude-code", "cursor"])
+        if (
+            not isinstance(targets, list)
+            or not targets
+            or any(
+                not isinstance(t, str) or t not in {"codex", "claude-code", "cursor"}
+                for t in targets
+            )
+            or len(targets) != len(set(targets))
+        ):
+            errors.append(f"Invalid live targets: {case.get('id')}")
         if not case.get("prompt") or len(case.get("rubric", [])) < 2:
             errors.append(f"Incomplete live scenario: {case.get('id')}")
     version = json.loads((ROOT / "bundle-manifest.json").read_text())["version"]
@@ -32,6 +43,17 @@ def validate():
         root = Path(temp)
         for target in ("codex", "claude-code", "cursor"):
             for case in cases:
+                if target not in case.get(
+                    "targets", ["codex", "claude-code", "cursor"]
+                ):
+                    blocked_output = root / f"{target}-{case['id']}"
+                    try:
+                        prepare(case, target, blocked_output)
+                        errors.append("Unsupported scenario target was prepared")
+                    except ValueError:
+                        if blocked_output.exists():
+                            errors.append("Unsupported target wrote output")
+                    continue
                 workspace, prompt = prepare(
                     case, target, root / f"{target}-{case['id']}"
                 )

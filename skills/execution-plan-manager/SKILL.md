@@ -269,3 +269,12 @@ Should not trigger:
 - `project/progress-log.md` - optional local-only progress log.
 - `project/decision-log.md` - optional local-only decision log.
 - `project/loop-memory.md` - optional local-only loop memory.
+
+## Delegated Slice Handoff
+
+When existing routing justifies delegation, use `common/subagent-handoff-rules.md`
+and `templates/subagent-task.md` to export the current slice, exact interfaces,
+global constraints and remaining attempt budget. Keep the canonical plan and
+stable identifiers authoritative. Task packets and reports are plan-scoped
+local artifacts; they do not create a second plan. Lightweight work bypasses
+this handoff as it bypasses durable planning.

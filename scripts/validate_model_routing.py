@@ -85,6 +85,11 @@ def source_checks():
         "activation-proof",
         "update-drift",
         "measured-cost",
+        "approved-native-gate",
+        "pre-setup-no-spawn",
+        "untrusted-config",
+        "gate-conflict",
+        "scoped-repair",
     }
     if set(ids) != required_ids or len(ids) != len(set(ids)):
         errors.append("Routing eval coverage is incomplete or duplicated")
@@ -140,6 +145,39 @@ def generated_checks():
                     errors.append(
                         f"dist/{target}: packaged setup failed: {result.stderr}"
                     )
+                activation_request = request()
+                activation_request["activation"] = {
+                    "config_key": "features.multi_agent",
+                    "schema_evidence": "Synthetic installed-schema fixture",
+                    "allow_enable": True,
+                }
+                req.write_text(json.dumps(activation_request))
+                activated = subprocess.run(command, capture_output=True, text=True)
+                inspected = subprocess.run(
+                    [
+                        sys.executable,
+                        str(generated / HELPER),
+                        "--root",
+                        temp,
+                        "--inspect",
+                    ],
+                    capture_output=True,
+                    text=True,
+                )
+                if activated.returncode or inspected.returncode:
+                    errors.append(
+                        f"dist/{target}: packaged activation/inspection failed"
+                    )
+                else:
+                    observation = json.loads(inspected.stdout)
+                    if (
+                        observation["native_gate"] != "enabled-in-project-config"
+                        or observation["activation"] != "unverified"
+                        or len(observation["roles"]) != 4
+                    ):
+                        errors.append(
+                            f"dist/{target}: configuration/runtime boundary lost"
+                        )
                 repeat = subprocess.run(command, capture_output=True, text=True)
                 if (
                     repeat.returncode

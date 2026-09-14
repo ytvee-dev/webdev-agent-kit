@@ -15,6 +15,7 @@ tags:
     - 'workflow/quality-review'
 parent: []
 related:
+    - '[[skills/frontend-quality-reviewer/references/review-handoffs]]'
     - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
     - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[common/review-severity-model|Review Severity Model]]'
@@ -222,3 +223,12 @@ Should not trigger:
 - `common/typescript-discipline.md`
 - `common/build-tool-boundary-rules.md`
 - `common/lint-verification-rules.md`
+
+## Delegated Review Packages
+
+For durable delegated reviews and material repair loops load
+`references/review-handoffs.md`. Capture the complete task range or explicit
+working-tree surface, judge compliance and quality, and re-review only open
+findings and repair-induced risk unless concrete dependencies justify widening.
+A package contains code evidence, not a successful test run. Never force this
+artifact workflow onto an isolated low-risk edit.

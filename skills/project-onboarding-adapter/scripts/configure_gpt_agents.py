@@ -3,6 +3,7 @@
 
 import argparse
 import base64
+import copy
 import hashlib
 import json
 import os
@@ -19,6 +20,7 @@ BACKUPS = ".agents/project/model-routing-backups"
 CONFIG = ".codex/config.toml"
 BEGIN = "# BEGIN webdev-agent-kit model roles"
 END = "# END webdev-agent-kit model roles"
+ACTIVATION_KEYS = {"agents.enabled", "features.multi_agent"}
 ROLES = {
     "wdk_lookup": "Gather bounded evidence and paths. Do not edit files or run fixers.",
     "wdk_worker": "Implement one explicit low-risk slice. Edit only assigned files.",
@@ -83,10 +85,19 @@ def validate_request(request):
             "cost_basis",
             "models",
             "roles",
-        },
+        }
+        | (
+            {"activation"}
+            if isinstance(request, dict) and "activation" in request
+            else set()
+        ),
         "request",
     )
-    if request["schema_version"] != 1 or request["client"] != "codex":
+    if (
+        type(request["schema_version"]) is not int
+        or request["schema_version"] != 1
+        or request["client"] != "codex"
+    ):
         raise ValueError("Only schema 1 and the Codex client are supported")
     if request["format"] not in {"standalone", "registered"}:
         raise ValueError("Unsupported client configuration format")
@@ -101,6 +112,20 @@ def validate_request(request):
         "cost_basis",
     ):
         text(request[name], name)
+    if "activation" in request:
+        activation = request["activation"]
+        keys(
+            activation, {"config_key", "schema_evidence", "allow_enable"}, "activation"
+        )
+        if activation["config_key"] not in ACTIVATION_KEYS:
+            raise ValueError(
+                "Only a documented local subagent enablement key is allowed"
+            )
+        text(activation["schema_evidence"], "activation schema evidence")
+        if activation["allow_enable"] is not True:
+            raise ValueError(
+                "Activation must be included in the explicitly approved scope"
+            )
     models = request["models"]
     if not isinstance(models, dict) or not models:
         raise ValueError("A confirmed available GPT catalog is required")
@@ -169,6 +194,167 @@ def split_config(data):
     return parsed, "".join(lines[:a] + lines[b:]), "".join(lines[a:b])
 
 
+def gate_values(parsed):
+    values = {}
+    for key in sorted(ACTIVATION_KEYS):
+        section, field = key.split(".")
+        table = parsed.get(section, {})
+        if not isinstance(table, dict):
+            raise ValueError("Invalid subagent gate table")
+        value = table.get(field)
+        if value is not None and type(value) is not bool:
+            raise ValueError("Subagent gate must be a boolean")
+        values[key] = value
+    return values
+
+
+def enable_gate(source, key):
+    """Patch one simple boolean only; parse/compare the entire result before use.
+
+    This is deliberately not a general TOML editor. Inline/ambiguous forms fail
+    closed. Candidate matching inside multiline strings cannot alter other values:
+    the full semantic equality check rejects such a candidate.
+    """
+    before = tomllib.loads(source)
+    section, field = key.split(".")
+    if gate_values(before)[key] is True:
+        return source
+    expected = copy.deepcopy(before)
+    expected.setdefault(section, {})[field] = True
+    lines = source.splitlines(keepends=True)
+    nl = "\r\n" if "\r\n" in source else "\n"
+    candidates = []
+    for index, line in enumerate(lines):
+        # Prefer the exact dotted spelling; a semantic comparison rejects a
+        # match in the wrong table or in a multiline string.
+        match = re.match(
+            rf"^(\s*{re.escape(key)}\s*=\s*)false(\s*(?:#.*)?)(\r?\n)?$", line
+        )
+        if match:
+            candidates.append(
+                "".join(lines[:index])
+                + match[1]
+                + "true"
+                + match[2]
+                + (match[3] or "")
+                + "".join(lines[index + 1 :])
+            )
+        if not re.match(rf"^\s*\[{section}\]\s*(?:#.*)?$", line.rstrip("\r\n")):
+            continue
+        # Adding a missing key immediately inside its explicit table preserves
+        # comments and other settings. Duplicate keys are rejected by tomllib.
+        header = line if line.endswith("\n") else line + nl
+        candidates.append(
+            "".join(lines[:index])
+            + header
+            + f"{field} = true{nl}"
+            + "".join(lines[index + 1 :])
+        )
+        for offset in range(index + 1, len(lines)):
+            if re.match(r"^\s*\[", lines[offset]):
+                break
+            match = re.match(
+                rf"^(\s*{field}\s*=\s*)false(\s*(?:#.*)?)(\r?\n)?$", lines[offset]
+            )
+            if match:
+                candidates.append(
+                    "".join(lines[:offset])
+                    + match[1]
+                    + "true"
+                    + match[2]
+                    + (match[3] or "")
+                    + "".join(lines[offset + 1 :])
+                )
+    prefix = source + (nl if source and not source.endswith("\n") else "")
+    candidates.append(prefix + f"[{section}]{nl}{field} = true{nl}")
+    for candidate in candidates:
+        try:
+            if tomllib.loads(candidate) == expected:
+                return candidate
+        except tomllib.TOMLDecodeError:
+            continue
+    raise ValueError(
+        "Activation needs a reviewed manual merge for this TOML layout; no files written"
+    )
+
+
+def inspection(root):
+    """Configuration evidence only. Never equate it with a real model run."""
+    raw_state = read(root, STATE)
+    config = read(root, CONFIG)
+    parsed = tomllib.loads((config or b"").decode("utf-8"))
+    gates = gate_values(parsed)
+    if any(value is False for value in gates.values()):
+        gate = "disabled-in-project-config"
+    elif any(value is True for value in gates.values()):
+        gate = "enabled-in-project-config"
+    else:
+        gate = "unspecified-check-installed-client-default"
+    roles = {}
+    hashes = {CONFIG: digest(config), STATE: digest(raw_state)}
+    if raw_state:
+        state = json.loads(raw_state)
+        if state.get("schema_version") != 1 or state.get("format") not in {
+            "standalone",
+            "registered",
+        }:
+            raise ValueError("Unknown managed state")
+        paths = role_paths(state["format"])
+        if set(state.get("files", {})) != set(paths.values()):
+            raise ValueError("Unexpected managed state paths")
+        for name, path in paths.items():
+            content = read(root, path)
+            hashes[path] = digest(content)
+            if content is None or hashes[path] != state["files"][path]:
+                raise ValueError(f"Managed role missing or changed: {name}")
+            role = tomllib.loads(content.decode())
+            roles[name] = {
+                "path": path,
+                "model": role["model"],
+                "effort": role["model_reasoning_effort"],
+            }
+        _, _, block = split_config(config)
+        if digest(block.encode()) != state["block_hash"]:
+            raise ValueError("Managed registration block changed")
+        if (
+            state.get("activation")
+            and gates[state["activation"]["config_key"]] is not True
+        ):
+            raise ValueError("Managed activation changed; reconcile before reuse")
+    return {
+        "status": "configured" if raw_state else "not-configured",
+        "activation": "unverified",
+        "native_gate": gate,
+        "gate_values": gates,
+        "configuration_fingerprint": digest(json_bytes(hashes)),
+        "roles": roles,
+        "requires": [
+            "trusted-project",
+            "effective-config-and-policy",
+            "runtime-canaries",
+        ],
+    }
+
+
+def review_preview(root, request):
+    """Show only approved fields, never a full secret-bearing config diff."""
+    parsed = tomllib.loads((read(root, CONFIG) or b"").decode())
+    preview = {
+        "roles": {
+            name: {"model": binding["model"], "effort": binding["effort"]}
+            for name, binding in request["roles"].items()
+        }
+    }
+    if request.get("activation"):
+        key = request["activation"]["config_key"]
+        preview["activation"] = {
+            "config_key": key,
+            "before": gate_values(parsed)[key],
+            "after": True,
+        }
+    return preview
+
+
 def role_paths(fmt):
     directory = "agents" if fmt == "standalone" else "wdk-agents"
     return {name: f".codex/{directory}/{name}.toml" for name in ROLES}
@@ -205,7 +391,8 @@ def plan(root, request):
     if raw_state is not None:
         keys(
             state,
-            {"schema_version", "format", "request_hash", "files", "block_hash"},
+            {"schema_version", "format", "request_hash", "files", "block_hash"}
+            | ({"activation"} if "activation" in state else set()),
             "state",
         )
         if state["schema_version"] != 1 or state["format"] != fmt:
@@ -222,8 +409,26 @@ def plan(root, request):
     agents = parsed.get("agents", {})
     if not isinstance(agents, dict):
         raise ValueError("Invalid agents configuration")
-    if agents.get("enabled") is False:
-        raise ValueError("Subagents are explicitly disabled; settings are preserved")
+    gates = gate_values(parsed)
+    activation = request.get("activation")
+    selected_key = activation["config_key"] if activation else None
+    prior_activation = state.get("activation") if state else None
+    if prior_activation:
+        keys(prior_activation, {"config_key"}, "activation state")
+        if (
+            prior_activation["config_key"] not in ACTIVATION_KEYS
+            or gates[prior_activation["config_key"]] is not True
+        ):
+            raise ValueError("Managed activation changed; reconcile before reuse")
+        if selected_key and selected_key != prior_activation["config_key"]:
+            raise ValueError(
+                "Activation format migration requires a separate reviewed plan"
+            )
+    for key, value in gates.items():
+        if value is False and key != selected_key:
+            raise ValueError(
+                f"Subagents are explicitly disabled by {key}; settings are preserved"
+            )
     if state:
         if digest(old_block.encode()) != state["block_hash"]:
             raise ValueError("Managed registration block changed")
@@ -247,7 +452,10 @@ def plan(root, request):
     for path in outputs:
         if not state and read(root, path) is not None:
             raise ValueError(f"Refusing to adopt or overwrite an unowned file: {path}")
+    if selected_key:
+        outside = enable_gate(outside, selected_key)
     block = ""
+    updated = outside.encode()
     if fmt == "registered":
         nl = "\r\n" if b"\r\n" in (config or b"") else "\n"
         block = BEGIN + nl
@@ -268,7 +476,11 @@ def plan(root, request):
             del result["agents"]
         if before != result:
             raise ValueError("Configuration merge would alter unrelated values")
+    if fmt == "registered" or selected_key:
         outputs[CONFIG] = updated
+    activation_state = (
+        {"config_key": selected_key} if selected_key else prior_activation
+    )
     outputs[STATE] = json_bytes(
         {
             "schema_version": 1,
@@ -276,6 +488,7 @@ def plan(root, request):
             "request_hash": digest(json_bytes(request)),
             "files": {p: digest(outputs[p]) for p in paths.values()},
             "block_hash": digest(block.encode()),
+            **({"activation": activation_state} if activation_state else {}),
         }
     )
     return {
@@ -389,6 +602,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, required=True)
     parser.add_argument("--request", type=Path)
+    parser.add_argument(
+        "--inspect",
+        action="store_true",
+        help="Read configuration state/fingerprint; no runtime claim",
+    )
     parser.add_argument("--apply", action="store_true")
     parser.add_argument(
         "--approve", action="store_true", help="Use only after explicit user permission"
@@ -399,7 +617,13 @@ def main():
         if not args.root.is_dir() or args.root.is_symlink():
             raise ValueError("Host root must be an existing real directory")
         root = args.root.resolve()
-        if args.rollback:
+        if args.inspect:
+            if args.request or args.apply or args.approve or args.rollback:
+                raise ValueError(
+                    "--inspect cannot be combined with request or write options"
+                )
+            result = inspection(root)
+        elif args.rollback:
             if args.request or args.apply or not args.approve:
                 raise ValueError("Rollback requires --approve and no --request/--apply")
             result = rollback(root, args.rollback)
@@ -415,6 +639,7 @@ def main():
                     "status": "proposed",
                     "activation": "unverified",
                     "changed": list(changes),
+                    "review": review_preview(root, request),
                 }
             )
         print(json.dumps(result))

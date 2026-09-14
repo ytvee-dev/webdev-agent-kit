@@ -11,6 +11,7 @@ tags:
 parent:
     - '[[AGENTS]]'
 related:
+    - '[[common/subagent-handoff-rules]]'
     - '[[common/bounded-retry-rules]]'
     - '[[common/independent-review-rules]]'
     - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
@@ -60,6 +61,9 @@ role's fixed model and effort are not overridden by prose; escalation selects
 a different approved role. Pass only the selected skill, goal and acceptance
 criteria, owned paths, constraints, decisive evidence, required tools, checks,
 and remaining attempt budget. Do not forward the full parent transcript.
+
+Use `common/subagent-handoff-rules.md` for self-contained task/report packets
+and batching independent same-shape mechanical edits.
 
 Only the coordinator delegates. Default to sequential work; use at most two
 concurrent children only for independent, explicitly bounded assignments, and

@@ -33,6 +33,8 @@ def snapshot(root):
 
 
 def prepare(case, target, output):
+    if target not in case.get("targets", ["codex", "claude-code", "cursor"]):
+        raise ValueError("Scenario does not support this client target")
     output = output.resolve()
     if output == ROOT or ROOT in output.parents:
         raise ValueError("Use an output directory outside the source repository")

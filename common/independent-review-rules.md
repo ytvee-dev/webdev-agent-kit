@@ -94,3 +94,13 @@ claiming independent verification of those repairs.
 Independent review is valid only when it evaluates the acceptance criteria and
 evidence instead of merely restating the implementer's summary. Review findings
 must not add, remove, reorder, renumber, or mark plan slices.
+
+## Scoped Repair Review
+
+For delegated durable review use `common/subagent-handoff-rules.md` and
+`skills/frontend-quality-reviewer/references/review-handoffs.md`. The review
+surface must include all task commits or the actual uncommitted snapshot, not
+only the last commit. Re-review the open findings and repair-induced risk; widen
+only for concrete dependent-interface, security, or outcome evidence. Unrelated
+preferences never extend a repair loop. Preserve required failed criteria at
+the attempt cap; completion is not manufactured by deferring mandatory work.

@@ -143,3 +143,16 @@ project notes separately before restoring older overlays.
 Start a fresh session and confirm the restored version. Report both versions,
 target, exact reproduction, result, and rollback outcome. Do not retarget a
 published release tag or delete unrelated project files.
+
+## 1.0.0 To 1.1.0
+
+All 21 skills and native targets are retained. Existing schema-1 role requests
+and managed state remain accepted; no role-format migration or model change is
+performed by an upgrade. Preserve host role files, state, profiles and journals.
+Use the [GPT routing guide](gpt-model-routing.md) only when explicitly approving
+activation or revalidating client/configuration drift. The optional activation
+member adds one supported local gate, not global or main-model defaults.
+
+Existing canonical goals/plans stay in place. Plan-scoped handoff/review artifacts
+are additive, git-ignored local evidence for delegated work, not a new required
+plan layout. Small tasks remain inline and do not create those artifacts.

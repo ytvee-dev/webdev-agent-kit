@@ -20,10 +20,12 @@ depends_on: []
 
 # Optional GPT Model Routing
 
-Version 1.0.0 adds opt-in, instruction-driven GPT subagents for a supported local
-Codex project bundle, including compatible Codex IDE surfaces. It does not
-change models in Claude or Cursor, replace the main session's model, or require
-an external router/API key. Existing onboarding remains unchanged.
+Version 1.1.0 extends the 1.0.0 opt-in GPT role setup with approved native
+activation and read-only configuration diagnostics. It supports a local Codex
+project bundle, including compatible Codex IDE surfaces, not GPT models running
+inside unrelated clients. It never replaces the main session's model or requires
+an external router/API key. Normal onboarding now identifies missing routing
+setup and offers its scope; it still does not change models without approval.
 
 ## Enable During Onboarding
 
@@ -33,7 +35,9 @@ After normal installation, send:
 Adapt this kit to the project and configure economical GPT subagents in the
 project-local .codex directory. Preserve my main model, global configuration,
 MCP and security settings. Confirm model availability and show the narrow
-configuration plan before writing. Smoke-test activation when supported.
+configuration plan before writing, including the native subagent enablement
+key if needed. After I approve that diff, apply it, refresh the client and
+smoke-test all four roles. Do not change project trust or bypass managed policy.
 ```
 
 The agent selects models from your actual client catalog and records the cost
@@ -53,6 +57,11 @@ live in `.codex/agents/`; registered configuration layers live in
 `.codex/wdk-agents/` with a narrow `.codex/config.toml` registration block.
 Do not configure the same role in both formats. Existing global/user roles,
 main-model defaults, approvals and MCP are preserved. Name conflicts stop setup.
+Only a separately approved enablement field may be changed alongside the roles:
+`agents.enabled` or `features.multi_agent`, selected from the installed schema.
+Current Codex documentation enables subagents by default, so a missing flag is
+not itself a defect. Another false gate, higher-precedence denial, untrusted
+project or ambiguous TOML layout needs explicit reconciliation, not a workaround.
 
 Local `.agents/project/` contains the request, human model-routing profile,
 managed hashes and restricted recovery journals. Keep these and `.codex/`
@@ -67,7 +76,18 @@ and state; do not delete a setup lock while another installer may still run.
 
 ## Verify Activation, Not Just Files
 
-A written TOML means configured, not verified. The agent should refresh the
+A written TOML means configured, not verified. Use this read-only local check:
+
+```sh
+python .agents/skills/project-onboarding-adapter/scripts/configure_gpt_agents.py \
+  --root . --inspect
+```
+
+It reports configured roles, local gates and a fingerprint, never live success.
+Native delegation need not exist before the configuration phase; it must exist
+after activation to perform canaries. Save the next onboarding step before a
+client restart. Project trust and managed policy remain controlled by the human
+and the client, not by kit instructions. The agent should refresh the
 client as documented, run tiny approved read-only canaries, and inspect actual
 model/effort and permissions from runtime metadata. A model's identity claim
 is not proof. Reviewer independence additionally requires fresh context.
@@ -86,5 +106,18 @@ Repeated same-input setup is a no-op. Approved rollback restores only managed
 transaction files and refuses later edits. Format migration needs a separate
 reviewed plan rather than silently registering duplicate agents.
 
-See the [1.0.0 validation scope](../release/1.0.0-checklist.md) for what automated
-tests cover and what requires your own authenticated Codex session.
+## Configured But Inactive
+
+| Observation | Action |
+| --- | --- |
+| Local native gate explicitly false | Preview a narrow schema-confirmed enablement change; apply only after its approval |
+| Both known gates false or effective policy denies children | Reconcile effective configuration; never guess which flag wins |
+| Project is not trusted | Human uses the client's supported trust controls; the kit does not edit global trust |
+| Roles written but not discovered | Refresh/new session, confirm role format and effective registration |
+| Inspector succeeds but runtime metadata is missing | Leave activation-unverified; use the main agent |
+| Actual child model or effort differs | Block that role, inspect loading/precedence, repeat the canary after correction |
+| Existing user role or inline TOML conflicts | Stop before writes and review a manual scoped merge |
+
+See the [1.1.0 validation scope](../release/1.1.0-checklist.md) for automated
+coverage and the authenticated four-role acceptance procedure. The
+[1.0.0 checklist](../release/1.0.0-checklist.md) remains historical.

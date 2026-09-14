@@ -61,3 +61,14 @@ When tests matter, report the exact command or file, result, scope, and any appr
 - New tests and infrastructure have explicit current user authorization.
 - Verification stays proportional and relevant.
 - Final output omits non-actionable skipped-test noise.
+
+## Evidence Quality For Authorized Test Work
+
+When test creation or maintenance is authorized, name the realistic behavior
+break it catches and derive the expected result independently of the code under
+test. A source-string marker proves structure only, not agent compliance.
+An import, collection, setup or syntax failure does not prove a behavior
+assertion rejected an incorrect result. Report it as a structural failure;
+behavioral evidence requires the assertion to execute against an appropriate
+negative control. Never weaken expectations to manufacture a pass. These rules
+do not authorize new tests or infrastructure outside the boundaries above.

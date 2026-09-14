@@ -80,6 +80,9 @@ def main():
     )
     if routing_target_code:
         sys.exit(routing_target_code)
+    handoff_code = run("validate_review_handoffs.py", "--generated")
+    if handoff_code:
+        sys.exit(handoff_code)
     behavior_code = run("validate_behavior_evals.py")
     if behavior_code:
         sys.exit(behavior_code)

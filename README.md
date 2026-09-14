@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Skills-19-0ea5e9?style=flat-square" alt="Skills: 19">
+  <img src="https://img.shields.io/badge/Skills-21-0ea5e9?style=flat-square" alt="Skills: 21">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" alt="License: Apache-2.0"></a>
 </p>
 
@@ -199,6 +199,28 @@ Cached facts remain local and never override current source files, configuration
 CI, or actual verification results. Stale facts must be updated. The kit does
 not promise a fixed token-savings percentage; it reduces waste by avoiding
 unnecessary context and repeated repository scans.
+
+## Economical GPT Subagents And Review Handoffs
+
+Codex onboarding can propose four project-local roles for bounded lookup,
+implementation, complex reasoning and independent review. Models and reasoning
+efforts come from the actual client catalog, not hardcoded production IDs.
+Version 1.1.0 also previews and applies a separately approved native subagent
+activation field when needed. The primary model, global configuration, MCP,
+trust and security settings remain unchanged.
+
+Ask to configure economical GPT subagents during adaptation, inspect the proposed
+fields, then approve that scope. A written TOML is only configured: refresh the
+client and verify the actual child model, effort and permissions. Missing runtime
+evidence retains the ordinary single-agent workflow. See the
+[GPT routing guide](docs/install/gpt-model-routing.md) for commands and diagnosis.
+
+For justified delegated work, compact task packets preserve criteria, interfaces,
+owned files and retry budgets. Exact review packages cover all task commits or
+an explicitly scoped working-tree snapshot; repeat review focuses on fixes and
+their consequences. These artifacts stay local and do not burden small edits.
+The [design notes](docs/architecture/superpowers-adoption.md) explain what was
+adapted from Superpowers and which heavier workflows were deliberately excluded.
 
 ## Verifying the Installation
 

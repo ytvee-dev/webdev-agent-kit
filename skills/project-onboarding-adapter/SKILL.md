@@ -113,14 +113,23 @@ Read targeted README sections only when they help identify project intent, setup
 
 ## Optional GPT Role Setup
 
-Only an explicit GPT-model setup request or approval activates
-`references/codex-model-bootstrap.md`, and only for a confirmed Codex client.
-Plan Mode and ordinary adaptation never write model settings. After the normal
-host checks, follow that reference to resolve available GPT models, inspect
-configuration scope, plan a narrow merge, install approved roles and validate
-activation separately. Use `templates/project/model-routing-profile.md` for
-local evidence. Keep primary/global models, security and MCP unchanged.
-Missing runtime evidence leaves routing inactive; no silent expensive fallback.
+During confirmed Codex onboarding, assess model-routing state with the minimal
+client/configuration facts already needed for adaptation. Offer an explicit
+optional scope when roles or native enablement are missing; do not silently
+skip activation because delegation is not callable before setup. Load
+`references/codex-model-bootstrap.md` when setup is requested, approved, or the
+user asks why configured roles are inactive. Ordinary adaptation without that
+approval, Plan Mode, kit updates and non-Codex clients never write model settings.
+
+After approval, resolve available GPT models, preview the exact roles and any
+single schema-confirmed local enablement key, apply the narrow merge, then
+refresh the client and verify approved canaries. Configuration preparation does
+not require a callable spawn tool; runtime verification does. Untrusted projects,
+managed denial, missing auth or unavailable metadata remain explicit blockers,
+not permission to modify trust/security. Use
+`templates/project/model-routing-profile.md` for evidence. Keep primary/global
+models and MCP unchanged. Missing runtime evidence leaves routing inactive;
+no silent expensive fallback.
 
 ## Output Contract
 

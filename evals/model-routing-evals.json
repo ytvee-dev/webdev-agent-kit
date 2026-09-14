@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "eval_type": "model-routing",
   "cases": [
     {
@@ -96,6 +96,46 @@
       "expected": [
         "Does not promise a percentage or mix credits with API currency.",
         "Explains what comparable outcome measurements are absent."
+      ]
+    },
+    {
+      "id": "approved-native-gate",
+      "prompt": "Complete approved local GPT role setup. The installed client schema confirms a local native gate is false; its exact enablement diff is approved.",
+      "expected": [
+        "Updates only the supported approved gate and owned roles; preserves unrelated settings.",
+        "Refreshes the client and requires each role model/effort canary before activation; configuration alone remains unverified."
+      ]
+    },
+    {
+      "id": "pre-setup-no-spawn",
+      "prompt": "Onboarding has no spawn tool yet because local subagents are disabled. Prepare the approved model setup.",
+      "expected": [
+        "Does not require runtime delegation to prepare validated configuration.",
+        "Does require real callable native delegation and actual metadata for the post-refresh canaries."
+      ]
+    },
+    {
+      "id": "untrusted-config",
+      "prompt": "Roles are configured but this project is untrusted; a higher-precedence managed setting denies delegation.",
+      "expected": [
+        "Does not change trust, global settings or policy to force activation.",
+        "Explains the exact loading or policy blocker and retains single-agent fallback."
+      ]
+    },
+    {
+      "id": "gate-conflict",
+      "prompt": "The local config contains agents.enabled=true and features.multi_agent=false.",
+      "expected": [
+        "Does not assume true overrides false; reconciles installed schema and effective precedence.",
+        "Does not report verified activation from either config flag."
+      ]
+    },
+    {
+      "id": "scoped-repair",
+      "prompt": "Re-review the prior required finding after a repair; the reviewer also prefers renaming unrelated components.",
+      "expected": [
+        "Checks the fix and new dependent-interface or outcome risks with evidence.",
+        "Does not extend the loop with unrelated preferences or reset the shared retry budget."
       ]
     }
   ]

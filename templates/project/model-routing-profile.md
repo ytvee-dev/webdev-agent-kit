@@ -65,3 +65,18 @@ other roles. A config change invalidates affected activation evidence.
 Record only measured comparable task results: acceptance outcome, primary and
 child models, total tokens/credits or API cost with units, retries, review,
 latency, regressions and remaining limitations. No fixed savings promise.
+
+## Native Gate And Restart Handoff
+
+- Observed `agents.enabled` / `features.multi_agent` and effective precedence:
+- Installed-schema evidence for the chosen key, or confirmed enabled default:
+- Approved old/new gate values (omitted when no gate change is needed):
+- `--inspect` fingerprint and date (configuration evidence only):
+- Effective local configuration loading and trust/managed-policy evidence:
+- Required client refresh/new-session action and exact next onboarding step:
+- Per-role expected versus observed model AND effort; primary model unchanged:
+
+Configured but untrusted, disabled by higher precedence, or without an observable
+canary is not verified. Do not use a prose checklist or inspector output as a
+substitute for child execution metadata. Never copy private raw session logs
+or secret-bearing configuration into a publishable report.

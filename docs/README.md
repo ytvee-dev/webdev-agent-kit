@@ -11,6 +11,8 @@ tags:
 parent:
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
 related:
+    - '[[docs/architecture/superpowers-adoption]]'
+    - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/install/README|Installation Guides]]'
     - '[[docs/mcp/README|MCP for WebDev Agent Kit]]'
     - '[[docs/architecture/runtime-target-contracts|Runtime Target Contracts]]'
@@ -38,3 +40,10 @@ depends_on: []
 - [0.4.0 release checklist](release/0.4.0-checklist.md)
 
 The documents in this directory are intended for users and project maintainers. Runtime policies and executable agent instructions live in `AGENTS.md`, `common/**`, `profiles/**`, `adapters/**`, `skills/**`, and `templates/**`.
+
+## Agent Execution And Routing
+
+- [GPT model routing and activation troubleshooting](install/gpt-model-routing.md)
+- [Superpowers comparison and adopted design choices](architecture/superpowers-adoption.md)
+- [Behavior evaluation and authenticated onboarding trials](architecture/behavior-evaluation.md)
+- [1.1.0 release acceptance checklist](release/1.1.0-checklist.md)

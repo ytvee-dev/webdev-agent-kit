@@ -28,6 +28,7 @@ jobs:
           python -m py_compile scripts/*.py
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
           python -m py_compile skills/project-onboarding-adapter/scripts/*.py
+          python -m py_compile skills/frontend-quality-reviewer/scripts/*.py
 
       - name: Validate schemas
         id: validate_schemas
@@ -152,6 +153,9 @@ jobs:
       - name: Build portable targets
         run: python scripts/build_skill_targets.py
 
+      - name: Validate exact review handoffs and packaged helper
+        run: python scripts/validate_review_handoffs.py --generated
+
       - name: Validate generated runtime policy layers
         run: python scripts/validate_runtime_layers.py --generated
 
@@ -202,3 +206,22 @@ jobs:
       - name: Fail if full validation failed
         if: steps.validate_full.outputs.status != '0'
         run: exit ${{ steps.validate_full.outputs.status }}
+
+  runtime-helpers:
+    name: Native helper regressions (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test documented onboarding and configuration recovery
+        run: python -m unittest discover -s scripts -p test_model_routing.py -v
+      - name: Test real Git review snapshots
+        run: python -m unittest discover -s scripts -p test_review_package.py -v

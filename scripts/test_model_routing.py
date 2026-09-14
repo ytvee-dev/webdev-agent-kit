@@ -4,6 +4,7 @@
 import copy
 import importlib.util
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -82,6 +83,69 @@ class InstallationTests(unittest.TestCase):
         with self.assertRaises((ValueError, TypeError)):
             kit.plan(self.root, req)
         self.assertEqual(before, snapshot(self.root, recovery=True))
+
+    def test_documented_request_runs_dryrun_apply_inspect(self):
+        guide = (
+            ROOT
+            / "skills/project-onboarding-adapter/references/codex-model-bootstrap.md"
+        ).read_text()
+        blocks = re.findall(r"```json\n(.*?)\n```", guide, re.S)
+        self.assertEqual(len(blocks), 2)
+        replacements = {
+            "REPLACE_WITH_AVAILABLE_GPT_ECONOMY_ID": "gpt-fixture-economy",
+            "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID": "gpt-fixture-capable",
+            "CONFIRMED_CLIENT_VERSION": "synthetic-fixture",
+            "CONFIRMED_OBSERVATION_DATE": "2026-09-14",
+            "CONFIRMED_CLIENT_CATALOG_SOURCE": "synthetic offline catalog",
+            "CONFIRMED_COST_UNITS_SOURCE_DATE_AND_TASK_FIT": "synthetic cost, no claim",
+            "CONFIRMED_INSTALLED_SCHEMA_AND_VERSION": "synthetic schema evidence",
+        }
+        example = blocks[0]
+        activation = blocks[1]
+        for key, value in replacements.items():
+            example = example.replace(key, value)
+            activation = activation.replace(key, value)
+        req = json.loads(example)
+        req.update(json.loads("{" + activation + "}"))
+        self.put(
+            ".codex/config.toml",
+            '# preserved\nmodel = "keep-primary"\n[agents]\nenabled = false\n',
+        )
+        request_path = self.put("request.json", json.dumps(req))
+        command = [
+            sys.executable,
+            str(HELPER),
+            "--root",
+            str(self.root),
+            "--request",
+            str(request_path),
+        ]
+        before = snapshot(self.root, recovery=True)
+        preview = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(preview.returncode, 0, preview.stderr)
+        self.assertEqual(
+            json.loads(preview.stdout)["review"]["activation"]["before"], False
+        )
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+        applied = subprocess.run(
+            [*command, "--apply", "--approve"], capture_output=True, text=True
+        )
+        self.assertEqual(applied.returncode, 0, applied.stderr)
+        inspected = subprocess.run(
+            [sys.executable, str(HELPER), "--root", str(self.root), "--inspect"],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(inspected.returncode, 0, inspected.stderr)
+        report = json.loads(inspected.stdout)
+        self.assertEqual(report["activation"], "unverified")
+        self.assertEqual(report["native_gate"], "enabled-in-project-config")
+        for name, binding in req["roles"].items():
+            self.assertEqual(report["roles"][name]["model"], binding["model"])
+            self.assertEqual(report["roles"][name]["effort"], binding["effort"])
+        parsed = tomllib.loads((self.root / ".codex/config.toml").read_text())
+        self.assertEqual(parsed["model"], "keep-primary")
+        self.assertTrue(parsed["agents"]["enabled"])
 
     def test_plan_has_zero_writes(self):
         before = snapshot(self.root, recovery=True)
@@ -397,6 +461,161 @@ class InstallationTests(unittest.TestCase):
         )
         self.assertEqual(applied.returncode, 0, applied.stderr)
         self.assertEqual(json.loads(applied.stdout)["activation"], "unverified")
+
+    def activation_request(self, key="agents.enabled", fmt="standalone"):
+        req = request(fmt)
+        req["activation"] = {
+            "config_key": key,
+            "schema_evidence": "Synthetic installed-schema fixture; not runtime proof",
+            "allow_enable": True,
+        }
+        return req
+
+    def test_legacy_disabled_gate_is_not_silently_ignored(self):
+        self.put(kit.CONFIG, "[features]\nmulti_agent = false\n")
+        self.assertBlocked(request())
+
+    def test_approved_gate_enabling_preserves_other_config_and_rolls_back(self):
+        for key in ("agents.enabled", "features.multi_agent"):
+            for fmt in ("standalone", "registered"):
+                with self.subTest(key=key, fmt=fmt):
+                    section, field = key.split(".")
+                    original = (
+                        '# keep\r\nmodel = "primary"\r\n'
+                        f"[{section}] # settings\r\n{field} = false # deliberate\r\n"
+                        '[mcp_servers.local]\r\ncommand = "tool"\r\n'
+                    ).encode()
+                    self.put(kit.CONFIG, original)
+                    before = snapshot(self.root)
+                    req = self.activation_request(key, fmt)
+                    changes = kit.plan(self.root, req)
+                    self.assertEqual(before, snapshot(self.root))
+                    result = kit.apply(self.root, changes)
+                    data = tomllib.loads((self.root / kit.CONFIG).read_text())
+                    self.assertIs(data[section][field], True)
+                    self.assertEqual(data["model"], "primary")
+                    self.assertEqual(data["mcp_servers"]["local"]["command"], "tool")
+                    self.assertIn(
+                        b"true # deliberate\r\n", (self.root / kit.CONFIG).read_bytes()
+                    )
+                    self.assertEqual(self.install(req)["status"], "unchanged")
+                    self.assertEqual(result["activation"], "unverified")
+                    kit.rollback(self.root, result["transaction"])
+                    self.assertEqual(before, snapshot(self.root))
+
+    def test_activation_missing_gate_existing_table_and_dotted_key(self):
+        for original in (
+            "",
+            "[agents]\nmax_threads = 2\n",
+            '[agents.user_role]\ndescription = "mine"\n',
+            'agents.enabled = false # keep\nmodel = "primary"\n',
+        ):
+            with self.subTest(original=original):
+                self.put(kit.CONFIG, original)
+                before = snapshot(self.root)
+                result = self.install(self.activation_request())
+                data = tomllib.loads((self.root / kit.CONFIG).read_text())
+                self.assertIs(data["agents"]["enabled"], True)
+                kit.rollback(self.root, result["transaction"])
+                self.assertEqual(before, snapshot(self.root))
+
+    def test_activation_cannot_mask_other_disabled_gate(self):
+        self.put(
+            kit.CONFIG, "[agents]\nenabled = false\n[features]\nmulti_agent = false\n"
+        )
+        self.assertBlocked(self.activation_request())
+        self.assertBlocked(self.activation_request("features.multi_agent"))
+
+    def test_invalid_activation_scope_and_missing_consent_rejected(self):
+        for field, value in (
+            ("config_key", "sandbox_mode"),
+            ("config_key", "projects.trust_level"),
+            ("schema_evidence", ""),
+            ("allow_enable", False),
+            ("allow_enable", "yes"),
+        ):
+            req = self.activation_request()
+            req["activation"][field] = value
+            self.assertBlocked(req)
+        req = self.activation_request()
+        req["activation"]["global"] = True
+        self.assertBlocked(req)
+
+    def test_activation_does_not_rewrite_multiline_lookalike(self):
+        original = 'developer_instructions = """\n[agents]\nenabled = false\n"""\n[agents]\nenabled = false\n'
+        self.put(kit.CONFIG, original)
+        self.install(self.activation_request())
+        data = tomllib.loads((self.root / kit.CONFIG).read_text())
+        self.assertEqual(
+            data["developer_instructions"],
+            tomllib.loads(original)["developer_instructions"],
+        )
+        self.assertIs(data["agents"]["enabled"], True)
+
+    def test_activation_inline_table_refuses_unsafe_rewrite(self):
+        self.put(kit.CONFIG, "agents = { enabled = false, max_threads = 1 }\n")
+        self.assertBlocked(self.activation_request())
+
+    def test_existing_v1_state_can_add_activation_and_preserve_it(self):
+        self.install()
+        self.install(self.activation_request())
+        self.assertIs(
+            tomllib.loads((self.root / kit.CONFIG).read_text())["agents"]["enabled"],
+            True,
+        )
+        req = request()
+        req["roles"]["wdk_worker"]["effort"] = "medium"
+        self.install(req)
+        state = json.loads((self.root / kit.STATE).read_text())
+        self.assertEqual(state["activation"]["config_key"], "agents.enabled")
+        self.assertEqual(self.install(req)["status"], "unchanged")
+
+    def test_activation_user_drift_is_not_silently_reenabled(self):
+        self.install(self.activation_request())
+        self.put(kit.CONFIG, "[agents]\nenabled = false\n")
+        self.assertBlocked(self.activation_request())
+
+    def test_inspect_is_readonly_and_never_claims_runtime_activation(self):
+        self.install(self.activation_request())
+        command = [sys.executable, str(HELPER), "--root", str(self.root), "--inspect"]
+        before = snapshot(self.root, recovery=True)
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        data = json.loads(result.stdout)
+        self.assertEqual(data["activation"], "unverified")
+        self.assertEqual(data["native_gate"], "enabled-in-project-config")
+        self.assertEqual(len(data["configuration_fingerprint"]), 64)
+        self.assertEqual(set(data["roles"]), set(kit.ROLES))
+        self.assertEqual(before, snapshot(self.root, recovery=True))
+        self.put(kit.CONFIG, "# unrelated drift\n[agents]\nenabled = true\n")
+        changed = json.loads(
+            subprocess.run(command, capture_output=True, text=True).stdout
+        )
+        self.assertNotEqual(
+            data["configuration_fingerprint"], changed["configuration_fingerprint"]
+        )
+
+    def test_dry_run_includes_narrow_review_not_unrelated_secrets(self):
+        self.put(kit.CONFIG, 'model="primary"\nprivate_value="DO_NOT_PRINT"\n')
+        req = self.put(
+            ".agents/project/request.json", json.dumps(self.activation_request())
+        )
+        command = [
+            sys.executable,
+            str(HELPER),
+            "--root",
+            str(self.root),
+            "--request",
+            str(req),
+        ]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        data = json.loads(result.stdout)
+        self.assertIs(data["review"]["activation"]["after"], True)
+        self.assertEqual(
+            data["review"]["roles"]["wdk_worker"]["model"], "gpt-fixture-economy"
+        )
+        self.assertNotIn("DO_NOT_PRINT", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":
