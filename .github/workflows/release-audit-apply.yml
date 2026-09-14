@@ -50,7 +50,15 @@ jobs:
           pathlib.Path('/tmp/release.patch').write_text(change['patch'])
           subprocess.run(['git', 'apply', '--check', '--unidiff-zero', '--index', '/tmp/release.patch'], check=True)
           subprocess.run(['git', 'apply', '--unidiff-zero', '--index', '/tmp/release.patch'], check=True)
-          pathlib.Path('.github/workflows/release-audit-apply.yml').unlink()
+          for name, key, value in [('skills/project-onboarding-adapter/scripts/configure_gpt_agents.py', 'WDK_PRIVATE_JOURNAL_DIRECTORY', 'directory'), ('scripts/test_model_routing.py', 'WDK_TEST_JOURNAL', 'journal')]:
+              path = pathlib.Path(name)
+              text = path.read_text()
+              old = f'env={{**os.environ, "{key}": str({value})}},'
+              assert text.count(old) == 1
+              new = 'env={\n                **{k: v for k, v in os.environ.items() if k.lower() != "psmodulepath"},\n                "PSModulePath": str(shell.parent / "Modules"),\n                "' + key + '": str(' + value + '),\n            },'
+              path.write_text(text.replace(old, new))
+          for name in ['release-audit-apply.yml', 'release-audit-diagnose.yml']:
+              pathlib.Path('.github/workflows', name).unlink()
           PY
       - name: Install existing quality tools
         run: |
@@ -91,7 +99,7 @@ jobs:
           parent = os.environ['GITHUB_SHA']
           base_tree = api('git/commits/' + parent)['tree']['sha']
           files = json.loads(pathlib.Path('/tmp/release-files.json').read_text())
-          files.append({'path': '.github/workflows/release-audit-apply.yml'})
+          files.extend({'path': '.github/workflows/' + name} for name in ['release-audit-apply.yml', 'release-audit-diagnose.yml'])
           elements = []
           for item in files:
               path = pathlib.Path(item['path'])
