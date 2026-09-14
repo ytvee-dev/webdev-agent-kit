@@ -30,6 +30,10 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Component-level design evidence with selected-layer/property attribution and
+  a product decision register covering navigation, forms, states, persistence,
+  responsive behavior, and motion. Unresolved choices are clarified with the user
+  before dependent implementation.
 - First-run checks, upgrade/rollback guidance, canonical alias matrix, and reproducible screenshot, bugfix, review, and verification examples.
 - Project fact provenance and verification templates; sanitized findings from two real-project configuration snapshots, with no live success claims.
 - Host instruction migration with reachable local rules, verbatim backup, coverage map, and repeat-run preservation (issue #66).
@@ -41,6 +45,13 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Design intake accepts Figma links and automatically prefers available MCP reads,
+  then browser/computer use when MCP is missing, failing, or incomplete. Supplied
+  screenshots remain a standalone path with explicit confidence and coverage.
+- Design direction and intelligence now keep recommendations separate from user
+  decisions; implementation consumes confirmed scope. Optional read-only design
+  providers replace the former screenshot-only prohibition without auto-setup or
+  canvas writes. Existing skill names and the 0.5.0 release version are preserved.
 - Native plugin onboarding and context refresh resolve host overlays outside the plugin and avoid dangling shared-policy pointers.
 - Contributor reports capture client/model/OS, evidence kind, repeat outcomes, and installation stages; checksum failures are reportable.
 - Release validation rejects unsafe Windows paths, duplicate/case-colliding members, unexpected roots, and unsafe archive types before extraction; preservation fixtures include local plans and unrelated client rules.

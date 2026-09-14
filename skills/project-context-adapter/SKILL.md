@@ -130,13 +130,15 @@ relevant domain. Glossary maintenance never renames code or edits host docs.
 - `project/mcp-profile.md` must match active declarations in
   `tool-capabilities-manifest.json` when it is touched; provider config alone
   must not be recorded as availability.
-- `project/design-reference-profile.md` must not imply live design-tool access.
+- `project/design-reference-profile.md` must distinguish successful live reads
+  from image evidence and unverified historical access; preserve source/state IDs.
 - Patterns and anti-patterns must cite real local code facts or official
   documentation choices, not generic preferences.
 - Reusable skills must not receive host-specific facts.
 - README claims must not become project facts without confirmation from source, config, CI, package scripts, lockfiles, official documentation, or real results.
 - Context refresh must not edit README unless the current user explicitly requests that README change.
-- No Figma MCP or Figma whiteboard workflow may be introduced.
+- Context refresh records design evidence; live acquisition belongs to
+  `design-screenshot-spec`, and canvas/whiteboard writes remain outside refresh.
 
 ## Trigger Evals
 

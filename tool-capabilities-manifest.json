@@ -30,11 +30,11 @@
       "blocked_providers": ["live_design_tool_guess"]
     },
     "live_design_source": {
-      "purpose": "Inspect or modify live design-tool sources; blocked for the default screenshot-only bundle flow.",
+      "purpose": "Read supplied live design sources, selected-layer properties, visual references, and prototype behavior through MCP or browser computer use; never modify the design during intake.",
       "availability_evidence": ["current_session_tool_registry"],
-      "preferred_providers": [],
-      "fallback_providers": [],
-      "blocked_providers": ["figjam_mcp", "figma_mcp", "live_design_tooling"]
+      "preferred_providers": ["figma_mcp"],
+      "fallback_providers": ["browser_computer_use", "host_browser_tool", "host_computer_use"],
+      "blocked_providers": ["canvas_write_tools", "http_fetch_as_visual_inspection", "unverified_design_access"]
     },
     "openai_platform_docs": {
       "purpose": "Fetch current official OpenAI API, ChatGPT Apps SDK, Codex, model, tool, MCP, sandbox, skill, plugin, and configuration documentation.",
@@ -80,10 +80,10 @@
       "blocked": []
     },
     "design-screenshot-spec": {
-      "requires": ["design_reference_files"],
-      "requires_when_in_scope": ["web_platform_docs"],
+      "requires": [],
+      "requires_when_in_scope": ["design_reference_files", "live_design_source", "web_platform_docs"],
       "optional": [],
-      "blocked": ["live_design_source"]
+      "blocked": []
     },
     "execution-plan-manager": {
       "requires": [],
@@ -105,21 +105,21 @@
     },
     "frontend-design-director": {
       "requires": [],
-      "requires_when_in_scope": ["design_reference_files", "project_files", "rendered_visual_evidence"],
+      "requires_when_in_scope": ["design_reference_files", "live_design_source", "project_files", "rendered_visual_evidence"],
       "optional": ["current_library_docs", "web_platform_docs"],
-      "blocked": ["live_design_source"]
+      "blocked": []
     },
     "frontend-design-intelligence": {
       "requires": [],
-      "requires_when_in_scope": ["design_reference_files", "project_files"],
+      "requires_when_in_scope": ["design_reference_files", "live_design_source", "project_files"],
       "optional": ["current_library_docs", "web_platform_docs"],
-      "blocked": ["live_design_source"]
+      "blocked": []
     },
     "frontend-layout-implementer": {
       "requires": ["project_files"],
-      "requires_when_in_scope": ["command_execution", "design_reference_files", "openai_platform_docs", "rendered_visual_evidence"],
+      "requires_when_in_scope": ["command_execution", "design_reference_files", "live_design_source", "openai_platform_docs", "rendered_visual_evidence"],
       "optional": ["current_library_docs", "web_platform_docs"],
-      "blocked": ["live_design_source"]
+      "blocked": []
     },
     "frontend-linter-manager": {
       "requires": ["command_execution", "project_files"],

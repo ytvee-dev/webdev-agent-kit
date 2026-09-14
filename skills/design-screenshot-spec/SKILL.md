@@ -1,6 +1,6 @@
 ---
 name: design-screenshot-spec
-description: 'Turn user-supplied screenshots, copied inspect values, exports, assets, or design notes into a strict frontend Design Implementation Spec. Live design links alone are insufficient.'
+description: 'Inspect Figma links through MCP or browser computer use, or analyze screenshots and selected-layer properties. Produce frontend specs and clarify unresolved product behavior before implementation.'
 id: 'agents.skills.design-screenshot-spec.skill'
 title: 'Design Screenshot Spec'
 doc_type: 'skill'
@@ -16,6 +16,8 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[skills/design-screenshot-spec/references/design-source-inspection|Design Source Inspection]]'
+    - '[[skills/design-screenshot-spec/references/product-behavior-review|Product Behavior Review]]'
     - '[[skills/design-screenshot-spec/references/spec-extraction-checklist|Spec Extraction Checklist]]'
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
     - '[[skills/frontend-layout-implementer/SKILL|Frontend Layout Implementer]]'
@@ -28,24 +30,26 @@ depends_on:
 
 ## Purpose
 
-Convert user-supplied Figma screenshots, copied visual inspect panels, exported
-assets, and design notes into a strict `Design Implementation Spec` for a
-frontend implementer.
+Inspect live Figma designs or supplied screenshots, property panels, assets,
+and notes to produce a traceable `Design Implementation Spec`. Review the
+observed design as a product flow and resolve unspecified design and behavior
+decisions with the user before handing affected work to an implementer.
+The existing skill name remains stable for bundle compatibility.
 
 ## When To Use
 
 - The user sends screenshots of Figma frames, components, screens, or inspect
   panels.
 - The user asks to analyze a visual design before implementation.
+- The user provides a Figma file, frame, component, or prototype link and asks
+  to inspect it or implement its design.
 - The next step is frontend layout work and the implementer needs a structured
   spec.
 
 ## When Not To Use
 
-- The user asks for live Figma inspection, canvas editing, file creation, Figma
-  whiteboard workflows, design-system generation, or Code Connect.
-- The user supplies only a Figma URL, file key, or node id without screenshots
-  or copied design material.
+- The user asks to edit the design canvas, create files or whiteboards,
+  generate a design system, or write Code Connect mappings.
 - The user already provides a complete `Design Implementation Spec` and asks to
   implement it. Use `frontend-layout-implementer`.
 
@@ -58,26 +62,36 @@ frontend implementer.
 4. Read `common/anti-patterns.md`.
 5. Read `project/design-reference-profile.md` when present.
 6. Read `references/spec-extraction-checklist.md`.
+7. For live links, read `references/design-source-inspection.md`.
+8. After extraction, read `references/product-behavior-review.md` before
+   formulating product questions or an implementation handoff.
 
 ## Tool Contract
 
-- Do not use Figma MCP.
-- Use Visual Reference MCP when available for user-supplied image references.
-- Use Design Spec MCP when available to store or read structured specs.
-- If those MCP servers are unavailable, work from attached images, local image
-  files, copied inspect text, and user-provided notes.
-- Do not open live Figma links.
+- Resolve `live_design_source` and `design_reference_files` through the current
+  tool registry and `tool-capabilities-manifest.json` for the active source.
+- A supplied link triggers scoped read-only inspection automatically: use a
+  callable Figma MCP read tool first; if unavailable, failing, or incomplete,
+  use permitted browser/computer use to inspect the same design visually.
+- Browser fallback must support screenshots and pointer interaction with the
+  canvas and property panel. Search results or an HTTP fetch are not inspection.
+- With screenshots and no link, inspect those images directly; do not require
+  a Figma connection. Never invent a tool, session, node, or successful read.
+- Follow host tool instructions and permissions. Do not install tools, change
+  access settings, edit the source canvas, or write mappings during intake.
 
 ## Workflow
 
-1. Inventory all supplied artifacts: screenshots, inspect panels, exported
-   assets, dimensions, fonts, colors, states, notes, and target screens.
-2. If only a Figma URL, file key, node id, Figma whiteboard reference is present,
-   stop and ask for screenshots, exported assets, copied inspect values, or a
-   written brief.
-3. Group screenshots by screen, component, state, and viewport. For each
-   screenshot, record the visible frame or viewport width, height, state,
-   screen or component ownership, and confidence.
+1. Inventory links, screenshots, inspect panels, exports, notes, target screens,
+   and existing user decisions. Identify the requested frame and state scope.
+2. Inspect live links using `references/design-source-inspection.md`; use
+   supplied screenshots directly when no link exists. If neither source can be
+   inspected, request the smallest missing reference and report the limitation.
+3. Group evidence by screen, component, variant, state, and viewport. Record
+   source ID, node or selected-layer identity, frame size, image crop/zoom when
+   known, access path, and inspection coverage. Match property panels to their
+   selected elements before assigning values. Inspect every in-scope component;
+   reuse proven identical instances while recording overrides and state changes.
 4. Treat each screenshot or design-frame size as a reference coordinate system,
    not as a production container cap. Record whether containment is explicitly
    visible and capture desktop edge anchors plus expected behavior beyond the
@@ -91,18 +105,20 @@ frontend implementer.
 7. For spacing, separate outside margins, section rhythm, inter-component gaps,
    container padding, and internal control padding instead of merging them into
    one generic gap value.
-8. Mark each value as `source-provided`, `screenshot-inferred`, or `unknown`.
-9. Resolve conflicts by preferring copied inspect values and exported values
-   over screenshot estimates.
-10. Ask the user about disputed or low-confidence values when the answer changes
-   layout, responsive behavior, visual hierarchy, typography, or implementation
-   acceptance.
-11. Produce the `Design Implementation Spec` and stop unless the user also asks
-    for implementation.
-12. Route to `frontend-design-director` before implementation when the supplied
-    material needs redesign, polish, distinctive visual direction, anti-template
-    critique, interface-copy stance, motion stance, or visual acceptance
-    criteria.
+8. Mark values `source-provided`, `screenshot-inferred`, or `unknown`, with the
+   exact source/selection and units; keep user decisions separately traceable.
+9. Prefer exact properties only for the same node, state, mode, and revision.
+   Reinspect mismatches; ask the user which reference governs unresolved conflicts.
+10. Apply `references/product-behavior-review.md`: map observed actions and
+    states, inspect available prototype transitions, then ask about every
+    unresolved product/design decision needed for the requested scope. Keep
+    recommendations unaccepted until the user answers; do not invent defaults.
+11. Produce a draft spec with a decision register. Mark affected slices blocked
+    until answers settle their dependencies. Continue independent inspection;
+    never treat silence or a question limit as approval.
+12. Hand off the resolved scope only when implementation was requested. Use
+    `frontend-design-director` for requested redesign or visual choices that need
+    proposals; source-fidelity work does not itself authorize redesign.
 
 ## Output Contract
 
@@ -111,6 +127,7 @@ Final response: return only facts that affect the user's understanding, confiden
 Return a `Design Implementation Spec` with these sections:
 
 - `Source Inventory`
+- `Component Evidence And Coverage`
 - `Screen And Component Scope`
 - `Layout Structure`
 - `Typography`
@@ -118,14 +135,23 @@ Return a `Design Implementation Spec` with these sections:
 - `Spacing And Sizing`
 - `Assets`
 - `States And Interactions`
+- `Product Questions And Decisions`
 - `Responsive Behavior`
 - `Accessibility Notes`
 - `Implementation Acceptance Criteria`
 - `Confidence And Unknowns`
 
+Keep detailed per-component evidence in the spec; user-facing questions should
+name the relevant component, observation, missing decision, and consequence.
+
 ## Validation Gates
 
-- Every concrete value must cite its source confidence.
+- Every concrete value must cite its source, selection/state, and confidence.
+- A link-only request must attempt an available read path before requesting
+  screenshots. Missing MCP alone must not block an available browser fallback.
+- Each in-scope component/state is inspected or explicitly marked missing,
+  unreadable, or blocked; an overview image is not complete extraction.
+- Mixed selections and parent properties must not be attributed to a child.
 - `Source Inventory` must record each screenshot's viewport or frame size when
   visible or provided.
 - `Spacing And Sizing` must distinguish measured or estimated margins, section
@@ -140,13 +166,14 @@ Return a `Design Implementation Spec` with these sections:
   fixed container dimensions, or equivalent caps without source evidence of a
   centered container and an explicit responsive rationale.
 - Missing states, assets, breakpoints, and token names must be explicit.
-- Disputed values that materially affect implementation must be asked back to
-  the user or listed as unresolved questions.
+- Unresolved product behavior, visual deviations, and inferred responsive or
+  motion choices must be asked back and block their dependent implementation.
+- A static screenshot does not establish transitions, timings, hidden forms,
+  validation, persistence, or error recovery.
 - The spec must be usable by `frontend-layout-implementer` without guessing the
   target layout intent.
-- When visual judgment is needed, the handoff must name
-  `frontend-design-director` before implementation.
-- The response must not mention using Figma MCP or live Figma inspection.
+- Report actual MCP/browser/image evidence and access gaps honestly; source
+  inspection alone does not prove the implemented UI works.
 
 ## Trigger Evals
 
@@ -155,14 +182,19 @@ Should trigger:
 - "Here are Figma screenshots with dimensions and colors; write the layout spec."
 - "Read these frame screenshots and inspect panels before coding."
 - "Create a frontend implementation spec from these design screenshots."
+- "Open this Figma node and inspect its components before coding."
+- "MCP is unavailable; inspect the linked design in the browser."
+- "Which layer do these property-panel values belong to?"
 
 Should not trigger:
 
 - "Implement this existing Design Implementation Spec."
-- "Open this Figma node and inspect it."
 - "Create a new Figma whiteboard."
 
 ## Reference Map
 
 - `references/spec-extraction-checklist.md`
+- `references/design-source-inspection.md` - live MCP and browser acquisition.
+- `references/product-behavior-review.md` - evidence-led product questions and
+  decision gates after extraction.
 - `skills/frontend-design-director/SKILL.md`

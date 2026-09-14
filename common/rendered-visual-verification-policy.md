@@ -25,6 +25,12 @@ depends_on: []
 
 Purpose: keep rendered automation narrow, capability-aware, and tied to named visual or functional acceptance criteria.
 
+This policy governs verification of the implemented app. Read-only acquisition
+of a supplied live design has a separate purpose and follows
+`skills/design-screenshot-spec/references/design-source-inspection.md`, including
+browser/computer-use fallback to inspect canvas selections and property panels.
+It does not require starting the app or count as rendered implementation QA.
+
 ## Allowed Use
 
 Use Browser or Playwright only when rendered or browser-dependent evidence is required:

@@ -102,8 +102,10 @@ Map the detected stack to official documentation and MCP sources:
 - Use Next Devtools MCP only when the host project is Next.js, the project
   version supports it, and the tool is available in the current session.
 
-Never use or install Figma MCP, whiteboard, live-design inspection, Figma
-canvas, Figma file creation, design-system generation, or Code Connect tooling.
+Keep onboarding focused on provider facts. Route supplied designs to
+`design-screenshot-spec` for read-only MCP/browser/image inspection. Do not
+install design tools automatically or introduce canvas, file, whiteboard,
+design-system generation, or Code Connect writes through onboarding.
 
 ## Capability Scan
 

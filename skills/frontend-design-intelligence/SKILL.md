@@ -1,6 +1,6 @@
 ---
 name: frontend-design-intelligence
-description: 'Ground standard or deep UI work in product category, page pattern, design dials, domain UX risks, and anti-patterns before visual direction. Produces a brief, not code or tool setup.'
+description: 'Review inspected designs or briefs for product-flow gaps and ask evidence-based user questions. Ground UI direction in audience, patterns, and UX risks; excludes code and tool setup.'
 id: 'agents.skills.frontend-design-intelligence.skill'
 title: 'Frontend Design Intelligence'
 doc_type: 'skill'
@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[skills/design-screenshot-spec/references/product-behavior-review|Product Behavior Review]]'
     - '[[skills/frontend-design-director/SKILL|Frontend Design Director]]'
     - '[[common/design-quality-rubric|Design Quality Rubric]]'
     - '[[common/anti-template-defaults|Anti-Template Defaults]]'
@@ -42,6 +43,7 @@ Use after prompt intent routing when the task is `Standard Workflow` or `Deep Wo
 - product type, page type, audience, or user job is vague;
 - the user asks for visual style, landing structure, dashboard structure, or distinctive UI direction;
 - the page needs visual variance, motion, or density decisions;
+- inspected designs leave transitions, forms, states, or product behavior unclear;
 - `frontend-design-director` needs better grounding before writing a Design Direction Contract.
 
 ## When Not To Use
@@ -58,6 +60,9 @@ Do not use for Fast Lookup, tiny edits, purely technical bugfixes, code implemen
    - `references/design-dials.md`;
    - `references/product-anti-patterns.md`.
 5. Read supplied screenshots, briefs, inspect notes, or existing route files only when they materially affect the brief.
+6. Read `skills/design-screenshot-spec/references/product-behavior-review.md`
+   when reviewing flows or unresolved product/design decisions. If supplied
+   visual sources have not been inspected, use `design-screenshot-spec` first.
 
 ## Tool Contract
 
@@ -65,14 +70,19 @@ Do not use for Fast Lookup, tiny edits, purely technical bugfixes, code implemen
 - Must not run design generators or external CLIs.
 - Must not create or edit app source code.
 - Must not create a global design system unless explicitly requested, and then only inside `.agents/project/**`.
-- Must not use Figma MCP.
+- Delegate live source acquisition to `design-screenshot-spec`; consume its
+  component evidence and report missing coverage before product review.
 
 ## Workflow
 
 1. Identify product category, audience, page type, and single job.
-2. If required facts are missing, infer the smallest useful assumption and label it.
-3. Select a likely page pattern from the user job, not from a generic style catalog.
-4. Set design dials: visual variance, motion intensity, and information density.
+2. Separate confirmed facts from unknowns. Inspect the available evidence before
+   asking the user; never fill missing product intent with an assumed default.
+3. Map the observed user journey and component states. Apply the product review
+   reference to ask about unresolved transitions, forms, feedback, persistence,
+   responsive behavior, and motion, with evidence and tradeoffs.
+4. Propose a page pattern and design dials only where choices are needed. Keep
+   proposals distinct from confirmed constraints and obtain the user's decisions.
 5. Identify domain UX risks.
 6. Identify product-specific anti-patterns and generic template risks.
 7. Produce a compact Design Intelligence Brief.
@@ -93,6 +103,8 @@ Domain UX Risks
 Product-Specific Anti-Patterns
 Useful Subject Materials
 Design Direction Handoff
+Product Questions And Decisions
+Blocked Dependent Scope
 ```
 
 ## Validation Gates
@@ -101,6 +113,10 @@ Design Direction Handoff
 - The recommendation must be a starting hypothesis, not a rigid template.
 - The page pattern must connect to the user job.
 - Design dials must explain restraint or intensity.
+- Unspecified product/design choices remain open until answered; recommendations
+  and existing-code behavior are not substitutes for a user decision.
+- Every question identifies a real component/flow, the evidence gap, and user
+  impact. Do not re-ask settled facts or stop at a fixed total question count.
 - Durable records belong in local project overlays, not reusable bundle docs.
 
 ## Trigger Evals
@@ -109,6 +125,7 @@ Should trigger:
 
 - "Ground this analytics dashboard before choosing its visual direction."
 - "Choose product patterns and design dials for this AI workflow."
+- "Review these inspected screens and ask what is missing from the form flow."
 
 Should not trigger:
 
@@ -118,6 +135,7 @@ Should not trigger:
 ## Reference Map
 
 - `references/product-pattern-matrix.md`
+- `skills/design-screenshot-spec/references/product-behavior-review.md`
 - `references/design-dials.md`
 - `references/product-anti-patterns.md`
 - `skills/frontend-design-director/SKILL.md`

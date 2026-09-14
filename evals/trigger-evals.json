@@ -3,6 +3,56 @@
   "eval_type": "skill-trigger",
   "cases": [
     {
+      "id": "design-screenshot-spec.figma-link-intake",
+      "prompt": "Inspect the components and properties in this Figma frame before implementing it: https://www.figma.com/design/example/Checkout?node-id=10-20. Use the connected MCP if it works.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-prototype-explorer"],
+      "risk_notes": ["Inspect the supplied node and matching visual evidence before product review; a URL alone is a valid intake trigger."],
+      "reason": "Live design intake now belongs to the existing design spec skill."
+    },
+    {
+      "id": "design-screenshot-spec.browser-fallback",
+      "prompt": "Figma MCP is not working. Open my supplied frame link in the available browser, select its layers with the mouse, and inspect the properties before drafting the spec.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-layout-implementer"],
+      "risk_notes": ["Use current visual state and confirmed selection; do not install providers or ask for screenshots before trying the browser."],
+      "reason": "A missing preferred provider activates the existing permitted visual fallback."
+    },
+    {
+      "id": "design-screenshot-spec.selected-layer-properties",
+      "prompt": "These screenshots show a selected nested text layer and the properties panel. Work out which values belong to the label versus its parent button and list what is still unknown.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": ["design-screenshot-spec"],
+      "should_not_trigger": ["mcp-toolchain-manager", "frontend-design-director"],
+      "risk_notes": ["Parent padding, text fill, and control dimensions must not be conflated; no link requires no live provider."],
+      "reason": "Screenshot intake requires selection-aware component evidence."
+    },
+    {
+      "id": "frontend-design-intelligence.product-flow-gaps",
+      "prompt": "The design spec already records all inspected components. Review the creation flow and ask me about missing dialog opening, draft persistence, error recovery, and animation behavior before any implementation.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-design-intelligence",
+      "should_trigger": ["frontend-design-intelligence"],
+      "should_not_trigger": ["frontend-layout-implementer", "frontend-prototype-explorer"],
+      "risk_notes": ["Recommendations are proposals; every unresolved dependent product choice needs a user answer."],
+      "reason": "Product review follows completed extraction and does not choose behavior on the user's behalf."
+    },
+    {
+      "id": "agent-rules-skill-author.design-intake-boundary",
+      "prompt": "Update the kit rules so Figma design intake stays read-only and excludes canvas creation; do not inspect or modify a design file.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "agent-rules-skill-author",
+      "should_trigger": ["agent-rules-skill-author"],
+      "should_not_trigger": ["design-screenshot-spec", "frontend-layout-implementer", "frontend-design-intelligence"],
+      "risk_notes": ["Rule maintenance must not invoke live design acquisition based on Figma keywords."],
+      "reason": "The expanded live-read trigger must not capture maintenance of the skill itself."
+    },
+    {
       "id": "frontend-bugfix-debugger.mobile-blank-route",
       "prompt": "The dashboard route renders blank on mobile. Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.",
       "workflow_level": "Standard Workflow",

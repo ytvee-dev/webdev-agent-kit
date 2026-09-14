@@ -1,6 +1,6 @@
 interface:
     display_name: 'Frontend Design Intelligence'
-    short_description: 'Ground product-specific UI direction'
-    default_prompt: 'Use $frontend-design-intelligence to ground this UI task in product patterns, design dials, UX risks, and anti-patterns before visual direction.'
+    short_description: 'Review product flows and clarify design decisions'
+    default_prompt: 'Use $frontend-design-intelligence to review the inspected design or brief, ask evidence-based questions about unresolved product behavior, and propose grounded UI direction for user confirmation.'
 policy:
     allow_implicit_invocation: true

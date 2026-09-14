@@ -20,6 +20,21 @@ depends_on: []
 
 # Design Direction Contract
 
+For supplied designs, retain source fidelity and identify evidence and user
+decisions. Proposed values are not approved requirements. Use only applicable
+fields; unresolved choices block their dependent implementation.
+
+## Evidence And Decisions
+
+```text
+source/component/state evidence:
+confirmed constraints and answer references:
+open decision IDs, questions, and proposals:
+deferred decisions:
+confirmed independent scope:
+blocked dependent scope:
+```
+
 ## Subject
 
 ...
@@ -138,9 +153,12 @@ ASCII wireframe or short structural description.
 ## Motion Stance
 
 ```text
-needed: yes | no
+needed: confirmed yes | confirmed no | unresolved
 purpose:
 primary motion idea:
+trigger and start/end states:
+duration, easing, delay, and evidence:
+interruption and exit behavior:
 reduced-motion behavior:
 implementation boundary:
 ```

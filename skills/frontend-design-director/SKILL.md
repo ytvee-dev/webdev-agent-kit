@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[skills/design-screenshot-spec/references/product-behavior-review|Product Behavior Review]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/design-quality-rubric|Design Quality Rubric]]'
     - '[[common/anti-template-defaults|Anti-Template Defaults]]'
@@ -44,6 +45,13 @@ It does not implement code by default. It creates a Design Direction Contract th
 ## Design Lead Stance
 
 Act as a design lead, not a style randomizer.
+
+For supplied designs, establish fidelity constraints through
+`design-screenshot-spec` before critique. Read
+`skills/design-screenshot-spec/references/product-behavior-review.md` for unresolved visual or behavior choices.
+Preserve observed design intent; recommendations, polish, and accessibility
+deviations require user resolution before entering the implementation contract.
+Creative guidance below shapes proposals only where the user requests design work.
 
 - The page needs a point of view that fits this subject and audience.
 - Take one real visual risk only when it can be justified.
@@ -86,7 +94,8 @@ Do not use this skill as a required step for every frontend task. Use it only wh
 - May use Browser or Playwright screenshots when a rendered UI already exists and screenshot critique is needed.
 - May use MDN or official platform docs for CSS, accessibility, motion, or browser behavior details when needed.
 - May use `context7` for framework-specific UI constraints when relevant.
-- Must not use Figma MCP for the screenshot-only bundle workflow.
+- Route supplied live links and uninspected images through `design-screenshot-spec`;
+  reuse its MCP/browser/image evidence instead of assuming visual properties.
 - Must not install UI libraries, animation libraries, testing libraries, packages, or MCP servers.
 - Must not implement code unless the user explicitly asked for implementation and the execution plan includes a separate implementation slice.
 
@@ -108,10 +117,13 @@ Do not use this skill as a required step for every frontend task. Use it only wh
    - What must the first screen prove?
    - What subject-specific material opens the page?
    - Why is this not a generic hero?
-8. Select or recommend the final direction.
+8. Present the proposed direction and unresolved choices with evidence and
+   tradeoffs. Ask the user to settle them; do not choose on the user's behalf.
 9. Define the Design Direction Contract.
 10. Run anti-template review.
-11. Prepare implementation handoff to `frontend-layout-implementer` only when concrete enough to implement.
+11. Prepare implementation handoff to `frontend-layout-implementer` only for
+    scope whose visual and product decisions are confirmed. Include decision IDs,
+    source evidence, and any blocked dependent scope.
 12. Prepare verification handoff with visual acceptance criteria for `frontend-visual-qa` or `frontend-quality-reviewer`.
 
 ## Output Contract
@@ -140,16 +152,17 @@ Anti-Template Checks
 Implementation Handoff Notes
 Visual Acceptance Criteria
 Next Skill Or Next Step
+Product Questions And Decisions
 ```
 
 Use `templates/design-direction-contract.md` for durable handoff when needed.
 
 ## Unresolved Experimental Questions
 
-If a material UI or state choice remains unresolved after targeted source and
-documentation inspection, hand off one bounded question to
-`frontend-prototype-explorer`. Keep this planning skill read-only. Return the
-observed decision and its limitations to the existing plan or decision log.
+If a material UI or state choice remains unresolved after inspection, ask the
+user. Propose `frontend-prototype-explorer` only when an experiment would help
+them decide, and run it only when requested. Keep this planning skill read-only;
+experimental observations do not themselves settle the product choice.
 
 ## Validation Gates
 
@@ -157,6 +170,8 @@ Before finishing, verify:
 
 - the task actually needed design judgment;
 - the direction is grounded in the subject and audience;
+- unresolved design/product questions block dependent implementation, and no
+  proposal or experiment result is presented as a user-approved decision;
 - the screen has one primary job;
 - the hero or lead section expresses a thesis when the surface has a lead section;
 - design dials are explicit when visual intensity, motion, or density matters;
@@ -199,3 +214,5 @@ Should not trigger:
 - `common/ui-ux-priority-checklist.md` - user-impact priority model.
 - `templates/design-direction-contract.md` - durable design direction artifact.
 - `templates/visual-memory.md` - local-only project visual memory template.
+- `skills/design-screenshot-spec/references/product-behavior-review.md` - user
+  decisions, evidence-based questions, and implementation readiness.

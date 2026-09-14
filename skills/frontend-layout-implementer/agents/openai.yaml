@@ -1,6 +1,6 @@
 interface:
     display_name: 'Frontend Layout Implementer'
     short_description: 'Implement specs in frontend projects'
-    default_prompt: 'Use $frontend-layout-implementer to implement a Design Implementation Spec in the current frontend project.'
+    default_prompt: 'Use $frontend-layout-implementer to implement the confirmed scope of a Design Implementation Spec in the current frontend project, resolving open design and product decisions before dependent code.'
 policy:
     allow_implicit_invocation: true

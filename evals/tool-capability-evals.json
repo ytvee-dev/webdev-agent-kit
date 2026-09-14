@@ -3,6 +3,66 @@
   "eval_type": "tool-capability",
   "cases": [
     {
+      "id": "capability.figma-read-preferred",
+      "prompt": "Inspect the supplied Figma node. A callable Figma MCP read tool successfully returns its design context and screenshot.",
+      "capability_action": "preferred-provider",
+      "required_capabilities": ["live_design_source"],
+      "available_providers": ["figma_mcp"],
+      "expected_status": "available",
+      "expected_install": false,
+      "expected_behavior": "Inspect matching structured and visual evidence, then fetch relevant child properties, variants, variables, and motion when exposed; record coverage and unknowns.",
+      "forbidden_behaviors": ["reject the link and demand screenshots", "treat one overview as complete component coverage", "edit the canvas"],
+      "reason": "Successful read-only MCP access is preferred for a supplied design link."
+    },
+    {
+      "id": "capability.figma-browser-fallback",
+      "prompt": "The Figma MCP read failed with an access error. The permitted browser session can open the supplied design and exposes screenshots and mouse controls.",
+      "capability_action": "fallback-provider",
+      "required_capabilities": ["live_design_source"],
+      "available_providers": ["browser_computer_use"],
+      "expected_status": "fallback-used",
+      "expected_install": false,
+      "expected_behavior": "Open the exact link, verify file and selection, inspect individual layers and readable property panels with fresh screenshots, and report which values remain inaccessible.",
+      "forbidden_behaviors": ["claim MCP success", "ask for screenshots before attempting browser inspection", "use editor DOM CSS as canvas layer styles", "change sharing permissions"],
+      "reason": "MCP failure must not block an available permitted browser route."
+    },
+    {
+      "id": "capability.figma-partial-context",
+      "prompt": "Figma MCP returns a truncated frame and no prototype data; the browser can show the remaining components and prototype settings.",
+      "capability_action": "fallback-provider",
+      "required_capabilities": ["live_design_source"],
+      "available_providers": ["browser_computer_use", "figma_mcp"],
+      "expected_status": "fallback-used",
+      "expected_install": false,
+      "expected_behavior": "Recover bounded child reads with metadata where possible, inspect missing design or motion evidence through the browser, and keep source provenance for each property.",
+      "forbidden_behaviors": ["mark truncated content fully inspected", "invent motion timing", "discard verified MCP evidence"],
+      "reason": "Fallback can supplement a partially working provider rather than replacing all evidence."
+    },
+    {
+      "id": "capability.screenshot-without-link",
+      "prompt": "Analyze the supplied screenshots and selected-layer property panels. No live design link was supplied.",
+      "capability_action": "lightweight-no-audit",
+      "required_capabilities": ["live_design_source"],
+      "available_providers": [],
+      "expected_status": "not-needed",
+      "expected_install": false,
+      "expected_behavior": "Use design_reference_files, inspect image selection and property attribution, and mark unreadable values unknown without checking Figma setup.",
+      "forbidden_behaviors": ["require a live link", "audit MCP configuration", "infer exact tokens from screenshot appearance"],
+      "reason": "Screenshots remain a self-contained source path."
+    },
+    {
+      "id": "capability.figma-live-blocked",
+      "prompt": "The supplied Figma link cannot be opened by MCP or the browser and no image/export is available.",
+      "capability_action": "missing-required",
+      "required_capabilities": ["live_design_source"],
+      "available_providers": [],
+      "expected_status": "blocked",
+      "expected_install": false,
+      "expected_behavior": "Explain the exact live access gap and request access or focused screenshots with selected layers and properties; do not produce an invented completed spec.",
+      "forbidden_behaviors": ["claim to have inspected the design", "bypass login", "install a provider automatically"],
+      "reason": "Exhausted acquisition paths must leave an honest evidence blocker."
+    },
+    {
       "id": "capability.codex-native-files",
       "prompt": "Codex exposes native project file tools. Read the affected component without requiring Filesystem MCP.",
       "capability_action": "native-provider",
