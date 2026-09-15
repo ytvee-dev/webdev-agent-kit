@@ -45,8 +45,14 @@ basis and supported inputs/efforts. The reusable kit deliberately contains no
 fixed production model IDs. Subscription and API authentication can expose
 different catalogs; published model documentation alone is insufficient.
 
-Four roles cover bounded lookup, explicit implementation, complex reasoning
-and independent review. Skills still describe how to work. Instructions select
+Four base roles retain compatibility; new onboarding normally adds a mechanical
+worker and an architect. Luna/low suits lookup, Luna/medium mechanical edits,
+Terra/medium ordinary implementation, Sol/high complex work and review, and
+Astra/high consequential architecture. These are evidence-gated starting choices,
+not fixed IDs or a promise that one model always wins. Optional deep architecture
+and light/deep review roles are added only when justified. See the
+[workload and effort matrix](../../skills/project-onboarding-adapter/references/model-workload-matrix.md).
+Skills still describe how to work. Instructions select
 a real role per action; trivial work remains inline, parallelism is bounded,
 and stronger models do not reset the existing retry budget.
 
@@ -134,5 +140,5 @@ reviewed plan rather than silently registering duplicate agents.
 | Existing user role or inline TOML conflicts | Stop before writes and review a manual scoped merge |
 
 See the [1.1.0 validation scope](../release/1.1.0-checklist.md) for automated
-coverage and the authenticated four-role acceptance procedure. The
+coverage and the authenticated per-role acceptance procedure. The
 [1.0.0 checklist](../release/1.0.0-checklist.md) remains historical.

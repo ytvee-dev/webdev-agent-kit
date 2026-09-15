@@ -62,6 +62,58 @@ def snapshot(root, recovery=False):
 
 
 class InstallationTests(unittest.TestCase):
+    def test_extended_roles_preserve_legacy_bindings_and_roll_back(self):
+        for fmt in ("standalone", "registered"):
+            with self.subTest(fmt=fmt):
+                initial = self.install(request(fmt))
+                before = snapshot(self.root)
+                prior_roles = kit.inspection(self.root)["roles"]
+                req = request(fmt)
+                for name in (
+                    "wdk_worker_light",
+                    "wdk_architect",
+                    "wdk_architect_deep",
+                    "wdk_reviewer_light",
+                    "wdk_reviewer_deep",
+                ):
+                    req["roles"][name] = copy.deepcopy(req["roles"]["wdk_reviewer"])
+                result = self.install(req)
+                observed = kit.inspection(self.root)
+                self.assertEqual(set(observed["roles"]), set(req["roles"]))
+                for name, path in kit.role_paths(fmt).items():
+                    self.assertEqual(before[path], snapshot(self.root)[path])
+                    self.assertEqual(
+                        prior_roles[name]["role_fingerprint"],
+                        observed["roles"][name]["role_fingerprint"],
+                    )
+                for name in set(req["roles"]) - set(kit.ROLES):
+                    role = tomllib.loads(
+                        (self.root / observed["roles"][name]["path"]).read_text()
+                    )
+                    if name != "wdk_worker_light":
+                        self.assertEqual(role["sandbox_mode"], "read-only")
+                self.assertEqual(self.install(req)["status"], "unchanged")
+                self.assertBlocked(request(fmt))  # No implicit removal of roles.
+                kit.rollback(self.root, result["transaction"])
+                self.assertEqual(snapshot(self.root), before)
+                kit.rollback(self.root, initial["transaction"])
+
+    def test_extended_role_cannot_adopt_unowned_file(self):
+        self.install()
+        req = request()
+        req["roles"]["wdk_architect"] = copy.deepcopy(req["roles"]["wdk_reviewer"])
+        self.put(".codex/agents/wdk_architect.toml", "# user-owned\n")
+        self.assertBlocked(req)
+
+    def test_unknown_role_and_invented_effort_rejected(self):
+        req = request()
+        req["roles"]["wdk_unknown"] = copy.deepcopy(req["roles"]["wdk_worker"])
+        self.assertBlocked(req)
+        req = request()
+        req["models"]["gpt-fixture-economy"]["efforts"].append("light")
+        req["roles"]["wdk_worker"]["effort"] = "light"
+        self.assertBlocked(req)
+
     @unittest.skipUnless(os.name == "nt", "Windows junction regression")
     def test_junction_parent_and_root_rejected_without_writes(self):
         outside = Path(self.temp.name) / "outside"
@@ -129,6 +181,8 @@ class InstallationTests(unittest.TestCase):
         replacements = {
             "REPLACE_WITH_AVAILABLE_GPT_ECONOMY_ID": "gpt-fixture-economy",
             "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID": "gpt-fixture-capable",
+            "REPLACE_WITH_AVAILABLE_GPT_STANDARD_ID": "gpt-fixture-standard",
+            "REPLACE_WITH_AVAILABLE_GPT_ARCHITECT_ID": "gpt-fixture-architect",
             "CONFIRMED_CLIENT_VERSION": "synthetic-fixture",
             "CONFIRMED_OBSERVATION_DATE": "2026-09-14",
             "CONFIRMED_CLIENT_CATALOG_SOURCE": "synthetic offline catalog",
@@ -258,6 +312,7 @@ class InstallationTests(unittest.TestCase):
 
     def test_validated_binding_update(self):
         self.install()
+        before = kit.inspection(self.root)["roles"]
         req = request()
         req["roles"]["wdk_lookup"]["effort"] = "medium"
         result = self.install(req)
@@ -266,6 +321,15 @@ class InstallationTests(unittest.TestCase):
             {kit.STATE, kit.role_paths("standalone")["wdk_lookup"]},
         )
         self.assertEqual(result["activation"], "unverified")
+        after = kit.inspection(self.root)["roles"]
+        self.assertNotEqual(
+            before["wdk_lookup"]["role_fingerprint"],
+            after["wdk_lookup"]["role_fingerprint"],
+        )
+        for name in set(kit.ROLES) - {"wdk_lookup"}:
+            self.assertEqual(
+                before[name]["role_fingerprint"], after[name]["role_fingerprint"]
+            )
 
     def test_unrelated_user_config_edit_survives_role_update(self):
         self.install(request("registered"))

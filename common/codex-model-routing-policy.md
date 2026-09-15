@@ -26,20 +26,16 @@ instructions can change the model of a running response.
 
 ## Activation
 
-Apply only in Codex with callable native delegation and approved, runtime-verified
-roles in local `project/model-routing-profile.md`. Check that its client, auth
-mode, configuration fingerprint and role evidence still match the current
-session. Missing, stale, disabled or unavailable routing leaves the existing
-single-agent workflow intact; report limits only when they affect the task.
+Apply only in Codex with callable delegation and approved, runtime-verified
+roles in `project/model-routing-profile.md`. Match client, auth, fingerprint and
+role evidence. Missing, stale or disabled routing retains single-agent work.
 Never create configuration during ordinary work. Configuration syntax alone,
 a model self-report, a skill name and `agents/openai.yaml` are not runtime proof.
 
 ## Executor Selection
 
-Classify the next action using existing workflow rules before broad context
-loading. Keep trivial work inline when coordination would cost more than it
-saves. Use tools directly for deterministic commands. Do not bind an entire
-skill or workflow level permanently to a model.
+Classify before broad reading. Keep trivial work inline and deterministic
+commands on tools. Never bind a whole skill or workflow level to a model.
 
 | Executor | Suitable action | Boundary |
 | --- | --- | --- |
@@ -47,6 +43,13 @@ skill or workflow level permanently to a model.
 | `wdk_worker` | Explicit low-risk implementation slice | Assigned files only |
 | `wdk_complex` | Ambiguous cause or cross-boundary reasoning | No scope expansion |
 | `wdk_reviewer` | Material-risk independent review | No implementation |
+| `wdk_architect` | Consequential architecture and migration design | Read-only; user owns decisions |
+
+For model/effort selection use
+`skills/project-onboarding-adapter/references/model-workload-matrix.md`.
+It covers Luna, Terra, Sol, Astra, effort and optional light/deep roles.
+Architecture risk can require Astra directly; tiny architecture-adjacent edits
+stay inline. Do not confuse workflow weight, model capability and effort.
 
 Choose the least costly verified adequate role, considering uncertainty,
 consequences, tool access, input modalities, context size and verification.

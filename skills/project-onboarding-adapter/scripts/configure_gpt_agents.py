@@ -33,6 +33,30 @@ ROLES = {
         "A clean review is valid; do not invent findings."
     ),
 }
+OPTIONAL_ROLES = {
+    "wdk_worker_light": (
+        "Perform a fully specified mechanical edit with no design decisions. "
+        "Edit only assigned files; escalate ambiguity instead of guessing."
+    ),
+    "wdk_architect": (
+        "Analyze consequential architecture and tradeoffs before implementation. "
+        "Use frontend-architecture-planner when applicable. Preserve product "
+        "decisions for the user. Return boundaries, alternatives and verification. "
+        "Do not edit application files or run fixers."
+    ),
+    "wdk_architect_deep": (
+        "Analyze exceptionally difficult architecture with interacting constraints "
+        "or irreversible migration risk. Require a concrete reason for this tier. "
+        "Preserve user decisions and scope. Do not edit files or run fixers."
+    ),
+    "wdk_reviewer_light": "Review a bounded low-risk diff. " + ROLES["wdk_reviewer"],
+    "wdk_reviewer_deep": (
+        "Review critical architectural, security or data-loss risks. "
+        + ROLES["wdk_reviewer"]
+    ),
+}
+ALL_ROLES = ROLES | OPTIONAL_ROLES
+EFFORTS = {"none", "minimal", "low", "medium", "high", "xhigh", "max", "ultra"}
 COMMON = (
     "Follow host instructions and the installed .agents/AGENTS.md policy. "
     "Use the assigned skill and only the references needed for this slice. "
@@ -145,13 +169,20 @@ def validate_request(request):
                 raise ValueError(f"{model}: invalid {field}")
         if "text" not in entry["modalities"]:
             raise ValueError(f"{model}: text input support is required")
-    keys(request["roles"], ROLES, "roles")
+    if not isinstance(request["roles"], dict) or not (
+        set(ROLES) <= set(request["roles"]) <= set(ALL_ROLES)
+    ):
+        raise ValueError("Expected the four base roles and only known optional roles")
     for role, binding in request["roles"].items():
         keys(binding, {"model", "effort", "reason"}, role)
         model = text(binding["model"], "model")
         effort = text(binding["effort"], "effort")
         text(binding["reason"], "reason")
-        if model not in models or effort not in models[model]["efforts"]:
+        if (
+            model not in models
+            or effort not in EFFORTS
+            or effort not in models[model]["efforts"]
+        ):
             raise ValueError(f"{role}: model or effort is not in the confirmed catalog")
 
 
@@ -314,9 +345,7 @@ def inspection(root):
             "registered",
         }:
             raise ValueError("Unknown managed state")
-        paths = role_paths(state["format"])
-        if set(state.get("files", {})) != set(paths.values()):
-            raise ValueError("Unexpected managed state paths")
+        paths = state_role_paths(state)
         for name, path in paths.items():
             content = read(root, path)
             hashes[path] = digest(content)
@@ -327,6 +356,16 @@ def inspection(root):
                 "path": path,
                 "model": role["model"],
                 "effort": role["model_reasoning_effort"],
+                "role_fingerprint": digest(
+                    json_bytes(
+                        {
+                            "file_hash": hashes[path],
+                            "format": state["format"],
+                            "registration": parsed.get("agents", {}).get(name),
+                            "gates": gates,
+                        }
+                    )
+                ),
             }
         _, _, block = split_config(config)
         if digest(block.encode()) != state["block_hash"]:
@@ -370,20 +409,33 @@ def review_preview(root, request):
     return preview
 
 
-def role_paths(fmt):
+def role_paths(fmt, names=None):
     directory = "agents" if fmt == "standalone" else "wdk-agents"
-    return {name: f".codex/{directory}/{name}.toml" for name in ROLES}
+    return {
+        name: f".codex/{directory}/{name}.toml"
+        for name in (ROLES if names is None else names)
+    }
+
+
+def state_role_paths(state):
+    allowed = role_paths(state["format"], ALL_ROLES)
+    files = state.get("files", {})
+    if not isinstance(files, dict) or not (
+        set(role_paths(state["format"]).values()) <= set(files) <= set(allowed.values())
+    ):
+        raise ValueError("Unexpected managed state paths")
+    return {name: path for name, path in allowed.items() if path in files}
 
 
 def render_role(name, binding, fmt):
     # JSON quoting is valid TOML for these bounded strings; never interpolate code.
     fields = {}
     if fmt == "standalone":
-        fields.update(name=name, description=ROLES[name])
+        fields.update(name=name, description=ALL_ROLES[name])
     fields.update(model=binding["model"], model_reasoning_effort=binding["effort"])
-    if name in {"wdk_lookup", "wdk_reviewer"}:
+    if name == "wdk_lookup" or name.startswith(("wdk_reviewer", "wdk_architect")):
         fields["sandbox_mode"] = "read-only"
-    fields["developer_instructions"] = COMMON + " " + ROLES[name]
+    fields["developer_instructions"] = COMMON + " " + ALL_ROLES[name]
     source = "# Managed by WebDev Agent Kit; local model binding, not a skill.\n"
     source += "".join(
         f"{k} = {json.dumps(v, ensure_ascii=False)}\n" for k, v in fields.items()
@@ -400,7 +452,7 @@ def plan(root, request):
                 "Expected an installed Codex project bundle at this host root"
             )
     fmt = request["format"]
-    paths = role_paths(fmt)
+    paths = role_paths(fmt, request["roles"])
     raw_state = read(root, STATE)
     state = json.loads(raw_state) if raw_state else None
     if raw_state is not None:
@@ -414,8 +466,9 @@ def plan(root, request):
             raise ValueError(
                 "Existing state requires explicit migration, not format switching"
             )
-        if set(state["files"]) != set(paths.values()):
-            raise ValueError("Unexpected managed state paths")
+        prior_paths = state_role_paths(state)
+        if not set(prior_paths) <= set(paths):
+            raise ValueError("Role removal requires explicit migration")
         for path, expected in state["files"].items():
             if digest(read(root, path)) != expected:
                 raise ValueError(f"User change or missing managed file: {path}")
@@ -450,7 +503,7 @@ def plan(root, request):
     elif old_block:
         raise ValueError("Unowned registration block; explicit migration is required")
     outside_agents = tomllib.loads(outside).get("agents", {})
-    if not isinstance(outside_agents, dict) or set(ROLES) & outside_agents.keys():
+    if not isinstance(outside_agents, dict) or set(paths) & outside_agents.keys():
         raise ValueError("Existing user agent name collides with a Kit role")
     # Check the name field, not just filenames, in all auto-discovered project roles.
     agent_dir = safe_path(root, ".codex/agents/.probe").parent
@@ -458,14 +511,14 @@ def plan(root, request):
         for path in agent_dir.glob("*.toml"):
             rel = path.relative_to(root).as_posix()
             entry = tomllib.loads(read(root, rel).decode("utf-8"))
-            if entry.get("name") in ROLES and not (state and rel in state["files"]):
+            if entry.get("name") in paths and not (state and rel in state["files"]):
                 raise ValueError(f"Existing auto-discovered agent collides: {rel}")
     outputs = {
         path: render_role(name, request["roles"][name], fmt)
         for name, path in paths.items()
     }
     for path in outputs:
-        if not state and read(root, path) is not None:
+        if (not state or path not in state["files"]) and read(root, path) is not None:
             raise ValueError(f"Refusing to adopt or overwrite an unowned file: {path}")
     if selected_key:
         outside = enable_gate(outside, selected_key)
@@ -477,14 +530,14 @@ def plan(root, request):
         for name, path in paths.items():
             block += (
                 f"[agents.{name}]{nl}"
-                f"description = {json.dumps(ROLES[name])}{nl}"
+                f"description = {json.dumps(ALL_ROLES[name])}{nl}"
                 f"config_file = {json.dumps(path.removeprefix('.codex/'))}{nl}"
             )
         block += END + nl
         prefix = outside + (nl if outside and not outside.endswith("\n") else "")
         updated = (prefix + block).encode()
         result = tomllib.loads(updated.decode())
-        for name in ROLES:
+        for name in paths:
             result["agents"].pop(name)
         before = tomllib.loads(outside)
         if "agents" not in before and not result["agents"]:
@@ -652,8 +705,8 @@ def rollback(root, transaction):
     allowed = {
         STATE,
         CONFIG,
-        *role_paths("standalone").values(),
-        *role_paths("registered").values(),
+        *role_paths("standalone", ALL_ROLES).values(),
+        *role_paths("registered", ALL_ROLES).values(),
     }
     if not isinstance(journal, dict) or not journal or not set(journal) <= allowed:
         raise ValueError("Unexpected rollback paths")

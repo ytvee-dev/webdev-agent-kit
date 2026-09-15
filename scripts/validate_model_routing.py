@@ -32,6 +32,8 @@ def source_checks():
             "wdk_worker",
             "wdk_complex",
             "wdk_reviewer",
+            "wdk_architect",
+            "model-workload-matrix.md",
             "Do not forward the full parent transcript",
             "do not\nreset the shared retry budget",
             "No silent expensive fallback",
@@ -92,6 +94,9 @@ def source_checks():
         "scoped-repair",
         "automatic-onboarding",
         "explicit-binding-interface",
+        "workload-tiers",
+        "effort-boundaries",
+        "legacy-tier-expansion",
     }
     if set(ids) != required_ids or len(ids) != len(set(ids)):
         errors.append("Routing eval coverage is incomplete or duplicated")

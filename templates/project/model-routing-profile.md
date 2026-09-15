@@ -37,7 +37,13 @@ credentials, complete config contents or unverified availability as fact.
 
 ## Role Bindings And Activation
 
-For each of `wdk_lookup`, `wdk_worker`, `wdk_complex`, `wdk_reviewer`, record:
+For each installed base or optional role (including architecture), record:
+
+- Workload coverage: mechanical, standard, complex, architecture and review.
+- Model capability rationale separately from effort; cost/latency ceiling.
+- Missing tiers and justified light/deep variants; no silent rebinding.
+- Per-role fingerprint, relevant effective runtime settings, and evidence
+  carry-forward decision after aggregate fingerprint drift; re-run if uncertain.
 
 - Configuration path, model ID, effort and selection rationale:
 - Input modalities and required tool capabilities:

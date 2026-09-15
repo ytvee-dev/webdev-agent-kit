@@ -17,6 +17,7 @@ parent: []
 related:
     - '[[templates/project/model-routing-profile]]'
     - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
+    - '[[skills/project-onboarding-adapter/references/model-workload-matrix]]'
     - '[[common/host-instruction-migration-rules|Host Instruction Migration]]'
     - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
     - '[[templates/project/verification-profile|Verification Profile Template]]'
@@ -193,6 +194,9 @@ Should not trigger:
 - "Scaffold a new React app."
 
 ## Reference Map
+
+- `references/model-workload-matrix.md`: select capability tiers and reasoning
+  efforts, including architecture and light/deep variants, during model setup.
 
 - `common/client-adaptation-policy.md`
 - `common/codex-official-docs-policy.md`

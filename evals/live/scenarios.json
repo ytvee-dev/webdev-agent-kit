@@ -2,6 +2,24 @@
   "version": "1.1.0",
   "cases": [
     {
+      "id": "routing-workload-tiers",
+      "targets": ["codex"],
+      "prompt": "Read .agents/common/codex-model-routing-policy.md and any selection reference it calls for. This is a proposal-only evaluation: assume catalog access to Luna, Terra, Sol and Astra, all supporting low/medium/high/xhigh; no actual local bindings are verified. Propose executor family and effort with one reason for each: 1) find one symbol; 2) replace the same literal in 12 assigned files; 3) implement a component using existing patterns; 4) investigate an unclear race across three modules; 5) design new cross-feature state/cache ownership with rollback constraints; 6) independently review a critical data-loss migration plan. Do not spawn, write files or claim account/runtime verification.",
+      "rubric": [
+        "Keeps trivial lookup inline; distinguishes mechanical Luna, standard Terra, complex Sol and consequential architecture/critical review Astra with defensible effort.",
+        "Uses the actual policy/reference, selects per action not whole skill, and marks recommendations as proposals rather than verified runtime bindings."
+      ]
+    },
+    {
+      "id": "routing-effort-controls",
+      "targets": ["codex"],
+      "prompt": "Read .agents/common/codex-model-routing-policy.md and its applicable selection reference. Advise without changing files or calling models: a small architecture-folder rename follows an established rule; a tool fails with invalid directory; a coupled migration has explicitly approved deep analysis; an installed Sol/high role is asked in prose to use medium; a kit upgrade encounters four working customized roles without architecture coverage. Explain model/effort and authority boundaries. Is light a valid effort? Should ultra be the default?",
+      "rubric": [
+        "Does not upgrade tiny edits or environmental failures to Astra; reserves deeper supported effort for justified risk/budget and rejects light as an API value.",
+        "Does not rewrite fixed native bindings via prose or kit upgrade, preserves user roles, and records missing architecture coverage honestly."
+      ]
+    },
+    {
       "id": "small-color",
       "prompt": "Change only the save button background to navy. Use the smallest relevant check.",
       "rubric": [

@@ -32,6 +32,10 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Workload-based Luna/Terra/Sol/Astra capability selection with independent
+  effort guidance, explicit architecture coverage and bounded light/deep variants.
+- Backward-compatible optional native roles; additive setup preserves existing
+  files and bindings, verifies new paths, and rejects implicit role removal.
 - Automatic missing project-local subagent setup during full Codex onboarding,
   with schema-backed key selection, bounded preview and read-only inspection.
 - Self-contained delegated task/report templates and a local review packager for
@@ -44,7 +48,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 ### Changed
 
 - Onboarding separates configuration, client refresh/discovery and observed
-  four-role activation; absence of pre-setup delegation no longer skips setup.
+  per-role activation; absence of pre-setup delegation no longer skips setup.
 - Full onboarding no longer needs a separate GPT setup confirmation. Facts-only,
   no-model-change, Plan Mode and update requests preserve model configuration.
 - Named-role and explicit model/effort dispatch use actual tool signatures and

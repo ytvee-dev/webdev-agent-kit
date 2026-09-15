@@ -81,11 +81,21 @@ observation date, client/version/auth mode, input modalities, availability
 source and cost basis. Compare current official subscription credits or API
 prices as appropriate; do not mix units or infer price from an ID suffix.
 Use task-fit evidence and expected total cost, not just the lowest token rate.
-Start with an economical model for bounded lookup/work and a more capable
-approved model for complex/review work when the catalog supports that split.
+Use `model-workload-matrix.md` to cover mechanical, standard, complex and
+architectural work separately. Do not collapse all complex work and architecture
+onto one vaguely "capable" model. Select model capability and effort independently.
 The same model may serve several roles; do not claim savings without evidence.
 Use higher effort only when justified and supported. No permanent production
 model IDs belong in reusable instructions or templates.
+
+For a new full installation, normally add `wdk_worker_light` and `wdk_architect`
+to the four base roles when the catalog and cost limits support them. Optional
+`wdk_architect_deep`, `wdk_reviewer_light` and `wdk_reviewer_deep` cover justified
+specialized needs. Existing schema-1 four-role installations remain valid.
+Adding roles preserves existing bindings and checks each new path for ownership;
+omitting an installed role is not permission to remove it. Kit upgrades do not
+automatically rebind legacy roles. A requested model-policy reconfiguration may
+update their explicit model/effort pairs after showing the bounded diff.
 
 ## Choose One Native Format
 
@@ -129,18 +139,25 @@ Create a local-only request JSON after confirming its facts. Required shape:
   "cost_basis": "CONFIRMED_COST_UNITS_SOURCE_DATE_AND_TASK_FIT",
   "models": {
     "REPLACE_WITH_AVAILABLE_GPT_ECONOMY_ID": {"efforts": ["low", "medium"], "modalities": ["text"]},
-    "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID": {"efforts": ["medium", "high"], "modalities": ["text", "image"]}
+    "REPLACE_WITH_AVAILABLE_GPT_STANDARD_ID": {"efforts": ["medium", "high"], "modalities": ["text", "image"]},
+    "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID": {"efforts": ["medium", "high"], "modalities": ["text", "image"]},
+    "REPLACE_WITH_AVAILABLE_GPT_ARCHITECT_ID": {"efforts": ["high", "xhigh"], "modalities": ["text", "image"]}
   },
   "roles": {
     "wdk_lookup": {"model": "REPLACE_WITH_AVAILABLE_GPT_ECONOMY_ID", "effort": "low", "reason": "Bounded lookup"},
-    "wdk_worker": {"model": "REPLACE_WITH_AVAILABLE_GPT_ECONOMY_ID", "effort": "medium", "reason": "Explicit slice"},
-    "wdk_complex": {"model": "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID", "effort": "medium", "reason": "Ambiguous cause"},
-    "wdk_reviewer": {"model": "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID", "effort": "high", "reason": "Material-risk review"}
+    "wdk_worker_light": {"model": "REPLACE_WITH_AVAILABLE_GPT_ECONOMY_ID", "effort": "medium", "reason": "Mechanical edit"},
+    "wdk_worker": {"model": "REPLACE_WITH_AVAILABLE_GPT_STANDARD_ID", "effort": "medium", "reason": "Established implementation slice"},
+    "wdk_complex": {"model": "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID", "effort": "high", "reason": "Ambiguous cross-module cause"},
+    "wdk_reviewer": {"model": "REPLACE_WITH_AVAILABLE_GPT_CAPABLE_ID", "effort": "high", "reason": "Material-risk review"},
+    "wdk_architect": {"model": "REPLACE_WITH_AVAILABLE_GPT_ARCHITECT_ID", "effort": "high", "reason": "Consequential architectural decisions"}
   }
 }
 ```
 
-The example contains placeholders, not actual available models. Replace every
+The example covers six roles across four capability tiers. The original four
+base-role request remains valid for legacy installations. Add specialized
+variants only when justified using `model-workload-matrix.md`.
+It contains placeholders, not actual available models. Replace every
 placeholder from evidence; never execute the example verbatim. The helper
 validates consistency, not the truth of supplied account/cost assertions.
 Keep request, profile, state and backups local and out of published archives.
@@ -246,7 +263,16 @@ owned hashes and reports gates/bindings; it cannot observe trust, account access
 higher-precedence policy, live permissions or a model execution. Reconcile those
 separately and retain the actual runtime evidence in the profile.
 
-Within full onboarding scope, launch each configured role on a tiny read-only
+The whole-configuration fingerprint changes when roles are added. Reconcile it,
+but do not discard every prior canary automatically: the inspector also exposes
+a `role_fingerprint` for each role's file, registration, format and local gates.
+Carry existing runtime evidence forward only when that fingerprint AND the
+client/auth, effective model/effort, permission/tool configuration and dispatch
+mode are demonstrably unchanged. Record old/new aggregate fingerprints and the
+reconciliation evidence. If any relevant effective value cannot be compared,
+re-run that role's canary; a local hash alone never proves runtime equivalence.
+
+Within full onboarding scope, launch each new, changed or unreconciled role on a tiny read-only
 fixture, including workers, without implementation work. Bootstrap canaries
 are the explicit exception to the normal verified-role routing gate. Confirm
 role discovery, actual model/effort from runtime metadata, inherited tools and
@@ -256,6 +282,11 @@ For each role and dispatch mode record the expected binding beside the observed 
 and effort, child/run ID, clean-context mode, effective permissions, exact
 read-only result and evidence location. Read the same small existing synthetic
 fixture with every role; do not authorize application edits to test a worker.
+Specify the acceptance output before dispatch and verify it literally when exact
+extraction is requested; a paraphrase is not a passed quotation check. Record a
+result mismatch separately from correct model dispatch. Correct an ambiguous
+handoff and retry only that role within the shared budget, without automatically
+buying a stronger model or re-running already accepted roles.
 Confirm that the primary model did not change. Use the inspect fingerprint for
 local files and additionally record effective config/client/auth evidence.
 If an observed binding differs, mark that role blocked and investigate loading,
