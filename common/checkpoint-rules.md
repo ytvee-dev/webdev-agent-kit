@@ -53,3 +53,13 @@ The active plan remains the canonical planning state. Progress, decision, and
 loop-memory files record evidence and resume pointers; they must not duplicate
 or independently redefine criteria, slices, coverage states, or convergence
 findings.
+
+## Delegated Artifact Identity
+
+For durable delegation follow `common/subagent-handoff-rules.md`: plan-scoped
+briefs, reports and review evidence are local artifacts, not a competing plan.
+Before resuming, compare recorded repository/worktree, plan hash, commits and
+covered file state with reality. Preserve the completion status and evidence
+pointers in the canonical progress record; a cleaned scratch folder or an old
+checkbox must not cause completed work to be redispatched or reverted work to
+be treated as verified.

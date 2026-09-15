@@ -1,6 +1,6 @@
 {
   "name": "webdev-agent-kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Frontend workflow skills for React and Next.js planning, implementation, review, and visual QA.",
   "skills": "./skills/"
 }

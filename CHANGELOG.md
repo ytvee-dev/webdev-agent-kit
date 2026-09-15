@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/release/1.0.0-checklist|1.0.0 GPT Routing Validation]]'
     - '[[docs/release/0.5.0-checklist|0.5.0 Release Checklist]]'
     - '[[README|WebDev Agent Kit README]]'
@@ -28,6 +29,57 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Workload-based Luna/Terra/Sol/Astra capability selection with independent
+  effort guidance, explicit architecture coverage and bounded light/deep variants.
+- Backward-compatible optional native roles; additive setup preserves existing
+  files and bindings, verifies new paths, and rejects implicit role removal.
+- Automatic missing project-local subagent setup during full Codex onboarding,
+  with schema-backed key selection, bounded preview and read-only inspection.
+- Self-contained delegated task/report templates and a local review packager for
+  complete task commits or scoped staged, unstaged and untracked changes.
+- Plan-scoped artifact identity, precise repair re-review and retained completion
+  evidence without making small tasks use agents or durable plans.
+- Regression and documented-example checks, packaged-helper validation and live
+  scenarios for activation, missing permissions, recovery and review evidence.
+
+### Changed
+
+- Onboarding separates configuration, client refresh/discovery and observed
+  per-role activation; absence of pre-setup delegation no longer skips setup.
+- Full onboarding no longer needs a separate GPT setup confirmation. Facts-only,
+  no-model-change, Plan Mode and update requests preserve model configuration.
+- Named-role and explicit model/effort dispatch use actual tool signatures and
+  separate runtime evidence; direct dispatch does not certify native role loading.
+- Existing task, review and authoring skills adopt file-based handoffs and
+  structural-versus-behavioral evidence distinctions without overriding test scope.
+- User guides, README, upgrade notes and release checklist describe actual limits.
+- Source and portable-target version metadata advance to 1.1.0 with 21 skills.
+
+### Fixed
+
+- Reject Windows junction/reparse-point escapes in role configuration, recovery
+  and review-artifact paths, including host-root ancestry, on Python 3.11+.
+- Protect Windows recovery journals with verified current-user ACLs before sensitive
+  writes, rather than assuming POSIX chmod bits apply; retain POSIX mode checks.
+- Persist only journal DACL changes through native .NET access control, avoiding
+  Windows PowerShell Set-Acl's unnecessary SeSecurityPrivilege requirement.
+- The installer no longer ignores an explicit `features.multi_agent = false`.
+  Both known disabling gates are checked; only the selected approved local key
+  may change. Trust, managed policy, global and primary model settings are untouched.
+- Review snapshots no longer depend on a last-commit assumption or omit owned
+  uncommitted work when working-tree mode is explicitly selected.
+
+### Validation Scope
+
+- Offline tests validate real configuration/helper behavior and documentation
+  examples, not authenticated Codex models. Live scenarios remain unverified
+  until an authorized client run supplies actual child metadata and assessment.
+- Existing schema-1 requests/state and normal single-agent fallback remain valid.
+
+## 1.0.0
 
 ### Added
 

@@ -35,7 +35,9 @@ Use the active tool registry or validated project facts as capability evidence.
 Native tools can satisfy capabilities without MCP. Keep sandbox and approvals
 separate; never bypass either. Report blocked checks after bounded fallback.
 
-For approved GPT setup, onboarding uses its `references/codex-model-bootstrap.md`.
+Full onboarding uses `references/codex-model-bootstrap.md` for automatic local
+GPT setup, unless explicitly excluded. Inspect the live delegation signature:
+named-role and explicit-binding are separate verified dispatch modes, not aliases.
 For task delegation with a local model-routing profile, load
 `common/codex-model-routing-policy.md` before broad context. No config writes
 during ordinary work, silent model upgrades, or changes to global defaults.

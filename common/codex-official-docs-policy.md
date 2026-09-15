@@ -74,7 +74,7 @@ The Docs MCP is read-only and documentation-only. It cannot call the OpenAI API,
 
 - Treat `AGENTS.md` as durable guidance that Codex reads before work; keep repository-level instructions small enough to stay inside discovery limits.
 - Treat skills as progressive-disclosure workflows: frontmatter names and descriptions are the trigger surface; detailed instructions and references are loaded only after selection.
-- Treat `.codex/config.toml` as configuration, not runtime policy text. Do not create or change it without explicit user approval.
+- Treat `.codex/config.toml` as configuration, not runtime policy text. A full Codex onboarding request covers the narrow model bootstrap described by the onboarding skill; facts-only/Plan Mode requests do not. Other changes require explicit user approval.
 - Treat sandbox and approval policy as separate controls: sandbox defines technical boundaries, and approval policy defines when Codex must ask before crossing them.
 - Treat MCP configuration as explicit tool setup. Verify official install sources and ask for approval before installing servers or changing configuration.
 

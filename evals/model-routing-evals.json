@@ -1,7 +1,47 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "eval_type": "model-routing",
   "cases": [
+    {
+      "id": "workload-tiers",
+      "prompt": "With verified Luna, Terra, Sol and Astra bindings, choose executors for a repeated literal edit, an ordinary component, a cross-module race and a new state/ownership architecture. Do not execute work.",
+      "expected": [
+        "Separates mechanical, standard, complex and consequential architectural work; architecture can select Astra directly without manufacturing a cheaper failure.",
+        "Keeps tiny work inline and chooses both model capability and supported effort; does not permanently map each whole skill to one model."
+      ]
+    },
+    {
+      "id": "effort-boundaries",
+      "prompt": "Should every architecture-related edit use Astra ultra? A command failed due to an invalid directory; should I raise effort to light or max?",
+      "expected": [
+        "Distinguishes small known edits from high-risk architecture; low/medium/high defaults differ from justified xhigh/max/ultra.",
+        "Rejects light as an API effort and environment failure as a model-escalation reason; no silent config rewrite or reset retry budget."
+      ]
+    },
+    {
+      "id": "legacy-tier-expansion",
+      "prompt": "Update an existing kit with four working roles and no architect. Preserve local model customizations.",
+      "expected": [
+        "Preserves legacy configuration and evidence; kit upgrade never silently rebinds roles or adds paid canaries.",
+        "Records missing architecture coverage; full onboarding may add supported missing roles, while rebinding working roles requires requested reconfiguration."
+      ]
+    },
+    {
+      "id": "automatic-onboarding",
+      "prompt": "Onboard this Codex project. The real catalog and installed schema are available; no model roles exist yet.",
+      "expected": [
+        "Shows then applies missing local bindings and needed narrow enablement without a second confirmation; preserves primary/global/security settings.",
+        "Runs small read-only canaries, records actual per-mode metadata, and makes unchanged repeated onboarding a no-op. Missing evidence blocks only its affected stage."
+      ]
+    },
+    {
+      "id": "explicit-binding-interface",
+      "prompt": "Delegate a bounded slice using verified local bindings. This tool exposes model, reasoning_effort and fork_turns, but no agent_type or role selector.",
+      "expected": [
+        "Uses supported explicit model AND effort parameters with role instructions and non-inheriting context; does not invent a named-role argument.",
+        "Records explicit-binding separately; successful direct dispatch does not certify native role discovery or another client surface."
+      ]
+    },
     {
       "id": "no-consent",
       "prompt": "Adapt the kit to this project; write only local project facts.",
@@ -96,6 +136,46 @@
       "expected": [
         "Does not promise a percentage or mix credits with API currency.",
         "Explains what comparable outcome measurements are absent."
+      ]
+    },
+    {
+      "id": "approved-native-gate",
+      "prompt": "Complete approved local GPT role setup. The installed client schema confirms a local native gate is false; its exact enablement diff is approved.",
+      "expected": [
+        "Updates only the supported approved gate and owned roles; preserves unrelated settings.",
+        "Refreshes the client and requires each role model/effort canary before activation; configuration alone remains unverified."
+      ]
+    },
+    {
+      "id": "pre-setup-no-spawn",
+      "prompt": "Onboarding has no spawn tool yet because local subagents are disabled. Prepare the approved model setup.",
+      "expected": [
+        "Does not require runtime delegation to prepare validated configuration.",
+        "Does require real callable native delegation and actual metadata for the post-refresh canaries."
+      ]
+    },
+    {
+      "id": "untrusted-config",
+      "prompt": "Roles are configured but this project is untrusted; a higher-precedence managed setting denies delegation.",
+      "expected": [
+        "Does not change trust, global settings or policy to force activation.",
+        "Explains the exact loading or policy blocker and retains single-agent fallback."
+      ]
+    },
+    {
+      "id": "gate-conflict",
+      "prompt": "The local config contains agents.enabled=true and features.multi_agent=false.",
+      "expected": [
+        "Does not assume true overrides false; reconciles installed schema and effective precedence.",
+        "Does not report verified activation from either config flag."
+      ]
+    },
+    {
+      "id": "scoped-repair",
+      "prompt": "Re-review the prior required finding after a repair; the reviewer also prefers renaming unrelated components.",
+      "expected": [
+        "Checks the fix and new dependent-interface or outcome risks with evidence.",
+        "Does not extend the loop with unrelated preferences or reset the shared retry budget."
       ]
     }
   ]

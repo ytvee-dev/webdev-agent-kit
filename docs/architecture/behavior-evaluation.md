@@ -113,3 +113,26 @@ runs a remote client, record that client's OS separately in the assessment.
 describe the actual prepared runtime. A source commit alone does not identify
 an uncommitted candidate. Cursor fixtures place native rules at the host root,
 matching the archive contract.
+
+## 1.1.0 Onboarding And Handoff Trials
+
+The existing runner now includes four Codex-only onboarding cases, scoped repair
+review, structural-versus-behavioral test evidence, and a task-packet retry budget
+case. Declared target restrictions are enforced before any fixture is written.
+
+For `onboarding-approved-activation`, use an already authorized real Codex client
+and a disposable project. The first user turn authorizes read-only investigation
+and asks for a configuration proposal. The operator must inspect and approve the
+exact fields in a subsequent turn before writes, then refresh the client and
+continue with four read-only canaries. A trusted adapter may drive that same
+conversation but must retain every approval and actual tool event. Do not replace
+real availability or metadata with synthetic model names, and never auto-trust a
+project or bypass a managed restriction to finish the scenario.
+
+Keep baseline and candidate attempts comparable: same fixture, client/model/effort,
+available tools and rubric, with separate fresh sessions and retained artifacts.
+Assess real config diffs, child model/effort metadata, preserved primary/global
+settings, reviewer isolation and total usage. The runner's model flag is reported
+metadata, not execution proof. One successful installer run does not establish
+that agents follow the onboarding instructions; absent client traces remain
+unverified. See the [release acceptance gate](../release/1.1.0-checklist.md).

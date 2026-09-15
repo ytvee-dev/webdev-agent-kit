@@ -150,3 +150,15 @@ For new skills, use the local scaffolder only after the workflow, resources, com
 - `references/figma-derived-conventions.md`
 - `references/source-backed-prompting.md`
 - `references/documentation-maintenance.md`
+
+## Behavioral Evidence Boundary
+
+When editing the kit source repository, use its existing live scenario inventory
+and `run_behavior_evals.py` runner for changes that affect agent decisions.
+Installed host bundles need a separately authorized evaluation environment;
+never assume the source-only runner is shipped in the skill package. Preserve baseline/candidate traces under
+comparable client/model/effort settings and assess actual actions and file
+changes, not just the final answer. Static marker/schema checks and synthetic
+runner tests are not live model passes. For authorized executable tests follow
+`common/test-policy.md`: a missing import is structural failure, not proof of a
+behavior assertion. Record unrun live scenarios as unverified.

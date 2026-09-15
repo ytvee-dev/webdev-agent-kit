@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: 'Adapt frontend projects with approved pointers, local-only stack, client, tool and verification facts, context cache, and loop memory. Configure economical GPT subagents only through explicitly approved Codex onboarding. Do not create app code or overwrite instructions.'
+description: 'Onboard frontend projects with local context, client and verification facts. Codex onboarding includes economical subagent setup and activation checks. Excludes model changes during updates, facts-only requests and Plan Mode; no app code or instruction replacement.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'
@@ -17,6 +17,7 @@ parent: []
 related:
     - '[[templates/project/model-routing-profile]]'
     - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
+    - '[[skills/project-onboarding-adapter/references/model-workload-matrix]]'
     - '[[common/host-instruction-migration-rules|Host Instruction Migration]]'
     - '[[common/project-fact-provenance-rules|Project Fact Provenance]]'
     - '[[templates/project/verification-profile|Verification Profile Template]]'
@@ -49,7 +50,7 @@ Onboarding must also adapt natively to the installed client target. It creates o
 
 ## Natural Language Trigger Aliases
 
-Route adaptation, initialization, and project-context bootstrap commands to this skill, including `адаптируйся`, `инициализируй .agents`, and `Adapt this .agents bundle to my project.` Explicit `configure economical GPT subagents` or `настрой экономных GPT-субагентов` requests activate only the optional Codex setup phase.
+Route adaptation, initialization, and project-context bootstrap commands here, including `адаптируйся`, `инициализируй .agents`, and `Adapt this .agents bundle to my project.` Full Codex onboarding includes model setup; explicit GPT requests also trigger that phase. A facts-only request does not.
 
 ## When To Use
 
@@ -109,18 +110,25 @@ Read targeted README sections only when they help identify project intent, setup
 10. Read `tool-capabilities-manifest.json` for declared capability needs and cache required, available, missing, optional, approved, installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
 11. Cache detected client target, native pointer, skill support, and MCP config locations in `project/client-profile.md`.
 12. In Plan Mode, return the plan and stop.
-13. In approved execution mode, create or update only the approved pointer and local-only overlays, plus GPT role configuration explicitly approved under the optional phase below, then run available validation checks. Native plugins write host facts to host `.agents/project/`, never into the installed plugin. Do not create a pointer to a shared policy file that is not installed.
+13. In execution mode, update the approved pointer and local overlays; complete the Codex model phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
 
-## Optional GPT Role Setup
+## Codex Model Setup During Onboarding
 
-Only an explicit GPT-model setup request or approval activates
-`references/codex-model-bootstrap.md`, and only for a confirmed Codex client.
-Plan Mode and ordinary adaptation never write model settings. After the normal
-host checks, follow that reference to resolve available GPT models, inspect
-configuration scope, plan a narrow merge, install approved roles and validate
-activation separately. Use `templates/project/model-routing-profile.md` for
-local evidence. Keep primary/global models, security and MCP unchanged.
-Missing runtime evidence leaves routing inactive; no silent expensive fallback.
+A full onboarding request authorizes missing project-local GPT role setup,
+narrow native enablement and tiny read-only activation checks without a second
+confirmation. Read `references/codex-model-bootstrap.md`, inspect current facts,
+show the scoped change summary, then execute within that request. Preserve
+existing working bindings; do not reselect models or rewrite caches on each run.
+Explicit facts-only, no-model-change, preview/Plan Mode requests, kit updates
+and non-Codex clients never write model settings or run canaries.
+
+Confirm actual catalog, supported format and dispatch interface. Missing spawn
+before configuration does not block preparation; runtime verification needs a
+callable supported interface. Resolve genuine conflicts, missing evidence or
+authority before writes; never change trust, global/primary models, MCP or
+security controls. Record separate configuration, dispatch-mode and runtime
+evidence in `templates/project/model-routing-profile.md`. Missing runtime
+evidence leaves the affected route inactive, without an expensive fallback.
 
 ## Output Contract
 
@@ -161,7 +169,7 @@ relevant domain. Glossary maintenance never renames code or edits host docs.
 - Non-target frontend overlays do not claim React/Next implementation support.
 - Non-target frontend projects list applicable framework-agnostic skills instead of reporting the whole bundle unusable.
 - Capability detection uses `tool-capabilities-manifest.json` and does not depend on Codex-only `agents/openai.yaml` files.
-- Optional GPT role setup has explicit approval and follows the bootstrap reference; written TOML is not runtime verification.
+- Full Codex onboarding includes narrow model setup; explicit exclusions and higher-level restrictions win. Written TOML is not runtime verification.
 - No application source files are created during onboarding.
 - No package, MCP, UI library, styling system, or framework change is made without explicit approval.
 - Changed Markdown keeps graph frontmatter and English reusable rules.
@@ -186,6 +194,9 @@ Should not trigger:
 - "Scaffold a new React app."
 
 ## Reference Map
+
+- `references/model-workload-matrix.md`: select capability tiers and reasoning
+  efforts, including architecture and light/deep variants, during model setup.
 
 - `common/client-adaptation-policy.md`
 - `common/codex-official-docs-policy.md`
