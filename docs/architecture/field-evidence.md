@@ -1,6 +1,6 @@
 ---
 id: 'agents.docs.architecture.field-evidence'
-title: 'Field Evidence And Contributor Reports'
+title: 'Field Evidence And Project Reports'
 doc_type: 'guide'
 layer: 'docs'
 status: 'active'
@@ -15,7 +15,7 @@ related:
 depends_on: []
 ---
 
-# Field Evidence And Contributor Reports
+# Field Evidence And Project Reports
 
 ## Evidence Reviewed For 0.5.0
 
@@ -92,5 +92,5 @@ Windows names, traversal, collisions, links, private overlays, and wrong roots.
 Deterministic fixture/schema validation and synthetic runner success are release
 gates. Actual behavior across supported clients remains an evidence-collection
 task; report counts from configuration snapshots must not promote skill maturity.
-Use the governance criteria for stability, with client/model-specific traces
+Use the maintenance criteria for stability, with client/model-specific traces
 and independent projects. No global success percentage is claimed here.

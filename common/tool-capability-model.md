@@ -62,8 +62,10 @@ For `openai_platform_docs`, prefer a callable official OpenAI Developer Docs MCP
 
 For `live_design_source`, `design-screenshot-spec` owns acquisition, including
 handoffs from design direction, intelligence, and implementation. A supplied
-link activates MCP-first inspection and browser/computer-use fallback when MCP
-is missing, failing, or incomplete. Confirm file access with a scoped read;
+link activates read-only inspection. Honor explicit role/tool preferences under
+`common/webdev-role-selection.md`; otherwise use MCP-first inspection with
+browser/computer-use fallback when MCP is missing, failing or incomplete.
+Do not use a provider forbidden by the current instruction. Confirm scoped access;
 browser fallback needs screenshots and pointer interaction with the canvas and
 property panels. Native provider naming alone does not prove these controls.
 With supplied screenshots and no link, activate `design_reference_files` only.

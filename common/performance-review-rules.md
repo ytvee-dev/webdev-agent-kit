@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/react-performance-rules]]'
     - '[[skills/frontend-quality-reviewer/SKILL|Frontend Quality Reviewer]]'
 depends_on: []
 ---
@@ -30,3 +31,6 @@ Purpose: focus frontend performance review on evidence and user-visible risk.
 - Do not add caching, memoization, virtualization, build tooling, or dependencies
   without evidence and approval.
 - Label speculative opportunities as optional improvements, not required fixes.
+
+For React/Next loading, imports, caches or rendering, load the relevant section
+of `common/react-performance-rules.md`; keep unrelated stacks and tiny edits out.

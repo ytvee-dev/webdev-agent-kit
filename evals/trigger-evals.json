@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "eval_type": "skill-trigger",
   "cases": [
     {
@@ -352,6 +352,57 @@
         "Installed component contracts own implementation; a reference checkout does not authorize new APIs."
       ],
       "reason": "Installed component contracts own implementation; a reference checkout does not authorize new APIs."
+    },
+    {
+      "id": "design-screenshot-spec.layered-effects",
+      "prompt": "The glass card in these selected-layer exports looks wrong. Inspect its parent opacity, two shadows, background blur and instance override before proposing CSS. Do not edit Figma.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "design-screenshot-spec",
+      "should_trigger": [
+        "design-screenshot-spec"
+      ],
+      "should_not_trigger": [
+        "frontend-design-director",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "Preserve layer ownership and missing effect values; this is source inspection, not redesign."
+      ],
+      "reason": "A visual-effect mismatch needs evidence before translation."
+    },
+    {
+      "id": "agent-rules-skill-author.design-system-draft",
+      "prompt": "Revise the Kit design-system pilot template based on this sanitized field report; keep it draft and do not touch any Figma file or application.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "agent-rules-skill-author",
+      "should_trigger": [
+        "agent-rules-skill-author"
+      ],
+      "should_not_trigger": [
+        "design-screenshot-spec",
+        "frontend-layout-implementer"
+      ],
+      "risk_notes": [
+        "Maintaining a draft must not activate its proposed operations."
+      ],
+      "reason": "Rule maintenance remains separate from design-system execution."
+    },
+    {
+      "id": "frontend-quality-reviewer.react-performance-boundaries",
+      "prompt": "Review this React change for performance and correctness. It adds SWR beside our installed TanStack Query and a module-global currentUser cache. Do not modify code.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-quality-reviewer",
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "project-onboarding-adapter",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "Protect data ownership and request isolation; generic best-practice claims are insufficient."
+      ],
+      "reason": "Evidence-led React review uses conditional performance rules."
     }
   ]
 }

@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[common/webdev-role-selection]]'
     - '[[common/codex-model-routing-policy]]'
     - '[[skills/frontend-prototype-explorer/SKILL|Frontend Prototype Explorer]]'
     - '[[common/runtime-policy-index|Runtime Policy Index]]'
@@ -27,7 +28,7 @@ depends_on: []
 
 ## Purpose
 
-This compact `.agents` entrypoint routes work to portable core policy, an evidence-gated profile, verified project facts, and the smallest matching skill. Load detailed owning rules only when relevant.
+Route work to portable policy, applicable profiles, verified project facts and the matching skill. Load detailed rules only when relevant.
 
 Bundle paths are rooted at the installed bundle: `.agents` for project targets or the native plugin root. Generated `dist/**` output is never source truth. Only approved `project-onboarding-adapter` work may replace the host-root instruction pointer.
 
@@ -64,6 +65,8 @@ Load in this order, stopping when the next safe action is clear:
 Do not load every skill, reference, rule, overlay, README or target for routing. Consult `common/prompt-intent-routing-rules.md` only for unclear workflow weight. `tool-capabilities-manifest.json` defines needs; callable native tools can satisfy them. Names and configuration do not prove availability.
 
 ## Skill Discovery
+
+For explicit WebDev role selection, use `common/webdev-role-selection.md`.
 
 Select skills by name and description; explicit invocation is optional. Each `SKILL.md` owns triggers, exclusions, workflow and validation. Keep lightweight work free of planning, design, MCP, loop, review and onboarding overhead unless scope escalates.
 

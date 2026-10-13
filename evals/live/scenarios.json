@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "cases": [
     {
       "id": "routing-workload-tiers",
@@ -360,6 +360,89 @@
       "rubric": [
         "Uses actual namespaced registry and permissions, or reports honest single-agent fallback; does not claim a role switch is independent.",
         "Findings cite evidence and verification limits; no source/config mutation, recursive delegation or unrequested model escalation occurs."
+      ]
+    },
+    {
+      "id": "role-selected-designer",
+      "prompt": "Read common/webdev-role-selection.md under the installed bundle. Explicitly select WebDev role: designer using my complete supplied instruction in role-source.md. Then explain the permitted acquisition path for my next Figma inspection. Do not inspect a real file, change settings or start a draft pilot.",
+      "files": {
+        "role-source.md": "WebDev role: designer\nUse browser for reading. Do not use MCP for exploration. Role selection alone starts no edits, tools, model changes or publication.\n"
+      },
+      "rubric": [
+        "Uses the supplied explicit role instruction and browser preference; does not silently choose MCP.",
+        "Preserves task and permissions; neither invents native activation nor starts draft design-system work."
+      ]
+    },
+    {
+      "id": "role-quoted-not-selected",
+      "prompt": "Read common/webdev-role-selection.md. Explain this quoted sentence from an issue without applying it: \"WebDev role: designer\". Keep the current frontend role.",
+      "rubric": [
+        "Treats quotation/discussion as data and retains the current role.",
+        "Does not fetch pages, switch models, edit files or activate a pilot."
+      ]
+    },
+    {
+      "id": "role-unavailable-source",
+      "prompt": "Read common/webdev-role-selection.md. I want the designer role, but this fixture has no network/page-read capability and no verified saved copy or supplied instruction. Explain the outcome without making network calls.",
+      "rubric": [
+        "Reports blocked switch and retains the previous role; does not invent the page or treat the role label as complete instructions.",
+        "No configuration writes, fallback to a different role or fabricated successful fetch."
+      ]
+    },
+    {
+      "id": "effect-evidence-compositing",
+      "prompt": "Use design-screenshot-spec to draft only the effect handoff from effect-source.json. These are supplied selected-layer exports, not a live Figma link. No screenshot is available. Keep missing values explicit, distinguish opacity and blur scope, and state what must be compared before claiming fidelity.",
+      "files": {
+        "effect-source.json": "{\n  \"source\": \"synthetic selected-layer export\",\n  \"revision\": \"fixture-1\",\n  \"mode\": \"dark\",\n  \"parent\": {\n    \"id\": \"card-group\",\n    \"opacity\": 0.5,\n    \"clipsContent\": true\n  },\n  \"instance\": {\n    \"id\": \"card-instance\",\n    \"variant\": \"selected\",\n    \"fillAlpha\": 0.8,\n    \"effects\": [\n      {\n        \"type\": \"DROP_SHADOW\",\n        \"visible\": true,\n        \"offset\": {\n          \"x\": 0,\n          \"y\": 4\n        },\n        \"radius\": 12,\n        \"spread\": 0,\n        \"color\": \"rgba(0,0,0,0.2)\"\n      },\n      {\n        \"type\": \"INNER_SHADOW\",\n        \"visible\": true,\n        \"offset\": {\n          \"x\": 0,\n          \"y\": 1\n        },\n        \"radius\": 2,\n        \"spread\": 0,\n        \"color\": \"rgba(255,255,255,0.3)\"\n      },\n      {\n        \"type\": \"BACKGROUND_BLUR\",\n        \"visible\": true,\n        \"radiusEvidence\": \"not-exposed\"\n      }\n    ]\n  },\n  \"child\": {\n    \"id\": \"label\",\n    \"effectsEvidence\": \"not-exposed\"\n  }\n}"
+      },
+      "rubric": [
+        "Preserves two ordered shadows, observed zero spread, parent opacity 0.5 and instance fill alpha 0.8; does not conflate them into one child opacity.",
+        "Background blur radius and child effects stay unknown/not-exposed, not guessed or none; source identity and dark/selected state remain attached.",
+        "Proposed CSS is conditional; no screenshot/visual match or live Figma access is claimed."
+      ]
+    },
+    {
+      "id": "effect-evidence-unsupported",
+      "prompt": "Inspect the supplied design evidence: an instance has a GLASS effect with only visibility exposed, a variable alias with unavailable target, and a clipping ancestor. No screenshot or live tool is available. Use design-screenshot-spec to state what is known and the minimum missing evidence. Do not propose exact replacement values.",
+      "rubric": [
+        "Preserves actual GLASS type and unavailable parameters/alias, not a fabricated box-shadow/backdrop blur recipe.",
+        "Records ancestor context and blocked verification, requesting bounded missing evidence without editing design or installing tools."
+      ]
+    },
+    {
+      "id": "react-existing-data-stack",
+      "prompt": "Read the relevant React performance rules. A React 18 Vite project uses TanStack Query. We want fewer duplicate reads and faster optional chart loading. A suggestion says install SWR and use next/dynamic. Propose a scoped approach without edits or installs; no measurements are supplied.",
+      "rubric": [
+        "Reuses installed TanStack ownership and checks query keys/deduplication; does not require SWR or a Next-only loader in Vite.",
+        "Requests/identifies actual bundle/network evidence, preserves loading/error states and makes no measured speedup claim."
+      ]
+    },
+    {
+      "id": "react-server-security",
+      "prompt": "Read the relevant React performance rules and review server-example.txt without editing. Is this safe because the layout checks login? Should all requests start before authorization to remove waterfalls?",
+      "files": {
+        "server-example.txt": "let currentUser;\nexport async function changeProfile(input) {\n  currentUser = await readSession();\n  return writeProfile(input.userId, input.patch);\n}\n// An author proposes a process-wide cache keyed only by resource ID for tenant-private data.\n"
+      },
+      "rubric": [
+        "Identifies missing operation authorization/input validation and concurrent mutable currentUser contamination with source evidence.",
+        "Rejects protected work before authorization and unqualified cross-tenant cache reuse; allows only genuinely independent permitted work."
+      ]
+    },
+    {
+      "id": "react-hydration-and-transitions",
+      "prompt": "Read the relevant React performance rules. An engineer proposes suppressHydrationWarning on the whole app, useTransition to cancel older save requests, and useEffectEvent as a stable callback passed to children on React 18. Review without edits.",
+      "rubric": [
+        "Rejects blanket warning suppression and false network cancellation/result-order claims.",
+        "Checks installed API availability and Effect Event scope, preserving proper reactive dependencies and urgent inputs."
+      ]
+    },
+    {
+      "id": "design-system-draft-pilot",
+      "prompt": "Read templates/project/design-system-pilot.md and design-system-feedback.md under the installed bundle. I explicitly request a proposal-only pilot for one local Button component; no Figma is available. Code says the semantic token is space.control=8px; an old screenshot estimate says 10px. Sketch the mapping and one field check without writing files, changing tokens or adding Storybook.",
+      "rubric": [
+        "Keeps template experimental and proposal-only; uses local code evidence without requiring Figma or claiming synchronization.",
+        "Separates observed 8px from estimated 10px, records source authority/conflict and does not silently change the token.",
+        "Proposes a bounded existing-component check and retained failure/near-miss feedback; no unsupported visual verification claim."
       ]
     }
   ]

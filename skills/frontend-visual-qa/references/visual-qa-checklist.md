@@ -79,3 +79,11 @@ landscape: when fixed UI, forms, media, or app-like screens are affected
 - Browser or Playwright MCP must be callable in the current agent session before reporting rendered browser QA.
 - A running local app or installed Playwright dependency is not enough to claim Browser or Playwright MCP availability.
 - When the tool is unavailable, report blocked rendered checks and continue only with honest static or manual checks.
+
+## Captured Effect Evidence
+
+For effect fidelity, compare against the intake spec and captured source layers.
+Check stacked/inner shadows, foreground versus backdrop blur, group opacity versus
+fill alpha, clipping and the actual background/state. Missing source properties
+remain a coverage gap. Do not acquire Figma here or report build/CSS inspection as
+a rendered match; return missing acquisition to `design-screenshot-spec`.

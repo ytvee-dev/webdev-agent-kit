@@ -47,10 +47,10 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
    Adapt this .agents bundle to my project and create AGENTS.md in the root
    ```
 
-5. Open the Codex extension settings, go to **Personalization**, and select the
-   **Pragmatic** personality. Then copy the recommended prompt from
-   [Custom instructions](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Custom-instructions)
-   into the **Custom instructions** field.
+5. Select the [frontend role](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Frontend-Meta-instructions)
+   or [designer role](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Designer-Meta-instructions)
+   for this conversation as described in [role selection](roles.md). Preserve
+   your existing personality and global instructions.
 
 6. After adaptation, Codex creates `.agents/project/` with local project
    profiles, capability information, and path indexes. During subsequent work,

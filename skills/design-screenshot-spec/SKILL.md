@@ -16,6 +16,8 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[skills/design-screenshot-spec/references/effect-evidence]]'
+    - '[[common/webdev-role-selection]]'
     - '[[skills/design-screenshot-spec/references/design-source-inspection|Design Source Inspection]]'
     - '[[skills/design-screenshot-spec/references/product-behavior-review|Product Behavior Review]]'
     - '[[skills/design-screenshot-spec/references/spec-extraction-checklist|Spec Extraction Checklist]]'
@@ -63,7 +65,8 @@ The existing skill name remains stable for bundle compatibility.
 5. Read `project/design-reference-profile.md` when present.
 6. Read `references/spec-extraction-checklist.md`.
 7. For live links, read `references/design-source-inspection.md`.
-8. After extraction, read `references/product-behavior-review.md` before
+8. For effects or a visual-effect mismatch, read `references/effect-evidence.md`.
+9. After extraction, read `references/product-behavior-review.md` before
    formulating product questions or an implementation handoff.
 
 ## Tool Contract
@@ -71,8 +74,9 @@ The existing skill name remains stable for bundle compatibility.
 - Resolve `live_design_source` and `design_reference_files` through the current
   tool registry and `tool-capabilities-manifest.json` for the active source.
 - A supplied link triggers scoped read-only inspection automatically: use a
-  callable Figma MCP read tool first; if unavailable, failing, or incomplete,
-  use permitted browser/computer use to inspect the same design visually.
+  permitted provider selected by the current explicit role/tool instruction;
+  otherwise use callable Figma MCP first with browser/computer-use fallback.
+  Apply `common/webdev-role-selection.md` for an explicitly selected role.
 - Browser fallback must support screenshots and pointer interaction with the
   canvas and property panel. Search results or an HTTP fetch are not inspection.
 - With screenshots and no link, inspect those images directly; do not require
@@ -131,7 +135,8 @@ Return a `Design Implementation Spec` with these sections:
 - `Screen And Component Scope`
 - `Layout Structure`
 - `Typography`
-- `Color And Effects`
+- `Color And Effects` (owning layers, ordered effects, bindings/modes, evidence
+  states, proposed translation and unresolved differences)
 - `Spacing And Sizing`
 - `Assets`
 - `States And Interactions`
@@ -165,7 +170,9 @@ name the relevant component, observation, missing decision, and consequence.
 - Screenshot or design-frame dimensions must not become runtime `max-width`,
   fixed container dimensions, or equivalent caps without source evidence of a
   centered container and an explicit responsive rationale.
-- Missing states, assets, breakpoints, and token names must be explicit.
+- Missing states, assets, breakpoints, and token names must be explicit. Missing
+  effect fields are unknown; inspect ancestors, instance overrides and actual
+  effect types before proposing CSS. Never replace unread values with defaults.
 - Unresolved product behavior, visual deviations, and inferred responsive or
   motion choices must be asked back and block their dependent implementation.
 - A static screenshot does not establish transitions, timings, hidden forms,
@@ -192,6 +199,9 @@ Should not trigger:
 - "Create a new Figma whiteboard."
 
 ## Reference Map
+
+- `references/effect-evidence.md` - layered effects and implementation evidence.
+- `common/webdev-role-selection.md` - explicit conversational role preferences.
 
 - `references/spec-extraction-checklist.md`
 - `references/design-source-inspection.md` - live MCP and browser acquisition.

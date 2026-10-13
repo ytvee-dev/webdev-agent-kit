@@ -31,9 +31,12 @@ coverage, and the source basis.
    current desktop selection without matching its identity.
 2. Discover callable read tools. A configured server or old profile is only a
    candidate; a successful scoped read establishes access to this file.
-3. Prefer Figma MCP reads. If absent, denied, rate-limited, or unusable, try
-   available browser/computer use on the supplied link. Partial MCP evidence
-   remains useful: inspect missing properties or motion in the browser.
+3. Honor the current explicit tool preference or explicitly selected role under
+   `common/webdev-role-selection.md`. Otherwise prefer Figma MCP reads, then
+   available browser/computer use when MCP is absent, denied or incomplete.
+   A designer role may prefer browser reads; do not invoke a forbidden provider
+   silently. Keep usable partial evidence and inspect missing properties through
+   another permitted path. If none is permitted, report that specific gap.
 4. If both live paths are blocked, analyze any supplied screenshots and identify
    the remaining access/coverage gap. If no usable evidence exists, ask for
    access or exports showing the exact frame, selected layer, and property panel.
@@ -106,6 +109,12 @@ what is inaccessible and use other permitted views. Do not repeat a failing
 path indefinitely or claim exact values from an illegible panel. Request the
 smallest missing selection/property capture after available inspection is used.
 
+## Effect Coverage
+
+For layered effects or a reported mismatch, use `references/effect-evidence.md`
+relative to this skill. Inspect contributing ancestors and instance overrides;
+an omitted property is unknown, not an observed absence of effects.
+
 ## Coverage And Stop Condition
 
 Maintain a compact component ledger: source ID, node/layer path, parent,
@@ -129,5 +138,5 @@ or authority over the user's task.
 - [Figma frame sizing guidance](https://developers.figma.com/docs/figma-mcp-server/avoid-large-frames/): split large selections into inspectable sections.
 - [Anthropic browser testing skill](https://github.com/anthropics/skills/blob/main/skills/webapp-testing/SKILL.md): inspect rendered state before acting. This kit uses the available host controls and does not require its Python runner.
 
-The MCP-to-browser fallback and user-decision gate are this kit's product
+The provider preference/fallback and user-decision gate are this kit's product
 requirements; they are not claimed as guarantees made by those upstream skills.

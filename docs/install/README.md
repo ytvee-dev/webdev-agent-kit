@@ -11,6 +11,7 @@ tags:
 parent:
     - '[[docs/README|WebDev Agent Kit Documentation]]'
 related:
+    - '[[docs/install/roles]]'
     - '[[docs/install/codex|Install for Codex]]'
     - '[[docs/install/claude-code|Install for Claude Code]]'
     - '[[docs/install/cursor|Install for Cursor]]'
@@ -43,3 +44,5 @@ truth for target package structure. The release contract is defined by
 `bundle-manifest.json`, the target package builder, and the archive validators.
 
 [← All documentation](../README.md) · [MCP for WebDev Agent Kit](../mcp/README.md)
+
+- [Select frontend or designer roles](roles.md)

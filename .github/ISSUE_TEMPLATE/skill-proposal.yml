@@ -1,10 +1,10 @@
 name: Skill, profile, or adapter proposal
-description: Propose a new workflow or a high-risk change that requires governance review.
+description: Record a new workflow or a high-risk change for owner review.
 title: "[Proposal]: "
 body:
   - type: markdown
     attributes:
-      value: Read GOVERNANCE.md before submitting. Do not begin implementation until scope and acceptance criteria are accepted.
+      value: Read MAINTENANCE.md before submitting. Do not begin implementation until scope and acceptance criteria are accepted.
   - type: dropdown
     id: proposal_type
     attributes:

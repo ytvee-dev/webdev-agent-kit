@@ -167,7 +167,7 @@ def validate_markdown(errors):
     orphan_exceptions = {
         (ROOT / "AGENTS.md").resolve(),
         (ROOT / "CHANGELOG.md").resolve(),
-        (ROOT / "CONTRIBUTING.md").resolve(),
+        (ROOT / "MAINTENANCE.md").resolve(),
         (ROOT / "SECURITY.md").resolve(),
         (ROOT / "AUDIT_AND_OPTIMIZATION_PLAN.md").resolve(),
     }

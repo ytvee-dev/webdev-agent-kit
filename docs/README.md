@@ -11,6 +11,9 @@ tags:
 parent:
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
 related:
+    - '[[docs/architecture/design-system-pilot]]'
+    - '[[docs/architecture/react-performance-audit]]'
+    - '[[docs/release/1.3.0-plan]]'
     - '[[docs/architecture/superpowers-adoption]]'
     - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/install/README|Installation Guides]]'
@@ -27,10 +30,14 @@ depends_on: []
 
 ## Guides
 
+- [Draft design-system pilot and field feedback](architecture/design-system-pilot.md)
+
 - [Install WebDev Agent Kit](install/README.md)
 - [Configure and verify MCP](mcp/README.md)
 
 ## Architecture
+
+- [React performance coverage audit](architecture/react-performance-audit.md)
 
 - [Runtime target contracts](architecture/runtime-target-contracts.md)
 
@@ -50,3 +57,5 @@ The documents in this directory are intended for users and project maintainers. 
 - [Behavior evaluation and authenticated onboarding trials](architecture/behavior-evaluation.md)
 - [1.2.0 Claude adaptation release checks](release/1.2.0-checklist.md)
 - [1.1.0 release acceptance checklist](release/1.1.0-checklist.md)
+
+- [1.3.0 implementation and release plan](release/1.3.0-plan.md)

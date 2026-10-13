@@ -12,8 +12,7 @@ tags:
 parent: []
 related:
     - '[[AGENTS|Canonical Agent Policy]]'
-    - '[[CONTRIBUTING|Contributing To WebDev Agent Kit]]'
-    - '[[GOVERNANCE|Project Governance]]'
+    - '[[MAINTENANCE|Maintainer Change Process]]'
 depends_on: []
 ---
 
@@ -46,7 +45,7 @@ This policy covers:
 - helper scripts in `scripts/**` and `skills/**/scripts/**`;
 - schemas, eval fixtures, capability metadata, and client adapters;
 - generated Codex, Claude Code, and Cursor targets;
-- installation, packaging, contribution, and release workflows.
+- installation, packaging, maintenance, and release workflows.
 
 Local-only host project overlays under `project/**` are outside the reusable
 upstream bundle and must not be published.
@@ -90,7 +89,7 @@ maintainer has agreed on disclosure. After remediation, the project may publish
 a GitHub Security Advisory, release notes, affected versions, mitigation steps,
 and reporter credit when consented.
 
-## Security Rules For Contributors
+## Security Rules For Maintainers
 
 - Do not add hidden instructions, prompt-injection payloads, credential requests,
   production access steps, or unreviewed remote execution flows.
@@ -127,7 +126,7 @@ Before tagging or distributing a release:
    are excluded.
 4. Confirm client-specific files do not leak into another client's target.
 5. Confirm public documentation describes installation, validation,
-   contribution, and security boundaries accurately.
+   maintenance, and security boundaries accurately.
 6. Record behavior, validation, and security changes in `CHANGELOG.md`.
 7. Verify release archives and `SHA256SUMS` through the existing archive
    validator.
