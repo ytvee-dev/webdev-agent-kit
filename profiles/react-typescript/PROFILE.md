@@ -13,6 +13,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/react-performance-rules]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/skill-applicability-policy|Skill Applicability Policy]]'
     - '[[common/typescript-discipline|TypeScript Discipline]]'
@@ -45,6 +46,7 @@ Use the owning policies rather than repeating them:
 - component boundaries: `common/frontend-implementation-boundaries.md`;
 - state and data: `common/state-ownership-rules.md`, `common/data-fetching-boundary-rules.md`, and `common/frontend-integration-boundaries.md`;
 - routing and styling: `common/routing-boundary-rules.md` and `common/css-modules-specificity-rules.md`;
+- performance for changed loading/import/render boundaries: `common/react-performance-rules.md`;
 - verification: `common/diff-impact-verification-rules.md` and `common/smart-verification-budget.md`.
 
 ## Override Boundary

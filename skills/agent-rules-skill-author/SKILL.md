@@ -104,8 +104,9 @@ Report:
 - `agents/openai.yaml` matches skill UI and invocation policy. Only true hard
   client-tool dependencies belong there; optional providers belong in the
   capability manifest.
-- Live design intake remains read-only, MCP-first with browser fallback, and
-  does not introduce whiteboard/canvas writes or hard provider dependencies.
+- Live design intake remains read-only, honors explicit role/tool preferences,
+  and defaults to MCP-first with browser fallback. It adds no canvas writes or
+  hard provider dependencies.
 - README is not used as runtime policy, routing input, validator truth, or sole technical evidence, and is not edited without an explicit current user request.
 
 ## Trigger Evals

@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/1.3.0-plan]]'
     - '[[docs/release/1.2.0-checklist]]'
     - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/release/1.0.0-checklist|1.0.0 GPT Routing Validation]]'
@@ -30,6 +31,36 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Explicit frontend/designer conversation-role selection with verified-source
+  fallback, task continuity and separate native model/subagent boundaries.
+- A pinned 70-rule React/Next performance audit and conditionally loaded rules
+  for waterfalls, bundles, caches, effects, scheduling and evidence-led review.
+- Opt-in draft design-system pilot and feedback templates for owner field testing;
+  no automatic synchronization or new design-writing provider is introduced.
+- Nine prepared behavioral scenarios and focused trigger/output fixtures for
+  role selection, effect evidence, draft scope and React correctness boundaries.
+
+### Changed
+
+- Figma intake honors explicit role/tool preferences while retaining read-only
+  inspection and the generic MCP-first fallback. Layered-effect handoffs preserve
+  provenance, order, ancestor/instance context, bindings and unknown values.
+- Wiki links now identify the actual frontend/designer pages. Documentation
+  distinguishes conversational roles, model activation and unverified host checks.
+- Development/support wording reflects owner-managed maintenance. Maintenance
+  guidance replaces contribution/community governance pages; Apache-2.0 remains
+  unchanged and maintenance docs remain outside installed runtime archives.
+
+### Validation Scope
+
+- Structural checks, scenario preparation and synthetic runner tests do not prove
+  live Figma fidelity, measured React improvements or original-host activation.
+  Design-system drafts await owner testing and corrections in a later release.
+
+## 1.2.0
 
 ### Added
 

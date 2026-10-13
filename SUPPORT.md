@@ -7,20 +7,20 @@ status: 'active'
 publishable: true
 local_only: false
 tags:
-    - 'community/support'
+    - 'maintenance/support'
 parent: []
 related:
     - '[[README|WebDev Agent Kit]]'
-    - '[[CONTRIBUTING|Contributing To WebDev Agent Kit]]'
+    - '[[MAINTENANCE|Maintainer Change Process]]'
     - '[[SECURITY|WebDev Agent Kit Security Policy]]'
 depends_on: []
 ---
 
 # Support
 
-WebDev Agent Kit is maintained as an open-source project. Support is provided on
-a best-effort basis through GitHub Issues; no response-time or resolution-time
-guarantee is offered.
+Development and releases are managed by the project owner. GitHub Issues track
+usage problems and approved work; no response-time or resolution-time guarantee
+is offered.
 
 ## Choose The Right Channel
 
@@ -36,13 +36,11 @@ guarantee is offered.
   [Feature Request form](https://github.com/ytvee-dev/webdev-agent-kit/issues/new?template=feature-request.yml).
 - **New skill, profile, adapter, or core change:** use the
   [Skill Proposal form](https://github.com/ytvee-dev/webdev-agent-kit/issues/new?template=skill-proposal.yml)
-  and follow `GOVERNANCE.md` before implementation.
+  and follow `MAINTENANCE.md` before implementation.
 - **Usage question:** use the
   [Support Question form](https://github.com/ytvee-dev/webdev-agent-kit/issues/new?template=support-question.yml).
 - **Security vulnerability:** do not open an issue. Follow
   [SECURITY.md](SECURITY.md).
-- **Conduct concern:** do not open an issue with sensitive details. Follow
-  [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Before Opening An Issue
 
@@ -65,5 +63,5 @@ Modules, Redux, TanStack, and Axios when those technologies are verified in the
 host project. Framework-agnostic planning, design intake, review, visual QA,
 tooling, and project-context workflows may apply outside that stack.
 
-Requests for other stacks are welcome as proposals, but support is not implied
-until a profile or workflow is accepted and documented.
+Other stacks are unsupported unless an applicable profile or workflow is
+accepted and documented by the owner.

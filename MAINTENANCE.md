@@ -1,49 +1,33 @@
 ---
-id: 'agents.contributing'
-title: 'Contributing To WebDev Agent Kit'
-doc_type: 'contribution-guide'
+id: 'agents.maintenance'
+title: 'WebDev Agent Kit Maintenance'
+doc_type: 'maintenance-guide'
 layer: 'bundle'
 status: 'active'
 publishable: true
 local_only: false
 tags:
-    - 'agents/contributing'
+    - 'maintenance'
     - 'governance'
 parent: []
 related:
+    - '[[ROADMAP]]'
     - '[[AGENTS|Canonical Agent Policy]]'
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
-    - '[[CODE_OF_CONDUCT|Code Of Conduct]]'
-    - '[[GOVERNANCE|Project Governance]]'
     - '[[SECURITY|WebDev Agent Kit Security Policy]]'
     - '[[SUPPORT|Project Support]]'
 depends_on: []
 ---
 
-# Contributing
+# Maintenance
 
-Thank you for helping improve WebDev Agent Kit. The project is a reusable source
-bundle for coding-agent workflows, so all changes must remain portable,
-progressively disclosed, auditable, and safe to install into a host project.
+Development priorities, implementation and releases are managed by the project
+owner. This document describes the maintainer's change process, not an open
+contribution program. Licensing terms remain in LICENSE without alteration.
 
-Read the [Code of Conduct](CODE_OF_CONDUCT.md) before participating. To choose
-the right channel, see [Support](SUPPORT.md).
-
-## Ways To Contribute
-
-Useful contributions include:
-
-- reporting reproducible agent behavior that violates an expected rule;
-- testing an archive in Codex, Claude Code, Cursor, or VS Code environments;
-- adding a trigger, negative-trigger, output, or compatibility eval fixture;
-- improving installation guidance, examples, links, or translations;
-- proposing a documented frontend pattern or anti-pattern;
-- improving client compatibility without weakening the portable core;
-- proposing a new profile or skill after demonstrating a distinct recurring
-  workflow.
-
-Reproducible failure cases are as valuable as code changes. They let maintainers
-turn observed behavior into a focused rule and deterministic regression check.
+Approved work must remain portable, progressively disclosed, auditable and safe
+to install. Use [Support](SUPPORT.md) for reproducible usage reports and
+[Security](SECURITY.md) for private vulnerability reporting.
 
 ## Report An Agent Behavior Problem
 
@@ -67,7 +51,7 @@ information before submitting evidence. Then create an Issue or Pull Request
 with a detailed description in the current repository. The title must include a
 severity-level marker.
 
-## Contribution Risk Levels
+## Change Risk Levels
 
 Review depth depends on the affected layer.
 
@@ -79,7 +63,7 @@ Review depth depends on the affected layer.
 - installation guide corrections;
 - eval fixtures that do not change runtime behavior.
 
-These are the best starting points for first-time contributors.
+These changes still require source/link checks and review of technical claims.
 
 ### Level 2 — Patterns And Evals
 
@@ -111,7 +95,7 @@ already covered by an existing skill.
 These changes require explicit maintainer review, complete validation, and a
 clear compatibility and security analysis.
 
-## Contribution Principles
+## Maintenance Principles
 
 - Keep reusable policy in `common/**` and task-specific procedures in
   `skills/**`.
@@ -223,5 +207,16 @@ number of integrations or features.
 - `low`: improves wording, formatting, or local clarity without changing
   behavior.
 
-Project decision-making and maintainer responsibilities are described in
-[Governance](GOVERNANCE.md).
+The project owner decides priorities, accepted scope and release readiness.
+
+## Experimental Work And Release Decisions
+
+The owner approves scope before implementation. Material runtime changes need
+an explicit failure mode, acceptance criteria, relevant checks and independent
+review. New workflows remain experimental until the owner reviews retained
+behavioral evidence from real projects; static validation alone cannot establish
+maturity. Preserve unknowns, failed cases and client-specific limitations.
+
+A release requires approved publication scope, passing CI for the reviewed head,
+version/tag consistency and verification of published artifacts. A proposed PR
+or draft design does not itself authorize release or changes to user projects.

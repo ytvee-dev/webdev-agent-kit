@@ -7,7 +7,7 @@ status: 'active'
 publishable: true
 local_only: false
 tags:
-    - 'community/roadmap'
+    - 'maintenance/roadmap'
     - 'planning/public'
 parent: []
 related:
@@ -16,7 +16,6 @@ related:
     - '[[docs/architecture/field-evidence]]'
     - '[[docs/architecture/reproducible-workflows]]'
     - '[[README|WebDev Agent Kit]]'
-    - '[[GOVERNANCE|Project Governance]]'
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'
 depends_on: []
 ---
@@ -30,7 +29,8 @@ is recorded in `CHANGELOG.md`.
 
 ## Current
 
-- Prepare `0.5.0` while retaining the `0.4.x` target contracts and local plans.
+- Prepare `1.3.0` after Claude adaptation in `1.2.0`, preserving client contracts
+  and host state. See [the release plan](docs/release/1.3.0-plan.md).
 - Validate first-run and upgrade guidance against real client installations;
   [first-run checks](docs/install/first-run.md) and
   [upgrade/rollback](docs/install/upgrade.md) are implemented in the release candidate.
@@ -51,19 +51,18 @@ is recorded in `CHANGELOG.md`.
 - Add focused React and Next.js workflows only when repeated user runs show a
   distinct gap. Two React/Vite configurations do not meet that threshold.
 - Exercise Windows shell/sandbox fixtures on actual Windows clients. Synthetic
-  log replays and Windows archive-path rejection are contributor checks, not
+  log replays and Windows archive-path rejection are maintenance checks, not
   proof of real sandbox compatibility.
-- Refine community patterns and anti-patterns from public, reproducible cases,
+- Refine project patterns and anti-patterns from public, reproducible cases,
   preserving failures and near misses alongside successful runs.
 
 ## Exploring
 
 - Evidence-gated profiles for Vue, Svelte, or Astro.
-- A discoverable registry for community-maintained skills and profiles.
-- Private team policy packs layered over the open core.
+- Owner-tested design-system mapping drafts before broader automation.
 - Centralized version visibility and compatibility reporting.
 - Additional host adapters when their native contracts can be validated.
 
 Items in **Exploring** are not accepted features. New stacks, clients, skills,
 dependencies, and services still require the proposal and approval process in
-`GOVERNANCE.md`.
+`MAINTENANCE.md`.

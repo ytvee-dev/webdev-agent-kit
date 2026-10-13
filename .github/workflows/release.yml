@@ -146,6 +146,7 @@ jobs:
             test ! -e "dist/${target}/README.md"
             test ! -e "dist/${target}/CHANGELOG.md"
             test ! -e "dist/${target}/CONTRIBUTING.md"
+            test ! -e "dist/${target}/MAINTENANCE.md"
             test ! -e "dist/${target}/SECURITY.md"
             test ! -e "dist/${target}/examples"
           done

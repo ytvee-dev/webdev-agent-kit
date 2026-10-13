@@ -25,6 +25,7 @@ HUMAN_FACING_ROOT_FILES = (
     "README.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
+    "MAINTENANCE.md",
     "SECURITY.md",
 )
 HUMAN_FACING_DIRS = ("examples",)

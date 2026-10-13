@@ -33,12 +33,12 @@
 - [Core Skills](#core-skills)
 - [Architecture](#architecture)
 - [Project Validation](#project-validation)
-- [Contributing](#contributing)
+- [Maintenance and support](#maintenance-and-support)
 - [License](#license)
 
 ## Who This Kit Is For
 
-WebDev Agent Kit is an open-source set of local rules. You continue using your
+WebDev Agent Kit is a set of local rules. You continue using your
 usual Codex, Claude Code, or Cursor client while connecting it to a shared
 standard for working with projects.
 
@@ -135,11 +135,11 @@ other tools.
 
 For the best adaptation result:
 
-1. Add the repository-aware prompt from the
-   [custom instructions](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Custom-instructions)
-   to the personal or user instructions of your coding client. Keep local project
-   instructions enabled: the user prompt supplements them and requires the agent
-   to discover and follow the repository's own rules.
+1. Select the [frontend](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Frontend-Meta-instructions)
+   or [designer](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Designer-Meta-instructions)
+   instructions for the current conversation. Follow the
+   [role-selection guide](docs/install/roles.md); reading a page alone does not
+   select a role, and role selection does not change models or permissions.
 2. Ask the agent to inspect tool capabilities in the current session and confirm
    recommended MCP servers or equivalent native tools. Configuration alone does
    not prove that a server is available: the capability must be callable or
@@ -339,23 +339,17 @@ CI separately verifies Markdown, YAML, Python, schemas, graph links, tool
 capabilities, runtime layers, context budgets, generated targets, and release
 archives.
 
-## Contributing
+## Design-System Pilot
 
-Reproducible cases of incorrect agent behavior, compatibility reports,
-negative-trigger evals, documentation improvements, and archive checks in real
-projects are especially useful.
+The [design-system pilot](docs/architecture/design-system-pilot.md) is an opt-in draft
+for real-project testing: component/token mappings, source conflicts, one-component
+changes and field feedback. It does not provide automatic Figma/code synchronization.
 
-- [Contributing Guide](CONTRIBUTING.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Governance](GOVERNANCE.md)
-- [Support](SUPPORT.md)
-- [Roadmap](ROADMAP.md)
-- [Security Policy](SECURITY.md)
+## Maintenance And Support
 
-Before opening a pull request, run the checks appropriate to the changed layer
-and provide the exact commands and results. Changes to the runtime core, scripts,
-packaging, and permission boundaries require stricter review than documentation
-and example changes.
+The project owner manages development and releases. See the
+[maintainer change process](MAINTENANCE.md), [support guide](SUPPORT.md),
+[roadmap](ROADMAP.md) and [security policy](SECURITY.md).
 
 ## License
 

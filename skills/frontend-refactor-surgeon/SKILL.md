@@ -15,6 +15,7 @@ tags:
     - 'workflow/refactor'
 parent: []
 related:
+    - '[[common/react-performance-rules]]'
     - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
     - '[[common/component-substitution-rules|Component Substitution Rules]]'
     - '[[common/refactor-safety-rules|Refactor Safety Rules]]'
@@ -66,6 +67,9 @@ When shared UI or compatible component wrappers are in scope, read
 `common/frontend-design-system-rules.md` and
 `common/component-substitution-rules.md`. Apply purpose-specific naming from
 `common/frontend-implementation-boundaries.md` to changed project-owned code.
+
+When React/Next work changes loading, imports, subscriptions or expensive
+rendering, read the relevant section of `common/react-performance-rules.md`.
 
 ## Tool Contract
 
@@ -133,6 +137,8 @@ Should not trigger:
 - "Redesign this page."
 
 ## Reference Map
+
+- `common/react-performance-rules.md`
 
 - `common/refactor-safety-rules.md`
 - `common/approved-patterns.md`

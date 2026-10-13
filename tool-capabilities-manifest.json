@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "capabilities": {
     "client_platform_docs": {
       "purpose": "Fetch current host-client installation, plugin, instruction, tool, and configuration documentation.",
@@ -30,7 +30,7 @@
       "blocked_providers": ["live_design_tool_guess"]
     },
     "live_design_source": {
-      "purpose": "Read supplied live design sources, selected-layer properties, visual references, and prototype behavior through MCP or browser computer use; never modify the design during intake.",
+      "purpose": "Read supplied live design sources, selected-layer properties, visual references, and prototype behavior through permitted MCP or browser computer use; explicit role/tool preferences override the default provider order, never permissions or the read-only intake boundary.",
       "availability_evidence": ["current_session_tool_registry"],
       "preferred_providers": ["figma_mcp"],
       "fallback_providers": ["browser_computer_use", "host_browser_tool", "host_computer_use"],

@@ -15,6 +15,7 @@ tags:
     - 'frontend/layout'
 parent: []
 related:
+    - '[[common/react-performance-rules]]'
     - '[[skills/design-screenshot-spec/references/product-behavior-review|Product Behavior Review]]'
     - '[[common/frontend-design-system-rules|Frontend Design System Rules]]'
     - '[[common/component-substitution-rules|Component Substitution Rules]]'
@@ -84,6 +85,9 @@ When shared UI or compatible component wrappers are in scope, read
 `common/frontend-design-system-rules.md` and
 `common/component-substitution-rules.md`. Apply purpose-specific naming from
 `common/frontend-implementation-boundaries.md` to changed project-owned code.
+
+When React/Next work changes loading, imports, subscriptions or expensive
+rendering, read the relevant section of `common/react-performance-rules.md`.
 
 ## Tool Contract
 
@@ -182,6 +186,8 @@ Should not trigger:
 - "Compare the rendered page with the screenshot only."
 
 ## Reference Map
+
+- `common/react-performance-rules.md`
 
 - `common/target-stack-policy.md`
 - `skills/design-screenshot-spec/references/product-behavior-review.md`

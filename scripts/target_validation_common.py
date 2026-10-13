@@ -17,6 +17,7 @@ FORBIDDEN_RUNTIME_PATHS = (
     "README.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
+    "MAINTENANCE.md",
     "SECURITY.md",
     "bundle-manifest.json",
     "examples",

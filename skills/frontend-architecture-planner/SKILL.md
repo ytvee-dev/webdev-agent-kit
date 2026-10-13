@@ -16,6 +16,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[common/react-performance-rules]]'
     - '[[common/target-stack-policy|Target Stack Policy]]'
     - '[[common/prompt-intent-routing-rules|Prompt Intent Routing Rules]]'
     - '[[common/framework-adaptation-policy|Framework Adaptation Policy]]'
@@ -81,6 +82,9 @@ Do not use this skill for:
 6. Read relevant project overlays when present: stack, architecture, styling, verification, docs, build, workspace, state, and data-fetching profiles.
 7. Read affected source files only when architectural boundaries cannot be planned from overlays.
 8. Do not read generated `dist/**` during normal runtime.
+
+When React/Next work changes loading, imports, subscriptions or expensive
+rendering, read the relevant section of `common/react-performance-rules.md`.
 
 ## Tool Contract
 
@@ -173,6 +177,8 @@ Should not trigger:
 - "Install shadcn."
 
 ## Reference Map
+
+- `common/react-performance-rules.md`
 
 - `AGENTS.md`.
 - `common/target-stack-policy.md`.

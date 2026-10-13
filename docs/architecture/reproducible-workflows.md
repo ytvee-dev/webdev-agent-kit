@@ -107,4 +107,4 @@ availability, trace, changed files, and per-rubric observations. Write a separat
 `assessment.json` with passed/failed/blocked/unverified outcomes. Adapter exit
 zero never grades behavior. The [evaluation guide](behavior-evaluation.md)
 explains optional adapters and the [report guide](field-evidence.md) describes
-public regression contributions.
+sanitized regression cases.

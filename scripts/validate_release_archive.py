@@ -15,7 +15,13 @@ from validate_claude_agents import validate_agents
 ROOT = Path(__file__).resolve().parents[1]
 CLAUDE_TARGETS = {"claude-code", "vs-code-claude"}
 CODEX_TARGETS = {"codex", "vs-code-codex"}
-HUMAN_FILES = {"README.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md"}
+HUMAN_FILES = {
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "MAINTENANCE.md",
+    "SECURITY.md",
+}
 FORBIDDEN_ANYWHERE_PARTS = {".obsidian", "node_modules"}
 FORBIDDEN_RUNTIME_ROOT_PARTS = {"project", "examples"}
 FORBIDDEN_SKILL_TERMS = {

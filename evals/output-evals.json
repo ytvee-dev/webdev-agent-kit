@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "eval_type": "skill-output",
   "cases": [
     {
@@ -133,6 +133,50 @@
       "max_words": 220,
       "must_report_verification": true,
       "reason": "Bundle maintenance needs a compact evidence-backed change report rather than process narration."
+    },
+    {
+      "id": "design-screenshot-spec.effect-evidence-output",
+      "prompt": "Inspect a supplied instance export with group opacity 0.5, child fill alpha 0.8, two enabled shadows and a background blur whose radius is not exposed. No rendered screenshot is available.",
+      "skill": "design-screenshot-spec",
+      "workflow_level": "Standard Workflow",
+      "required_facts": [
+        "separate group opacity and child fill alpha",
+        "ordered shadows and correct layer ownership",
+        "unknown background blur radius",
+        "rendered comparison remains unverified"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "invent blur radius or collapse opacity to one literal",
+        "claim visual fidelity without rendered evidence"
+      ],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "Source extraction must preserve compositing and unknowns."
+    },
+    {
+      "id": "frontend-quality-reviewer.react-performance-output",
+      "prompt": "Review a Next server mutation that checks authorization only in the layout and stores currentUser in a module variable. The author calls it a Vercel performance optimization. No benchmarks were run.",
+      "skill": "frontend-quality-reviewer",
+      "workflow_level": "Standard Workflow",
+      "required_facts": [
+        "authorization required at mutation entrypoint",
+        "cross-request contamination risk from shared mutable user state",
+        "specific source evidence",
+        "no measured speedup claim"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "accept security regressions as performance tradeoffs",
+        "invent benchmark results"
+      ],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "Review must prioritize concrete correctness over optimization slogans."
     }
   ]
 }
