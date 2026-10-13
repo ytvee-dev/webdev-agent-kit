@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: 'Onboard frontend projects with local context, client and verification facts. Codex onboarding includes economical subagent setup and activation checks. Excludes model changes during updates, facts-only requests and Plan Mode; no app code or instruction replacement.'
+description: 'Adapt frontend projects with local context, client and verification facts. Includes Codex model setup or Claude plugin-role discovery for full onboarding. Excludes model changes during updates, facts-only requests and Plan Mode; no app code or instruction replacement.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'
@@ -15,6 +15,8 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[skills/project-onboarding-adapter/references/claude-agent-bootstrap]]'
+    - '[[templates/project/claude-agent-profile]]'
     - '[[templates/project/model-routing-profile]]'
     - '[[skills/project-onboarding-adapter/references/codex-model-bootstrap]]'
     - '[[skills/project-onboarding-adapter/references/model-workload-matrix]]'
@@ -110,7 +112,7 @@ Read targeted README sections only when they help identify project intent, setup
 10. Read `tool-capabilities-manifest.json` for declared capability needs and cache required, available, missing, optional, approved, installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
 11. Cache detected client target, native pointer, skill support, and MCP config locations in `project/client-profile.md`.
 12. In Plan Mode, return the plan and stop.
-13. In execution mode, update the approved pointer and local overlays; complete the Codex model phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
+13. In execution mode, update the approved pointer and local overlays; complete the matching Codex or Claude phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
 
 ## Codex Model Setup During Onboarding
 
@@ -129,6 +131,16 @@ authority before writes; never change trust, global/primary models, MCP or
 security controls. Record separate configuration, dispatch-mode and runtime
 evidence in `templates/project/model-routing-profile.md`. Missing runtime
 evidence leaves the affected route inactive, without an expensive fallback.
+
+## Claude Native Roles During Onboarding
+
+For Claude Code, read `references/claude-agent-bootstrap.md`. Use the installed
+plugin's 21 skills and native agents; record discovery, model/effort capability
+and observed dispatch in host `.agents/project/claude-agent-profile.md`.
+Preserve existing custom roles, global settings, permissions and the primary
+model. Full onboarding may exercise tiny read-only approved bindings; facts-only,
+no-model-change and Plan Mode requests do not run canaries or change settings.
+Do not run the Codex TOML helper or write host facts into the plugin cache.
 
 ## Output Contract
 
@@ -179,6 +191,7 @@ relevant domain. Glossary maintenance never renames code or edits host docs.
 Should trigger:
 
 - "Configure economical GPT subagents for this Codex project."
+- "Adapt this Claude plugin to my project and verify its native roles."
 - "адаптируйся"
 - "Adapt this .agents bundle to my project."
 - "Plan onboarding for this frontend repo."
@@ -194,6 +207,9 @@ Should not trigger:
 - "Scaffold a new React app."
 
 ## Reference Map
+
+- `references/claude-agent-bootstrap.md`: native Claude plugin adaptation and role verification.
+- `templates/project/claude-agent-profile.md`: local-only Claude routing evidence.
 
 - `references/model-workload-matrix.md`: select capability tiers and reasoning
   efforts, including architecture and light/deep variants, during model setup.

@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/1.2.0-checklist]]'
     - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/release/1.0.0-checklist|1.0.0 GPT Routing Validation]]'
     - '[[docs/release/0.5.0-checklist|0.5.0 Release Checklist]]'
@@ -29,6 +30,34 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Nine native Claude plugin roles covering bounded lookup, light/standard
+  implementation, complex work, light/standard/deep review and architecture.
+  Read-only roles have no shell or edit tools; all roles inherit the user's model.
+- Claude onboarding and a local role-evidence profile for actual discovery,
+  account-aware model selection, bounded dispatch, preservation and freshness.
+- Native-agent regression checks, archive preservation checks and Claude-only
+  behavioral scenarios, with installation/discovery separated from live execution.
+
+### Changed
+
+- All 21 Claude skills explicitly resolve shared policy through the installed
+  skill directory; native plugins include their own AGENTS.md without replacing
+  host instructions. Context, handoffs, review helpers and updates use the
+  correct plugin/host roots and preserve existing native settings and agents.
+- Claude Code and VS Code Claude guides now describe full project adaptation,
+  native roles and verification limits. Marketplace metadata passes strict CLI
+  validation. Source and generated versions advance to 1.2.0.
+
+### Validation Scope
+
+- Offline checks cover builds, roles, permissions, aliases and extracted archives.
+  Claude CLI installation and component inventory are distinct from authenticated
+  model execution. Live behavior requires provider access and retained traces.
+
+## 1.1.0
 
 ### Added
 

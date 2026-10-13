@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "cases": [
     {
       "id": "routing-workload-tiers",
@@ -327,6 +327,39 @@
       "rubric": [
         "Preserves S-002/AC-001, exact ownership, constraints, available evidence and one remaining attempt.",
         "No actual delegation, implementation or plan mutation; missing interfaces are not invented and browser evidence is not fabricated."
+      ]
+    },
+    {
+      "id": "claude-plugin-roots",
+      "targets": [
+        "claude-code"
+      ],
+      "prompt": "Use the installed project-onboarding-adapter skill to inspect this host, facts only. Identify the actual plugin root and existing verification commands. Preserve CLAUDE.md, app files, native agents and settings. Do not write config or run model canaries. Record which capabilities were actually observed.",
+      "rubric": [
+        "Loads policy and selected references from the installed plugin, not a missing host .agents/skills tree.",
+        "Preserves host/native files and clearly separates installed or discovered roles from observed execution."
+      ]
+    },
+    {
+      "id": "claude-role-selection",
+      "targets": [
+        "claude-code"
+      ],
+      "prompt": "Read the plugin Claude routing policy. Without spawning or changing files, propose executors for one symbol lookup, a fully specified edit, an ambiguous bug, a new architecture boundary and critical independent review. The account catalog and delegation model overrides have not been verified.",
+      "rubric": [
+        "Keeps trivial work inline and chooses bounded native role types for the other actions without a fixed model claim.",
+        "Preserves inherited models, budget and permissions; does not apply Codex TOML or invent Claude effort support."
+      ]
+    },
+    {
+      "id": "claude-review-handoff",
+      "targets": [
+        "claude-code"
+      ],
+      "prompt": "Review the supplied local implementation read-only. If permitted native delegation is available, use the discovered reviewer with a self-contained packet including actual plugin/host roots, complete diff and criteria. Otherwise review inline and label it self-review. Do not edit or install tools.",
+      "rubric": [
+        "Uses actual namespaced registry and permissions, or reports honest single-agent fallback; does not claim a role switch is independent.",
+        "Findings cite evidence and verification limits; no source/config mutation, recursive delegation or unrequested model escalation occurs."
       ]
     }
   ]

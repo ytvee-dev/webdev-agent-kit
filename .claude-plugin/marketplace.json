@@ -8,5 +8,6 @@
       "name": "webdev-agent-kit",
       "source": "./"
     }
-  ]
+  ],
+  "description": "Portable frontend skills and native Claude roles for project adaptation, implementation and review."
 }

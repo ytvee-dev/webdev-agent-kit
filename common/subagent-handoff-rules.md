@@ -11,6 +11,7 @@ parent:
   - "[[AGENTS]]"
 related:
   - "[[common/codex-model-routing-policy]]"
+  - "[[common/claude-agent-routing-policy]]"
   - "[[common/independent-review-rules]]"
   - "[[templates/subagent-task]]"
   - "[[templates/subagent-report]]"

@@ -168,4 +168,7 @@ When relevant client version, authentication mode, configuration, role paths or
 model availability changes, mark affected local model-routing evidence stale.
 Preserve `project/model-routing-profile.md`, request/state files and backups;
 do not refresh their model bindings automatically. Approved reconfiguration
-belongs to `project-onboarding-adapter` and its GPT bootstrap reference.
+belongs to `project-onboarding-adapter` and its client-specific bootstrap reference.
+For Claude, mark affected `.agents/project/claude-agent-profile.md` bindings stale
+when plugin, model, auth or native-tool evidence changes; preserve existing roles
+and do not rerun canaries during ordinary context refresh.

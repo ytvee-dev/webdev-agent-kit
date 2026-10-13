@@ -73,7 +73,8 @@ never source truth and must be rebuilt from the source bundle.
 - `common/core/runtime-core-policy.md` owns the compact client-neutral behavior.
 - `profiles/react-typescript/PROFILE.md` activates stack defaults only from repository evidence and defers details to owning common rules.
 - `adapters/**` owns only native discovery, entrypoints, tool registries, sandbox, and configuration differences. Each generated target ships one canonical adapter; aliases reuse it.
-- Source `skills/**` remains portable authoring source. Claude-generated skills load the core, conditional profile, and matching adapter explicitly.
+- Source `skills/**` remains portable. Claude skills explicitly load plugin-local `AGENTS.md` and the matching adapter using `${CLAUDE_SKILL_DIR}`; that policy routes to the core and conditional profile.
+- Source `agents/claude-code/**` defines nine native roles. Only Claude targets package them under `agents/`, with native metadata and inherited models. Host settings and custom agents remain outside the plugin.
 - Codex-only `agents/openai.yaml` metadata is emitted only for Codex-compatible plugin or skill targets.
 - Claude Code receives a self-contained native plugin installable through its local marketplace and must not depend on `.agents/skills` for native skill discovery.
 - Project-local facts remain in host `.agents/project/**` overlays and are never published inside a reusable plugin.
@@ -109,7 +110,10 @@ then verifies native skill paths, internal links, exclusions, checksum entries,
 single `.agents` nesting, preservation of existing host-root instructions, and
 the Claude marketplace manifest. Cursor archives place shared runtime under
 `.agents/` and native rules under root `.cursor/`; Claude skills remain inside
-the native plugin root.
+the native plugin root. Claude archives now include plugin-local `AGENTS.md`,
+never a host-root instruction file, and native agents with validated tool
+allowlists. Archive extraction preserves host `.claude/settings.json` and
+custom `.claude/agents` files.
 
 `scripts/validate_runtime_layers.py` enforces the layer inventory, prevents
 client-specific terms in the core and project profile, caps their context size,

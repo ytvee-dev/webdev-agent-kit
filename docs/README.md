@@ -43,7 +43,10 @@ The documents in this directory are intended for users and project maintainers. 
 
 ## Agent Execution And Routing
 
+- [Claude project adaptation and native roles](install/claude-agents.md)
+
 - [Automatic Codex onboarding, model routing and activation troubleshooting](install/gpt-model-routing.md)
 - [Superpowers comparison and adopted design choices](architecture/superpowers-adoption.md)
 - [Behavior evaluation and authenticated onboarding trials](architecture/behavior-evaluation.md)
+- [1.2.0 Claude adaptation release checks](release/1.2.0-checklist.md)
 - [1.1.0 release acceptance checklist](release/1.1.0-checklist.md)

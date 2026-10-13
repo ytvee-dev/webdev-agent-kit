@@ -117,6 +117,9 @@ jobs:
       - name: Validate Codex plugin target
         run: python scripts/validate_codex_plugin_target.py
 
+      - name: Validate Claude native roles
+        run: python scripts/validate_claude_agents.py --generated
+
       - name: Validate Claude Code plugin target
         run: python scripts/validate_claude_plugin_target.py
 

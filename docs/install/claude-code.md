@@ -12,6 +12,7 @@ tags:
 parent:
     - '[[docs/install/README|Installation Guides]]'
 related:
+    - '[[docs/install/claude-agents]]'
     - '[[docs/install/first-run|First Run And Installation Checks]]'
     - '[[docs/install/upgrade|Upgrade And Rollback]]'
     - '[[common/client-adaptation-policy|Client Adaptation Policy]]'
@@ -54,5 +55,11 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 
 6. Verify the installation with `claude plugin list`, or open `/plugin` and
    confirm that `webdev-agent-kit@webdev-agent-kit` is enabled in user scope.
+
+## Adaptation And Native Roles
+
+After installation, follow [Claude project adaptation and native roles](claude-agents.md)
+to use all 21 skills, local project context, nine plugin agents, bounded handoffs
+and independent reviews. Preserve existing host instructions and settings.
 
 [← All installation guides](README.md) · [MCP setup](../mcp/claude.md) · [All documentation](../README.md)

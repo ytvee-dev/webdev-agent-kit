@@ -67,6 +67,8 @@ separately. Use `not-run` for a skill that has not been exercised.
 - activation method:
 - Codex metadata available:
 - Claude-compatible skill layout available:
+- Claude plugin native-agent inventory and verified namespaced identifiers:
+- Claude local `.agents/project/claude-agent-profile.md` evidence and freshness:
 - Cursor rules available:
 
 ## MCP Configuration
