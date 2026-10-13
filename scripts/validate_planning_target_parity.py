@@ -13,8 +13,9 @@ from validate_context_budgets import validate as validate_context_budgets
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 CLAUDE_RUNTIME_PRELUDE = (
-    "Apply `common/core/runtime-core-policy.md`, evidence-gated "
-    "`profiles/react-typescript/PROFILE.md`, and `adapters/claude-code.md`."
+    "Read `${CLAUDE_SKILL_DIR}/../../AGENTS.md` and "
+    "`${CLAUDE_SKILL_DIR}/../../adapters/claude-code.md`; resolve bundle paths "
+    "from `${CLAUDE_SKILL_DIR}/../..`, host facts from `.agents/project/`."
 )
 PLANNING_COMMON = (
     "common/agent-loop-policy.md",

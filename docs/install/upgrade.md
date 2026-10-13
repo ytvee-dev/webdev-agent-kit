@@ -156,3 +156,14 @@ member adds one supported local gate, not global or main-model defaults.
 Existing canonical goals/plans stay in place. Plan-scoped handoff/review artifacts
 are additive, git-ignored local evidence for delegated work, not a new required
 plan layout. Small tasks remain inline and do not create those artifacts.
+
+## 1.1.0 To 1.2.0
+
+Claude adds plugin-local shared policy and nine native roles; existing skill
+names and aliases are unchanged. Update through the native plugin manager and
+refresh discovery. Preserve host `CLAUDE.md`, `.claude/settings.json`, custom
+`.claude/agents`, model choices and `.agents/project/` overlays. Do not copy the
+plugin's policy into the host root or replace existing local agents. Revalidate
+only affected discovery/runtime evidence during separately requested onboarding.
+See [Claude adaptation and roles](claude-agents.md). Codex bindings and Cursor
+installation remain unchanged; no host configuration migration is required.

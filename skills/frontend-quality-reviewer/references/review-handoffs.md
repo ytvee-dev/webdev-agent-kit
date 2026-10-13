@@ -32,6 +32,10 @@ python .agents/skills/frontend-quality-reviewer/scripts/review_package.py \
   --root . --plan .agents/project/active-plan.md --base RECORDED_BASE --head HEAD
 ```
 
+For Claude plugins, replace the command's `.agents/skills` prefix with the
+absolute installed plugin `skills` path; keep `--root` and `--plan` anchored
+to the host. Do not copy helpers into the host or write into the plugin cache.
+
 The helper returns an artifact path and SHA-256; pass that reference, not the
 whole diff, to the reviewer. It writes only git-ignored local run storage and
 never commits, runs tests, invokes models, or marks criteria complete. No ignored

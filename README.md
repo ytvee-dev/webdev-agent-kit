@@ -200,7 +200,16 @@ CI, or actual verification results. Stale facts must be updated. The kit does
 not promise a fixed token-savings percentage; it reduces waste by avoiding
 unnecessary context and repeated repository scans.
 
-## Economical GPT Subagents And Review Handoffs
+## Native Subagents And Review Handoffs
+
+Claude Code and its VS Code alias include all 21 skills and nine native roles for
+lookup, implementation, debugging, architecture and independent review. Skills
+load policy from the installed plugin; project facts stay in host `.agents/project/`.
+Roles inherit the user's model by default. Account-specific model selection uses
+verified native controls and the existing budget, preserving custom agents,
+permissions and global settings. Follow [Claude adaptation and roles](docs/install/claude-agents.md).
+
+### Codex GPT Routing
 
 Full Codex onboarding configures missing project-local roles for bounded lookup,
 implementation, complex reasoning and independent review. Models and reasoning
@@ -265,7 +274,7 @@ are actually needed. The complete workflow is shown in
 ## Core Skills
 
 The kit includes a client-neutral runtime core, an evidence-activated
-React/TypeScript profile, thin client adapters, and 19 task skills.
+React/TypeScript profile, thin client adapters, and 21 task skills.
 
 | Task | Primary workflow |
 | --- | --- |
@@ -296,7 +305,8 @@ AGENTS.md                         compact runtime entrypoint
 common/core/                     portable client-neutral core
 profiles/react-typescript/       evidence-activated stack defaults
 adapters/                        Codex, Claude Code, and Cursor differences
-skills/                          19 task workflows
+skills/                          21 task workflows
+agents/claude-code/               native Claude executor definitions
 templates/                       goal, plan, loop, and project contracts
 schemas/                         machine-readable source contracts
 evals/                           static behavior fixtures

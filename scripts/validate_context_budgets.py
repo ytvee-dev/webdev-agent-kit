@@ -14,8 +14,9 @@ ADAPTER_BODY_LIMIT = 180
 SKILL_DESCRIPTION_LIMIT = 45
 SKILL_DESCRIPTION_TOTAL_LIMIT = 550
 CLAUDE_RUNTIME_PRELUDE = (
-    "Apply `common/core/runtime-core-policy.md`, evidence-gated "
-    "`profiles/react-typescript/PROFILE.md`, and `adapters/claude-code.md`."
+    "Read `${CLAUDE_SKILL_DIR}/../../AGENTS.md` and "
+    "`${CLAUDE_SKILL_DIR}/../../adapters/claude-code.md`; resolve bundle paths "
+    "from `${CLAUDE_SKILL_DIR}/../..`, host facts from `.agents/project/`."
 )
 REQUIRED_AGENTS_HEADINGS = (
     "Purpose",

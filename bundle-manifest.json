@@ -1,6 +1,6 @@
 {
   "name": "webdev-agent-kit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "license": "Apache-2.0",
   "description": "Internal source and distribution inventory for the WebDev Agent Kit skill bundle.",
   "portable_core": "common/core/runtime-core-policy.md",
@@ -72,5 +72,16 @@
     "dist/**",
     "docs/**",
     ".obsidian/**"
+  ],
+  "claude_agents": [
+    "wdk-architect",
+    "wdk-architect-deep",
+    "wdk-complex",
+    "wdk-lookup",
+    "wdk-reviewer",
+    "wdk-reviewer-deep",
+    "wdk-reviewer-light",
+    "wdk-worker",
+    "wdk-worker-light"
   ]
 }

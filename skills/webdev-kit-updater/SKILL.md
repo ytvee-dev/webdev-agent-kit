@@ -144,6 +144,11 @@ Should not trigger:
 
 ## Host Model Configuration Boundary
 
+For Claude, update packaged `agents/` only as part of the selected plugin version.
+Preserve host `.claude/agents`, settings, permissions and
+`.agents/project/claude-agent-profile.md`. Mark affected discovery or runtime
+evidence stale; do not rebind models or run canaries as an update side effect.
+
 Preserve host `.codex/` roles/configuration and local model-routing profile,
 request, state and backups. A kit update is not approval to change models or
 reinstall roles. Flag incompatible bootstrap/schema changes and stale runtime

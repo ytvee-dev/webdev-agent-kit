@@ -28,6 +28,7 @@ Choose a client:
 
 - [Codex](codex.md)
 - [Claude Code](claude-code.md)
+- [Claude project adaptation and native roles](claude-agents.md)
 - [Cursor](cursor.md)
 - [VS Code Codex](vscode-codex.md)
 - [VS Code Claude](vscode-claude.md)

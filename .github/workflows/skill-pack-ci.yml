@@ -177,6 +177,9 @@ jobs:
       - name: Validate Codex plugin target
         run: python scripts/validate_codex_plugin_target.py
 
+      - name: Validate Claude native roles
+        run: python scripts/validate_claude_agents.py --generated
+
       - name: Validate Claude Code plugin target
         run: python scripts/validate_claude_plugin_target.py
 
@@ -223,5 +226,7 @@ jobs:
           python-version: '3.11'
       - name: Test documented onboarding and configuration recovery
         run: python -m unittest discover -s scripts -p test_model_routing.py -v
+      - name: Test Claude native roles and archive preservation
+        run: python -m unittest discover -s scripts -p test_claude_agents.py -v
       - name: Test real Git review snapshots
         run: python -m unittest discover -s scripts -p test_review_package.py -v

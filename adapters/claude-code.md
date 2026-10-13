@@ -19,27 +19,32 @@ depends_on:
 
 # Claude Code Client Adapter
 
-Purpose: map portable policy to Claude Code discovery and project instructions.
+Purpose: map shared policy, skills and roles to Claude Code.
 
 ## Discovery
 
-- Native package root: `.claude-plugin/plugin.json`.
-- Native skill root: `skills/` inside the installed plugin.
-- Do not depend on `.agents/skills`, `.codex-plugin`, or `agents/openai.yaml` for skill discovery.
+Native root: `.claude-plugin/plugin.json`; skills: `skills/`; agents: `agents/`.
+Read the plugin's `AGENTS.md` through the invoked skill's `${CLAUDE_SKILL_DIR}`.
+Do not require `.agents/skills`, `.codex-plugin` or `agents/openai.yaml`.
+For delegation, use `common/claude-agent-routing-policy.md` and the onboarding
+`references/claude-agent-bootstrap.md`. Verify actual registry names and tools.
 
 ## Project Instructions
 
-Plugin installation does not authorize project-file edits. If the project separately uses `.agents/AGENTS.md`, propose the exact root `CLAUDE.md` import `@.agents/AGENTS.md`. Create or merge it only after explicit user approval; never overwrite existing instructions.
-
-Resolve reusable paths under the plugin root and `project/**` under host
-`.agents/project/`. Never write host facts into the shared plugin.
+Resolve reusable paths under the installed plugin root and `project/**` under
+host `.agents/project/`. Preserve host `CLAUDE.md` and imported rules. Never write
+host facts into the shared plugin. If separately installed shared project policy
+is approved, use `@.agents/AGENTS.md`; never create a dangling import.
+Plugin installation does not authorize host instruction replacement.
 
 ## Tool Boundary
 
-Detect tools from the current registry and verified project facts. Native tools
-can satisfy capabilities. Packages, config, provider names, and another client's
-metadata do not prove availability. Use declared fallbacks and report limits.
+Use current callable tools or verified local capability evidence. Configured
+MCP, installed roles and model names do not prove availability or execution.
+Preserve existing agents, models, permissions and global settings. Plan Mode
+remains read-only; Codex role configuration does not apply.
 
 ## Output Boundary
 
-Use the portable core output contract. Do not add client setup narration unless setup changed, failed, or requires a user decision.
+Separate installed, discovered and exercised capabilities. Report missing evidence
+and retain normal single-agent work when native delegation is unavailable.

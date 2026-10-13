@@ -10,6 +10,7 @@ import tempfile
 from pathlib import Path, PurePosixPath
 
 from build_release_archives import RELEASE_TARGETS, VERSION_PATTERN, build_archives
+from validate_claude_agents import validate_agents
 
 ROOT = Path(__file__).resolve().parents[1]
 CLAUDE_TARGETS = {"claude-code", "vs-code-claude"}
@@ -142,6 +143,8 @@ def extract_and_validate(target, archive, members, destination):
     sentinels = {
         destination / "AGENTS.md": "existing host AGENTS\n",
         destination / "CLAUDE.md": "existing host CLAUDE\n",
+        destination / ".claude/settings.json": '{"permissions":{"deny":["Bash"]}}\n',
+        destination / ".claude/agents/team.md": "existing team role\n",
         destination / ".agents/project/active-plan.md": "existing local plan\n",
         destination / ".cursor/rules/team.mdc": "unrelated team rule\n",
     }
@@ -158,6 +161,10 @@ def extract_and_validate(target, archive, members, destination):
         if target in CLAUDE_TARGETS
         else destination / ".agents"
     )
+    if target in CLAUDE_TARGETS:
+        errors.extend(validate_agents(runtime_root / "agents"))
+        if not (runtime_root / "AGENTS.md").is_file():
+            errors.append(f"{target}: plugin-local shared policy is missing")
     skills_root = runtime_root / "skills"
     expected_skills = sorted(load_manifest().get("skills", []))
     actual_skills = sorted(path.parent.name for path in skills_root.glob("*/SKILL.md"))

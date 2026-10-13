@@ -72,9 +72,18 @@ def main():
     routing_code = run("validate_model_routing.py")
     if routing_code:
         sys.exit(routing_code)
+    claude_agents_code = run("validate_claude_agents.py")
+    if claude_agents_code:
+        sys.exit(claude_agents_code)
     build_code = run("build_skill_targets.py")
     if build_code:
         sys.exit(build_code)
+    claude_agents_code = run("validate_claude_agents.py", "--generated")
+    if claude_agents_code:
+        sys.exit(claude_agents_code)
+    claude_tests_code = run("test_claude_agents.py")
+    if claude_tests_code:
+        sys.exit(claude_tests_code)
     routing_target_code = run(
         "validate_model_routing.py", "--generated", "--skip-unit-tests"
     )

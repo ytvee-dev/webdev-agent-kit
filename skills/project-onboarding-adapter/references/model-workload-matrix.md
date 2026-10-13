@@ -19,6 +19,9 @@ depends_on: []
 
 # Task, Model And Reasoning Selection
 
+Use only for Codex/GPT; Claude uses `claude-agent-bootstrap.md` and its native
+routing policy. Do not map these model IDs or effort values into Claude settings.
+
 Use during model onboarding/reconfiguration, or when a nontrivial task needs
 executor selection. Apply to the next bounded action, not the whole skill.
 Model capability and reasoning effort are separate decisions. A cheap model at

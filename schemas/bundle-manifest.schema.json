@@ -15,7 +15,8 @@
     "skills",
     "targets",
     "target_aliases",
-    "excludes"
+    "excludes",
+    "claude_agents"
   ],
   "properties": {
     "name": {
@@ -30,7 +31,9 @@
     },
     "license": {
       "type": "string",
-      "enum": ["Apache-2.0"]
+      "enum": [
+        "Apache-2.0"
+      ]
     },
     "description": {
       "type": "string",
@@ -87,7 +90,10 @@
         "properties": {
           "kind": {
             "type": "string",
-            "enum": ["project-bundle", "plugin"]
+            "enum": [
+              "project-bundle",
+              "plugin"
+            ]
           },
           "output": {
             "type": "string",
@@ -95,7 +101,10 @@
           },
           "install_mode": {
             "type": "string",
-            "enum": ["project-root-extract", "plugin-install"]
+            "enum": [
+              "project-root-extract",
+              "plugin-install"
+            ]
           },
           "entrypoint": {
             "type": "string",
@@ -127,6 +136,15 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 120
+      }
+    },
+    "claude_agents": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^wdk-[a-z]+(?:-[a-z]+)*$"
       }
     }
   },

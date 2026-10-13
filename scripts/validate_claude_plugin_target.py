@@ -7,6 +7,8 @@ import re
 import sys
 from pathlib import Path
 
+from validate_claude_agents import validate_agents
+
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "dist" / "claude-code"
 ALIASES = (ROOT / "dist" / "claude", ROOT / "dist" / "vs-code-claude")
@@ -19,6 +21,7 @@ FORBIDDEN_SKILL_TERMS = (
     "unit-test",
 )
 REQUIRED_ROOT_FILES = (
+    "AGENTS.md",
     ".claude-plugin/plugin.json",
     ".claude-plugin/marketplace.json",
     "LICENSE",
@@ -29,7 +32,6 @@ REQUIRED_ROOT_FILES = (
 )
 FORBIDDEN_ROOT_PATHS = (
     ".codex-plugin",
-    "AGENTS.md",
     "CLAUDE.md",
     "README.md",
     "CHANGELOG.md",
@@ -151,6 +153,7 @@ def validate():
         errors.append("Claude plugin must not include Codex-only agents/openai.yaml")
 
     validate_manifest(errors)
+    errors.extend(validate_agents(TARGET / "agents"))
 
     skills = sorted((TARGET / "skills").glob("*/SKILL.md"))
     if not skills:
@@ -183,9 +186,8 @@ def validate():
             errors.append(f"{skill.relative_to(ROOT)} needs name and description")
         skill_text = skill.read_text(encoding="utf-8-sig")
         for runtime_layer in (
-            "common/core/runtime-core-policy.md",
-            "profiles/react-typescript/PROFILE.md",
-            "adapters/claude-code.md",
+            "${CLAUDE_SKILL_DIR}/../../AGENTS.md",
+            "${CLAUDE_SKILL_DIR}/../../adapters/claude-code.md",
         ):
             if runtime_layer not in skill_text:
                 errors.append(

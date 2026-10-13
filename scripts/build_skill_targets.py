@@ -29,8 +29,9 @@ HUMAN_FACING_ROOT_FILES = (
 )
 HUMAN_FACING_DIRS = ("examples",)
 CLAUDE_RUNTIME_PRELUDE = (
-    "Apply `common/core/runtime-core-policy.md`, evidence-gated "
-    "`profiles/react-typescript/PROFILE.md`, and `adapters/claude-code.md`."
+    "Read `${CLAUDE_SKILL_DIR}/../../AGENTS.md` and "
+    "`${CLAUDE_SKILL_DIR}/../../adapters/claude-code.md`; resolve bundle paths "
+    "from `${CLAUDE_SKILL_DIR}/../..`, host facts from `.agents/project/`."
 )
 
 
@@ -208,10 +209,29 @@ def build_cursor_project_target():
     write_cursor_rules(target_root)
 
 
+def copy_claude_agents(target_root):
+    for name in MANIFEST["claude_agents"]:
+        source = ROOT / "agents" / "claude-code" / f"{name}.md"
+        fields, body = split_frontmatter(source.read_text(encoding="utf-8"))
+        native = "\n".join(
+            f"{key}: {fields[key]}"
+            for key in ("name", "description", "model", "color", "tools")
+        )
+        destination = target_root / "agents" / f"{name}.md"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(
+            f"---\n{native}\n---\n\n{body.lstrip()}", encoding="utf-8"
+        )
+
+
 def build_claude_plugin_target():
     target = "claude-code"
     target_root = prepare_target_root(target)
 
+    copy_file(
+        ROOT / "AGENTS.md", target_root / "AGENTS.md", strip_graph_frontmatter=True
+    )
+    copy_claude_agents(target_root)
     for file_name in ("LICENSE", "tool-capabilities-manifest.json"):
         shutil.copy2(ROOT / file_name, target_root / file_name)
 

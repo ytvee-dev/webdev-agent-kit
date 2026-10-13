@@ -29,7 +29,7 @@ depends_on: []
 
 This compact `.agents` entrypoint routes work to portable core policy, an evidence-gated profile, verified project facts, and the smallest matching skill. Load detailed owning rules only when relevant.
 
-Bundle paths are rooted at `.agents`. Generated `dist/**` output is never source truth. The host-root instruction pointer is managed only by `project-onboarding-adapter` with explicit approval; ordinary bundle work must not replace it.
+Bundle paths are rooted at the installed bundle: `.agents` for project targets or the native plugin root. Generated `dist/**` output is never source truth. Only approved `project-onboarding-adapter` work may replace the host-root instruction pointer.
 
 ## Precedence And Approvals
 
@@ -43,6 +43,8 @@ Require explicit approval before installing packages or tools, changing configur
 
 In Codex, when a local model-routing profile exists, consult
 `common/codex-model-routing-policy.md` before broad reading or delegation.
+In Claude Code, consult `common/claude-agent-routing-policy.md` when delegation
+is relevant; use verified native roles and preserve single-agent fallback.
 
 Classify before reading broadly:
 
@@ -59,11 +61,11 @@ Load in this order, stopping when the next safe action is clear:
 4. Verified project instructions and only the affected `project/**` facts.
 5. The smallest matching `skills/**/SKILL.md` and only references it requires for the active slice.
 
-Do not load every skill, reference, common rule, overlay, README, or generated target for routing. Use `common/prompt-intent-routing-rules.md` only when workflow weight is unclear. Tool needs come from `tool-capabilities-manifest.json`; a callable native tool may satisfy them, and provider names or config do not prove availability.
+Do not load every skill, reference, rule, overlay, README or target for routing. Consult `common/prompt-intent-routing-rules.md` only for unclear workflow weight. `tool-capabilities-manifest.json` defines needs; callable native tools can satisfy them. Names and configuration do not prove availability.
 
 ## Skill Discovery
 
-Select skills from their `name` and `description`; the user need not name one. Full triggers, exclusions, workflow, and validation gates remain in each `SKILL.md`. Do not insert planning, design, MCP, loop, review, or onboarding skills into a lightweight task unless its scope actually escalates.
+Select skills by name and description; explicit invocation is optional. Each `SKILL.md` owns triggers, exclusions, workflow and validation. Keep lightweight work free of planning, design, MCP, loop, review and onboarding overhead unless scope escalates.
 
 ## Compact Skill Index
 
