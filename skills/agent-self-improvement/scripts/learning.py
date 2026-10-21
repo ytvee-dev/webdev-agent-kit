@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Private, opt-in, standard-library-only experience recorder and offline triage."""
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import os
@@ -104,9 +106,9 @@ def set_mode(conn, project, enabled):
     return {"project_id": pid, "recording": enabled}
 
 
-def safe_input():
-    raw = sys.stdin.buffer.read(MAX_EVENT_BYTES + 1)
-    if len(raw) > MAX_EVENT_BYTES:
+def safe_input(limit=MAX_EVENT_BYTES):
+    raw = sys.stdin.buffer.read(limit + 1)
+    if len(raw) > limit:
         raise ValueError("Event exceeds the input size limit")
     return json.loads(raw.decode("utf-8"))
 
@@ -173,40 +175,69 @@ def ingest_file(conn, project, file):
     return counts
 
 
-def attach(conn, state, project, client, session, file):
+def store_bytes(conn, state, project, client, session, filename, data):
     if not opt_in(conn, project):
         raise PermissionError("Collection is off for this project")
-    available = conn.execute(
+    exists = conn.execute(
         "SELECT 1 FROM events WHERE project_id=? AND client=? AND session_id=? LIMIT 1",
         (project_id(project), client, session),
     ).fetchone()
-    if not available:
+    if not exists:
         raise ValueError("Cannot attach without a recorded session")
-    path = Path(file).expanduser()
-    if path.is_symlink() or not path.is_file():
-        raise ValueError("Attachment must be a regular non-symlink file")
-    if path.stat().st_size > MAX_ATTACHMENT:
-        raise ValueError("Attachment exceeds 20 MiB")
-    data = path.read_bytes()
     if len(data) > MAX_ATTACHMENT:
         raise ValueError("Attachment exceeds 20 MiB")
     digest = hashlib.sha256(data).hexdigest()
     dest = state / "blobs" / digest[:2] / digest
     dest.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     if not dest.exists():
-        with tempfile.NamedTemporaryFile(dir=dest.parent, delete=False) as tmp:
-            tmp.write(data)
-            temp_path = Path(tmp.name)
+        with tempfile.NamedTemporaryFile(dir=dest.parent, delete=False) as temporary:
+            temporary.write(data)
+            temp_path = Path(temporary.name)
         os.chmod(temp_path, 0o600)
         os.replace(temp_path, dest)
-    aid = hashlib.sha256(json.dumps([project_id(project), client, session, digest]).encode()).hexdigest()
+    identity = json.dumps([project_id(project), client, session, digest])
+    aid = hashlib.sha256(identity.encode()).hexdigest()
     conn.execute("INSERT OR IGNORE INTO blobs VALUES(?,?)", (digest, len(data)))
     conn.execute(
         "INSERT OR IGNORE INTO attachments VALUES(?,?,?,?,?,?)",
-        (aid, project_id(project), client, session, digest, path.name[:180]),
+        (aid, project_id(project), client, session, digest, str(filename)[:180]),
     )
     conn.commit()
     return {"attachment_id": aid, "sha256": digest, "bytes": len(data)}
+
+
+def attach(conn, state, project, client, session, file):
+    path = Path(file).expanduser()
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("Attachment must be a regular non-symlink file")
+    if path.stat().st_size > MAX_ATTACHMENT:
+        raise ValueError("Attachment exceeds 20 MiB")
+    return store_bytes(conn, state, project, client, session, path.name, path.read_bytes())
+
+
+def attach_data(conn, state, project, item):
+    if not isinstance(item, dict):
+        raise ValueError("Inline attachment must be a JSON object")
+    uri = item.get("data_url")
+    if not isinstance(uri, str) or len(uri) > MAX_ATTACHMENT * 2:
+        raise ValueError("Invalid inline attachment")
+    head, separator, encoded = uri.partition(",")
+    if not separator or not head.startswith("data:") or not head.endswith(";base64"):
+        raise ValueError("Only base64 inline data URLs are supported")
+    mime = head[5:-7].lower()
+    allowed = {"image/png", "image/jpeg", "image/webp", "image/gif",
+               "application/pdf", "text/plain"}
+    if mime not in allowed:
+        raise ValueError("Unsupported inline attachment type")
+    try:
+        payload = base64.b64decode(encoded, validate=True)
+    except binascii.Error as exc:
+        raise ValueError("Malformed inline base64 attachment") from exc
+    return store_bytes(
+        conn, state, project, str(item.get("client", ""))[:60],
+        str(item.get("session_id", ""))[:200],
+        str(item.get("name", "attachment"))[:180], payload,
+    )
 
 
 def run_triage(conn, state, project):
@@ -276,7 +307,7 @@ def main():
     parser.add_argument("--state", type=Path, default=default_root(), help="Private local state directory")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("init")
-    for name in ("on", "off", "status", "capture", "import", "attach", "run", "purge"):
+    for name in ("on", "off", "status", "capture", "capture-batch", "import", "attach", "attach-data", "run", "purge"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--project", required=True, help="Project root; must be explicitly enabled")
         if name == "capture":
@@ -303,6 +334,20 @@ def main():
             result = {"project_id": pid, "recording": opt_in(conn, args.project), "events": count}
         elif args.command == "capture":
             result = capture(conn, args.project, safe_input(), args.client)
+        elif args.command == "capture-batch":
+            payload = safe_input(3 * 1024 * 1024)
+            if not isinstance(payload, list) or len(payload) > 500:
+                raise ValueError("capture-batch requires an array of <=500 events")
+            counts = {"recorded": 0, "duplicates": 0}
+            for item in payload:
+                outcome = capture(conn, args.project, item)
+                if outcome.get("recorded"):
+                    counts["recorded"] += 1
+                elif outcome.get("duplicate"):
+                    counts["duplicates"] += 1
+            result = counts
+        elif args.command == "attach-data":
+            result = attach_data(conn, state, args.project, safe_input(28 * 1024 * 1024))
         elif args.command == "import":
             result = ingest_file(conn, args.project, args.file)
         elif args.command == "attach":

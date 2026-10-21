@@ -54,10 +54,10 @@ Requires approved local filesystem and command access for CLI operations. Captur
 2. Resolve the packaged Python script relative to this `SKILL.md`: `scripts/learning.py`. Invoke `python scripts/learning.py --help` or its absolute equivalent.
 3. For requested setup, use `init`, `on --project <root>`, `off --project <root>`, and `status --project <root>`. Collection is per-project, not a global silent opt-in.
 4. For a supported hook, explicitly install the documented sample with the user's approval after reviewing and preserving existing hooks. Otherwise use `import --project <root> --file <jsonl>` for canonical events. Attachment bytes require explicit `attach --file`, scoped to a recorded session.
-5. For `run`, analyze new evidence without changing any skill. The shipped deterministic runner creates a local evidence report; its suggestions are hypotheses, not proof of better quality. No new eligible observations is a valid `no_change` result.
-6. When the user asks to improve a skill, inspect the relevant report and the original artifacts with permission, distinguish project facts from reusable procedures, and route the minimal source change through `agent-rules-skill-author`. Do not copy user/chat text directly into executable instructions.
-7. Compare baseline and candidate on existing and held-out checks with the same model/tools/environment. Record failures and withheld evaluations. Without comparison, return a proposal only, never a quality claim.
-8. Present a diff and evidence to the user. Do not merge, publish, modify global policy, or install hooks without separate explicit approval. Preserve rollback.
+5. For `run`, perform deterministic offline triage without editing skills. For a model-assisted proposal, use `scripts/learning_cycle.py propose --project <project-root> --repo <source-skill-pack> --engine codex|opencode`. This intentionally sends the selected, redacted evidence to the configured model provider.
+6. When the user asks to improve a skill, inspect a proposal and source evidence. Run `learning_cycle.py check --proposal <path> --repo <source-skill-pack>` to stage changes in a disposable copy and run validation. Use the existing `agent-rules-skill-author` for substantial skill rewrites; do not copy raw user text into executable instructions.
+7. Compare baseline and candidate on equivalent fixtures; model-based A/B improvement is not claimed by the included structural checks. `learning_cycle.py apply ... --approve` requires explicit user approval and a successful isolated check, and changes local skill source only. Review the diff and commit manually.
+8. For scheduled model analysis use `learning_cycle.py auto --project <root> --repo <source-skill-pack> --engine codex|opencode`. The result is a proposal, not an applied edit. See `assets/integrations/INTEGRATIONS.md` for Codex Windows opt-in and OpenCode. Do not merge, publish or install hooks without separate explicit approval.
 
 ## Output Contract
 

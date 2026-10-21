@@ -79,21 +79,44 @@ def model_suggestion(engine, prompt, timeout):
             output = answer.read_text(encoding="utf-8")
         elif engine == "opencode":
             env = os.environ.copy()
-            # Inline user-config override is documented by OpenCode.
             env["OPENCODE_CONFIG_CONTENT"] = json.dumps({
-                "permission": {"edit": "deny", "shell": "deny", "bash": "deny",
-                               "external_directory": "deny", "task": "deny"},
-                "agent": {"plan": {"permission": {"edit": "deny", "shell": "deny",
-                                               "bash": "deny", "task": "deny",
-                                               "external_directory": "deny"}}},
+                "permission": {
+                    "edit": "deny", "bash": "deny", "shell": "deny",
+                    "webfetch": "deny", "websearch": "deny",
+                    "task": "deny", "external_directory": "deny",
+                },
+                "agent": {"plan": {
+                    "permission": {"edit": "deny", "bash": "deny",
+                                   "shell": "deny", "task": "deny",
+                                   "external_directory": "deny"},
+                }},
             })
-            result = subprocess.run(["opencode", "run", "--agent", "plan",
-                                     "--dir", str(directory), prompt],
-                                    cwd=directory, env=env, text=True,
-                                    capture_output=True, timeout=timeout, check=False)
+            evidence_file = directory / "experience.txt"
+            evidence_file.write_text(prompt, encoding="utf-8")
+            if os.name == "posix":
+                os.chmod(evidence_file, 0o600)
+            command = [
+                "opencode", "run", "--agent", "plan", "--format", "json",
+                "--dir", str(directory), "--file", str(evidence_file),
+                "Return a strict JSON skill proposal based only on the attached evidence.",
+            ]
+            result = subprocess.run(
+                command, cwd=directory, env=env, text=True,
+                capture_output=True, timeout=timeout, check=False,
+            )
             if result.returncode:
                 raise ValueError("OpenCode CLI analysis failed; check auth and installed version")
-            output = result.stdout
+            parts = []
+            for line in result.stdout.splitlines():
+                try:
+                    event = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if event.get("type") == "text":
+                    part = event.get("part") or {}
+                    if isinstance(part.get("text"), str):
+                        parts.append(part["text"])
+            output = "".join(parts) if parts else result.stdout
         else:
             raise ValueError("Select codex/opencode or supply an offline proposal")
     output = output.strip()
@@ -255,6 +278,35 @@ def apply(args):
             "warning": "Static tests passed; independent behavioral A/B evaluation is not yet proven."}
 
 
+def auto(args):
+    """One scheduled iteration: analyze only changed evidence and validate, never apply."""
+    state = Path(args.state).expanduser().resolve()
+    repo = Path(args.repo).resolve(strict=True)
+    project = Path(args.project).resolve(strict=True)
+    events = evidence(state, project)
+    if not events:
+        return {"result": "no_change", "reason": "No new experience"}
+    key = hash_text(str(repo) + str(project_id(project)))[:24]
+    checkpoint = state / "checkpoints" / (key + ".json")
+    signature = hash_text(json.dumps(
+        [item["id"] for item in events] + [
+            entry["sha256"] for entry in skill_inventory(repo).values()
+        ], sort_keys=True,
+    ))
+    if checkpoint.exists() and read_json(checkpoint).get("signature") == signature and not args.force:
+        return {"result": "no_change", "reason": "No new evidence or skill versions"}
+    proposal = propose(args)
+    if proposal["result"] == "pending_validation":
+        args.proposal = proposal["proposal"]
+        checked = check(args)
+        proposal.update(checked)
+        if not checked["structural_passed"]:
+            return proposal
+    if proposal["result"] in ("no_change", "pending_validation"):
+        write_json(checkpoint, {"signature": signature, "timestamp": datetime.now(UTC).isoformat()})
+    return proposal
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", default=str(default_root()))
@@ -265,6 +317,13 @@ def main():
     p.add_argument("--engine", choices=("codex", "opencode"))
     p.add_argument("--proposal-file")
     p.add_argument("--timeout", type=int, default=240)
+    nightly = sub.add_parser("auto", help="One unattended iteration, never applies edits")
+    nightly.add_argument("--project", required=True)
+    nightly.add_argument("--repo", required=True)
+    nightly.add_argument("--engine", choices=("codex", "opencode"))
+    nightly.add_argument("--proposal-file", help="Offline replay input")
+    nightly.add_argument("--timeout", type=int, default=240)
+    nightly.add_argument("--force", action="store_true")
     c = sub.add_parser("check")
     c.add_argument("--repo", required=True)
     c.add_argument("--proposal", required=True)
@@ -274,7 +333,14 @@ def main():
     a.add_argument("--proposal", required=True)
     a.add_argument("--approve", action="store_true")
     args = parser.parse_args()
-    answer = propose(args) if args.cmd == "propose" else check(args) if args.cmd == "check" else apply(args)
+    if args.cmd == "propose":
+        answer = propose(args)
+    elif args.cmd == "auto":
+        answer = auto(args)
+    elif args.cmd == "check":
+        answer = check(args)
+    else:
+        answer = apply(args)
     print(json.dumps(answer, ensure_ascii=False))
 
 

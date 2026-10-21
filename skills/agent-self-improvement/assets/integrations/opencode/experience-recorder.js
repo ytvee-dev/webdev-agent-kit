@@ -1,43 +1,47 @@
-// Optional, experimental OpenCode adapter. Manually copy into .opencode/plugins/.
-// Set AGENT_LEARNING_SCRIPT to an absolute path to the shipped learning.py.
-// No raw image bytes are copied. File parts remain metadata-only until explicit import.
+// Optional OpenCode plugin. Does not activate storage without per-project opt-in.
+// SDK reference: https://opencode.ai/docs/sdk/ and https://opencode.ai/docs/plugins/
 export const ExperienceRecorder = async ({ client, directory }) => {
   const script = process.env.AGENT_LEARNING_SCRIPT
   if (!script) return {}
 
-  async function command(commandName, event) {
+  const python = process.env.AGENT_LEARNING_PYTHON || "python"
+  const run = async (subcommand, payload) => {
     try {
       const proc = Bun.spawn(
-        ["python", script, commandName, "--project", directory],
+        [python, script, subcommand, "--project", directory],
         { stdin: "pipe", stdout: "pipe", stderr: "ignore" },
       )
-      if (event !== undefined) proc.stdin.write(JSON.stringify(event))
+      if (payload !== undefined) proc.stdin.write(JSON.stringify(payload))
       proc.stdin.end()
       const output = await new Response(proc.stdout).text()
-      await proc.exited
-      return JSON.parse(output)
+      const exit = await proc.exited
+      return exit === 0 ? JSON.parse(output) : null
     } catch {
-      return null // The recorder is best-effort and must never block OpenCode.
+      // Recorder failures must never block the user's primary agent.
+      return null
     }
   }
 
   return {
     event: async ({ event }) => {
       if (event.type !== "session.idle") return
-      const status = await command("status")
-      if (!status?.recording) return
-
       const sessionID = event.properties?.sessionID
       if (!sessionID) return
-      let messages
+
+      const status = await run("status")
+      if (!status?.recording) return
+
+      let response
       try {
-        const response = await client.session.messages({ path: { id: sessionID } })
-        messages = response.data ?? response
+        response = await client.session.messages({ path: { id: sessionID } })
       } catch {
         return
       }
+      const messages = response?.data ?? response
       if (!Array.isArray(messages)) return
 
+      const records = []
+      const inline = []
       for (const message of messages) {
         const info = message.info ?? {}
         for (const part of message.parts ?? []) {
@@ -46,19 +50,47 @@ export const ExperienceRecorder = async ({ client, directory }) => {
           const isFile = part.type === "file"
           const isTool = part.type === "tool"
           if (!isText && !isFile && !isTool) continue
+
           const kind = isTool ? "tool" : info.role === "user" ? "user" : "assistant"
-          const canonical = {
+          const content = isText
+            ? String(part.text ?? "")
+            : isTool ? "Tool: " + String(part.tool ?? "unknown") : ""
+          const metadata = isFile
+            ? [{ name: part.filename ?? "attachment", mime: part.mime ?? "",
+                 status: "metadata_only" }]
+            : []
+          const invoked = isTool && part.tool === "skill"
+            ? [part.state?.input?.name].filter((name) => typeof name === "string")
+            : []
+          records.push({
             client: "opencode",
             session_id: String(sessionID),
             message_id: String(info.id ?? part.id),
             part_id: String(part.id),
             kind,
-            content: isText ? String(part.text ?? "") : isTool ? String(part.tool ?? "tool") : "",
-            attachments: isFile ? [{ name: part.filename ?? "attachment",
-                                      mime: part.mime ?? "application/octet-stream" }] : [],
+            content,
+            skills: invoked,
+            attachments: metadata,
+          })
+          if (isFile && typeof part.url === "string" &&
+              part.url.startsWith("data:") && part.url.length <= 28000000) {
+            inline.push({
+              client: "opencode",
+              session_id: String(sessionID),
+              name: part.filename ?? "attachment",
+              data_url: part.url,
+            })
           }
-          await command("capture", canonical)
         }
+      }
+
+      // Re-reading on every idle event is safe: the database deduplicates by part ID.
+      for (let index = 0; index < records.length; index += 400) {
+        await run("capture-batch", records.slice(index, index + 400))
+      }
+      // Only embedded data: bytes are copied. No arbitrary local path or URL is followed.
+      for (const item of inline) {
+        await run("attach-data", item)
       }
     },
   }

@@ -15,9 +15,9 @@ related: []
 depends_on: []
 ---
 
-# Optional client integrations (preview)
+# Local client integrations and full learning cycle
 
-These examples are **not activated on installation**. Install only after an explicit project opt-in with `python <absolute-path-to-learning.py> on --project <absolute-project-root>`. Review existing client config and preserve its existing hooks.
+These integrations are **not activated on installation**. Install only after an explicit project opt-in with `python <absolute-path-to-learning.py> on --project <absolute-project-root>`. Review existing client config and preserve its existing hooks.
 
 ## Codex
 
@@ -53,3 +53,55 @@ python <path-to-learning.py> attach --project <root> --client opencode --session
 ## Scheduling
 
 The `run` command performs deterministic offline triage of explicitly tagged user corrections. It does not run a model, edit skills, or publish code. It is safe to schedule in a trusted local OS scheduler for analysis only; do not describe this as automated prompt optimization.
+
+
+## Windows Codex: install without replacing existing hooks
+
+From PowerShell in the **source Kit checkout or installed package**, adjust paths:
+
+```powershell
+$skill = "C:\path\to\webdev-agent-kit\skills\agent-self-improvement"
+$project = "C:\path\to\your-project"
+python "$skill\scripts\learning.py" on --project "$project"
+python "$skill\scripts\install_hooks.py" --project "$project"
+# Inspect the preview, then explicitly approve:
+python "$skill\scripts\install_hooks.py" --project "$project" --approve
+```
+
+The installer merges into `<project>\.codex\hooks.json`, preserves unrelated handlers, makes a backup, and adds the native `commandWindows` override. Restart Codex and review/trust changes using `/hooks`. Opt-out with `learning.py off --project ...`; remove hooks with `install_hooks.py --remove --approve`. Hooks do **not** give access to a complete or stable raw transcript; they record exposed user prompts, assistant Stop messages, and tool response excerpts. Use manual `attach` for screenshots whose bytes are unavailable.
+
+## OpenCode opt-in
+
+Copy `opencode/experience-recorder.js` to `<project>\.opencode\plugins\experience-recorder.js`. Set `AGENT_LEARNING_SCRIPT` to the absolute installed `learning.py` path; optional `AGENT_LEARNING_PYTHON` points to your Python interpreter. Enable per-project recording with `learning.py on`. Restart OpenCode. `session.idle` imports message text, observed skill-tool calls and file metadata. When the SDK returns an inline base64 data URL, its bytes can be stored automatically with limits. Remote URLs and arbitrary local paths are never fetched.
+
+## Run complete local cycle
+
+Use a **clone of the source Skill Pack** as `--repo`, not a generated `.agents` installation:
+
+```powershell
+$skill = "C:\path\to\webdev-agent-kit\skills\agent-self-improvement"
+$repo = "C:\path\to\webdev-agent-kit"
+$project = "C:\path\to\your-project"
+python "$skill\scripts\learning_cycle.py" auto --project "$project" --repo "$repo" --engine codex
+# Or: --engine opencode
+```
+
+The command uses your already-authorized CLI/model, processes the recent permitted experiences, generates a restricted proposal and runs structural validation in a disposable directory. If accepted, read the saved `proposal.json` and `.diff`, then apply explicitly:
+
+```powershell
+python "$skill\scripts\learning_cycle.py" apply --repo "$repo" --proposal "C:\path\to\proposal.json" --approve
+```
+
+This does **not** prove improved performance on unseen tasks. Evaluate the changed skill's behavior separately before merging or publishing it.
+
+## Nightly Windows scheduling
+
+In Task Scheduler create a task running your local `python.exe` with arguments `"C:\path\to\learning_cycle.py" auto --project "C:\path\to\project" --repo "C:\path\to\source-kit" --engine codex`. Choose the desired nightly trigger, run only under your user account, and keep saved credentials and output under your private profile. No scheduled task is created by the package. Repeated unchanged experience is skipped using a local checkpoint. Linux users can adapt the provided systemd timer/service templates.
+
+## Offline acceptance without model costs
+
+```powershell
+python -m unittest discover -s "$skill\scripts" -p "test_*.py" -v
+```
+
+Tests use synthetic conversations and offline proposal fixtures. A separate **real** client smoke test remains necessary to verify Codex/Windows and OpenCode event payloads and the actual model authentication flow.
