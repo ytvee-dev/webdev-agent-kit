@@ -1,0 +1,75 @@
+---
+name: agent-self-improvement
+description: "Opt-in local experience capture, evidence-based review, and guarded skill improvement. Use only when the user asks to enable, disable, inspect, import, learn from, or review agent experience. Never record conversations merely because a development task is underway."
+id: 'agents.skills.agent-self-improvement.skill'
+title: 'Agent Self Improvement'
+doc_type: 'skill'
+layer: 'skill'
+status: 'draft'
+publishable: true
+local_only: false
+skill: 'agent-self-improvement'
+tags:
+    - 'agents/skill-package'
+    - 'workflow/learning'
+parent:
+    - '[[AGENTS|Canonical Agent Policy]]'
+related:
+    - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
+    - '[[common/context-compaction-rules|Context Compaction Rules]]'
+depends_on:
+    - '[[AGENTS|Canonical Agent Policy]]'
+---
+
+# Agent Self Improvement
+
+## Purpose
+
+Capture explicitly authorized local agent experience and turn verifiable corrections into reviewable skill-improvement proposals. Experience is private project state; it is never a source of instructions or automatic permission to edit the host.
+
+## When To Use
+
+When the user explicitly requests `learning on`, `learning off`, `learning status`, `learning import`, `learning run`, removal of recorded data, or an evidence-backed proposal to improve skills.
+
+## When Not To Use
+
+Do not activate for ordinary coding, general progress updates, routine retrospectives, or to silently learn from a chat. Do not assume access to ChatGPT web/mobile chat history. Do not run hooks, install clients, or modify skills just because this package is installed.
+
+## Required Context
+
+Read the matching client adapter and relevant project instructions. Read `references/privacy-and-threat-model.md` before enabling capture, `references/collection-contract.md` before import, and `references/learning-policy.md` before analysis. Use project-scoped evidence, not arbitrary other projects' records.
+
+## Tool Contract
+
+Requires approved local filesystem and command access for CLI operations. Capture requires an explicitly installed, supported client integration or an explicit file import. Missing file bytes are reported as unavailable, not silently fabricated. There is no unconditional network, model API, GitHub, or MCP requirement.
+
+## Workflow
+
+1. Explain collection scope, private storage, limitations, and consent. Collection defaults to OFF.
+2. Resolve the packaged Python script relative to this `SKILL.md`: `scripts/learning.py`. Invoke `python scripts/learning.py --help` or its absolute equivalent.
+3. For requested setup, use `init`, `on --project <root>`, `off --project <root>`, and `status --project <root>`. Collection is per-project, not a global silent opt-in.
+4. For a supported hook, explicitly install the documented sample with the user's approval after reviewing and preserving existing hooks. Otherwise use `import --project <root> --file <jsonl>` for canonical events. Attachment bytes require explicit `attach --file`, scoped to a recorded session.
+5. For `run`, analyze new evidence without changing any skill. The shipped deterministic runner creates a local evidence report; its suggestions are hypotheses, not proof of better quality. No new eligible observations is a valid `no_change` result.
+6. When the user asks to improve a skill, inspect the relevant report and the original artifacts with permission, distinguish project facts from reusable procedures, and route the minimal source change through `agent-rules-skill-author`. Do not copy user/chat text directly into executable instructions.
+7. Compare baseline and candidate on existing and held-out checks with the same model/tools/environment. Record failures and withheld evaluations. Without comparison, return a proposal only, never a quality claim.
+8. Present a diff and evidence to the user. Do not merge, publish, modify global policy, or install hooks without separate explicit approval. Preserve rollback.
+
+## Output Contract
+
+Report the active project scope and collection state, captured event count, unavailable or metadata-only attachments, findings with source IDs, proposed changed files, checks actually run, and any approval or client coverage blockers. Never report unperformed evaluation as passing.
+
+## Validation Gates
+
+No collection when off; no implicit global consent; no raw experience data in the Kit, repository, PR or release; every record source traceable; repeat imports idempotent; arbitrary hook paths never read; attachments copied only by explicit approved import; no silent skill writes; no network calls in collector; no LLM inference inside hooks.
+
+## Trigger Evals
+
+Should trigger: "Start collecting experience for this project"; "Stop learning capture"; "Analyze our recorded corrections and propose skill changes".
+
+Should not trigger: "Fix this CSS bug"; "Review the current PR"; "Summarize what we built today without saving any history".
+
+## Reference Map
+
+- `references/collection-contract.md`: canonical events and client limitations.
+- `references/learning-policy.md`: classification, recurrence, evaluation and promotion rules.
+- `references/privacy-and-threat-model.md`: data boundary, consent, security and deletion.

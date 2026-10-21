@@ -77,6 +77,7 @@ Select skills by name and description; explicit invocation is optional. Each `SK
 - Build: `frontend-architecture-planner` defines ownership; `greenfield-project-builder` plans a first vertical slice; `frontend-layout-implementer` implements an approved spec in its target stack.
 - Quality: `frontend-bugfix-debugger` fixes evidence-first defects; `frontend-refactor-surgeon` preserves behavior; `frontend-linter-manager` runs or repairs scoped lint; `frontend-visual-qa` checks rendered evidence; `frontend-quality-reviewer` performs independent review.
 - Context and tooling: `project-onboarding-adapter` initializes pointers and local facts; `project-context-adapter` refreshes them; `mcp-toolchain-manager` maps tool capabilities; `pattern-library-manager` maintains reusable patterns; `agent-rules-skill-author` maintains this bundle.
+- Learning (opt-in): `agent-self-improvement` manages local private experience capture and review-only proposals; collection is off until explicitly enabled. Never assume access to unexposed attachments.
 - Updates: `webdev-kit-updater` reconciles installed versions with upstream diffs, preserving local changes.
 
 ## Change Boundaries

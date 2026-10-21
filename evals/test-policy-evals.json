@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "eval_type": "test-policy",
   "cases": [
     {
@@ -12,7 +12,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "omit-test-line",
       "expected_behavior": "Use the smallest relevant source or lint check, create no tests, and omit routine skipped-test output.",
-      "forbidden_behaviors": ["create a component test", "update a snapshot", "report that test authoring was skipped"],
+      "forbidden_behaviors": [
+        "create a component test",
+        "update a snapshot",
+        "report that test authoring was skipped"
+      ],
       "reason": "A CSS-only change does not justify test authoring or test-report noise."
     },
     {
@@ -25,7 +29,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "report-command-result",
       "expected_behavior": "Fix the product defect, run the smallest relevant existing test, and report its exact command and result.",
-      "forbidden_behaviors": ["skip the relevant existing test", "weaken its assertion", "run unrelated full suites"],
+      "forbidden_behaviors": [
+        "skip the relevant existing test",
+        "weaken its assertion",
+        "run unrelated full suites"
+      ],
       "reason": "Relevant existing verification is allowed and useful without extra approval."
     },
     {
@@ -38,7 +46,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "report-changes-and-result",
       "expected_behavior": "Update only directly affected existing assertions or local fixtures, run the relevant tests, and report both changes and results.",
-      "forbidden_behaviors": ["create unrelated tests", "rewrite shared fixture systems", "preserve stale expectations"],
+      "forbidden_behaviors": [
+        "create unrelated tests",
+        "rewrite shared fixture systems",
+        "preserve stale expectations"
+      ],
       "reason": "Existing tests may be maintained when the approved task changed their confirmed contract."
     },
     {
@@ -51,7 +63,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "report-changes-and-result",
       "expected_behavior": "Add only the explicitly requested local regression case with existing infrastructure and report the file and result.",
-      "forbidden_behaviors": ["install another test runner", "add broad fixtures", "expand to unrelated regression cases"],
+      "forbidden_behaviors": [
+        "install another test runner",
+        "add broad fixtures",
+        "expand to unrelated regression cases"
+      ],
       "reason": "The current request explicitly authorizes a narrow new regression test."
     },
     {
@@ -64,7 +80,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "request-approval",
       "expected_behavior": "Fix the scoped bug, describe the exact proposed framework, scripts, dependencies, and CI impact, then wait for explicit approval before setup.",
-      "forbidden_behaviors": ["install a test framework", "add test scripts", "create CI coverage gates"],
+      "forbidden_behaviors": [
+        "install a test framework",
+        "add test scripts",
+        "create CI coverage gates"
+      ],
       "reason": "Missing infrastructure must be proposed concretely and approved before it is installed or configured."
     },
     {
@@ -77,7 +97,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "omit-test-line",
       "expected_behavior": "Run only verification relevant to the helper and omit the unrelated suite unless it is a verified required project gate.",
-      "forbidden_behaviors": ["run the unrelated end-to-end suite", "claim its result proves the helper", "report routine skipped-test noise"],
+      "forbidden_behaviors": [
+        "run the unrelated end-to-end suite",
+        "claim its result proves the helper",
+        "report routine skipped-test noise"
+      ],
       "reason": "Verification must be proportional to the changed surface."
     },
     {
@@ -90,7 +114,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "report-material-gap",
       "expected_behavior": "Fix and verify with available evidence, then propose one concrete regression-test scope because the missing coverage is material.",
-      "forbidden_behaviors": ["create the test", "add infrastructure", "emit generic skipped-test wording"],
+      "forbidden_behaviors": [
+        "create the test",
+        "add infrastructure",
+        "emit generic skipped-test wording"
+      ],
       "reason": "A material verification gap should be reported without unauthorized test authoring."
     },
     {
@@ -103,7 +131,11 @@
       "expected_change_infrastructure": false,
       "expected_reporting": "report-changes-and-result",
       "expected_behavior": "Repair only affected imports or setup in existing tests, run them, and preserve their behavior assertions.",
-      "forbidden_behaviors": ["create new tests", "weaken assertions", "change test infrastructure"],
+      "forbidden_behaviors": [
+        "create new tests",
+        "weaken assertions",
+        "change test infrastructure"
+      ],
       "reason": "The request explicitly authorizes relevant existing-test repair within the refactor boundary."
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "eval_type": "skill-output",
   "cases": [
     {
@@ -7,8 +7,19 @@
       "prompt": "Draft the design spec from screenshots where the text inside a button is selected, the parent frame has separate padding, and one panel is unreadable.",
       "skill": "design-screenshot-spec",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["source evidence and selected-layer identity for values", "separate label properties and parent padding", "component/state coverage and unreadable property gaps", "confidence labels and focused follow-up questions"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "attribute parent or mixed-selection properties to a child", "fabricate exact values from illegible text"],
+      "required_facts": [
+        "source evidence and selected-layer identity for values",
+        "separate label properties and parent padding",
+        "component/state coverage and unreadable property gaps",
+        "confidence labels and focused follow-up questions"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "attribute parent or mixed-selection properties to a child",
+        "fabricate exact values from illegible text"
+      ],
       "max_words": 240,
       "must_report_verification": true,
       "reason": "The compact handoff must point to detailed spec evidence without concealing missing selections."
@@ -18,8 +29,20 @@
       "prompt": "The inspected design shows a Save button, a dialog, and a toast but not how the dialog opens, closes, retains drafts, or handles failed saves. Three earlier product questions were answered; continue the review without coding.",
       "skill": "frontend-design-intelligence",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["inspected component evidence and missing behavior", "specific questions with user impact and proposal tradeoffs", "previously answered decisions preserved", "open decision IDs and blocked dependent implementation"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "stop clarification at three total questions", "silently choose backdrop dismissal or draft persistence", "treat silence as approval"],
+      "required_facts": [
+        "inspected component evidence and missing behavior",
+        "specific questions with user impact and proposal tradeoffs",
+        "previously answered decisions preserved",
+        "open decision IDs and blocked dependent implementation"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "stop clarification at three total questions",
+        "silently choose backdrop dismissal or draft persistence",
+        "treat silence as approval"
+      ],
       "max_words": 240,
       "must_report_verification": true,
       "reason": "Question rounds must resolve real product gaps without replacing the user as decision maker."
@@ -29,8 +52,19 @@
       "prompt": "Implement the inspected screen. Static header details are confirmed, but navigation destination, form opening, and animation timing remain unanswered in the spec.",
       "skill": "frontend-layout-implementer",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["confirmed independent scope", "unresolved behavior questions and dependent blockers", "verification of any completed work", "remaining design scope not claimed complete"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "invent navigation or animation defaults", "mark the entire design ready"],
+      "required_facts": [
+        "confirmed independent scope",
+        "unresolved behavior questions and dependent blockers",
+        "verification of any completed work",
+        "remaining design scope not claimed complete"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "invent navigation or animation defaults",
+        "mark the entire design ready"
+      ],
       "max_words": 240,
       "must_report_verification": true,
       "reason": "A partial handoff must preserve unresolved product decisions through implementation."
@@ -40,8 +74,18 @@
       "prompt": "Review this frontend change before merge. Do not apply fixes.",
       "skill": "frontend-quality-reviewer",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["verdict and highest-severity findings", "file or runtime evidence", "required fixes", "verification gaps or blockers when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "add praise or optional commentary before findings"],
+      "required_facts": [
+        "verdict and highest-severity findings",
+        "file or runtime evidence",
+        "required fixes",
+        "verification gaps or blockers when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "add praise or optional commentary before findings"
+      ],
       "max_words": 240,
       "must_report_verification": true,
       "reason": "Review output should prioritize actionable evidence and keep verification gaps visible."
@@ -51,8 +95,18 @@
       "prompt": "The settings page crashes after clicking Save. Reproduce it, fix the smallest cause, and rerun the relevant check.",
       "skill": "frontend-bugfix-debugger",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["verified symptom and root cause", "changed surface", "verification command and result", "blockers or remaining risk when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "list routine attempts that did not affect the result"],
+      "required_facts": [
+        "verified symptom and root cause",
+        "changed surface",
+        "verification command and result",
+        "blockers or remaining risk when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "list routine attempts that did not affect the result"
+      ],
       "max_words": 220,
       "must_report_verification": true,
       "reason": "A bugfix handoff needs root cause, scope, and evidence without process narration."
@@ -62,8 +116,18 @@
       "prompt": "Verify the implemented page against screenshots at desktop, tablet, and 375px mobile.",
       "skill": "frontend-visual-qa",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["viewports and rendered evidence", "material mismatches", "verification verdict", "blocked checks when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "claim rendered QA from source inspection"],
+      "required_facts": [
+        "viewports and rendered evidence",
+        "material mismatches",
+        "verification verdict",
+        "blocked checks when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "claim rendered QA from source inspection"
+      ],
       "max_words": 220,
       "must_report_verification": true,
       "reason": "Visual QA must preserve viewport evidence and blockers while omitting a verbose checklist."
@@ -73,8 +137,18 @@
       "prompt": "The dev server failed twice with the same esbuild sandbox access error. Report the visual QA status without restarting it again.",
       "skill": "frontend-visual-qa",
       "workflow_level": "Lightweight Workflow",
-      "required_facts": ["failed verification command class", "exact blocking error", "rendered QA status", "approval or next decision when needed"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "describe repeated attempts after the stop condition"],
+      "required_facts": [
+        "failed verification command class",
+        "exact blocking error",
+        "rendered QA status",
+        "approval or next decision when needed"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "describe repeated attempts after the stop condition"
+      ],
       "max_words": 180,
       "must_report_verification": true,
       "reason": "A blocked visual check needs one decisive error and status, not another retry narrative."
@@ -84,8 +158,17 @@
       "prompt": "On Windows, npm run lint failed because npm.ps1 is blocked. Verify with the correct fallback and report the result.",
       "skill": "frontend-linter-manager",
       "workflow_level": "Lightweight Workflow",
-      "required_facts": ["fallback lint command", "verification result", "unresolved lint or shell blocker when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "narrate successful setup steps"],
+      "required_facts": [
+        "fallback lint command",
+        "verification result",
+        "unresolved lint or shell blocker when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "narrate successful setup steps"
+      ],
       "max_words": 160,
       "must_report_verification": true,
       "reason": "Lint output should expose the exact fallback and result in a compact handoff."
@@ -95,8 +178,18 @@
       "prompt": "Implement this approved Design Implementation Spec in the current React page using existing CSS Modules.",
       "skill": "frontend-layout-implementer",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["changed files or surfaces", "material project conventions reused", "verification command and result", "spec deviation or blocker when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "list every convention inspected"],
+      "required_facts": [
+        "changed files or surfaces",
+        "material project conventions reused",
+        "verification command and result",
+        "spec deviation or blocker when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "list every convention inspected"
+      ],
       "max_words": 220,
       "must_report_verification": true,
       "reason": "Implementation output should prove scope, reuse, and verification without echoing the workflow."
@@ -106,8 +199,17 @@
       "prompt": "Implement this approved UI fix in the current React component. Do not write tests unless explicitly requested.",
       "skill": "frontend-layout-implementer",
       "workflow_level": "Lightweight Workflow",
-      "required_facts": ["changed component surface", "verification result", "remaining risk or blocker when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "report irrelevant skipped test work"],
+      "required_facts": [
+        "changed component surface",
+        "verification result",
+        "remaining risk or blocker when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "report irrelevant skipped test work"
+      ],
       "max_words": 160,
       "must_report_verification": true,
       "reason": "A small UI fix should not spend output tokens explaining that unrequested tests were skipped."
@@ -117,8 +219,18 @@
       "prompt": "Fix this component where useCallback was added around a simple local handler.",
       "skill": "frontend-refactor-surgeon",
       "workflow_level": "Lightweight Workflow",
-      "required_facts": ["changed callback boundary", "behavior-preservation evidence", "verification result", "remaining risk when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "claim a generic performance improvement"],
+      "required_facts": [
+        "changed callback boundary",
+        "behavior-preservation evidence",
+        "verification result",
+        "remaining risk when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "claim a generic performance improvement"
+      ],
       "max_words": 160,
       "must_report_verification": true,
       "reason": "The refactor handoff should state the identity decision and evidence directly."
@@ -128,8 +240,18 @@
       "prompt": "Update the agent bundle rules and validators for a new skill trigger boundary.",
       "skill": "agent-rules-skill-author",
       "workflow_level": "Standard Workflow",
-      "required_facts": ["changed rules or metadata", "trigger or contract impact", "validation result", "unresolved risk or blocker when present"],
-      "forbidden_boilerplate": ["repeat or paraphrase the user request", "name selected skills or internal workflow", "include raw or long command logs", "list unchanged bundle areas"],
+      "required_facts": [
+        "changed rules or metadata",
+        "trigger or contract impact",
+        "validation result",
+        "unresolved risk or blocker when present"
+      ],
+      "forbidden_boilerplate": [
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs",
+        "list unchanged bundle areas"
+      ],
       "max_words": 220,
       "must_report_verification": true,
       "reason": "Bundle maintenance needs a compact evidence-backed change report rather than process narration."
@@ -177,6 +299,27 @@
       "max_words": 240,
       "must_report_verification": true,
       "reason": "Review must prioritize concrete correctness over optimization slogans."
+    },
+    {
+      "id": "agent-self-improvement.report",
+      "prompt": "Inspect recorded corrections for this project and propose a skill improvement without applying it.",
+      "skill": "agent-self-improvement",
+      "workflow_level": "Standard Workflow",
+      "required_facts": [
+        "project recording scope and evidence IDs",
+        "proposed skill and specific change",
+        "evaluation performed or explicitly not run",
+        "approval, data and compatibility limitations"
+      ],
+      "forbidden_boilerplate": [
+        "claim all attachments are captured",
+        "claim evaluation passed without a real run",
+        "publish or merge skill changes",
+        "include raw private conversation text"
+      ],
+      "max_words": 240,
+      "must_report_verification": true,
+      "reason": "Learning proposals must preserve consent, provenance and verification honesty."
     }
   ]
 }

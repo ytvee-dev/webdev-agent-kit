@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "eval_type": "planning-integrity",
   "cases": [
     {
@@ -8,9 +8,15 @@
       "planning_action": "lightweight-bypass",
       "expected_mode": "none",
       "expected_write_scope": "none",
-      "required_contracts": ["lightweight-bypass"],
+      "required_contracts": [
+        "lightweight-bypass"
+      ],
       "expected_behavior": "Keep the isolated edit lightweight and do not create durable goal or execution-plan artifacts.",
-      "forbidden_behaviors": ["create goal identifiers", "write an execution plan", "start planning analysis"],
+      "forbidden_behaviors": [
+        "create goal identifiers",
+        "write an execution plan",
+        "start planning analysis"
+      ],
       "reason": "Traceability must not add ceremony to a lightweight direct fix."
     },
     {
@@ -19,9 +25,15 @@
       "planning_action": "clarify-one-at-a-time",
       "expected_mode": "create",
       "expected_write_scope": "none",
-      "required_contracts": ["single-question"],
+      "required_contracts": [
+        "single-question"
+      ],
       "expected_behavior": "Ask the single highest-impact material question and wait before asking another or finalizing the goal.",
-      "forbidden_behaviors": ["ask a batch of questions", "write an assumed goal", "ask implementation trivia"],
+      "forbidden_behaviors": [
+        "ask a batch of questions",
+        "write an assumed goal",
+        "ask implementation trivia"
+      ],
       "reason": "Sequential clarification should reduce ambiguity without front-loading a questionnaire."
     },
     {
@@ -30,9 +42,15 @@
       "planning_action": "clarify-limit",
       "expected_mode": "create",
       "expected_write_scope": "goal-contract",
-      "required_contracts": ["three-question-limit"],
+      "required_contracts": [
+        "three-question-limit"
+      ],
       "expected_behavior": "Stop at three clarification questions, record accepted answers, and proceed with explicit assumptions or blockers.",
-      "forbidden_behaviors": ["ask a fourth routine question", "discard accepted answers", "hide a blocking ambiguity"],
+      "forbidden_behaviors": [
+        "ask a fourth routine question",
+        "discard accepted answers",
+        "hide a blocking ambiguity"
+      ],
       "reason": "The clarification gate has a deterministic upper bound."
     },
     {
@@ -41,9 +59,15 @@
       "planning_action": "coverage-complete",
       "expected_mode": "create",
       "expected_write_scope": "active-plan",
-      "required_contracts": ["criterion-slice-verification"],
+      "required_contracts": [
+        "criterion-slice-verification"
+      ],
       "expected_behavior": "Map every active AC identifier to at least one stable slice and one named verification source.",
-      "forbidden_behaviors": ["leave an active criterion uncovered", "treat a completed slice as verification", "duplicate criterion prose"],
+      "forbidden_behaviors": [
+        "leave an active criterion uncovered",
+        "treat a completed slice as verification",
+        "duplicate criterion prose"
+      ],
       "reason": "Coverage makes the durable plan traceable and independently checkable."
     },
     {
@@ -52,9 +76,15 @@
       "planning_action": "enabler-dependencies",
       "expected_mode": "create",
       "expected_write_scope": "active-plan",
-      "required_contracts": ["enabler-downstream"],
+      "required_contracts": [
+        "enabler-downstream"
+      ],
       "expected_behavior": "Label the slice ENABLER and name the approved downstream slice identifiers it unlocks.",
-      "forbidden_behaviors": ["claim criterion coverage", "add generic setup", "omit downstream slices"],
+      "forbidden_behaviors": [
+        "claim criterion coverage",
+        "add generic setup",
+        "omit downstream slices"
+      ],
       "reason": "Enabling work needs a bounded dependency purpose rather than invented acceptance coverage."
     },
     {
@@ -63,9 +93,15 @@
       "planning_action": "analyze-read-only",
       "expected_mode": "analyze",
       "expected_write_scope": "none",
-      "required_contracts": ["read-only-analysis"],
+      "required_contracts": [
+        "read-only-analysis"
+      ],
       "expected_behavior": "Return deterministic PA findings from the confirmed plan and evidence without editing or auto-remediating it.",
-      "forbidden_behaviors": ["edit the plan", "implement a recommendation", "install a tool"],
+      "forbidden_behaviors": [
+        "edit the plan",
+        "implement a recommendation",
+        "install a tool"
+      ],
       "reason": "Pre-implementation analysis must remain repeatable and read-only."
     },
     {
@@ -74,9 +110,15 @@
       "planning_action": "analyze-blocking-gap",
       "expected_mode": "analyze",
       "expected_write_scope": "none",
-      "required_contracts": ["blocking-handoff"],
+      "required_contracts": [
+        "blocking-handoff"
+      ],
       "expected_behavior": "Report the uncovered criterion with evidence and stop implementation handoff until the plan is repaired.",
-      "forbidden_behaviors": ["allow implementation to proceed", "silently add a slice", "mark the criterion verified"],
+      "forbidden_behaviors": [
+        "allow implementation to proceed",
+        "silently add a slice",
+        "mark the criterion verified"
+      ],
       "reason": "Blocking coverage gaps must prevent an unsafe implementation handoff."
     },
     {
@@ -85,9 +127,15 @@
       "planning_action": "converge-append-only",
       "expected_mode": "converge",
       "expected_write_scope": "active-plan-append",
-      "required_contracts": ["append-only-pass"],
+      "required_contracts": [
+        "append-only-pass"
+      ],
       "expected_behavior": "Append one convergence pass with stable findings and new slice identifiers after the existing maximum.",
-      "forbidden_behaviors": ["rewrite prior slices", "renumber identifiers", "change implementation files"],
+      "forbidden_behaviors": [
+        "rewrite prior slices",
+        "renumber identifiers",
+        "change implementation files"
+      ],
       "reason": "Remaining work should be added without erasing execution history."
     },
     {
@@ -96,9 +144,15 @@
       "planning_action": "converge-clean-noop",
       "expected_mode": "converge",
       "expected_write_scope": "none",
-      "required_contracts": ["byte-identical-noop"],
+      "required_contracts": [
+        "byte-identical-noop"
+      ],
       "expected_behavior": "Report alignment and leave the durable plan byte-for-byte unchanged.",
-      "forbidden_behaviors": ["append an empty pass", "add a success timestamp", "reformat the plan"],
+      "forbidden_behaviors": [
+        "append an empty pass",
+        "add a success timestamp",
+        "reformat the plan"
+      ],
       "reason": "A clean convergence pass must not create noisy plan churn."
     },
     {
@@ -107,9 +161,15 @@
       "planning_action": "current-request-reconcile",
       "expected_mode": "resume",
       "expected_write_scope": "active-plan",
-      "required_contracts": ["current-request-precedence"],
+      "required_contracts": [
+        "current-request-precedence"
+      ],
       "expected_behavior": "Reconcile the current scoped request into goal and plan state before convergence while preserving unrelated approval gates.",
-      "forbidden_behaviors": ["follow the stale plan", "converge against old intent", "infer broader settings approval"],
+      "forbidden_behaviors": [
+        "follow the stale plan",
+        "converge against old intent",
+        "infer broader settings approval"
+      ],
       "reason": "Durable artifacts cannot override a newer direct user request."
     },
     {
@@ -118,9 +178,15 @@
       "planning_action": "review-no-slices",
       "expected_mode": "none",
       "expected_write_scope": "none",
-      "required_contracts": ["reviewer-no-plan-mutation"],
+      "required_contracts": [
+        "reviewer-no-plan-mutation"
+      ],
       "expected_behavior": "Judge each criterion from coverage evidence and hand remaining work to convergence without creating slices.",
-      "forbidden_behaviors": ["append a slice", "renumber the plan", "implement review fixes"],
+      "forbidden_behaviors": [
+        "append a slice",
+        "renumber the plan",
+        "implement review fixes"
+      ],
       "reason": "Independent judgment and remaining-work planning must stay separate."
     },
     {
@@ -129,9 +195,15 @@
       "planning_action": "resume-stable-ids",
       "expected_mode": "resume",
       "expected_write_scope": "active-plan",
-      "required_contracts": ["stable-resume-identifiers"],
+      "required_contracts": [
+        "stable-resume-identifiers"
+      ],
       "expected_behavior": "Reuse AC-003 and S-004 across retry history, evidence, progress, and the exact next-slice pointer.",
-      "forbidden_behaviors": ["create replacement identifiers", "start a second status model", "repeat the failed strategy without new evidence"],
+      "forbidden_behaviors": [
+        "create replacement identifiers",
+        "start a second status model",
+        "repeat the failed strategy without new evidence"
+      ],
       "reason": "Loop and resume state must preserve one traceable planning model."
     },
     {
@@ -140,9 +212,15 @@
       "planning_action": "client-parity",
       "expected_mode": "analyze",
       "expected_write_scope": "none",
-      "required_contracts": ["cross-client-portability"],
+      "required_contracts": [
+        "cross-client-portability"
+      ],
       "expected_behavior": "Apply the same planning modes, identifiers, severity gate, and no-write boundary on both supported clients.",
-      "forbidden_behaviors": ["require a host-specific planning command", "change findings by client", "edit the plan"],
+      "forbidden_behaviors": [
+        "require a host-specific planning command",
+        "change findings by client",
+        "edit the plan"
+      ],
       "reason": "Planning integrity is a portable contract rather than a client-specific feature."
     }
   ]
