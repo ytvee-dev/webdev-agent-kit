@@ -1,3 +1,20 @@
+---
+id: 'agents.skills.agent-self-improvement.assets.integrations'
+title: 'Client Integration Examples'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'draft'
+publishable: true
+local_only: false
+skill: 'agent-self-improvement'
+tags:
+    - 'agents/learning'
+parent:
+    - '[[skills/agent-self-improvement/SKILL|Agent Self Improvement]]'
+related: []
+depends_on: []
+---
+
 # Optional client integrations (preview)
 
 These examples are **not activated on installation**. Install only after an explicit project opt-in with `python <absolute-path-to-learning.py> on --project <absolute-project-root>`. Review existing client config and preserve its existing hooks.

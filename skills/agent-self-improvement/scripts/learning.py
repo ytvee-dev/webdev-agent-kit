@@ -9,7 +9,7 @@ import sqlite3
 import sys
 import tempfile
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 MAX_EVENT_BYTES = 262144
@@ -256,7 +256,6 @@ def purge(conn, state, project, session=None):
     else:
         conn.execute("DELETE FROM events WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM attachments WHERE project_id=?", (pid,))
-        conn.execute("DELETE FROM runs WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM projects WHERE id=?", (pid,))
     # Derived reports must be removed too; they can contain purged source text.
     prior_runs = [row[0] for row in conn.execute("SELECT id FROM runs WHERE project_id=?", (pid,))]

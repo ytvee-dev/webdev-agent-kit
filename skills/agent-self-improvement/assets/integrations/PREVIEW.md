@@ -1,3 +1,20 @@
+---
+id: 'agents.skills.agent-self-improvement.assets.preview'
+title: 'Preview Integration Status'
+doc_type: 'skill-reference'
+layer: 'skill'
+status: 'draft'
+publishable: true
+local_only: false
+skill: 'agent-self-improvement'
+tags:
+    - 'agents/learning'
+parent:
+    - '[[skills/agent-self-improvement/SKILL|Agent Self Improvement]]'
+related: []
+depends_on: []
+---
+
 # Preview integration status
 
 The optional bridge receives Codex/Claude lifecycle JSON over stdin, stores user prompts and tool-name metadata in the private local store, and ignores the host transcript path rather than reading arbitrary client files. It does not claim to capture all assistant messages or uploaded attachment bytes.
