@@ -311,6 +311,11 @@ def apply(args):
             or proposal.get("state") != "needs_review"
             or not proposal.get("checks", {}).get("structural_passed")):
         raise ValueError("Explicit --approve and successful check are required")
+    checked = proposal.get("checks", {})
+    benchmark_passed = checked.get("behavioral_passed") is True
+    if not benchmark_passed and not args.accept_unevaluated:
+        raise ValueError("Missing successful live benchmark: run learning_benchmark.py or "
+                         "explicitly acknowledge with --accept-unevaluated")
     edits = render_changes(proposal, repo)
     completed = []
     try:
@@ -323,6 +328,7 @@ def apply(args):
             (repo / name).write_text(old, encoding="utf-8")
         raise
     proposal["state"] = "applied"
+    proposal["accepted_without_benchmark"] = not benchmark_passed
     proposal["applied_at"] = datetime.now(UTC).isoformat()
     write_json(path, proposal)
     return {"result": "applied", "files": [name for name, _a, _b in edits],
@@ -383,6 +389,8 @@ def main():
     a.add_argument("--repo", required=True)
     a.add_argument("--proposal", required=True)
     a.add_argument("--approve", action="store_true")
+    a.add_argument("--accept-unevaluated", action="store_true",
+                   help="Explicit manual bypass when no live held-out benchmark passed")
     args = parser.parse_args()
     if args.cmd == "propose":
         answer = propose(args)
