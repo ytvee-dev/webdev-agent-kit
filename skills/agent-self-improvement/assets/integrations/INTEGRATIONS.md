@@ -85,7 +85,7 @@ python "$skill\scripts\learning_cycle.py" auto --project "$project" --repo "$rep
 # Or: --engine opencode
 ```
 
-The command uses your already-authorized CLI/model, processes the recent permitted experiences, generates a restricted proposal and runs structural validation in a disposable directory. If accepted, read the saved `proposal.json` and `.diff`, then apply explicitly:
+The command uses your already-authorized CLI/model, processes the recent permitted experiences, selects up to six relevant skills (preferring observed invocations), generates a restricted proposal and runs structural validation in a disposable directory. For a specific target, add `--skill frontend-bugfix-debugger` (repeatable). It never loads every skill into one prompt. If accepted, read the saved `proposal.json` and `.diff`, then apply explicitly:
 
 ```powershell
 python "$skill\scripts\learning_cycle.py" apply --repo "$repo" --proposal "C:\path\to\proposal.json" --approve
