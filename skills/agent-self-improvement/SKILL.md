@@ -17,6 +17,11 @@ parent:
 related:
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
     - '[[common/context-compaction-rules|Context Compaction Rules]]'
+    - '[[skills/agent-self-improvement/references/collection-contract|Collection Contract]]'
+    - '[[skills/agent-self-improvement/references/learning-policy|Learning Policy]]'
+    - '[[skills/agent-self-improvement/references/privacy-and-threat-model|Privacy And Threat Model]]'
+    - '[[skills/agent-self-improvement/assets/integrations/INTEGRATIONS|Client Integrations]]'
+    - '[[skills/agent-self-improvement/assets/integrations/PREVIEW|Integration Preview]]'
 depends_on:
     - '[[AGENTS|Canonical Agent Policy]]'
 ---
