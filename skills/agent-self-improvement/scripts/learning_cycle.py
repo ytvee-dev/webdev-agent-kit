@@ -95,16 +95,8 @@ def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
         elif engine == "opencode":
             env = os.environ.copy()
             env["OPENCODE_CONFIG_CONTENT"] = json.dumps({
-                "permission": {
-                    "edit": "deny", "bash": "deny", "shell": "deny",
-                    "webfetch": "deny", "websearch": "deny",
-                    "task": "deny", "external_directory": "deny",
-                },
-                "agent": {"plan": {
-                    "permission": {"edit": "deny", "bash": "deny",
-                                   "shell": "deny", "task": "deny",
-                                   "external_directory": "deny"},
-                }},
+                "permission": {"*": "deny", "read": "allow"},
+                "agent": {"plan": {"permission": {"*": "deny", "read": "allow"}}},
             })
             evidence_file = directory / "experience.txt"
             evidence_file.write_text(prompt, encoding="utf-8")
