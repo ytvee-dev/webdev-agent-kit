@@ -91,7 +91,36 @@ The command uses your already-authorized CLI/model, processes the recent permitt
 python "$skill\scripts\learning_cycle.py" apply --repo "$repo" --proposal "C:\path\to\proposal.json" --approve
 ```
 
-This does **not** prove improved performance on unseen tasks. Evaluate the changed skill's behavior separately before merging or publishing it.
+Before applying, supply independent held-out cases for the affected skill. The benchmark compares **baseline vs. candidate** under the same configured model and records per-case assertions:
+
+```powershell
+python "$skill\scripts\learning_benchmark.py" --repo "$repo" --proposal "C:\path\to\proposal.json" --cases "C:\path\to\heldout-cases.json" --engine codex
+# Or: --engine opencode
+```
+
+Each case specifies an id, changed skill path, independent task prompt, and required/forbidden phrases:
+
+```json
+{
+  "cases": [
+    {
+      "id": "correctness-1",
+      "skill": "skills/frontend-bugfix-debugger/SKILL.md",
+      "task": "A user reports the button no longer saves. Describe what you would do.",
+      "required": ["reproduce", "verify"],
+      "forbidden": ["skip verification"]
+    }
+  ]
+}
+```
+
+Cases must be defined independently of the training examples. These lexical assertions are only a *minimum regression screen*, not proof of task success. For live coding quality, also run the Kit's existing full-agent behavior fixtures and review traces. A **synthetic replay cannot unlock live benchmark approval**. To apply without a live benchmark, the user must acknowledge the evaluation gap explicitly:
+
+```powershell
+python "$skill\scripts\learning_cycle.py" apply --repo "$repo" --proposal "C:\path\to\proposal.json" --approve --accept-unevaluated
+```
+
+Do not use the bypass for automatic scheduled jobs.
 
 ## Nightly Windows scheduling
 
