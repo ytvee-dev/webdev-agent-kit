@@ -24,6 +24,7 @@ To install, locate `hook_bridge.py` inside the extracted `skills/agent-self-impr
 For the OpenCode pilot, copy `opencode/experience-recorder.js` to the local plugin directory and point `AGENT_LEARNING_SCRIPT` to the absolute installed learning CLI. The plugin reads messages on `session.idle`, after checking that learning is enabled for that project.
 
 Explicit file import example:
+
 ```sh
 python /absolute/path/to/learning.py attach --project /path/to/project --client opencode --session session123 --file /approved/path/screenshot.png
 ```
