@@ -64,7 +64,22 @@ def skill_inventory(repo):
     return skills
 
 
-def model_suggestion(engine, prompt, timeout):
+def selected_attachments(state, project, observations):
+    sessions = {event["session"] for event in observations}
+    if not sessions:
+        return []
+    with sqlite3.connect(state / "experience.sqlite3") as conn:
+        rows = conn.execute(
+            "SELECT session_id, digest, display_name FROM attachments WHERE project_id=? "
+            "ORDER BY rowid DESC LIMIT 80", (project_id(project),)
+        ).fetchall()
+    return [
+        {"session": session, "digest": digest, "name": name}
+        for session, digest, name in rows if session in sessions
+    ][:6]
+
+
+def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
     with tempfile.TemporaryDirectory(prefix="learning-analysis-") as folder:
         directory = Path(folder)
         if engine == "codex":
@@ -97,8 +112,21 @@ def model_suggestion(engine, prompt, timeout):
             command = [
                 "opencode", "run", "--agent", "plan", "--format", "json",
                 "--dir", str(directory), "--file", str(evidence_file),
-                "Return a strict JSON skill proposal based only on the attached evidence.",
             ]
+            for number, item in enumerate(attachments):
+                blob = state / "blobs" / item["digest"][:2] / item["digest"]
+                if not blob.is_file() or blob.stat().st_size > 5 * 1024 * 1024:
+                    continue
+                data = blob.read_bytes()
+                if hashlib.sha256(data).hexdigest() != item["digest"]:
+                    continue
+                suffix = Path(item["name"]).suffix.lower()
+                if suffix not in {".png", ".jpg", ".jpeg", ".webp", ".pdf", ".txt"}:
+                    continue
+                copied = directory / ("evidence-" + str(number) + suffix)
+                copied.write_bytes(data)
+                command.extend(["--file", str(copied)])
+            command.append("Return a strict JSON skill proposal from the attached evidence.")
             result = subprocess.run(
                 command, cwd=directory, env=env, text=True,
                 capture_output=True, timeout=timeout, check=False,
@@ -170,6 +198,7 @@ def propose(args):
     if not items:
         return {"result": "no_change", "reason": "No recorded experience"}
     skills = skill_inventory(repo)
+    attachments = selected_attachments(state, project, items)
     if args.proposal_file:
         response = read_json(args.proposal_file)
     elif args.engine:
@@ -184,7 +213,8 @@ def propose(args):
             + json.dumps(items, ensure_ascii=False)
             + "\nSKILLS:\n" + json.dumps(skills, ensure_ascii=False)
         )
-        response = model_suggestion(args.engine, prompt, args.timeout)
+        prompt += "\nATTACHMENT METADATA:\n" + json.dumps(attachments, ensure_ascii=False)
+        response = model_suggestion(args.engine, prompt, args.timeout, attachments, state)
     else:
         return {"result": "needs_model", "events": len(items),
                 "hint": "Pass --engine codex/opencode or --proposal-file"}
