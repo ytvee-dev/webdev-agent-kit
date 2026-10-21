@@ -150,6 +150,10 @@ def validate_candidate(candidate, skills, observations):
             raise ValueError("Missing known evidence IDs")
         if skills[path]["content"].count(before) != 1:
             raise ValueError("Old snippet not found exactly once")
+        source = skills[path]["content"]
+        body_start = source.find("\n---\n", 4)
+        if source.startswith("---\n") and body_start >= 0 and source.index(before) < body_start + 5:
+            raise ValueError("Automated frontmatter changes are forbidden")
         if "permission:" in after or "allowed-tools:" in after:
             raise ValueError("Permission changes are forbidden in unattended proposals")
         touched.add(path)

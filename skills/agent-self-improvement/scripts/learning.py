@@ -17,6 +17,7 @@ from pathlib import Path
 MAX_EVENT_BYTES = 262144
 MAX_TEXT = 65536
 MAX_ATTACHMENT = 20 * 1024 * 1024
+MAX_TOTAL_BLOBS = 2 * 1024 * 1024 * 1024
 KINDS = {"user", "assistant", "tool", "user_correction", "system_event"}
 TOKEN_PATTERNS = [
     re.compile(r"(?i)(bearer\s+)[a-z0-9._~+/\-]{10,}"),
@@ -187,6 +188,10 @@ def store_bytes(conn, state, project, client, session, filename, data):
     if len(data) > MAX_ATTACHMENT:
         raise ValueError("Attachment exceeds 20 MiB")
     digest = hashlib.sha256(data).hexdigest()
+    total = conn.execute("SELECT COALESCE(SUM(size),0) FROM blobs").fetchone()[0]
+    known = conn.execute("SELECT 1 FROM blobs WHERE digest=?", (digest,)).fetchone()
+    if not known and total + len(data) > MAX_TOTAL_BLOBS:
+        raise ValueError("Private attachment storage exceeds 2 GiB quota")
     dest = state / "blobs" / digest[:2] / digest
     dest.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     if not dest.exists():
@@ -225,10 +230,8 @@ def attach_data(conn, state, project, item):
     if not separator or not head.startswith("data:") or not head.endswith(";base64"):
         raise ValueError("Only base64 inline data URLs are supported")
     mime = head[5:-7].lower()
-    allowed = {"image/png", "image/jpeg", "image/webp", "image/gif",
-               "application/pdf", "text/plain"}
-    if mime not in allowed:
-        raise ValueError("Unsupported inline attachment type")
+    if not re.fullmatch(r"[a-z0-9.+-]+/[a-z0-9.+-]+", mime):
+        raise ValueError("Unsupported inline attachment MIME format")
     try:
         payload = base64.b64decode(encoded, validate=True)
     except binascii.Error as exc:

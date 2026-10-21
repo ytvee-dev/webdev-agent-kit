@@ -85,8 +85,8 @@ export const ExperienceRecorder = async ({ client, directory }) => {
       }
 
       // Re-reading on every idle event is safe: the database deduplicates by part ID.
-      for (let index = 0; index < records.length; index += 400) {
-        await run("capture-batch", records.slice(index, index + 400))
+      for (let index = 0; index < records.length; index += 30) {
+        await run("capture-batch", records.slice(index, index + 30))
       }
       // Only embedded data: bytes are copied. No arbitrary local path or URL is followed.
       for (const item of inline) {
