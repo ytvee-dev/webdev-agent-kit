@@ -1,0 +1,43 @@
+name: publish-v1.5.0-after-approved-merge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  create-release-tag:
+    name: Create immutable v1.5.0 tag from approved merge
+    if: >-
+      ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release: WebDev Agent Kit v1.5.0') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout merged commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check exact source version
+        run: |
+          test "$(python -c "import json;print(json.load(open('bundle-manifest.json'))['version'])")" = "1.5.0"
+
+      - name: Create release tag
+        run: |
+          if git ls-remote --exit-code --tags origin refs/tags/v1.5.0 >/dev/null; then
+            echo "v1.5.0 already exists; refusing to move or overwrite tag."
+            exit 1
+          fi
+          git tag v1.5.0 "$GITHUB_SHA"
+          git push origin refs/tags/v1.5.0
+
+  publish-release:
+    name: Package and publish GitHub v1.5.0
+    needs: create-release-tag
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release.yml
+    with:
+      release_tag: v1.5.0

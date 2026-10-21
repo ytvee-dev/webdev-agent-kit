@@ -187,6 +187,9 @@ jobs:
             --directory release-artifacts \
             --version "${RELEASE_TAG}"
 
+          cp scripts/install_opencode.ps1 release-artifacts/install-opencode.ps1
+          python -c "import hashlib,pathlib; p=pathlib.Path('release-artifacts/install-opencode.ps1'); s=pathlib.Path('release-artifacts/SHA256SUMS'); s.write_text(s.read_text() + hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name + chr(10))"
+
           echo 'Release artifacts:'
           find release-artifacts -maxdepth 1 -type f -print | sort
 
@@ -212,6 +215,7 @@ jobs:
             "release-artifacts/webdev-agent-kit-vs-code-codex.tar.gz"
             "release-artifacts/webdev-agent-kit-vs-code-claude.tar.gz"
             "release-artifacts/SHA256SUMS"
+            "release-artifacts/install-opencode.ps1"
           )
 
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then

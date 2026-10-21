@@ -46,3 +46,5 @@ truth for target package structure. The release contract is defined by
 [← All documentation](../README.md) · [MCP for WebDev Agent Kit](../mcp/README.md)
 
 - [Select frontend or designer roles](roles.md)
+
+[[docs/install/opencode]]
