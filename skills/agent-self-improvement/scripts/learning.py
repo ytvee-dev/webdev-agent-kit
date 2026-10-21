@@ -42,7 +42,7 @@ def default_root():
 
 
 def project_id(root):
-    canonical = str(Path(root).expanduser().resolve())
+    canonical = os.path.normcase(str(Path(root).expanduser().resolve()))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:24]
 
 
