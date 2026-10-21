@@ -22,7 +22,7 @@ jobs:
 
       - name: Check exact source version
         run: |
-          test "$(python -c "import json;print(json.load(open('bundle-manifest.json'))['version'])")" = "1.4.0"
+          test "$(python -c "import json;print(json.load(open('bundle-manifest.json'))['version'])")" = "1.5.0"
 
       - name: Create release tag
         run: |
