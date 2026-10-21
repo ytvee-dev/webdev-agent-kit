@@ -65,6 +65,33 @@ def skill_inventory(repo):
     return skills
 
 
+def select_relevant_skills(inventory, observations, requested=()):
+    """Bound prompt context and privilege observed invocations over guesses."""
+    if requested:
+        chosen = {
+            path: value for path, value in inventory.items()
+            if path in requested or Path(path).parent.name in requested
+        }
+        if len(chosen) != len(set(requested)):
+            raise ValueError("Unknown or ambiguous --skill selection")
+        return chosen
+    invoked = {
+        name.lower() for event in observations for name in event.get("skills", [])
+        if isinstance(name, str)
+    }
+    text = " ".join(event.get("content", "") for event in observations).casefold()
+    ranking = []
+    for path, value in inventory.items():
+        name = Path(path).parent.name
+        terms = [part for part in name.split("-") if len(part) >= 5]
+        score = (100 if name.lower() in invoked else 0) + sum(
+            2 for term in terms if term in text
+        )
+        ranking.append((score, path, value))
+    ranking.sort(key=lambda item: (-item[0], item[1]))
+    return {path: value for score, path, value in ranking[:6]}
+
+
 def selected_attachments(state, project, observations):
     sessions = {event["session"] for event in observations}
     if not sessions:
@@ -190,7 +217,7 @@ def propose(args):
     items = evidence(state, project)
     if not items:
         return {"result": "no_change", "reason": "No recorded experience"}
-    skills = skill_inventory(repo)
+    skills = select_relevant_skills(skill_inventory(repo), items, getattr(args, "skill", ()))
     attachments = selected_attachments(state, project, items)
     if args.proposal_file:
         response = read_json(args.proposal_file)
@@ -364,12 +391,14 @@ def main():
     p.add_argument("--project", required=True)
     p.add_argument("--repo", required=True)
     p.add_argument("--engine", choices=("codex", "opencode"))
+    p.add_argument("--skill", action="append", help="Target an exact skill directory name; repeatable")
     p.add_argument("--proposal-file")
     p.add_argument("--timeout", type=int, default=240)
     nightly = sub.add_parser("auto", help="One unattended iteration, never applies edits")
     nightly.add_argument("--project", required=True)
     nightly.add_argument("--repo", required=True)
     nightly.add_argument("--engine", choices=("codex", "opencode"))
+    nightly.add_argument("--skill", action="append", help="Target an exact skill directory name")
     nightly.add_argument("--proposal-file", help="Offline replay input")
     nightly.add_argument("--timeout", type=int, default=240)
     nightly.add_argument("--force", action="store_true")
