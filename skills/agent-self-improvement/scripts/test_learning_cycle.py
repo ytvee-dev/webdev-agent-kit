@@ -81,6 +81,10 @@ class LearningCycleSmoke(unittest.TestCase):
         )
         self.assertEqual(result["result"], "applied")
         self.assertIn("affected functionality", self.skill.read_text())
+        # Project purge also removes derived training suggestions and diffs.
+        self.call(STORE, "purge", "--project", str(self.project))
+        self.assertFalse(Path(path).exists())
+        self.assertFalse(Path(path).with_suffix(".diff").exists())
 
     def test_scheduled_offline_cycle_skips_unchanged_evidence(self):
         event_id = self.record()

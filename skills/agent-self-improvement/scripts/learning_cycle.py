@@ -337,7 +337,7 @@ def auto(args):
         if not checked["structural_passed"]:
             return proposal
     if proposal["result"] in ("no_change", "pending_validation"):
-        write_json(checkpoint, {"signature": signature, "timestamp": datetime.now(UTC).isoformat()})
+        write_json(checkpoint, {"signature": signature, "project_id": project_id(project), "timestamp": datetime.now(UTC).isoformat()})
     return proposal
 
 

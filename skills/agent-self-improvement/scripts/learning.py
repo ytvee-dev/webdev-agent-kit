@@ -296,6 +296,22 @@ def purge(conn, state, project, session=None):
     for run_id in prior_runs:
         (state / "runs" / (run_id + ".json")).unlink(missing_ok=True)
     conn.execute("DELETE FROM runs WHERE project_id=?", (pid,))
+    # Derived proposals and diffs can quote removed conversation content.
+    for candidate in (state / "proposals").glob("*.json"):
+        try:
+            data = json.loads(candidate.read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            continue
+        if data.get("project_id") == pid:
+            candidate.with_suffix(".diff").unlink(missing_ok=True)
+            candidate.unlink(missing_ok=True)
+    for checkpoint in (state / "checkpoints").glob("*.json"):
+        try:
+            data = json.loads(checkpoint.read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            continue
+        if data.get("project_id") == pid:
+            checkpoint.unlink(missing_ok=True)
     used = {row[0] for row in conn.execute("SELECT DISTINCT digest FROM attachments")}
     for (digest,) in conn.execute("SELECT digest FROM blobs").fetchall():
         if digest not in used:
