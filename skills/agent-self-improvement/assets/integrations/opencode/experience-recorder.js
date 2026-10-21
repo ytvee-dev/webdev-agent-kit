@@ -1,8 +1,9 @@
 // Optional OpenCode plugin. Does not activate storage without per-project opt-in.
 // SDK reference: https://opencode.ai/docs/sdk/ and https://opencode.ai/docs/plugins/
 export const ExperienceRecorder = async ({ client, directory }) => {
-  const script = process.env.AGENT_LEARNING_SCRIPT
-  if (!script) return {}
+  // Project installs work without global environment variables.
+  const script = process.env.AGENT_LEARNING_SCRIPT ||
+    `${directory}/.agents/skills/agent-self-improvement/scripts/learning.py`
 
   const python = process.env.AGENT_LEARNING_PYTHON || "python"
   const run = async (subcommand, payload) => {
