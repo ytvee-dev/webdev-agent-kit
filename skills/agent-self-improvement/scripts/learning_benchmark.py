@@ -10,7 +10,7 @@ import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
-from learning_cycle import model_suggestion, read_json, render_changes, write_json
+from learning_cycle import read_json, render_changes, write_json
 
 
 def score(text, required, forbidden):
