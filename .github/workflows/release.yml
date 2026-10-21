@@ -188,7 +188,7 @@ jobs:
             --version "${RELEASE_TAG}"
 
           cp scripts/install_opencode.ps1 release-artifacts/install-opencode.ps1
-          python -c "import hashlib,pathlib; p=pathlib.Path('release-artifacts/install-opencode.ps1'); s=pathlib.Path('release-artifacts/SHA256SUMS'); s.write_text(s.read_text() + hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name + '\\n')"
+          python -c "import hashlib,pathlib; p=pathlib.Path('release-artifacts/install-opencode.ps1'); s=pathlib.Path('release-artifacts/SHA256SUMS'); s.write_text(s.read_text() + hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name + chr(10))"
 
           echo 'Release artifacts:'
           find release-artifacts -maxdepth 1 -type f -print | sort
