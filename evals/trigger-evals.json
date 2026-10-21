@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "eval_type": "skill-trigger",
   "cases": [
     {
@@ -7,9 +7,16 @@
       "prompt": "Inspect the components and properties in this Figma frame before implementing it: https://www.figma.com/design/example/Checkout?node-id=10-20. Use the connected MCP if it works.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "design-screenshot-spec",
-      "should_trigger": ["design-screenshot-spec"],
-      "should_not_trigger": ["mcp-toolchain-manager", "frontend-prototype-explorer"],
-      "risk_notes": ["Inspect the supplied node and matching visual evidence before product review; a URL alone is a valid intake trigger."],
+      "should_trigger": [
+        "design-screenshot-spec"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "frontend-prototype-explorer"
+      ],
+      "risk_notes": [
+        "Inspect the supplied node and matching visual evidence before product review; a URL alone is a valid intake trigger."
+      ],
       "reason": "Live design intake now belongs to the existing design spec skill."
     },
     {
@@ -17,9 +24,16 @@
       "prompt": "Figma MCP is not working. Open my supplied frame link in the available browser, select its layers with the mouse, and inspect the properties before drafting the spec.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "design-screenshot-spec",
-      "should_trigger": ["design-screenshot-spec"],
-      "should_not_trigger": ["mcp-toolchain-manager", "frontend-layout-implementer"],
-      "risk_notes": ["Use current visual state and confirmed selection; do not install providers or ask for screenshots before trying the browser."],
+      "should_trigger": [
+        "design-screenshot-spec"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "frontend-layout-implementer"
+      ],
+      "risk_notes": [
+        "Use current visual state and confirmed selection; do not install providers or ask for screenshots before trying the browser."
+      ],
       "reason": "A missing preferred provider activates the existing permitted visual fallback."
     },
     {
@@ -27,9 +41,16 @@
       "prompt": "These screenshots show a selected nested text layer and the properties panel. Work out which values belong to the label versus its parent button and list what is still unknown.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "design-screenshot-spec",
-      "should_trigger": ["design-screenshot-spec"],
-      "should_not_trigger": ["mcp-toolchain-manager", "frontend-design-director"],
-      "risk_notes": ["Parent padding, text fill, and control dimensions must not be conflated; no link requires no live provider."],
+      "should_trigger": [
+        "design-screenshot-spec"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "frontend-design-director"
+      ],
+      "risk_notes": [
+        "Parent padding, text fill, and control dimensions must not be conflated; no link requires no live provider."
+      ],
       "reason": "Screenshot intake requires selection-aware component evidence."
     },
     {
@@ -37,9 +58,16 @@
       "prompt": "The design spec already records all inspected components. Review the creation flow and ask me about missing dialog opening, draft persistence, error recovery, and animation behavior before any implementation.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-design-intelligence",
-      "should_trigger": ["frontend-design-intelligence"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-prototype-explorer"],
-      "risk_notes": ["Recommendations are proposals; every unresolved dependent product choice needs a user answer."],
+      "should_trigger": [
+        "frontend-design-intelligence"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-prototype-explorer"
+      ],
+      "risk_notes": [
+        "Recommendations are proposals; every unresolved dependent product choice needs a user answer."
+      ],
       "reason": "Product review follows completed extraction and does not choose behavior on the user's behalf."
     },
     {
@@ -47,9 +75,17 @@
       "prompt": "Update the kit rules so Figma design intake stays read-only and excludes canvas creation; do not inspect or modify a design file.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "agent-rules-skill-author",
-      "should_trigger": ["agent-rules-skill-author"],
-      "should_not_trigger": ["design-screenshot-spec", "frontend-layout-implementer", "frontend-design-intelligence"],
-      "risk_notes": ["Rule maintenance must not invoke live design acquisition based on Figma keywords."],
+      "should_trigger": [
+        "agent-rules-skill-author"
+      ],
+      "should_not_trigger": [
+        "design-screenshot-spec",
+        "frontend-layout-implementer",
+        "frontend-design-intelligence"
+      ],
+      "risk_notes": [
+        "Rule maintenance must not invoke live design acquisition based on Figma keywords."
+      ],
       "reason": "The expanded live-read trigger must not capture maintenance of the skill itself."
     },
     {
@@ -57,9 +93,17 @@
       "prompt": "The dashboard route renders blank on mobile. Reproduce it, identify the smallest cause, fix it, and rerun the relevant check.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-bugfix-debugger",
-      "should_trigger": ["frontend-bugfix-debugger"],
-      "should_not_trigger": ["frontend-design-director", "greenfield-project-builder", "frontend-refactor-surgeon"],
-      "risk_notes": ["A visible frontend defect needs evidence-first debugging, not redesign or broad refactor."],
+      "should_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "should_not_trigger": [
+        "frontend-design-director",
+        "greenfield-project-builder",
+        "frontend-refactor-surgeon"
+      ],
+      "risk_notes": [
+        "A visible frontend defect needs evidence-first debugging, not redesign or broad refactor."
+      ],
       "reason": "User reports a user-visible frontend defect and asks for a smallest verified fix."
     },
     {
@@ -67,9 +111,17 @@
       "prompt": "Implement this approved Design Implementation Spec in the pricing page. Reuse existing components and CSS Modules. Do not install packages.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-layout-implementer",
-      "should_trigger": ["frontend-layout-implementer"],
-      "should_not_trigger": ["design-screenshot-spec", "greenfield-project-builder", "mcp-toolchain-manager"],
-      "risk_notes": ["The spec is already approved, so the implementation skill should run instead of spec extraction."],
+      "should_trigger": [
+        "frontend-layout-implementer"
+      ],
+      "should_not_trigger": [
+        "design-screenshot-spec",
+        "greenfield-project-builder",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "The spec is already approved, so the implementation skill should run instead of spec extraction."
+      ],
       "reason": "User asks to implement an approved frontend spec inside the target stack with strict reuse constraints."
     },
     {
@@ -77,9 +129,17 @@
       "prompt": "Review this frontend change before merge. Check correctness, TypeScript safety, accessibility, performance, architecture, and verification honesty. Do not apply fixes.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-quality-reviewer",
-      "should_trigger": ["frontend-quality-reviewer"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-bugfix-debugger", "frontend-refactor-surgeon"],
-      "risk_notes": ["The user explicitly asks for review only, so implementation skills must not apply fixes."],
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-bugfix-debugger",
+        "frontend-refactor-surgeon"
+      ],
+      "risk_notes": [
+        "The user explicitly asks for review only, so implementation skills must not apply fixes."
+      ],
       "reason": "User asks for an evidence-backed frontend quality review and explicitly blocks fixes."
     },
     {
@@ -87,9 +147,17 @@
       "prompt": "Verify the implemented page against these screenshots at desktop, tablet, and 375px mobile. Report visual mismatches with viewport evidence.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-visual-qa",
-      "should_trigger": ["frontend-visual-qa"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-linter-manager", "mcp-toolchain-manager"],
-      "risk_notes": ["The task requires rendered browser evidence, not source-only implementation."],
+      "should_trigger": [
+        "frontend-visual-qa"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-linter-manager",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "The task requires rendered browser evidence, not source-only implementation."
+      ],
       "reason": "User requests rendered UI verification against screenshots across viewports."
     },
     {
@@ -97,9 +165,17 @@
       "prompt": "Create a new skill for visual QA routing, add trigger examples, update manifests, and validate the changed skill package.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "agent-rules-skill-author",
-      "should_trigger": ["agent-rules-skill-author"],
-      "should_not_trigger": ["frontend-visual-qa", "frontend-layout-implementer", "project-onboarding-adapter"],
-      "risk_notes": ["This changes the agent bundle itself and must not be routed as runtime visual QA work."],
+      "should_trigger": [
+        "agent-rules-skill-author"
+      ],
+      "should_not_trigger": [
+        "frontend-visual-qa",
+        "frontend-layout-implementer",
+        "project-onboarding-adapter"
+      ],
+      "risk_notes": [
+        "This changes the agent bundle itself and must not be routed as runtime visual QA work."
+      ],
       "reason": "User asks to create or maintain skill package metadata and validation."
     },
     {
@@ -107,9 +183,17 @@
       "prompt": "Use these screenshots and copied inspect notes to write a Design Implementation Spec. Do not implement the page yet.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "design-screenshot-spec",
-      "should_trigger": ["design-screenshot-spec"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "frontend-bugfix-debugger"],
-      "risk_notes": ["The user asks for spec extraction only, so implementation and QA must wait."],
+      "should_trigger": [
+        "design-screenshot-spec"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-visual-qa",
+        "frontend-bugfix-debugger"
+      ],
+      "risk_notes": [
+        "The user asks for spec extraction only, so implementation and QA must wait."
+      ],
       "reason": "Screenshot and inspect material should be converted into an implementation spec before coding."
     },
     {
@@ -117,9 +201,17 @@
       "prompt": "Refactor this settings panel into smaller components without changing behavior. Preserve public props and rendered output.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-refactor-surgeon",
-      "should_trigger": ["frontend-refactor-surgeon"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-design-director", "frontend-bugfix-debugger"],
-      "risk_notes": ["The task is behavior-preserving and should not become a redesign or bugfix workflow."],
+      "should_trigger": [
+        "frontend-refactor-surgeon"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-design-director",
+        "frontend-bugfix-debugger"
+      ],
+      "risk_notes": [
+        "The task is behavior-preserving and should not become a redesign or bugfix workflow."
+      ],
       "reason": "User asks for a bounded behavior-preserving frontend refactor."
     },
     {
@@ -127,9 +219,17 @@
       "prompt": "Check which MCP tools are missing for rendered visual QA and report the official install sources. Do not install anything yet.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "mcp-toolchain-manager",
-      "should_trigger": ["mcp-toolchain-manager"],
-      "should_not_trigger": ["frontend-visual-qa", "frontend-layout-implementer", "frontend-linter-manager"],
-      "risk_notes": ["Tool capability detection is not the same as running visual QA."],
+      "should_trigger": [
+        "mcp-toolchain-manager"
+      ],
+      "should_not_trigger": [
+        "frontend-visual-qa",
+        "frontend-layout-implementer",
+        "frontend-linter-manager"
+      ],
+      "risk_notes": [
+        "Tool capability detection is not the same as running visual QA."
+      ],
       "reason": "User asks for MCP capability detection and approval-gated tooling guidance."
     },
     {
@@ -137,9 +237,18 @@
       "prompt": "Change the background color on these four pages. Do not over-test.",
       "workflow_level": "Lightweight Workflow",
       "expected_primary_skill": "frontend-bugfix-debugger",
-      "should_trigger": ["frontend-bugfix-debugger"],
-      "should_not_trigger": ["mcp-toolchain-manager", "frontend-visual-qa", "loop-workflow-planner", "frontend-quality-reviewer"],
-      "risk_notes": ["A CSS-only background change should stay lightweight and should not inspect MCP state, start a dev server, or test unrelated routes by default."],
+      "should_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "frontend-visual-qa",
+        "loop-workflow-planner",
+        "frontend-quality-reviewer"
+      ],
+      "risk_notes": [
+        "A CSS-only background change should stay lightweight and should not inspect MCP state, start a dev server, or test unrelated routes by default."
+      ],
       "reason": "The user requests a bounded low-risk visual tweak and explicitly asks to avoid over-testing."
     },
     {
@@ -147,9 +256,18 @@
       "prompt": "On Windows, npm run lint failed because npm.ps1 is blocked by execution policy. Use the correct fallback and do not change project config.",
       "workflow_level": "Lightweight Workflow",
       "expected_primary_skill": "frontend-linter-manager",
-      "should_trigger": ["frontend-linter-manager"],
-      "should_not_trigger": ["mcp-toolchain-manager", "frontend-visual-qa", "loop-workflow-planner", "frontend-quality-reviewer"],
-      "risk_notes": ["PowerShell shim blocks require one .cmd fallback, not package changes, execution-policy changes, or repeated retries."],
+      "should_trigger": [
+        "frontend-linter-manager"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "frontend-visual-qa",
+        "loop-workflow-planner",
+        "frontend-quality-reviewer"
+      ],
+      "risk_notes": [
+        "PowerShell shim blocks require one .cmd fallback, not package changes, execution-policy changes, or repeated retries."
+      ],
       "reason": "The user needs lint verification handling for a Windows shell blocker."
     },
     {
@@ -157,9 +275,17 @@
       "prompt": "Build passed outside the sandbox, but dev server still fails with the same esbuild sandbox access error. Do not keep restarting it.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-visual-qa",
-      "should_trigger": ["frontend-visual-qa"],
-      "should_not_trigger": ["mcp-toolchain-manager", "greenfield-project-builder", "frontend-design-director"],
-      "risk_notes": ["Repeated esbuild sandbox blockers should stop rendered QA attempts and be reported as blocked verification."],
+      "should_trigger": [
+        "frontend-visual-qa"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "greenfield-project-builder",
+        "frontend-design-director"
+      ],
+      "risk_notes": [
+        "Repeated esbuild sandbox blockers should stop rendered QA attempts and be reported as blocked verification."
+      ],
       "reason": "The user describes a rendered verification blocker after the allowed sandbox fallback was already attempted."
     },
     {
@@ -167,9 +293,17 @@
       "prompt": "I already asked twice; the background is still wrong on mobile. Verify it visually.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-visual-qa",
-      "should_trigger": ["frontend-visual-qa"],
-      "should_not_trigger": ["mcp-toolchain-manager", "greenfield-project-builder", "frontend-design-director"],
-      "risk_notes": ["Repeated visual failure plus explicit verification request should escalate to targeted rendered evidence when browser capability exists."],
+      "should_trigger": [
+        "frontend-visual-qa"
+      ],
+      "should_not_trigger": [
+        "mcp-toolchain-manager",
+        "greenfield-project-builder",
+        "frontend-design-director"
+      ],
+      "risk_notes": [
+        "Repeated visual failure plus explicit verification request should escalate to targeted rendered evidence when browser capability exists."
+      ],
       "reason": "Repeated failure changes the verification budget from source-only confidence to targeted rendered QA."
     },
     {
@@ -177,9 +311,17 @@
       "prompt": "Review this auth state shape: isInitialized and isInitializing are stored separately in Redux.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-quality-reviewer",
-      "should_trigger": ["frontend-quality-reviewer"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "greenfield-project-builder"],
-      "risk_notes": ["Parallel booleans for one lifecycle create impossible states and should be replaced with a single typed status."],
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-visual-qa",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "Parallel booleans for one lifecycle create impossible states and should be replaced with a single typed status."
+      ],
       "reason": "The user asks for review of frontend state modeling."
     },
     {
@@ -187,9 +329,17 @@
       "prompt": "Review this React change. The agent added useCallback around a simple click handler with no memoized child.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-quality-reviewer",
-      "should_trigger": ["frontend-quality-reviewer"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "mcp-toolchain-manager"],
-      "risk_notes": ["useCallback without a proven identity-sensitive consumer is an anti-pattern."],
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-visual-qa",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "useCallback without a proven identity-sensitive consumer is an anti-pattern."
+      ],
       "reason": "The user asks for review of a React implementation quality issue."
     },
     {
@@ -197,9 +347,17 @@
       "prompt": "Review this React change. The agent created component and helper tests even though the user only asked for a UI fix.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-quality-reviewer",
-      "should_trigger": ["frontend-quality-reviewer"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "mcp-toolchain-manager"],
-      "risk_notes": ["Component, helper, hook, or unit tests must not be created as a side effect of implementation work."],
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-visual-qa",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "Component, helper, hook, or unit tests must not be created as a side effect of implementation work."
+      ],
       "reason": "The user asks for review of unauthorized test authoring during frontend implementation."
     },
     {
@@ -207,19 +365,35 @@
       "prompt": "Fix this UI bug and update anything else that seems outdated.",
       "workflow_level": "Lightweight Workflow",
       "expected_primary_skill": "frontend-bugfix-debugger",
-      "should_trigger": ["frontend-bugfix-debugger"],
-      "should_not_trigger": ["agent-rules-skill-author", "project-context-adapter", "mcp-toolchain-manager"],
-      "risk_notes": ["The agent must not treat vague extra cleanup as approval to edit host README.md or docs; README reading is unnecessary unless a relevant documentation claim must be checked."],
+      "should_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "should_not_trigger": [
+        "agent-rules-skill-author",
+        "project-context-adapter",
+        "mcp-toolchain-manager"
+      ],
+      "risk_notes": [
+        "The agent must not treat vague extra cleanup as approval to edit host README.md or docs; README reading is unnecessary unless a relevant documentation claim must be checked."
+      ],
       "reason": "An existing README requires an explicit current user request before editing."
     },
     {
       "id": "project-onboarding-adapter.adapt-command",
-      "prompt": "\u0430\u0434\u0430\u043f\u0442\u0438\u0440\u0443\u0439\u0441\u044f",
+      "prompt": "адаптируйся",
       "workflow_level": "Deep Workflow",
       "expected_primary_skill": "project-onboarding-adapter",
-      "should_trigger": ["project-onboarding-adapter"],
-      "should_not_trigger": ["project-context-adapter", "frontend-architecture-planner", "greenfield-project-builder"],
-      "risk_notes": ["The natural-language command should initialize or refresh local-only project overlays without app source edits."],
+      "should_trigger": [
+        "project-onboarding-adapter"
+      ],
+      "should_not_trigger": [
+        "project-context-adapter",
+        "frontend-architecture-planner",
+        "greenfield-project-builder"
+      ],
+      "risk_notes": [
+        "The natural-language command should initialize or refresh local-only project overlays without app source edits."
+      ],
       "reason": "The bundle policy maps this Russian adaptation command to project onboarding."
     },
     {
@@ -227,9 +401,17 @@
       "prompt": "Before implementing this dashboard redesign, define the user goal, scope, constraints, non-goals, acceptance criteria, and done definition.",
       "workflow_level": "Deep Workflow",
       "expected_primary_skill": "goal-planner",
-      "should_trigger": ["goal-planner"],
-      "should_not_trigger": ["frontend-layout-implementer", "frontend-visual-qa", "frontend-linter-manager"],
-      "risk_notes": ["The user asks for goal definition before execution; implementation should not start yet."],
+      "should_trigger": [
+        "goal-planner"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer",
+        "frontend-visual-qa",
+        "frontend-linter-manager"
+      ],
+      "risk_notes": [
+        "The user asks for goal definition before execution; implementation should not start yet."
+      ],
       "reason": "Standard or deep work needs an explicit goal contract before implementation."
     },
     {
@@ -237,8 +419,12 @@
       "prompt": "Compare two interactive filter placements with synthetic data before choosing the interaction.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-prototype-explorer",
-      "should_trigger": ["frontend-prototype-explorer"],
-      "should_not_trigger": ["frontend-layout-implementer"],
+      "should_trigger": [
+        "frontend-prototype-explorer"
+      ],
+      "should_not_trigger": [
+        "frontend-layout-implementer"
+      ],
       "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
     },
     {
@@ -246,8 +432,12 @@
       "prompt": "Build a throwaway cancel/retry state probe; do not change the production reducer.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-prototype-explorer",
-      "should_trigger": ["frontend-prototype-explorer"],
-      "should_not_trigger": ["frontend-bugfix-debugger"],
+      "should_trigger": [
+        "frontend-prototype-explorer"
+      ],
+      "should_not_trigger": [
+        "frontend-bugfix-debugger"
+      ],
       "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
     },
     {
@@ -255,8 +445,12 @@
       "prompt": "Implement the approved preview layout; the design choice is settled.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-layout-implementer",
-      "should_trigger": ["frontend-layout-implementer"],
-      "should_not_trigger": ["frontend-prototype-explorer"],
+      "should_trigger": [
+        "frontend-layout-implementer"
+      ],
+      "should_not_trigger": [
+        "frontend-prototype-explorer"
+      ],
       "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
     },
     {
@@ -264,8 +458,13 @@
       "prompt": "Review whether saving settings survives reload. Check the actual local behavior, without changing the UI.",
       "workflow_level": "Standard Workflow",
       "expected_primary_skill": "frontend-quality-reviewer",
-      "should_trigger": ["frontend-quality-reviewer"],
-      "should_not_trigger": ["frontend-visual-qa", "frontend-prototype-explorer"],
+      "should_trigger": [
+        "frontend-quality-reviewer"
+      ],
+      "should_not_trigger": [
+        "frontend-visual-qa",
+        "frontend-prototype-explorer"
+      ],
       "reason": "Route by the requested outcome; preserve experimental and verification boundaries."
     },
     {
@@ -403,6 +602,39 @@
         "Protect data ownership and request isolation; generic best-practice claims are insufficient."
       ],
       "reason": "Evidence-led React review uses conditional performance rules."
+    },
+    {
+      "id": "agent-self-improvement.explicit-start",
+      "prompt": "Enable private experience recording for this project. Do not modify any skills yet.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "agent-self-improvement",
+      "should_trigger": [
+        "agent-self-improvement"
+      ],
+      "should_not_trigger": [
+        "project-context-adapter",
+        "agent-rules-skill-author"
+      ],
+      "risk_notes": [
+        "Explicit opt-in is scoped to one project; no data should be recorded before activation."
+      ],
+      "reason": "User deliberately enables experience collection."
+    },
+    {
+      "id": "agent-self-improvement.learning-review",
+      "prompt": "Analyze the previously recorded corrections and propose an improvement to the relevant skill without changing the files.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "agent-self-improvement",
+      "should_trigger": [
+        "agent-self-improvement"
+      ],
+      "should_not_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "risk_notes": [
+        "No source file writes without evaluation and user review."
+      ],
+      "reason": "Review-only request for recorded evidence."
     }
   ]
 }

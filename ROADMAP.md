@@ -14,6 +14,7 @@ related:
     - '[[docs/install/first-run]]'
     - '[[docs/install/upgrade]]'
     - '[[docs/architecture/field-evidence]]'
+    - '[[docs/release/1.4.0-plan]]'
     - '[[docs/architecture/reproducible-workflows]]'
     - '[[README|WebDev Agent Kit]]'
     - '[[CHANGELOG|WebDev Agent Kit Changelog]]'

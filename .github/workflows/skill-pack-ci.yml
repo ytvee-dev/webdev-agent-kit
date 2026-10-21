@@ -29,6 +29,8 @@ jobs:
           python -m py_compile skills/agent-rules-skill-author/scripts/*.py
           python -m py_compile skills/project-onboarding-adapter/scripts/*.py
           python -m py_compile skills/frontend-quality-reviewer/scripts/*.py
+          python -m py_compile skills/agent-self-improvement/scripts/*.py
+          python -m py_compile skills/agent-self-improvement/assets/integrations/*.py
 
       - name: Validate schemas
         id: validate_schemas
@@ -228,5 +230,12 @@ jobs:
         run: python -m unittest discover -s scripts -p test_model_routing.py -v
       - name: Test Claude native roles and archive preservation
         run: python -m unittest discover -s scripts -p test_claude_agents.py -v
+      - name: Test opt-in private learning store
+        run: python -m unittest discover -s skills/agent-self-improvement/scripts -p 'test_*.py' -v
+      - name: Smoke Windows PowerShell learning runner
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\\skills\\agent-self-improvement\\scripts\\smoke_windows.ps1 -Project . -Repo .
+
       - name: Test real Git review snapshots
         run: python -m unittest discover -s scripts -p test_review_package.py -v

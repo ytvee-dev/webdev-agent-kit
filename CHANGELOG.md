@@ -12,6 +12,7 @@ tags:
 parent: []
 related:
     - '[[docs/release/1.3.0-plan]]'
+    - '[[docs/release/1.4.0-plan]]'
     - '[[docs/release/1.2.0-checklist]]'
     - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/release/1.0.0-checklist|1.0.0 GPT Routing Validation]]'
