@@ -45,6 +45,9 @@ jobs:
           set -o pipefail
           ruff format --diff scripts skills/agent-rules-skill-author/scripts skills/project-onboarding-adapter/scripts skills/frontend-quality-reviewer/scripts 2>&1 | tee ruff-format.log
 
+      - name: Check OpenCode plugin JavaScript syntax
+        run: node --input-type=module --check < skills/agent-self-improvement/assets/integrations/opencode/experience-recorder.js
+
       - name: YAML lint
         run: |
           set -o pipefail
