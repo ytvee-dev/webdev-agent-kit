@@ -35,9 +35,6 @@ jobs:
           python -m pip install ruff yamllint
           npm install --global markdownlint-cli2
 
-      - name: Show import-order fix suggestion
-        run: ruff check --select I --diff skills/agent-self-improvement/scripts/install_hooks.py || true
-
       - name: Ruff lint
         run: |
           set -o pipefail
