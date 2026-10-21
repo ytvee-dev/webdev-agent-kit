@@ -56,6 +56,8 @@ Requires approved local filesystem and command access for CLI operations. Captur
 
 ## Output Contract
 
+Final response: return only facts that affect the user's understanding, confidence, or next action. Omit empty fields and workflow narration.
+
 Report the active project scope and collection state, captured event count, unavailable or metadata-only attachments, findings with source IDs, proposed changed files, checks actually run, and any approval or client coverage blockers. Never report unperformed evaluation as passing.
 
 ## Validation Gates

@@ -12,7 +12,7 @@ CORE_BODY_LIMIT = 350
 PROFILE_BODY_LIMIT = 300
 ADAPTER_BODY_LIMIT = 180
 SKILL_DESCRIPTION_LIMIT = 45
-SKILL_DESCRIPTION_TOTAL_LIMIT = 575  # Allow 22 skills at prior per-skill context density.
+SKILL_DESCRIPTION_TOTAL_LIMIT = 575
 CLAUDE_RUNTIME_PRELUDE = (
     "Read `${CLAUDE_SKILL_DIR}/../../AGENTS.md` and "
     "`${CLAUDE_SKILL_DIR}/../../adapters/claude-code.md`; resolve bundle paths "

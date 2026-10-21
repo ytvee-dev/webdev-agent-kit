@@ -14,7 +14,6 @@ related:
     - '[[docs/architecture/design-system-pilot]]'
     - '[[docs/architecture/react-performance-audit]]'
     - '[[docs/release/1.3.0-plan]]'
-    - '[[docs/release/1.4.0-plan]]'
     - '[[docs/architecture/superpowers-adoption]]'
     - '[[docs/release/1.1.0-checklist]]'
     - '[[docs/install/README|Installation Guides]]'
@@ -60,4 +59,3 @@ The documents in this directory are intended for users and project maintainers. 
 - [1.1.0 release acceptance checklist](release/1.1.0-checklist.md)
 
 - [1.3.0 implementation and release plan](release/1.3.0-plan.md)
-- [1.4.0 self-learning preview release plan](release/1.4.0-plan.md)

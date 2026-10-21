@@ -315,7 +315,10 @@
         "claim all attachments are captured",
         "claim evaluation passed without a real run",
         "publish or merge skill changes",
-        "include raw private conversation text"
+        "include raw private conversation text",
+        "repeat or paraphrase the user request",
+        "name selected skills or internal workflow",
+        "include raw or long command logs"
       ],
       "max_words": 240,
       "must_report_verification": true,
