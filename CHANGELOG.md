@@ -35,6 +35,17 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Windows OpenCode installer: SHA256-verified release download, portable skills, instructions integration and an opt-in Experience Recorder plugin.
+- OpenCode recorder resolves the project-local script without requiring global environment variables.
+
+### Changed
+
+- Installation safeguards preserve existing OpenCode configuration and never overwrite a previously installed Kit.
+
+## 1.4.0
+
+### Added
+
 - Explicit frontend/designer conversation-role selection with verified-source
   fallback, task continuity and separate native model/subagent boundaries.
 - A pinned 70-rule React/Next performance audit and conditionally loaded rules
