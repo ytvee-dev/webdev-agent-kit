@@ -24,7 +24,7 @@ TOKEN_PATTERNS = [
 
 
 def utc_now():
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def default_root():

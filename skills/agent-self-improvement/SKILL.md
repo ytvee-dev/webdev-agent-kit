@@ -1,6 +1,6 @@
 ---
 name: agent-self-improvement
-description: "Opt-in local experience capture, evidence-based review, and guarded skill improvement. Use only when the user asks to enable, disable, inspect, import, learn from, or review agent experience. Never record conversations merely because a development task is underway."
+description: "Opt-in agent experience capture, local analysis, and evidence-based skill proposals. Trigger only for explicit collection, import, learning, or review requests."
 id: 'agents.skills.agent-self-improvement.skill'
 title: 'Agent Self Improvement'
 doc_type: 'skill'
