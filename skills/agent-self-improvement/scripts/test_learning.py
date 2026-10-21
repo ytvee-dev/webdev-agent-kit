@@ -1,6 +1,7 @@
 """Offline, synthetic smoke tests for the packaged learning CLI."""
 import base64
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -24,6 +25,14 @@ class LearningSmoke(unittest.TestCase):
                            input=payload, text=True, capture_output=True)
         self.assertEqual(p.returncode, expect, p.stderr)
         return json.loads(p.stdout) if p.stdout.strip() else p
+
+    def test_windows_project_identifiers_are_case_insensitive(self):
+        if os.name != "nt":
+            self.skipTest("Windows-only normalization check")
+        sys.path.insert(0, str(CLI.parent))
+        from learning import project_id
+
+        self.assertEqual(project_id(self.project), project_id(self.project.upper()))
 
     def test_off_by_default_and_dedup(self):
         event = json.dumps({"client": "codex", "session_id": "s1", "message_id": "m1",
