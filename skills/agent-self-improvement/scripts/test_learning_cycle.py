@@ -78,6 +78,7 @@ class LearningCycleSmoke(unittest.TestCase):
         self.assertIn("Always verify before", self.skill.read_text())
         result = self.call(
             CLI, "apply", "--repo", str(self.repo), "--proposal", path, "--approve",
+            "--accept-unevaluated",
         )
         self.assertEqual(result["result"], "applied")
         self.assertIn("affected functionality", self.skill.read_text())
