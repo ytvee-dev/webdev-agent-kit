@@ -21,7 +21,7 @@ These integrations are **not activated on installation**. Install only after an 
 
 ## Codex
 
-Codex supports `UserPromptSubmit`, `PostToolUse`, and `SessionEnd` in trusted `hooks.json`. Configure the following alongside existing hooks, resolving the Python bridge to an **absolute path** under the installed Kit. Change the placeholder before applying:
+Codex supports `UserPromptSubmit`, `PostToolUse`, and `Stop` in trusted `hooks.json`. Configure the following alongside existing hooks, resolving the Python bridge to an **absolute path** under the installed Kit. Change the placeholder before applying:
 
 ```json
 {
@@ -32,7 +32,7 @@ Codex supports `UserPromptSubmit`, `PostToolUse`, and `SessionEnd` in trusted `h
 }
 ```
 
-Inspect and trust the hooks using the client UI. The bridge stores prompt text and tool names, **not complete assistant replies, tool inputs, attachments or transcript copies**. Transcript path is not followed automatically.
+Inspect and trust the hooks using the client UI. The bridge records exposed user prompts, assistant Stop message content and tool response excerpts, **not a complete authenticated transcript or attachment bytes**. Transcript path is not followed automatically.
 
 ## Claude Code
 
@@ -40,7 +40,7 @@ Use supported native `UserPromptSubmit` and `PostToolUse` command hooks, pointin
 
 ## OpenCode
 
-Copy `opencode/experience-recorder.js` into `.opencode/plugins/experience-recorder.js` and set `AGENT_LEARNING_SCRIPT` to the absolute path of `scripts/learning.py`. The plugin uses `session.idle` and the documented SDK `session.messages` method to capture text parts, tool-name metadata and file-part metadata. **Files are not automatically copied**. Set `learning on` for the project; off immediately prevents new capture at CLI level. This is a preview and needs a real OpenCode compatibility test.
+Copy `opencode/experience-recorder.js` into `.opencode/plugins/experience-recorder.js` and set `AGENT_LEARNING_SCRIPT` to the absolute path of `scripts/learning.py`. The plugin uses `session.idle` and the documented SDK `session.messages` method to capture text parts, tool-name metadata and file-part metadata. **Inline base64 `data:` file parts are copied with size limits; remote file references remain metadata-only.** Enable collection with `learning.py on --project <root>`; off immediately prevents new capture at CLI level. This is a preview and needs a real OpenCode compatibility test.
 
 ## File bytes
 
