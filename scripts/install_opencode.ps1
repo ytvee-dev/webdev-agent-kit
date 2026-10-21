@@ -28,9 +28,10 @@ try {
  } else {$config=[pscustomobject]@{'$schema'='https://opencode.ai/config.json'}}
  $p=$config.PSObject.Properties['instructions']
  if($p -and $p.Value -isnot [array]){throw "instructions must be array"}
- $rules=if($p){@($p.Value)}else{@()}
+ $rules=@()
+ if($p){$rules=@($p.Value)}
  if($rules -notcontains ".agents/AGENTS.md"){$rules+= ".agents/AGENTS.md"}
- if($p){$p.Value=$rules}else{$config | Add-Member NoteProperty instructions $rules}
+ if($p){$p.Value=@($rules)}else{$config | Add-Member -MemberType NoteProperty -Name instructions -Value @($rules)}
  Copy-Item $src "$root\.agents" -Recurse
  if(Test-Path $conf){Copy-Item $conf "$conf.webdev-backup"}
  ($config | ConvertTo-Json -Depth 100) | Set-Content $conf -Encoding UTF8
