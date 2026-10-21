@@ -52,8 +52,7 @@ python <path-to-learning.py> attach --project <root> --client opencode --session
 
 ## Scheduling
 
-The `run` command performs deterministic offline triage of explicitly tagged user corrections. It does not run a model, edit skills, or publish code. It is safe to schedule in a trusted local OS scheduler for analysis only; do not describe this as automated prompt optimization.
-
+The `learning.py run` command performs deterministic triage. For model-backed scheduled proposals, use `learning_cycle.py auto`, which never applies changes without approval. See the Windows scheduling example below.
 
 ## Windows Codex: install without replacing existing hooks
 
