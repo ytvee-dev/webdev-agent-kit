@@ -6,10 +6,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from learning_cycle import select_relevant_skills
+
 CLI = Path(__file__).with_name("learning_cycle.py")
 STORE = Path(__file__).with_name("learning.py")
 
-from learning_cycle import select_relevant_skills  # noqa: E402
 
 
 class LearningCycleSmoke(unittest.TestCase):
