@@ -237,5 +237,8 @@ jobs:
         shell: pwsh
         run: .\\skills\\agent-self-improvement\\scripts\\smoke_windows.ps1 -Project . -Repo .
 
+      - name: Validate OpenCode installer presence
+        run: python -c "from pathlib import Path; x=Path('scripts/install_opencode.ps1').read_text(); assert 'SHA256' in x and 'experience-recorder.js' in x and 'EnableLearning' in x"
+
       - name: Test real Git review snapshots
         run: python -m unittest discover -s scripts -p test_review_package.py -v

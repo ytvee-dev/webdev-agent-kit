@@ -33,6 +33,7 @@ depends_on: []
 - [Draft design-system pilot and field feedback](architecture/design-system-pilot.md)
 
 - [Install WebDev Agent Kit](install/README.md)
+- [OpenCode installer](install/opencode.md)
 - [Configure and verify MCP](mcp/README.md)
 
 ## Architecture

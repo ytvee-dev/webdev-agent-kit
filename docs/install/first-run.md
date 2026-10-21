@@ -24,6 +24,7 @@ the archive validators and `bundle-manifest.json` own package contracts.
 
 | Download target | Canonical runtime | Extracted root | Discovery entry |
 | --- | --- | --- | --- |
+| `opencode` (installer) | `codex` portable skills | host `.agents/` and `.opencode/plugins/` | `opencode.json` instructions + native plugin |
 | `codex` | `codex` | host `.agents/` | host `AGENTS.md` pointer to `.agents/AGENTS.md` |
 | `vs-code-codex` | `codex` | host `.agents/` | same Codex contract |
 | `cursor` | `cursor` | host `.agents/` and `.cursor/` | `.cursor/rules/webdev-agent-kit.mdc` |
