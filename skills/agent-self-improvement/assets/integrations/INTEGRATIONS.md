@@ -126,6 +126,18 @@ Do not use the bypass for automatic scheduled jobs.
 
 In Task Scheduler create a task running your local `python.exe` with arguments `"C:\path\to\learning_cycle.py" auto --project "C:\path\to\project" --repo "C:\path\to\source-kit" --engine codex`. Choose the desired nightly trigger, run only under your user account, and keep saved credentials and output under your private profile. No scheduled task is created by the package. Repeated unchanged experience is skipped using a local checkpoint. Linux users can adapt the provided systemd timer/service templates.
 
+## One-command local acceptance on Windows
+
+From PowerShell after installing Python, without modifying live agents:
+
+```powershell
+& "$skill\scripts\smoke_windows.ps1" -Project $project -Repo $repo
+# Only after explicit opt-in and reviewing stored experience:
+& "$skill\scripts\smoke_windows.ps1" -Project $project -Repo $repo -Engine codex -RunLive
+```
+
+The first command uses synthetic test data and reports collection state. The second uses the selected installed Codex/OpenCode model to prepare a **review-only** proposal and may send your approved local evidence to its provider. Neither command applies changes.
+
 ## Offline acceptance without model costs
 
 ```powershell
