@@ -110,6 +110,28 @@ class LearningCycleSmoke(unittest.TestCase):
         self.assertEqual(second["result"], "no_change")
         self.assertIn("No new evidence", second["reason"])
 
+    def test_forged_proposal_cannot_write_outside_skill_directory(self):
+        self.record()
+        outside = self.base / "important.txt"
+        outside.write_text("Protected", encoding="utf-8")
+        import hashlib
+
+        source = self.base / "forged.json"
+        source.write_text(json.dumps({
+            "repo": str(self.repo.resolve()),
+            "state": "pending_validation",
+            "changes": [{
+                "path": "../important.txt",
+                "find": "Protected",
+                "replace": "ATTACKED",
+                "base_sha256": hashlib.sha256(b"Protected").hexdigest(),
+            }],
+        }), encoding="utf-8")
+        result = self.call(CLI, "check", "--repo", str(self.repo),
+                           "--proposal", str(source), expect=1)
+        self.assertIn("allowed", result.stderr.lower())
+        self.assertEqual(outside.read_text(encoding="utf-8"), "Protected")
+
     def test_unknown_evidence_is_rejected(self):
         self.record()
         proposal = self.base / "invalid.json"

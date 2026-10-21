@@ -13,7 +13,7 @@ import sys
 import tempfile
 import uuid
 from datetime import UTC, datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from learning import default_root, project_id
 
@@ -232,9 +232,26 @@ def propose(args):
 
 
 def render_changes(proposal, repo):
+    if not isinstance(proposal.get("changes"), list):
+        raise ValueError("Proposal changes must be a list")
     output = []
     for change in proposal["changes"]:
-        target = repo / change["path"]
+        relative = change.get("path")
+        if not isinstance(relative, str):
+            raise ValueError("Skill path must be a string")
+        path = PurePosixPath(relative)
+        parts = path.parts
+        if (path.is_absolute() or ".." in parts or "." in parts
+                or len(parts) != 3 or parts[0] not in {"skills"}
+                or parts[-1] != "SKILL.md" or not parts[1].replace("-", "").isalnum()):
+            if (len(parts) != 4 or parts[:2] != (".agents", "skills")
+                    or parts[-1] != "SKILL.md" or not parts[2].replace("-", "").isalnum()
+                    or ".." in parts):
+                raise ValueError("Only direct skill source paths are allowed")
+        target = repo.joinpath(*parts)
+        if (not target.resolve().is_relative_to(repo.resolve()) or not target.is_file()
+                or any(parent.is_symlink() for parent in [target, *target.parents] if parent != repo)):
+            raise ValueError("Skill path leaves the authorized repository")
         if not target.is_file() or target.is_symlink() or target.parent.is_symlink():
             raise ValueError("Skill source missing or symlinked")
         old = target.read_text(encoding="utf-8-sig")

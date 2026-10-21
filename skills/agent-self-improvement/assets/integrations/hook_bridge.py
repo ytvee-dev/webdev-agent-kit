@@ -49,8 +49,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--client", choices=("codex", "claude-code"), required=True)
     args = parser.parse_args()
+    event_name = None
     try:
         payload = json.load(sys.stdin)
+        event_name = payload.get("hook_event_name") if isinstance(payload, dict) else None
         entry = normalize(payload, args.client)
         if entry is None:
             return
@@ -64,7 +66,11 @@ def main():
         )
     except (OSError, ValueError, TypeError, subprocess.TimeoutExpired, json.JSONDecodeError):
         # Collection errors must never block a user's primary agent.
-        return
+        pass
+    finally:
+        # Codex Stop requires JSON on stdout even when nothing is recorded.
+        if args.client == "codex" and event_name == "Stop":
+            print("{}")
 
 
 if __name__ == "__main__":
