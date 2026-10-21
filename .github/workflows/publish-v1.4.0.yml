@@ -11,7 +11,8 @@ permissions:
 jobs:
   create-release-tag:
     name: Create immutable v1.4.0 tag from approved merge
-    if: ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release: WebDev Agent Kit v1.4.0 (#76)') }}
+    if: >-
+      ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release: WebDev Agent Kit v1.4.0 (#76)') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout merged commit
