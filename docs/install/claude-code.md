@@ -59,7 +59,7 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 ## Adaptation And Native Roles
 
 After installation, follow [Claude project adaptation and native roles](claude-agents.md)
-to use all 21 skills, local project context, nine plugin agents, bounded handoffs
+to use all 22 skills, local project context, nine plugin agents, bounded handoffs
 and independent reviews. Preserve existing host instructions and settings.
 
 [← All installation guides](README.md) · [MCP setup](../mcp/claude.md) · [All documentation](../README.md)

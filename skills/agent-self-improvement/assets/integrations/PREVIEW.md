@@ -29,3 +29,5 @@ python /absolute/path/to/learning.py attach --project /path/to/project --client 
 \`\`\`
 
 Use the operating-system scheduler if you want regular offline triage. Such a timer generates findings only. An LLM-based autonomous trainer and automatic skill changes are not shipped in this preview.
+
+Hook bridge invocations must pass `--client codex` or `--client claude-code`. If the host does not provide a stable message ID, the adapter creates a unique event ID; retries in this fallback mode may duplicate evidence and need review.

@@ -26,8 +26,8 @@ Codex supports `UserPromptSubmit`, `PostToolUse`, and `SessionEnd` in trusted `h
 ```json
 {
   "hooks": {
-    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py", "async": true, "timeout": 5 }] }],
-    "PostToolUse": [{ "hooks": [{ "type": "command", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py", "async": true, "timeout": 5 }] }]
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py --client codex", "async": true, "timeout": 5 }] }],
+    "PostToolUse": [{ "hooks": [{ "type": "command", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py --client codex", "async": true, "timeout": 5 }] }]
   }
 }
 ```
@@ -36,7 +36,7 @@ Inspect and trust the hooks using the client UI. The bridge stores prompt text a
 
 ## Claude Code
 
-Use supported native `UserPromptSubmit` and `PostToolUse` command hooks, pointing to the same absolute `hook_bridge.py`. Merge with existing hooks rather than replacing settings. Treat as an opt-in preview until the exact payload is observed in a real session.
+Use supported native `UserPromptSubmit` and `PostToolUse` command hooks, pointing to the same absolute `hook_bridge.py`, with `--client claude-code`. Merge with existing hooks rather than replacing settings. Treat as an opt-in preview until the exact payload is observed in a real session.
 
 ## OpenCode
 
