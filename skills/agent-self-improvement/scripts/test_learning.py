@@ -33,6 +33,8 @@ class LearningSmoke(unittest.TestCase):
         self.assertTrue(self.call("capture", payload=event)["recorded"])
         self.assertTrue(self.call("capture", payload=event)["duplicate"])
         self.assertEqual(self.call("status")["events"], 1)
+        sessions = self.call("sessions")["sessions"]
+        self.assertEqual(sessions[0]["session_id"], "s1")
         self.call("off")
         self.assertFalse(self.call("capture", payload=event)["recorded"])
 

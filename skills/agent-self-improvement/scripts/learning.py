@@ -326,7 +326,7 @@ def main():
     parser.add_argument("--state", type=Path, default=default_root(), help="Private local state directory")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("init")
-    for name in ("on", "off", "status", "capture", "capture-batch", "import", "attach", "attach-data", "run", "purge"):
+    for name in ("on", "off", "status", "sessions", "capture", "capture-batch", "import", "attach", "attach-data", "run", "purge"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--project", required=True, help="Project root; must be explicitly enabled")
         if name == "capture":
@@ -350,7 +350,22 @@ def main():
         elif args.command == "status":
             pid = project_id(args.project)
             count = conn.execute("SELECT COUNT(*) FROM events WHERE project_id=?", (pid,)).fetchone()[0]
-            result = {"project_id": pid, "recording": opt_in(conn, args.project), "events": count}
+            attachments = conn.execute(
+                "SELECT COUNT(*) FROM attachments WHERE project_id=?", (pid,)
+            ).fetchone()[0]
+            result = {"project_id": pid, "recording": opt_in(conn, args.project),
+                      "events": count, "attachments": attachments}
+        elif args.command == "sessions":
+            pid = project_id(args.project)
+            rows = conn.execute(
+                "SELECT client, session_id, COUNT(*), MAX(timestamp) FROM events "
+                "WHERE project_id=? GROUP BY client, session_id ORDER BY MAX(timestamp) DESC LIMIT 100",
+                (pid,),
+            ).fetchall()
+            result = {"project_id": pid, "sessions": [
+                {"client": row[0], "session_id": row[1],
+                 "events": row[2], "last_at": row[3]} for row in rows
+            ]}
         elif args.command == "capture":
             result = capture(conn, args.project, safe_input(), args.client)
         elif args.command == "capture-batch":
