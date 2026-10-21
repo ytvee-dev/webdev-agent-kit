@@ -9,6 +9,8 @@ from pathlib import Path
 CLI = Path(__file__).with_name("learning_cycle.py")
 STORE = Path(__file__).with_name("learning.py")
 
+from learning_cycle import select_relevant_skills  # noqa: E402
+
 
 class LearningCycleSmoke(unittest.TestCase):
     def setUp(self):
@@ -132,6 +134,18 @@ class LearningCycleSmoke(unittest.TestCase):
                            "--proposal", str(source), expect=1)
         self.assertIn("allowed", result.stderr.lower())
         self.assertEqual(outside.read_text(encoding="utf-8"), "Protected")
+
+    def test_selects_observed_skill_before_heuristic(self):
+        inventory = {
+            "skills/frontend-bugfix-debugger/SKILL.md": {"content": "A"},
+            "skills/frontend-design-director/SKILL.md": {"content": "B"},
+        }
+        found = select_relevant_skills(
+            inventory,
+            [{"skills": ["frontend-bugfix-debugger"],
+              "content": "The layout requires better design decisions"}],
+        )
+        self.assertEqual(next(iter(found)), "skills/frontend-bugfix-debugger/SKILL.md")
 
     def test_unknown_evidence_is_rejected(self):
         self.record()
