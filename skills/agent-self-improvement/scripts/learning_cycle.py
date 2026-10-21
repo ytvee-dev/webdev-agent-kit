@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Local opt-in training cycle: evidence -> model suggestion -> check -> approved apply."""
+
 import argparse
 import difflib
 import hashlib
