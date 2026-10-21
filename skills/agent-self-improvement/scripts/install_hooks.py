@@ -2,7 +2,6 @@
 """Opt-in Codex hook installer. Preserves existing hooks and native trust review."""
 import argparse
 import json
-import os
 import shlex
 import shutil
 import subprocess
