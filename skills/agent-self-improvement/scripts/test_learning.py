@@ -1,4 +1,5 @@
 """Offline, synthetic smoke tests for the packaged learning CLI."""
+import base64
 import json
 import subprocess
 import sys
@@ -48,6 +49,26 @@ class LearningSmoke(unittest.TestCase):
         self.assertTrue(self.call("purge")["purged"])
         self.assertEqual(self.call("status")["events"], 0)
         self.assertFalse(Path(result["report"]).exists())
+
+    def test_inline_attachment_is_retained_without_remote_fetch(self):
+        self.call("on")
+        self.call("capture", payload=json.dumps({
+            "client": "opencode", "session_id": "image-chat",
+            "message_id": "m1", "kind": "user", "content": "Look at this screenshot",
+        }))
+        payload = json.dumps({
+            "client": "opencode", "session_id": "image-chat", "name": "screenshot.png",
+            "data_url": "data:image/png;base64,"
+            + base64.b64encode(b"fake-png-bytes").decode("ascii"),
+        })
+        result = self.call("attach-data", payload=payload)
+        self.assertEqual(result["bytes"], len(b"fake-png-bytes"))
+        digest = result["sha256"]
+        stored = Path(self.state) / "blobs" / digest[:2] / digest
+        self.assertEqual(stored.read_bytes(), b"fake-png-bytes")
+        self.call("off")
+        rejected = self.call("attach-data", payload=payload, expect=1)
+        self.assertIn("Collection is off", rejected.stderr)
 
     def test_attachment_requires_recorded_session(self):
         self.call("on")
