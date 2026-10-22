@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/install/model-capability-guide]]'
     - '[[docs/release/1.3.0-plan]]'
     - '[[docs/release/1.4.0-plan]]'
     - '[[docs/release/1.2.0-checklist]]'
@@ -34,6 +35,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 ## Unreleased
 
 ### Added
+
+- Dated provider/model and client-capability guide, linked from README, covering
+  MCP, hooks, browser/Computer Use, search, vision, files and verification limits.
 
 - `webdev-feedback` turns explicit bug and feature-report requests into GitHub
   issues with product ownership, duplicate search, sanitized context and honest

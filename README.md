@@ -22,6 +22,7 @@
 - [Who This Kit Is For](#who-this-kit-is-for)
 - [What Changes After Installation](#what-changes-after-installation)
 - [Supported Clients](#supported-clients)
+- [Choosing Models And Tools](#choosing-models-and-tools)
 - [Quick Start](#quick-start)
 - [Adapting the Kit to a Project](#adapting-the-kit-to-a-project)
 - [Smart Context Cache and Token Savings](#smart-context-cache-and-token-savings)
@@ -85,6 +86,15 @@ Download the package for your client from the latest GitHub Release:
 
 The same release includes a checksum for each archive in `SHA256SUMS`.
 The stable and versioned names for the same target contain identical bytes.
+
+## Choosing Models And Tools
+
+See the [model and capability guide](docs/install/model-capability-guide.md) for
+OpenAI, Anthropic and Google recommendations, plus client-specific requirements
+for MCP, hooks, browser/Computer Use, search, images, files and subagents.
+The guide separates model capability from tool availability and includes dated
+sources and practical verification steps. Installing the Kit or selecting a
+stronger model does not automatically enable those tools.
 
 ## Quick Start
 
