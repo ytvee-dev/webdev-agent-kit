@@ -1,6 +1,6 @@
 ---
 name: agent-self-improvement
-description: "Opt-in agent experience capture, local analysis, and evidence-based skill proposals. Trigger only for explicit collection, import, learning, or review requests."
+description: "Opt-in experience capture, project memory, manual GitHub sync and evidence-based proposals. Use for explicit learning requests or configured project-memory recall; never silently collect or sync."
 id: 'agents.skills.agent-self-improvement.skill'
 title: 'Agent Self Improvement'
 doc_type: 'skill'
@@ -15,6 +15,7 @@ tags:
 parent:
     - '[[AGENTS|Canonical Agent Policy]]'
 related:
+    - '[[skills/agent-self-improvement/references/project-memory]]'
     - '[[skills/agent-rules-skill-author/SKILL|Agent Rules And Skill Author]]'
     - '[[common/context-compaction-rules|Context Compaction Rules]]'
     - '[[skills/agent-self-improvement/references/collection-contract|Collection Contract]]'
@@ -48,6 +49,14 @@ Read the matching client adapter and relevant project instructions. Read `refere
 
 Requires approved local filesystem and command access for CLI operations. Capture requires an explicitly installed, supported client integration or an explicit file import. Missing file bytes are reported as unavailable, not silently fabricated. There is no unconditional network, model API, GitHub, or MCP requirement.
 
+## Project Memory
+
+For session curation, configured project recall or explicit manual sync, read
+`references/project-memory.md` and use `scripts/learning_memory.py`. Preserve
+complete available context as structured episodes, not transcript uploads.
+Project identity, typed evidence and review status are separate. Shared experience
+never automatically changes reusable skills. No automatic network synchronization.
+
 ## Workflow
 
 1. Explain collection scope, private storage, limitations, and consent. Collection defaults to OFF.
@@ -77,6 +86,7 @@ Should not trigger: "Fix this CSS bug"; "Review the current PR"; "Summarize what
 
 ## Reference Map
 
+- `references/project-memory.md`: project IDs, schema, curation, recall and manual exchange.
 - `references/collection-contract.md`: canonical events and client limitations.
 - `references/learning-policy.md`: classification, recurrence, evaluation and promotion rules.
 - `references/privacy-and-threat-model.md`: data boundary, consent, security and deletion.

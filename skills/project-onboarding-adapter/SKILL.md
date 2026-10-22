@@ -114,6 +114,18 @@ Read targeted README sections only when they help identify project intent, setup
 12. In Plan Mode, return the plan and stop.
 13. In execution mode, update the approved pointer and local overlays; complete the matching Codex or Claude phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
 
+## Optional Learning Repository
+
+During full adaptation, offer optional private-repository experience storage.
+Only if the user supplies a repository, follow the learning skill's
+`skills/agent-self-improvement/references/project-memory.md` to bind the stable project ID, verify access and
+configure the local address. Store ID and manual-only mode in host-local
+`.agents/project/learning-profile.md`. Link it from the approved host pointer for
+project-scoped recall on relevant tasks; recall never enables capture or sync.
+No repository means local-only operation.
+Do not enable capture, upload data, install tooling, or ask again on kit updates.
+Plan Mode only describes the option. Never embed a user's repository in this kit.
+
 ## Codex Model Setup During Onboarding
 
 A full onboarding request authorizes missing project-local GPT role setup,

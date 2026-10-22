@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Project,[string]$Version="v1.5.0",[switch]$EnableLearning)
+param([Parameter(Mandatory=$true)][string]$Project,[string]$Version="v1.6.0",[switch]$EnableLearning)
 $ErrorActionPreference="Stop"
 if(!(Test-Path $Project -PathType Container)){throw "Project directory missing"}
 $root=(Resolve-Path $Project).Path

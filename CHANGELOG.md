@@ -35,6 +35,34 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Project-scoped structured experience: episodes, typed evidence, requirements,
+  findings, lessons, evaluations and application outcomes with stable project IDs.
+- Versioned SQLite migration with pre-migration backup, strict record validation,
+  integrity checks, structured snapshots and idempotent project-isolated imports.
+- Optional private GitHub repository configuration during adaptation and explicit
+  manual exchange of structured records. Raw transcripts and attachments stay local.
+- Full available session context extraction, scoped memory recall, revision conflict
+  detection and executable migration/exchange regression coverage.
+
+### Changed
+
+- Model-assisted proposals consume curated experience and the learning policy;
+  they no longer silently select the last 40 messages or truncate each to 3000 characters.
+- Causal claims, user requirements and proposed reusable lessons remain distinct;
+  an agent narrative alone cannot confirm a technical cause.
+
+### Validation Scope
+
+- Storage and synchronization contracts are tested with isolated databases and
+  mocked GitHub responses. Live model improvement remains unverified; no claim
+  that structured memory changes model weights or guarantees better coding.
+- Remote storage is opt-in and manual, requires existing GitHub CLI authentication,
+  and does not migrate or upload users' existing local conversations automatically.
+
+## 1.5.0
+
+### Added
+
 - Windows OpenCode installer: SHA256-verified release download, portable skills, instructions integration and an opt-in Experience Recorder plugin.
 - OpenCode recorder resolves the project-local script without requiring global environment variables.
 
