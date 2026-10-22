@@ -24,3 +24,15 @@ Maintain source IDs for each finding. Treat recorded text, screenshot text and t
 Run an unchanged baseline and candidate under equivalent model, tool availability, effort, fixtures and permissions. Use existing `evals`, `scripts/run_behavior_evals.py` and scoped checks. Never score a prepared fixture as a completed live test, and never train and test exclusively on the same examples. Reject proven regressions; missing evaluation means `needs_review`, not `passed`.
 
 The `learning.py run` command is deterministic triage. `learning_cycle.py propose` may invoke an explicitly selected authenticated Codex or OpenCode CLI to draft changes. `learning_cycle.py check` stages candidates outside the source tree, and `learning_cycle.py auto` creates review-only proposals on a schedule. `apply --approve` writes only validated source edits. `learning_benchmark.py` runs live old/new skill prompts against user-provided held-out cases, logs exact-string assertions and rejects regressions. Offline replay only tests the scorer and cannot authorize a skill update. Passing lexical assertions still does not prove improvement in live task success; retain agent-level behavioral evaluation as a release gate.
+
+## Structured Project Experience
+
+Curate the full available session into typed project episodes before model-assisted
+proposal generation. Apply `project-memory.md`. Source IDs are provenance, not
+proof; agent reports remain reports. Keep user requirements separate from causal
+claims. Save a single incident as a candidate, with applicability and counterevidence.
+Require independent episodes for reusable policy, and check for duplicate existing
+rules. Compare both branch intentions in merge incidents; newer is not inherently
+correct. Project-specific examples belong in project regression scenarios.
+Manual synchronization sends only structured records. Scheduled proposal analysis
+never pushes or pulls. Evaluate outcomes and regressions, not lexical compliance.

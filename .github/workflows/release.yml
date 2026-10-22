@@ -36,6 +36,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Verify experience storage and exchange
+        run: python -m unittest discover -s skills/agent-self-improvement/scripts -p 'test_learning*.py'
+
       - name: Compile Python validators
         run: |
           python -m py_compile scripts/*.py

@@ -291,6 +291,19 @@ def purge(conn, state, project, session=None):
         conn.execute("DELETE FROM events WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM attachments WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM projects WHERE id=?", (pid,))
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE name='memory_bindings'").fetchone():
+        row = conn.execute("SELECT project_id FROM memory_bindings WHERE local_id=?", (pid,)).fetchone()
+        if row:
+            shared_pid = row[0]
+            if session:
+                episodes = {r[0] for r in conn.execute(
+                    "SELECT episode_id FROM memory_records WHERE project_id=? AND json_extract(provenance,'$.session_id')=?",
+                    (shared_pid, session))}
+                for episode in episodes:
+                    conn.execute("DELETE FROM memory_records WHERE project_id=? AND episode_id=?", (shared_pid, episode))
+            else:
+                conn.execute("DELETE FROM memory_records WHERE project_id=?", (shared_pid,))
+            conn.execute("DELETE FROM memory_packages WHERE project_id=?", (shared_pid,))
     # Derived reports must be removed too; they can contain purged source text.
     prior_runs = [row[0] for row in conn.execute("SELECT id FROM runs WHERE project_id=?", (pid,))]
     for run_id in prior_runs:
@@ -318,7 +331,10 @@ def purge(conn, state, project, session=None):
             (state / "blobs" / digest[:2] / digest).unlink(missing_ok=True)
             conn.execute("DELETE FROM blobs WHERE digest=?", (digest,))
     conn.commit()
-    return {"purged": True, "project_id": pid, "session": session}
+    retained = [str(p) for p in state.glob("experience.pre-v2-*.sqlite3")]
+    return {"purged": True, "project_id": pid, "session": session,
+            "retained_migration_backups": retained,
+            "warning": "Local migration backups and remote packages may still contain this project's data; purge does not erase Git history or external copies."}
 
 
 def main():
@@ -341,7 +357,8 @@ def main():
             cmd.add_argument("--session")
     args = parser.parse_args()
     state = args.state.expanduser().resolve()
-    conn = create_store(state)
+    from learning_memory import open_store
+    conn = open_store(state)
     try:
         if args.command == "init":
             result = {"state": str(state), "recording": False}

@@ -24,6 +24,9 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
+      - name: Verify experience storage and exchange
+        run: python -m unittest discover -s skills/agent-self-improvement/scripts -p 'test_learning*.py'
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
