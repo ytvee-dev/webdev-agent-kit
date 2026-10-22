@@ -18,9 +18,9 @@ depends_on: []
 
 # Live Behavior Evaluation
 
-This experimental harness separates scenario validity, runner execution, and
-human-assessed agent behavior. A zero adapter exit code is not a behavior pass.
-No model/client success rates are claimed without retained run evidence.
+This experimental tool prepares test projects and records agent runs. A person
+then checks the result against the case's criteria. The tool finishing without
+an error does not mean the agent solved the task correctly.
 
 ## Prepare And Run
 
@@ -39,7 +39,8 @@ not expose the expected answer. Start a fresh client in `workspace/`, give it
 implementation conversation for review. For the missing-browser case, disable
 browser capability in the actual client rather than merely telling it to pretend.
 
-For repeatable execution, supply a trusted local adapter command after `--`:
+To automate a run, supply a local adapter command after `--`. An adapter is a
+script that starts your installed client and records its output:
 
 ```text
 python scripts/run_behavior_evals.py --case review-defect --target codex --output /tmp/webdev-review-eval --client codex --model recorded-model-id -- python /absolute/path/to/local-adapter.py
@@ -71,15 +72,15 @@ count as success. Do not publish raw transcripts containing private information.
 
 Repeat relevant cases in fresh workspaces on each supported client; use separate
 with-kit and without-kit runs when comparing effect. Never count synthetic
-adapter smoke checks as real model evidence. Release stability still requires
-the independent project/client reports in Governance.
+adapter smoke checks as real model evidence. Release decisions also need
+real-project reports, as described in [Maintenance](../../MAINTENANCE.md).
 
 ## Fixture Scope
 
 The dependency-free HTML/JavaScript page deliberately contains a local-storage
 persistence defect. It supports CSS scope, debugging, review, blocked-browser,
 resume, prototype, glossary, vertical planning, and assumption-analysis cases.
-Cases receive only their declared synthetic context; local overlays live under
+Cases receive only their declared synthetic context; local project records live under
 host `.agents/project/`, including for native plugins. The runner captures
 fixture changes and includes kit changes so policy tampering is visible.
 
@@ -93,8 +94,8 @@ with a synthetic adapter. It does not execute an AI model.
 
 The workflows use original kit-specific wording informed by
 [Agentic Coding Design Patterns](https://github.com/mokevnin/agentic-coding-design-patterns):
-throwaway prototypes, writer/reviewer context separation, tracer-bullet tasks,
-domain vocabulary, and feedback loops. Existing kit permissions and lightweight
+temporary prototypes, separate sessions for implementation and review, small
+end-to-end tasks, project terminology, and feedback after each attempt. Existing kit permissions and lightweight
 routing remain authoritative.
 
 ## Field-Derived Cases
@@ -124,7 +125,7 @@ For `onboarding-approved-activation`, use an already authorized real Codex clien
 and a disposable project. The first user turn authorizes read-only investigation
 and asks for a configuration proposal. The operator must inspect and approve the
 exact fields in a subsequent turn before writes, then refresh the client and
-continue with four read-only canaries. A trusted adapter may drive that same
+continue with four small read-only checks. A trusted adapter may drive that same
 conversation but must retain every approval and actual tool event. Do not replace
 real availability or metadata with synthetic model names, and never auto-trust a
 project or bypass a managed restriction to finish the scenario.

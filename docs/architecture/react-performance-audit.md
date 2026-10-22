@@ -24,19 +24,19 @@ depends_on: []
 Issue #71 requested coverage against Vercel's React guidance. Reviewed on
 2026-10-13 against [the pinned skill](https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/react-best-practices/SKILL.md)
 and its 70 rule files at that revision. `_sections` and `_template` are authoring
-files, not rules. This audit records original Kit decisions; upstream examples
-are not vendored. It is an inventory/contract audit, not 70 executed benchmarks.
+files, not rules. This audit records which recommendations the Kit adopted and why. It does not
+copy upstream examples, and the 70 rows are not performance benchmark results.
 
 Baseline 1.2.0 had broad performance priorities, state/data boundaries and an
 explicit restriction on speculative memoization. It did not establish complete
-rule-by-rule coverage. The owning runtime synthesis is
+rule-by-rule coverage. The agent instructions are in
 [Conditional React And Next Performance Rules](../../common/react-performance-rules.md).
 Its sections are loaded only for relevant React/Next work. Current React docs
 were checked for cache, effects, Effect Events, transitions and hydration;
 Next documentation was checked for server data security. Installed host versions
 still determine applicability.
 
-## Dispositions
+## What the labels mean
 
 - Added: an explicit missing instruction is now present.
 - Clarified: an existing principle now has a concrete boundary.
@@ -47,7 +47,7 @@ still determine applicability.
 None of these labels means measured performance improvement. No policy requires
 installing better-all, SWR, an LRU package, an optimizer or new test infrastructure.
 
-## Coverage By Owner Section
+## Recommendations by topic
 
 The table groups map to sections of the runtime reference. Security, host
 conventions and evidence requirements apply to every row.

@@ -21,8 +21,10 @@ depends_on: []
 
 [← All documentation](../README.md)
 
-Purpose: define the native installation, policy entrypoint, skill discovery
-root, alias ownership, and validation boundary for every release target.
+This maintainer reference describes where each client package installs, how the
+client finds its instructions and skills, and which checks validate the package.
+A target is a package built for a client. An alias reuses another target's contents
+under a different download name.
 
 `bundle-manifest.json` is the machine-readable source of truth for these
 contracts. Generated `dist/**` files are build output and must not redefine
@@ -36,8 +38,8 @@ them.
 | `claude-code` | Plugin | Install through a local marketplace using the native Claude Code plugin flow | `.claude-plugin/plugin.json` through `.claude-plugin/marketplace.json` | `skills` inside the plugin root |
 | `cursor` | Project bundle | Extract from the host project root | `.cursor/rules/webdev-agent-kit.mdc` plus the approved host-root pointer | `.agents/skills` through the shared project policy |
 
-Canonical targets own build behavior. Each canonical target must declare one
-safe output path, install mode, entrypoint, skills root, and contract validator.
+Each base target defines its output directory, installation method, instruction
+entry file, skill directory and validation script.
 
 ## Target Aliases
 
@@ -77,8 +79,8 @@ never source truth and must be rebuilt from the source bundle.
 - Source `agents/claude-code/**` defines nine native roles. Only Claude targets package them under `agents/`, with native metadata and inherited models. Host settings and custom agents remain outside the plugin.
 - Codex-only `agents/openai.yaml` metadata is emitted only for Codex-compatible plugin or skill targets.
 - Claude Code receives a self-contained native plugin installable through its local marketplace and must not depend on `.agents/skills` for native skill discovery.
-- Project-local facts remain in host `.agents/project/**` overlays and are never published inside a reusable plugin.
-- Generated targets exclude human-facing repository docs, local overlays, caches, dependencies, and internal bundle manifests.
+- Project-local facts remain in project `.agents/project/**` files and are never published inside a reusable plugin.
+- Generated targets exclude human-facing repository docs, local project records, caches, dependencies, and internal bundle manifests.
 - Generated targets strip source graph frontmatter from policy, common, profile, adapter, template, and reference Markdown. Generated skills retain only portable `name` and `description` frontmatter.
 
 ## Validation Boundary

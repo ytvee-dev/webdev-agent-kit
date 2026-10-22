@@ -19,7 +19,7 @@ depends_on: []
 
 # Claude Project Adaptation And Native Roles
 
-Version 1.2.0 keeps all 21 shared skills and adds nine native plugin agents.
+The current release candidate includes 23 shared skills and nine plugin agents.
 Claude Code and the VS Code Claude alias use the same generated plugin.
 Complete the [Claude installation](claude-code.md) or
 [VS Code installation](vscode-claude.md) first.
@@ -49,7 +49,7 @@ inspect supported model choices within my existing budget. Verify only new or
 changed approved bindings with tiny read-only checks. Do not change app code.
 ```
 
-For discovery without model probes, add: `Facts only; no model changes or canaries.`
+To list roles without calling models, add: `Facts only; no model changes or canaries.`
 Plan Mode returns a proposal without writing project context or settings.
 If persistent context imports are needed, review the proposed minimal host
 `CLAUDE.md` merge. Never replace existing instructions or import a missing
@@ -59,15 +59,15 @@ If persistent context imports are needed, review the proposed minimal host
 
 | Suffix | Suitable work | Tools |
 | --- | --- | --- |
-| `wdk-lookup` | Bounded source facts | Read, Glob, Grep |
+| `wdk-lookup` | Focused file lookups | Read, Glob, Grep |
 | `wdk-worker-light` | Fully specified mechanical edits | Read, Glob, Grep, Edit, Write, Bash |
-| `wdk-worker` | Ordinary approved implementation | Same worker tools |
+| `wdk-worker` | Routine implementation | Same worker tools |
 | `wdk-complex` | Ambiguous debugging or integration | Same worker tools, within explicit scope |
 | `wdk-reviewer-light` | Narrow requested review | Read, Glob, Grep |
-| `wdk-reviewer` | Cross-boundary correctness review | Read, Glob, Grep |
+| `wdk-reviewer` | Review changes across several components | Read, Glob, Grep |
 | `wdk-reviewer-deep` | Critical security or data-loss review | Read, Glob, Grep |
-| `wdk-architect` | Consequential architecture or migration | Read, Glob, Grep |
-| `wdk-architect-deep` | Exceptionally coupled architecture | Read, Glob, Grep |
+| `wdk-architect` | Architecture or migration decisions | Read, Glob, Grep |
+| `wdk-architect-deep` | Architecture with many interacting parts | Read, Glob, Grep |
 
 Use the actual registry identifier, normally `webdev-agent-kit:<suffix>`.
 Descriptions define when to delegate; small work stays in the main session.
@@ -83,9 +83,9 @@ Do not apply Codex TOML, GPT IDs or unsupported effort values to Claude.
 ## Verify Each Level
 
 1. `claude plugin list` establishes enabled installation and version.
-2. `claude plugin details webdev-agent-kit@webdev-agent-kit` on Claude Code
-   2.1.296 lists 21 skills and nine agents. On other clients, inspect `/plugin`
-   and `/agents`. A CLI inventory is discovery evidence, not model execution.
+2. Use `claude plugin details webdev-agent-kit@webdev-agent-kit` if your CLI
+   supports it, or inspect `/plugin` and `/agents`. Compare the list with the
+   installed release. Seeing a role in the list does not prove it can run.
 3. Refresh with `/reload-plugins` or a new session. Inspect actual native agent
    identifiers, effective tools and permitted dispatch options.
 4. For authorized live verification, send one existing-file lookup to a newly

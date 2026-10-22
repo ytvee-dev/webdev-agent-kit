@@ -17,10 +17,10 @@ depends_on: []
 
 # Reproducible Workflow Examples
 
-These examples use public synthetic inputs under `evals/live/`. They describe
-reproduction and expected contracts, not claimed live agent results. Prerequisite:
-Python, a source checkout, and your chosen installed client. Browser cases also
-need a callable browser tool; the kit does not install one.
+These examples use small test projects in `evals/live/`. Each explains how to
+run a case and what result to expect. The examples are not reports of completed
+agent runs. You need Python, a checkout of this repository and an installed
+coding client. Browser cases also need a working browser tool.
 
 Run `python scripts/build_skill_targets.py`, then prepare each case into a
 different empty directory outside this checkout. Example paths below use
@@ -104,7 +104,7 @@ Use `component-substitution` to review disabled and callback contracts, and
 
 Keep `result.json` as runner evidence; attach client version, model, tool
 availability, trace, changed files, and per-rubric observations. Write a separate
-`assessment.json` with passed/failed/blocked/unverified outcomes. Adapter exit
-zero never grades behavior. The [evaluation guide](behavior-evaluation.md)
+`assessment.json` with passed/failed/blocked/unverified outcomes. An adapter exiting
+without an error does not prove that the agent completed the task correctly. The [evaluation guide](behavior-evaluation.md)
 explains optional adapters and the [report guide](field-evidence.md) describes
 sanitized regression cases.

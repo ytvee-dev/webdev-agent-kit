@@ -20,7 +20,7 @@ body:
     attributes:
       label: WebDev Agent Kit version
       description: Provide the release tag, commit, or archive name.
-      placeholder: v0.5.0
+      placeholder: v1.6.0
     validations:
       required: true
   - type: dropdown
@@ -118,20 +118,20 @@ body:
     id: client-model
     attributes:
       label: Client version and model
-      description: Include client surface, exact version, model ID, OS, and shell; use unknown when unavailable.
+      description: Include the app or extension, its version, model, OS, and shell. Write unknown for details you cannot check.
     validations:
       required: true
   - type: textarea
     id: repetition
     attributes:
       label: Repetitions and retained evidence
-      description: Include fresh-session runs, failures and successes, trace locations, and any near-miss prompt. Never count a fixture as a live pass.
+      description: Say whether it happened in a new session, how often it occurred, and where the results are recorded. Separate real agent runs from simulated cases.
     validations:
       required: false
   - type: textarea
     id: hypotheses
     attributes:
       label: Suspected cause and proposed changes
-      description: Separate source-confirmed defects from hypotheses and requested architectural changes. Preserve explicit consent boundaries.
+      description: Explain what the source code confirms, what you suspect, and what change you propose. Include any user restrictions that affected the task.
     validations:
       required: false

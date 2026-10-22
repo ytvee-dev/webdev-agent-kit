@@ -19,11 +19,13 @@ depends_on: []
 
 # Install WebDev Agent Kit in OpenCode
 
-This is a project-scoped integration for OpenCode Desktop and CLI on Windows. The release includes all 22 portable skills and the Experience Recorder plugin.
+This is a project-scoped integration for OpenCode Desktop and CLI on Windows. The release includes all 23 portable skills and the Experience Recorder plugin.
 
 ## One-command Windows installation
 
-Download the exact versioned script from the release assets:
+The example below pins v1.5.0, the first OpenCode installer release. For a newer
+published release, replace both version strings with that release's tag. Use the
+script and bundle from the same release:
 
 ```powershell
 $project = "C:\Projects\my-app"

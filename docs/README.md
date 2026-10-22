@@ -28,35 +28,42 @@ depends_on: []
 
 [← Project home](../README.md)
 
-## Guides
+## Set up and use the Kit
 
-- [Draft design-system pilot and field feedback](architecture/design-system-pilot.md)
+- [Install for your client](install/README.md)
+- [Check your first installation](install/first-run.md)
+- [Choose models and tools](install/model-capability-guide.md)
+- [Connect and check MCP servers](mcp/README.md)
+- [Select a frontend or designer role](install/roles.md)
+- [Configure Codex subagents](install/gpt-model-routing.md)
+- [Use Claude project context and subagents](install/claude-agents.md)
+- [Update or roll back without losing local work](install/upgrade.md)
+- [Ask for help or report a bug](../SUPPORT.md)
 
-- [Install WebDev Agent Kit](install/README.md)
-- [OpenCode installer](install/opencode.md)
-- [Configure and verify MCP](mcp/README.md)
+## Understand and maintain the Kit
 
-## Architecture
+- [Package layouts and client aliases](architecture/runtime-target-contracts.md)
+- [Run and assess agent evaluations](architecture/behavior-evaluation.md)
+- [Reproduce bugfix, screenshot and review cases](architecture/reproducible-workflows.md)
+- [Report results from real projects](architecture/field-evidence.md)
+- [React performance rule audit](architecture/react-performance-audit.md)
+- [Design-system pilot — experimental](architecture/design-system-pilot.md)
+- [Design choices informed by Superpowers](architecture/superpowers-adoption.md)
+- [Maintainer workflow](../MAINTENANCE.md)
 
-- [React performance coverage audit](architecture/react-performance-audit.md)
+## Release history
 
-- [Runtime target contracts](architecture/runtime-target-contracts.md)
+Start with the [changelog](../CHANGELOG.md) for changes by version. The documents
+below record plans and checks for those versions; they are not current setup guides.
 
-## Releases
+- [0.3.0 checklist](release/0.3.0-checklist.md)
+- [0.4.0 checklist](release/0.4.0-checklist.md)
+- [0.5.0 checklist](release/0.5.0-checklist.md)
+- [1.0.0 routing checks](release/1.0.0-checklist.md)
+- [1.1.0 acceptance checks](release/1.1.0-checklist.md)
+- [1.2.0 Claude checks](release/1.2.0-checklist.md)
+- [1.3.0 implementation plan](release/1.3.0-plan.md)
+- [1.4.0 learning preview plan](release/1.4.0-plan.md)
 
-- [0.3.0 release checklist](release/0.3.0-checklist.md)
-- [0.4.0 release checklist](release/0.4.0-checklist.md)
-
-The documents in this directory are intended for users and project maintainers. Runtime policies and executable agent instructions live in `AGENTS.md`, `common/**`, `profiles/**`, `adapters/**`, `skills/**`, and `templates/**`.
-
-## Agent Execution And Routing
-
-- [Claude project adaptation and native roles](install/claude-agents.md)
-
-- [Automatic Codex onboarding, model routing and activation troubleshooting](install/gpt-model-routing.md)
-- [Superpowers comparison and adopted design choices](architecture/superpowers-adoption.md)
-- [Behavior evaluation and authenticated onboarding trials](architecture/behavior-evaluation.md)
-- [1.2.0 Claude adaptation release checks](release/1.2.0-checklist.md)
-- [1.1.0 release acceptance checklist](release/1.1.0-checklist.md)
-
-- [1.3.0 implementation and release plan](release/1.3.0-plan.md)
+These pages are for users and maintainers. Agent instructions live in
+`AGENTS.md`, `common/`, `profiles/`, `adapters/`, `skills/` and `templates/`.

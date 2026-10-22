@@ -39,8 +39,8 @@ Review this frontend change for correctness, TypeScript safety, accessibility,
 performance, and verification gaps.
 ```
 
-Expected exclusions:
+What to expect:
 
-- no broad rewrite from a review finding alone;
-- no behavior change during refactor without approval;
-- no generated testing workflow.
+- A review returns findings; it does not start an unrequested rewrite.
+- A refactor preserves behavior unless you approve a change.
+- The agent uses relevant existing checks. New tests need a separate request.

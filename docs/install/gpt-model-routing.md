@@ -20,14 +20,15 @@ depends_on: []
 
 # Codex Onboarding Model Routing
 
-Version 1.1.0 includes missing GPT role setup, narrow native activation and
-read-only checks in full Codex onboarding, without a second confirmation.
-It supports a local Codex
-project bundle, including compatible Codex IDE surfaces, not GPT models running
-inside unrelated clients. It never replaces the main session's model or requires
-an external router/API key. Existing working bindings are preserved. Facts-only,
-no-model-change, preview/Plan Mode requests and kit updates do not configure
-models or launch canaries. Genuine conflicts or missing authority still stop setup.
+Codex can delegate part of a task to a subagent with its own role and model.
+During full project adaptation, the Kit sets up missing local roles and checks
+that they work. It preserves existing working settings and your main session's
+model. No separate routing service or API key is required.
+
+This setup applies to supported Codex clients, including compatible IDE
+extensions. It does not configure GPT models inside other products. A Kit
+update, Plan Mode or a request to update project facts only leaves model settings
+unchanged. If settings conflict, the agent asks how to resolve them.
 
 ## Enable During Onboarding
 
@@ -37,24 +38,23 @@ After normal installation, send:
 Onboard this project with WebDev Agent Kit.
 ```
 
-That request includes local model setup and small read-only activation checks;
-the agent shows a bounded change summary, then acts without asking again.
-To exclude it, say "Update only project facts; do not change model configuration."
-The agent selects missing bindings from your actual client catalog and records the cost
-basis and supported inputs/efforts. The reusable kit deliberately contains no
-fixed production model IDs. Subscription and API authentication can expose
-different catalogs; published model documentation alone is insufficient.
+This request includes local role setup and small read-only checks. The agent
+shows what it will change and proceeds without a second setup confirmation.
+To skip this, say: "Update only project facts; do not change model configuration."
 
-Four base roles retain compatibility; new onboarding normally adds a mechanical
-worker and an architect. Luna/low suits lookup, Luna/medium mechanical edits,
-Terra/medium ordinary implementation, Sol/high complex work and review, and
-Astra/high consequential architecture. These are evidence-gated starting choices,
-not fixed IDs or a promise that one model always wins. Optional deep architecture
-and light/deep review roles are added only when justified. See the
+Each role needs a model and a supported reasoning effort. The agent checks the
+models available in your client and account before choosing them. Subscription
+and API accounts can offer different models.
+
+The four original roles cover lookup, implementation, complex work and review.
+New setup normally also adds a role for mechanical edits and one for architecture.
+The bundled routing matrix suggests model families and effort levels for each
+job; the agent must match them to your account's available models. Additional
+review or architecture roles are optional. See the
 [workload and effort matrix](../../skills/project-onboarding-adapter/references/model-workload-matrix.md).
-Skills still describe how to work. Instructions select
-a real role per action; trivial work remains inline, parallelism is bounded,
-and stronger models do not reset the existing retry budget.
+Skills describe how to do a task; roles determine who does it. Small tasks stay
+with the main agent. Delegated tasks keep their scope and retry limits even if
+a stronger model is selected.
 
 ## Files And Safety
 
@@ -69,8 +69,8 @@ Current Codex documentation enables subagents by default, so a missing flag is
 not itself a defect. Another false gate, higher-precedence denial, untrusted
 project or ambiguous TOML layout needs explicit reconciliation, not a workaround.
 
-Local `.agents/project/` contains the request, human model-routing profile,
-managed hashes and restricted recovery journals. Keep these and `.codex/`
+Local `.agents/project/` stores the setup request, a readable summary of role
+settings, file hashes used to detect changes, and recovery records for rollback. Keep these and `.codex/`
 out of public commits and release archives. Journals can contain original
 configuration bytes; do not share them. Symlinks and Windows reparse points,
 including junctions in managed paths or the host root, are refused. On POSIX, journals use 0600 inside a
@@ -85,15 +85,16 @@ see the [bootstrap reference](../../skills/project-onboarding-adapter/references
 Do not run placeholder model IDs. After interruptions, inspect the journal
 and state; do not delete a setup lock while another installer may still run.
 
-## Verify The Actual Dispatch Mode
+## Check how your client starts subagents
 
-Some Codex surfaces select named native roles; others expose explicit model and
-effort parameters instead. Onboarding inspects the real tool signature and
-records `named-role`, `explicit-binding`, or `unsupported`. It never invents a
-role-selector argument. Direct dispatch carries the role's instructions and
-both confirmed binding values; reviewer context must be non-inheriting.
-Direct-binding success does not prove that native TOML roles loaded. Verify
-each mode on its own surface; never transfer a CLI claim to the desktop app.
+Some Codex clients start a subagent by role name. Others accept a model and
+reasoning effort directly. Adaptation records the supported mode as `named-role`,
+`explicit-binding`, or `unsupported`.
+
+A direct call must include the role's instructions, model and effort. An
+independent reviewer starts without the implementation conversation. A successful
+direct call does not prove that role files loaded, and a CLI result does not
+prove the same setup works in the desktop app.
 
 ## Verify Activation, Not Just Files
 
@@ -104,18 +105,19 @@ python .agents/skills/project-onboarding-adapter/scripts/configure_gpt_agents.py
   --root . --inspect
 ```
 
-It reports configured roles, local gates and a fingerprint, never live success.
-Native delegation need not exist before the configuration phase; it must exist
-after activation to perform canaries. Save the next onboarding step before a
+It reports configured roles, enablement settings and a configuration fingerprint
+used to detect later changes. It does not start a subagent.
+Role files can be prepared before delegation is available. To test them, the
+client must actually support starting subagents. Save the next onboarding step before a
 client restart. Project trust and managed policy remain controlled by the human
 and the client, not by kit instructions. The agent should refresh the
-client as documented, run the onboarding-scoped read-only canaries, and inspect actual
+client as documented, run the onboarding-scoped small read-only checks, and inspect actual
 model/effort and permissions from runtime metadata. A model's identity claim
 is not proof. Reviewer independence additionally requires fresh context.
 
 When the client, credentials or observable runtime metadata are unavailable,
 setup remains activation-unverified and the ordinary single-agent workflow
-continues. No invisible expensive fallback is allowed. Real savings must be
+continues. The agent must not silently switch to a more expensive model. Real savings must be
 measured across comparable accepted tasks, including coordinator and review
 cost, rather than promised from token rates alone.
 
@@ -136,7 +138,7 @@ reviewed plan rather than silently registering duplicate agents.
 | Project is not trusted | Human uses the client's supported trust controls; the kit does not edit global trust |
 | Roles written but not discovered | Refresh/new session, confirm role format and effective registration |
 | Inspector succeeds but runtime metadata is missing | Leave activation-unverified; use the main agent |
-| Actual child model or effort differs | Block that role, inspect loading/precedence, repeat the canary after correction |
+| Actual child model or effort differs | Block that role, inspect loading/precedence, repeat the small check after correction |
 | Existing user role or inline TOML conflicts | Stop before writes and review a manual scoped merge |
 
 See the [1.1.0 validation scope](../release/1.1.0-checklist.md) for automated

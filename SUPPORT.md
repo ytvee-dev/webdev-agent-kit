@@ -30,7 +30,7 @@ is offered.
   files, reports verification incorrectly, or violates another kit rule.
 - **Client compatibility:** use the
   [Compatibility Report form](https://github.com/ytvee-dev/webdev-agent-kit/issues/new?template=compatibility-report.yml)
-  for installation, archive layout, discovery, sandbox, or target-specific
+  for installation, missing skills, archive layout, permissions, or client-specific
   behavior in Codex, Claude Code, Cursor, or their VS Code variants.
 - **Feature or workflow idea:** use the
   [Feature Request form](https://github.com/ytvee-dev/webdev-agent-kit/issues/new?template=feature-request.yml).
@@ -51,10 +51,9 @@ is offered.
 5. Remove credentials, customer data, private paths, and proprietary source.
 6. Record exact commands and distinguish failed, blocked, and skipped checks.
 
-The maintainer may close requests that lack enough public evidence to reproduce,
-fall outside the supported scope, or belong in a different channel. A clear
-reproduction improves the chance of a useful response but does not guarantee a
-fix or inclusion in the roadmap.
+If you cannot reproduce the problem, include what you observed and what remains
+unknown. The maintainer may ask for more detail or direct you to the relevant
+project. Submitting a report does not guarantee a fix.
 
 ## Supported Scope
 

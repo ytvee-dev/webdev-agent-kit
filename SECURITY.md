@@ -18,9 +18,9 @@ depends_on: []
 
 # Security Policy
 
-WebDev Agent Kit contains executable instructions for AI coding agents. Treat
-every rule, skill, script, reference, metadata file, and generated distribution
-target as supply-chain-sensitive content.
+WebDev Agent Kit includes instructions and scripts that can affect what an agent
+reads, changes or runs. Review changes to these files as you would changes to
+other development tools.
 
 ## Supported Versions
 
@@ -28,8 +28,8 @@ Security fixes are developed for the latest published release line.
 
 | Version | Supported |
 | --- | --- |
-| `0.4.x` | Yes |
-| `< 0.4` | No |
+| Latest published release | Yes |
+| Older releases | Upgrade to receive fixes |
 
 Users of an older release should upgrade to the latest release before reporting
 an issue that has already been fixed. A coordinated fix may include a new patch

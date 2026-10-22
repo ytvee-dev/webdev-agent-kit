@@ -20,13 +20,14 @@ depends_on: []
 Compared WebDev `d01a66da060f739f36cd39cf8ff06da96141abc8` (1.0.0) with
 Superpowers `b36e0829c6d0140e93cfef2ca599b1b07d4a7797` (6.3.0), inspecting runtime
 instructions, helpers, evaluation machinery, docs and relevant issues.
-WebDev already has GPT role bootstrap, criterion/slice traceability, independent
-review, bounded retries and a live-eval runner. This release improves their
-handoffs and activation, rather than adding duplicate orchestrators.
+At the time of the comparison, WebDev already had model-role setup, plans linked
+to acceptance criteria, independent review, retry limits and an evaluation runner.
+The changes focused on passing task context between agents and checking role
+activation.
 
-WebDev's strengths remain frontend-specific boundaries and proportional work.
-Superpowers provides concrete task/report/diff handoffs and scoped repair loops.
-Its mandatory review/TDD workflow is not imported as a blanket frontend policy.
+Superpowers supplied useful examples of task briefs, review packages and follow-up
+checks. WebDev adopted parts of those approaches while keeping small frontend
+edits free of mandatory delegation or test-driven development.
 
 ## Adopted With Adaptation
 
@@ -36,8 +37,8 @@ Its mandatory review/TDD workflow is not imported as a blanket frontend policy.
 | Whole-task review diff, not only last commit | New dependency-free packager records full commit range or scoped staged/unstaged/untracked state; no forced commit |
 | Scoped re-review | Existing reviewer judges open findings and repair-induced risk; explicit dependency exception prevents narrow blind spots |
 | Isolated per-plan artifacts and recovery | Additive local run namespaces, while canonical plans retain completion/evidence pointers |
-| Cost-shaped dispatch | Batch same-shape mechanical work only when useful; keep trivial work inline and preserve approved roles/retry caps |
-| Behavioral evidence instead of slogans | Extend the existing live scenarios; separate schema, executable-helper, synthetic-runner and actual model evidence |
+| Task and model selection | Batch same-shape mechanical work only when useful; keep trivial work inline and preserve approved roles/retry caps |
+| Evaluation cases | Extend the existing live scenarios; separate schema, executable-helper, synthetic-runner and actual model evidence |
 
 New reusable wording and the Python helper are kit-specific implementations, not
 an installation or wholesale copy of the upstream skills.

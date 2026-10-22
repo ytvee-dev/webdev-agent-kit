@@ -23,16 +23,13 @@ depends_on: []
 
 [← All documentation](../README.md) · [Install WebDev Agent Kit](../install/README.md)
 
-This document is the common entrypoint for installing and verifying MCP tools
-that complement `webdev-agent-kit-main`. Select your client in the table below,
-open the instructions for a specific MCP, and return to the
-[MCP verification](#mcp-verification) section after installation.
+MCP (Model Context Protocol) connects an agent to external tools, such as library
+documentation or a browser. Install only the servers you need. Built-in client
+tools can often do the same job.
 
-WebDev Agent Kit uses a **capability-first** approach: a skill declares the
-capability it needs, and an MCP, a built-in client tool, or another verified
-provider can supply it. A server name alone does not prove availability. An MCP
-is considered operational only after one of its tools is called successfully in
-the current session.
+Choose your client below, follow the server's setup steps, then run the
+[MCP checks](#mcp-verification). A server is confirmed working when one of its
+tools returns a useful result in your current session.
 
 ## Installation Matrix
 
@@ -91,21 +88,8 @@ current documentation for that ID. It is useful when the behavior of React,
 Next.js, TypeScript, Redux, TanStack, Axios, a package manager, or a build tool
 may have changed.
 
-The `current_library_docs` capability is optionally used by:
-
-- `frontend-architecture-planner`;
-- `frontend-bugfix-debugger`;
-- `frontend-design-director`;
-- `frontend-design-intelligence`;
-- `frontend-layout-implementer`;
-- `frontend-quality-reviewer`;
-- `frontend-refactor-surgeon`;
-- `greenfield-project-builder`;
-- `project-context-adapter`;
-- `project-onboarding-adapter`.
-
-The absence of Context7 does not block these skills: official web documentation
-for the library is an acceptable fallback.
+Use it when a task depends on a library's current API. If Context7 is unavailable,
+the agent can read that library's official web documentation instead.
 
 ### Authorization
 
@@ -141,32 +125,8 @@ task, file changes. The server can see only the directories passed in its
 arguments. Native client file tools can satisfy the same capability, so a
 separate Filesystem MCP is not always required.
 
-The `project_files` capability is required for core work by:
-
-- `agent-rules-skill-author`;
-- `frontend-architecture-planner`;
-- `frontend-bugfix-debugger`;
-- `frontend-layout-implementer`;
-- `frontend-linter-manager`;
-- `frontend-quality-reviewer`;
-- `frontend-refactor-surgeon`;
-- `mcp-toolchain-manager`;
-- `pattern-library-manager`;
-- `project-context-adapter`;
-- `project-onboarding-adapter`.
-
-It is required only when the scope calls for it by:
-
-- `execution-plan-manager`;
-- `frontend-design-director`;
-- `frontend-design-intelligence`;
-- `frontend-visual-qa`;
-- `goal-planner`;
-- `greenfield-project-builder`;
-- `loop-workflow-planner`.
-
-These dependencies apply to the capability, not necessarily to the specific
-Filesystem MCP.
+Most coding tasks need file access. Use the client's built-in file tools if they
+already provide the access you need; a separate Filesystem server is optional.
 
 ### Security
 
@@ -184,23 +144,6 @@ Source: [official Filesystem MCP](https://github.com/modelcontextprotocol/server
 
 MDN Docs provides current information about HTML, CSS, Web APIs,
 accessibility, specifications, and Browser Compatibility Data.
-
-The `web_platform_docs` capability is required when relevant to the scope by:
-
-- `design-screenshot-spec`.
-
-It is optionally used by:
-
-- `frontend-architecture-planner`;
-- `frontend-bugfix-debugger`;
-- `frontend-design-director`;
-- `frontend-design-intelligence`;
-- `frontend-layout-implementer`;
-- `frontend-quality-reviewer`;
-- `frontend-refactor-surgeon`;
-- `frontend-visual-qa`;
-- `project-context-adapter`;
-- `project-onboarding-adapter`.
 
 The MDN MCP is experimental and may be withdrawn. Mozilla states that it stores
 request data during the experiment. Do not send secrets or private code. The
@@ -220,21 +163,6 @@ Apps SDK, Codex, models, MCP, skills, plugins, sandbox, and configuration.
 The server provides documentation only: it does not call the OpenAI API, check
 an account, or require an OpenAI API key.
 
-The `openai_platform_docs` capability is required when current OpenAI information
-affects the task by:
-
-- `agent-rules-skill-author`;
-- `frontend-architecture-planner`;
-- `frontend-bugfix-debugger`;
-- `frontend-layout-implementer`;
-- `frontend-quality-reviewer`;
-- `frontend-refactor-surgeon`;
-- `greenfield-project-builder`;
-- `mcp-toolchain-manager`;
-- `pattern-library-manager`;
-- `project-context-adapter`;
-- `project-onboarding-adapter`.
-
 Source: [official OpenAI Docs MCP page](https://developers.openai.com/learn/docs-mcp).
 
 ## Playwright
@@ -245,17 +173,8 @@ Playwright controls a real browser: it opens pages, retrieves accessibility
 snapshots, interacts with elements, changes the viewport, captures screenshots,
 and inspects console/network activity.
 
-The `rendered_visual_evidence` capability is required by:
-
-- `frontend-visual-qa`.
-
-It is required when relevant to the scope by:
-
-- `frontend-bugfix-debugger`;
-- `frontend-design-director`;
-- `frontend-layout-implementer`;
-- `frontend-quality-reviewer`;
-- `frontend-refactor-surgeon`.
+Use it to check the rendered page and interactions. It is optional when your
+client already has a browser tool that can perform the same checks.
 
 Playwright is not a security boundary. Verify the URL and action, do not provide
 credentials unnecessarily, and choose one-time permission instead of permanent
@@ -279,7 +198,8 @@ After installation:
 ### Verify Filesystem
 
 ```text
-Use the Filesystem MCP and verify how it works
+Use Filesystem MCP to list the allowed project directory and read package.json.
+Do not write files.
 ```
 
 Success: the server shows the restricted allowed path, returns a file list, and
@@ -288,7 +208,8 @@ reads `package.json` without writing.
 ### Verify Context7
 
 ```text
-Use the Context7 MCP and verify how it works
+Use Context7 to find documentation for the installed React version.
+Resolve the library ID, retrieve a relevant page and report the source.
 ```
 
 Success: a library ID is returned first, followed by documentation for that ID.
@@ -296,29 +217,28 @@ Success: a library ID is returned first, followed by documentation for that ID.
 ### Verify MDN Docs
 
 ```text
-Use the MDN MCP and verify how it works
+Use MDN MCP to find CSS grid documentation and its browser compatibility.
 ```
 
-Success: `search`, `get_doc`, and `get_compat` work, including Browser
-Compatibility Data.
+Success: the server returns the requested documentation and compatibility data.
 
 ### Verify Playwright
 
 ```text
-Use the Playwright MCP and verify how it works
+Use Playwright MCP to open https://example.com, read its heading and close
+the page. Do not submit forms or change browser settings.
 ```
 
-Success: the browser opens, a link is found through the accessibility tree,
-navigation and network activity are confirmed, and the page closes.
+Success: the browser opens the page, returns its actual heading and closes it.
 
 ### Verify OpenAI Developer Docs
 
 ```text
-Use the OpenAI Developer Docs MCP and verify how it works
+Use OpenAI Developer Docs MCP to find and read the Codex MCP setup guide.
+Return the official source link.
 ```
 
-Success: the server searches official OpenAI docs, retrieves a page, and returns
-endpoints from the current specification.
+Success: the server finds the official guide and reads its content.
 
 ## Readiness Criterion
 

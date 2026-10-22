@@ -5,362 +5,242 @@
 <h1 align="center">WebDev Agent Kit</h1>
 
 <p align="center">
-  <strong>A cross-platform frontend kit for Codex, Claude Code, and Cursor.</strong><br>
-  WebDev Agent Kit helps AI coding agents work predictably and safely with existing frontend projects.
+  Rules and skills for frontend work in Codex, Claude Code, and Cursor.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Skills-21-0ea5e9?style=flat-square" alt="Skills: 21">
+  <img src="https://img.shields.io/badge/Skills-23-0ea5e9?style=flat-square" alt="Skills: 23">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" alt="License: Apache-2.0"></a>
 </p>
 
----
+WebDev Agent Kit gives your coding agent instructions for working with an existing
+project: where to look, how to plan a change, what to preserve, and what to check.
+You keep using your usual client and model. The Kit is a collection of instructions
+and helper scripts, not a separate coding app.
 
-## Table of Contents
+## Contents
 
-- [Table of Contents](#table-of-contents)
-- [Who This Kit Is For](#who-this-kit-is-for)
-- [What Changes After Installation](#what-changes-after-installation)
-- [Supported Clients](#supported-clients)
-- [Choosing Models And Tools](#choosing-models-and-tools)
-- [Quick Start](#quick-start)
-- [Adapting the Kit to a Project](#adapting-the-kit-to-a-project)
-- [Smart Context Cache and Token Savings](#smart-context-cache-and-token-savings)
-- [Verifying the Installation](#verifying-the-installation)
-- [Practical Scenarios](#practical-scenarios)
-  - [A Small CSS Change](#a-small-css-change)
-  - [Fixing a Frontend Bug](#fixing-a-frontend-bug)
-  - [Building an Interface from Screenshots](#building-an-interface-from-screenshots)
-- [Core Skills](#core-skills)
-- [Architecture](#architecture)
-- [Project Validation](#project-validation)
-- [Maintenance and support](#maintenance-and-support)
-- [License](#license)
+- [What it does](#what-it-does)
+- [Install](#install)
+- [Choose models and tools](#choose-models-and-tools)
+- [Adapt it to your project](#adapt-it-to-your-project)
+- [Check the setup](#check-the-setup)
+- [Project context and memory](#project-context-and-memory)
+- [Subagents](#subagents)
+- [Example requests](#example-requests)
+- [Skills](#skills)
+- [Repository layout](#repository-layout)
+- [Checks for maintainers](#checks-for-maintainers)
+- [Support and license](#support-and-license)
 
-## Who This Kit Is For
+## What it does
 
-WebDev Agent Kit is a set of local rules. You continue using your
-usual Codex, Claude Code, or Cursor client while connecting it to a shared
-standard for working with projects.
+The Kit tells the agent to:
 
-WebDev Agent Kit is intended for frontend developers and teams that use AI
-coding agents in React and Next.js projects and want to:
+- follow the project's existing architecture, components and styles;
+- keep a small fix small;
+- check source code and configuration before making assumptions;
+- ask before installing dependencies or doing work outside your request;
+- run checks relevant to the change and report failures or checks it could not run.
 
-- preserve the existing architecture and local conventions;
-- keep small tasks small;
-- avoid broad rewrites and unapproved dependencies;
-- receive verification proportional to the change;
-- use the same baseline rules across different coding agents;
-- see actual results and blockers instead of confident assumptions.
+Its stack-specific rules cover React, Next.js, TypeScript and CSS Modules, plus
+Redux, TanStack and Axios when the project already uses them. Planning, code
+review and screenshot analysis can also apply to other stacks.
 
-The stack profile supports React, Next.js, TypeScript, and CSS Modules, Redux,
-TanStack, and Axios when they are already used in the project. General planning,
-review, visual verification, and tooling workflows can apply more broadly, but
-the kit does not transfer React rules to another stack by analogy.
+These instructions help define expected behavior. They cannot guarantee that a
+model will follow every rule or produce correct code.
 
-## What Changes After Installation
+## Install
 
-The agent receives a local decision-making system that:
+Choose the guide for your client. Download links in the guides point to the
+latest **published** release; an open release PR may contain newer changes.
 
-- classifies the task and selects the minimum necessary workflow;
-- reads only the context needed for the next safe action;
-- prefers facts from source files, configuration, and CI over general recommendations;
-- asks for permission before installing packages, changing infrastructure, or taking other actions outside the task;
-- performs the minimum meaningful verification of the changed area;
-- separates related failures from existing ones and reports unavailable checks honestly.
-
-The kit does not guarantee error-free model behavior. It makes expected
-behavior, boundaries, and result verification explicit and testable.
-
-## Supported Clients
-
-Download the package for your client from the latest GitHub Release:
-
-| Client | Contract | Download |
+| Client | How it is installed | Guide |
 | --- | --- | --- |
-| Codex | Project bundle | [Codex bundle](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-codex.tar.gz) |
-| Claude Code | Native plugin via local marketplace | [Claude Code bundle](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-claude-code.tar.gz) |
-| Cursor | Project bundle + native rule | [Cursor bundle](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-cursor.tar.gz) |
-| VS Code — Codex | Codex contract alias | [VS Code Codex bundle](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-codex.tar.gz) |
-| VS Code — Claude | Claude Code contract alias | [VS Code Claude bundle](https://github.com/ytvee-dev/webdev-agent-kit/releases/latest/download/webdev-agent-kit-vs-code-claude.tar.gz) |
+| Codex | Files in the project's `.agents/` directory | [Codex](docs/install/codex.md) |
+| Claude Code | Plugin installed through a local marketplace | [Claude Code](docs/install/claude-code.md) |
+| Cursor | `.agents/` directory and a Cursor rule | [Cursor](docs/install/cursor.md) |
+| VS Code — Codex | Same package layout as Codex | [VS Code Codex](docs/install/vscode-codex.md) |
+| VS Code — Claude | Same plugin as Claude Code | [VS Code Claude](docs/install/vscode-claude.md) |
+| OpenCode on Windows | Installer using the Codex bundle and a recorder plugin | [OpenCode](docs/install/opencode.md) |
 
-The same release includes a checksum for each archive in `SHA256SUMS`.
-The stable and versioned names for the same target contain identical bytes.
+Each release provides `SHA256SUMS` so you can check downloaded files. For an
+existing installation, follow [upgrade and rollback](docs/install/upgrade.md)
+to preserve project context, settings and local changes.
 
-## Choosing Models And Tools
+Installation recordings are available in the [Cursor](docs/install/cursor.md)
+and [VS Code Codex](docs/install/vscode-codex.md) guides.
 
-See the [model and capability guide](docs/install/model-capability-guide.md) for
-OpenAI, Anthropic and Google recommendations, plus client-specific requirements
-for MCP, hooks, browser/Computer Use, search, images, files and subagents.
-The guide separates model capability from tool availability and includes dated
-sources and practical verification steps. Installing the Kit or selecting a
-stronger model does not automatically enable those tools.
+## Choose models and tools
 
-## Quick Start
+The [model and capability guide](docs/install/model-capability-guide.md) compares
+starting choices from OpenAI, Anthropic and Google. It explains what you need for
+MCP, hooks, browser control, Computer Use, search, image analysis and subagents.
 
-Installation instructions are available for all supported clients:
+A model and its tools are separate choices. A model that understands screenshots
+still needs a client that can take screenshots and perform actions. Installing
+the Kit does not install or enable those tools.
 
-- [Codex](docs/install/codex.md)
-- [Claude Code](docs/install/claude-code.md)
-- [Cursor](docs/install/cursor.md)
-- [VS Code Codex](docs/install/vscode-codex.md)
-- [VS Code Claude Code](docs/install/vscode-claude.md)
+For common integrations, see the [MCP setup guide](docs/mcp/README.md). MCP
+(Model Context Protocol) lets an agent use tools provided by another service.
+You do not need an MCP server when your client already provides the required tool.
 
-Video guides are available only for:
+## Adapt it to your project
 
-- [Cursor — text and video guide](docs/install/cursor.md)
-- [VS Code Codex — text and video guide](docs/install/vscode-codex.md)
-
-All materials are collected in the [documentation index](docs/README.md). The
-[installation guide index](docs/install/README.md) and [MCP guide](docs/mcp/README.md)
-are also available separately.
-
-## Adapting the Kit to a Project
-
-For Codex and Cursor targets, after installation open the project root in the
-coding agent and send this request once:
+For Codex or Cursor, open the project root and send:
 
 ```text
-Adapt this .agents kit to my project and create AGENTS.md in the root
+Adapt this .agents kit to my project and create AGENTS.md in the root.
+Preserve existing project instructions, settings, caches and saved experience.
 ```
 
-Claude Code targets use the native plugin installed through the local
-marketplace; the `.agents` adaptation flow in this section applies only to
-Codex and Cursor.
+For Claude Code, use the [plugin adaptation guide](docs/install/claude-agents.md).
 
-The onboarding process detects the active client, project structure, framework,
-routes, styling system, verification commands, and available tool capabilities.
-It then creates or updates the local `.agents/project/**` profiles and path
-indexes for the detected stack, architecture, styles, verification, design
-references, client, and tool capabilities.
+During adaptation, the agent checks the stack, project paths, styles, commands
+and available tools. It saves those facts in `.agents/project/` for future tasks.
+If existing project instructions need to be merged, it shows the proposed change.
+Adaptation does not create application code or install libraries and MCP servers.
 
-React and Next.js projects receive stack-specific path indexes. Other frontend
-stacks receive a bounded profile that records the detected boundary and keeps
-only applicable framework-neutral workflows.
+You can also select a [frontend or designer role](docs/install/roles.md) for the
+conversation. This changes the task focus; it does not select a model.
 
-Onboarding keeps the native instruction pointer small and does not overwrite
-existing project instructions without permission. It does not create application
-source files or automatically install packages, MCP servers, frameworks, or
-other tools.
-
-For the best adaptation result:
-
-1. Select the [frontend](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Frontend-Meta-instructions)
-   or [designer](https://github.com/ytvee-dev/webdev-agent-kit/wiki/Designer-Meta-instructions)
-   instructions for the current conversation. Follow the
-   [role-selection guide](docs/install/roles.md); reading a page alone does not
-   select a role, and role selection does not change models or permissions.
-2. Ask the agent to inspect tool capabilities in the current session and confirm
-   recommended MCP servers or equivalent native tools. Configuration alone does
-   not prove that a server is available: the capability must be callable or
-   previously verified for the project.
-
-Recommended integrations depend on the project and active task:
-
-| Capability | Recommended provider | When it is useful |
-| --- | --- | --- |
-| Current framework and library documentation | Context7 MCP | Questions about React, Next.js, TypeScript, packages, CLIs, and build tools |
-| Visual evidence from the rendered interface | Browser or Playwright MCP | Opening a local application, checking responsive states, and capturing screenshots |
-| Next.js runtime diagnostics | Next DevTools MCP | Only for compatible Next.js projects |
-
-The kit continues to work without MCP servers. Native file tools and targeted
-shell commands support onboarding, planning, source changes, code review, and
-existing lint, typecheck, build, or test commands. Official web documentation
-can replace documentation MCPs. Without a callable browser provider, rendered
-visual QA, viewport checks, and screenshot evidence are unavailable; the agent
-can perform only source review and must report lower confidence. Without Next
-DevTools MCP, Next.js runtime verification is unavailable, but normal source and
-project-command work remains possible. Missing optional tools should be reported
-honestly and skipped or replaced with a fallback, not installed automatically.
-
-Detailed instructions for recommended MCPs and verification prompts are in the
-[MCP guide](docs/mcp/README.md).
-
-## Smart Context Cache and Token Savings
-
-The context cache is a set of verified project profiles and path indexes, not a
-build cache or model-response cache. Onboarding creates the initial context, and
-subsequent tasks consult the relevant overlays before searching the repository
-broadly. The agent receives direct paths to known routes, components, styles,
-patterns, verification commands, and tool capabilities.
-
-When project facts change, the context workflow updates only the affected
-profiles and indexes. For example, after changing routes, components, styles,
-verification commands, documentation variants, or tool capabilities, use:
+Full Codex adaptation includes setup of missing local subagent roles when the
+client supports them. To exclude that step, say:
 
 ```text
-Update the project context after this layout change.
+Update project facts only. Do not change model configuration.
 ```
 
-Token use is reduced by selecting the minimum necessary workflow, starting from
-cached paths, searching narrowly, loading only the relevant skill and required
-references, and stopping after enough evidence is available for the next safe
-action. Reports remain evidence-based and omit irrelevant logs, repeated output,
-and process narration while preserving commands, errors, check results, risks,
-and blockers.
+Experience recording is a separate choice. Adaptation preserves an existing
+opt-in or opt-out and asks if the choice is unknown. Adding a sync repository
+does not, by itself, enable recording. See [project context and memory](#project-context-and-memory).
 
-For long-running or resumable work, compact summaries preserve the goal,
-constraints, acceptance criteria, decisions, affected files and checks, results,
-blockers, and the exact next step. Optional loop memory organizes persistent
-progress as `Tried`, `Verified`, and `Open`, so another session can continue
-without reconstructing the context again.
+## Check the setup
 
-Cached facts remain local and never override current source files, configuration,
-CI, or actual verification results. Stale facts must be updated. The kit does
-not promise a fixed token-savings percentage; it reduces waste by avoiding
-unnecessary context and repeated repository scans.
-
-## Native Subagents And Review Handoffs
-
-Claude Code and its VS Code alias include all 21 skills and nine native roles for
-lookup, implementation, debugging, architecture and independent review. Skills
-load policy from the installed plugin; project facts stay in host `.agents/project/`.
-Roles inherit the user's model by default. Account-specific model selection uses
-verified native controls and the existing budget, preserving custom agents,
-permissions and global settings. Follow [Claude adaptation and roles](docs/install/claude-agents.md).
-
-### Codex GPT Routing
-
-Full Codex onboarding configures missing project-local roles for bounded lookup,
-implementation, complex reasoning and independent review. Models and reasoning
-efforts come from the actual client catalog, not hardcoded production IDs.
-Version 1.1.0 also previews and applies a narrow supported native subagent
-activation field when needed. The primary model, global configuration, MCP,
-trust and security settings remain unchanged.
-
-No separate setup command or second confirmation is needed. Existing working
-bindings remain unchanged; facts-only/no-model-change requests and Plan Mode
-exclude model setup and canaries. A written TOML is only configured: refresh the
-client and verify the actual child model, effort and permissions. Missing runtime
-evidence retains the ordinary single-agent workflow. Named-role and direct
-model/effort dispatch are verified separately for the actual client surface. See the
-[GPT routing guide](docs/install/gpt-model-routing.md) for commands and diagnosis.
-
-For justified delegated work, compact task packets preserve criteria, interfaces,
-owned files and retry budgets. Exact review packages cover all task commits or
-an explicitly scoped working-tree snapshot; repeat review focuses on fixes and
-their consequences. These artifacts stay local and do not burden small edits.
-The [design notes](docs/architecture/superpowers-adoption.md) explain what was
-adapted from Superpowers and which heavier workflows were deliberately excluded.
-
-## Verifying the Installation
-
-Use this read-only smoke prompt:
+Ask:
 
 ```text
-Verify the WebDev Agent Kit installation.
-Do not change source code.
-Show the detected client, stack, available capabilities,
-local rules, and unavailable checks.
+Verify the WebDev Agent Kit installation without changing it.
+Report the client, Kit version, project stack, loaded skills and available tools.
+For hooks and subagents, distinguish configured settings from an observed run.
+List anything you could not verify.
 ```
 
-The response should contain facts about the detected target, confirmed stack,
-available tool capabilities, local overlays, and verification limits. A missing
-tool must be reported as unavailable, not presented as successfully used.
+A file on disk or a green connection indicator does not prove that a tool works.
+The agent should say which checks it actually ran. For example, without a
+browser it can review source code, but cannot confirm how the page renders.
 
-## Practical Scenarios
+## Project context and memory
 
-### A Small CSS Change
+The Kit stores two kinds of information locally:
 
-The kit directs the agent toward a local change and verification of the affected
-area. A decorative change should not automatically trigger an architecture plan,
-a full build, a development server, and browser QA.
+- **Project context:** paths, conventions, commands and tool settings in
+  `.agents/project/`. This helps the agent find relevant files in later tasks.
+- **Experience records:** optional saved task context, findings, corrections and
+  proposed lessons. Records belong to a project and do not change model weights.
 
-### Fixing a Frontend Bug
+To refresh project context after changes, ask:
 
-The workflow first requires gathering evidence and stating one testable
-hypothesis, then fixing the smallest root cause and separating related failures
-from existing ones. An example prompt is in
-[bugfix-refactor-review.md](examples/bugfix-refactor-review.md).
+```text
+Update the project context after these changes.
+```
 
-### Building an Interface from Screenshots
+Cached facts must be checked against current code when they become outdated.
+They can reduce repeated searches; the Kit does not promise a fixed token saving.
 
-Screenshots and inspect notes are first converted into an implementation
-specification. The kit then applies visual direction, architecture,
-implementation, lint, rendered-interface visual QA, and review only where they
-are actually needed. The complete workflow is shown in
-[screenshot-to-frontend.md](examples/screenshot-to-frontend.md).
+Experience capture is off by default. Hooks are client event handlers that record
+prompts, tool results and responses when capture is enabled. Installing them,
+enabling recording and approving them in the client are separate steps. Actual
+events are needed to confirm that recording works.
 
-## Core Skills
+During adaptation, you can provide a private GitHub repository for manual exchange
+of structured records. Full conversations and attachments are not uploaded by
+that exchange. Sync happens only when requested. See the
+[recording setup](skills/agent-self-improvement/assets/integrations/INTEGRATIONS.md)
+and [project memory reference](skills/agent-self-improvement/references/project-memory.md)
+for details.
 
-The kit includes a client-neutral runtime core, an evidence-activated
-React/TypeScript profile, thin client adapters, and 21 task skills.
+## Subagents
 
-| Task | Primary workflow |
+Subagents handle a specific part of a task, such as a file lookup or code review.
+Small tasks can stay with the main agent.
+
+Claude Code includes nine roles for lookup, implementation, debugging,
+architecture and review. They inherit your selected model unless you configure
+supported overrides. See [Claude roles](docs/install/claude-agents.md).
+
+Codex adaptation selects role models from those available in your client and
+preserves existing working settings. Writing a role file is only setup; a real
+invocation confirms whether the client loads it and uses the expected model.
+See [Codex model routing](docs/install/gpt-model-routing.md).
+
+## Example requests
+
+**Small edit:** “Center the Retry button below the error text.” The agent should
+make the local change and check the affected files.
+
+**Bugfix:** “The dashboard is blank on mobile. Reproduce the problem and fix it.”
+See [bugfix, refactor and review examples](examples/bugfix-refactor-review.md).
+
+**Build from a screenshot:** “Implement this pricing page in the existing app.
+Match the supplied desktop and mobile screenshots.” See the
+[screenshot example](examples/screenshot-to-frontend.md).
+
+**Report a Kit problem:** “Create an issue in the WebDev repository for this bug.”
+The agent checks for duplicates and prepares a report with relevant context and
+verification results. It needs an authenticated GitHub tool to publish the issue.
+
+## Skills
+
+The release candidate contains 23 skills. These are the main groups:
+
+| Task | Skills |
 | --- | --- |
-| Adapt the kit to a project | `project-onboarding-adapter` |
-| Update local context | `project-context-adapter` |
-| Define a goal and plan | `goal-planner`, `execution-plan-manager` |
-| Plan a bounded loop | `loop-workflow-planner` |
-| Convert screenshots into a specification | `design-screenshot-spec` |
-| Define visual direction | `frontend-design-intelligence`, `frontend-design-director` |
-| Design and implement UI | `frontend-architecture-planner`, `frontend-layout-implementer` |
-| Fix a defect | `frontend-bugfix-debugger` |
-| Perform a safe refactor | `frontend-refactor-surgeon` |
-| Verify lint and UI | `frontend-linter-manager`, `frontend-visual-qa` |
-| Perform an independent review | `frontend-quality-reviewer` |
-| Manage the capability model | `mcp-toolchain-manager` |
-| Evolve the kit itself | `agent-rules-skill-author` |
+| Set up or update the Kit | `project-onboarding-adapter`, `webdev-kit-updater` |
+| Keep project context current | `project-context-adapter`, `pattern-library-manager` |
+| Plan work | `goal-planner`, `execution-plan-manager`, `loop-workflow-planner` |
+| Understand and explore a design | `design-screenshot-spec`, `frontend-design-intelligence`, `frontend-design-director`, `frontend-prototype-explorer` |
+| Build an interface | `frontend-architecture-planner`, `greenfield-project-builder`, `frontend-layout-implementer` |
+| Fix or refactor code | `frontend-bugfix-debugger`, `frontend-refactor-surgeon` |
+| Check code and UI | `frontend-linter-manager`, `frontend-visual-qa`, `frontend-quality-reviewer` |
+| Configure tools | `mcp-toolchain-manager` |
+| Maintain Kit instructions | `agent-rules-skill-author` |
+| Save experience or report feedback | `agent-self-improvement`, `webdev-feedback` |
 
-The tool model is based on capabilities, not provider names. A skill can require
-`project_files`, `current_library_docs`, `rendered_visual_evidence`, or another
-capability; an MCP server, native tool, connector, or approved fallback can
-provide it. The presence of a package or configuration does not prove that a
-tool is available.
+The [design-system pilot](docs/architecture/design-system-pilot.md) is an optional
+experiment for comparing components and tokens in a real project. It does not
+automatically synchronize Figma and code.
 
-## Architecture
+## Repository layout
 
-```text
-AGENTS.md                         compact runtime entrypoint
-common/core/                     portable client-neutral core
-profiles/react-typescript/       evidence-activated stack defaults
-adapters/                        Codex, Claude Code, and Cursor differences
-skills/                          21 task workflows
-agents/claude-code/               native Claude executor definitions
-templates/                       goal, plan, loop, and project contracts
-schemas/                         machine-readable source contracts
-evals/                           static behavior fixtures
-scripts/                         validation, packaging, and release tooling
-docs/                            user guides
-```
+| Path | Contents |
+| --- | --- |
+| `AGENTS.md`, `common/` | Shared agent instructions |
+| `profiles/`, `adapters/` | Stack and client differences |
+| `skills/` | Task instructions and helper scripts |
+| `agents/claude-code/` | Claude subagent definitions |
+| `templates/` | Reusable plans and project records |
+| `schemas/`, `evals/` | Data formats and evaluation cases |
+| `scripts/` | Validation, build and release tools |
+| `docs/` | User and maintainer guides |
 
-`bundle-manifest.json` is the machine-readable source of truth for target
-contracts. Generated `dist/**` is build output, not source truth. Local project
-facts live in `.agents/project/**` in the installed project and are not published
-in the reusable bundle.
+`bundle-manifest.json` defines package contents. Build output goes to `dist/`.
+Project-specific facts stay in the installed project's `.agents/project/` and
+are not included in shared release packages.
 
-Detailed user documentation starts with the
-[main index](docs/README.md), and technical target contracts are described in
-the [architecture document](docs/architecture/runtime-target-contracts.md).
-
-## Project Validation
-
-Core commands:
+## Checks for maintainers
 
 ```bash
-python scripts/validate_source_bundle.py
-python scripts/check_readme_boundary.py
-python scripts/check_links.py
-python scripts/validate_install_guides.py
 python scripts/validate_skill_pack.py
 ```
 
-CI separately verifies Markdown, YAML, Python, schemas, graph links, tool
-capabilities, runtime layers, context budgets, generated targets, and release
-archives.
+This runs the source, package and archive checks. CI also runs Markdown, YAML
+and Python lint. See [Maintenance](MAINTENANCE.md) for checks by change type.
 
-## Design-System Pilot
+## Support and license
 
-The [design-system pilot](docs/architecture/design-system-pilot.md) is an opt-in draft
-for real-project testing: component/token mappings, source conflicts, one-component
-changes and field feedback. It does not provide automatic Figma/code synchronization.
+Start with the [documentation index](docs/README.md) or [support guide](SUPPORT.md).
+The project owner manages development and releases. Plans are in the
+[roadmap](ROADMAP.md); private vulnerability reporting is in [Security](SECURITY.md).
 
-## Maintenance And Support
-
-The project owner manages development and releases. See the
-[maintainer change process](MAINTENANCE.md), [support guide](SUPPORT.md),
-[roadmap](ROADMAP.md) and [security policy](SECURITY.md).
-
-## License
-
-WebDev Agent Kit is licensed under Apache-2.0. See [LICENSE](LICENSE).
+Licensed under [Apache-2.0](LICENSE).

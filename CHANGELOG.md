@@ -58,6 +58,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Changed
 
+- Rewrote user and maintainer documentation in plain English, reorganized the
+  guide indexes, corrected current skill counts and stale version guidance,
+  and marked old release plans as historical. Agent instructions are unchanged.
 - Release metadata and distributions advance to v1.7.0. Publication remains gated
   on the approved release merge; preparing this PR does not publish a release.
 
@@ -134,11 +137,11 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
-- Nine native Claude plugin roles covering bounded lookup, light/standard
+- Nine native Claude plugin roles covering focused lookup, light/standard
   implementation, complex work, light/standard/deep review and architecture.
   Read-only roles have no shell or edit tools; all roles inherit the user's model.
 - Claude onboarding and a local role-evidence profile for actual discovery,
-  account-aware model selection, bounded dispatch, preservation and freshness.
+  account-aware model selection, delegation with explicit task limits, preservation and freshness.
 - Native-agent regression checks, archive preservation checks and Claude-only
   behavioral scenarios, with installation/discovery separated from live execution.
 
@@ -184,7 +187,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Named-role and explicit model/effort dispatch use actual tool signatures and
   separate runtime evidence; direct dispatch does not certify native role loading.
 - Existing task, review and authoring skills adopt file-based handoffs and
-  structural-versus-behavioral evidence distinctions without overriding test scope.
+  configuration-versus-agent-behavior evidence distinctions without overriding test scope.
 - User guides, README, upgrade notes and release checklist describe actual limits.
 - Source and portable-target version metadata advance to 1.1.0 with 21 skills.
 
@@ -214,13 +217,13 @@ Use this changelog for source-bundle and distribution-target changes that affect
 ### Added
 
 - Opt-in instruction-driven GPT model routing for supported local Codex clients:
-  bounded lookup, implementation, complex reasoning and independent review roles.
-- Evidence-gated onboarding that selects available GPT IDs and supported efforts
-  instead of hardcoding production models or modifying the primary session.
+  focused lookup, implementation, complex reasoning and independent review roles.
+- Onboarding selects GPT models and reasoning efforts available in the installed
+  client, instead of using fixed model IDs or changing the main session.
 - Dependency-free role configuration helper with standalone and registered TOML
   formats, no-write planning, ownership checks, repeat-run stability, restricted
   recovery journals and conflict-aware rollback.
-- Local model-routing profile, activation canaries, routing/installation evals,
+- Local model-routing profile, small activation checks, routing/installation evals,
   installer regressions and generated-target checks in normal release validation.
 
 ### Changed
@@ -272,7 +275,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
   decisions; implementation consumes confirmed scope. Optional read-only design
   providers replace the former screenshot-only prohibition without auto-setup or
   canvas writes. Existing skill names and the 0.5.0 release version are preserved.
-- Native plugin onboarding and context refresh resolve host overlays outside the plugin and avoid dangling shared-policy pointers.
+- Native plugin onboarding and context refresh resolve project records outside the plugin and avoid dangling shared-policy pointers.
 - Contributor reports capture client/model/OS, evidence kind, repeat outcomes, and installation stages; checksum failures are reportable.
 - Release validation rejects unsafe Windows paths, duplicate/case-colliding members, unexpected roots, and unsafe archive types before extraction; preservation fixtures include local plans and unrelated client rules.
 - Live preparation checks cover all canonical targets, isolated screenshot references, fixture path safety, and run provenance. Windows logs remain synthetic until exercised on real clients.
@@ -345,7 +348,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Added `scripts/validate_target_contracts.py` to enforce canonical target, alias, entrypoint, skill-root, output, and validator declarations.
 - Added `docs/architecture/runtime-target-contracts.md` as the human-readable target contract.
 - Added a native Claude Code plugin manifest and structural artifact validator.
-- Added a compact portable runtime core, evidence-gated React/TypeScript profile, and thin Claude Code, Codex, and Cursor adapters.
+- Added a compact portable runtime core, React/TypeScript profile enabled when the project uses that stack, and thin Claude Code, Codex, and Cursor adapters.
 - Added runtime-layer validation for client neutrality, context budgets, manifest alignment, and generated adapter selection.
 - Added a centralized eight-level policy precedence contract and validator for forbidden absolute authority claims.
 - Added eight cross-client policy conflict evals covering every adjacent precedence boundary.
@@ -369,7 +372,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Claude Code now builds as a self-contained native plugin with portable skill frontmatter, stripped source graph metadata, and no Codex-only plugin or UI metadata.
 - Legacy `claude` and `vs-code-claude` outputs now reuse the canonical `claude-code` artifact exactly.
 - Claude project-policy onboarding now uses the exact `@.agents/AGENTS.md` import and requires approval before creating or merging host instructions.
-- Runtime routing now loads core, project profile, client adapter, local conventions, and task skill as separate progressive-disclosure layers.
+- Runtime routing now loads core, project profile, client adapter, local conventions, and task skill as separate layers loaded as needed.
 - Generated targets now ship the portable core, default profile, and exactly one canonical client adapter; Claude skills load those layers explicitly.
 - Runtime skills, profiles, adapters, and project facts now resolve instruction conflicts through one shared precedence contract.
 - README may now be read for relevant intent, setup, onboarding, audit, and drift questions, but it is never sufficient technical proof and cannot be edited without an explicit current user request.
@@ -380,7 +383,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Codex `agents/openai.yaml` files now contain only UI and invocation metadata; optional MCP and native-provider candidates live exclusively in the client-neutral capability manifest.
 - Current OpenAI API, ChatGPT Apps SDK, and Codex lookups now use conditional `openai_platform_docs` routing: prefer the callable official OpenAI Developer Docs MCP, fall back to official web docs, and skip unrelated frontend work.
 - Capability availability now requires current-registry, validated-profile, or user-supplied-reference evidence; package, config, and provider names are explicitly non-proof.
-- Replaced the long always-on policy catalog with a 19-skill compact index and progressive-disclosure routes while preserving detailed rules in owning common docs and skills.
+- Replaced the long always-on policy catalog with a 19-skill compact index and links to details loaded as needed while preserving detailed rules in owning common docs and skills.
 - Compressed all skill discovery descriptions and stripped source graph frontmatter from every generated target.
 - Final responses now default to `Changed`, `Verified`, and `Blocked` facts while omitting request echo, skill narration, empty headings, and raw logs.
 - Aligned `bundle-manifest.json`, `.codex-plugin/plugin.json`, and `tool-capabilities-manifest.json` with the `0.3.0` next-release metadata.

@@ -1,26 +1,26 @@
-## Problem Or Failure Mode
+## Problem
 
 <!-- Describe the user-facing problem, observed agent failure, or documentation gap. -->
 
-## Scope And Layer
+## Scope
 
-<!-- List the affected files and owning layers. Explain important exclusions. -->
+<!-- List the affected files and parts of the Kit. Explain important exclusions. -->
 
 ## Changes
 
-<!-- Summarize the smallest coherent change made. -->
+<!-- Summarize the changes and their effect on users. -->
 
-## Routing Evidence
+## Skill Selection
 
-<!-- For rule or skill changes, include should-trigger and near-miss examples. Use N/A when routing is unaffected. -->
+<!-- For rule or skill changes, show when the workflow should and should not apply. Use N/A when routing is unaffected. -->
 
-Should trigger:
+Requests that should use this workflow:
 
 ```text
 
 ```
 
-Should not trigger:
+Similar requests that should not use it:
 
 ```text
 

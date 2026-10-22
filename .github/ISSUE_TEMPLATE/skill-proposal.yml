@@ -33,21 +33,21 @@ body:
   - type: textarea
     id: trigger
     attributes:
-      label: Should-trigger examples
+      label: Requests that should use this workflow
       render: text
     validations:
       required: true
   - type: textarea
     id: non_trigger
     attributes:
-      label: Near-miss examples that must not trigger
+      label: Similar requests that should use a different workflow
       render: text
     validations:
       required: true
   - type: textarea
     id: contracts
     attributes:
-      label: Affected contracts
+      label: Affected parts of the Kit
       description: List clients, stacks, layers, capabilities, manifests, and generated targets.
     validations:
       required: true
