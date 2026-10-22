@@ -104,6 +104,6 @@ body:
     id: installation-stage
     attributes:
       label: Installation stage and upgrade state
-      description: Which step failed: extracting files, loading skills, adapting the project, or running a task? For updates, include old/new versions, the client package, preserved files, and any rollback result.
+      description: Say whether the failure happened while extracting files, loading skills, adapting the project, or running a task. For updates, include old/new versions, the client package, preserved files, and any rollback result.
     validations:
       required: true
