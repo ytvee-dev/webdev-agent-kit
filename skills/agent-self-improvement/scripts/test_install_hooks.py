@@ -42,14 +42,16 @@ class HookInstallerTests(unittest.TestCase):
             labels = [installed["hooks"][event][-1]["hooks"][0]["statusMessage"]
                       for event in ("UserPromptSubmit", "PostToolUse", "Stop")]
             self.assertEqual(len(set(labels)), 3)
-            self.assertTrue(all(label.startswith("WebDev:") for label in labels))
+            self.assertEqual(labels, ["Record user prompt", "Record tool result",
+                                      "Record assistant response"])
             installed["hooks"]["Stop"][-1]["hooks"][0]["statusMessage"] = "My custom label"
             installed["hooks"]["Stop"][-1]["hooks"][0]["timeout"] = 9
             old_command = installed["hooks"]["Stop"][-1]["hooks"][0]["command"]
             old_args = shlex.split(old_command)
             old_args[0] = "/previous/python3"
             installed["hooks"]["Stop"][-1]["hooks"][0]["command"] = shlex.join(old_args)
-            installed["hooks"]["UserPromptSubmit"][-1]["hooks"][0].pop("statusMessage")
+            installed["hooks"]["UserPromptSubmit"][-1]["hooks"][0]["statusMessage"] = "WebDev: ????? ???????"
+            installed["hooks"]["PostToolUse"][-1]["hooks"][0]["statusMessage"] = "WebDev: record tool result"
             path.write_text(json.dumps(installed), encoding="utf-8")
             call("--approve")
             installed = json.loads(path.read_text())
@@ -57,7 +59,8 @@ class HookInstallerTests(unittest.TestCase):
                              "My custom label")
             self.assertEqual(len(installed["hooks"]["Stop"]), 1)
             self.assertEqual(installed["hooks"]["Stop"][-1]["hooks"][0]["timeout"], 9)
-            self.assertTrue(installed["hooks"]["UserPromptSubmit"][-1]["hooks"][0]["statusMessage"])
+            self.assertEqual(installed["hooks"]["UserPromptSubmit"][-1]["hooks"][0]["statusMessage"], "Record user prompt")
+            self.assertEqual(installed["hooks"]["PostToolUse"][-1]["hooks"][0]["statusMessage"], "Record tool result")
             unchanged = path.read_bytes()
             backup = path.with_suffix(".json.bak").read_bytes()
             self.assertFalse(json.loads(call("--approve").stdout)["changed"])

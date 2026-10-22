@@ -47,7 +47,8 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Fixed
 
-- Codex learning hooks now receive distinct default labels; reinstall preserves
+- Codex learning hooks use short English labels without a repeated Kit prefix;
+  reinstall repairs older defaults and question-mark corruption and preserves
   custom labels and handler/group settings and skips unchanged file writes.
 - Adaptation reconciles capture consent, hook installation, native trust and real
   event evidence separately from repository configuration. Existing opt-out stays valid.

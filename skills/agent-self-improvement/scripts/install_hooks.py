@@ -12,10 +12,21 @@ from pathlib import Path
 
 EVENTS = ("UserPromptSubmit", "PostToolUse", "Stop")
 LABELS = {
-    "UserPromptSubmit": "WebDev: record user prompt",
-    "PostToolUse": "WebDev: record tool result",
-    "Stop": "WebDev: record assistant response",
+    "UserPromptSubmit": "Record user prompt",
+    "PostToolUse": "Record tool result",
+    "Stop": "Record assistant response",
 }
+
+
+def needs_default_label(label, event):
+    if not isinstance(label, str) or not label.strip():
+        return True
+    if label == "WebDev: " + LABELS[event].lower():
+        return True
+    # Recover the observed lossy-encoding label without replacing custom names.
+    prefix, separator, suffix = label.partition(":")
+    return (separator and prefix == "WebDev" and bool(suffix.strip())
+            and set(suffix.strip()) <= {"?", " ", "\ufffd"})
 
 
 def bridge_path():
@@ -88,7 +99,7 @@ def update_hooks(path, remove):
                     continue
                 entry = dict(entry)
                 label = entry.get("statusMessage")
-                if not isinstance(label, str) or not label.strip():
+                if needs_default_label(label, event):
                     entry["statusMessage"] = LABELS[event]
                 entries.append(entry)
             if entries or not removed_owned:
