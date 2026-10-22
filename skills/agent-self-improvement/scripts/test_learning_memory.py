@@ -4,6 +4,7 @@ import json
 import sqlite3
 import tempfile
 import unittest
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
 
@@ -57,7 +58,7 @@ class ProjectMemoryTests(unittest.TestCase):
         sample = self.sample()
         self.assertEqual(save_records(self.conn, self.pid, sample), 4)
         exported = package(self.conn, self.pid)
-        with open_store(self.root / 'other') as other:
+        with closing(open_store(self.root / 'other')) as other:
             pid = bind(other, self.root / 'clone', self.pid)
             self.assertEqual(import_package(other, pid, exported), 4)
             self.assertEqual(import_package(other, pid, exported), 0)
@@ -114,19 +115,19 @@ class ProjectMemoryTests(unittest.TestCase):
 
     def test_legacy_backup_and_schema(self):
         legacy = self.root / 'legacy'
-        with create_store(legacy) as conn:
+        with closing(create_store(legacy)) as conn:
             set_mode(conn, self.project, True)
             capture(conn, self.project, dict(client='test', session_id='s', kind='user', content='preserve me'))
-        with open_store(legacy) as upgraded:
+        with closing(open_store(legacy)) as upgraded:
             self.assertEqual(upgraded.execute('PRAGMA user_version').fetchone()[0], 2)
             self.assertEqual(upgraded.execute('SELECT content FROM events').fetchone()[0], 'preserve me')
             self.assertEqual(upgraded.execute('PRAGMA foreign_keys').fetchone()[0], 1)
         backups = list(legacy.glob('experience.pre-v2-*.sqlite3'))
         self.assertEqual(len(backups), 1)
-        with open_store(legacy):
+        with closing(open_store(legacy)):
             pass
         self.assertEqual(len(list(legacy.glob('experience.pre-v2-*.sqlite3'))), 1)
-        with sqlite3.connect(backups[0]) as conn:
+        with closing(sqlite3.connect(backups[0])) as conn:
             self.assertEqual(conn.execute('SELECT content FROM events').fetchone()[0], 'preserve me')
 
     def test_future_database_rejected(self):

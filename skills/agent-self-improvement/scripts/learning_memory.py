@@ -9,6 +9,7 @@ import sqlite3
 import subprocess
 import sys
 import uuid
+from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -71,13 +72,13 @@ def open_store(state):
     state = Path(state)
     database = state / "experience.sqlite3"
     if database.exists():
-        with sqlite3.connect(database) as old:
+        with closing(sqlite3.connect(database)) as old:
             version = old.execute("PRAGMA user_version").fetchone()[0]
             if version not in (0, VERSION):
                 raise ValueError(f"Unsupported database schema {version}")
             if version == 0:
                 backup = state / ("experience.pre-v2-" + uuid.uuid4().hex + ".sqlite3")
-                with sqlite3.connect(backup) as target:
+                with closing(sqlite3.connect(backup)) as target:
                     old.backup(target)
                 backup.chmod(0o600)
     conn = create_store(state)
@@ -90,7 +91,7 @@ def open_store(state):
         "memory_records": {"id", "revision", "project_id", "episode_id", "kind", "status", "payload", "provenance", "created_at", "digest"},
         "memory_packages": {"digest", "project_id", "imported_at"},
     }
-    with sqlite3.connect(":memory:") as reference:
+    with closing(sqlite3.connect(":memory:")) as reference:
         reference.executescript(SCHEMA)
         for table, fields in expected.items():
             actual = conn.execute(f"PRAGMA table_info({table})").fetchall()
@@ -325,6 +326,8 @@ def sync(conn, pid, direction):
         except ValueError:
             existing = None
         if existing:
+            if existing.get("encoding") != "base64":
+                existing = gh("repos/" + remote + "/git/blobs/" + existing["sha"])
             if existing.get("encoding") != "base64" or base64.b64decode(existing["content"]) != encoded:
                 raise ValueError("Remote package content mismatch")
             return {"result": "already_synced", "path": name}
@@ -408,7 +411,7 @@ def main():
                 if target.exists():
                     raise ValueError("Snapshot destination already exists")
                 target.parent.mkdir(parents=True, exist_ok=True)
-                with sqlite3.connect(target) as out:
+                with closing(sqlite3.connect(target)) as out:
                     out.executescript(SCHEMA + f"PRAGMA user_version={VERSION};")
                     row = conn.execute("SELECT id,name,source_repository,'',created_at FROM memory_projects WHERE id=?", (pid,)).fetchone()
                     out.execute("INSERT INTO memory_projects VALUES(?,?,?,?,?)", row)

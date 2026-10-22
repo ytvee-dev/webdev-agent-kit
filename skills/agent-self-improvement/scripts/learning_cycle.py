@@ -12,6 +12,7 @@ import subprocess
 import sys
 import tempfile
 import uuid
+from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 
@@ -39,7 +40,7 @@ def evidence(state, project):
     db = state / "experience.sqlite3"
     if not db.is_file():
         raise ValueError("Experience store not initialized")
-    with sqlite3.connect(db) as conn:
+    with closing(sqlite3.connect(db)) as conn:
         rows = conn.execute(
             "SELECT id, client, session_id, kind, content, skills_json "
             "FROM events WHERE project_id=? ORDER BY timestamp,rowid",
@@ -96,7 +97,7 @@ def selected_attachments(state, project, observations):
     sessions = {event["session"] for event in observations}
     if not sessions:
         return []
-    with sqlite3.connect(state / "experience.sqlite3") as conn:
+    with closing(sqlite3.connect(state / "experience.sqlite3")) as conn:
         rows = conn.execute(
             "SELECT session_id, digest, display_name FROM attachments WHERE project_id=? "
             "ORDER BY rowid DESC LIMIT 80", (project_id(project),)
@@ -224,7 +225,7 @@ def propose(args):
     state = Path(args.state).expanduser().resolve()
     items = evidence(state, project)
     from learning_memory import binding, open_store, records
-    with open_store(state) as memory:
+    with closing(open_store(state)) as memory:
         try:
             pid = binding(memory, project)
         except ValueError:
