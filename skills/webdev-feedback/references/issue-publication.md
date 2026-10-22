@@ -87,3 +87,34 @@ create another. Do not silently mutate an existing issue after a mismatch.
 - https://cli.github.com/manual/gh_issue_create
 - https://cli.github.com/manual/gh_issue_list
 - https://docs.github.com/en/rest/issues/issues#create-an-issue
+
+## Evidence And Encoding Review
+
+Summarize chronology instead of pasting an entire dialogue. Distinguish
+user-reported observations, quoted agent claims, independently inspected source
+and proposed architecture. Do not call an agent's "tests passed" statement your
+own verification. Identify expected opt-in behavior separately from defects.
+Frame acceptance criteria as requested outcomes, not proof of an existing bug.
+
+Use structured UTF-8 tool arguments or an explicitly UTF-8 body file. After
+posting compare the returned/read-back body with the intended text, including
+non-ASCII characters. Replacement characters or runs of question marks can
+indicate destructive encoding loss: report the mismatch and use the same issue
+for an authorized correction, never post a duplicate or guess the lost text.
+
+## Explicit Learning Exclusion
+
+When the user says not to save this task in learning memory, do not create or
+update episodes, attach the issue URL, import the conversation or sync it. If
+local capture is already active and accessible, the user's request authorizes
+turning it off for the affected project through `learning.py off --project ROOT`;
+verify `status` and explain that this project-wide pause also affects concurrent
+sessions. Do not silently resume. If the user requests session-only suppression,
+state that it is not currently implemented and resolve the narrower requirement
+before promising it. Never edit client trust to suppress capture.
+
+Hooks may have captured the initiating prompt before the agent saw the request,
+and in-flight async capture may race the pause. Do not promise retroactive
+absence. If state is inaccessible, say background capture is unverified. Cleanup
+of existing records is a separate scoped deletion request; do not purge history
+or claim all traces are gone. A pause is not a session-level exclusion guarantee.

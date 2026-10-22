@@ -85,11 +85,13 @@ sanitized draft and the target issue URL; do not claim it was submitted.
    version and reproduction: a distinct regression may warrant a new linked
    issue. If search is blocked, return the draft and state the missing check.
 6. Submit once through the existing authenticated identity. Read back the issue
-   when supported and verify destination, title and body. On an uncertain write
+   when supported and verify destination, title, body and Unicode integrity.
+   A successful POST with corrupted text is not a verified report. On an uncertain write
    result, reconcile recent issues before retrying; never blindly repeat a POST.
 7. Return the actual issue URL and concise summary, or an explicit draft/blocker.
+   An explicit no-learning/no-database instruction overrides optional linkage.
    If an opted-in local learning episode already exists, its own workflow may
-   record the public issue URL in a new revision. Do not enable learning, alter
+   record the public issue URL in a new revision only when not excluded. Do not enable learning, alter
    its schema or sync memory as a side effect. Keep local episode IDs private.
 
 ## Output Contract

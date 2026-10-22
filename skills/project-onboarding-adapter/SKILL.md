@@ -123,17 +123,30 @@ Read targeted README sections only when they help identify project intent, setup
 12. In Plan Mode, return the plan and stop.
 13. In execution mode, update the approved pointer and local overlays; complete the matching Codex or Claude phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
 
-## Optional Learning Repository
+## Learning Setup During Adaptation
 
-During full adaptation, offer optional private-repository experience storage.
-Only if the user supplies a repository, follow the learning skill's
-`skills/agent-self-improvement/references/project-memory.md` to bind the stable project ID, verify access and
-configure the local address. Store ID and manual-only mode in host-local
-`.agents/project/learning-profile.md`. Link it from the approved host pointer for
-project-scoped recall on relevant tasks; recall never enables capture or sync.
-No repository means local-only operation.
-Do not enable capture, upload data, install tooling, or ask again on kit updates.
-Plan Mode only describes the option. Never embed a user's repository in this kit.
+During full adaptation or re-adaptation, reconcile the existing learning profile,
+recording state and client integration. Follow
+`skills/agent-self-improvement/references/project-memory.md` (Adaptation State).
+Preserve prior opt-in or opt-out, stable project ID, database and caches. A generic
+"adapt" request or supplying a sync repository does not authorize raw capture.
+If capture intent is unresolved, explain the local collection scope and ask once;
+otherwise honor the existing decision without repeated confirmation. Explicit
+capture setup already authorizes its documented local hooks; do not ask again.
+
+Offer optional private-repository experience storage only during adaptation.
+Only if the user supplies a repository, follow the memory reference to verify it
+and configure its local address. No repository means local-only operation.
+Store decisions and separate setup/verification states in host-local
+`.agents/project/learning-profile.md`; link it from the approved host pointer for
+project-scoped recall. Recall never enables capture or sync. Report capture
+opt-out as a valid completed choice, unresolved consent as pending, and installed
+but unobserved hooks as unverified. Never call the whole learning pipeline active
+merely because recording is enabled or tests pass.
+
+An update alone preserves these decisions and does not reopen onboarding.
+Plan Mode only describes changes. Never upload automatically, alter native trust,
+install tooling without authority or embed a user's repository in the Kit.
 
 ## Codex Model Setup During Onboarding
 

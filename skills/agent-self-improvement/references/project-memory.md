@@ -138,3 +138,37 @@ not leak to another project; an agent's unverified narrative must stay a hypothe
 a simple task must not acquire unnecessary history analysis. Compare actual actions
 and outcomes under equivalent model/tool conditions. Synthetic exchange tests prove
 storage behavior, not improvement of model reasoning or Windows runtime activation.
+
+## Adaptation State
+
+During full adaptation, reconcile and record the following independently in the
+host-local learning profile. These are profile facts, not new database fields:
+
+- Runtime installation/version and fresh-session discovery evidence.
+- Project context adaptation and stable memory project ID.
+- Capture consent: opted-in, opted-out, or unresolved; include its source.
+- Capture configuration: recording on/off, hook definitions present/absent,
+  and supported client or explicit unsupported-client blocker.
+- Native trust: confirmed, pending review, blocked, or unknown.
+- Runtime capture: verified for specified events, or unverified; include observed
+  client/session/event kind and timestamp without copying sensitive payloads.
+- Optional sync repository configured/unconfigured and manual-only exchange.
+
+A stored `recording: false` proves configuration, not necessarily a remembered
+user refusal. Preserve it while resolving unknown consent. Explicit prior opt-out
+is complete, not a failed adaptation. A repository address authorizes configuring
+exchange, not collecting chat contents. Generic re-adaptation does not override
+an opt-out. Resolve all available facts before asking the single missing decision.
+
+After explicit capture opt-in, use the supported client integration and, for
+Codex, `scripts/install_hooks.py --project ROOT --approve`. Preserve existing
+hooks and labels. Enable recording with the learning CLI only within the granted
+project scope. Never write client trust hashes or bypass native review. If trust
+requires user action, finish permitted setup and report the precise pending step.
+
+Verify automatic capture with a harmless user-approved lifecycle event in the
+actual client, after required review/refresh. Compare scoped session/event records
+before and after; unrelated historical counts are insufficient. A manually
+invoked bridge or unit test is only a synthetic check. One observed event verifies
+that event, not every handler. Zero events after setup is unverified, not proof
+of a broken hook. Do not generate sensitive prompts for a probe.

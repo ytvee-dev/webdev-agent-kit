@@ -41,6 +41,16 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Read-only installation and subagent diagnostics separate configuration,
   discovery, permitted dispatch and runtime verification without modifying setup.
 
+### Fixed
+
+- Codex learning hooks now receive distinct default labels; reinstall preserves
+  custom labels and handler/group settings and skips unchanged file writes.
+- Adaptation reconciles capture consent, hook installation, native trust and real
+  event evidence separately from repository configuration. Existing opt-out stays valid.
+- Feedback distinguishes agent reports from verified evidence, checks Unicode
+  readback and respects explicit learning exclusions without promising retroactive
+  or session-only suppression. Related: #81.
+
 ### Changed
 
 - Release metadata and distributions advance to v1.7.0. Publication remains gated

@@ -111,6 +111,7 @@ body:
         - Observed installation
         - Configuration snapshot
         - Synthetic replay
+        - Agent-reported result (not independently verified)
     validations:
       required: true
   - type: input
@@ -125,5 +126,12 @@ body:
     attributes:
       label: Repetitions and retained evidence
       description: Include fresh-session runs, failures and successes, trace locations, and any near-miss prompt. Never count a fixture as a live pass.
+    validations:
+      required: false
+  - type: textarea
+    id: hypotheses
+    attributes:
+      label: Suspected cause and proposed changes
+      description: Separate source-confirmed defects from hypotheses and requested architectural changes. Preserve explicit consent boundaries.
     validations:
       required: false
