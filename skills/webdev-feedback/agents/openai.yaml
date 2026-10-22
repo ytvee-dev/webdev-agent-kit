@@ -1,0 +1,7 @@
+interface:
+  display_name: "WebDev Feedback"
+  short_description: "Report WebDev bugs and feature requests"
+  default_prompt: "Use $webdev-feedback to report this WebDev bug in the appropriate GitHub repository."
+
+policy:
+  allow_implicit_invocation: true

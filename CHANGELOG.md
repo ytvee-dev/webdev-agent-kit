@@ -35,6 +35,21 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- `webdev-feedback` turns explicit bug and feature-report requests into GitHub
+  issues with product ownership, duplicate search, sanitized context and honest
+  evidence. Existing authenticated tools are optional; blocked writes yield drafts.
+- Read-only installation and subagent diagnostics separate configuration,
+  discovery, permitted dispatch and runtime verification without modifying setup.
+
+### Changed
+
+- Release metadata and distributions advance to v1.7.0. Publication remains gated
+  on the approved release merge; preparing this PR does not publish a release.
+
+## 1.6.0
+
+### Added
+
 - Project-scoped structured experience: episodes, typed evidence, requirements,
   findings, lessons, evaluations and application outcomes with stable project IDs.
 - Versioned SQLite migration with pre-migration backup, strict record validation,

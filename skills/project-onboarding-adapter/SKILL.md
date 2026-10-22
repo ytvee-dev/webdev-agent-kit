@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: 'Adapt frontend projects with local context, client and verification facts. Includes Codex model setup or Claude plugin-role discovery for full onboarding. Excludes model changes during updates, facts-only requests and Plan Mode; no app code or instruction replacement.'
+description: 'Adapt frontend projects, configure supported agent roles, or diagnose WebDev setup read-only. Excludes app code and model changes during updates.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'
@@ -15,6 +15,7 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[skills/project-onboarding-adapter/references/installation-diagnostics]]'
     - '[[skills/project-onboarding-adapter/references/claude-agent-bootstrap]]'
     - '[[templates/project/claude-agent-profile]]'
     - '[[templates/project/model-routing-profile]]'
@@ -56,6 +57,8 @@ Route adaptation, initialization, and project-context bootstrap commands here, i
 
 ## When To Use
 
+- The user asks to check WebDev installation or diagnose inactive subagents.
+
 - The user explicitly requests economical GPT subagent setup or reconfiguration in a supported Codex project.
 - The user asks to adapt this bundle to a new React or Next.js project.
 - The user asks to adapt this bundle to a non-target frontend project while keeping applicable design, QA, review, lint, planning, MCP, context, and skill-authoring workflows.
@@ -70,6 +73,12 @@ Route adaptation, initialization, and project-context bootstrap commands here, i
 - Reusable skill authoring.
 - Application scaffolding, package installation, or source file creation.
 - Stack-specific React/Next architecture or implementation guidance for a non-target frontend project unless the user explicitly changes the supported stack.
+
+## Diagnostic Branch
+
+For installation checks or questions about inactive subagents, read
+`references/installation-diagnostics.md` and follow only that read-only branch.
+Do not continue into the adaptation workflow or model bootstrap.
 
 ## Required Context
 
@@ -219,6 +228,8 @@ Should not trigger:
 - "Scaffold a new React app."
 
 ## Reference Map
+
+- `references/installation-diagnostics.md` - read-only setup and subagent checks.
 
 - `references/claude-agent-bootstrap.md`: native Claude plugin adaptation and role verification.
 - `templates/project/claude-agent-profile.md`: local-only Claude routing evidence.

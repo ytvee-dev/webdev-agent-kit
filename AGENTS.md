@@ -78,7 +78,7 @@ Select skills by name and description; explicit invocation is optional. Each `SK
 - Quality: `frontend-bugfix-debugger` fixes defects; `frontend-refactor-surgeon` preserves behavior; `frontend-linter-manager` runs or repairs scoped lint; `frontend-visual-qa` checks rendering; `frontend-quality-reviewer` reviews independently.
 - Context and tooling: `project-onboarding-adapter` initializes pointers and local facts; `project-context-adapter` refreshes them; `mcp-toolchain-manager` maps tool capabilities; `pattern-library-manager` maintains reusable patterns; `agent-rules-skill-author` maintains this bundle.
 - Learning: `agent-self-improvement` (opt-in).
-- Updates: `webdev-kit-updater` reconciles installed versions with upstream diffs, preserving local changes.
+- Feedback: `webdev-feedback` files requested issues. Updates: `webdev-kit-updater` preserves local changes.
 
 ## Change Boundaries
 

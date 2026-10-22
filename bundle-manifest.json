@@ -1,6 +1,6 @@
 {
   "name": "webdev-agent-kit",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "license": "Apache-2.0",
   "description": "Internal source and distribution inventory for the WebDev Agent Kit skill bundle.",
   "portable_core": "common/core/runtime-core-policy.md",
@@ -35,6 +35,7 @@
     "pattern-library-manager",
     "project-context-adapter",
     "project-onboarding-adapter",
+    "webdev-feedback",
     "webdev-kit-updater"
   ],
   "targets": {
