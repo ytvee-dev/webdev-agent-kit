@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "eval_type": "skill-trigger",
   "cases": [
     {
@@ -380,7 +380,7 @@
     },
     {
       "id": "project-onboarding-adapter.adapt-command",
-      "prompt": "адаптируйся",
+      "prompt": "\u0430\u0434\u0430\u043f\u0442\u0438\u0440\u0443\u0439\u0441\u044f",
       "workflow_level": "Deep Workflow",
       "expected_primary_skill": "project-onboarding-adapter",
       "should_trigger": [
@@ -635,6 +635,86 @@
         "No source file writes without evaluation and user review."
       ],
       "reason": "Review-only request for recorded evidence."
+    },
+    {
+      "id": "webdev-feedback.feedback-bug",
+      "prompt": "File this WebDev adaptation bug in its GitHub repository.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "webdev-feedback",
+      "should_trigger": [
+        "webdev-feedback"
+      ],
+      "should_not_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "risk_notes": [
+        "Preserve publication intent and read-only diagnostic boundaries."
+      ],
+      "reason": "Route the requested action without conflating app implementation, feedback and setup."
+    },
+    {
+      "id": "webdev-feedback.feedback-feature",
+      "prompt": "Submit my idea for WebDev memory as a feature request.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "webdev-feedback",
+      "should_trigger": [
+        "webdev-feedback"
+      ],
+      "should_not_trigger": [
+        "agent-self-improvement"
+      ],
+      "risk_notes": [
+        "Preserve publication intent and read-only diagnostic boundaries."
+      ],
+      "reason": "Route the requested action without conflating app implementation, feedback and setup."
+    },
+    {
+      "id": "webdev-feedback.feedback-draft",
+      "prompt": "Draft a WebDev bug report without posting it.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "webdev-feedback",
+      "should_trigger": [
+        "webdev-feedback"
+      ],
+      "should_not_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "risk_notes": [
+        "Preserve publication intent and read-only diagnostic boundaries."
+      ],
+      "reason": "Route the requested action without conflating app implementation, feedback and setup."
+    },
+    {
+      "id": "frontend-bugfix-debugger.feedback-app-fix",
+      "prompt": "Fix the checkout bug in this application.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "frontend-bugfix-debugger",
+      "should_trigger": [
+        "frontend-bugfix-debugger"
+      ],
+      "should_not_trigger": [
+        "webdev-feedback"
+      ],
+      "risk_notes": [
+        "Preserve publication intent and read-only diagnostic boundaries."
+      ],
+      "reason": "Route the requested action without conflating app implementation, feedback and setup."
+    },
+    {
+      "id": "project-onboarding-adapter.setup-diagnostics",
+      "prompt": "Check my WebDev setup and explain why subagents are not running; do not change configuration.",
+      "workflow_level": "Standard Workflow",
+      "expected_primary_skill": "project-onboarding-adapter",
+      "should_trigger": [
+        "project-onboarding-adapter"
+      ],
+      "should_not_trigger": [
+        "webdev-feedback"
+      ],
+      "risk_notes": [
+        "Preserve publication intent and read-only diagnostic boundaries."
+      ],
+      "reason": "Route the requested action without conflating app implementation, feedback and setup."
     }
   ]
 }

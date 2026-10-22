@@ -22,7 +22,7 @@ depends_on: []
 [← All MCPs](README.md) · [Install WebDev Agent Kit for VS Code Codex](../install/vscode-codex.md)
 
 This guide covers only MCP installation in the official Codex extension for
-VS Code on Windows. Server purposes, skill relationships, and common test
+VS Code on Windows. Server purposes, setup requirements, and test
 prompts are in the [general MCP guide](README.md).
 
 ## Codex in VS Code
@@ -73,26 +73,10 @@ On the next screen, name the key `pc-vs-code-codex` and select **Create API Key*
 
 ![Context7 API key name](assets/codex-vscode/context7-api-key-name.png)
 
-### Configuration Shown in the Screenshot
+### Configure Context7
 
-In **MCP servers → Add server**, enter:
-
-| Field | Value |
-| --- | --- |
-| Name | `cntx7` |
-| Type | `Streamable HTTP` |
-| URL | `https://context7.com/` |
-| Bearer token env var | `<YOUR_CONTEXT7_API_KEY>` |
-
-Select **Save**.
-
-![Created Context7 API key and server configuration](assets/codex-vscode/context7-api-key-and-server-config.png)
-
-> This option matches the screenshot. Current official Context7 documentation
-> uses a different endpoint and header. If the server does not connect, apply
-> the current configuration below.
-
-### Current Configuration Through an Environment Variable
+The old screenshot used a different URL and bearer-token field. Use the endpoint
+and environment-variable header below instead.
 
 Create a local Windows variable:
 

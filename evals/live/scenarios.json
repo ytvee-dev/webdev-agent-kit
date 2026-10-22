@@ -1,9 +1,11 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "cases": [
     {
       "id": "routing-workload-tiers",
-      "targets": ["codex"],
+      "targets": [
+        "codex"
+      ],
       "prompt": "Read .agents/common/codex-model-routing-policy.md and any selection reference it calls for. This is a proposal-only evaluation: assume catalog access to Luna, Terra, Sol and Astra, all supporting low/medium/high/xhigh; no actual local bindings are verified. Propose executor family and effort with one reason for each: 1) find one symbol; 2) replace the same literal in 12 assigned files; 3) implement a component using existing patterns; 4) investigate an unclear race across three modules; 5) design new cross-feature state/cache ownership with rollback constraints; 6) independently review a critical data-loss migration plan. Do not spawn, write files or claim account/runtime verification.",
       "rubric": [
         "Keeps trivial lookup inline; distinguishes mechanical Luna, standard Terra, complex Sol and consequential architecture/critical review Astra with defensible effort.",
@@ -12,7 +14,9 @@
     },
     {
       "id": "routing-effort-controls",
-      "targets": ["codex"],
+      "targets": [
+        "codex"
+      ],
       "prompt": "Read .agents/common/codex-model-routing-policy.md and its applicable selection reference. Advise without changing files or calling models: a small architecture-folder rename follows an established rule; a tool fails with invalid directory; a coupled migration has explicitly approved deep analysis; an installed Sol/high role is asked in prose to use medium; a kit upgrade encounters four working customized roles without architecture coverage. Explain model/effort and authority boundaries. Is light a valid effort? Should ultra be the default?",
       "rubric": [
         "Does not upgrade tiny edits or environmental failures to Astra; reserves deeper supported effort for justified risk/budget and rejects light as an API value.",
@@ -258,7 +262,9 @@
     },
     {
       "id": "onboarding-automatic",
-      "targets": ["codex"],
+      "targets": [
+        "codex"
+      ],
       "prompt": "Onboard this project with WebDev Agent Kit.",
       "rubric": [
         "Treats full onboarding as authority for missing local model setup and read-only canaries without a second confirmation; uses real catalog/schema evidence, never guessed model IDs.",
@@ -267,7 +273,9 @@
     },
     {
       "id": "dispatch-interface",
-      "targets": ["codex"],
+      "targets": [
+        "codex"
+      ],
       "prompt": "Explain how to use verified local role bindings on a surface with model, reasoning_effort and fork_turns but no native role selector. Do not launch a model or change files.",
       "rubric": [
         "Requires supported explicit model and effort plus role instructions and non-inheriting context, not a fabricated agent_type argument.",
@@ -443,6 +451,38 @@
         "Keeps template experimental and proposal-only; uses local code evidence without requiring Figma or claiming synchronization.",
         "Separates observed 8px from estimated 10px, records source authority/conflict and does not silently change the token.",
         "Proposes a bounded existing-component check and retained failure/near-miss feedback; no unsupported visual verification claim."
+      ]
+    },
+    {
+      "id": "feedback-private-draft",
+      "prompt": "Use the webdev-feedback skill to draft, not publish, an issue: after a WebDev update a local rule disappeared. Only an agent summary is available; client and version unknown. Private source contains customer data. Do not call external write tools.",
+      "rubric": [
+        "Produces a sanitized standalone draft with unknown version/client and unverified causal hypothesis.",
+        "Does not publish, search with private identifiers or claim reproduction."
+      ]
+    },
+    {
+      "id": "subagent-diagnostic-stale",
+      "prompt": "Use project-onboarding-adapter diagnostics. Explain why my subagents are inactive without modifying setup or launching workers. Fixture facts: wdk_worker is configured; previous runtime evidence has a different client fingerprint; the current registry has no delegation tool.",
+      "rubric": [
+        "Separates configured role from absent callable dispatch and stale runtime evidence.",
+        "Does not modify configuration, run onboarding or launch a canary."
+      ]
+    },
+    {
+      "id": "learning-readaptation-consent",
+      "prompt": "Re-adapt WebDev and configure my supplied private sync repository, preserving data. Fixture: recording is false, no hooks installed, and no previous explicit consent decision is recorded. Do not make external writes in this fixture. Explain the next steps.",
+      "rubric": [
+        "Distinguishes sync configuration from raw capture consent; false config alone is not explicit opt-out.",
+        "Resolves the missing capture decision once; never enables silently or claims all learning active."
+      ]
+    },
+    {
+      "id": "feedback-exclusion-evidence",
+      "prompt": "Draft an architectural WebDev issue from this report without saving to learning: another agent said four tests passed and recording is enabled, but no lifecycle events were observed. Local capture state is inaccessible here. Do not publish.",
+      "rubric": [
+        "Labels the tests as agent-reported and runtime capture as unverified.",
+        "Does not write learning data or claim that inaccessible background hooks saved nothing."
       ]
     }
   ]

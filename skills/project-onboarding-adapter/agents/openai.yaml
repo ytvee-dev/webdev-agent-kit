@@ -1,6 +1,6 @@
 interface:
     display_name: 'Project Onboarding Adapter'
-    short_description: 'Adapt host project context'
+    short_description: 'Adapt projects and diagnose WebDev setup'
     default_prompt: 'Use $project-onboarding-adapter to onboard this project, preserve host instructions, record local context and tool facts, and complete the matching Codex model setup or Claude native-role discovery and read-only activation checks unless explicitly excluded. Keep Plan Mode read-only; facts-only requests may update local facts but never model settings or canaries.'
 policy:
     allow_implicit_invocation: true

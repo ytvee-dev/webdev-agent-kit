@@ -26,11 +26,22 @@ Codex supports `UserPromptSubmit`, `PostToolUse`, and `Stop` in trusted `hooks.j
 ```json
 {
   "hooks": {
-    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py --client codex", "async": true, "timeout": 5 }] }],
-    "PostToolUse": [{ "hooks": [{ "type": "command", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py --client codex", "async": true, "timeout": 5 }] }]
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "statusMessage": "Record user prompt", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py --client codex", "async": true, "timeout": 5 }] }],
+    "PostToolUse": [{ "hooks": [{ "type": "command", "statusMessage": "Record tool result", "command": "python /ABSOLUTE/PATH/TO/assets/integrations/hook_bridge.py --client codex", "async": true, "timeout": 5 }] }]
   }
 }
 ```
+
+Prefer `scripts/install_hooks.py --project ROOT` to preview and add `--approve`
+only for an authorized capture setup. It supplies stable event-specific
+`statusMessage` labels, including `Record assistant response` for Stop.
+Known older prefixed defaults and corrupted question-mark labels are repaired.
+Other custom labels and handler/group settings are preserved; identical
+reinstallation performs no file write. Agents need not invent names during
+adaptation. Localize labels only when requested, preserving their event meaning.
+Changed definitions may require native trust review again; never edit trust hashes.
+See https://learn.chatgpt.com/docs/hooks#config-shape and
+https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks.
 
 Inspect and trust the hooks using the client UI. The bridge records exposed user prompts, assistant Stop message content and tool response excerpts, **not a complete authenticated transcript or attachment bytes**. Transcript path is not followed automatically.
 

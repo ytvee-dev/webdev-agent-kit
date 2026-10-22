@@ -11,6 +11,8 @@ tags:
 parent:
     - '[[docs/README|WebDev Agent Kit Documentation]]'
 related:
+    - '[[docs/install/opencode]]'
+    - '[[docs/install/model-capability-guide]]'
     - '[[docs/install/roles]]'
     - '[[docs/install/codex|Install for Codex]]'
     - '[[docs/install/claude-code|Install for Claude Code]]'
@@ -23,28 +25,34 @@ depends_on: []
 
 # Installation Guides
 
-[← All documentation](../README.md) · [MCP setup](../mcp/README.md)
+[← All documentation](../README.md)
 
-Choose a client:
+Choose the client you use to open your project:
 
-- [Codex](codex.md)
-- [Claude Code](claude-code.md)
-- [Claude project adaptation and native roles](claude-agents.md)
-- [Cursor](cursor.md)
-- [VS Code Codex](vscode-codex.md)
-- [VS Code Claude](vscode-claude.md)
+| Client | Guide |
+| --- | --- |
+| Codex | [Install for Codex](codex.md) |
+| Claude Code | [Install the Claude plugin](claude-code.md) |
+| Cursor | [Install for Cursor](cursor.md) |
+| VS Code with Codex | [Install for VS Code Codex](vscode-codex.md) |
+| VS Code with Claude Code | [Install for VS Code Claude](vscode-claude.md) |
+| OpenCode on Windows | [Use the OpenCode installer](opencode.md) |
 
-## Video Guides
+Read [first-run checks](first-run.md) before extracting a package. If the Kit
+is already installed, use [upgrade and rollback](upgrade.md).
+
+## After installation
+
+- [Choose a model and check tool support](model-capability-guide.md)
+- [Set up MCP servers](../mcp/README.md)
+- [Select a frontend or designer role](roles.md)
+- [Set up Codex subagents](gpt-model-routing.md)
+- [Adapt the Claude plugin to a project](claude-agents.md)
+
+## Video guides
 
 - [Cursor — text and video guide](cursor.md)
 - [VS Code Codex — text and video guide](vscode-codex.md)
 
-These are user-facing installation guides, not runtime policy or the source of
-truth for target package structure. The release contract is defined by
-`bundle-manifest.json`, the target package builder, and the archive validators.
-
-[← All documentation](../README.md) · [MCP for WebDev Agent Kit](../mcp/README.md)
-
-- [Select frontend or designer roles](roles.md)
-
-[[docs/install/opencode]]
+These pages are user guides, not runtime policy. Maintainers define package
+contents in `bundle-manifest.json` and check them with the archive validators.

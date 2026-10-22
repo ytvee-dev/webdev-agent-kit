@@ -24,7 +24,7 @@ depends_on: []
 
 This guide covers installation for the Claude Code CLI, the official Claude Code
 extension for VS Code, the **Code** tab in Claude Desktop, and regular Claude
-Desktop chat on Windows. MCP purposes, skill relationships, and common tests are
+Desktop chat on Windows. MCP purposes, setup requirements, and tests are
 in the [general MCP guide](README.md).
 
 ## Claude Clients
@@ -204,7 +204,7 @@ claude mcp list
 
 Then:
 
-1. Restart the Claude Code surface or begin a new session.
+1. Restart the Claude Code client or begin a new session.
 2. Enter `/mcp`.
 3. Make sure the servers have **connected** status and show tools.
 4. Complete OAuth for Context7 if authorization is still pending.

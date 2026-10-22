@@ -36,8 +36,8 @@ Load https://github.com/ytvee-dev/webdev-agent-kit/wiki/Designer-Meta-instructio
 and apply the designer role in this conversation.
 ```
 
-With the updated Kit policy loaded, `WebDev role: frontend` and
-`WebDev role: designer` express the same instruction route. `developer` aliases
+Once the Kit instructions are loaded, you can shorten those requests to
+`WebDev role: frontend` or `WebDev role: designer`. `developer` also selects
 frontend. These are conversational prompts, not guaranteed slash commands or
 native client UI controls. Earlier installations may need the full prompt.
 
@@ -54,11 +54,12 @@ promise Figma/code synchronization or completed implementation.
 ## Models And Activation
 
 Use [Codex model routing](gpt-model-routing.md) or
-[Claude native roles](claude-agents.md) for execution bindings. Codex 1.1.0
-introduced configuration activation during full onboarding; retained release
-evidence covers specific tested clients, not every installation. Project trust
-or a managed-policy denial must be resolved by its owner. Re-run the smallest
-read-only role canary on the affected host; a present config file is not proof.
+[Claude native roles](claude-agents.md) to configure subagents. Codex 1.1.0
+introduced role activation during full adaptation. Release checks cover the
+clients actually tested, not every installation. Project trust
+or a managed-policy denial must be resolved by its owner. After setup, run a small
+read-only task with the affected role. A configuration file alone is not proof
+that the role works.
 
 When reporting issue #71, separate conversational selection, native discovery,
 effective model/effort, permissions and actual task output. This release does

@@ -25,8 +25,8 @@ Development priorities, implementation and releases are managed by the project
 owner. This document describes the maintainer's change process, not an open
 contribution program. Licensing terms remain in LICENSE without alteration.
 
-Approved work must remain portable, progressively disclosed, auditable and safe
-to install. Use [Support](SUPPORT.md) for reproducible usage reports and
+Changes must work in the supported clients, load only relevant instructions,
+and be reviewable before installation. Use [Support](SUPPORT.md) for reproducible usage reports and
 [Security](SECURITY.md) for private vulnerability reporting.
 
 ## Report An Agent Behavior Problem
@@ -47,9 +47,8 @@ Verification performed:
 ```
 
 Remove secrets, private repository content, customer data, and personal
-information before submitting evidence. Then create an Issue or Pull Request
-with a detailed description in the current repository. The title must include a
-severity-level marker.
+information before submitting evidence. Submit the report in this repository. Use the issue form's title prefix and
+describe the impact; the maintainer assigns severity.
 
 ## Change Risk Levels
 
@@ -99,7 +98,7 @@ clear compatibility and security analysis.
 
 - Keep reusable policy in `common/**` and task-specific procedures in
   `skills/**`.
-- Keep host-project facts in local-only `project/**` overlays. Never publish
+- Keep host-project facts in local-only `project/**` files. Never publish
   current project state in the reusable bundle.
 - Prefer precise workflow instructions over broad slogans such as "follow best
   practices".

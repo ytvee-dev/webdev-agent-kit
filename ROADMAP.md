@@ -30,11 +30,12 @@ is recorded in `CHANGELOG.md`.
 
 ## Current
 
-- Prepare `1.3.0` after Claude adaptation in `1.2.0`, preserving client contracts
-  and host state. See [the release plan](docs/release/1.3.0-plan.md).
+- Prepare `1.7.0`: GitHub feedback reports, setup diagnostics, clearer capture
+  setup, named hooks and model guidance. See [release PR #80](https://github.com/ytvee-dev/webdev-agent-kit/pull/80).
+  Earlier release plans remain historical records.
 - Validate first-run and upgrade guidance against real client installations;
   [first-run checks](docs/install/first-run.md) and
-  [upgrade/rollback](docs/install/upgrade.md) are implemented in the release candidate.
+  [upgrade/rollback](docs/install/upgrade.md) describe the supported process.
 - Exercise the public [reproducible workflows](docs/architecture/reproducible-workflows.md)
   for scoped fixes, screenshots, review, migration, and verification boundaries.
 - Collect actual agent-behavior and client-compatibility runs through the expanded
@@ -59,11 +60,11 @@ is recorded in `CHANGELOG.md`.
 
 ## Exploring
 
-- Evidence-gated profiles for Vue, Svelte, or Astro.
+- Profiles for Vue, Svelte, or Astro, if real projects show a need.
 - Owner-tested design-system mapping drafts before broader automation.
 - Centralized version visibility and compatibility reporting.
 - Additional host adapters when their native contracts can be validated.
 
-Items in **Exploring** are not accepted features. New stacks, clients, skills,
+Items in **Exploring** are ideas, not scheduled features. New stacks, clients, skills,
 dependencies, and services still require the proposal and approval process in
 `MAINTENANCE.md`.

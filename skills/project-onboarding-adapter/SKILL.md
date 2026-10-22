@@ -1,6 +1,6 @@
 ---
 name: project-onboarding-adapter
-description: 'Adapt frontend projects with local context, client and verification facts. Includes Codex model setup or Claude plugin-role discovery for full onboarding. Excludes model changes during updates, facts-only requests and Plan Mode; no app code or instruction replacement.'
+description: 'Adapt frontend projects, configure supported agent roles, or diagnose WebDev setup read-only. Excludes app code and model changes during updates.'
 id: 'agents.skills.project-onboarding-adapter.skill'
 title: 'Project Onboarding Adapter'
 doc_type: 'skill'
@@ -15,6 +15,7 @@ tags:
     - 'frontend/project-context'
 parent: []
 related:
+    - '[[skills/project-onboarding-adapter/references/installation-diagnostics]]'
     - '[[skills/project-onboarding-adapter/references/claude-agent-bootstrap]]'
     - '[[templates/project/claude-agent-profile]]'
     - '[[templates/project/model-routing-profile]]'
@@ -56,6 +57,8 @@ Route adaptation, initialization, and project-context bootstrap commands here, i
 
 ## When To Use
 
+- The user asks to check WebDev installation or diagnose inactive subagents.
+
 - The user explicitly requests economical GPT subagent setup or reconfiguration in a supported Codex project.
 - The user asks to adapt this bundle to a new React or Next.js project.
 - The user asks to adapt this bundle to a non-target frontend project while keeping applicable design, QA, review, lint, planning, MCP, context, and skill-authoring workflows.
@@ -70,6 +73,12 @@ Route adaptation, initialization, and project-context bootstrap commands here, i
 - Reusable skill authoring.
 - Application scaffolding, package installation, or source file creation.
 - Stack-specific React/Next architecture or implementation guidance for a non-target frontend project unless the user explicitly changes the supported stack.
+
+## Diagnostic Branch
+
+For installation checks or questions about inactive subagents, read
+`references/installation-diagnostics.md` and follow only that read-only branch.
+Do not continue into the adaptation workflow or model bootstrap.
 
 ## Required Context
 
@@ -114,17 +123,30 @@ Read targeted README sections only when they help identify project intent, setup
 12. In Plan Mode, return the plan and stop.
 13. In execution mode, update the approved pointer and local overlays; complete the matching Codex or Claude phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
 
-## Optional Learning Repository
+## Learning Setup During Adaptation
 
-During full adaptation, offer optional private-repository experience storage.
-Only if the user supplies a repository, follow the learning skill's
-`skills/agent-self-improvement/references/project-memory.md` to bind the stable project ID, verify access and
-configure the local address. Store ID and manual-only mode in host-local
-`.agents/project/learning-profile.md`. Link it from the approved host pointer for
-project-scoped recall on relevant tasks; recall never enables capture or sync.
-No repository means local-only operation.
-Do not enable capture, upload data, install tooling, or ask again on kit updates.
-Plan Mode only describes the option. Never embed a user's repository in this kit.
+During full adaptation or re-adaptation, reconcile the existing learning profile,
+recording state and client integration. Follow
+`skills/agent-self-improvement/references/project-memory.md` (Adaptation State).
+Preserve prior opt-in or opt-out, stable project ID, database and caches. A generic
+"adapt" request or supplying a sync repository does not authorize raw capture.
+If capture intent is unresolved, explain the local collection scope and ask once;
+otherwise honor the existing decision without repeated confirmation. Explicit
+capture setup already authorizes its documented local hooks; do not ask again.
+
+Offer optional private-repository experience storage only during adaptation.
+Only if the user supplies a repository, follow the memory reference to verify it
+and configure its local address. No repository means local-only operation.
+Store decisions and separate setup/verification states in host-local
+`.agents/project/learning-profile.md`; link it from the approved host pointer for
+project-scoped recall. Recall never enables capture or sync. Report capture
+opt-out as a valid completed choice, unresolved consent as pending, and installed
+but unobserved hooks as unverified. Never call the whole learning pipeline active
+merely because recording is enabled or tests pass.
+
+An update alone preserves these decisions and does not reopen onboarding.
+Plan Mode only describes changes. Never upload automatically, alter native trust,
+install tooling without authority or embed a user's repository in the Kit.
 
 ## Codex Model Setup During Onboarding
 
@@ -219,6 +241,8 @@ Should not trigger:
 - "Scaffold a new React app."
 
 ## Reference Map
+
+- `references/installation-diagnostics.md` - read-only setup and subagent checks.
 
 - `references/claude-agent-bootstrap.md`: native Claude plugin adaptation and role verification.
 - `templates/project/claude-agent-profile.md`: local-only Claude routing evidence.

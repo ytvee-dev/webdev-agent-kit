@@ -20,17 +20,17 @@ depends_on: []
 
 # Draft Design System Pilot
 
-This release ships sketches for owner testing on a real project. They are not
-automatically activated, do not add a skill or writing provider, and do not
-promise automatic Figma/code synchronization. Stable rules will be shaped by
-observed failures and corrections in a later release.
+This pilot provides templates for trying a design-system workflow on a real
+project. Start with one component and record what works and what needs fixing.
+It is optional and does not add a Figma editing tool or automatic synchronization
+between Figma and code.
 
 ## Proposed Workflow
 
 Start with an existing component family, ideally one with variants, tokens and
 effects. Inspect the installed code/library and the matching Figma instances
-where available. Choose source authority separately for API, behavior, tokens
-and appearance; do not assume Figma or code always wins.
+where available. Decide which source to follow for the API, behavior, tokens and appearance.
+For example, code may define behavior while Figma defines spacing.
 
 Use [the pilot contract](../../templates/project/design-system-pilot.md) to map
 component identity, anatomy, properties, states, aliases, modes, effects and
@@ -67,6 +67,7 @@ expected/actual behavior, evidence and local corrections. Include a near-miss
 where the correction should not apply. The follow-up issue will collect sanitized
 results; a local preference does not automatically become a universal rule.
 
-Until those runs occur, extraction accuracy, writing-provider compatibility,
-token round-tripping and multi-project behavior remain unverified. This release
-validates template distribution and scenario preparation only.
+The package checks confirm that the templates ship and the test cases can be
+prepared. They do not confirm that tools edit Figma correctly, preserve tokens
+when moving between Figma and code, or work across different projects. Those
+questions need real project trials.

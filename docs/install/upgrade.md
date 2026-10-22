@@ -18,18 +18,18 @@ depends_on: []
 
 # Upgrade And Rollback
 
-Use an explicit old and new release tag. During a release PR, candidate archives
-built from that branch are local artifacts; `releases/latest` still resolves to
-the published release. Do not use it to test unpublished 0.5.0 content.
+Record the installed version and the version you want to install before updating.
+`releases/latest` points to the latest published release. It does not include
+changes from an open release PR.
 
 ## Agent-Assisted Update
 
 Use [WebDev Kit Updater](../../skills/webdev-kit-updater/SKILL.md) for an
 installed-version check, authorized upgrade, or rollback. Its
 [procedure](../../skills/webdev-kit-updater/references/upgrade-procedure.md)
-owns the executable-by-agent workflow: pinned endpoint diffs, three-way target
-comparison, preservation, installation records, and bounded verification.
-This is an instruction-only skill, not an automated installer command.
+tells the agent to compare the old release, your installed copy and the new
+release, preserve local changes, record the update and check the result.
+You ask the agent to follow this procedure; it is not a one-command updater.
 
 Example request when the skill is installed:
 
@@ -63,8 +63,7 @@ or execute fetched scripts without checking scope and required permissions.
 ```
 
 Fetch the skill reference relative to its skill directory and both files from
-the same pinned guide revision. Until this guide is merged, use the requested
-release-PR revision instead of `main`. Keep the procedure revision distinct from
+the same pinned guide revision. Keep the procedure revision distinct from
 the requested installation revision: a new guide does not authorize installing
 an unpublished candidate. If the pinned guide lacks the skill, ask for a
 revision containing it; do not invent an updater or install a different release.
@@ -92,8 +91,8 @@ authorized apply, after establishing the real old baseline.
 
 ## Project Bundles: Codex And Cursor
 
-Apply the reconciled owned runtime from staging; avoid overlay extraction that
-can leave deleted old skills active. Preserve local `project/**` facts and
+Copy the reviewed Kit files from the temporary directory. Do not simply extract
+the new archive over the old installation: removed skills could remain active. Preserve local `project/**` facts and
 reviewed customizations; do not replace the entire `.agents/` directory.
 Preserve unrelated host instructions and client rules.
 For Cursor, compare and replace only the kit-owned rule
@@ -128,7 +127,8 @@ does not require migrating project policy to a different runtime.
 | Project custom skills or rules | Preserve separately and review against new policy; do not silently publish them |
 | Experimental workflows | Require real run evidence; synthetic runner checks do not promote maturity |
 
-Freshness metadata is additive; missing fields in old overlays mean unknown.
+New records can include when a fact was last checked. Missing fields in older
+project records mean that information is unknown.
 No automatic rewrite of host state is required.
 
 ## Validate And Roll Back
@@ -138,7 +138,7 @@ Confirm old local goals, decisions, and unrelated rules are byte-preserved.
 If discovery fails or a regression appears, retain the error and stop using the
 candidate. Restore the backed-up runtime and kit-owned rule/pointer as a unit,
 or reactivate the old plugin through the client's manager. Preserve newer local
-project notes separately before restoring older overlays.
+project notes separately before restoring older project records.
 
 Start a fresh session and confirm the restored version. Report both versions,
 target, exact reproduction, result, and rollback outcome. Do not retarget a
@@ -162,7 +162,7 @@ plan layout. Small tasks remain inline and do not create those artifacts.
 Claude adds plugin-local shared policy and nine native roles; existing skill
 names and aliases are unchanged. Update through the native plugin manager and
 refresh discovery. Preserve host `CLAUDE.md`, `.claude/settings.json`, custom
-`.claude/agents`, model choices and `.agents/project/` overlays. Do not copy the
+`.claude/agents`, model choices and `.agents/project/` records. Do not copy the
 plugin's policy into the host root or replace existing local agents. Revalidate
 only affected discovery/runtime evidence during separately requested onboarding.
 See [Claude adaptation and roles](claude-agents.md). Codex bindings and Cursor

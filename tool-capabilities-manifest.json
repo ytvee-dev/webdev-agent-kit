@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
+  "version": "1.7.0",
   "capabilities": {
     "client_platform_docs": {
       "purpose": "Fetch current host-client installation, plugin, instruction, tool, and configuration documentation.",
@@ -82,6 +82,22 @@
       "blocked_providers": [
         "unapproved_remote_upload",
         "untrusted_project_path"
+      ]
+    },
+    "issue_publication": {
+      "purpose": "Create a user-requested issue in the resolved repository; never automatic feedback or memory upload.",
+      "availability_evidence": [
+        "current_session_tool_registry"
+      ],
+      "preferred_providers": [
+        "github_connector"
+      ],
+      "fallback_providers": [
+        "authenticated_github_cli"
+      ],
+      "blocked_providers": [
+        "shared_token",
+        "unapproved_external_write"
       ]
     },
     "live_design_source": {
@@ -498,6 +514,21 @@
       ],
       "blocked": [
         "live_design_source"
+      ]
+    },
+    "webdev-feedback": {
+      "requires": [],
+      "requires_when_in_scope": [
+        "issue_publication",
+        "project_files",
+        "repo_metadata"
+      ],
+      "optional": [
+        "command_execution"
+      ],
+      "blocked": [
+        "live_design_source",
+        "rendered_visual_evidence"
       ]
     },
     "webdev-kit-updater": {

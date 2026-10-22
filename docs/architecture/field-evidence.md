@@ -21,8 +21,8 @@ depends_on: []
 
 Two maintainer-supplied project documentation snapshots were reviewed. Both
 describe React/Vite projects used with Codex, including Windows shell context.
-They are configuration and project-convention evidence, not retained agent
-transcripts or independent client compatibility passes. Source project names,
+They show project settings and conventions. They do not show how an agent
+performed a task or prove client compatibility. Source project names,
 paths, repository routes, and raw private files are omitted.
 
 | Observation in supplied documentation | Generalized action | Public reproduction |
@@ -30,7 +30,7 @@ paths, repository routes, and raw private files are omitted.
 | One project uses plain CSS; another uses CSS Modules and an installed design system | Preserve verified local conventions and installed APIs | `onboarding-existing`, design-system trigger fixture |
 | Client and MCP profiles have different validation dates and discovery detail | Record source/session freshness; separate availability from successful use | `stale-browser-profile` |
 | A verification profile attributes type checking to a Vite build without retaining command-chain evidence | Record command expansion and exact coverage; leave results not-run until executed | `refresh-build-coverage` |
-| A project designates a specific engineering document and feature-level rules | Preserve scope and read-only references in local overlays | `migrate-instructions` |
+| A project designates a specific engineering document and feature-level rules | Preserve scope and read-only references in local project records | `migrate-instructions` |
 | Local review transport and product/UI restrictions differ from reusable policy | Keep team-specific constraints local | Instruction migration coverage map |
 
 The build observation identifies an unsupported claim in documentation, not a
@@ -64,8 +64,9 @@ customer data, or full local profiles. Public sharing must be authorized.
 
 ## Turn A Report Into A Regression
 
-1. Triage the evidence kind and affected contract. Label unsupported facts
-   unknown. Separate environment blocks from source defects and agent mistakes.
+1. Identify what the report demonstrates and which behavior it affects. Mark
+   unconfirmed details as unknown. Distinguish setup problems, code defects and
+   agent mistakes.
 2. Reduce to public synthetic inputs that preserve the failure condition.
 3. Add positive and near-miss cases to the owning static eval file; keep all
    existing schema, policy, routing, and context-budget gates.
@@ -89,8 +90,7 @@ Windows names, traversal, collisions, links, private overlays, and wrong roots.
 
 ## Current Coverage Limit
 
-Deterministic fixture/schema validation and synthetic runner success are release
-gates. Actual behavior across supported clients remains an evidence-collection
-task; report counts from configuration snapshots must not promote skill maturity.
-Use the maintenance criteria for stability, with client/model-specific traces
-and independent projects. No global success percentage is claimed here.
+Release checks validate data formats, prepared test projects and the runner.
+Actual agent behavior must also be assessed in each client. A count of project
+configuration files does not measure reliability. Record the client, model,
+task and outcome for real runs; this document reports no overall success rate.

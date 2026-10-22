@@ -25,7 +25,7 @@ body:
     id: version
     attributes:
       label: Kit version and archive
-      placeholder: v0.5.0, webdev-agent-kit-codex.tar.gz
+      placeholder: v1.6.0, webdev-agent-kit-codex.tar.gz
     validations:
       required: true
   - type: input
@@ -46,7 +46,7 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: Expected contract
+      label: Expected result
       description: List the expected paths, discovery result, or client behavior.
     validations:
       required: true
@@ -79,14 +79,14 @@ body:
     id: client-model
     attributes:
       label: Client version and model
-      description: Include client surface, exact version, model ID, OS, and shell; use unknown when unavailable.
+      description: Include the app or extension, its version, model, OS, and shell. Write unknown for details you cannot check.
     validations:
       required: true
   - type: textarea
     id: repetition
     attributes:
       label: Repetitions and retained evidence
-      description: Include fresh-session runs, failures and successes, trace locations, and any near-miss prompt. Never count a fixture as a live pass.
+      description: Say whether it happened in a new session, how often it occurred, and where the results are recorded. Separate real agent runs from simulated cases.
     validations:
       required: false
   - type: dropdown
@@ -104,6 +104,6 @@ body:
     id: installation-stage
     attributes:
       label: Installation stage and upgrade state
-      description: Distinguish extracted, discovered, adapted, and exercised. For upgrades include old/new versions, active target/alias, preserved files, and rollback result.
+      description: Say whether the failure happened while extracting files, loading skills, adapting the project, or running a task. For updates, include old/new versions, the client package, preserved files, and any rollback result.
     validations:
       required: true

@@ -59,10 +59,10 @@ installation, use [upgrade and rollback](upgrade.md) to preserve local state.
 
 ## GPT Subagents During Onboarding
 
-Version 1.1.0 includes missing economical GPT roles and narrow activation in full
-onboarding, without a second confirmation. Follow [GPT model routing](gpt-model-routing.md).
-Facts-only/no-model-change requests and Plan Mode do not write model settings.
-Preserve working bindings. After writing, refresh and check actual child model/effort
-metadata. A TOML file or inspector success alone does not activate routing.
+Full adaptation can set up missing local subagent roles. Existing working
+settings stay in place. Follow [GPT model routing](gpt-model-routing.md).
+To skip model setup, ask for project facts only. Plan Mode also leaves settings
+unchanged. After setup, refresh the client and check one real role invocation;
+a configuration file alone does not show that the role works.
 
 [← All installation guides](README.md) · [MCP for WebDev Agent Kit](../mcp/README.md) · [All documentation](../README.md)

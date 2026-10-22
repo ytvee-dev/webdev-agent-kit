@@ -22,7 +22,7 @@ depends_on: []
 [← All MCPs](README.md) · [Install WebDev Agent Kit for Cursor](../install/cursor.md)
 
 This guide covers MCP installation in Cursor on Windows using the interface
-shown in the screenshots. Server purposes, skill relationships, and functional
+shown in the screenshots. Server purposes, setup requirements, and functional
 tests are in the [general MCP guide](README.md).
 
 ## Cursor Settings
@@ -69,8 +69,8 @@ project file that may be committed to git.
 
    ![Search for Context7 in Cursor Marketplace](assets/cursor/context7-marketplace-search.png)
 
-3. Confirm that the card includes the Context7 MCP, the `context7-mcp` skill,
-   the `docs-researcher` subagent, and the `docs` command.
+3. Check that the plugin includes the Context7 MCP. Other bundled components
+   may differ from the screenshot.
 4. Select **Add to Cursor**.
 
    ![Install Context7 through Add to Cursor](assets/cursor/context7-marketplace-install.png)
@@ -187,8 +187,8 @@ tool call.
 
 ## Complete mcp.json
 
-If Context7 is installed through Marketplace, global `~/.cursor/mcp.json` should
-contain the other four servers. Do not overwrite an existing file blindly:
+This example includes all four optional servers other than Context7, which the
+Marketplace plugin provides. Keep only the entries you need. Do not overwrite an existing file blindly:
 merge the entries inside its existing `mcpServers` object.
 
 ```json
@@ -235,7 +235,7 @@ the **User** source:
 ## Verify Cursor
 
 1. Open **Customize → MCPs**.
-2. Make sure all five servers have a green indicator and show tools.
+2. Make sure the servers you installed show a connection status and tools.
 3. If Cursor Agent CLI is installed, run:
 
    ```powershell
