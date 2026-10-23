@@ -71,12 +71,15 @@ never automatically changes reusable skills. No automatic network synchronizatio
 ## Capture Exclusion
 
 Honor explicit no-learning/no-database instructions before optional curation or
-linkage. For active capture, use the existing project `off` operation and verify
-status; explain its project-wide scope and do not silently resume. The current
-collector has no session-only exclusion control. The initiating prompt or an
-in-flight hook may already have been recorded; never promise retroactive absence.
-If verification is unavailable, report that limit. Delete prior records only on
-an explicitly scoped request, preserving unrelated history.
+linkage. For session-only exclusion use `learning.py pause` with observed client
+and session IDs, then verify `status`. When IDs are unavailable or the refusal
+covers the project, use `off` and explain its project-wide scope. Never resume
+silently. The initiating prompt or in-flight hook may already be recorded; never
+promise retroactive absence. Delete prior records only on a scoped request.
+For quality audit, application stages, multilingual aliases and raw retention,
+follow `references/project-memory.md`. Do not confuse successful application,
+incorporation into a rule, and current applicability. Run `audit` after import or
+curation; `check` alone is not a quality assessment.
 
 ## Output Contract
 

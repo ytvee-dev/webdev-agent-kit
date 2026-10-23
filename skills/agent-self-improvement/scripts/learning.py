@@ -11,7 +11,7 @@ import sqlite3
 import sys
 import tempfile
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 MAX_EVENT_BYTES = 262144
@@ -79,6 +79,10 @@ def create_store(root):
             id TEXT PRIMARY KEY, project_id TEXT NOT NULL, client TEXT NOT NULL,
             session_id TEXT NOT NULL, digest TEXT NOT NULL, display_name TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS capture_pauses (
+            project_id TEXT NOT NULL, client TEXT NOT NULL, session_id TEXT NOT NULL,
+            PRIMARY KEY(project_id,client,session_id)
+        );
         CREATE TABLE IF NOT EXISTS runs (
             id TEXT PRIMARY KEY, project_id TEXT NOT NULL, timestamp TEXT NOT NULL,
             observed INTEGER NOT NULL, findings INTEGER NOT NULL, result TEXT NOT NULL
@@ -93,6 +97,69 @@ def create_store(root):
 def opt_in(conn, project):
     row = conn.execute("SELECT recording FROM projects WHERE id=?", (project_id(project),)).fetchone()
     return bool(row and row[0])
+
+
+def session_paused(conn, project, client, session):
+    return bool(conn.execute("SELECT 1 FROM capture_pauses WHERE project_id=? AND client=? AND session_id=?",
+                             (project_id(project), client, session)).fetchone())
+
+
+def set_pause(conn, project, client, session, paused):
+    if not client.strip() or not session.strip():
+        raise ValueError("Pause requires exact client and session identifiers")
+    with conn:
+        if paused:
+            conn.execute("INSERT OR IGNORE INTO capture_pauses VALUES(?,?,?)", (project_id(project), client, session))
+        else:
+            conn.execute("DELETE FROM capture_pauses WHERE project_id=? AND client=? AND session_id=?", (project_id(project), client, session))
+    return {"session_id": session, "client": client, "paused": paused,
+            "recording": opt_in(conn, project), "retroactive": False}
+
+
+def retain_raw(conn, project, days, apply=False):
+    """Age-based maintenance only; never remove memory, blobs or privacy history."""
+    if days < 1:
+        raise ValueError("Retention days must be positive")
+    pid = project_id(project)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
+    # Serialize preview selection and apply with concurrent collectors/curators.
+    with conn:
+        conn.execute("BEGIN IMMEDIATE")
+        protected, protect_all = set(), False
+        if conn.execute("SELECT 1 FROM sqlite_master WHERE name='memory_bindings'").fetchone():
+            row = conn.execute("SELECT project_id FROM memory_bindings WHERE local_id=?", (pid,)).fetchone()
+            if row:
+                for kind, payload, provenance in conn.execute("SELECT kind,payload,provenance FROM memory_records WHERE project_id=?", (row[0],)):
+                    p, origin = json.loads(payload), json.loads(provenance)
+                    protected.update(p.get("source_event_ids", []))
+                    if kind == "evidence":
+                        protected.add(p["source_ref"])
+                    if kind == "episode" and not p.get("source_event_ids"):
+                        # Without provenance we cannot prove any event is expendable.
+                        session, client = origin.get("session_id"), origin.get("client")
+                        if not session or session == "unknown" or not client or client == "unknown":
+                            protect_all = True
+                        else:
+                            protected.update(r[0] for r in conn.execute("SELECT id FROM events WHERE project_id=? AND client=? AND session_id=?", (pid, client, session)))
+        selected, protected_count, invalid = [], 0, 0
+        for eid, stamp in conn.execute("SELECT id,timestamp FROM events WHERE project_id=?", (pid,)):
+            try:
+                date = datetime.fromisoformat(stamp)
+                if date.tzinfo is None:
+                    raise ValueError("missing timezone")
+            except (ValueError, TypeError):
+                invalid += 1
+                continue
+            if date < cutoff:
+                if protect_all or eid in protected:
+                    protected_count += 1
+                else:
+                    selected.append(eid)
+        if apply:
+            conn.executemany("DELETE FROM events WHERE project_id=? AND id=?", [(pid, eid) for eid in selected])
+    return {"mode": "applied" if apply else "preview", "eligible": len(selected), "deleted": len(selected) if apply else 0,
+            "protected": protected_count, "invalid_timestamps": invalid, "days": days,
+            "limitations": "Raw events only. Structured records, attachments, reports, backups and remote Git history remain. Missing provenance conservatively pins events."}
 
 
 def set_mode(conn, project, enabled):
@@ -153,6 +220,10 @@ def normalize(event, project, client_override=None):
 def capture(conn, project, event, client_override=None):
     if not opt_in(conn, project):
         return {"recorded": False, "reason": "collection_disabled"}
+    if not isinstance(event, dict):
+        raise ValueError("Event must be a JSON object")
+    if session_paused(conn, project, str(client_override or event.get("client") or ""), str(event.get("session_id") or "")):
+        return {"recorded": False, "reason": "session_paused"}
     record = normalize(event, project, client_override)
     cur = conn.execute(
         "INSERT OR IGNORE INTO events VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", record
@@ -179,6 +250,8 @@ def ingest_file(conn, project, file):
 def store_bytes(conn, state, project, client, session, filename, data):
     if not opt_in(conn, project):
         raise PermissionError("Collection is off for this project")
+    if session_paused(conn, project, client, session):
+        raise PermissionError("Collection is paused for this session")
     exists = conn.execute(
         "SELECT 1 FROM events WHERE project_id=? AND client=? AND session_id=? LIMIT 1",
         (project_id(project), client, session),
@@ -291,6 +364,7 @@ def purge(conn, state, project, session=None):
         conn.execute("DELETE FROM events WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM attachments WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM projects WHERE id=?", (pid,))
+        conn.execute("DELETE FROM capture_pauses WHERE project_id=?", (pid,))
     if conn.execute("SELECT 1 FROM sqlite_master WHERE name='memory_bindings'").fetchone():
         row = conn.execute("SELECT project_id FROM memory_bindings WHERE local_id=?", (pid,)).fetchone()
         if row:
@@ -342,9 +416,15 @@ def main():
     parser.add_argument("--state", type=Path, default=default_root(), help="Private local state directory")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("init")
-    for name in ("on", "off", "status", "sessions", "capture", "capture-batch", "import", "attach", "attach-data", "run", "purge"):
+    for name in ("on", "off", "status", "sessions", "capture", "capture-batch", "import", "attach", "attach-data", "run", "purge", "pause", "resume", "retain"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--project", required=True, help="Project root; must be explicitly enabled")
+        if name in {"pause", "resume"}:
+            cmd.add_argument("--client", required=True)
+            cmd.add_argument("--session", required=True)
+        if name == "retain":
+            cmd.add_argument("--days", type=int, default=30)
+            cmd.add_argument("--apply", action="store_true", help="Delete eligible raw events; default previews only")
         if name == "capture":
             cmd.add_argument("--client", help="Override event client when the hook supplies a common format")
         if name == "import":
@@ -364,6 +444,10 @@ def main():
             result = {"state": str(state), "recording": False}
         elif args.command in {"on", "off"}:
             result = set_mode(conn, args.project, args.command == "on")
+        elif args.command in {"pause", "resume"}:
+            result = set_pause(conn, args.project, args.client, args.session, args.command == "pause")
+        elif args.command == "retain":
+            result = retain_raw(conn, args.project, args.days, args.apply)
         elif args.command == "status":
             pid = project_id(args.project)
             count = conn.execute("SELECT COUNT(*) FROM events WHERE project_id=?", (pid,)).fetchone()[0]
@@ -371,7 +455,7 @@ def main():
                 "SELECT COUNT(*) FROM attachments WHERE project_id=?", (pid,)
             ).fetchone()[0]
             result = {"project_id": pid, "recording": opt_in(conn, args.project),
-                      "events": count, "attachments": attachments}
+                      "events": count, "attachments": attachments, "paused_sessions": [dict(client=r[0], session_id=r[1]) for r in conn.execute("SELECT client,session_id FROM capture_pauses WHERE project_id=?", (pid,))]}
         elif args.command == "sessions":
             pid = project_id(args.project)
             rows = conn.execute(

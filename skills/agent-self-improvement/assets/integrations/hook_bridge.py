@@ -21,12 +21,15 @@ def normalize(event, client):
         content = event.get("prompt") or ""
     elif name == "Stop":
         kind = "assistant"
-        content = event.get("last_assistant_message") or ""
+        content = event.get("last_assistant_message") or "[Assistant text unavailable in hook payload]"
     elif name == "PostToolUse":
         kind = "tool"
         tool = str(event.get("tool_name") or "tool")[:160]
         response = event.get("tool_response")
-        result = json.dumps(response, ensure_ascii=False)[:3000] if response is not None else ""
+        raw = json.dumps(response, ensure_ascii=False) if response is not None else ""
+        result = raw[:3000]
+        if len(raw) > 3000:
+            result += f"\n[TRUNCATED: retained 3000 of {len(raw)} characters]"
         content = f"Tool: {tool}\nOutcome: {result}"
     else:
         kind = "system_event"

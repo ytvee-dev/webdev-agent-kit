@@ -44,7 +44,14 @@ class LearningSmoke(unittest.TestCase):
         self.assertEqual(self.call("status")["events"], 1)
         sessions = self.call("sessions")["sessions"]
         self.assertEqual(sessions[0]["session_id"], "s1")
+        self.call("pause", "--client", "codex", "--session", "s1")
+        self.assertEqual(self.call("capture", payload=event)["reason"], "session_paused")
+        self.assertEqual(len(self.call("status")["paused_sessions"]), 1)
+        other = json.loads(event)
+        other["session_id"] = "s2"
+        self.assertTrue(self.call("capture", payload=json.dumps(other))["recorded"])
         self.call("off")
+        self.call("resume", "--client", "codex", "--session", "s1")
         self.assertFalse(self.call("capture", payload=event)["recorded"])
 
     def test_correction_triage_and_purge(self):
@@ -57,6 +64,12 @@ class LearningSmoke(unittest.TestCase):
         self.assertEqual(result["findings"], 1)
         report = json.loads(Path(result["report"]).read_text())
         self.assertEqual(report["findings"][0]["distinct_sessions"], 2)
+        self.call("capture", payload=json.dumps({"client": "codex", "session_id": "old", "message_id": "old",
+                  "kind": "tool", "content": "obsolete", "timestamp": "2000-01-01T00:00:00+00:00"}))
+        self.assertEqual(self.call("retain", "--days", "30")["eligible"], 1)
+        self.assertEqual(self.call("status")["events"], 3)
+        self.assertEqual(self.call("retain", "--days", "30", "--apply")["deleted"], 1)
+        self.assertEqual(self.call("status")["events"], 2)
         self.assertTrue(self.call("purge")["purged"])
         self.assertEqual(self.call("status")["events"], 0)
         self.assertFalse(Path(result["report"]).exists())

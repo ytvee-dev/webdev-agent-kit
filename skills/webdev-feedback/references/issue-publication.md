@@ -107,14 +107,13 @@ for an authorized correction, never post a duplicate or guess the lost text.
 When the user says not to save this task in learning memory, do not create or
 update episodes, attach the issue URL, import the conversation or sync it. If
 local capture is already active and accessible, the user's request authorizes
-turning it off for the affected project through `learning.py off --project ROOT`;
-verify `status` and explain that this project-wide pause also affects concurrent
-sessions. Do not silently resume. If the user requests session-only suppression,
-state that it is not currently implemented and resolve the narrower requirement
-before promising it. Never edit client trust to suppress capture.
+pausing the affected session through `learning.py pause --project ROOT --client
+CLIENT --session ID` when its exact runtime identifiers are known. Verify `status`.
+Otherwise use `learning.py off --project ROOT` and explain that it also affects
+concurrent sessions. Do not silently resume or edit client trust to suppress capture.
 
 Hooks may have captured the initiating prompt before the agent saw the request,
 and in-flight async capture may race the pause. Do not promise retroactive
 absence. If state is inaccessible, say background capture is unverified. Cleanup
 of existing records is a separate scoped deletion request; do not purge history
-or claim all traces are gone. A pause is not a session-level exclusion guarantee.
+or claim all traces are gone. An already in-flight event may precede the pause.

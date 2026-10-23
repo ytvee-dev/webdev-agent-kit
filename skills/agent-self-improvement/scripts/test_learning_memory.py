@@ -11,6 +11,7 @@ from unittest.mock import patch
 from learning import capture, create_store, set_mode
 from learning_memory import (
     FIELDS,
+    audit,
     bind,
     configure,
     import_package,
@@ -95,9 +96,26 @@ class ProjectMemoryTests(unittest.TestCase):
         self.assertEqual(recall(self.conn, self.pid, 'currency'), [])
         accepted = copy.deepcopy(items[-1])
         accepted.update(revision=2, status='accepted')
-        save_records(self.conn, self.pid, [accepted])
+        with self.assertRaisesRegex(ValueError, 'Quality gate'):
+            save_records(self.conn, self.pid, [accepted])
+        # Import preserves historical statuses, but unsupported advice stays out.
+        import_package(self.conn, self.pid, dict(schema_version=2, project_id=self.pid, records=[accepted]))
+        self.assertEqual(recall(self.conn, self.pid, 'currency'), [])
+        self.assertTrue(audit(self.conn, self.pid)['issues'])
+        evidence = copy.deepcopy(items[1])
+        evidence.update(revision=2, status='verified')
+        evidence['payload'].update(source_type='user_requirement', summary='User requires currency consumer checks')
+        accepted['revision'] = 3
+        accepted['payload'].update(finding_ids=[], applicability='Currency components', recheck_when='Currency formatter changes',
+                                   last_verified_commit='a' * 40, acceptance_basis='explicit_requirement', acceptance_evidence_ids=['evidence'],
+                                   keywords=['валюта', 'форматирование'], incorporated_ref='rules/currency', incorporated_revision='r1')
+        save_records(self.conn, self.pid, [evidence, accepted])
+        self.assertEqual(len(recall(self.conn, self.pid, 'валюта форматирование')), 1)
+        self.assertEqual(recall(self.conn, self.pid, 'instruction'), [])
+        self.assertEqual(recall(self.conn, self.pid, 'currency', ['rules/currency@r1']), [])
+        self.assertEqual(len(recall(self.conn, self.pid, 'currency', ['rules/currency@r2'])), 1)
         self.assertEqual(len(recall(self.conn, self.pid, 'currency')), 1)
-        accepted.update(revision=3, status='stale')
+        accepted.update(revision=4, status='stale')
         save_records(self.conn, self.pid, [accepted])
         self.assertEqual(recall(self.conn, self.pid, 'currency'), [])
 
@@ -151,7 +169,7 @@ class ProjectMemoryTests(unittest.TestCase):
         with patch('learning_memory.gh', return_value=remote) as api:
             configure(self.conn, self.pid, 'owner/memory')
             self.assertEqual(api.call_count, 1)  # configuring never uploads
-        with patch('learning_memory.gh', side_effect=[remote, ValueError('missing'), {}]) as api:
+        with patch('learning_memory.gh', side_effect=[remote, [], {}]) as api:
             result = sync(self.conn, self.pid, 'push')
             self.assertEqual(result['records'], 4)
             self.assertIn('projects/' + self.pid + '/packages/', result['path'])
@@ -162,7 +180,9 @@ class ProjectMemoryTests(unittest.TestCase):
 
     def test_revision_cannot_invalidate_confirmed_findings(self):
         items = self.sample()
-        items[1]['payload']['source_type'] = 'diff'
+        items[1]['status'] = 'verified'
+        items[1]['payload'].update(source_type='diff', summary='Changed formatter', source_revision='a' * 40,
+                                   procedure='git diff base head -- formatter.py', result='Expected currency format confirmed')
         items[2]['payload']['cause_status'] = 'confirmed'
         save_records(self.conn, self.pid, items)
         revision = copy.deepcopy(items[1])
@@ -203,6 +223,12 @@ class ProjectMemoryTests(unittest.TestCase):
             return {'private': True, 'size': 1, 'default_branch': 'main'}
         with patch('learning_memory.gh', side_effect=api):
             self.assertEqual(sync(self.conn, self.pid, 'pull')['records'], 4)
+            self.assertEqual(sync(self.conn, self.pid, 'push')['result'], 'no_change')
+            updated = copy.deepcopy(data['records'][-1])
+            updated.update(revision=2)
+            updated['payload']['instruction'] = 'Revised currency candidate'
+            save_records(self.conn, self.pid, [updated])
+            self.assertEqual(sync(self.conn, self.pid, 'push')['records'], 1)
 
     def test_binding_cannot_silently_change(self):
         self.assertEqual(bind(self.conn, self.project), self.pid)

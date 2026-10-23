@@ -11,6 +11,8 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/install/project-memory]]'
+    - '[[docs/release/1.8.0-plan]]'
     - '[[docs/install/model-capability-guide]]'
     - '[[docs/release/1.3.0-plan]]'
     - '[[docs/release/1.4.0-plan]]'
@@ -33,6 +35,37 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Memory quality audit, evidence checks and supported acceptance bases for new
+  verified lessons. Unsupported historical lessons stay stored and are excluded
+  from ordinary recall.
+- Explicit application stages, versioned evaluation references, session curation
+  markers and installed-rule references separate use, verification and freshness.
+- Session-scoped collection pause/resume and preview-first raw-event retention
+  that preserves referenced events and structured records.
+- [Project memory guide](docs/install/project-memory.md) explains quality,
+  compatibility, maintenance and the limits of these checks.
+
+### Fixed
+
+- Recall searches content words and explicit multilingual aliases, not JSON keys.
+- Hook excerpts mark truncation and unavailable assistant text.
+- Incremental manual sync uploads missing revisions instead of repeated complete
+  history; combined package relationships and conflicts are checked before use.
+
+### Changed
+
+- Existing v2 records retain their bytes and statuses. All exchanging clients
+  must upgrade before optional payload fields are used; older strict clients
+  reject extended records. No private project database is modified by this release.
+- Existing storage/exchange tests and release validation cover executable behavior.
+  Live model improvement and native Windows hook behavior remain unverified.
+- Release metadata advances to v1.8.0; the approved release merge triggers
+  tag creation and the existing validated archive publication workflow.
+
+## 1.7.0
 
 ### Added
 

@@ -17,6 +17,9 @@ depends_on: []
 
 # Project Memory And Manual Exchange
 
+Sections: boundaries; adaptation; session curation; record contract; quality and
+application; retrieval and exchange; maintenance; migration; adaptation state.
+
 ## Boundaries
 
 Use `scripts/learning_memory.py` relative to this skill. All commands accept
@@ -84,8 +87,11 @@ Every record has exactly `id`, positive integer `revision`, `project_id`,
 Use portable IDs (letters, digits, hyphen, underscore). Episode IDs refer to an
 `episode` record in the same project. Provenance has nonempty strings `agent`,
 `client`, `skill_version`, `session_id`; use `unknown` for unavailable metadata.
-The helper's `FIELDS` constant is the exact payload contract; array fields end in `_ids`, `held_out` is boolean, other fields are
-summary strings. Empty strings mean unavailable, not verified absence.
+The helper's `FIELDS` defines required payload fields and `OPTIONAL_FIELDS`
+defines allowed additions. Arrays end in `_ids` or are `keywords` and
+`lesson_versions`; `held_out` is boolean; other fields are strings. Empty strings
+mean unavailable, not verified absence. Keep existing records unchanged and add
+revisions when correcting them.
 
 Kinds: `episode`, `evidence`, `requirement`, `finding`, `lesson`, `evaluation`,
 `application`. Status: `candidate`, `verified`, `accepted`, `disputed`, `stale`,
@@ -101,14 +107,70 @@ commit. Evaluation records describe baseline/candidate, held-out scenario,
 environment, checks and actual result. Applications record outcomes/regressions.
 Different fields express evidence confidence and policy acceptance separately.
 
+## Quality And Application
+
+Run `audit --project ROOT` after curation or import. It reports missing declared
+support, provenance gaps, application stages and curation counts. `check` checks
+storage integrity; neither command proves the truth of a source or model learning.
+
+A single correction produces a candidate lesson. For technical evidence promoted
+to `verified` or `accepted`, add `source_revision`, `procedure` and `result`:
+identify the commit, diff digest or design version, the reproducible command or
+measurement procedure, and its relevant observed output. Do not label a narrative
+as `diff` or `test` merely to pass validation. Inspect the source before declaring
+it verified. A local reference can be valid locally but unavailable to a recipient;
+recipients must check availability before acting.
+
+New verified/accepted lessons require checkable verified evidence, applicability,
+recheck conditions, a concrete `last_verified_commit` (a diff digest is allowed),
+and one of these acceptance bases:
+
+- `explicit_requirement`: `acceptance_evidence_ids` points to an actual
+  `user_requirement`. A request to remember an incident is not approval of the
+  agent's causal explanation. Prefer a `requirement` record for a direct constraint.
+- `independent_evaluation`: `evaluation_ids` points to a verified passing held-out
+  comparison from another episode. The evaluated `candidate` equals the lesson
+  instruction and `lesson_versions` identifies the tested `id@revision`.
+  Record baseline, scenario, environment, checks and actual results. A failed or
+  inconclusive evaluation may itself be verified but cannot justify acceptance.
+
+These are checks of declared support, not an automatic truth detector. Keep
+counterevidence and inspect contradictions. Do not manufacture an extra episode
+from the same repair. `transfer_candidate` stays a proposal for another scope.
+General skill changes still follow the independent-policy evaluation workflow.
+
+For authorized outcome recording, use an `application` with `stage=retrieved`,
+`applied` or `checked`. Retrieval alone is not application or success. Include
+`lesson_versions`, task, actual outcome and regressions; a verified application
+also needs `checks` and verified `evidence_ids`. Record failures as well as wins.
+An application never changes a lesson's freshness or acceptance automatically.
+
+After a session review, set episode `curation_state` to `reviewed`,
+`lesson_created` or `no_lesson`, with `curation_reason` explaining the decision.
+This marks processed material without pretending the model permanently learned it.
+After a rule is actually installed, record lesson `incorporated_ref` and
+`incorporated_revision`. Retain its evidence. Use `stale` after relevant source
+changes and `superseded` with `superseded_by` for a replacement lesson; preserve
+history and resolve contradictions explicitly.
+
 ## Retrieval And Exchange
 
 Before relevant coding work, if an existing learning profile is configured, use
 `recall --project ROOT --query "task terms"` for at most ten matching accepted or
-verified requirements/lessons. Check applicability, freshness, source availability
+verified requirements/lessons that pass the quality checks. Search uses Unicode
+word matches in instruction/statement, applicability and explicit `keywords`,
+not JSON field names. Add useful aliases in the user's language and source-code
+language, including component names. It is not semantic search or automatic
+translation. If recall is empty, inspect `audit` and try source-language aliases;
+do not conclude the project has no relevant memory.
+
+Check applicability, freshness, source availability
 and contradictions against current source. Candidates are not instructions.
 Record outcomes only under an existing collection opt-in or an explicit request.
-No recall command starts capture, calls a model, or contacts GitHub.
+No recall command starts capture, calls a model, or contacts GitHub. Incorporated
+lessons remain visible by default. Only after inspecting an installed rule's
+exact revision may the caller pass `--covered-by REF@REVISION` to omit its duplicate
+lesson. A changed or missing installed rule must not suppress recall.
 
 On a manual sync request, review the structured export for secrets and unnecessary
 private material, then use `sync --project ROOT --direction pull` and/or `push`.
@@ -116,7 +178,11 @@ The GitHub repository stores immutable content-addressed JSON packages under
 `projects/PROJECT_ID/packages/`. Import validates fields, references, versions and
 project identity before a transaction; repeated packages are idempotent. Same-ID
 same-revision conflicts stop import. Retry after fetching/reconciling; never force
-push or replace another agent's database. Offline failure leaves local data intact.
+push or replace another agent's database. Offline failure leaves local data intact. Push compares local revisions with
+validated remote packages and uploads only missing revisions. Pull validates the
+combined graph across packages; an incremental package may depend on earlier
+packages. Standalone offline `export` remains a complete project snapshot. No
+command removes old remote packages or rewrites Git history.
 Use `export`/`import --project ROOT --file FILE` for offline transport and
 `snapshot --project ROOT --file NEW.sqlite3` for a structured-only SQLite backup.
 
@@ -125,6 +191,34 @@ an access boundary. Use separate repos for different audiences. Full transcript
 backups stay local. Local purge reports retained migration backups and does not erase Git history or remote packages;
 do not pull purged remote data until remote retention has been handled explicitly.
 
+## Collection And Maintenance
+
+For a session-scoped refusal, use `learning.py pause --project ROOT --client
+CLIENT --session ID` and verify its entry in `status`. Use exact observed runtime
+identifiers. If unavailable, use project-wide `off` and disclose the broader
+scope. `resume` removes only that session pause and does not enable an opted-out
+project. Never resume silently. Pause blocks event and attachment ingestion for
+that client/session; it does not erase earlier or already in-flight captures.
+
+Tool excerpts explicitly mark truncation; unavailable assistant text is marked
+as unavailable. These markers do not make the transcript complete. Preserve full
+relevant measurements separately as authorized evidence, not a larger raw export.
+
+`learning.py retain --project ROOT --days 30` previews age-based raw-event cleanup;
+add `--apply` only within an authorized maintenance request. Thirty days is a
+configurable starting point, not a quality or SQLite size limit. No scheduler is
+installed. Referenced events are pinned across all record revisions. Episodes
+without event IDs pin their known client/session; unknown provenance pins all
+project events conservatively. Correct provenance before trying to reclaim them.
+
+Retention never deletes lessons, evidence, attachments, derived reports, backups
+or remote history. It is not privacy erasure or automatic disk compaction. Use
+scoped `purge` only for an explicit deletion request, not routine maintenance.
+Review duplicates and stale lessons when relevant source changes; do not expire
+useful lessons merely because they are old. Monitor raw volume, pinned events,
+retrieval relevance and evidence gaps separately. Audit cannot infer local raw
+counts or SQLite integrity from a structured export.
+
 ## Migration And Evaluation
 
 Schema version 2 adds memory tables without rewriting legacy capture tables or
@@ -132,6 +226,11 @@ path IDs. Before upgrading an existing unversioned store, the helper creates a
 consistent SQLite backup. Unknown versions fail closed. `check` verifies schema
 fields, SQLite integrity, relationships and structured payloads. Old proposals
 remain readable but must not be mislabeled as evaluated structured lessons.
+The v1.8 additions retain schema version 2 and preserve old record bytes/statuses.
+Import and snapshots preserve low-quality history; recall excludes it and audit
+explains why. New promoted writes must satisfy the quality gate. Upgrade every
+participating Kit before writing optional fields: older strict v2 clients reject
+extended payloads. Local session pauses are never included in structured export.
 
 Evaluate independent tasks and negative cases: a scoped product requirement must
 not leak to another project; an agent's unverified narrative must stay a hypothesis;
