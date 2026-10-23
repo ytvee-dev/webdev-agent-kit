@@ -26,3 +26,9 @@ Images, PDFs and other artifacts are stored as SHA-256-addressed bytes via expli
 Integration templates are available under `assets/integrations/` and are **not installed by extracting this skill**. OpenCode's sample uses a session-idle SDK snapshot; Codex/Claude sample hooks only capture exposed data, without asserting complete transcripts or byte-level attachment parity. ChatGPT web and mobile require authorized manual export/import and cannot be continuously scraped by this skill.
 
 Retain the original local source IDs; never create fake chat URLs. The state root lives outside the Kit and outside host Git repositories by default.
+
+Session pause is keyed by project, client and session and blocks both event and
+attachment ingestion. It never enables collection or erases existing data. The
+Codex/Claude bridge marks tool output beyond its 3000-character excerpt as
+truncated and marks missing assistant text explicitly. These remain partial
+observations. Use the memory contract for quality audit and raw-only retention.

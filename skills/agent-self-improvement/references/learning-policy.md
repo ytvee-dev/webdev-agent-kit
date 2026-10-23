@@ -31,6 +31,9 @@ Curate the full available session into typed project episodes before model-assis
 proposal generation. Apply `project-memory.md`. Source IDs are provenance, not
 proof; agent reports remain reports. Keep user requirements separate from causal
 claims. Save a single incident as a candidate, with applicability and counterevidence.
+Use the executable quality checks and exact acceptance bases in `project-memory.md`;
+requesting a memory entry does not accept its inferred lesson. Track retrieval,
+application, checked outcome and installed-rule revision separately.
 Require independent episodes for reusable policy, and check for duplicate existing
 rules. Compare both branch intentions in merge incidents; newer is not inherently
 correct. Project-specific examples belong in project regression scenarios.

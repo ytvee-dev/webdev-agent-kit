@@ -27,6 +27,18 @@ FIELDS = {
     "evaluation": {"lesson_ids", "baseline", "candidate", "scenario", "held_out", "environment", "result", "checks"},
     "application": {"lesson_ids", "task", "outcome", "regressions"},
 }
+# Additive v2 fields: old records remain readable; older Kit writers must upgrade.
+OPTIONAL_FIELDS = {
+    "episode": {"curation_state", "curation_reason"},
+    "evidence": {"source_revision", "procedure", "result"},
+    "requirement": {"keywords"},
+    "finding": set(),
+    "lesson": {"keywords", "acceptance_basis", "acceptance_evidence_ids", "evaluation_ids",
+               "incorporated_ref", "incorporated_revision", "superseded_by"},
+    "evaluation": {"verdict", "evidence_ids", "lesson_versions"},
+    "application": {"stage", "checks", "evidence_ids", "lesson_versions"},
+}
+LIST_FIELDS = {"keywords", "lesson_versions"}
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS memory_projects (
  id TEXT PRIMARY KEY, name TEXT NOT NULL, source_repository TEXT NOT NULL DEFAULT '',
@@ -166,7 +178,7 @@ def validate_record(record, pid):
     if kind not in KINDS or record["status"] not in STATUSES:
         raise ValueError("Invalid kind or status")
     payload = record["payload"]
-    if not isinstance(payload, dict) or set(payload) != FIELDS[kind]:
+    if not isinstance(payload, dict) or not FIELDS[kind] <= set(payload) or set(payload) - FIELDS[kind] - OPTIONAL_FIELDS[kind]:
         raise ValueError(f"Invalid {kind} payload fields; expected {sorted(FIELDS[kind])}")
     if not isinstance(record["created_at"], str):
         raise ValueError("Missing creation timestamp")
@@ -175,7 +187,7 @@ def validate_record(record, pid):
     if not isinstance(provenance, dict) or set(provenance) != {"agent", "client", "skill_version", "session_id"} or not all(isinstance(v, str) and v for v in provenance.values()):
         raise ValueError("Missing provenance")
     for key, value in payload.items():
-        if key.endswith("_ids"):
+        if key.endswith("_ids") or key in LIST_FIELDS:
             if not isinstance(value, list) or not all(isinstance(v, str) for v in value):
                 raise ValueError("Evidence and relationship IDs must be arrays")
         elif key == "held_out":
@@ -183,6 +195,18 @@ def validate_record(record, pid):
                 raise ValueError("held_out must be boolean")
         elif not isinstance(value, str):
             raise ValueError(f"{key} must be a summary string")
+    if "keywords" in payload and (len(payload["keywords"]) > 40 or any(len(v) > 100 or redact(v) != v for v in payload["keywords"])):
+        raise ValueError("Use at most 40 short, sanitized search aliases")
+    if payload.get("curation_state") and not payload.get("curation_reason", "").strip():
+        raise ValueError("Curation needs its reason")
+    if bool(payload.get("incorporated_ref")) != bool(payload.get("incorporated_revision")):
+        raise ValueError("Incorporation requires both source reference and revision")
+    if "stage" in payload and payload["stage"] not in {"retrieved", "applied", "checked"}:
+        raise ValueError("Invalid application stage")
+    if "verdict" in payload and payload["verdict"] not in {"passed", "failed", "inconclusive"}:
+        raise ValueError("Invalid evaluation verdict")
+    if "curation_state" in payload and payload["curation_state"] not in {"reviewed", "lesson_created", "no_lesson"}:
+        raise ValueError("Invalid curation state")
     if kind == "episode" and (record["id"] != record["episode_id"] or payload["coverage"] not in {"complete_available", "partial", "unknown"}):
         raise ValueError("Invalid episode identity or coverage")
     if kind == "evidence" and (payload["source_type"] not in {"user_requirement", "user_feedback", "agent_report", "diff", "command", "test"} or payload["availability"] not in {"local_only", "shared_summary", "accessible_reference"}):
@@ -210,17 +234,18 @@ def records(conn, pid):
     return [dict(id=r[0], revision=r[1], project_id=pid, episode_id=r[2], kind=r[3], status=r[4], payload=json.loads(r[5]), provenance=json.loads(r[6]), created_at=r[7]) for r in rows]
 
 
-def save_records(conn, pid, items):
+def save_records(conn, pid, items, *, enforce_quality=True):
     # Serialize validation and insert so another writer cannot win an unchecked race.
     with conn:
         conn.execute("BEGIN IMMEDIATE")
-        return _save_records(conn, pid, items)
+        return _save_records(conn, pid, items, enforce_quality=enforce_quality)
 
 
-def _save_records(conn, pid, items):
+def _save_records(conn, pid, items, *, enforce_quality=True):
     if not isinstance(items, list) or len(items) > 10000:
         raise ValueError("Expected a bounded record list")
     known = {(r["id"], r["revision"]): r for r in records(conn, pid)}
+    existing_keys = set(known)
     for item in items:
         validate_record(item, pid)
         key = (item["id"], item["revision"])
@@ -240,7 +265,7 @@ def _save_records(conn, pid, items):
         for key, values in item["payload"].items():
             if not key.endswith("_ids") or key == "source_event_ids":
                 continue
-            expected = "evidence" if key in {"evidence_ids", "counterevidence_ids"} else key[:-4].rstrip("s")
+            expected = "evidence" if key in {"evidence_ids", "counterevidence_ids", "acceptance_evidence_ids"} else key[:-4].rstrip("s")
             for ref in values:
                 target = latest.get(ref)
                 if not target or target["kind"] != expected:
@@ -249,6 +274,37 @@ def _save_records(conn, pid, items):
             support = [latest[r]["payload"]["source_type"] for r in item["payload"]["evidence_ids"]]
             if not any(t in {"diff", "command", "test"} for t in support):
                 raise ValueError("Agent reports alone cannot confirm a technical cause")
+    for item in latest.values():
+        replacement = item["payload"].get("superseded_by")
+        if replacement:
+            target = latest.get(replacement)
+            if not target or target["kind"] != "lesson" or replacement == item["id"]:
+                raise ValueError("Invalid replacement lesson")
+            seen = {item["id"]}
+            while target:
+                if target["id"] in seen:
+                    raise ValueError("Replacement cycle")
+                seen.add(target["id"])
+                target = latest.get(target["payload"].get("superseded_by"))
+        versions = item["payload"].get("lesson_versions", [])
+        if versions and {v.rpartition("@")[0] for v in versions} != set(item["payload"].get("lesson_ids", [])):
+            raise ValueError("Every referenced lesson needs an exact version")
+        for version in versions:
+            name, sep, revision = version.rpartition("@")
+            if not sep or not revision.isdigit() or (name, int(revision)) not in known or known[(name, int(revision))]["kind"] != "lesson" or name not in item["payload"].get("lesson_ids", []):
+                raise ValueError("Invalid lesson version reference")
+            if item["kind"] == "evaluation" and item["payload"]["candidate"] != known[(name, int(revision))]["payload"]["instruction"]:
+                raise ValueError("Evaluation candidate must match its lesson version instruction")
+    if enforce_quality:
+        for item in items:
+            if (item["id"], item["revision"]) in existing_keys:
+                continue
+            if item["kind"] == "lesson" and item["status"] == "superseded" and not item["payload"].get("superseded_by"):
+                raise ValueError("Superseded lesson needs its replacement ID")
+            promoted = item["status"] in {"verified", "accepted"} or (item["kind"] == "finding" and item["payload"]["cause_status"] == "confirmed")
+            issues = quality_issues(item, latest)
+            if promoted and issues:
+                raise ValueError("Quality gate: " + item["id"] + ": " + "; ".join(issues))
     inserted = 0
     with conn:
         for r in items:
@@ -266,7 +322,7 @@ def import_package(conn, pid, data):
         raise ValueError("Unsupported exchange schema")
     if data["project_id"] != pid:
         raise ValueError("Package belongs to another project")
-    count = save_records(conn, pid, data["records"])
+    count = save_records(conn, pid, data["records"], enforce_quality=False)
     with conn:
         conn.execute("INSERT OR IGNORE INTO memory_packages VALUES(?,?,?)", (digest(data), pid, now()))
     return count
@@ -293,56 +349,128 @@ def session_context(conn, project, client, session):
     return {"client": client, "session_id": session, "coverage": "unknown", "limitations": "All available recorded events; host capture may be incomplete or truncated. Verify against available chat before claiming complete_available.", "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3]) for r in rows]}
 
 
-def recall(conn, pid, query):
-    latest = {}
-    for r in records(conn, pid):
-        latest[r["id"]] = r
-    terms = query.casefold().split()
-    found = [r for r in latest.values() if r["kind"] in {"requirement", "lesson"} and r["status"] in {"accepted", "verified"}]
-    found = [(sum(t in canonical(r["payload"]).casefold() for t in terms), r) for r in found]
-    return [r for score, r in sorted(found, key=lambda pair: (-pair[0], pair[1]["id"])) if score][:10]
+def evidence_issues(record):
+    p = record["payload"]
+    issues = []
+    if not p["source_ref"].strip() or not p["summary"].strip():
+        issues.append("missing source or observation")
+    if p["source_type"] in {"diff", "command", "test"}:
+        for field in ("source_revision", "procedure", "result"):
+            if not p.get(field, "").strip() or p.get(field) in {"unknown", "uncommitted-worktree"}:
+                issues.append("missing reproducible " + field)
+    elif p["source_type"] == "agent_report":
+        issues.append("agent report is not independent evidence")
+    if p["availability"] == "shared_summary":
+        issues.append("source is only a shared summary")
+    return issues
 
 
-def sync(conn, pid, direction):
-    remote = conn.execute("SELECT sync_repository FROM memory_projects WHERE id=?", (pid,)).fetchone()[0]
-    if not remote:
-        raise ValueError("No sync repository configured during adaptation")
-    # Recheck privacy on every exchange; never send local events, blobs or paths.
-    info = gh("repos/" + repository(remote))
-    if not info.get("private"):
-        raise ValueError("Sync repository is no longer private")
-    prefix = "projects/" + pid + "/packages/"
-    if direction == "push":
-        data = package(conn, pid)
-        if not data["records"]:
-            return {"result": "no_change", "records": 0}
-        encoded = canonical(data).encode()
-        if len(encoded) > 16 * 1024 * 1024:
-            raise ValueError("Project export exceeds 16 MiB")
-        name = prefix + digest(data) + ".json"
-        # Immutable content-addressed packages; concurrent writers never overwrite a DB.
-        try:
-            existing = gh("repos/" + remote + "/contents/" + name)
-        except ValueError:
-            existing = None
-        if existing:
-            if existing.get("encoding") != "base64":
-                existing = gh("repos/" + remote + "/git/blobs/" + existing["sha"])
-            if existing.get("encoding") != "base64" or base64.b64decode(existing["content"]) != encoded:
-                raise ValueError("Remote package content mismatch")
-            return {"result": "already_synced", "path": name}
-        gh("repos/" + remote + "/contents/" + name, "--method", "PUT", "--input", "-", input_data=json.dumps({"message": "sync: structured project experience", "content": base64.b64encode(encoded).decode()}))
-        return {"result": "uploaded", "path": name, "records": len(data["records"])}
+def quality_issues(record, latest):
+    """Check declared support, not the truth of supplied measurements or consent."""
+    p, kind = record["payload"], record["kind"]
+    if kind == "evidence":
+        return evidence_issues(record)
+    issues = []
+    evidence = [latest.get(i) for i in p.get("evidence_ids", [])]
+    if kind in {"lesson", "requirement", "finding", "evaluation", "application"}:
+        if not evidence or any(not e or e["status"] not in {"verified", "accepted"} or evidence_issues(e) for e in evidence):
+            issues.append("missing checkable verified evidence")
+    if kind == "requirement" and (not p["authority"].strip() or not p["statement"].strip()):
+        issues.append("missing requirement authority or statement")
+    if kind == "finding" and p["cause_status"] == "confirmed":
+        if not any(e and e["payload"]["source_type"] in {"diff", "command", "test"} and not evidence_issues(e) for e in evidence):
+            issues.append("cause lacks reproducible technical evidence")
+    if kind == "lesson":
+        if p["scope"] != "project":
+            issues.append("transfer candidate is not accepted project policy")
+        if not all(p.get(k, "").strip() for k in ("instruction", "applicability", "recheck_when")):
+            issues.append("missing lesson scope or recheck conditions")
+        if p.get("last_verified_commit", "") in {"", "unknown", "uncommitted-worktree"}:
+            issues.append("missing verified source revision or diff digest")
+        if any(latest[i]["status"] in {"candidate", "disputed", "stale", "superseded"} or quality_issues(latest[i], latest) for i in p["finding_ids"]):
+            issues.append("supporting finding is not verified")
+        basis = p.get("acceptance_basis")
+        if basis == "explicit_requirement":
+            support = [latest[i] for i in p.get("acceptance_evidence_ids", [])]
+            if not any(e["payload"]["source_type"] == "user_requirement" and e["status"] in {"verified", "accepted"} and not evidence_issues(e) for e in support):
+                issues.append("missing explicit requirement source")
+        elif basis == "independent_evaluation":
+            evaluations = [latest[i] for i in p.get("evaluation_ids", [])]
+            # Evaluation must identify the exact instruction being accepted. Its
+            # candidate revision may precede the acceptance-only revision.
+            if not any(e["episode_id"] != record["episode_id"] and e["status"] in {"verified", "accepted"}
+                       and p["instruction"] == e["payload"]["candidate"]
+                       and record["id"] in e["payload"]["lesson_ids"]
+                       and e["payload"].get("verdict") == "passed"
+                       and not quality_issues(e, latest) for e in evaluations):
+                issues.append("missing independent passing evaluation of this instruction")
+        else:
+            issues.append("single incident: keep candidate until acceptance has support")
+    if kind == "evaluation":
+        if any(e and e["episode_id"] != record["episode_id"] for e in evidence):
+            issues.append("evaluation must cite observations from its own episode")
+        if not p["held_out"] or p.get("verdict") not in {"passed", "failed", "inconclusive"} or not all(p[k].strip() for k in ("baseline", "candidate", "scenario", "environment", "result", "checks")) or not p.get("lesson_versions"):
+            issues.append("evaluation lacks a held-out comparison, verdict and versioned checks")
+    if kind == "application":
+        if p.get("stage") != "checked" or not all(p.get(k, "").strip() for k in ("checks", "task", "outcome", "regressions")) or not p.get("lesson_versions"):
+            issues.append("application has not been checked against a lesson version")
+    return issues
+
+
+def audit(conn, pid):
+    latest = {r["id"]: r for r in records(conn, pid)}
+    findings = [{"id": r["id"], "revision": r["revision"], "issues": quality_issues(r, latest)}
+                for r in latest.values()]
+    return {"records": len(latest), "issues": [f for f in findings if f["issues"]],
+            "curation": {state: sum(r["kind"] == "episode" and r["payload"].get("curation_state", "unreviewed") == state for r in latest.values()) for state in ("reviewed", "lesson_created", "no_lesson", "unreviewed")},
+            "provenance_gaps": [r["id"] for r in latest.values() if r["provenance"]["session_id"] == "unknown" or (r["kind"] == "episode" and not r["payload"]["source_event_ids"])],
+            "applications": {stage: sum(r["kind"] == "application" and r["payload"].get("stage", "unknown") == stage for r in latest.values()) for stage in ("retrieved", "applied", "checked", "unknown")},
+            "limitations": "Checks declared support, not source truth, current freshness or live agent learning."}
+
+
+def search_tokens(text):
+    return set(re.findall(r"[^\W_]+", text.casefold(), flags=re.UNICODE))
+
+
+def recall(conn, pid, query, covered_by=()):
+    latest = {r["id"]: r for r in records(conn, pid)}
+    terms = search_tokens(query)
+    found = []
+    for r in latest.values():
+        if r["kind"] not in {"requirement", "lesson"} or r["status"] not in {"accepted", "verified"} or quality_issues(r, latest):
+            continue
+        p = r["payload"]
+        # Caller must have inspected this exact installed policy revision.
+        coverage = p.get("incorporated_ref", "") + "@" + p.get("incorporated_revision", "")
+        if p.get("incorporated_ref") and p.get("incorporated_revision") and coverage in covered_by:
+            continue
+        fields = ("instruction", "statement", "applicability", "keywords")
+        values = " ".join(" ".join(p[k]) if isinstance(p.get(k), list) else p.get(k, "") for k in fields)
+        score = len(terms & search_tokens(values))
+        if score:
+            found.append((score, r))
+    return [r for _, r in sorted(found, key=lambda pair: (-pair[0], pair[1]["id"]))[:10]]
+
+
+def remote_records(remote, pid, info):
     if info.get("size") == 0:
-        return {"result": "no_change", "records": 0}
+        # GitHub's repository size can lag behind successful package writes.
+        # Only an authoritative empty branch list means a new empty repository.
+        branches = gh("repos/" + remote + "/branches?per_page=1")
+        if not isinstance(branches, list):
+            raise ValueError("Cannot verify empty remote repository")
+        if not branches:
+            return []
+    prefix = "projects/" + pid + "/packages/"
     tree = gh("repos/" + remote + "/git/trees/" + info["default_branch"] + "?recursive=1")
     if tree.get("truncated"):
         raise ValueError("Remote tree truncated; cannot claim complete synchronization")
-    pending = []
+    unique, seen = {}, set()
     for entry in tree.get("tree", []):
         path = entry["path"]
-        if entry["type"] != "blob" or not re.fullmatch(re.escape(prefix) + r"[0-9a-f]{64}\.json", path):
+        if entry["type"] != "blob" or path in seen or not re.fullmatch(re.escape(prefix) + r"[0-9a-f]{64}\.json", path):
             continue
+        seen.add(path)
         if entry.get("size", 0) > 16 * 1024 * 1024:
             raise ValueError("Remote package too large")
         content = gh("repos/" + remote + "/git/blobs/" + entry["sha"])
@@ -351,23 +479,63 @@ def sync(conn, pid, direction):
             raise ValueError("Remote package hash mismatch")
         if data.get("schema_version") != VERSION or data.get("project_id") != pid or set(data) != {"schema_version", "project_id", "records"}:
             raise ValueError("Incompatible remote package")
-        pending.extend(data["records"])
-    unique = {}
-    for item in pending:
-        validate_record(item, pid)
-        key = (item["id"], item["revision"])
-        if key in unique and unique[key] != item:
-            raise ValueError("Conflicting remote revisions")
-        unique[key] = item
-    count = save_records(conn, pid, list(unique.values()))
-    return {"result": "imported", "records": count}
+        if not isinstance(data["records"], list) or len(data["records"]) > 10000:
+            raise ValueError("Expected a bounded record list")
+        for item in data["records"]:
+            validate_record(item, pid)
+            key = (item["id"], item["revision"])
+            if key in unique and unique[key] != item:
+                raise ValueError("Conflicting remote revisions")
+            unique[key] = item
+    return list(unique.values())
+
+
+def sync(conn, pid, direction):
+    remote = conn.execute("SELECT sync_repository FROM memory_projects WHERE id=?", (pid,)).fetchone()[0]
+    if not remote:
+        raise ValueError("No sync repository configured during adaptation")
+    info = gh("repos/" + repository(remote))
+    if not info.get("private"):
+        raise ValueError("Sync repository is no longer private")
+    remote_items = remote_records(remote, pid, info)
+    if direction == "pull":
+        count = save_records(conn, pid, remote_items, enforce_quality=False)
+        return {"result": "imported", "records": count}
+    local = records(conn, pid)
+    known = {(r["id"], r["revision"]): r for r in remote_items}
+    for r in local:
+        key = (r["id"], r["revision"])
+        if key in known and known[key] != r:
+            raise ValueError("Conflicting remote revisions; pull and reconcile before pushing")
+    # Validate the complete relationship graph without importing remote state.
+    with closing(sqlite3.connect(":memory:")) as scratch:
+        scratch.executescript(SCHEMA)
+        scratch.execute("INSERT INTO memory_projects(id,name,created_at) VALUES(?,?,?)", (pid, "validation", now()))
+        scratch.commit()
+        save_records(scratch, pid, list({(r["id"], r["revision"]): r for r in remote_items + local}.values()), enforce_quality=False)
+    delta = [r for r in local if (r["id"], r["revision"]) not in known]
+    if not delta:
+        return {"result": "no_change", "records": 0}
+    data = {"schema_version": VERSION, "project_id": pid, "records": delta}
+    encoded = canonical(data).encode()
+    if len(encoded) > 16 * 1024 * 1024:
+        raise ValueError("Project delta exceeds 16 MiB; use bounded offline packages")
+    name = "projects/" + pid + "/packages/" + digest(data) + ".json"
+    # Immutable content addressing makes duplicate simultaneous uploads harmless.
+    try:
+        gh("repos/" + remote + "/contents/" + name, "--method", "PUT", "--input", "-", input_data=json.dumps({"message": "sync: structured project experience", "content": base64.b64encode(encoded).decode()}))
+    except ValueError:
+        existing = gh("repos/" + remote + "/contents/" + name)
+        if existing.get("encoding") != "base64" or base64.b64decode(existing["content"]) != encoded:
+            raise ValueError("Upload failed or remote package content mismatch")
+    return {"result": "uploaded", "path": name, "records": len(delta)}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", type=Path, default=default_root())
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("bind", "configure", "context", "record", "export", "import", "recall", "sync", "check", "snapshot"):
+    for name in ("bind", "configure", "context", "record", "export", "import", "recall", "sync", "check", "audit", "snapshot"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--project", required=True)
         if name == "bind":
@@ -382,6 +550,7 @@ def main():
             cmd.add_argument("--session", required=True)
         if name == "recall":
             cmd.add_argument("--query", required=True)
+            cmd.add_argument("--covered-by", action="append", default=[], help="Inspected installed policy ref@revision; omit to retain incorporated lessons")
         if name == "sync":
             cmd.add_argument("--direction", choices=("push", "pull"), required=True)
     args = parser.parse_args()
@@ -416,11 +585,13 @@ def main():
                     row = conn.execute("SELECT id,name,source_repository,'',created_at FROM memory_projects WHERE id=?", (pid,)).fetchone()
                     out.execute("INSERT INTO memory_projects VALUES(?,?,?,?,?)", row)
                     out.commit()
-                    save_records(out, pid, records(conn, pid))
+                    save_records(out, pid, records(conn, pid), enforce_quality=False)
                 target.chmod(0o600)
                 result = {"file": str(target), "raw_transcripts": False}
             elif args.command == "recall":
-                result = {"project_id": pid, "records": recall(conn, pid, args.query), "authority": "Context only; current source and user requirements take precedence"}
+                result = {"project_id": pid, "records": recall(conn, pid, args.query, args.covered_by), "authority": "Context only; current source and user requirements take precedence"}
+            elif args.command == "audit":
+                result = audit(conn, pid)
             elif args.command == "sync":
                 result = sync(conn, pid, args.direction)
             else:
@@ -428,7 +599,7 @@ def main():
                 foreign = conn.execute("PRAGMA foreign_key_check").fetchall()
                 if integrity != "ok" or foreign:
                     raise ValueError("Database integrity check failed")
-                save_records(conn, pid, records(conn, pid))
+                save_records(conn, pid, records(conn, pid), enforce_quality=False)
                 result = {"schema_version": VERSION, "integrity": integrity, "project_id": pid}
         print(json.dumps(result, ensure_ascii=False))
     finally:
