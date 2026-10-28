@@ -4,7 +4,6 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-
 from learning_project import initialize, read_config, write_json
 from learning_tagging import configure, validate
 from learning_telemetry import assess
@@ -15,7 +14,7 @@ class TaggingTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.project = Path(self.tmp.name)
-        initialize(self.project, telemetry=True)
+        initialize(self.project)
 
     def test_setup_preserves_settings_and_requires_real_readback(self):
         path = self.project / '.codex/langfuse.json'

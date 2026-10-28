@@ -30,11 +30,6 @@ project to `.agents/learning`. Preserve the old store for rollback. Never migrat
 all projects into a new project's database. `project.json` contains stable capture
 and portable memory identities; renaming the folder does not create new identities.
 Explicit `--state` remains available for isolated tests and recovery.
-An explicit legacy path must contain a database with this project's capture or
-memory binding; missing or unrelated stores fail instead of creating empty memory.
-Migration stages and lock files are ignored by Git before data is copied. A failed
-stage remains under `.agents/.learning-migrate-*` for inspection and is never
-activated; correct the cause and retry. The original database remains unchanged.
 
 Classify each item as a project requirement, a project lesson (`scope: project`),
 or a Kit improvement candidate (`scope: transfer_candidate`). The last is a

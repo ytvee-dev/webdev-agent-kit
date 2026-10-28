@@ -28,16 +28,16 @@ class HookInstallerTests(unittest.TestCase):
                     capture_output=True, text=True, check=True,
                 )
             call()
-            original = json.loads(path.read_text(encoding="utf-8"))
+            original = json.loads(path.read_text())
             self.assertEqual(len(original["hooks"]["PostToolUse"]), 1)
             call("--approve")
-            installed = json.loads(path.read_text(encoding="utf-8"))
+            installed = json.loads(path.read_text())
             self.assertEqual(len(installed["hooks"]["PostToolUse"]), 2)
             original_bytes = path.read_bytes()
             repeat = json.loads(call("--approve").stdout)
             self.assertFalse(repeat["changed"])
             self.assertEqual(path.read_bytes(), original_bytes)
-            installed = json.loads(path.read_text(encoding="utf-8"))
+            installed = json.loads(path.read_text())
             self.assertEqual(len(installed["hooks"]["PostToolUse"]), 2)
             labels = [installed["hooks"][event][-1]["hooks"][0]["statusMessage"]
                       for event in ("UserPromptSubmit", "PostToolUse", "Stop")]
@@ -54,7 +54,7 @@ class HookInstallerTests(unittest.TestCase):
             installed["hooks"]["PostToolUse"][-1]["hooks"][0]["statusMessage"] = "WebDev: record tool result"
             path.write_text(json.dumps(installed), encoding="utf-8")
             call("--approve")
-            installed = json.loads(path.read_text(encoding="utf-8"))
+            installed = json.loads(path.read_text())
             self.assertEqual(installed["hooks"]["Stop"][-1]["hooks"][0]["statusMessage"],
                              "My custom label")
             self.assertEqual(len(installed["hooks"]["Stop"]), 1)
@@ -68,7 +68,7 @@ class HookInstallerTests(unittest.TestCase):
             self.assertEqual(path.with_suffix(".json.bak").read_bytes(), backup)
             self.assertIn("commandWindows", installed["hooks"]["Stop"][-1]["hooks"][0])
             call("--remove", "--approve")
-            remaining = json.loads(path.read_text(encoding="utf-8"))
+            remaining = json.loads(path.read_text())
             self.assertEqual(len(remaining["hooks"]["PostToolUse"]), 1)
             self.assertEqual(remaining["hooks"]["PostToolUse"][0]["matcher"], "Bash")
             self.assertEqual(remaining["hooks"]["Stop"], [])

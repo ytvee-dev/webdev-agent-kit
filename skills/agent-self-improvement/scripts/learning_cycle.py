@@ -16,7 +16,7 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 
-from learning import project_id, resolve_state
+from learning import default_root, project_id
 
 MAX_CONTEXT_BYTES = 512 * 1024
 
@@ -863,7 +863,7 @@ def certify(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--state", default=None)
+    parser.add_argument("--state", default=str(default_root()))
     sub = parser.add_subparsers(dest="cmd", required=True)
     status = sub.add_parser("status", help="Read local per-record processing receipts without changing memory")
     status.add_argument("--project", required=True)
@@ -904,13 +904,6 @@ def main():
     a.add_argument("--accept-unevaluated", action="store_true",
                    help="Explicit manual bypass when no live held-out benchmark passed")
     args = parser.parse_args()
-    if getattr(args, "project", None):
-        args.state = str(resolve_state(args.project, args.state))
-    elif args.state is None:
-        proposal_path = Path(args.proposal).expanduser().resolve()
-        if proposal_path.parent.name != "proposals":
-            raise ValueError("Specify --state for a proposal outside its state/proposals directory")
-        args.state = str(proposal_path.parent.parent)
     if args.cmd == "status":
         answer = processing_status(args)
     elif args.cmd == "propose":

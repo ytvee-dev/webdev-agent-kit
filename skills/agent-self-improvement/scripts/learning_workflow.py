@@ -1,18 +1,17 @@
 """Explicitly requested preparation and completion; no background execution."""
 import argparse
-import hashlib
 import json
+import hashlib
 import sqlite3
-import time
 import uuid
 from contextlib import closing
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from pathlib import Path
 
-from learning_exchange import drain, enqueue
-from learning_memory import records
 from learning_project import read_config, write_json
-from learning_telemetry import cleanup, export, prepare, timestamp
+from learning_memory import records
+from learning_exchange import enqueue, drain
+from learning_telemetry import export, prepare, cleanup, timestamp
 
 
 def verification_plan(paths, changes=()):
@@ -41,12 +40,14 @@ def curate_queue(project):
         rows = conn.execute('SELECT client,session_id,COUNT(*),MAX(timestamp) FROM events WHERE project_id=? GROUP BY client,session_id', (config['capture_project_id'],)).fetchall()
         for client, session, count, last in rows:
             conn.execute("INSERT INTO curation_queue VALUES (?,?,?,?,'pending') ON CONFLICT(client,session_id) DO UPDATE SET event_count=excluded.event_count,last_event=excluded.last_event,state='pending' WHERE curation_queue.event_count != excluded.event_count OR curation_queue.last_event != excluded.last_event", (client, session, count, last))
-        from learning_memory import curated_event_ids
-        covered = curated_event_ids(conn, project)
+        latest = {r['id']: r for r in records(conn, config['project_id'])}
+        covered = {event for item in latest.values() if item['kind'] == 'episode'
+                   and item['payload'].get('curation_state') in {'reviewed', 'lesson_created', 'no_lesson'}
+                   for event in item['payload'].get('source_event_ids', [])}
         for client, session, count, last in rows:
             source_ids = {r[0] for r in conn.execute('SELECT id FROM events WHERE project_id=? AND client=? AND session_id=?', (config['capture_project_id'], client, session))}
-            queue_state = 'curated' if source_ids and source_ids <= covered else 'pending'
-            conn.execute('UPDATE curation_queue SET state=? WHERE client=? AND session_id=?', (queue_state, client, session))
+            if source_ids and source_ids <= covered:
+                conn.execute("UPDATE curation_queue SET state='curated' WHERE client=? AND session_id=?", (client, session))
         return {'sessions_pending': conn.execute("SELECT COUNT(*) FROM curation_queue WHERE state='pending'").fetchone()[0]}
 
 
@@ -64,39 +65,22 @@ def begin(project, ids):
     if any(i not in latest or latest[i]['kind'] not in {'lesson', 'requirement'} for i in ids):
         raise ValueError('Work must reference known lessons or requirements')
     selected = [latest[i] for i in ids]
-    from learning_run import rule_snapshot, sources
-    source_digests = sources(project, ids)
-    days = set()
-    # Include the same recursive evidence graph that is pinned for verification.
-    # Curation timestamps cannot stand in for actual incident dates.
+    months = sorted({timestamp(r['created_at']).strftime('%Y-%m') for r in selected})
+    # Source-event dates, not just curation timestamps, determine restoration windows.
     with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:
-        for event_id in source_digests['events']:
-            row = conn.execute('SELECT timestamp FROM events WHERE id=? AND project_id=?', (event_id, config['capture_project_id'])).fetchone()
-            if row:
-                days.add(timestamp(row[0]).astimezone(UTC).date())
-    windows = [(datetime.combine(day, datetime.min.time(), tzinfo=UTC).isoformat(),
-                min(datetime.combine(day + timedelta(days=1), datetime.min.time(), tzinfo=UTC), datetime.now(UTC)).isoformat())
-               for day in sorted(days)]
-    months = sorted({start[:7] for start, _ in windows})
+        for item in selected:
+            episode = latest.get(item['episode_id'], {})
+            for event_id in episode.get('payload', {}).get('source_event_ids', []):
+                row = conn.execute('SELECT timestamp FROM events WHERE id=? AND project_id=?', (event_id, config['capture_project_id'])).fetchone()
+                if row:
+                    months.append(timestamp(row[0]).strftime('%Y-%m'))
     run = uuid.uuid4().hex
     from learning_processing import LearningBusy
     try:
-        if not windows or len(windows) > 32:
-            telemetry = {'database_only': True, 'coverage_complete': False, 'reason': 'source_dates_unavailable_or_excessive'}
-        else:
-            results = []
-            budget = {'deadline': time.monotonic() + 120,
-                      'pages_remaining': min(1000, config['telemetry'].get('max_pages', 100))}
-            for window in windows:
-                result = export(project, window=window, budget=budget, reuse_cache=True)
-                results.append(result)
-                if not result.get('coverage_complete'):
-                    break
-            telemetry = {'windows': results, 'database_only': all(r.get('database_only', True) for r in results),
-                         'coverage_complete': len(results) == len(windows) and all(r.get('coverage_complete') for r in results)}
+        telemetry = export(project)
     except LearningBusy:
         telemetry = {'database_only': True, 'coverage_complete': False, 'reason': 'busy'}
-    cache = prepare(project, run, months, windows=windows)
+    cache = prepare(project, run, sorted(set(months)))
     artifact = {'run_id': run, 'project_id': config['project_id'], 'record_ids': ids,
                 'record_digests': {r['id']: hashlib.sha256(json.dumps(r, sort_keys=True).encode()).hexdigest() for r in selected},
                 'telemetry': telemetry, 'cache': cache,
@@ -104,7 +88,8 @@ def begin(project, ids):
                     'source_assessment': None, 'expected_vs_actual': None, 'causal_hypotheses': None,
                     'relevant_rules': None, 'measurable_goal': None, 'alternatives_and_sources': None,
                     'decision': None, 'verification': None} for i in ids}}
-    artifact['source_digests'] = source_digests
+    from learning_run import sources, rule_snapshot
+    artifact['source_digests'] = sources(project, ids)
     artifact['rule_snapshot'], artifact['analysis_dependencies'] = rule_snapshot(project)
     artifact['reflection'] = None
     write_json(state / 'runs' / run / 'analysis.json', artifact)
@@ -112,8 +97,8 @@ def begin(project, ids):
 
 
 def finish(project, run):
-    from learning_processing import lock
     from learning_run import load
+    from learning_processing import lock
     _, analysis = load(project, run)
     proposal_path = analysis.get('proposal')
     if not proposal_path:
@@ -150,13 +135,7 @@ def finish_locked(project, run):
     verify_binding(proposal, state)
     if proposal['run_binding']['run_id'] != run:
         raise ValueError('Proposal belongs to another run')
-    from learning_cycle import (
-        hash_text,
-        processing_receipt,
-        skill_inventory,
-        verify_dependencies,
-        verify_evidence,
-    )
+    from learning_cycle import verify_dependencies, verify_evidence, processing_receipt, skill_inventory, hash_text
     verify_dependencies(proposal)
     verify_evidence(proposal, state)
     inventory = skill_inventory(Path(proposal['repo']))

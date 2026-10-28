@@ -1,11 +1,10 @@
+import json
 import tempfile
-import time
 import unittest
 from datetime import UTC, datetime
 from pathlib import Path
-
 from learning_project import initialize, read_config, write_json
-from learning_telemetry import cleanup, export, prepare, sanitize
+from learning_telemetry import export, prepare, cleanup, sanitize
 
 
 class TelemetryTests(unittest.TestCase):
@@ -13,7 +12,7 @@ class TelemetryTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.project = Path(self.tmp.name)
-        initialize(self.project, telemetry=True)
+        initialize(self.project)
         self.state = self.project / '.agents/learning'
         config = read_config(self.project)
         config['telemetry'].update(required_tags=[], project_metadata_key='project', project_metadata_value='stem')
@@ -43,25 +42,6 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(len(list((self.state / 'archive').glob('*/*.json'))), 3)
         export(self.project, fetch, self.now)
         self.assertEqual(len(calls), 4)  # 48-hour overlap, not another full month.
-        window = ('2026-10-20T00:00:00+00:00', '2026-10-21T00:00:00+00:00')
-        fresh = export(self.project, fetch, self.now, window=window)
-        self.assertTrue(fresh['coverage_complete'])
-        cached = export(self.project, lambda *args: self.fail('complete cache fetched again'),
-                        self.now, window=window, reuse_cache=True)
-        self.assertTrue(cached['cached'])
-        self.assertEqual(cached['pages'], 0)
-        self.assertEqual(cached['accepted'], fresh['accepted'])
-        # Deleting an archived payload invalidates completeness and forces refetch.
-        receipt = next(self.state.glob('telemetry-window-*.complete.json'))
-        import json
-        manifest = json.loads(receipt.read_text(encoding='utf-8'))
-        (self.state / next(iter(manifest['archive_hashes']))).unlink()
-        before = len(calls)
-        export(self.project, fetch, self.now, window=window, reuse_cache=True)
-        self.assertGreater(len(calls), before)
-        before = len(calls)
-        export(self.project, fetch, datetime(2026, 10, 29, tzinfo=UTC), window=window, reuse_cache=True)
-        self.assertGreater(len(calls), before)  # Completed windows expire after 24 hours.
 
     def test_partial_failure_does_not_advance(self):
         def fetch(spec, start, end, cursor):
@@ -102,17 +82,6 @@ class TelemetryTests(unittest.TestCase):
         export(self.project, fetch, self.now)
         self.assertEqual(cursors[0], 'resume')
         self.assertFalse((self.state / 'telemetry-watermark.json').exists())
-        # A multi-day analysis cannot reset the budget for each historical day.
-        budget = {'deadline': time.monotonic() + 120, 'pages_remaining': 1}
-        window = ('2026-10-20T00:00:00+00:00', '2026-10-21T00:00:00+00:00')
-        first = export(self.project, fetch, self.now, window=window, budget=budget)
-        self.assertTrue(first['coverage_complete'])
-        second = export(self.project, lambda *args: self.fail('exhausted budget called network'),
-                        self.now, window=('2026-10-21T00:00:00+00:00', '2026-10-22T00:00:00+00:00'),
-                        budget=budget)
-        self.assertEqual(second['status'], 'page_budget_exhausted')
-        self.assertFalse(second['coverage_complete'])
-        self.assertEqual(second['pages'], 0)
 
     def test_reduces_large_pages_and_excludes_validation(self):
         def fetch(spec, start, end, cursor):

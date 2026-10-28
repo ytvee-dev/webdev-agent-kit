@@ -10,8 +10,8 @@ from contextlib import closing
 from pathlib import Path
 
 from learning_memory import gh, records, repository
-from learning_processing import lock
 from learning_project import read_config, write_json
+from learning_processing import lock
 from learning_telemetry import sanitize
 
 
@@ -119,7 +119,7 @@ def drain(project, api=gh, limit=100):
                 entry.rename(entry.with_suffix('.sent'))
                 uploaded += 1
             remaining = len(list((state / 'outbox').glob('*.json')))
-            result = {'status': 'pending_batch' if remaining else 'synced', 'uploaded': uploaded, 'remaining': remaining}
+            result = {'status': 'pending_retry' if remaining else 'synced', 'uploaded': uploaded, 'remaining': remaining}
         except (ValueError, OSError, TimeoutError, subprocess.TimeoutExpired) as exc:
             result = {'status': 'pending_retry', 'uploaded': uploaded, 'stage': stage,
                       'reason': getattr(exc, 'code', 'remote_conflict' if str(exc) == 'Remote artifact conflict; no overwrite' else type(exc).__name__),
@@ -213,7 +213,7 @@ def drain_batch(project, api=gh, limit=100):
                 entry.rename(entry.with_suffix('.sent'))
                 uploaded += 1
             remaining = len(list((state / 'outbox').glob('*.json')))
-            result = {'status': 'pending_batch' if remaining else 'synced', 'uploaded': uploaded,
+            result = {'status': 'pending_retry' if remaining else 'synced', 'uploaded': uploaded,
                       'remaining': remaining, 'batch_bytes': size, 'delivery': 'verified_git_blobs',
                       'retry': 'explicit_request_only'}
         except (ValueError, OSError, KeyError, TimeoutError, subprocess.TimeoutExpired) as exc:

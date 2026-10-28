@@ -39,33 +39,26 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
-- Project-local learning state with explicit selected-project legacy migration,
-  preserved history and private state excluded from Git (#85).
-- Per-record learning decisions, recovery receipts, environment-outcome checks
-  and explicit completion snapshots from the locally developed learning workflow.
-- Kimi Code project distribution with skill policy preludes, installation guidance
-  and archive validation (#83). Live Kimi execution is not yet verified.
-
-### Fixed
-
-- Raw triage excludes source events covered by the latest complete curated
-  episodes; partial coverage remains pending and input IDs remain auditable (#84).
-- Parsed project arguments consistently select memory across working directories,
-  including `--project=ROOT`; status exposes actual database paths.
-- Learning context uses source-event day windows rather than unrelated current
-  telemetry. Historical exports preserve the general synchronization watermark.
-- Windows hook regression fixtures read UTF-8 explicitly for non-ASCII paths.
+- Literal transfer of the STEM self-improvement package: capture, structured
+  memory, per-record processing, run binding, behavioral checks, recovery,
+  Langfuse tagging/export, private snapshots and explicit workflow completion.
+- Optional Langfuse setup choices during adaptation: disabled, Cloud, or
+  local/self-hosted deployment. This supplements the copied STEM instructions.
+- Kimi Code distribution, installation guide and archive validation.
 
 ### Changed
 
-- Capture, telemetry and private sync are separate opt-ins. Initialization has no
-  personal remote default; network configuration must be supplied explicitly.
-- Remove background learning timers. Explicit requests control analysis and retry.
-- Distinguish upload batch remainder from network failure.
-- Project-less initialization requires an explicit state override. Existing
-  shared project memory requires explicit migration rather than silent replacement.
-- Behavioral reports establish only their covered scenarios; structural checks
-  and historical local reports do not establish general agent improvement.
+- The requested STEM source supersedes the earlier interpreted candidate.
+  Its original defaults are retained, including enabled telemetry and private
+  synchronization and the original repository address. Adaptation must reconcile
+  these with the user's selected configuration before network operations.
+- Source bodies and executable files are retained unchanged. Source repository
+  graph metadata is preserved separately from runtime text.
+- Earlier claims of incremental raw triage, bounded context, revised project-path
+  resolution and telemetry-window caching no longer describe this candidate.
+  Their corresponding acceptance results must not be reused.
+- Background learning remains disabled as in STEM; explicit requests control
+  the copied workflow. Live model improvement is not established by unit tests.
 
 ## 1.8.0 — 2026-10-23
 

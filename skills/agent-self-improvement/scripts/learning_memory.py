@@ -13,7 +13,7 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
-from learning import create_store, project_id, redact, resolve_state
+from learning import create_store, default_root, project_id, redact
 
 VERSION = 2
 KINDS = {"episode", "evidence", "requirement", "finding", "lesson", "evaluation", "application"}
@@ -244,22 +244,6 @@ def records(conn, pid):
     return [dict(id=r[0], revision=r[1], project_id=pid, episode_id=r[2], kind=r[3], status=r[4], payload=json.loads(r[5]), provenance=json.loads(r[6]), created_at=r[7]) for r in rows]
 
 
-
-def curated_event_ids(conn, project):
-    """Only latest, complete, explicitly reviewed episodes cover raw evidence."""
-    tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-    if not {'memory_bindings', 'memory_records'} <= tables:
-        return set()
-    row = conn.execute("SELECT project_id FROM memory_bindings WHERE local_id=?", (project_id(project),)).fetchone()
-    if not row:
-        return set()
-    latest = {r['id']: r for r in records(conn, row[0])}
-    return {event for item in latest.values() if item['kind'] == 'episode'
-            and item['payload'].get('coverage') == 'complete_available'
-            and item['payload'].get('curation_state') in {'reviewed', 'lesson_created', 'no_lesson'}
-            for event in item['payload'].get('source_event_ids', [])}
-
-
 def save_records(conn, pid, items, *, enforce_quality=True):
     # Serialize validation and insert so another writer cannot win an unchecked race.
     with conn:
@@ -368,27 +352,11 @@ def write_json(file, value):
     path.chmod(0o600)
 
 
-def session_context(conn, project, client, session, after_row=0, limit=100):
-    if after_row < 0 or not 1 <= limit <= 100:
-        raise ValueError('Context requires after_row >= 0 and limit between 1 and 100')
-    rows = conn.execute("SELECT rowid,id,kind,content,timestamp FROM events WHERE project_id=? AND client=? AND session_id=? AND rowid>? ORDER BY rowid LIMIT ?", (project_id(project), client, session, after_row, limit + 1)).fetchall()
+def session_context(conn, project, client, session):
+    rows = conn.execute("SELECT id,kind,content,timestamp FROM events WHERE project_id=? AND client=? AND session_id=? ORDER BY timestamp,rowid", (project_id(project), client, session)).fetchall()
     if not rows:
         raise ValueError("No captured events for this project/client/session")
-    more = len(rows) > limit
-    events = []
-    for row, identifier, kind, content, at in rows[:limit]:
-        # Context is a bounded reading aid; the original database stays intact.
-        text, omitted = re.subn(r'data:[^\s,;]+(?:;[^\s,]*)?;base64,[A-Za-z0-9+/=\r\n]*',
-                               '[INLINE_DATA_OMITTED]', content, flags=re.IGNORECASE)
-        truncated = len(text) > 4000
-        text = text[:4000] + (' [TRUNCATED]' if truncated else '')
-        events.append(dict(row_id=row, id=identifier, kind=kind, content=text,
-                           timestamp=at, truncated=truncated, inline_data_omitted=bool(omitted)))
-    partial = more or after_row > 0 or any(e['truncated'] or e['inline_data_omitted'] for e in events)
-    return {'client': client, 'session_id': session, 'coverage': 'partial' if partial else 'unknown',
-            'limitations': 'Bounded context in capture order, at most 100 events and 4000 characters per event. Inline data omitted. Capture may be incomplete; review source evidence before claiming complete_available.',
-            'events': events, 'has_more': more,
-            'next_after_row': events[-1]['row_id'] if more else None}
+    return {"client": client, "session_id": session, "coverage": "unknown", "limitations": "All available recorded events; host capture may be incomplete or truncated. Verify against available chat before claiming complete_available.", "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3]) for r in rows]}
 
 
 def evidence_issues(record):
@@ -575,7 +543,7 @@ def sync(conn, pid, direction):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--state", type=Path, default=None)
+    parser.add_argument("--state", type=Path, default=default_root())
     sub = parser.add_subparsers(dest="command", required=True)
     for name in ("bind", "configure", "context", "record", "export", "import", "recall", "sync", "check", "audit", "snapshot"):
         cmd = sub.add_parser(name)
@@ -590,15 +558,12 @@ def main():
         if name == "context":
             cmd.add_argument("--client", required=True)
             cmd.add_argument("--session", required=True)
-            cmd.add_argument("--after-row", type=int, default=0)
-            cmd.add_argument("--limit", type=int, default=100)
         if name == "recall":
             cmd.add_argument("--query", required=True)
             cmd.add_argument("--covered-by", action="append", default=[], help="Inspected installed policy ref@revision; omit to retain incorporated lessons")
         if name == "sync":
             cmd.add_argument("--direction", choices=("push", "pull"), required=True)
     args = parser.parse_args()
-    args.state = resolve_state(args.project, args.state)
     conn = open_store(args.state)
     try:
         if args.command == "bind":
@@ -608,10 +573,9 @@ def main():
             if args.command == "configure":
                 result = {"repository": configure(conn, pid, args.repository), "mode": "manual"}
             elif args.command == "context":
-                value = session_context(conn, args.project, args.client, args.session, args.after_row, args.limit)
+                value = session_context(conn, args.project, args.client, args.session)
                 write_json(args.file, value)
-                result = {"file": args.file, "events": len(value["events"]), "local_only": True,
-                          "coverage": value['coverage'], "next_after_row": value['next_after_row']}
+                result = {"file": args.file, "events": len(value["events"]), "local_only": True}
             elif args.command in {"record", "import"}:
                 value = read_json(args.file)
                 count = save_records(conn, pid, value) if args.command == "record" else import_package(conn, pid, value)

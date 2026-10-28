@@ -1,12 +1,11 @@
-"""Inspect or remove a legacy project task. Scheduling is no longer supported."""
+﻿"""Inspect or remove a legacy project task. Scheduling is no longer supported."""
 import argparse
 import json
 import os
 import subprocess
 from pathlib import Path
-
-from learning_memory import identifier
 from learning_project import read_config, write_json
+from learning_memory import identifier
 
 
 def install(project):

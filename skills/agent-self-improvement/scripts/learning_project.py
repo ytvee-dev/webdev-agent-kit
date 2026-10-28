@@ -27,7 +27,7 @@ def write_json(path, value):
     os.replace(temporary, path)
 
 
-def initialize(project, legacy=None, remote=None, telemetry=False):
+def initialize(project, legacy=None, remote="ytvee-dev/webdev-learning-databse"):
     project = Path(project).resolve(strict=True)
     target = project / ".agents/learning"
     if (target / "project.json").exists():
@@ -38,17 +38,9 @@ def initialize(project, legacy=None, remote=None, telemetry=False):
     stage = project / ".agents" / (".learning-migrate-" + uuid.uuid4().hex)
     copied = {}
     source = Path(legacy).resolve() if legacy else None
-    if source is not None and not (source / 'experience.sqlite3').is_file():
-        raise ValueError('Legacy database not found; migration cannot initialize empty memory')
-    lock_root = project / '.agents/.learning-locks'
-    lock_root.mkdir(parents=True, exist_ok=True)
-    (lock_root / '.gitignore').write_text('*\n', encoding='utf-8')
-    with lock(lock_root, project):
+    with lock(project / ".agents/.learning-locks", project):
         if target.exists():
             raise ValueError("Project state was initialized concurrently")
-        stage.mkdir(parents=True)
-        # Protect partial copies too, before any private data reaches the stage.
-        (stage / '.gitignore').write_text('*\n', encoding='utf-8')
         with closing(open_store(stage)) as out:
             pid = None
             if source and (source / "experience.sqlite3").is_file():
@@ -58,9 +50,6 @@ def initialize(project, legacy=None, remote=None, telemetry=False):
                     tables = {r[0] for r in old.execute("SELECT name FROM sqlite_master WHERE type='table'")}
                     binding = old.execute("SELECT project_id FROM memory_bindings WHERE local_id=?", (local_id,)).fetchone() if "memory_bindings" in tables else None
                     pid = binding[0] if binding else None
-                    captured = old.execute('SELECT 1 FROM projects WHERE id=?', (local_id,)).fetchone() if 'projects' in tables else None
-                    if not binding and not captured:
-                        raise ValueError('Selected project is absent from the legacy database')
                     selections = {"projects": ("id", local_id), "events": ("project_id", local_id),
                         "attachments": ("project_id", local_id), "capture_pauses": ("project_id", local_id),
                         "runs": ("project_id", local_id)}
@@ -90,7 +79,7 @@ def initialize(project, legacy=None, remote=None, telemetry=False):
                     with closing(connect(stage)) as journal, journal:
                         if "learning_decisions" in tables:
                             columns = [r[1] for r in old.execute("PRAGMA table_info(learning_decisions)") if r[1] != "sequence"]
-                            rows = old.execute("SELECT " + ",".join(columns) + " FROM learning_decisions WHERE project_id=? ORDER BY sequence", (local_id,)).fetchall()
+                            rows = old.execute("SELECT " + ",".join(columns) + " FROM learning_decisions WHERE project_id=?", (local_id,)).fetchall()
                             for row in rows:
                                 values = dict(zip(columns, row))
                                 proposal = Path(values["proposal"]) if values["proposal"] else None
@@ -122,7 +111,7 @@ def initialize(project, legacy=None, remote=None, telemetry=False):
                 raise ValueError("Migrated database integrity failed")
         config = {"schema_version": 1, "project_id": pid, "capture_project_id": local_id,
             "name": project.name, "remote": remote, "remote_folder": project.name + "--" + pid,
-            "auto_sync": bool(remote), "telemetry": {"enabled": bool(telemetry), "base_url": "https://cloud.langfuse.com",
+            "auto_sync": True, "telemetry": {"enabled": True, "base_url": "https://cloud.langfuse.com",
             "authorization_env": "LANGFUSE_MCP_AUTHORIZATION", "project_metadata_key": None,
             "project_metadata_value": None, "access_days": 30, "overlap_hours": 48,
             "archive_interval_hours": 24, "max_pages": 100},
@@ -134,8 +123,6 @@ def initialize(project, legacy=None, remote=None, telemetry=False):
         for name in ("raw", "runs", "snapshots", "outbox", "archive", "queue"):
             (stage / name).mkdir(exist_ok=True)
         stage.rename(target)
-    if not telemetry:
-        return {"result": "initialized", "state": str(target), "project_id": pid, "counts": copied, "tagging": {"status": "disabled"}}
     from learning_tagging import configure
     try:
         tagging = configure(project)
@@ -148,10 +135,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
     parser.add_argument("--legacy")
-    parser.add_argument("--remote", help="Explicit private snapshot repository (owner/name)")
-    parser.add_argument("--telemetry", action="store_true", help="Explicitly enable project telemetry and tagging")
+    parser.add_argument("--remote", default="ytvee-dev/webdev-learning-databse")
     args = parser.parse_args()
-    print(json.dumps(initialize(args.project, args.legacy, args.remote, args.telemetry)))
+    print(json.dumps(initialize(args.project, args.legacy, args.remote)))
 
 
 if __name__ == "__main__":

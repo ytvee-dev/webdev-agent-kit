@@ -56,13 +56,9 @@ adaptation or explicit user reconfiguration.
 ## Session Curation
 
 1. Use `context --project ROOT --client CLIENT --session ID --file PRIVATE.json`
-   to read a local-only page in capture order, with original event timestamps.
-   Pages contain at most 100 events and 4000 characters per event. Follow
-   `next_after_row` using `--after-row ROW`; optionally lower `--limit`.
-   Retain decisions and exact source IDs across pages; never use only the last
-   messages. Inline data URLs are omitted and shortened text has `[TRUNCATED]`.
-   These pages report partial coverage. Originals remain in the private database;
-   inspect necessary source material separately before declaring complete coverage.
+   to read every available recorded event in chronological order. The file is
+   local-only. For long sessions, read it in sequential bounded chunks with
+   overlap and retain decisions across chunks; never use only the last messages.
 2. Inspect the available conversation and split it into coherent task episodes.
    Preserve request, expected result, initial state, constraints, actions,
    corrections, decisions, result, actual checks and unresolved questions.
@@ -284,36 +280,3 @@ before and after; unrelated historical counts are insufficient. A manually
 invoked bridge or unit test is only a synthetic check. One observed event verifies
 that event, not every handler. Zero events after setup is unverified, not proof
 of a broken hook. Do not generate sensitive prompts for a probe.
-
-## Incremental Raw Triage
-
-Raw `run` freezes its input event IDs in the report. It excludes only events
-referenced by the latest revision of an explicitly curated episode with
-`complete_available` coverage. Partial or unknown coverage remains pending;
-a newer incomplete revision reopens that evidence. Events arriving after the
-input snapshot remain available for the next run. Triage never marks an episode
-curated or a lesson applied: complete curation through the existing structured
-record/check/audit workflow. The report identifies skipped curated events and
-states `curation_completed: false`. Explicit reconsideration uses a new episode
-revision, preserving the prior review history.
-
-Project initialization defaults to local-only state. Supply `--remote owner/repo`
-only for an explicitly authorized private snapshot destination, and `--telemetry`
-only when project telemetry and tagging are requested. Neither option is implied
-by enabling local capture. `learning.py status` reports the actual state and
-SQLite database paths.
-
-## State Resolution And Legacy Migration
-
-Collector, structured memory and cycle CLIs resolve the parsed `--project`
-argument, including `--project=ROOT`, independently of the working directory.
-An explicit `--state` overrides the environment's `AGENT_LEARNING_STATE`;
-otherwise the project uses `.agents/learning`. New project state is initialized
-with capture and network functions off, and a local ignore file excludes its
-contents from Git. `learning.py init` now requires `--project ROOT` unless an
-explicit state override is supplied. Existing selected-project rows in the old
-shared store require explicit `learning_project.py --project ROOT --legacy PATH`
-migration; they are never silently replaced by an empty local store. Migration
-preserves the legacy database. Proposal check/certify/apply commands without a
-project argument infer state only from their `STATE/proposals/FILE` location;
-exported proposals require an explicit state override.

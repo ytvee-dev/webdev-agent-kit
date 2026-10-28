@@ -128,22 +128,3 @@ markers are per project, target rules and record version, not a permanent global
 ban on reconsidering changed evidence. Project snapshots include these receipts
 under the authorized exchange workflow. A receipt from another project never
 marks this project's work used or grants permission to change its instructions.
-
-Historical analysis uses UTC day windows from the selected records' source events.
-The context loader filters local archives to the same windows. Curation dates do
-not authorize fetching unrelated current history. Missing dates or more than 32
-windows retain database-only analysis. Historical exports use separate resumable
-checkpoints and never advance the general synchronization watermark. All windows
-in one analysis share a 120-second request budget and the configured page limit;
-each request timeout is capped by the remaining budget. Stop fetching further
-windows after incomplete coverage and retain any evidence already archived. Empty or
-unavailable results do not prove that an incident never occurred. Snapshot upload
-status `pending_batch` means a bounded batch left more work; `pending_retry` means
-an error interrupted processing. Neither status schedules an automatic retry.
-
-Repeated analysis may reuse a completed exact-window export for up to 24 hours.
-Reuse requires matching project/configuration and intact archived-file hashes;
-the result reports `cached` and its original `fetched_at`. It establishes coverage
-at that fetch time, not the absence of later telemetry revisions. Partial exports
-are not complete caches. Direct export defaults to a fresh request for explicit
-refresh; missing, expired or invalid cache receipts fall back to bounded fetching.

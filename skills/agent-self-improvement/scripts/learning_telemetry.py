@@ -11,8 +11,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from learning import redact
-from learning_processing import lock
 from learning_project import read_config, write_json
+from learning_processing import lock
 
 
 def timestamp(value):
@@ -90,7 +90,7 @@ def request_page(spec, start, end, cursor=None):
     req = urllib.request.Request(base + "/api/public/v2/observations?" + urllib.parse.urlencode(query),
                                  headers={"Authorization": auth, "Accept": "application/json"})
     try:
-        with urllib.request.build_opener(NoRedirect).open(req, timeout=spec.get('_request_timeout', 20)) as response:
+        with urllib.request.build_opener(NoRedirect).open(req, timeout=20) as response:
             content = response.read(8 * 1024 * 1024 + 1)
             if len(content) > 8 * 1024 * 1024:
                 raise RuntimeError("response_too_large")
@@ -102,7 +102,7 @@ def request_page(spec, start, end, cursor=None):
         raise RuntimeError("network_unavailable") from None
 
 
-def export(project, fetch=request_page, now=None, window=None, budget=None, reuse_cache=False):
+def export(project, fetch=request_page, now=None):
     config = read_config(project)
     state = Path(project).resolve() / ".agents/learning"
     spec = config["telemetry"]
@@ -111,77 +111,36 @@ def export(project, fetch=request_page, now=None, window=None, budget=None, reus
         write_json(state / "telemetry-status.json", result)
         return result
     now = now or datetime.now(UTC)
-    requested_at = now
-    if window is not None:
-        window_start, window_end = (timestamp(v) for v in window)
-        if window_start >= window_end or window_end > now:
-            raise ValueError("Invalid historical telemetry window")
     with lock(state, state / "telemetry"):
         watermark = state / "telemetry-watermark.json"
         checkpoint = state / "telemetry-checkpoint.json"
         start = now - timedelta(days=min(30, spec.get("access_days", 30)))
-        if window is None and watermark.exists():
+        if watermark.exists():
             start = max(start, timestamp(json.loads(watermark.read_text())["complete_until"]) - timedelta(hours=spec.get("overlap_hours", 48)))
-        if window is not None:
-            start, now = window_start, window_end
-            window_key = hashlib.sha256(json.dumps(window).encode()).hexdigest()[:24]
-            checkpoint = state / ("telemetry-window-" + window_key + ".json")
         resume_cursor = None
         signature = hashlib.sha256(json.dumps(spec, sort_keys=True).encode()).hexdigest()
-        receipt = checkpoint.with_suffix('.complete.json') if window is not None else None
-        if reuse_cache and receipt and receipt.is_file():
-            try:
-                cached = json.loads(receipt.read_text(encoding='utf-8'))
-                age = (requested_at - timestamp(cached['fetched_at'])).total_seconds()
-                valid = (cached['signature'] == signature and cached['project_id'] == config['project_id']
-                         and 0 <= age < 86400 and cached['result']['coverage_complete'] is True
-                         and timestamp(cached['result']['from']) == window_start
-                         and timestamp(cached['result']['to']) == window_end)
-                for relative, expected in cached['archive_hashes'].items():
-                    path = (state / relative).resolve()
-                    if not path.is_relative_to((state / 'archive').resolve()) or not path.is_file():
-                        valid = False
-                        break
-                    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
-                        valid = False
-                        break
-                if valid:
-                    result = dict(cached['result'], pages=0, cached=True, fetched_at=cached['fetched_at'])
-                    write_json(state / 'telemetry-status.json', result)
-                    return result
-            except (KeyError, TypeError, ValueError, OSError):
-                pass  # Invalid cache is not evidence of complete coverage.
         if checkpoint.exists():
             saved = json.loads(checkpoint.read_text())
-            if (saved.get('signature') == signature and timestamp(saved['start']) >= start
-                    and (timestamp(saved['until']) == now if window is not None else timestamp(saved['until']) <= now)):
+            if saved.get('signature') == signature and timestamp(saved['start']) >= now - timedelta(days=30):
                 start, now = timestamp(saved['start']), timestamp(saved['until'])
                 resume_cursor = saved.get('cursor')
         initial = start
-        cacheable = window is not None and start == window_start and resume_cursor is None
-        archive_hashes = {}
         pages, accepted, rejected = 0, 0, 0
         status = "complete"
-        # Callers restoring several dates share one budget across all windows.
-        if budget is None:
-            budget = {'deadline': time.monotonic() + 120,
-                      'pages_remaining': min(1000, spec.get('max_pages', 100))}
+        deadline = time.monotonic() + 120
         try:
             while start < now:
                 end = min(now, start + timedelta(days=14))
                 cursor, seen = resume_cursor, set()
                 resume_cursor = None
                 while True:
-                    remaining = budget['deadline'] - time.monotonic()
-                    if remaining <= 0:
+                    if time.monotonic() > deadline:
                         raise RuntimeError("time_budget_exhausted")
-                    if budget['pages_remaining'] <= 0:
+                    if pages >= min(1000, spec.get("max_pages", 100)):
                         raise RuntimeError("page_budget_exhausted")
                     pages += 1
-                    budget['pages_remaining'] -= 1
                     try:
-                        result = fetch(dict(spec, _request_timeout=min(20, remaining)),
-                                       start.isoformat(), end.isoformat(), cursor)
+                        result = fetch(spec, start.isoformat(), end.isoformat(), cursor)
                     except RuntimeError as exc:
                         size = spec.get('page_size', 10)
                         if str(exc) == 'response_too_large' and size > 1:
@@ -205,7 +164,6 @@ def export(project, fetch=request_page, now=None, window=None, budget=None, reus
                         path = state / "archive" / at.strftime("%Y-%m") / (digest + ".json")
                         if not path.exists():
                             write_json(path, payload)
-                        archive_hashes[path.relative_to(state).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
                         accepted += 1
                     cursor = result["meta"].get("cursor")
                     write_json(checkpoint, {'signature': signature, 'start': (start if cursor else end).isoformat(),
@@ -220,22 +178,17 @@ def export(project, fetch=request_page, now=None, window=None, budget=None, reus
             status = str(exc) if isinstance(exc, RuntimeError) else "invalid_or_unavailable"
         # Only a complete, paginated window advances the watermark. Empty is not proof of quota.
         if status == "complete":
-            if window is None:
-                write_json(watermark, {"complete_until": now.isoformat()})
+            write_json(watermark, {"complete_until": now.isoformat()})
             checkpoint.unlink(missing_ok=True)
         result = {"status": status if accepted or status != "complete" else "empty_unknown_reason",
                   "from": initial.isoformat(), "to": now.isoformat(), "pages": pages,
                   "accepted": accepted, "rejected": rejected, "database_only": accepted == 0,
                   "coverage_complete": status == "complete"}
-        if receipt and cacheable and status == 'complete':
-            write_json(receipt, {'signature': signature, 'project_id': config['project_id'],
-                                'fetched_at': requested_at.isoformat(), 'archive_hashes': archive_hashes,
-                                'result': result})
         write_json(state / "telemetry-status.json", result)
         return result
 
 
-def prepare(project, run_id, months, windows=None):
+def prepare(project, run_id, months):
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", run_id) or any(not re.fullmatch(r"\d{4}-\d{2}", m) for m in months):
         raise ValueError("Invalid run ID or month")
     state = Path(project).resolve() / ".agents/learning"
@@ -253,11 +206,6 @@ def prepare(project, run_id, months, windows=None):
             if value["project_id"] != config["project_id"]:
                 raise ValueError("Wrong project archive")
             obs = value["observation"]
-            if windows is not None and not any(
-                timestamp(start) <= timestamp(obs["startTime"]) < timestamp(end)
-                for start, end in windows
-            ):
-                continue
             # Preserve revisions; identical overlap records are one entry.
             rows[path.stem] = value
     cache = destination / "telemetry.jsonl"

@@ -15,12 +15,11 @@ class HookBridgeTests(unittest.TestCase):
         import os
         import runpy
         import sqlite3
-        from contextlib import closing
         from unittest.mock import patch
-
+        from learning_project import initialize
         from learning import set_mode
         from learning_memory import open_store
-        from learning_project import initialize
+        from contextlib import closing
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             initialize(project)

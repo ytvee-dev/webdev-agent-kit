@@ -4,10 +4,9 @@ import re
 import sqlite3
 from contextlib import closing
 from pathlib import Path
-
+from learning_project import read_config
 from learning_memory import records
 from learning_processing import digest
-from learning_project import read_config
 
 
 def load(project, run):
@@ -56,7 +55,7 @@ def analysis_digest(analysis):
 
 
 def rule_snapshot(project):
-    from learning_cycle import hash_text, processing_receipt, skill_inventory
+    from learning_cycle import skill_inventory, processing_receipt, hash_text
     project = Path(project).resolve()
     inventory = skill_inventory(project) if any((project / '.agents/skills').glob('*/SKILL.md')) or any((project / 'skills').glob('*/SKILL.md')) else {}
     dependencies = processing_receipt([], {}, project, project)['dependencies']

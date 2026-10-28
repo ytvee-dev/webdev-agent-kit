@@ -1,17 +1,16 @@
 """Acceptance regressions; disposable databases and injected telemetry only."""
-import json
 import tempfile
 import unittest
+import json
 from argparse import Namespace
-from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
-
+from contextlib import closing
+from learning_project import initialize, read_config, write_json
 from learning_memory import open_store, save_records
 from learning_processing import connect, lock
-from learning_project import initialize, read_config, write_json
-from learning_tagging import validate
 from learning_workflow import begin, finish, verification_plan
+from learning_tagging import validate
 
 
 class ClosureTests(unittest.TestCase):
@@ -19,7 +18,7 @@ class ClosureTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.project = Path(self.temp.name)
-        initialize(self.project, telemetry=True)
+        initialize(self.project)
         self.state = self.project / '.agents/learning'
         self.config = read_config(self.project)
         from test_learning_memory import ProjectMemoryTests
@@ -29,7 +28,7 @@ class ClosureTests(unittest.TestCase):
             save_records(conn, self.config['project_id'], fixture.sample())
 
     def prepared(self, change=False):
-        from learning_cycle import apply, check, propose
+        from learning_cycle import propose, check, apply
         target = self.project / '.agents/skills/example/SKILL.md'
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text('---\nname: example\ndescription: test\n---\nVerify.\n', encoding='utf-8')
@@ -206,11 +205,6 @@ class ClosureTests(unittest.TestCase):
         self.assertFalse((folder / 'completion.json').exists())
 
     def test_busy_optional_telemetry_preserves_db_run(self):
-        # A telemetry lookup requires an actual source-event date.
-        with closing(open_store(self.state)) as conn, conn:
-            conn.execute("INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                         ('local-event', self.config['capture_project_id'], 'fixture', 'session', 'message', '',
-                          'user', '2026-10-23T12:00:00+00:00', None, 'fixture', '[]', '[]'))
         with lock(self.state, self.state / 'telemetry'):
             result = begin(self.project, ['lesson'])
         self.assertTrue(result['telemetry']['database_only'])
