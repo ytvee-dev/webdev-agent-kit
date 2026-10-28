@@ -47,6 +47,7 @@ Use this changelog for source-bundle and distribution-target changes that affect
 - Natural-language memory writes with local storage, readback and no implicit
   rule edits, analysis, capture, tracing or synchronization.
 - Kimi Code distribution, installation guide and archive validation.
+  Release publication includes both versioned and stable-name Kimi archives.
 
 ### Changed
 

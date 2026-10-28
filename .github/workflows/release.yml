@@ -138,10 +138,11 @@ jobs:
           test -d dist/claude
           test -d dist/claude-code
           test -d dist/cursor
+          test -d dist/kimi
           test -d dist/vs-code-codex
           test -d dist/vs-code-claude
 
-          for target in codex claude claude-code cursor vs-code-codex vs-code-claude; do
+          for target in codex claude claude-code cursor kimi vs-code-codex vs-code-claude; do
             test -f "dist/${target}/LICENSE"
             test -f "dist/${target}/tool-capabilities-manifest.json"
             test ! -e "dist/${target}/project"
@@ -210,11 +211,13 @@ jobs:
             "release-artifacts/webdev-agent-kit-codex-${RELEASE_TAG}.tar.gz"
             "release-artifacts/webdev-agent-kit-claude-code-${RELEASE_TAG}.tar.gz"
             "release-artifacts/webdev-agent-kit-cursor-${RELEASE_TAG}.tar.gz"
+            "release-artifacts/webdev-agent-kit-kimi-${RELEASE_TAG}.tar.gz"
             "release-artifacts/webdev-agent-kit-vs-code-codex-${RELEASE_TAG}.tar.gz"
             "release-artifacts/webdev-agent-kit-vs-code-claude-${RELEASE_TAG}.tar.gz"
             "release-artifacts/webdev-agent-kit-codex.tar.gz"
             "release-artifacts/webdev-agent-kit-claude-code.tar.gz"
             "release-artifacts/webdev-agent-kit-cursor.tar.gz"
+            "release-artifacts/webdev-agent-kit-kimi.tar.gz"
             "release-artifacts/webdev-agent-kit-vs-code-codex.tar.gz"
             "release-artifacts/webdev-agent-kit-vs-code-claude.tar.gz"
             "release-artifacts/SHA256SUMS"
