@@ -102,7 +102,7 @@ def request_page(spec, start, end, cursor=None):
         raise RuntimeError("network_unavailable") from None
 
 
-def export(project, fetch=request_page, now=None, window=None, budget=None):
+def export(project, fetch=request_page, now=None, window=None, budget=None, reuse_cache=False):
     config = read_config(project)
     state = Path(project).resolve() / ".agents/learning"
     spec = config["telemetry"]
@@ -111,6 +111,7 @@ def export(project, fetch=request_page, now=None, window=None, budget=None):
         write_json(state / "telemetry-status.json", result)
         return result
     now = now or datetime.now(UTC)
+    requested_at = now
     if window is not None:
         window_start, window_end = (timestamp(v) for v in window)
         if window_start >= window_end or window_end > now:
@@ -127,6 +128,29 @@ def export(project, fetch=request_page, now=None, window=None, budget=None):
             checkpoint = state / ("telemetry-window-" + window_key + ".json")
         resume_cursor = None
         signature = hashlib.sha256(json.dumps(spec, sort_keys=True).encode()).hexdigest()
+        receipt = checkpoint.with_suffix('.complete.json') if window is not None else None
+        if reuse_cache and receipt and receipt.is_file():
+            try:
+                cached = json.loads(receipt.read_text(encoding='utf-8'))
+                age = (requested_at - timestamp(cached['fetched_at'])).total_seconds()
+                valid = (cached['signature'] == signature and cached['project_id'] == config['project_id']
+                         and 0 <= age < 86400 and cached['result']['coverage_complete'] is True
+                         and timestamp(cached['result']['from']) == window_start
+                         and timestamp(cached['result']['to']) == window_end)
+                for relative, expected in cached['archive_hashes'].items():
+                    path = (state / relative).resolve()
+                    if not path.is_relative_to((state / 'archive').resolve()) or not path.is_file():
+                        valid = False
+                        break
+                    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+                        valid = False
+                        break
+                if valid:
+                    result = dict(cached['result'], pages=0, cached=True, fetched_at=cached['fetched_at'])
+                    write_json(state / 'telemetry-status.json', result)
+                    return result
+            except (KeyError, TypeError, ValueError, OSError):
+                pass  # Invalid cache is not evidence of complete coverage.
         if checkpoint.exists():
             saved = json.loads(checkpoint.read_text())
             if (saved.get('signature') == signature and timestamp(saved['start']) >= start
@@ -134,6 +158,8 @@ def export(project, fetch=request_page, now=None, window=None, budget=None):
                 start, now = timestamp(saved['start']), timestamp(saved['until'])
                 resume_cursor = saved.get('cursor')
         initial = start
+        cacheable = window is not None and start == window_start and resume_cursor is None
+        archive_hashes = {}
         pages, accepted, rejected = 0, 0, 0
         status = "complete"
         # Callers restoring several dates share one budget across all windows.
@@ -179,6 +205,7 @@ def export(project, fetch=request_page, now=None, window=None, budget=None):
                         path = state / "archive" / at.strftime("%Y-%m") / (digest + ".json")
                         if not path.exists():
                             write_json(path, payload)
+                        archive_hashes[path.relative_to(state).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
                         accepted += 1
                     cursor = result["meta"].get("cursor")
                     write_json(checkpoint, {'signature': signature, 'start': (start if cursor else end).isoformat(),
@@ -200,6 +227,10 @@ def export(project, fetch=request_page, now=None, window=None, budget=None):
                   "from": initial.isoformat(), "to": now.isoformat(), "pages": pages,
                   "accepted": accepted, "rejected": rejected, "database_only": accepted == 0,
                   "coverage_complete": status == "complete"}
+        if receipt and cacheable and status == 'complete':
+            write_json(receipt, {'signature': signature, 'project_id': config['project_id'],
+                                'fetched_at': requested_at.isoformat(), 'archive_hashes': archive_hashes,
+                                'result': result})
         write_json(state / "telemetry-status.json", result)
         return result
 

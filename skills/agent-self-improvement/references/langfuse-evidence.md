@@ -140,3 +140,10 @@ windows after incomplete coverage and retain any evidence already archived. Empt
 unavailable results do not prove that an incident never occurred. Snapshot upload
 status `pending_batch` means a bounded batch left more work; `pending_retry` means
 an error interrupted processing. Neither status schedules an automatic retry.
+
+Repeated analysis may reuse a completed exact-window export for up to 24 hours.
+Reuse requires matching project/configuration and intact archived-file hashes;
+the result reports `cached` and its original `fetched_at`. It establishes coverage
+at that fetch time, not the absence of later telemetry revisions. Partial exports
+are not complete caches. Direct export defaults to a fresh request for explicit
+refresh; missing, expired or invalid cache receipts fall back to bounded fetching.

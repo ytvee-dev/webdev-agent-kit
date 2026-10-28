@@ -88,7 +88,7 @@ def begin(project, ids):
             budget = {'deadline': time.monotonic() + 120,
                       'pages_remaining': min(1000, config['telemetry'].get('max_pages', 100))}
             for window in windows:
-                result = export(project, window=window, budget=budget)
+                result = export(project, window=window, budget=budget, reuse_cache=True)
                 results.append(result)
                 if not result.get('coverage_complete'):
                     break

@@ -43,6 +43,25 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(len(list((self.state / 'archive').glob('*/*.json'))), 3)
         export(self.project, fetch, self.now)
         self.assertEqual(len(calls), 4)  # 48-hour overlap, not another full month.
+        window = ('2026-10-20T00:00:00+00:00', '2026-10-21T00:00:00+00:00')
+        fresh = export(self.project, fetch, self.now, window=window)
+        self.assertTrue(fresh['coverage_complete'])
+        cached = export(self.project, lambda *args: self.fail('complete cache fetched again'),
+                        self.now, window=window, reuse_cache=True)
+        self.assertTrue(cached['cached'])
+        self.assertEqual(cached['pages'], 0)
+        self.assertEqual(cached['accepted'], fresh['accepted'])
+        # Deleting an archived payload invalidates completeness and forces refetch.
+        receipt = next(self.state.glob('telemetry-window-*.complete.json'))
+        import json
+        manifest = json.loads(receipt.read_text(encoding='utf-8'))
+        (self.state / next(iter(manifest['archive_hashes']))).unlink()
+        before = len(calls)
+        export(self.project, fetch, self.now, window=window, reuse_cache=True)
+        self.assertGreater(len(calls), before)
+        before = len(calls)
+        export(self.project, fetch, datetime(2026, 10, 29, tzinfo=UTC), window=window, reuse_cache=True)
+        self.assertGreater(len(calls), before)  # Completed windows expire after 24 hours.
 
     def test_partial_failure_does_not_advance(self):
         def fetch(spec, start, end, cursor):
