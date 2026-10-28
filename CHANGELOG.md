@@ -40,8 +40,29 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
-- Consent-gated completion snapshots, destination-bound retries and capture health.
-- Project storage-pressure checks with explicit cleanup approval at configured limits.
+- Content-free capture health, receipt/source timestamps and context-completeness
+  metadata; bounded hook input/execution and safe synthetic event IDs.
+- Completion storage-pressure reports: 50,000 raw events or 250 MiB SQLite plus
+  WAL prompts for cleanup approval; no automatic deletion or capture shutdown.
+- Audit of learning/storage/consent contradictions with regression and live-trial
+  evidence boundaries.
+
+### Changed
+
+- One selected learning store across capture, analysis, tracing helpers, snapshots
+  and recovery, including external paths persisted in installed hooks.
+- Adaptation offers structured-memory snapshots after each completed learning
+  cycle to a user-selected private repository. Refusal creates no automatic
+  snapshot or delivery job; manual recording remains independent.
+- Snapshot queues bind their destination, exclude Langfuse archives, preserve
+  per-run snapshot links and retry during the next requested learning completion
+  or explicit sync. Empty private repositories support verified first upload.
+- Unconfigured capture/status no longer creates empty state. Update protections
+  explicitly include alternate state paths. Referenced evidence remains protected.
+
+## 1.9.0 — 2026-10-29
+
+### Added
 
 - Consolidated STEM learning workflows on the current Kit: scoped evidence,
   diagnosis, risk-based evaluation, processing receipts, recovery and snapshots.
@@ -54,9 +75,6 @@ Use this changelog for source-bundle and distribution-target changes that affect
   Release publication includes both versioned and stable-name Kimi archives.
 
 ### Changed
-
-- Resolve the same selected learning store across capture, analysis and exchange.
-- Snapshot exchange excludes telemetry archives; refusal creates no automatic snapshots.
 
 - New project memory defaults to local storage with capture, telemetry and exchange
   off and no preset remote. Existing choices and legacy history are preserved.

@@ -22,7 +22,7 @@ depends_on: []
 ## Boundary And Method
 
 Base: released v1.9.0. Scope: Kit source only; installed STEM/ASI are unchanged.
-No release or merge is authorized for this change. Historical 1.9.0 reports and
+Publication of these changes as v1.9.1 was separately authorized on 2026-10-29. Historical 1.9.0 reports and
 source inventories describe that release and are not rewritten as new results.
 
 The audit combines cross-repository searches of runtime policies, skills,
