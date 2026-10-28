@@ -1,10 +1,10 @@
-import json
 import tempfile
 import unittest
 from datetime import UTC, datetime
 from pathlib import Path
+
 from learning_project import initialize, read_config, write_json
-from learning_telemetry import export, prepare, cleanup, sanitize
+from learning_telemetry import cleanup, export, prepare, sanitize
 
 
 class TelemetryTests(unittest.TestCase):

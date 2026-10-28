@@ -52,8 +52,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
   Its original defaults are retained, including enabled telemetry and private
   synchronization and the original repository address. Adaptation must reconcile
   these with the user's selected configuration before network operations.
-- Source bodies and executable files are retained unchanged. Source repository
-  graph metadata is preserved separately from runtime text.
+- Instruction bodies remain unchanged. User-authorized technical exceptions
+  are import cleanup, statement formatting, an unused binding and Windows/UTF-8
+  test fixtures. Source/package hashes record each exception.
 - Earlier claims of incremental raw triage, bounded context, revised project-path
   resolution and telemetry-window caching no longer describe this candidate.
   Their corresponding acceptance results must not be reused.

@@ -2,211 +2,268 @@
   {
     "path": "SKILL.md",
     "source_sha256": "ed78a78f1ad51721c14382337aa00d63d8093b889d7ad0532034c0c15b647356",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "72bb439d7c66ae92fef2b594c19305f47b61ab30a9578796c98fe55d48999897"
   },
   {
     "path": "agents/openai.yaml",
     "source_sha256": "c05850f745ad44cf2d7d4491c1559bae7f38d13164cd090f46b5507659a8a924",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "c05850f745ad44cf2d7d4491c1559bae7f38d13164cd090f46b5507659a8a924"
   },
   {
     "path": "assets/behavior-cases.json",
     "source_sha256": "6c1802194f0ab52c45c1ae66e5bf64ce5d4e980a39610b060182b50d3ec6ee43",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "6c1802194f0ab52c45c1ae66e5bf64ce5d4e980a39610b060182b50d3ec6ee43"
   },
   {
     "path": "references/collection-contract.md",
     "source_sha256": "4cb4395d14aa20763a276a16796ab040a96f3104add60364992fbd5ba9ccddf5",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "3050242869fadaac33b401e01d60f49bf3130f3f27ca4c683f6721f0c3d3aa67"
   },
   {
     "path": "references/langfuse-evidence.md",
     "source_sha256": "4a95255c7f3bfbefd1d7340ebb388f002bc0e0e3e16cc2804a2d80f86c1dbfbd",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "2414f703e6e78345d5536ebacea4b6657a5c466c52192a36722f02d72c91cc60"
   },
   {
     "path": "references/learning-policy.md",
     "source_sha256": "1b81097a07a1c74034d7e4e7d1c622d3359394a1a503d8162ed12eae3e800a61",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "6bf193039d2e83a40ed2185a5a634aeeb200fbb67635ed6a4f1191d6c065ceea"
   },
   {
     "path": "references/privacy-and-threat-model.md",
     "source_sha256": "6df1617d30d26c050cbe601d11ab957d0d90fd1f0d2b7eabb932111e6aedeaa8",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "ee7c6ef9dc41e49b92c51443c722dc97ba57b4a9079e84be154995bf21b69a96"
   },
   {
     "path": "references/processing-contract.md",
     "source_sha256": "fee20bb47725464b67beef0cfc598342ed785edaef524ec56b65c2491b002bee",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "199af03dc92045fb66af52f50c5a236f5da3a58a7085017a61e3bfb53ed3b6ca"
   },
   {
     "path": "references/project-memory.md",
     "source_sha256": "97e8392ccdba38b25a30566ee0e5764279a38942f0c5b7affaccd08651af73b0",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "69371afa371947b4672d1c7b81c683bc40e84db349af0e64e1de8059bb9c2ace"
   },
   {
     "path": "references/project-workflow.md",
     "source_sha256": "dc2254b35ad292a657d0f350e8252e782d56ee5a41423d40623b53b952afb8e3",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "4ef7d18da723866b2b5edaee715a4252f30501e9aa716f8e29a298680e8b97e5"
   },
   {
     "path": "scripts/install_hooks.py",
     "source_sha256": "2aa6dc87e4d21f1af2f8ba5ee932f2328f7b907dd26a57aca90cdcc8620a85ba",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "2aa6dc87e4d21f1af2f8ba5ee932f2328f7b907dd26a57aca90cdcc8620a85ba"
   },
   {
     "path": "scripts/learning.py",
     "source_sha256": "a13f7f0386ff6fcbc8452de84fb243e06dc6ee89283f83548aca66af6212d6ba",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "a13f7f0386ff6fcbc8452de84fb243e06dc6ee89283f83548aca66af6212d6ba"
   },
   {
     "path": "scripts/learning_behavior.py",
     "source_sha256": "8c2f2c7245e25ac8b8604af9a4391fb720cc6f1a5f7dea699a0aa3ecd8cc891b",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "8c2f2c7245e25ac8b8604af9a4391fb720cc6f1a5f7dea699a0aa3ecd8cc891b"
   },
   {
     "path": "scripts/learning_benchmark.py",
     "source_sha256": "4d05603f3ebc0ef8fcb9fa07e06e9de439e95c9a860bf3f8543e235aa69c0fac",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "4d05603f3ebc0ef8fcb9fa07e06e9de439e95c9a860bf3f8543e235aa69c0fac"
   },
   {
     "path": "scripts/learning_cycle.py",
     "source_sha256": "9e4fed4792192db032795bf2b0e08b76ae4278a2108b1d8d93b0b213bec2c411",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "9e4fed4792192db032795bf2b0e08b76ae4278a2108b1d8d93b0b213bec2c411"
   },
   {
     "path": "scripts/learning_exchange.py",
     "source_sha256": "ccedf56c50a8caab919b1300ee157595ffd06629040fee7b84a08798b6863e54",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "565183ea7343181efac9dee6f30b95a825e474fb1ff71891e8c46463486d0f93",
+    "adjustments": "Import ordering and unused imports; unused observation binding renamed without removing lookup."
   },
   {
     "path": "scripts/learning_memory.py",
     "source_sha256": "cffcb865e0a7257c43a92825f55485d756ee0f9d42a5b21066b1f877518cd541",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "cffcb865e0a7257c43a92825f55485d756ee0f9d42a5b21066b1f877518cd541"
   },
   {
     "path": "scripts/learning_processing.py",
     "source_sha256": "0b8877e091d12a121d29e61873ef41b2473a554c912d0d87015183370522f272",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "0b8877e091d12a121d29e61873ef41b2473a554c912d0d87015183370522f272"
   },
   {
     "path": "scripts/learning_project.py",
     "source_sha256": "7a8a11893d42b70846029db9b9091af07a23895f3d5ffff5385372c6a8ee70c8",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "7a8a11893d42b70846029db9b9091af07a23895f3d5ffff5385372c6a8ee70c8"
   },
   {
     "path": "scripts/learning_run.py",
     "source_sha256": "c6adb46c3cdc0afa4fdd5a51f7b064e6a4e1e5aa57121847366575b589c00254",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "8a17d3e26623b631a9d2e465d6c7bf3e9ded63a079d959a8908700addeb69426",
+    "adjustments": "Import ordering and unused imports; unused observation binding renamed without removing lookup."
   },
   {
     "path": "scripts/learning_schedule.py",
     "source_sha256": "103faad97e6db246c6930f8aadf4c144d54af6412f2cc4b2fd1ff17e40ed2d5d",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "786705d750f39e02373eec0349852fb9990cbf6f34a645cb5990e330333ed1c6",
+    "adjustments": "Import ordering and unused imports; unused observation binding renamed without removing lookup."
   },
   {
     "path": "scripts/learning_tagging.py",
     "source_sha256": "ffcf40b322cbfae12002e536508e715b4db396b8a31d853951bae8c7c6347108",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "559326de70a6e3207e02fd0baef954f21250a8845657555cf5677e8f20f5fe57",
+    "adjustments": "Import ordering and unused imports; unused observation binding renamed without removing lookup."
   },
   {
     "path": "scripts/learning_telemetry.py",
     "source_sha256": "d021ecea606d51fd01603e44cdf35c19a20f9c7196ebfdea4e696b468dea8350",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "29f465629fc58e1cb96ecdf7fb54f921bcc90f4b84945913f347ba02cd8ac1c9",
+    "adjustments": "Import ordering and unused imports; unused observation binding renamed without removing lookup."
   },
   {
     "path": "scripts/learning_workflow.py",
     "source_sha256": "4729b228827d76efe7c22a0251fa1207678ef0d2ef2393695a03c9b893f4e76b",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "50a919770532d87fcb14b7f78b42fd6748cc312027fa4cb552f50417fd50e336",
+    "adjustments": "Import ordering and unused imports; unused observation binding renamed without removing lookup."
   },
   {
     "path": "scripts/smoke_windows.ps1",
     "source_sha256": "ca67543c5926b94b7ed281f87ba38f39559019c991309635b6c4ff2e7bdb4d54",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "ca67543c5926b94b7ed281f87ba38f39559019c991309635b6c4ff2e7bdb4d54"
   },
   {
     "path": "scripts/test_hook_bridge.py",
     "source_sha256": "ed7e3f636335fc2e3c99d473411e3bca649f14bd90050b9448e22c0bbe8ad04e",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "f15fe2b59e009642bddeba86217dafe39777e5706435586b331db7ae3ca9b4ec",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_install_hooks.py",
     "source_sha256": "d0e190b0d152a50dc6f372390e3549d17ae7bcc59fdb839024a981d2e0790b86",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "e26fb9fcaa694a39e9b65209ac8c3d95d92fc78a25be480e21e216a178fd3c8b",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning.py",
     "source_sha256": "b6e4c58cb1d56c48858f997f447bcbd192cc757bed4d592f790a34ca8fbc62d0",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "b6e4c58cb1d56c48858f997f447bcbd192cc757bed4d592f790a34ca8fbc62d0"
   },
   {
     "path": "scripts/test_learning_behavior.py",
     "source_sha256": "0e0975273b2704b971c1554bf097aab66b5fdde1922f870c114a4c099e6255dc",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "0e0975273b2704b971c1554bf097aab66b5fdde1922f870c114a4c099e6255dc"
   },
   {
     "path": "scripts/test_learning_benchmark.py",
     "source_sha256": "4350afd8cdb9949a21ec4af6f8aafc194969fdf7528d4975a91d58aab511bfea",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "4350afd8cdb9949a21ec4af6f8aafc194969fdf7528d4975a91d58aab511bfea"
   },
   {
     "path": "scripts/test_learning_closure.py",
     "source_sha256": "b667026df382700f6f601b52512a05d21450cd48dcd92deb1d06f1573b0a5bee",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "4a5b7bcf785462877bc34cca66f6696299397c6d66071dfedcc074754244bb84",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning_cycle.py",
     "source_sha256": "b4670910df46d947d0d54daf9279f1e36c6248669cf3211f10f428ef1dfdb608",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "c1661df7e6a5adee43f140e6f17b3995da21d355093906f3f8738ea9f789521d",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning_memory.py",
     "source_sha256": "5bc4ed84ad94497318d418763bc8ca104df01d9a36c156921a1b30dd7dc3a940",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "5bc4ed84ad94497318d418763bc8ca104df01d9a36c156921a1b30dd7dc3a940"
   },
   {
     "path": "scripts/test_learning_processing.py",
     "source_sha256": "339feb14b46b1984064cd70f02c5851b364a0c0cc8b212b712bceb7f6d8f5c4c",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "44a10953618a0a3588e0bb56385a9a68ee9ca5859a6de261e510671d49e1838d",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning_project.py",
     "source_sha256": "c3cf7646a12e7d3b21951a35f4aa1a4d50ef5e004edc6262105e0587c93699b1",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "cc6ec519f7af0eb5d2bd2c4ae3a69d4ff22eca3ac9f82a4f39f00c258af5e5f2",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning_tagging.py",
     "source_sha256": "6540cdf66e49b67981bdff224803874282a712980c90ed14851c82b61f25d3d4",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "0ce5e65a7fb0a043a9d5665c35671d434b9a3ef041c6b98d58eab6cbf989f4df",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning_telemetry.py",
     "source_sha256": "790fe9a0d0014864901b2978115a1e295963b54ba878d929cba01aaccfa2b2d8",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "9181dd07255931a1c781c298f3c390220d1bff56536bff94ce758b50846255ca",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "scripts/test_learning_workflow.py",
     "source_sha256": "f1fd0a15b7beb912cbe26b74d54e35db9195d79b632c943915e623064400a543",
-    "comparison": "byte-identical"
+    "comparison": "authorized-technical-adjustments",
+    "package_sha256": "1fc85ee37a95485ac60ada5feb6633e4295da38eb8c7e1fd357d5e0082827f1a",
+    "adjustments": "Import cleanup, statement formatting, explicit UTF-8 JSON reads or canonical Windows fixture paths; assertions retained."
   },
   {
     "path": "assets/integrations/hook_bridge.py",
     "source_sha256": "e67dd43c5cfc40513cb0f587cf17d51a8bf025482f5d0a3bbd1bbd494be6621b",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "e67dd43c5cfc40513cb0f587cf17d51a8bf025482f5d0a3bbd1bbd494be6621b"
   },
   {
     "path": "assets/integrations/INTEGRATIONS.md",
     "source_sha256": "a817050588fceec3ed18f5f94bc06a0e26f2be634e344242e1451addb43e5ec6",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "bf3945d6ba85951ae43556a3fff57c341f4edb684569f9b7573193c5ed02bbeb"
   },
   {
     "path": "assets/integrations/PREVIEW.md",
     "source_sha256": "c1222f36ce868efd82bf9fe9a940044522d047db86265929388baa67c17b33ba",
-    "comparison": "body-identical"
+    "comparison": "body-identical",
+    "package_sha256": "e8769db33be5838a8a63770bf0d21ec1d7c576051d9b3f38515ce38394e0e796"
   },
   {
     "path": "assets/integrations/opencode/experience-recorder.js",
     "source_sha256": "9e4799a2fb64e404db1deeef2aa035ac3c0e095db14785787c9b7c7557757497",
-    "comparison": "byte-identical"
+    "comparison": "byte-identical",
+    "package_sha256": "9e4799a2fb64e404db1deeef2aa035ac3c0e095db14785787c9b7c7557757497"
   }
 ]

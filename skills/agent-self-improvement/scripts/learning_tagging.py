@@ -3,12 +3,13 @@ import argparse
 import json
 import os
 import subprocess
-import uuid
 import time
+import uuid
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+
 from learning_project import read_config, write_json
-from learning_telemetry import request_page, assess
+from learning_telemetry import assess, request_page
 
 
 def configure(project):

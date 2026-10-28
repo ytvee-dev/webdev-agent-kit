@@ -1,17 +1,17 @@
 """Explicitly requested preparation and completion; no background execution."""
 import argparse
-import json
 import hashlib
+import json
 import sqlite3
 import uuid
 from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
-from learning_project import read_config, write_json
+from learning_exchange import drain, enqueue
 from learning_memory import records
-from learning_exchange import enqueue, drain
-from learning_telemetry import export, prepare, cleanup, timestamp
+from learning_project import read_config, write_json
+from learning_telemetry import cleanup, export, prepare, timestamp
 
 
 def verification_plan(paths, changes=()):
@@ -88,7 +88,7 @@ def begin(project, ids):
                     'source_assessment': None, 'expected_vs_actual': None, 'causal_hypotheses': None,
                     'relevant_rules': None, 'measurable_goal': None, 'alternatives_and_sources': None,
                     'decision': None, 'verification': None} for i in ids}}
-    from learning_run import sources, rule_snapshot
+    from learning_run import rule_snapshot, sources
     artifact['source_digests'] = sources(project, ids)
     artifact['rule_snapshot'], artifact['analysis_dependencies'] = rule_snapshot(project)
     artifact['reflection'] = None
@@ -97,8 +97,8 @@ def begin(project, ids):
 
 
 def finish(project, run):
-    from learning_run import load
     from learning_processing import lock
+    from learning_run import load
     _, analysis = load(project, run)
     proposal_path = analysis.get('proposal')
     if not proposal_path:
@@ -135,7 +135,13 @@ def finish_locked(project, run):
     verify_binding(proposal, state)
     if proposal['run_binding']['run_id'] != run:
         raise ValueError('Proposal belongs to another run')
-    from learning_cycle import verify_dependencies, verify_evidence, processing_receipt, skill_inventory, hash_text
+    from learning_cycle import (
+        hash_text,
+        processing_receipt,
+        skill_inventory,
+        verify_dependencies,
+        verify_evidence,
+    )
     verify_dependencies(proposal)
     verify_evidence(proposal, state)
     inventory = skill_inventory(Path(proposal['repo']))

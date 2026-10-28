@@ -10,8 +10,8 @@ from contextlib import closing
 from pathlib import Path
 
 from learning_memory import gh, records, repository
-from learning_project import read_config, write_json
 from learning_processing import lock
+from learning_project import read_config, write_json
 from learning_telemetry import sanitize
 
 

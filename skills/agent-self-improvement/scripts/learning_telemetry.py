@@ -11,8 +11,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from learning import redact
-from learning_project import read_config, write_json
 from learning_processing import lock
+from learning_project import read_config, write_json
 
 
 def timestamp(value):
@@ -205,7 +205,7 @@ def prepare(project, run_id, months):
                 raise ValueError("Archive digest mismatch")
             if value["project_id"] != config["project_id"]:
                 raise ValueError("Wrong project archive")
-            obs = value["observation"]
+            _ = value["observation"]
             # Preserve revisions; identical overlap records are one entry.
             rows[path.stem] = value
     cache = destination / "telemetry.jsonl"

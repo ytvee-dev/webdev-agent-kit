@@ -1,6 +1,4 @@
 import hashlib
-import json
-import shutil
 import sqlite3
 import tempfile
 import unittest
@@ -10,7 +8,7 @@ from unittest.mock import patch
 
 from learning import capture, default_root, project_id, set_mode
 from learning_memory import bind, open_store
-from learning_project import initialize, read_config
+from learning_project import initialize
 
 
 class ProjectStateTests(unittest.TestCase):
@@ -18,7 +16,8 @@ class ProjectStateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             project, other, legacy = root / "project", root / "other", root / "legacy"
-            project.mkdir(); other.mkdir()
+            project.mkdir()
+            other.mkdir()
             with closing(open_store(legacy)) as conn:
                 pid = bind(conn, project)
                 bind(conn, other)
@@ -46,7 +45,7 @@ class ProjectStateTests(unittest.TestCase):
             project.rename(moved)
             self.assertEqual(project_id(moved), old_id)
             with patch("sys.argv", ["learning.py", "status", "--project", str(moved)]), patch.dict("os.environ", {}, clear=True):
-                self.assertEqual(default_root(), moved / ".agents/learning")
+                self.assertEqual(default_root(), moved.resolve() / ".agents/learning")
 
     def test_partial_state_is_not_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:

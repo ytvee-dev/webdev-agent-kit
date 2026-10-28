@@ -1,24 +1,32 @@
 """Regression scenarios for queue loss, stale evidence and crash recovery."""
-from contextlib import closing
 import copy
 import json
 import sqlite3
 import tempfile
 import unittest
 from argparse import Namespace
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
 
+from learning_cycle import (
+    apply,
+    certify,
+    hash_text,
+    processing_receipt,
+    read_json,
+    validate_candidate,
+    validate_decisions,
+    write_json,
+)
 from learning_processing import append, connect, eligible, lock
-from learning_cycle import (apply, certify, check, hash_text, processing_receipt,
-                            validate_candidate, validate_decisions, write_json, read_json)
 
 
 class ProcessingTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.state = self.root / "state"
         self.repo = self.root / "repo"
         self.repo.mkdir()

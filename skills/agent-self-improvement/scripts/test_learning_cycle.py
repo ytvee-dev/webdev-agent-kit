@@ -116,6 +116,7 @@ class LearningCycleSmoke(unittest.TestCase):
 
     def test_automatic_cycle_rejected_without_side_effects(self):
         from unittest.mock import patch
+
         from learning_cycle import auto
         with patch('learning_cycle.propose') as propose:
             with self.assertRaisesRegex(ValueError, 'Automatic learning is disabled'):

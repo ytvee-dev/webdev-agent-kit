@@ -1,14 +1,12 @@
-import base64
 import json
-import sqlite3
 import tempfile
 import unittest
-from unittest.mock import patch
-from contextlib import closing
 from pathlib import Path
+from unittest.mock import patch
+
+from learning_exchange import drain, enqueue
 from learning_project import initialize, read_config, write_json
-from learning_exchange import enqueue, drain
-from learning_workflow import verification_plan, curate_queue, begin
+from learning_workflow import begin, curate_queue, verification_plan
 
 
 class WorkflowTests(unittest.TestCase):
@@ -20,8 +18,8 @@ class WorkflowTests(unittest.TestCase):
         self.state = self.project / '.agents/learning'
 
     def test_background_entrypoints_fail_before_work(self):
-        from learning_workflow import maintenance
         from learning_schedule import install
+        from learning_workflow import maintenance
         with patch('learning_workflow.curate_queue') as curate, patch('learning_workflow.export') as export, patch('learning_workflow.drain') as drain, patch('learning_schedule.subprocess.run') as process:
             with self.assertRaisesRegex(ValueError, 'disabled'):
                 maintenance(self.project)
@@ -32,6 +30,7 @@ class WorkflowTests(unittest.TestCase):
 
     def test_git_batch_readback_lost_response_and_conflict(self):
         import hashlib
+
         from learning_exchange import drain_batch
         enqueue(self.project)
         stored, pending = {}, {}

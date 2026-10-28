@@ -1,16 +1,17 @@
 """Acceptance regressions; disposable databases and injected telemetry only."""
+import json
 import tempfile
 import unittest
-import json
 from argparse import Namespace
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
-from contextlib import closing
-from learning_project import initialize, read_config, write_json
+
 from learning_memory import open_store, save_records
 from learning_processing import connect, lock
-from learning_workflow import begin, finish, verification_plan
+from learning_project import initialize, read_config, write_json
 from learning_tagging import validate
+from learning_workflow import begin, finish, verification_plan
 
 
 class ClosureTests(unittest.TestCase):
@@ -28,7 +29,7 @@ class ClosureTests(unittest.TestCase):
             save_records(conn, self.config['project_id'], fixture.sample())
 
     def prepared(self, change=False):
-        from learning_cycle import propose, check, apply
+        from learning_cycle import apply, check, propose
         target = self.project / '.agents/skills/example/SKILL.md'
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text('---\nname: example\ndescription: test\n---\nVerify.\n', encoding='utf-8')

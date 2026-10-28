@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+
 from learning_project import initialize, read_config, write_json
 from learning_tagging import configure, validate
 from learning_telemetry import assess
