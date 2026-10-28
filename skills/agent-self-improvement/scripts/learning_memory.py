@@ -393,7 +393,13 @@ def session_context(conn, project, client, session, limit=200, cursor=None):
     return {"client": client, "session_id": session, "coverage": "unknown",
             "limitations": "Bounded page of a captured-session snapshot; follow next_cursor. Capture may be incomplete.",
             "next_cursor": next_cursor, "snapshot_complete": not more,
-            "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3]) for r in rows]}
+            "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3],
+                            capture_metadata=event_metadata(conn, r[0])) for r in rows]}
+
+
+def event_metadata(conn, event_id):
+    row = conn.execute("SELECT received_at,source_timestamp,id_quality,truncated,content_missing FROM event_metadata WHERE event_id=?", (event_id,)).fetchone()
+    return dict(zip(('received_at', 'source_timestamp', 'id_quality', 'truncated', 'content_missing'), row)) if row else {'status': 'unknown_legacy'}
 
 
 def evidence_issues(record):
@@ -589,8 +595,10 @@ def main():
             cmd.add_argument("--project-id")
             cmd.add_argument("--name")
         if name == "configure":
-            cmd.add_argument("--repository", required=True)
+            cmd.add_argument("--repository")
             cmd.add_argument("--sync-on-finish", choices=("yes", "no"))
+            cmd.add_argument("--event-limit", type=int)
+            cmd.add_argument("--database-limit-mib", type=int)
         if name in {"context", "record", "export", "import", "snapshot"}:
             cmd.add_argument("--file", required=True)
         if name == "context":
@@ -612,15 +620,24 @@ def main():
         else:
             pid = binding(conn, args.project)
             if args.command == "configure":
-                remote = configure(conn, pid, args.repository)
+                if not args.repository and args.sync_on_finish != "no" and args.event_limit is None and args.database_limit_mib is None:
+                    raise ValueError("Provide --repository or explicitly decline with --sync-on-finish no")
+                remote = configure(conn, pid, args.repository) if args.repository else None
                 from learning_project import read_config, write_json
-                config_path = Path(args.project).resolve() / '.agents/learning/project.json'
+                config_path = Path(args.state).resolve() / 'project.json'
                 if config_path.is_file() and Path(args.state).resolve() == config_path.parent:
                     config = read_config(args.project)
-                    config['remote'] = remote
+                    if remote:
+                        config['remote'] = remote
                     if args.sync_on_finish is not None:
                         config['sync_on_finish'] = args.sync_on_finish == 'yes'
                         config['auto_sync'] = config['sync_on_finish']
+                        config['snapshot_choice'] = 'enabled' if config['sync_on_finish'] else 'declined'
+                    for name, value in [('events', args.event_limit), ('database_bytes', args.database_limit_mib * 1024 * 1024 if args.database_limit_mib is not None else None)]:
+                        if value is not None:
+                            if value <= 0:
+                                raise ValueError("Storage limits must be positive")
+                            config.setdefault('storage_limits', {})[name] = value
                     write_json(config_path, config)
                 elif args.sync_on_finish == 'yes':
                     raise ValueError("Completion-stage sync requires initialized project-local state")

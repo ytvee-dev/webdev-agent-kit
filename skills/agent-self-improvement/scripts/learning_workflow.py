@@ -8,9 +8,10 @@ from contextlib import closing
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
-from learning_exchange import drain, enqueue
+from learning_exchange import drain, enqueue, snapshot_enabled
 from learning_memory import records
 from learning_project import read_config, write_json
+from learning_state import state_root
 from learning_telemetry import cleanup, export, export_selected, prepare, timestamp
 
 
@@ -33,7 +34,7 @@ def verification_plan(paths, changes=()):
 
 def curate_queue(project):
     """Index raw sessions for separate semantic curation; never invent a lesson."""
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     config = read_config(project)
     with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn, conn:
         conn.execute('CREATE TABLE IF NOT EXISTS curation_queue (client TEXT, session_id TEXT, event_count INTEGER, last_event TEXT, state TEXT, PRIMARY KEY(client, session_id))')
@@ -56,7 +57,7 @@ def maintenance(project):
 
 
 def begin(project, ids):
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     config = read_config(project)
     with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:
         latest = {r['id']: r for r in records(conn, config['project_id'])}
@@ -115,7 +116,7 @@ def finish(project, run):
     proposal_path = analysis.get('proposal')
     if not proposal_path:
         raise ValueError('Run lacks its exact linked proposal')
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     path = Path(proposal_path).resolve(strict=True)
     if not path.is_relative_to(state / 'proposals'):
         raise ValueError('Proposal is outside this project store')
@@ -125,7 +126,7 @@ def finish(project, run):
 
 
 def finish_locked(project, run):
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     # Validate path before reading any caller-controlled location.
     import re
     if not re.fullmatch(r'[a-zA-Z0-9_-]{1,80}', run):
@@ -204,9 +205,29 @@ def finish_locked(project, run):
     if not (folder / 'completion.json').exists():
         write_json(folder / 'completion.json', {'decisions': decisions, 'finished_at': datetime.now(UTC).isoformat(),
                    'reflection': reflection})
-    snapshot = enqueue(project)
-    sync = drain(project)
-    return {'snapshot': snapshot, 'sync': sync, 'cleanup': cleanup(project, run)}
+    from learning_health import usage
+    # Completion is already durable; exchange failures cannot invalidate learning.
+    try:
+        link = folder / 'snapshot.json'
+        config = read_config(project)
+        if not snapshot_enabled(config):
+            snapshot = {'status': 'disabled'}
+        elif link.exists():
+            snapshot = dict(json.loads(link.read_text(encoding='utf-8')), status='linked')
+        else:
+            snapshot = enqueue(project)
+            if snapshot.get('snapshot'):
+                write_json(link, {'snapshot': snapshot['snapshot'], 'repository': config.get('remote')})
+        sync = drain(project) if snapshot.get('status') != 'disabled' else {'status': 'disabled'}
+    except (ValueError, OSError, sqlite3.Error) as exc:
+        snapshot = {'status': 'pending', 'reason': type(exc).__name__}
+        sync = {'status': 'pending_retry', 'retry': 'next_learning_or_explicit_request'}
+    try:
+        storage = usage(project)
+    except (OSError, ValueError, sqlite3.Error) as exc:
+        storage = {'status': 'unverified', 'reason': type(exc).__name__}
+    return {'learning': 'completed', 'snapshot': snapshot, 'sync': sync,
+            'storage': storage, 'cleanup': cleanup(project, run)}
 
 
 def main():
@@ -216,6 +237,7 @@ def main():
     parser.add_argument('--record', action='append', default=[])
     parser.add_argument('--run')
     parser.add_argument('--file')
+    parser.add_argument("--state", type=Path)
     args = parser.parse_args()
     if args.command == 'maintenance':
         parser.error('Background maintenance is disabled; explicit workflow stages only.')
@@ -223,7 +245,7 @@ def main():
         from learning_exchange import restore
         print(json.dumps(restore(args.project, args.file)))
         return
-    functions = {'maintenance': maintenance, 'snapshot': enqueue, 'sync': lambda project: drain(project, explicit=True), 'archive': export, 'curation-queue': curate_queue}
+    functions = {'maintenance': maintenance, 'snapshot': lambda project: enqueue(project, explicit=True), 'sync': lambda project: drain(project, explicit=True), 'archive': export, 'curation-queue': curate_queue}
     result = begin(args.project, args.record) if args.command == 'begin' else finish(args.project, args.run) if args.command == 'finish' else functions[args.command](args.project)
     print(json.dumps(result, ensure_ascii=False))
 

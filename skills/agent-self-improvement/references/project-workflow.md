@@ -160,7 +160,9 @@ actions is `environment_unverified`, even when the child exits with code zero.
 
 Complete `analysis.json`; call `learning_workflow.py finish --project <root> --run
 <id>`. It checks per-record decisions and used markers, writes a completion receipt,
-queues an immutable snapshot, tries private-repository upload and removes scratch.
+creates a snapshot and attempts upload only with the saved snapshot consent,
+checks storage pressure and removes scratch. Refusal or unresolved consent creates
+no automatic snapshot or outbox job. Completion remains durable if upload fails.
 Before completion, fill `reflection` with nonempty `checked`, `failed`,
 `limitations`, and `next_improvement` (or a reason none is warranted).
 Finish verifies the exact proposal, source versions, installed rules and matching
@@ -171,7 +173,7 @@ For an already `applying`/`applied` legacy proposal with a verifiable journal,
 source snapshot and checks, explicit `apply --approve --recover-legacy` repairs
 that interrupted application only. It cannot start a new legacy edit or fabricate
 a run analysis. Unverifiable legacy proposals require reassessment.
-Failed network operations leave the outbox pending. Retry `sync` only at an explicit user request,
+Failed network operations leave the outbox pending. Retry pending delivery at the next requested learning completion or explicit `sync`,
 never reapply a patch to repair an upload failure.
 
 Private uploads use bounded batches (up to 100 artifacts and normally 4 MiB),
@@ -182,8 +184,8 @@ the outbox intact; explicit retry discovers already committed objects.
 API contract: [Git trees](https://docs.github.com/en/rest/git/trees#create-a-tree)
 and [reference updates](https://docs.github.com/en/rest/git/refs#update-a-reference).
 
-Snapshots are under `<project-name>--<portable-id>/snapshots/`; telemetry under that
-same project folder's `archive/YYYY-MM/`. They contain structured revisions and
+Snapshots are under `<project-name>--<portable-id>/snapshots/`. Langfuse archives
+remain local and are excluded from snapshot exchange. Snapshots contain structured revisions and
 processing history including used markers. Raw event transcripts and credentials
 are excluded. Redaction can reduce evidence completeness; the local DB is canonical.
 Remote snapshots are audit/restore artifacts, not automatic authorization to apply
@@ -202,11 +204,14 @@ and rollback instructions; observed regressions prevent promotion.
 All commands are relative to this skill's `scripts` directory. `learning_workflow.py`
 supports explicitly requested `curation-queue`, `archive`, `begin`, `finish`,
 `snapshot`, `sync` and `restore`. Legacy `maintenance` and `auto` fail without
-side effects. No timers, background workers or unattended retries are allowed.
+side effects. No timers or background workers are allowed. Retries occur only within requested
+learning completion or an explicit sync command.
 Hooks only capture authorized local experience. Fetch telemetry during requested
 learning (or an explicit archive request); retention does not authorize a schedule.
-After requested learning, `finish` attempts the configured private sync in the
-same invocation. A failed upload remains pending until an explicit retry.
+After requested learning, `finish` attempts private snapshot sync in the same
+invocation only with saved consent. Failures remain pending for the next requested
+learning completion or explicit retry. Each completed run links its immutable
+snapshot hash; repeating finish must preserve that link.
 `learning_memory.py configure --repository OWNER/REPO --sync-on-finish yes`
 records explicit completion consent. Both `sync_on_finish: true` and `auto_sync`
 are required; old `auto_sync` alone is not consent. Explicit `sync` can send a

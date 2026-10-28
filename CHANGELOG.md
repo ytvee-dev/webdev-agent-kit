@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/learning-capture-audit]]'
     - '[[docs/release/1.9.0-plan]]'
     - '[[docs/install/project-memory]]'
     - '[[docs/release/1.8.0-plan]]'
@@ -39,6 +40,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
+- Consent-gated completion snapshots, destination-bound retries and capture health.
+- Project storage-pressure checks with explicit cleanup approval at configured limits.
+
 - Consolidated STEM learning workflows on the current Kit: scoped evidence,
   diagnosis, risk-based evaluation, processing receipts, recovery and snapshots.
   Full transferable-source inventory documents preservation and approved changes.
@@ -50,6 +54,9 @@ Use this changelog for source-bundle and distribution-target changes that affect
   Release publication includes both versioned and stable-name Kimi archives.
 
 ### Changed
+
+- Resolve the same selected learning store across capture, analysis and exchange.
+- Snapshot exchange excludes telemetry archives; refusal creates no automatic snapshots.
 
 - New project memory defaults to local storage with capture, telemetry and exchange
   off and no preset remote. Existing choices and legacy history are preserved.

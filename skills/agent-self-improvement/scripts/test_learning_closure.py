@@ -67,6 +67,10 @@ class ClosureTests(unittest.TestCase):
 
     def test_linked_completion_is_idempotent_and_offline_queue_survives(self):
         analysis, folder, args = self.prepared(change=True)
+        self.config.update(auto_sync=True, sync_on_finish=True, remote='example/private-memory')
+        write_json(self.state / 'project.json', self.config)
+        with closing(open_store(self.state)) as conn, conn:
+            conn.execute('UPDATE memory_projects SET sync_repository=?', ('example/private-memory',))
         with patch('learning_workflow.drain', return_value={'status': 'pending_retry'}):
             first = finish(self.project, analysis['run_id'])
             receipt = (folder / 'completion.json').read_bytes()
@@ -78,6 +82,33 @@ class ClosureTests(unittest.TestCase):
             self.assertEqual(conn.execute('SELECT COUNT(*) FROM learning_decisions').fetchone()[0], count)
         self.assertEqual(first['sync']['status'], 'pending_retry')
         self.assertTrue(list((self.state / 'outbox').glob('*.json')))
+
+    def test_no_change_completion_respects_refusal_and_checks_pressure(self):
+        analysis, folder, args = self.prepared()
+        self.config.update(snapshot_choice='declined', storage_limits={'events': 50000, 'database_bytes': 1})
+        write_json(self.state / 'project.json', self.config)
+        with patch('learning_workflow.drain') as upload:
+            result = finish(self.project, analysis['run_id'])
+            upload.assert_not_called()
+        self.assertEqual(result['learning'], 'completed')
+        self.assertEqual(result['snapshot']['status'], 'disabled')
+        self.assertTrue(result['storage']['cleanup_permission_required'])
+        self.assertFalse(list((self.state / 'snapshots').glob('*')))
+        self.assertFalse(list((self.state / 'outbox').glob('*')))
+
+    def test_snapshot_link_survives_repeated_completion(self):
+        analysis, folder, args = self.prepared()
+        self.config.update(auto_sync=True, sync_on_finish=True, remote='example/private-memory')
+        write_json(self.state / 'project.json', self.config)
+        with closing(open_store(self.state)) as conn, conn:
+            conn.execute('UPDATE memory_projects SET sync_repository=?', ('example/private-memory',))
+        with patch('learning_workflow.drain', return_value={'status': 'pending_retry'}):
+            result = finish(self.project, analysis['run_id'])
+            linked = (folder / 'snapshot.json').read_bytes()
+            with patch('learning_workflow.enqueue', side_effect=AssertionError('must reuse snapshot')):
+                repeated = finish(self.project, analysis['run_id'])
+        self.assertEqual((folder / 'snapshot.json').read_bytes(), linked)
+        self.assertEqual(result['snapshot']['snapshot'], repeated['snapshot']['snapshot'])
 
     def test_changed_rule_or_missing_reflection_blocks_finish(self):
         analysis, folder, args = self.prepared()

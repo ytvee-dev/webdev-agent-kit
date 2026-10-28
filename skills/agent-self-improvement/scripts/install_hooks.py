@@ -10,6 +10,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from learning_state import state_root
+
 EVENTS = ("UserPromptSubmit", "PostToolUse", "Stop")
 LABELS = {
     "UserPromptSubmit": "Record user prompt",
@@ -33,8 +35,10 @@ def bridge_path():
     return Path(__file__).resolve().parents[1] / "assets" / "integrations" / "hook_bridge.py"
 
 
-def handler(event):
+def handler(event, state=None):
     args = [sys.executable, str(bridge_path()), "--client", "codex"]
+    if state is not None:
+        args.extend(["--state", str(state)])
     return {
         "type": "command",
         "statusMessage": LABELS[event],
@@ -54,13 +58,13 @@ def is_owned(entry):
         return False
     # The generated portable command uses shlex.join even on Windows. Match
     # its exact argument structure, independent of the Python executable path.
-    return (len(args) == 4 and args[1] == str(bridge_path())
-            and args[2:] == ["--client", "codex"]
+    return ((len(args) == 4 or (len(args) == 6 and args[4] == "--state")) and args[1] == str(bridge_path())
+            and args[2:4] == ["--client", "codex"]
             and (Path(args[0].replace("\\", "/")).name.lower().startswith("python")
                  or args[0] == sys.executable))
 
 
-def update_hooks(path, remove):
+def update_hooks(path, remove, state=None):
     if path.exists():
         obj = json.loads(path.read_text(encoding="utf-8-sig"))
         if not isinstance(obj, dict):
@@ -74,7 +78,7 @@ def update_hooks(path, remove):
     if not isinstance(hooks, dict):
         raise ValueError("Existing hooks property must be an object")
     for event in EVENTS:
-        expected = handler(event)
+        expected = handler(event, state)
         groups = hooks.get(event, [])
         if not isinstance(groups, list):
             raise ValueError(f"Existing hook groups must be an array: {event}")
@@ -98,6 +102,9 @@ def update_hooks(path, remove):
                     removed_owned = True
                     continue
                 entry = dict(entry)
+                if state is not None:
+                    entry["command"] = expected["command"]
+                    entry["commandWindows"] = expected["commandWindows"]
                 label = entry.get("statusMessage")
                 if needs_default_label(label, event):
                     entry["statusMessage"] = LABELS[event]
@@ -114,6 +121,7 @@ def update_hooks(path, remove):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
+    parser.add_argument("--state", type=Path)
     parser.add_argument("--approve", action="store_true")
     parser.add_argument("--remove", action="store_true")
     args = parser.parse_args()
@@ -121,7 +129,9 @@ def main():
     target = root / ".codex" / "hooks.json"
     if target.is_symlink() or target.parent.is_symlink():
         raise ValueError("Hook target cannot be a symlink")
-    data, changed = update_hooks(target, args.remove)
+    resolved = state_root(root, args.state)
+    selected = resolved
+    data, changed = update_hooks(target, args.remove, selected)
     if not args.approve:
         print(json.dumps({"target": str(target), "changed": changed,
                           "approved": False, "preview": data}, ensure_ascii=False))

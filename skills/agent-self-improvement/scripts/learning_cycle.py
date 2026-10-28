@@ -17,6 +17,7 @@ from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 
 from learning import default_root, ensure_local_store, project_id
+from learning_state import state_root
 
 MAX_CONTEXT_BYTES = 512 * 1024
 
@@ -295,7 +296,7 @@ def propose(args):
     state = Path(args.state).expanduser().resolve()
     if (state / 'project.json').exists() or (Path(args.project).resolve() / '.agents/learning/project.json').exists():
         project = Path(args.project).resolve()
-        if state != project / '.agents/learning' or Path(args.repo).resolve() not in {project, project / '.agents'}:
+        if state != state_root(project) or Path(args.repo).resolve() not in {project, project / '.agents'}:
             raise ValueError('Project run must use its own state and installed rules; Kit transfer is separate')
         from learning_run import load, validate_analysis, verify_rules
         _, analysis = load(args.project, getattr(args, 'run', None))

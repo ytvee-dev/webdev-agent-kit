@@ -25,10 +25,25 @@ Images, PDFs and other artifacts are stored as SHA-256-addressed bytes via expli
 
 Integration templates are available under `assets/integrations/` and are **not installed by extracting this skill**. OpenCode's sample uses a session-idle SDK snapshot; Codex/Claude sample hooks only capture exposed data, without asserting complete transcripts or byte-level attachment parity. ChatGPT web and mobile require authorized manual export/import and cannot be continuously scraped by this skill.
 
-Retain the original local source IDs; never create fake chat URLs. The state root lives outside the Kit and outside host Git repositories by default.
+Retain the original local source IDs; never create fake chat URLs. Resolve state consistently: explicit `--state`, then `AGENT_LEARNING_STATE`, otherwise
+`.agents/learning` under the selected project. Keep state ignored by Git and
+protected during Kit updates, including explicitly configured external stores.
 
 Session pause is keyed by project, client and session and blocks both event and
 attachment ingestion. It never enables collection or erases existing data. The
 Codex/Claude bridge marks tool output beyond its 3000-character excerpt as
 truncated and marks missing assistant text explicitly. These remain partial
 observations. Use the memory contract for quality audit and raw-only retention.
+
+## Delivery Integrity
+
+Capture stores source time separately from receipt time when the client provides
+it. Stable client event IDs deduplicate retries; events without IDs receive fresh
+synthetic IDs and explicitly lack retry deduplication. Identical text is not proof
+of a duplicate. Truncation and missing content remain visible in context pages.
+
+Hooks bound input and execution time and never block primary work on capture
+failure. Content-free local health reports last receipt, duplicate/skip/error
+counts and reasons. Missing diagnostics means unverified, never healthy. Hooks
+must not store exception text, credentials or message contents in health records.
+Capture does not invoke analysis, snapshots, remote exchange or Langfuse setup.

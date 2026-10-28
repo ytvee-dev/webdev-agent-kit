@@ -8,13 +8,14 @@ from pathlib import Path
 from learning_memory import records
 from learning_processing import digest
 from learning_project import read_config
+from learning_state import state_root
 
 
 def load(project, run):
     if not isinstance(run, str) or not re.fullmatch(r'[a-zA-Z0-9_-]{1,80}', run):
         raise ValueError('A valid --run from begin is required')
     project = Path(project).resolve()
-    path = project / '.agents/learning/runs' / run / 'analysis.json'
+    path = state_root(project) / 'runs' / run / 'analysis.json'
     analysis = json.loads(path.read_text(encoding='utf-8'))
     if analysis['run_id'] != run or analysis['project_id'] != read_config(project)['project_id']:
         raise ValueError('Run belongs to a different project')
@@ -23,7 +24,7 @@ def load(project, run):
 
 def sources(project, ids):
     config = read_config(project)
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     with closing(sqlite3.connect((state / 'experience.sqlite3').as_uri() + '?mode=ro', uri=True)) as conn:
         latest = {r['id']: r for r in records(conn, config['project_id'])}
         found, events = {}, {}
@@ -85,7 +86,7 @@ def validate_analysis(project, analysis):
             raise ValueError('Cite archived context or explain its absence')
         for ref in refs:
             relative = Path(ref['path'])
-            archive = Path(project).resolve() / '.agents/learning/archive'
+            archive = state_root(project) / 'archive'
             path = (archive / relative).resolve(strict=True)
             if not path.is_relative_to(archive) or path.suffix != '.json':
                 raise ValueError('Invalid archive reference')
@@ -128,7 +129,7 @@ def verify_binding(proposal, state, require_link=True):
             raise ValueError('Legacy proposal lacks a run binding; explicit reassessment required')
         return
     project = Path(binding['project']).resolve()
-    if Path(state).resolve() != project / '.agents/learning':
+    if Path(state).resolve() != state_root(project):
         raise ValueError('Run and state do not belong to the same project')
     _, analysis = load(project, binding['run_id'])
     if require_link and analysis.get('proposal') != str(Path(state).resolve() / 'proposals' / (proposal['id'] + '.json')):

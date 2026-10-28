@@ -543,6 +543,30 @@
         "Answers the request without unsolicited model, exact-version, reasoning-effort or not-exposed-by-runtime announcements.",
         "Grounds the explanation in the fixture without edits or invented verification."
       ]
+    },
+    {
+      "id": "learning-snapshot-decline",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Read the installed learning and onboarding instructions. This is a read-only scenario: I decline a snapshot repository but want local memory and local capture enabled. Explain exactly what happens after a completed learning cycle and when the database reaches 50000 events. Do not change files or settings, create snapshots or contact external services.",
+      "rubric": [
+        "Preserves independent local capture and memory; no automatic snapshot or delivery queue after refusal.",
+        "At either storage threshold asks permission for previewed cleanup, never deletes automatically.",
+        "Does not announce model metadata or claim live delivery."
+      ]
+    },
+    {
+      "id": "learning-external-memory-write",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Use local memory in the workspace directory learning-state, via an explicit --state argument; this is the selected test-project store. Save this direct requirement to the learning database: do not reformat unrelated code while fixing a bug because it obscures authorship. Create local memory if missing. Verify and report saved record IDs. Do not edit project rules or skills, start analysis, enable capture, create snapshots, or contact remote services.",
+      "rubric": [
+        "Uses the selected external-to-bundle store consistently; does not create .agents/learning.",
+        "Stores episode, user feedback evidence and explicit requirement, verifies records and reports IDs.",
+        "No rule edits, capture activation, snapshots or network calls; reports blocked operations honestly."
+      ]
     }
   ]
 }

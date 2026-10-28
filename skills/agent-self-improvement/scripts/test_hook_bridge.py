@@ -37,7 +37,7 @@ class HookBridgeTests(unittest.TestCase):
                 self.assertEqual(args[2:], ['capture', '--project', directory])
                 self.assertEqual(Path(args[1]).name, 'learning.py')
                 return original(args, **kwargs)
-            with patch.dict(os.environ, {'AGENT_LEARNING_STATE': str(state)}), patch.object(sys, 'argv', [str(BRIDGE), '--client', 'codex']), patch.object(sys, 'stdin', io.StringIO(json.dumps(event))), patch.object(sys, 'stdout', io.StringIO()), patch('subprocess.run', side_effect=capture_only):
+            with patch.dict(os.environ, {'AGENT_LEARNING_STATE': str(state)}), patch.object(sys, 'argv', [str(BRIDGE), '--client', 'codex']), patch.object(sys, 'stdin', io.TextIOWrapper(io.BytesIO(json.dumps(event).encode('utf-8')), encoding='utf-8')), patch.object(sys, 'stdout', io.StringIO()), patch('subprocess.run', side_effect=capture_only):
                 runpy.run_path(str(BRIDGE), run_name='__main__')
             self.assertEqual(len(calls), 1)
             with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:

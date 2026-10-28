@@ -1,4 +1,4 @@
-﻿"""Inspect or remove a legacy project task. Scheduling is no longer supported."""
+"""Inspect or remove a legacy project task. Scheduling is no longer supported."""
 import argparse
 import json
 import os
@@ -7,6 +7,7 @@ from pathlib import Path
 
 from learning_memory import identifier
 from learning_project import read_config, write_json
+from learning_state import state_root
 
 
 def install(project):
@@ -49,7 +50,7 @@ def remove(project):
         if result['status'] != 'absent':
             raise ValueError('Task removal not verified')
     outcome = dict(result, status='disabled', scheduling_allowed=False)
-    write_json(Path(project).resolve() / '.agents/learning/scheduler.json', outcome)
+    write_json(state_root(project) / 'scheduler.json', outcome)
     return outcome
 
 
@@ -57,6 +58,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', nargs='?', default='install', choices=('status', 'remove', 'install'))
     parser.add_argument('--project', required=True)
+    parser.add_argument("--state", type=Path)
     args = parser.parse_args()
     try:
         print(json.dumps({'status': inspect, 'remove': remove, 'install': install}[args.command](args.project)))

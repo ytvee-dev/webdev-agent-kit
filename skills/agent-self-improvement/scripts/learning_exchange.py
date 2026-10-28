@@ -6,21 +6,30 @@ import re
 import sqlite3
 import subprocess
 import time
+import uuid
 from contextlib import closing
 from pathlib import Path
 
 from learning_memory import gh, records, repository
 from learning_processing import lock
 from learning_project import read_config, write_json
+from learning_state import state_root
 from learning_telemetry import sanitize
 
 
-def enqueue(project):
+def snapshot_enabled(config):
+    return config.get("snapshot_choice") != "declined" and config.get("auto_sync") is True and config.get("sync_on_finish") is True
+
+
+def enqueue(project, *, explicit=False):
     project = Path(project).resolve()
-    state = project / '.agents/learning'
+    state = state_root(project)
     if not (state / 'project.json').exists():
         return {'status': 'unconfigured'}
     config = read_config(project)
+    if not explicit and not snapshot_enabled(config):
+        return {"status": "disabled", "choice": config.get("snapshot_choice", "unresolved")}
+    remote = configured_remote(project, config)
     with lock(state, state / 'exchange'):
         with closing(sqlite3.connect((state / 'experience.sqlite3').as_uri() + '?mode=ro', uri=True)) as conn:
             conn.execute('BEGIN')
@@ -56,22 +65,26 @@ def enqueue(project):
         digest = hashlib.sha256(content).hexdigest()
         snapshot = state / 'snapshots' / (digest + '.json')
         if not snapshot.exists():
-            snapshot.write_bytes(content)
-        paths = [snapshot] + sorted((state / 'archive').glob('*/*.json'))
+            temporary = snapshot.with_suffix('.' + uuid.uuid4().hex + '.tmp')
+            temporary.write_bytes(content)
+            temporary.replace(snapshot)
+        elif snapshot.read_bytes() != content:
+            raise ValueError('Existing snapshot bytes differ from its content hash')
+        paths = [snapshot]
         count = 0
         for path in paths:
             relative = path.relative_to(state).as_posix()
-            key = hashlib.sha256(relative.encode()).hexdigest()
+            key = hashlib.sha256((remote + ':' + config['remote_folder'] + ':' + relative).encode()).hexdigest()
             if (state / 'outbox' / (key + '.sent')).exists():
                 continue
-            write_json(state / 'outbox' / (key + '.json'), {'path': relative,
+            write_json(state / 'outbox' / (key + '.json'), {'path': relative, 'repository': remote, 'folder': config['remote_folder'],
                        'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
             count += 1
         return {'status': 'queued', 'snapshot': digest, 'pending': count}
 
 
 def configured_remote(project, config):
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     with closing(sqlite3.connect((state / 'experience.sqlite3').as_uri() + '?mode=ro', uri=True)) as conn:
         row = conn.execute('SELECT sync_repository FROM memory_projects WHERE id=?', (config['project_id'],)).fetchone()
     if not row or not row[0]:
@@ -82,12 +95,28 @@ def configured_remote(project, config):
     return remote
 
 
+def pending_jobs(state, remote, folder, limit):
+    eligible = []
+    for entry in sorted((state / 'outbox').glob('*.json')):
+        if entry.stat().st_size > 8192:
+            continue
+        try:
+            job = json.loads(entry.read_text(encoding='utf-8'))
+        except (ValueError, OSError):
+            continue
+        if job.get('repository') == remote and job.get('folder') == folder and job.get('path', '').startswith('snapshots/'):
+            eligible.append(entry)
+            if limit is not None and len(eligible) >= max(1, min(limit, 100)):
+                break
+    return eligible
+
+
 def drain(project, api=gh, limit=100, *, explicit=False):
     if api is gh:
         return drain_batch(project, api, limit, explicit=explicit)
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     config = read_config(project)
-    if not explicit and not (config.get('auto_sync') and config.get('sync_on_finish') is True):
+    if not explicit and not snapshot_enabled(config):
         return {'status': 'disabled'}
     remote = configured_remote(project, config)
     folder = config['remote_folder']
@@ -101,14 +130,16 @@ def drain(project, api=gh, limit=100, *, explicit=False):
         try:
             if api('repos/' + remote).get('private') is not True:
                 raise ValueError('Remote must be private')
-            for entry in sorted((state / 'outbox').glob('*.json'))[:max(1, min(limit, 100))]:
+            for entry in pending_jobs(state, remote, folder, limit):
                 if time.monotonic() >= deadline:
                     break
                 stage = 'read_local_artifact'
-                job = json.loads(entry.read_text())
+                job = json.loads(entry.read_text(encoding='utf-8'))
+                if job.get('repository') != remote or job.get('folder') != folder or not job.get('path', '').startswith('snapshots/'):
+                    continue
                 relative = Path(job['path'])
                 path = (state / relative).resolve(strict=True)
-                if not path.is_relative_to(state.resolve()) or relative.parts[0] not in {'snapshots', 'archive'}:
+                if not path.is_relative_to(state.resolve()) or relative.parts[0] not in {'snapshots'}:
                     raise ValueError('Outbox path outside approved artifacts')
                 data = path.read_bytes()
                 if hashlib.sha256(data).hexdigest() != job['sha256'] or len(data) > 8 * 1024 * 1024:
@@ -131,21 +162,23 @@ def drain(project, api=gh, limit=100, *, explicit=False):
                 entry.rename(entry.with_suffix('.sent'))
                 uploaded += 1
             remaining = len(list((state / 'outbox').glob('*.json')))
-            result = {'status': 'pending_retry' if remaining else 'synced', 'uploaded': uploaded, 'remaining': remaining}
+            held = remaining - len(pending_jobs(state, remote, folder, None))
+            result = {'status': 'pending_retry' if remaining > held else 'blocked_review' if held else 'synced',
+                      'held_for_destination_review': held, 'uploaded': uploaded, 'remaining': remaining}
         except (ValueError, OSError, TimeoutError, subprocess.TimeoutExpired) as exc:
             result = {'status': 'pending_retry', 'uploaded': uploaded, 'stage': stage,
                       'reason': getattr(exc, 'code', 'remote_conflict' if str(exc) == 'Remote artifact conflict; no overwrite' else type(exc).__name__),
                       'remaining': len(list((state / 'outbox').glob('*.json'))),
-                      'retry': 'explicit_request_only', 'create_error': create_error}
+                      'retry': 'next_learning_or_explicit_request', 'create_error': create_error}
         write_json(state / 'sync-status.json', result)
         return result
 
 
 def drain_batch(project, api=gh, limit=100, *, explicit=False):
     """Create one bounded immutable tree commit; verify reachable blob IDs before ack."""
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     config = read_config(project)
-    if not explicit and not (config.get('auto_sync') and config.get('sync_on_finish') is True):
+    if not explicit and not snapshot_enabled(config):
         return {'status': 'disabled'}
     remote, folder = configured_remote(project, config), config['remote_folder']
     if not re.fullmatch(r'[A-Za-z0-9_.-]+', folder) or folder in {'.', '..'}:
@@ -157,6 +190,19 @@ def drain_batch(project, api=gh, limit=100, *, explicit=False):
         if time.monotonic() >= deadline:
             raise TimeoutError('Batch time budget exhausted')
         return transport(*args, **kwargs)
+    # A newly selected empty private repository has no Git tree yet. Bootstrap
+    # one immutable snapshot with the Contents API, retaining exact readback.
+    try:
+        meta = api(route)
+        if meta.get('private') is not True:
+            raise ValueError('Remote must be private')
+        if meta.get('size') == 0 and api(route + '/branches?per_page=1') == []:
+            return drain(project, api=api, limit=1, explicit=explicit)
+    except (ValueError, OSError, TimeoutError, subprocess.TimeoutExpired) as exc:
+        result = {'status': 'pending_retry', 'uploaded': 0, 'stage': 'repository_metadata',
+                  'reason': type(exc).__name__, 'retry': 'next_learning_or_explicit_request'}
+        write_json(state / 'sync-status.json', result)
+        return result
     stage, uploaded = 'repository_metadata', 0
     with lock(state, state / 'exchange'):
         try:
@@ -182,12 +228,14 @@ def drain_batch(project, api=gh, limit=100, *, explicit=False):
             stage = 'read_remote_tree'
             head, base_tree, existing = tree_at_head()
             jobs, additions, size = [], [], 0
-            for entry in sorted((state / 'outbox').glob('*.json'))[:max(1, min(limit, 100))]:
+            for entry in pending_jobs(state, remote, folder, limit):
                 stage = 'read_local_artifact'
                 job = json.loads(entry.read_text(encoding='utf-8'))
+                if job.get('repository') != remote or job.get('folder') != folder or not job.get('path', '').startswith('snapshots/'):
+                    continue
                 relative = Path(job['path'])
                 path = (state / relative).resolve(strict=True)
-                if not path.is_relative_to(state) or relative.parts[0] not in {'snapshots', 'archive'}:
+                if not path.is_relative_to(state) or relative.parts[0] not in {'snapshots'}:
                     raise ValueError('Outbox path outside approved artifacts')
                 data = path.read_bytes()
                 if len(data) > 8 * 1024 * 1024 or hashlib.sha256(data).hexdigest() != job['sha256']:
@@ -225,22 +273,22 @@ def drain_batch(project, api=gh, limit=100, *, explicit=False):
                 entry.rename(entry.with_suffix('.sent'))
                 uploaded += 1
             remaining = len(list((state / 'outbox').glob('*.json')))
-            result = {'status': 'pending_retry' if remaining else 'synced', 'uploaded': uploaded,
+            held = remaining - len(pending_jobs(state, remote, folder, None))
+            result = {'status': 'pending_retry' if remaining > held else 'blocked_review' if held else 'synced',
+                      'held_for_destination_review': held, 'uploaded': uploaded,
                       'remaining': remaining, 'batch_bytes': size, 'delivery': 'verified_git_blobs',
-                      'retry': 'explicit_request_only'}
+                      'retry': 'next_learning_or_explicit_request'}
         except (ValueError, OSError, KeyError, TimeoutError, subprocess.TimeoutExpired) as exc:
             result = {'status': 'pending_retry', 'uploaded': uploaded, 'stage': stage,
                       'reason': getattr(exc, 'code', 'remote_conflict' if str(exc) == 'Remote artifact conflict; no overwrite' else type(exc).__name__),
-                      'remaining': len(list((state / 'outbox').glob('*.json'))), 'retry': 'explicit_request_only'}
+                      'remaining': len(list((state / 'outbox').glob('*.json'))), 'retry': 'next_learning_or_explicit_request'}
         write_json(state / 'sync-status.json', result)
         return result
 
 
 def notify(project):
-    """Local dirty marker only; explicit sync or requested completion does network I/O."""
-    state = Path(project).resolve() / '.agents/learning'
-    if (state / 'project.json').is_file():
-        write_json(state / 'queue/sync.json', {'requested': True})
+    """Recording has no exchange side effects; finish reads the current database."""
+    return {'status': 'local_only'}
 
 
 def restore(project, snapshot):
@@ -248,7 +296,7 @@ def restore(project, snapshot):
     from learning_memory import open_store, save_records
     from learning_processing import connect
     project = Path(project).resolve()
-    state = project / '.agents/learning'
+    state = state_root(project)
     config = read_config(project)
     path = Path(snapshot).resolve(strict=True)
     content = path.read_bytes()
