@@ -58,14 +58,16 @@ without running instruction improvement. Curation never applies an instruction.
 1. Inspect `learning_cycle.py status`; resume unfinished work. Select a bounded
    topic, skills and eligible record IDs. Do not close an unselected queue.
 2. Run `learning_workflow.py begin --project <root> --record <id>` (repeat IDs,
-   maximum 32). It exports available project telemetry once in paginated windows,
-   builds a monthly local cache and creates `runs/<id>/analysis.json`.
+   maximum 32). It derives disjoint UTC event-day windows from source events and
+   linked evidence, exports only those windows with shared page/time limits,
+   reuses completed window receipts and builds a bounded filtered local cache and creates `runs/<id>/analysis.json`.
 3. Run `learning_tagging.py configure/validate` at setup. The existing tracing
    hook reads project-local `.codex/langfuse.json`; preserve its other settings.
    Add `webdev-agent-kit`, a friendly project tag and stable `project-id:<id>`.
    Validate returned trace tags, reject conflicting stable IDs and environment
    overrides. Preserve the confirmed friendly tag for historical export. A new
-   project is configured automatically; live readiness requires actual readback.
+   project starts with tracing disabled; configure only after connection consent.
+   Live readiness requires readback of the current probe, not older traces.
    Other adapters may use a verified `telemetry.project_metadata_key/value`.
    The shared Langfuse account ID is not the code project's ID.
    Missing mapping, connection, quota or data yields DB-only analysis. An HTTP 429
@@ -205,8 +207,11 @@ Hooks only capture authorized local experience. Fetch telemetry during requested
 learning (or an explicit archive request); retention does not authorize a schedule.
 After requested learning, `finish` attempts the configured private sync in the
 same invocation. A failed upload remains pending until an explicit retry.
-`auto_sync` in project config enables that completion-stage upload only; it is
-not permission to launch a worker. `learning_schedule.py status|remove` inspects
+`learning_memory.py configure --repository OWNER/REPO --sync-on-finish yes`
+records explicit completion consent. Both `sync_on_finish: true` and `auto_sync`
+are required; old `auto_sync` alone is not consent. Explicit `sync` can send a
+configured snapshot on request. SQLite owns the verified repository address;
+a conflicting legacy address blocks sending. No setting authorizes a worker. `learning_schedule.py status|remove` inspects
 or removes the legacy task; installation is disabled.
 
 Sources: [Google SRE postmortems](https://sre.google/workbook/postmortem-culture/),

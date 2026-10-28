@@ -5,13 +5,13 @@ import json
 import sqlite3
 import uuid
 from contextlib import closing
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from learning_exchange import drain, enqueue
 from learning_memory import records
 from learning_project import read_config, write_json
-from learning_telemetry import cleanup, export, prepare, timestamp
+from learning_telemetry import cleanup, export, export_selected, prepare, timestamp
 
 
 def verification_plan(paths, changes=()):
@@ -65,25 +65,37 @@ def begin(project, ids):
     if any(i not in latest or latest[i]['kind'] not in {'lesson', 'requirement'} for i in ids):
         raise ValueError('Work must reference known lessons or requirements')
     selected = [latest[i] for i in ids]
-    months = sorted({timestamp(r['created_at']).strftime('%Y-%m') for r in selected})
-    # Source-event dates, not just curation timestamps, determine restoration windows.
+    dates = set()
     with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:
         for item in selected:
             episode = latest.get(item['episode_id'], {})
             for event_id in episode.get('payload', {}).get('source_event_ids', []):
                 row = conn.execute('SELECT timestamp FROM events WHERE id=? AND project_id=?', (event_id, config['capture_project_id'])).fetchone()
                 if row:
-                    months.append(timestamp(row[0]).strftime('%Y-%m'))
+                    dates.add(timestamp(row[0]).date())
+            for evidence_id in item['payload'].get('evidence_ids', []):
+                evidence = latest.get(evidence_id, {})
+                observed = evidence.get('payload', {}).get('observed_at')
+                if observed:
+                    try:
+                        dates.add(timestamp(observed).date())
+                    except (ValueError, TypeError):
+                        pass  # Unknown event dates do not justify a wider request.
+    windows = [(datetime.combine(day, datetime.min.time(), UTC).isoformat(),
+                datetime.combine(day + timedelta(days=1), datetime.min.time(), UTC).isoformat()) for day in sorted(dates)]
+    months = sorted({day.strftime('%Y-%m') for day in dates})
     run = uuid.uuid4().hex
     from learning_processing import LearningBusy
     try:
-        telemetry = export(project)
+        telemetry = export_selected(project, windows)
     except LearningBusy:
         telemetry = {'database_only': True, 'coverage_complete': False, 'reason': 'busy'}
-    cache = prepare(project, run, sorted(set(months)))
+    cache = prepare(project, run, months, windows=windows)
+    if not cache['entries']:
+        telemetry['database_only'] = True
     artifact = {'run_id': run, 'project_id': config['project_id'], 'record_ids': ids,
                 'record_digests': {r['id']: hashlib.sha256(json.dumps(r, sort_keys=True).encode()).hexdigest() for r in selected},
-                'telemetry': telemetry, 'cache': cache,
+                'telemetry': telemetry, 'cache': cache, 'event_windows': windows,
                 'analysis_required': {i: {'scope': 'project_requirement' if latest[i]['kind'] == 'requirement' else latest[i]['payload'].get('scope'),
                     'source_assessment': None, 'expected_vs_actual': None, 'causal_hypotheses': None,
                     'relevant_rules': None, 'measurable_goal': None, 'alternatives_and_sources': None,
@@ -211,7 +223,7 @@ def main():
         from learning_exchange import restore
         print(json.dumps(restore(args.project, args.file)))
         return
-    functions = {'maintenance': maintenance, 'snapshot': enqueue, 'sync': drain, 'archive': export, 'curation-queue': curate_queue}
+    functions = {'maintenance': maintenance, 'snapshot': enqueue, 'sync': lambda project: drain(project, explicit=True), 'archive': export, 'curation-queue': curate_queue}
     result = begin(args.project, args.record) if args.command == 'begin' else finish(args.project, args.run) if args.command == 'finish' else functions[args.command](args.project)
     print(json.dumps(result, ensure_ascii=False))
 

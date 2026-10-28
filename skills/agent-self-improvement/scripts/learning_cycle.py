@@ -16,7 +16,7 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 
-from learning import default_root, project_id
+from learning import default_root, ensure_local_store, project_id
 
 MAX_CONTEXT_BYTES = 512 * 1024
 
@@ -778,6 +778,8 @@ def complete_processing(args, proposal, path, repo):
 def processing_status(args):
     state = Path(args.state).expanduser().resolve()
     db = state / "experience.sqlite3"
+    if not db.is_file():
+        return {"records": [], "state": str(state), "reason": "Project memory not initialized"}
     with closing(sqlite3.connect(db.as_uri() + "?mode=ro", uri=True)) as conn:
         if not conn.execute("SELECT 1 FROM sqlite_master WHERE name='learning_decisions'").fetchone():
             return {"records": [], "reason": "No processing receipts recorded"}
@@ -904,6 +906,8 @@ def main():
     a.add_argument("--accept-unevaluated", action="store_true",
                    help="Explicit manual bypass when no live held-out benchmark passed")
     args = parser.parse_args()
+    if args.cmd == "propose":
+        ensure_local_store(args.project, args.state)
     if args.cmd == "status":
         answer = processing_status(args)
     elif args.cmd == "propose":

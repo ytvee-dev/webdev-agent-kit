@@ -15,7 +15,7 @@ class TelemetryTests(unittest.TestCase):
         initialize(self.project)
         self.state = self.project / '.agents/learning'
         config = read_config(self.project)
-        config['telemetry'].update(required_tags=[], project_metadata_key='project', project_metadata_value='stem')
+        config['telemetry'].update(enabled=True, required_tags=[], project_metadata_key='project', project_metadata_value='stem')
         write_json(self.state / 'project.json', config)
         self.now = datetime(2026, 10, 27, tzinfo=UTC)
 

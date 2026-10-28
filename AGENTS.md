@@ -63,7 +63,9 @@ Load in this order, stopping when the next safe action is clear:
 4. Verified project instructions and only the affected `project/**` facts.
 5. The smallest matching `skills/**/SKILL.md` and only references it requires for the active slice.
 
-Do not load every skill, reference, rule, overlay, README or target for routing. Consult `common/prompt-intent-routing-rules.md` only for unclear workflow weight. `tool-capabilities-manifest.json` defines needs; callable native tools can satisfy them. Names and configuration do not prove availability.
+Load narrowly. Use `common/prompt-intent-routing-rules.md` for unclear intent.
+`tool-capabilities-manifest.json` defines needs; callable tools, not names or
+configuration, establish availability.
 
 ## Skill Discovery
 
@@ -78,7 +80,7 @@ Select skills by name and description; explicit invocation is optional. Each `SK
 - Build: `frontend-architecture-planner` defines ownership; `greenfield-project-builder` plans a first vertical slice; `frontend-layout-implementer` implements an approved spec in its target stack.
 - Quality: `frontend-bugfix-debugger` fixes defects; `frontend-refactor-surgeon` preserves behavior; `frontend-linter-manager` runs or repairs scoped lint; `frontend-visual-qa` checks rendering; `frontend-quality-reviewer` reviews independently.
 - Context and tooling: `project-onboarding-adapter` initializes pointers and local facts; `project-context-adapter` refreshes them; `mcp-toolchain-manager` maps tool capabilities; `pattern-library-manager` maintains reusable patterns; `agent-rules-skill-author` maintains this bundle.
-- Learning: `agent-self-improvement` (opt-in).
+- Learning: `agent-self-improvement` saves explicitly requested experience to the learning database, including natural-language requests. Never substitute project-rule edits.
 - Feedback: `webdev-feedback` files requested issues. Updates: `webdev-kit-updater` preserves local changes.
 
 ## Change Boundaries
@@ -89,6 +91,10 @@ Use targeted source or platform documentation only when current facts affect the
 
 ## Verification And Output
 
-Run the smallest relevant existing check for the changed surface. Bound retries, change strategy after a failed approach, and never claim a check, tool, screenshot, or result without evidence. Report exact blocked checks when no honest fallback exists.
+Omit routine model/version/effort announcements; include only on request or for
+model diagnostics. Preserve verified trace/evaluation metadata.
+
+Run relevant existing checks, bound retries, change failed approaches and report
+blocked checks. Never claim tools, screenshots or results without evidence.
 
 Apply `common/token-economy-rules.md`. Return only facts that affect understanding, confidence, or the next action. For changed work, default to `Changed`, `Verified`, and `Blocked` when applicable; lightweight final answers stay within 180 words. Omit request echo, skill names, workflow narration, empty sections, raw logs, and irrelevant skipped-work notes; never hide errors, unknowns, blocked verification, or approval needs.

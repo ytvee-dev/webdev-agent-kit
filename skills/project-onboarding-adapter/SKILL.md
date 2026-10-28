@@ -126,9 +126,12 @@ Read targeted README sections only when they help identify project intent, setup
 
 ## Learning Setup During Adaptation
 
-For the optional choice of no Langfuse, Cloud, or local/self-hosted deployment,
-follow `references/langfuse-installation.md`. Keep that installation decision
-separate from the copied project-learning workflow and capture consent.
+Every full adaptation must reconcile the Langfuse choice using
+`references/langfuse-installation.md`: reuse a saved decision or offer connection
+versus decline. Offer existing credentials; otherwise open the private credential
+file for the user and wait for completion or refusal. After consent, install the
+supported integration and hooks, configure project tags and verify ingestion.
+Keep this decision separate from local learning capture and private sync.
 
 During full adaptation or re-adaptation, reconcile the existing learning profile,
 recording state and client integration. Follow

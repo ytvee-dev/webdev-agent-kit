@@ -380,7 +380,7 @@
     },
     {
       "id": "project-onboarding-adapter.adapt-command",
-      "prompt": "\u0430\u0434\u0430\u043f\u0442\u0438\u0440\u0443\u0439\u0441\u044f",
+      "prompt": "адаптируйся",
       "workflow_level": "Deep Workflow",
       "expected_primary_skill": "project-onboarding-adapter",
       "should_trigger": [
@@ -715,6 +715,38 @@
         "Preserve publication intent and read-only diagnostic boundaries."
       ],
       "reason": "Route the requested action without conflating app implementation, feedback and setup."
+    },
+    {
+      "id": "agent-self-improvement.remember-database",
+      "prompt": "Запиши себе в базу: не переформатировать строки вне исправления, чтобы сохранять авторство кода.",
+      "workflow_level": "Lightweight Workflow",
+      "expected_primary_skill": "agent-self-improvement",
+      "should_trigger": [
+        "agent-self-improvement"
+      ],
+      "should_not_trigger": [
+        "agent-rules-skill-author"
+      ],
+      "risk_notes": [
+        "Persist local structured memory; no policy rewrite, automatic analysis or remote sync."
+      ],
+      "reason": "Explicit natural-language experience storage does not require naming the skill."
+    },
+    {
+      "id": "agent-self-improvement.remember-mistake",
+      "prompt": "Save this mistake for learning: the previous fix changed unrelated formatting.",
+      "workflow_level": "Lightweight Workflow",
+      "expected_primary_skill": "agent-self-improvement",
+      "should_trigger": [
+        "agent-self-improvement"
+      ],
+      "should_not_trigger": [
+        "agent-rules-skill-author"
+      ],
+      "risk_notes": [
+        "Persist local structured memory; no policy rewrite, automatic analysis or remote sync."
+      ],
+      "reason": "Explicit natural-language experience storage does not require naming the skill."
     }
   ]
 }

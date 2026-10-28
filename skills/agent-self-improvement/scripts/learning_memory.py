@@ -13,7 +13,7 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
-from learning import create_store, default_root, project_id, redact
+from learning import create_store, default_root, ensure_local_store, project_id, redact
 
 VERSION = 2
 KINDS = {"episode", "evidence", "requirement", "finding", "lesson", "evaluation", "application"}
@@ -352,11 +352,48 @@ def write_json(file, value):
     path.chmod(0o600)
 
 
-def session_context(conn, project, client, session):
-    rows = conn.execute("SELECT id,kind,content,timestamp FROM events WHERE project_id=? AND client=? AND session_id=? ORDER BY timestamp,rowid", (project_id(project), client, session)).fetchall()
-    if not rows:
+def curated_event_ids(conn, project):
+    tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if not {"memory_bindings", "memory_records"} <= tables:
+        return set()
+    try:
+        pid = binding(conn, project)
+    except ValueError:
+        return set()
+    latest = {r['id']: r for r in records(conn, pid)}
+    return {event for item in latest.values() if item['kind'] == 'episode'
+            and item['payload'].get('curation_state') in {'reviewed', 'lesson_created', 'no_lesson'}
+            for event in item['payload'].get('source_event_ids', [])}
+
+
+def session_context(conn, project, client, session, limit=200, cursor=None):
+    if not 1 <= limit <= 500:
+        raise ValueError("Context limit must be 1..500")
+    pid = project_id(project)
+    scope = [pid, client, session]
+    if cursor:
+        try:
+            saved = json.loads(base64.urlsafe_b64decode(cursor))
+            if saved['scope'] != scope or not isinstance(saved['ceiling'], int):
+                raise ValueError("Cursor belongs to another session")
+            ceiling, after_time, after_id = saved['ceiling'], saved['time'], saved['row']
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError("Invalid context cursor") from exc
+    else:
+        ceiling = conn.execute("SELECT COALESCE(MAX(rowid),0) FROM events WHERE project_id=? AND client=? AND session_id=?", scope).fetchone()[0]
+        after_time, after_id = '', 0
+    rows = conn.execute("SELECT id,kind,content,timestamp,rowid FROM events WHERE project_id=? AND client=? AND session_id=? AND rowid<=? AND (timestamp>? OR (timestamp=? AND rowid>?)) ORDER BY timestamp,rowid LIMIT ?",
+                        scope + [ceiling, after_time, after_time, after_id, limit + 1]).fetchall()
+    if not rows and not cursor:
         raise ValueError("No captured events for this project/client/session")
-    return {"client": client, "session_id": session, "coverage": "unknown", "limitations": "All available recorded events; host capture may be incomplete or truncated. Verify against available chat before claiming complete_available.", "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3]) for r in rows]}
+    more = len(rows) > limit
+    rows = rows[:limit]
+    next_cursor = (base64.urlsafe_b64encode(json.dumps(dict(scope=scope, ceiling=ceiling,
+                   time=rows[-1][3], row=rows[-1][4])).encode()).decode() if more else None)
+    return {"client": client, "session_id": session, "coverage": "unknown",
+            "limitations": "Bounded page of a captured-session snapshot; follow next_cursor. Capture may be incomplete.",
+            "next_cursor": next_cursor, "snapshot_complete": not more,
+            "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3]) for r in rows]}
 
 
 def evidence_issues(record):
@@ -553,17 +590,21 @@ def main():
             cmd.add_argument("--name")
         if name == "configure":
             cmd.add_argument("--repository", required=True)
+            cmd.add_argument("--sync-on-finish", choices=("yes", "no"))
         if name in {"context", "record", "export", "import", "snapshot"}:
             cmd.add_argument("--file", required=True)
         if name == "context":
             cmd.add_argument("--client", required=True)
             cmd.add_argument("--session", required=True)
+            cmd.add_argument("--limit", type=int, default=200)
+            cmd.add_argument("--cursor")
         if name == "recall":
             cmd.add_argument("--query", required=True)
             cmd.add_argument("--covered-by", action="append", default=[], help="Inspected installed policy ref@revision; omit to retain incorporated lessons")
         if name == "sync":
             cmd.add_argument("--direction", choices=("push", "pull"), required=True)
     args = parser.parse_args()
+    ensure_local_store(args.project, args.state, getattr(args, "project_id", None))
     conn = open_store(args.state)
     try:
         if args.command == "bind":
@@ -571,11 +612,23 @@ def main():
         else:
             pid = binding(conn, args.project)
             if args.command == "configure":
-                result = {"repository": configure(conn, pid, args.repository), "mode": "manual"}
+                remote = configure(conn, pid, args.repository)
+                from learning_project import read_config, write_json
+                config_path = Path(args.project).resolve() / '.agents/learning/project.json'
+                if config_path.is_file() and Path(args.state).resolve() == config_path.parent:
+                    config = read_config(args.project)
+                    config['remote'] = remote
+                    if args.sync_on_finish is not None:
+                        config['sync_on_finish'] = args.sync_on_finish == 'yes'
+                        config['auto_sync'] = config['sync_on_finish']
+                    write_json(config_path, config)
+                elif args.sync_on_finish == 'yes':
+                    raise ValueError("Completion-stage sync requires initialized project-local state")
+                result = {"repository": remote, "mode": "configured_no_upload"}
             elif args.command == "context":
-                value = session_context(conn, args.project, args.client, args.session)
+                value = session_context(conn, args.project, args.client, args.session, args.limit, args.cursor)
                 write_json(args.file, value)
-                result = {"file": args.file, "events": len(value["events"]), "local_only": True}
+                result = {"file": args.file, "events": len(value["events"]), "next_cursor": value["next_cursor"], "local_only": True}
             elif args.command in {"record", "import"}:
                 value = read_json(args.file)
                 count = save_records(conn, pid, value) if args.command == "record" else import_package(conn, pid, value)

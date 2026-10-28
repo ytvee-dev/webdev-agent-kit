@@ -1,0 +1,70 @@
+{
+  "version": "1.9.0",
+  "scope": "Kit and PR only; no installed host updates or release publication",
+  "baseline": "e48ea262595959611f2fc58063167af05dbf3d20",
+  "tests": {
+    "learning": "91 tests passed locally",
+    "package": "validate_skill_pack.py passed including source/generated targets, schemas, context budgets, synthetic runner and archive fixtures",
+    "lint": "Ruff, Markdown, links and changed YAML; Windows checkout CRLF in unchanged workflow files is checked canonically in Linux CI"
+  },
+  "live_trials": [
+    {
+      "trial": "baseline-memory",
+      "status": "blocked",
+      "reason": "Client denied writes under .agents; no database record created.",
+      "runner_status": "completed-unverified",
+      "changed_files": [],
+      "runtime": "Codex CLI 0.164.0",
+      "source_dirty": null,
+      "fixture_manifest_sha256": "2ead9150e4e57835ad275b8a2b0e909b6adbdd79f7caaa3851d18cf6f7b62809"
+    },
+    {
+      "trial": "candidate-memory",
+      "status": "blocked",
+      "reason": "Selected memory workflow and attempted local-only initialization; protected .agents write denied. No substitute rule edits or false success.",
+      "runner_status": "completed-unverified",
+      "changed_files": [],
+      "runtime": "Codex CLI 0.164.0",
+      "source_dirty": true,
+      "fixture_manifest_sha256": "2caf1683b2e70e1bba9e618ae7fe8f4e76f8ed42db2c0beac3adb2e7f7563715"
+    },
+    {
+      "trial": "candidate-keys",
+      "status": "passed-response-only",
+      "reason": "Read-only scenario described choice, private-file opening, waiting, refusal and pending readback. Real file opening/install not exercised.",
+      "runner_status": "completed-unverified",
+      "changed_files": [],
+      "runtime": "Codex CLI 0.164.0",
+      "source_dirty": true,
+      "fixture_manifest_sha256": "2caf1683b2e70e1bba9e618ae7fe8f4e76f8ed42db2c0beac3adb2e7f7563715"
+    },
+    {
+      "trial": "candidate-decline",
+      "status": "passed-response-only",
+      "reason": "Read-only scenario preserved per-project consent, shared keys and separate identities; no external writes.",
+      "runner_status": "completed-unverified",
+      "changed_files": [],
+      "runtime": "Codex CLI 0.164.0",
+      "source_dirty": true,
+      "fixture_manifest_sha256": "2caf1683b2e70e1bba9e618ae7fe8f4e76f8ed42db2c0beac3adb2e7f7563715"
+    },
+    {
+      "trial": "candidate-output",
+      "status": "passed",
+      "reason": "Inspected fixture and answered without routine model/version/effort announcements; no file changes.",
+      "runner_status": "completed-unverified",
+      "changed_files": [],
+      "runtime": "Codex CLI 0.164.0",
+      "source_dirty": true,
+      "fixture_manifest_sha256": "2caf1683b2e70e1bba9e618ae7fe8f4e76f8ed42db2c0beac3adb2e7f7563715"
+    }
+  ],
+  "limitations": [
+    "Memory write was blocked by client file policy; no live persistence pass claimed.",
+    "Read-only onboarding responses do not establish native editor opening, hook trust, restart or real trace ingestion.",
+    "Trials retain their exact prepared candidate hashes; later helper changes are covered by regressions, not a final-head live certification.",
+    "No real Langfuse account authentication or ingestion trial performed."
+  ],
+  "ci": "Use PR #86 checks for the exact head; prior green checks are not reused.",
+  "release": "Remote draft assets from e48ea26 are stale. Rebuild local artifacts; do not merge/tag/publish."
+}

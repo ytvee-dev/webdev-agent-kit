@@ -55,6 +55,26 @@ class ProjectMemoryTests(unittest.TestCase):
     def sample(self):
         return [self.record(kind, kind) for kind in ('episode', 'evidence', 'finding', 'lesson')]
 
+    def test_explicit_feedback_records_requirement_without_editing_rules(self):
+        rules = self.project / 'AGENTS.md'
+        rules.write_text('Preserve existing project rules.\n', encoding='utf-8')
+        before = rules.read_bytes()
+        items = [self.record(kind, kind) for kind in ('episode', 'evidence', 'requirement')]
+        items[0]['payload'].update(task='Remember formatting correction',
+                                   feedback='Do not reformat unrelated lines; preserve code authorship.')
+        items[1]['payload'].update(source_type='user_requirement',
+                                   summary='Skip unrelated formatting changes.')
+        items[2]['payload'].update(statement='Do not reformat lines outside the requested fix.',
+                                   authority='user', applicability='Scoped project fixes',
+                                   evidence_ids=['evidence'])
+        with patch('subprocess.run', side_effect=AssertionError('No external work for a memory write')):
+            self.assertEqual(save_records(self.conn, self.pid, items), 3)
+            saved = records(self.conn, self.pid)
+            self.assertEqual({r['id'] for r in saved}, {'episode', 'evidence', 'requirement'})
+            self.assertEqual(save_records(self.conn, self.pid, items), 0)
+        self.assertEqual(rules.read_bytes(), before)
+        self.assertFalse((self.project / '.codex').exists())
+
     def test_roundtrip_idempotence_and_project_isolation(self):
         sample = self.sample()
         self.assertEqual(save_records(self.conn, self.pid, sample), 4)

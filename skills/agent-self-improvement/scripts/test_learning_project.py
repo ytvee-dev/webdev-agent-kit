@@ -8,10 +8,41 @@ from unittest.mock import patch
 
 from learning import capture, default_root, project_id, set_mode
 from learning_memory import bind, open_store
-from learning_project import initialize
+from learning_project import initialize, read_config, write_json
 
 
 class ProjectStateTests(unittest.TestCase):
+    def test_local_only_creates_memory_without_tracing_or_sync(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp)
+            result = initialize(project, local_only=True)
+            config = read_config(project)
+            self.assertFalse(config['auto_sync'])
+            self.assertFalse(config['telemetry']['enabled'])
+            self.assertIsNone(config['remote'])
+            self.assertFalse((project / '.codex').exists())
+            with closing(open_store(project / '.agents/learning')) as conn:
+                self.assertEqual(conn.execute('SELECT recording FROM projects').fetchone()[0], 0)
+            before = (project / '.agents/learning/project.json').read_bytes()
+            self.assertEqual(initialize(project, local_only=True)['result'], 'already_initialized')
+            self.assertEqual((project / '.agents/learning/project.json').read_bytes(), before)
+            self.assertEqual(result['tagging']['status'], 'not_requested')
+
+    def test_local_only_preserves_existing_opt_in_and_project_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp)
+            initialize(project)
+            from learning_tagging import configure
+            configure(project)
+            config = read_config(project)
+            config['telemetry']['enabled'] = True
+            write_json(project / '.agents/learning/project.json', config)
+            before = read_config(project)
+            tracing = (project / '.codex/langfuse.json').read_bytes()
+            initialize(project, local_only=True)
+            self.assertEqual(read_config(project), before)
+            self.assertEqual((project / '.codex/langfuse.json').read_bytes(), tracing)
+
     def test_migration_roundtrip_and_idempotence(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

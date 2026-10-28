@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Self Improvement"
   short_description: "Project memory and verified instruction improvement"
-  default_prompt: "Use $agent-self-improvement for project-scoped instruction improvement and configured private snapshots; do not enable collection or synchronization without my authorization."
+  default_prompt: "Use $agent-self-improvement to save explicitly requested project experience or perform requested instruction improvement; recording alone never enables capture, tracing, analysis or synchronization."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

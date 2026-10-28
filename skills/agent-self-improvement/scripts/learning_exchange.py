@@ -70,14 +70,26 @@ def enqueue(project):
         return {'status': 'queued', 'snapshot': digest, 'pending': count}
 
 
-def drain(project, api=gh, limit=100):
+def configured_remote(project, config):
+    state = Path(project).resolve() / '.agents/learning'
+    with closing(sqlite3.connect((state / 'experience.sqlite3').as_uri() + '?mode=ro', uri=True)) as conn:
+        row = conn.execute('SELECT sync_repository FROM memory_projects WHERE id=?', (config['project_id'],)).fetchone()
+    if not row or not row[0]:
+        raise ValueError('Snapshot repository is unverified; use memory configure')
+    remote = repository(row[0])
+    if config.get('remote') and config['remote'] != remote:
+        raise ValueError('Conflicting snapshot repository; explicitly reconfigure before exchange')
+    return remote
+
+
+def drain(project, api=gh, limit=100, *, explicit=False):
     if api is gh:
-        return drain_batch(project, api, limit)
+        return drain_batch(project, api, limit, explicit=explicit)
     state = Path(project).resolve() / '.agents/learning'
     config = read_config(project)
-    if not config.get('auto_sync'):
+    if not explicit and not (config.get('auto_sync') and config.get('sync_on_finish') is True):
         return {'status': 'disabled'}
-    remote = repository(config['remote'])
+    remote = configured_remote(project, config)
     folder = config['remote_folder']
     if not re.fullmatch(r'[A-Za-z0-9_.-]+', folder) or folder in {'.', '..'}:
         raise ValueError('Invalid remote project folder')
@@ -129,13 +141,13 @@ def drain(project, api=gh, limit=100):
         return result
 
 
-def drain_batch(project, api=gh, limit=100):
+def drain_batch(project, api=gh, limit=100, *, explicit=False):
     """Create one bounded immutable tree commit; verify reachable blob IDs before ack."""
     state = Path(project).resolve() / '.agents/learning'
     config = read_config(project)
-    if not config.get('auto_sync'):
+    if not explicit and not (config.get('auto_sync') and config.get('sync_on_finish') is True):
         return {'status': 'disabled'}
-    remote, folder = repository(config['remote']), config['remote_folder']
+    remote, folder = configured_remote(project, config), config['remote_folder']
     if not re.fullmatch(r'[A-Za-z0-9_.-]+', folder) or folder in {'.', '..'}:
         raise ValueError('Invalid remote project folder')
     route = 'repos/' + remote

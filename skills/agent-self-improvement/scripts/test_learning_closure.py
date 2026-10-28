@@ -41,7 +41,7 @@ class ClosureTests(unittest.TestCase):
                 evidence['payload'].update(source_type='test', source_ref='fixture-test', availability='local_only',
                     summary='Observed failure', source_revision='fixture-v1', procedure='Check outcome', result='failed')
                 save_records(conn, self.config['project_id'], [evidence])
-        with patch('learning_workflow.export', return_value={'database_only': True}):
+        with patch('learning_workflow.export_selected', return_value={'database_only': True}):
             analysis = begin(self.project, ['lesson'])
         folder = self.state / 'runs' / analysis['run_id']
         analysis['analysis_required']['lesson'] = {k: 'fixture diagnosis' for k in analysis['analysis_required']['lesson']}
@@ -193,7 +193,7 @@ class ClosureTests(unittest.TestCase):
         with closing(connect(self.state)) as conn, conn:
             conn.execute('INSERT INTO learning_decisions (project_id,repo,record_id,record_digest,skill_digest,outcome,proposal,updated_at,reason,recheck_when,details) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
                 (self.config['capture_project_id'], str(self.project), 'lesson', 'stale', 'stale', 'applied', 'old.json', '2020', 'old', '', '{"used":true}'))
-        with patch('learning_workflow.export', return_value={'database_only': True}):
+        with patch('learning_workflow.export_selected', return_value={'database_only': True}):
             analysis = begin(self.project, ['lesson'])
         folder = self.state / 'runs' / analysis['run_id']
         analysis['analysis_required']['lesson'] = {key: 'reviewed fixture' for key in analysis['analysis_required']['lesson']}
@@ -206,6 +206,9 @@ class ClosureTests(unittest.TestCase):
         self.assertFalse((folder / 'completion.json').exists())
 
     def test_busy_optional_telemetry_preserves_db_run(self):
+        config = read_config(self.project)
+        config['telemetry'].update(enabled=True, required_tags=['project:test'])
+        write_json(self.state / 'project.json', config)
         with lock(self.state, self.state / 'telemetry'):
             result = begin(self.project, ['lesson'])
         self.assertTrue(result['telemetry']['database_only'])

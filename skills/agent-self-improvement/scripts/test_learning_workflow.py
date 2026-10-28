@@ -1,6 +1,8 @@
 import json
+import sqlite3
 import tempfile
 import unittest
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
 
@@ -16,6 +18,11 @@ class WorkflowTests(unittest.TestCase):
         self.project = Path(self.tmp.name)
         initialize(self.project)
         self.state = self.project / '.agents/learning'
+        config = read_config(self.project)
+        config.update(remote='example/private-memory', auto_sync=True, sync_on_finish=True)
+        write_json(self.state / 'project.json', config)
+        with closing(sqlite3.connect(self.state / 'experience.sqlite3')) as conn, conn:
+            conn.execute('UPDATE memory_projects SET sync_repository=?', ('example/private-memory',))
 
     def test_background_entrypoints_fail_before_work(self):
         from learning_schedule import install

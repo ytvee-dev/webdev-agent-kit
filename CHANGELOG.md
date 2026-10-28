@@ -39,27 +39,31 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Added
 
-- Literal transfer of the STEM self-improvement package: capture, structured
-  memory, per-record processing, run binding, behavioral checks, recovery,
-  Langfuse tagging/export, private snapshots and explicit workflow completion.
-- Optional Langfuse setup choices during adaptation: disabled, Cloud, or
-  local/self-hosted deployment. This supplements the copied STEM instructions.
+- Consolidated STEM learning workflows on the current Kit: scoped evidence,
+  diagnosis, risk-based evaluation, processing receipts, recovery and snapshots.
+  Full transferable-source inventory documents preservation and approved changes.
+- Optional Langfuse adaptation with credential reuse or an opened private key file,
+  explicit connection/decline, supported hooks, stable project tags and probe readback.
+- Natural-language memory writes with local storage, readback and no implicit
+  rule edits, analysis, capture, tracing or synchronization.
 - Kimi Code distribution, installation guide and archive validation.
 
 ### Changed
 
-- The requested STEM source supersedes the earlier interpreted candidate.
-  Its original defaults are retained, including enabled telemetry and private
-  synchronization and the original repository address. Adaptation must reconcile
-  these with the user's selected configuration before network operations.
-- Instruction bodies remain unchanged. User-authorized technical exceptions
-  are import cleanup, statement formatting, an unused binding and Windows/UTF-8
-  test fixtures. Source/package hashes record each exception.
-- Earlier claims of incremental raw triage, bounded context, revised project-path
-  resolution and telemetry-window caching no longer describe this candidate.
-  Their corresponding acceptance results must not be reused.
-- Background learning remains disabled as in STEM; explicit requests control
-  the copied workflow. Live model improvement is not established by unit tests.
+- New project memory defaults to local storage with capture, telemetry and exchange
+  off and no preset remote. Existing choices and legacy history are preserved.
+- Project CLI/hook storage resolution is consistent across both project flag forms,
+  working directories and explicit overrides; migration remains project-scoped.
+- Triage skips exactly curated source events; explicit reconsideration is separate.
+  Long sessions use bounded stable pages instead of unbounded context exports.
+- Snapshot exchange uses the verified SQLite repository, rejects conflicting legacy
+  addresses and requires separate completion-stage consent. No background learning.
+- Learning telemetry queries selected event windows and reuses bounded cached data;
+  missing evidence falls back to the database without weakening acceptance criteria.
+- Routine model/version/effort boilerplate is omitted from user-facing responses.
+  Runtime/evaluation metadata stays intact. Local memory is protected during updates.
+- Source, behavior and real-service verification are reported separately; tests do
+  not claim model improvement or live client/account activation.
 
 ## 1.8.0 — 2026-10-23
 

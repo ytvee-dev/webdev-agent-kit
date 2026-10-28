@@ -1,5 +1,6 @@
 """Configure the installed tracing plugin's project-local tags and validate isolation."""
 import argparse
+import base64
 import json
 import os
 import subprocess
@@ -10,6 +11,79 @@ from pathlib import Path
 
 from learning_project import read_config, write_json
 from learning_telemetry import assess, request_page
+
+
+def effective_connection(project, global_config=None):
+    global_path = Path(global_config) if global_config else Path(os.environ.get('CODEX_HOME', Path.home() / '.codex')) / 'langfuse.json'
+    local_path = Path(project).resolve() / '.codex/langfuse.json'
+    effective = {}
+    for path in (global_path, local_path):
+        if path.is_file():
+            effective.update(json.loads(path.read_text(encoding='utf-8')))
+    conflicts = [name for name in ('TRACE_TO_LANGFUSE', 'LANGFUSE_CODEX_ENABLED', 'LANGFUSE_CODEX_TAGS') if os.environ.get(name)]
+    for name in ('public_key', 'secret_key', 'base_url'):
+        for prefix in ('LANGFUSE_', 'LANGFUSE_CODEX_'):
+            if os.environ.get(prefix + name.upper()):
+                effective[name] = os.environ[prefix + name.upper()]
+    return effective, conflicts
+
+
+def connection_status(project, global_config=None):
+    effective, conflicts = effective_connection(project, global_config)
+    public, secret = effective.get('public_key', ''), effective.get('secret_key', '')
+    placeholders = ('...', 'PLACEHOLDER', 'YOUR_', 'ВАШ_', '<', '>')
+    ready = (isinstance(public, str) and isinstance(secret, str)
+             and public.startswith('pk-lf-') and secret.startswith('sk-lf-')
+             and len(public) > 12 and len(secret) > 12
+             and not any(token in (public + secret).upper() for token in placeholders)
+             and str(effective.get('base_url', '')).startswith('https://'))
+    return {'credentials_present': ready, 'authentication': 'unverified',
+            'enabled_in_files': effective.get('enabled') is True,
+            'environment_conflicts': conflicts, 'status': 'pending_readback'}
+
+
+def verify_credentials(project, effective):
+    config = read_config(project)
+    now = datetime.now(UTC)
+    authorization = 'Basic ' + base64.b64encode((effective['public_key'] + ':' + effective['secret_key']).encode()).decode()
+    spec = dict(config['telemetry'], base_url=effective['base_url'],
+                required_tags=['project-id:' + config['project_id']], fields='core', page_size=1)
+    request_page(spec, (now - timedelta(minutes=1)).isoformat(), now.isoformat(), authorization=authorization)
+
+
+def set_connection(project, enabled, approve=False, global_config=None, authenticate=verify_credentials):
+    if not approve:
+        raise ValueError('Explicit connection or disable consent required (--approve)')
+    project = Path(project).resolve()
+    status = connection_status(project, global_config)
+    if status['environment_conflicts']:
+        raise ValueError('Resolve tracing environment overrides before changing project enablement')
+    if enabled and not status['credentials_present']:
+        raise ValueError('Missing or placeholder credentials; tracing remains unchanged')
+    if enabled:
+        effective, _ = effective_connection(project, global_config)
+        try:
+            authenticate(project, effective)
+        except (ValueError, OSError, RuntimeError):
+            set_connection(project, False, approve=True, global_config=global_config)
+            config = read_config(project)
+            config['telemetry']['connection_choice'] = 'pending_credentials'
+            write_json(project / '.agents/learning/project.json', config)
+            raise ValueError('Authentication unavailable or failed; project tracing disabled') from None
+        configure(project)
+    path = project / '.codex/langfuse.json'
+    existing = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
+    write_json(path, dict(existing, enabled=enabled))
+    config = read_config(project)
+    config['telemetry']['enabled'] = enabled
+    if enabled:
+        effective, _ = effective_connection(project, global_config)
+        config['telemetry']['base_url'] = effective['base_url']
+    config['telemetry']['connection_choice'] = 'connected' if enabled else 'declined'
+    config['telemetry']['tag_validation'] = 'pending_readback' if enabled else 'disabled'
+    write_json(project / '.agents/learning/project.json', config)
+    return {'status': 'configured_pending_readback' if enabled else 'disabled',
+            'project_id': config['project_id']}
 
 
 def configure(project):
@@ -40,7 +114,7 @@ def configure(project):
                                stable_tag=identity, historical_tag=friendly,
                                tag_validation='configured_pending_readback')
     write_json(project / '.agents/learning/project.json', config)
-    if json.loads(path.read_text())['tags'] != expected:
+    if json.loads(path.read_text(encoding='utf-8'))['tags'] != expected:
         raise ValueError('Tag configuration readback failed')
     return {'status': 'configured_pending_readback', 'tags': expected,
             'source': 'project-local configuration of existing Codex tracing Stop hook'}
@@ -55,7 +129,7 @@ def validate(project, fetch=request_page):
     strict = dict(spec, required_tags=['webdev-agent-kit', 'project-id:' + config['project_id']],
                   fields='core,basic,trace_context')
     probe_file = project / '.agents/learning/tag-probe.json'
-    probe = json.loads(probe_file.read_text()) if probe_file.exists() else None
+    probe = json.loads(probe_file.read_text(encoding='utf-8')) if probe_file.exists() else None
     cursor, seen, good, rejected = None, set(), [], 0
     exhausted = False
     deadline = time.monotonic() + 120
@@ -80,7 +154,7 @@ def validate(project, fetch=request_page):
             if good and (not probe or any(r.get('sessionId') == probe['session_id'] for r in good)):
                 break
         probe_found = bool(probe and any(r.get('sessionId') == probe['session_id'] for r in good))
-        result = {'status': 'mismatch' if rejected else 'verified' if good else 'not_found' if exhausted else 'pending',
+        result = {'status': 'mismatch' if rejected else 'verified' if probe_found else 'pending_readback' if good else 'not_found' if exhausted else 'pending',
                   'matching_observations': len(good), 'rejected': rejected,
                   'probe_status': 'found' if probe_found else 'not_found' if exhausted else 'pending',
                   'pages_checked': page + 1, 'range_exhausted': exhausted,
@@ -96,7 +170,7 @@ def probe(project, hook):
     """Exercise the existing uploader with harmless synthetic events, not a model run."""
     project = Path(project).resolve()
     hook = Path(hook).resolve(strict=True)
-    config = json.loads((project / '.codex/langfuse.json').read_text())
+    config = json.loads((project / '.codex/langfuse.json').read_text(encoding='utf-8'))
     if config.get('enabled') is False:
         raise ValueError('Tracing is explicitly disabled')
     session, turn = str(uuid.uuid4()), str(uuid.uuid4())
@@ -124,8 +198,15 @@ def probe(project, hook):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=('configure', 'validate', 'probe'))
+    parser.add_argument('command', choices=('configure', 'validate', 'probe', 'status', 'enable', 'disable'))
     parser.add_argument('--project', required=True)
     parser.add_argument('--hook')
+    parser.add_argument('--approve', action='store_true')
     args = parser.parse_args()
-    print(json.dumps(probe(args.project, args.hook) if args.command == 'probe' else (configure if args.command == 'configure' else validate)(args.project)))
+    if args.command in {'enable', 'disable'}:
+        result = set_connection(args.project, args.command == 'enable', args.approve)
+    elif args.command == 'status':
+        result = connection_status(args.project)
+    else:
+        result = probe(args.project, args.hook) if args.command == 'probe' else (configure if args.command == 'configure' else validate)(args.project)
+    print(json.dumps(result))

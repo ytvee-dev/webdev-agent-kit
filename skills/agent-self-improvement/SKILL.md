@@ -1,6 +1,6 @@
 ---
 name: agent-self-improvement
-description: "Opt-in project experience, evidence-based instruction improvement and configured private snapshots. Use for explicit learning or project-memory requests; never silently enable capture or sync."
+description: "Project memory: remember this mistake, save for learning, запиши себе в базу, сохрани для обучения, запомни эту ошибку. Requested storage/analysis/snapshots; no silent capture/sync."
 id: 'agents.skills.agent-self-improvement.skill'
 title: 'Agent Self Improvement'
 doc_type: 'skill'
@@ -40,6 +40,13 @@ Capture explicitly authorized local agent experience and turn verifiable correct
 
 When the user explicitly requests `learning on`, `learning off`, `learning status`, `learning import`, `learning run`, removal of recorded data, or an evidence-backed proposal to improve skills.
 
+Also use for natural-language requests to save experience, feedback or a constraint
+to the agent's learning database, including "remember this mistake", "save this
+for learning", "запиши себе в базу", "сохрани для обучения" and "запомни эту ошибку".
+Explicit intent is sufficient; the user need not name this skill or a CLI command.
+Follow Manual Memory Writes in `references/project-memory.md`. A storage request
+does not authorize analysis, policy edits, capture, tracing or synchronization.
+
 ## When Not To Use
 
 Do not activate for ordinary coding, general progress updates, routine retrospectives, or to silently learn from a chat. Do not assume access to ChatGPT web/mobile chat history. Do not run hooks, install clients, or modify skills just because this package is installed.
@@ -77,7 +84,7 @@ For project-local setup and improvement, follow `references/project-workflow.md`
 Keep capture, curation and instruction improvement independent. Initialize project
 state with `learning_project.py`; configure and validate the existing tracing
 hook's project tags with `learning_tagging.py configure/validate`. Never declare
-telemetry ready from configuration alone. Prepare monthly context with
+telemetry ready from configuration alone. Prepare selected event-window context with
 `learning_workflow.py begin`, complete per-record diagnosis and risk-based checks,
 then `finish` to verify receipts, snapshot, synchronize and remove temporary context.
 The legacy `maintenance` and `auto` commands are disabled. The detailed cycle

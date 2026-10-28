@@ -11,6 +11,7 @@ import sqlite3
 import sys
 import tempfile
 import uuid
+from contextlib import closing
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -30,27 +31,50 @@ def utc_now():
     return datetime.now(UTC).isoformat()
 
 
-def default_root():
-    override = os.environ.get("AGENT_LEARNING_STATE")
-    if override:
-        return Path(override).expanduser()
-    # Hooks pass --project explicitly. Existing unadapted installations retain
-    # the legacy store until their project-local migration has completed.
-    candidate = Path.cwd()
-    if "--project" in sys.argv:
-        index = sys.argv.index("--project")
-        if index + 1 < len(sys.argv):
-            candidate = Path(sys.argv[index + 1]).expanduser()
-    parents = (candidate.resolve(),) if "--project" in sys.argv else (candidate.resolve(), *candidate.resolve().parents)
-    for parent in parents:
-        local = parent / ".agents" / "learning"
-        if (local / "project.json").is_file():
-            return local
+def legacy_root():
     if sys.platform == "win32":
         return Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "agent-self-improvement"
     if sys.platform == "darwin":
         return Path.home() / "Library" / "Application Support" / "agent-self-improvement"
     return Path(os.environ.get("XDG_STATE_HOME", str(Path.home() / ".local" / "state"))) / "agent-self-improvement"
+
+
+def legacy_has_project(project):
+    database = legacy_root() / "experience.sqlite3"
+    if not database.is_file():
+        return False
+    with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as conn:
+        tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        pid = project_id(project)
+        return any(conn.execute(f"SELECT 1 FROM {table} WHERE {column}=? LIMIT 1", (pid,)).fetchone()
+                   for table, column in (("projects", "id"), ("events", "project_id"),
+                                         ("memory_bindings", "local_id")) if table in tables)
+
+
+def default_root():
+    # Parse both flag spellings before any store is opened, including hook CLIs.
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--state")
+    parser.add_argument("--project")
+    args, _ = parser.parse_known_args()
+    override = args.state or os.environ.get("AGENT_LEARNING_STATE")
+    if override:
+        return Path(override).expanduser().resolve()
+    candidate = Path(args.project).expanduser().resolve() if args.project else Path.cwd().resolve()
+    if not args.project:
+        candidate = next((p for p in (candidate, *candidate.parents)
+                          if (p / ".agents").is_dir() or (p / ".git").exists()), candidate)
+    local = candidate / ".agents/learning"
+    if not (local / "project.json").is_file() and legacy_has_project(candidate):
+        raise ValueError("Legacy project memory exists; explicitly migrate it with learning_project.py --legacy STATE")
+    return local
+
+
+def ensure_local_store(project, state, memory_id=None):
+    project = Path(project).expanduser().resolve()
+    if Path(state).resolve() == project / ".agents/learning" and not (Path(state) / "project.json").is_file():
+        from learning_project import initialize
+        initialize(project, memory_id=memory_id)
 
 
 def project_id(root):
@@ -334,12 +358,16 @@ def attach_data(conn, state, project, item):
     )
 
 
-def run_triage(conn, state, project):
+def run_triage(conn, state, project, reconsider=False):
     pid = project_id(project)
     records = conn.execute(
         "SELECT id, content, client, session_id FROM events "
         "WHERE project_id=? AND kind='user_correction' ORDER BY timestamp", (pid,)
     ).fetchall()
+    if not reconsider:
+        from learning_memory import curated_event_ids
+        covered = curated_event_ids(conn, project)
+        records = [row for row in records if row[0] not in covered]
     groups = {}
     for event_id, content, client, session in records:
         key = re.sub(r"\s+", " ", content.strip().casefold())[:180]
@@ -370,7 +398,7 @@ def run_triage(conn, state, project):
     conn.execute("INSERT INTO runs VALUES(?,?,?,?,?,?)",
                  (rid, pid, report["created_at"], len(records), len(findings), outcome))
     conn.commit()
-    return {"run_id": rid, "result": outcome, "findings": len(findings), "report": str(output)}
+    return {"run_id": rid, "result": outcome, "findings": len(findings), "evidence_events": len(records), "report": str(output)}
 
 
 def purge(conn, state, project, session=None):
@@ -438,13 +466,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", type=Path, default=default_root(), help="Private local state directory")
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("init")
+    sub.add_parser("init").add_argument("--project", default=".")
     for name in ("on", "off", "status", "sessions", "capture", "capture-batch", "import", "attach", "attach-data", "run", "purge", "pause", "resume", "retain"):
         cmd = sub.add_parser(name)
         cmd.add_argument("--project", required=True, help="Project root; must be explicitly enabled")
         if name in {"pause", "resume"}:
             cmd.add_argument("--client", required=True)
             cmd.add_argument("--session", required=True)
+        if name == "run":
+            cmd.add_argument("--reconsider", action="store_true", help="Explicitly include already curated events")
         if name == "retain":
             cmd.add_argument("--days", type=int, default=30)
             cmd.add_argument("--apply", action="store_true", help="Delete eligible raw events; default previews only")
@@ -461,6 +491,8 @@ def main():
     args = parser.parse_args()
     state = args.state.expanduser().resolve()
     from learning_memory import open_store
+    if getattr(args, "project", None):
+        ensure_local_store(args.project, state)
     conn = open_store(state)
     try:
         if args.command == "init":
@@ -478,6 +510,7 @@ def main():
                 "SELECT COUNT(*) FROM attachments WHERE project_id=?", (pid,)
             ).fetchone()[0]
             result = {"project_id": pid, "recording": opt_in(conn, args.project),
+                      "state": str(state), "database": str(state / "experience.sqlite3"),
                       "events": count, "attachments": attachments, "paused_sessions": [dict(client=r[0], session_id=r[1]) for r in conn.execute("SELECT client,session_id FROM capture_pauses WHERE project_id=?", (pid,))]}
         elif args.command == "sessions":
             pid = project_id(args.project)
@@ -511,7 +544,7 @@ def main():
         elif args.command == "attach":
             result = attach(conn, state, args.project, args.client, args.session, args.file)
         elif args.command == "run":
-            result = run_triage(conn, state, args.project)
+            result = run_triage(conn, state, args.project, args.reconsider)
         else:
             result = purge(conn, state, args.project, args.session)
         print(json.dumps(result, ensure_ascii=False))

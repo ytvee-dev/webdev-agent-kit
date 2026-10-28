@@ -73,6 +73,10 @@ Do not reduce thinking by skipping root-cause analysis, accessibility checks, se
 
 ## Output Economy
 
+Omit routine model/version/reasoning-effort announcements and unavailable-runtime
+boilerplate. Include these only when directly requested or material to diagnosing
+model configuration. This does not remove metadata from traces or evaluations.
+
 Default final reports are compact, fact-only, and evidence-first. Return only facts that affect the user's understanding, confidence, or next action.
 
 For tasks that changed or validated something, use this default shape:

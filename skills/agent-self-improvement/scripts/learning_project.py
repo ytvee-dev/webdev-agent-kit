@@ -10,7 +10,7 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
-from learning import project_id
+from learning import legacy_has_project, project_id
 from learning_memory import bind, open_store
 from learning_processing import connect, lock
 
@@ -27,11 +27,13 @@ def write_json(path, value):
     os.replace(temporary, path)
 
 
-def initialize(project, legacy=None, remote="ytvee-dev/webdev-learning-databse"):
+def initialize(project, legacy=None, remote=None, *, local_only=False, memory_id=None):
     project = Path(project).resolve(strict=True)
     target = project / ".agents/learning"
     if (target / "project.json").exists():
         return {"result": "already_initialized", "state": str(target), "config": read_config(project)}
+    if not legacy and legacy_has_project(project):
+        raise ValueError("Legacy project memory exists; provide --legacy explicitly before initialization")
     if target.exists():
         raise ValueError("Partial state exists; inspect before migration")
     local_id = project_id(project)
@@ -104,18 +106,23 @@ def initialize(project, legacy=None, remote="ytvee-dev/webdev-learning-databse")
                             copied['legacy_processing_receipts'] = len(rows)
                     old.rollback()
             if pid is None:
-                pid = bind(out, project, name=project.name)
+                pid = bind(out, project, pid=memory_id, name=project.name)
+            if memory_id and memory_id != pid:
+                raise ValueError("Explicit project identity conflicts with migrated binding")
             with out:
                 out.execute("INSERT OR IGNORE INTO projects VALUES (?,?,0)", (local_id, str(project)))
             if out.execute("PRAGMA integrity_check").fetchone()[0] != "ok" or out.execute("PRAGMA foreign_key_check").fetchall():
                 raise ValueError("Migrated database integrity failed")
         config = {"schema_version": 1, "project_id": pid, "capture_project_id": local_id,
             "name": project.name, "remote": remote, "remote_folder": project.name + "--" + pid,
-            "auto_sync": True, "telemetry": {"enabled": True, "base_url": "https://cloud.langfuse.com",
+            "auto_sync": False, "telemetry": {"enabled": False, "base_url": "https://cloud.langfuse.com",
             "authorization_env": "LANGFUSE_MCP_AUTHORIZATION", "project_metadata_key": None,
             "project_metadata_value": None, "access_days": 30, "overlap_hours": 48,
             "archive_interval_hours": 24, "max_pages": 100},
             "created_at": datetime.now(UTC).isoformat()}
+        if local_only:
+            config.update(remote=None, auto_sync=False)
+            config['telemetry']['enabled'] = False
         write_json(stage / "project.json", config)
         write_json(stage / "migration.json", {"source": str(source) if source else None,
             "counts": copied, "legacy_preserved": True, "integrity": "ok"})
@@ -123,21 +130,22 @@ def initialize(project, legacy=None, remote="ytvee-dev/webdev-learning-databse")
         for name in ("raw", "runs", "snapshots", "outbox", "archive", "queue"):
             (stage / name).mkdir(exist_ok=True)
         stage.rename(target)
-    from learning_tagging import configure
-    try:
-        tagging = configure(project)
-    except (ValueError, OSError) as exc:
-        tagging = {"status": "needs_configuration", "reason": str(exc)}
-    return {"result": "initialized", "state": str(target), "project_id": pid, "counts": copied, "tagging": tagging}
+    return {"result": "initialized", "state": str(target), "project_id": pid,
+            "counts": copied, "tagging": {"status": "not_requested"}}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
     parser.add_argument("--legacy")
-    parser.add_argument("--remote", default="ytvee-dev/webdev-learning-databse")
+    parser.add_argument("--remote", help="Legacy address hint only; verify with memory configure before exchange")
+    parser.add_argument("--local-only", action="store_true",
+                        help="Create local memory without telemetry, remote sync or tracing configuration")
     args = parser.parse_args()
-    print(json.dumps(initialize(args.project, args.legacy, args.remote)))
+    result = initialize(args.project, args.legacy, args.remote, local_only=args.local_only)
+    # Existing configurations may contain private connection details.
+    result.pop('config', None)
+    print(json.dumps(result))
 
 
 if __name__ == "__main__":

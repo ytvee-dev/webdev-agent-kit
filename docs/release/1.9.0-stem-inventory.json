@@ -1,0 +1,1958 @@
+{
+  "base_version": "1.8.0",
+  "source": "STEM host rules snapshot; project-specific state excluded",
+  "files": [
+    {
+      "path": "adapters/codex.md",
+      "source_sha256": "68cb2b33124ef30c2642c20d47e4cc1a289a06d8ec2d05dbe78aab4c63cd9bef",
+      "package_sha256": "89685f5cf9f45748b56e3f4f041351f71d8a81cff35469687fe25770346c1186",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "016d7fa313e5f9df02f64bc6633e84bba3bef52d1b1ef101fee65791959314d5"
+    },
+    {
+      "path": "AGENTS.md",
+      "source_sha256": "6d52a8874131d725b03df2c9990a0ffd5c1c6ad267d0f1cbb5b92a6f0175ca7b",
+      "package_sha256": "e2b5ced55abdd20d8a088abfa8e00b487bb5143a20f191962d1d498418da476c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "eebb9c64ef3e98b0f60688dc822aa652ee508a306b0f5886792cbcc9f930b071"
+    },
+    {
+      "path": "common/agent-loop-policy.md",
+      "source_sha256": "c355aae61cd60049e89e4e24a1500438d4c3268f3846c95db6a3bbf26a39d3df",
+      "package_sha256": "d29547b7418adcad9cb2da5f845911a91298e124d49b4cee4051356fe22bd9a7",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "79ad194254e8de4e7855f70df09cbf221b9d36866f64a3fc2f6406500832b674"
+    },
+    {
+      "path": "common/agent-operating-model.md",
+      "source_sha256": "ae0d521d16b37f3ad6b4c4aec27fdba4f16170b2e777399306939327c56f7aad",
+      "package_sha256": "b99e0fa0a4f235c06142dfabee8ae4af41f49cd66ba96794f3029adda9cdfa73",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "25a322ea764bfc7aa836ba07edf52a789b866f6ac1632786406348c348bb9a58"
+    },
+    {
+      "path": "common/anti-patterns/no-anonymous-functions.md",
+      "source_sha256": "7d5283baa22f0af8b1d5647e770c5c22f0c4c86eb765485f954f6a608b754d5c",
+      "package_sha256": "9869b644c94c7ef245cdaa99ae43a7c4f1d62d9a1062b0a8f4c7eae35c2616a9",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "52b1422f8d2eaea3d5344e2499b10438bf202cdc641ab41a98e5a54a2ad39652"
+    },
+    {
+      "path": "common/anti-patterns/no-as-const-variables.md",
+      "source_sha256": "5d73504a162ccb44b8ce3fbb65ecc049c4c9feb49fdfbfa9a029a73b284f85b3",
+      "package_sha256": "c0526ca94ed459f3c3fb22eca987544431059ce4f7ef49581c62c5dbb3232b19",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ec3110980fa77d3366c558acba11305925d474f7feb53da16688f27b6a4ef20b"
+    },
+    {
+      "path": "common/anti-patterns/no-component-loops.md",
+      "source_sha256": "646cfe81ed6a40182b9dcb8053fa91c0e1f87a88c570578c3301fd468f0958d1",
+      "package_sha256": "446199e475c17e88d5b9cb8d62f9e86ad397508d045a4cd1d7de72e50685efd7",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f7801bd3d569801d373a32f4936e92a6eae217922939bae0485192719ba2d25d"
+    },
+    {
+      "path": "common/anti-patterns/no-console-file-read-before-filesystem-mcp.md",
+      "source_sha256": "1983233aa84693f8ced052da07bc3c64fd60a15e24fa1b241985131f05eca971",
+      "package_sha256": "f4b5b5552e4b48f563eb63ac22818eb2963d3d81e5b2ff45eef093ab616bfd2d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "7b72e2c6e3cd34c378659e015d40e2c247750b4f76faef26d63eb6cab0833bc2"
+    },
+    {
+      "path": "common/anti-patterns/no-function-declarations.md",
+      "source_sha256": "02ed27a447570105c4a4bec9b65a96c0fb9c0b1e632a5efc7bb6374a87d731ce",
+      "package_sha256": "e8e17269fee3484caf12de072416ad38803269bf38c6c8c08686beea732e8935",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bd8e0e58a3994a166d1116fc3fc76c432298c9b001ff2b840d603f08bf865d4d"
+    },
+    {
+      "path": "common/anti-patterns/no-host-readme-or-docs-edits-without-approval.md",
+      "source_sha256": "3d19edf44d81892f6d2ed9c2809101c108cf980148fde9cea340fc364bc0cb15",
+      "package_sha256": "6d883f6b89571c7368f71b5f04282b05fe238b081ac8c59f4c4f49b457db7ad8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8d21747c65023e58e9119e46597170904d8f3719800f4a8c2ce31b0007773c75"
+    },
+    {
+      "path": "common/anti-patterns/no-implicit-return-types.md",
+      "source_sha256": "9092d2b389a73b41d1e80eb56f28eeb6d4a8aa536162fe45e68902f1e4ce5262",
+      "package_sha256": "24233b53f50ca1de77c7592ad835528e5b5a9ee92118b4fa379d21df1f3482bc",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "1c0168b42ee9ae33ab47e2001e59b9b19345dbfe6c26d11ee94a88ea9604dd91"
+    },
+    {
+      "path": "common/anti-patterns/no-nested-array-pipelines.md",
+      "source_sha256": "0113c6e25013132586bc299997eb4c56f813d96b2954f447d13a9c2cd55934d5",
+      "package_sha256": "4bfb65e6e386e5f5df60aafc1c6317a7a12437d8aa9a99186fa706d19ecabdaf",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "7d6f7fa324e59677a7c622fe460247edd30c475c81f7939f8c384647edb8737e"
+    },
+    {
+      "path": "common/anti-patterns/no-parallel-status-booleans.md",
+      "source_sha256": "bdfd0cbbafa472cb2192842925b3912aff559c290ccaed43b8a9828e4fc6a54d",
+      "package_sha256": "edd330a86d2c7b9eaa701d713372a9d14c3d1270ce8d79cb0583f381daf34624",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "639ae88a0d38071e02224abe47047ba930c9ca609da58e09996cdcdf4c28b776"
+    },
+    {
+      "path": "common/anti-patterns/no-render-functions.md",
+      "source_sha256": "5444e7d464a34d083fa13d4c832d5c9908f0b3b3eb5d2af28742307103dc0207",
+      "package_sha256": "2d56e07cbcfe460b0b502ae74a1c60aab1bea89a366772ce72e925fa3a1ef0a7",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f84d960384e10c58fe134d3df706dc2d8dc8a8260cc074836c54c8a1de5da29e"
+    },
+    {
+      "path": "common/anti-patterns/no-test-authoring-by-default.md",
+      "source_sha256": "ee26c725dd03f984adcbf6851ab1adc2d29962e1daf2256271db12ba25f66d33",
+      "package_sha256": "c8f17c8aca3bf6f123908b7d0e67f9df351e5fe9d6df670128136a6cff80d33c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9c8724c6cad5c318ef94461358f8ac9c8ba55f60926de74221686db942f80aee"
+    },
+    {
+      "path": "common/anti-patterns/no-unapproved-test-infrastructure.md",
+      "source_sha256": "85b830cfe8e7bb14a02fdd787bcb3b39cc16508026222f5dbe7d93060cc4a5bc",
+      "package_sha256": "3f88468b4c0cacf7a2194169d8382f46a29412363625b08609136791a5d3894f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "5f8aa3c64804d366a44d2244cdcdf00288df9c9ba4a7d3ecbd26c0ec6b96bdb1"
+    },
+    {
+      "path": "common/anti-patterns/no-use-callback-by-default.md",
+      "source_sha256": "9956c3e33f1f9f1e7637216913988c22c71ca9327a52483c748f0209b5365844",
+      "package_sha256": "97a6d1e4668850150bb74fad0fd07483fb01bd2b9d59f73bb8373f3504a2ee09",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "eb8509ab08c47faefccfafc5f47b4b4e9e5d9112cd49055674814af9a0ef0fb5"
+    },
+    {
+      "path": "common/anti-patterns/prefer-object-destructuring.md",
+      "source_sha256": "351a00b7781d1477e6e627dbaf2e4a068176b7570e4a9d5409c36c6f8e9dff9c",
+      "package_sha256": "4770898557e668bb6179332b7fa50f7773272a7e6a6f51c1484c552d35d30f4a",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "223bdbd1f7f3e4d365fd31e9e8e7da3f251eb9c5cae1d2aee1a798add0b19bb5"
+    },
+    {
+      "path": "common/anti-patterns/README.md",
+      "source_sha256": "e32de10460e985ee7025aa8a2d3fc996ff5bc91a96c5454a499e542120189f9c",
+      "package_sha256": "0c8e10db85c830c627ff32c8905340c23cb4c7dd01dc79ac48bfd1f27b4e47e8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "c5183261ccb934d1d4134fd4632a55a2bc51156b5ba948919791be332785486c"
+    },
+    {
+      "path": "common/anti-patterns.md",
+      "source_sha256": "9ff4ffff465262f0358928bb4f52e90eeefe4f0940b122cfdbef6884a4bbad2a",
+      "package_sha256": "6497a94fd1c5d81736eaabfe3e05bd1aa7131d18e9774337788caac3113df57d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "49a4d50b3fc4e3b443991689b01a4707f108ee00c6161879992fb64b2d1c4a43"
+    },
+    {
+      "path": "common/anti-template-defaults.md",
+      "source_sha256": "37c0d1d478f951915203c787396dfc52a90ccd6e870a97e0e8ab2319f2c5ae60",
+      "package_sha256": "e55331159339259f202272be935366869c41fa32e707c4347ce3fc8251b1fd22",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "0573d0f2c425137b0c8bf87d061ee3faa95ef117a8030c0619464c435f89bc02"
+    },
+    {
+      "path": "common/approved-patterns.md",
+      "source_sha256": "8b092428c3e2c7080a2291b16d64f8491b2fa2e28b6c146db53c81bb2538474e",
+      "package_sha256": "d9875416cecbb9043bfa0cde89010bfc53aec440875fb2197fa7650d4353c9f0",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "4999cf97641791c62c4afaca87b4cf670cd2005a85a736a47a337598d4d948d8"
+    },
+    {
+      "path": "common/bounded-retry-rules.md",
+      "source_sha256": "2385df69022e5681316513e1f00fafe41ea24a981b020a68b3723d7b12d929a1",
+      "package_sha256": "e6db0bac96686104aae1a65ef04dc7f02863f242086f19d57c6cb0a7cc9797e2",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "10846b0aa9e98b17c661745bf5e9978627d766e58a8630d451c12f9325185c18"
+    },
+    {
+      "path": "common/build-tool-boundary-rules.md",
+      "source_sha256": "82d52cc4ce791309792878c19681e81d57ddee999b73d95cd9ea12146f8d468b",
+      "package_sha256": "8a7b019f25ccf611d7096b5ed0ac9c72bbb738310882cfb4de02a88892a9cb01",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "d57db297c5f33ad9b03e7dd3edb96eb5d44ea3b092fe660dc21806ec215dbed4"
+    },
+    {
+      "path": "common/checkpoint-rules.md",
+      "source_sha256": "d61525105cc193bde576d54228610efb27b3819dd8b2d0f3455aef31f625d815",
+      "package_sha256": "43d7930d43b46ba0b3a35187f4c38c6d988ff8f084c3cb2431f1d29bf73b7d27",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9b2d93b0faaffb7bfb58673cbf320a47931982cbe2988ab280edfaae52430295"
+    },
+    {
+      "path": "common/claude-agent-routing-policy.md",
+      "source_sha256": "a295439f80d2220ac0d3b396919ddc9cdb0be58c4d5374b455dc842c0e382605",
+      "package_sha256": "418bbfbc6f81f0c8d945e1d039a5571580b5b12df778d424efc388f316f18c70",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "54295c5e1af79a9eaeeb79162c1dd977cae576db2c776e9d1f18f3eca1a49dbc"
+    },
+    {
+      "path": "common/client-adaptation-policy.md",
+      "source_sha256": "c798a6fd39d42f1d288e7f8240fbdd43f6235f3e0f14d3598045a88e41a269bf",
+      "package_sha256": "caf1439f7fa6735c009c03cce2988a7b6007011acd998a1f47d0837b27ed3f0d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f45302ae3c38727774e517644b9b1d0516f5029479014b88903a0d47b9c178c6"
+    },
+    {
+      "path": "common/codex-model-routing-policy.md",
+      "source_sha256": "666ca04383a523c92f399d3c8f73094378594b123e1c6f7e9aeeefd442430297",
+      "package_sha256": "be0a2d58b8befe641f0e7f4bfd09206fcbc74130ec803febc1d511281f260c60",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ecfa4fba0667521b6a738bcc8fcb46519ab0908c9633b29a93f74a18e94ffe0f"
+    },
+    {
+      "path": "common/codex-official-docs-policy.md",
+      "source_sha256": "675fb72664869c97b96179963e0fdc3480e0e2f59fbc3564623ac5b241032d99",
+      "package_sha256": "c7372515226d24a36781209b5cc02de49f93b54439e98e35f122558293d06b2b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "cdf32dff6296fcf1ff6667dc4a8ea67bcc7d4688fd06cfc09804a7b1a72019df"
+    },
+    {
+      "path": "common/component-substitution-rules.md",
+      "source_sha256": "b67b97f836a4afa590553d5539705f2c0d03cf5fb66a03864bcc1ddc0ff12ec4",
+      "package_sha256": "a483f91fc240e9cb34138022bc81cde036f1f05b79700b52d151d646265bb1fa",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "6686f7b4750c20794f631b2669110949f520d2ee22d0f6b89af667789ecbeffb"
+    },
+    {
+      "path": "common/context-compaction-rules.md",
+      "source_sha256": "f843a418027f78f3f0a62a9be7223c70e2d990058c162ff67432fb0225d43b86",
+      "package_sha256": "2386abf2b9a2fa968d519a5347698c94067a3f0f78c8f012531bda50cd6723a1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "6c7b9a6a1fbce898b1e36310f045ba2a6eca6513fd31ffa20c54001f3c046084"
+    },
+    {
+      "path": "common/convergence-rules.md",
+      "source_sha256": "21100e961d74bf01f7770ab21fc25c68f58a49e86230640b05b5f6f59c520aaf",
+      "package_sha256": "dbedd5d0177609f14befcb2c5530fc63fb435ed6868a1d80b9e1d1d5854302d0",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "fb6d42e941daee67ad4c0f2308ee2dff28ea3f3a840fc847d8c5d17362d8bf10"
+    },
+    {
+      "path": "common/core/runtime-core-policy.md",
+      "source_sha256": "bceac9bb135d106806fd269d42ef7785155b72e5d38c6113f10b7aa0b06e6514",
+      "package_sha256": "188c3c91021f7dd0b065a24c869b4f8310388151cd56ac24c0b11d29e41bfa0a",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bd51a2cb8bde60acae0c6352b8dea5fe7d59fc3272bb0252b5b7e95c72f94b78"
+    },
+    {
+      "path": "common/css-modules-specificity-rules.md",
+      "source_sha256": "f43034d9e8742d31d7082b81568728bddb67083c4f96b49f8ccc4008f126b724",
+      "package_sha256": "b0b9cc92bbdcaef71425ec7196e24e5bbcfb8d094131cdce54be1ad637dfcce3",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "7c951ccc584205cf22face79d2722d1ef94c9a13c0d8d0ff4e84035e669653b1"
+    },
+    {
+      "path": "common/data-fetching-boundary-rules.md",
+      "source_sha256": "cefd0f40edd34efed99dba554efe52ec741eb90f0338b1d90c669a2e4ed16826",
+      "package_sha256": "c339759bbb062ad980bd96a3bbcd216ff70b9b3c1b9721f776e503782bccf4a4",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f422772b1c665874bcce467db292ba58e42ba2afef571a913f90775aef93a21c"
+    },
+    {
+      "path": "common/data-visualization-rules.md",
+      "source_sha256": "96aaf2bdfb6608d8a1d80bc7264971dc7adc412257dcdbdadda14babdccb7127",
+      "package_sha256": "120ceed340e5f01c222285d728ab210dfa7e38b88f94f37e75d0f8d775183b56",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "76140171d7b6fa6332954b2cc7fe618f318a99d8ff33db74261d619791055ed9"
+    },
+    {
+      "path": "common/debugging-evidence-rules.md",
+      "source_sha256": "558105700e8177f36de51a27b65b706a8bddb4a1df48fe71e0316cf341555f35",
+      "package_sha256": "c4bc23cbde9037166fe4ca9a24c4a0cccde01ebb60745d414cae820b77ea81c9",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "50e994e43d9694c1a649a757b73e8c4b2981dd062b8c2e23a33a6c38021d9e32"
+    },
+    {
+      "path": "common/design-quality-rubric.md",
+      "source_sha256": "1c4e46caa1aa855cf29ef9d67510b6d33bfa145b33d182d3ed1dade1eaaff97c",
+      "package_sha256": "910162ef19588069c31e42462c1097e0f9d84ef9e15ac7e58a59837755c151fd",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ef063ffb81f1f0b50c2feafd7023fdf53d9bf3010a527872460aa9f7ba2d915c"
+    },
+    {
+      "path": "common/diff-impact-verification-rules.md",
+      "source_sha256": "44ebf261bb8bf84de24ae561a83d284ffcd68ff7410df069cc338767d4d42d22",
+      "package_sha256": "0361ec08ef879f3adb54253749c82e8e8964a279e23a976255bd14bee8c5b026",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "4ca1b0b3476f1d44508db62ab5a87493f6ff40c91f3094d446d8ae4007523b07"
+    },
+    {
+      "path": "common/documentation-maintenance.md",
+      "source_sha256": "d83c9e364da9a161c8442e3ed91115398ac7dad1053677e9d33a27326c9f8b35",
+      "package_sha256": "5fc60bdaa439454e49e8e6adbcd6f80e3b01fe0ee1d76eb0386937c1e18be75c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "645fce307bb2d060ba507d8b74cde4b231f239c43edc9e3703a83767f70c3743"
+    },
+    {
+      "path": "common/domain-glossary-rules.md",
+      "source_sha256": "5b7f726a7eb6ec856450a588790ccaef9be73af053e563741a714d27393e1573",
+      "package_sha256": "b285444562d2bfa2d39b19273afbaae7a1aecf382ce6dca19f6fa008471552ae",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9ecd688885c69f19512fd4bfd30a1c121a6a0d6a1005f1f0f67eff9c3eae5e9e"
+    },
+    {
+      "path": "common/execution-loops.md",
+      "source_sha256": "43fe7d333d707af177719ed7b7160928c9d7ea8dea6a89c92dc859d974f72199",
+      "package_sha256": "75c9947a9e5114abc86e94e01075404a52526849910f91de2a915045e63597d5",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bdad59fc4f85d08b2714ffba8a5c2fbd437a5a23a2bb982bef4e6be40c038f97"
+    },
+    {
+      "path": "common/feedback-cycle-policy.md",
+      "source_sha256": "3049124d853d3008dcdcdc2d34636b34d8c7d7e7fd104401c8db76f8552534a7",
+      "package_sha256": "1efa28b297fd88a16f1735132ee105c2d988c2c641d44f797a175bf5266bc97f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9c1636eef66eb0b28565920c81f04648eec66d83b46409d4d2039c0335c53359"
+    },
+    {
+      "path": "common/form-boundary-rules.md",
+      "source_sha256": "23dfa4e8e1a66e1aba34d30ae08308339639b08f989ae6d70117b440b3a8ed85",
+      "package_sha256": "7149fb4df22d2785e8788bf5b3a87196d5e7eeb4062a0130ce636dc8be0a77bd",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bc5bfaa4fefbdb5921078ce12086643d3b6eec48738faf46386d59c7744422ee"
+    },
+    {
+      "path": "common/form-feedback-rules.md",
+      "source_sha256": "57a000e85b5ce3fab690778915501ac7bdc3b7d5038d1ad2df3dddeed2063498",
+      "package_sha256": "d9b2910dae452f45f79b471ab6b2e7f4192285567916c9f4d30ac514db8c87a5",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e63aff71ba7732e4608413fb213d75e0de59f35b8f9e0479c07a6ad16c056ffe"
+    },
+    {
+      "path": "common/framework-adaptation-policy.md",
+      "source_sha256": "82469cc30975fe03a3c766ee38c999981c9c325aad0acebd3db2709298718bef",
+      "package_sha256": "22abcc1b334712439d5686586a86b228a55617baa7caaae2d256315508d546fd",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "d07bc7cdf143108088621012088aef5f10489916185f3642b4dd5832b33d01c6"
+    },
+    {
+      "path": "common/framework-source-map.md",
+      "source_sha256": "418782fa4f89ce2cc0189d23d320f31a4df9429afff1aeabdf42ac8cf2079da5",
+      "package_sha256": "d761309a11c7fa903bbfda796ae8500666111f9f280555a0361f11e663488a17",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "33602d1a7064581e38f7f79f290ad30aaf9aa9b64a33a767fedce3f554725c1d"
+    },
+    {
+      "path": "common/frontend-design-system-rules.md",
+      "source_sha256": "876ffad5edaeb96bd414ffe3bce614ef9f0b5d3525cbf620a52b41ddb80f970e",
+      "package_sha256": "380ba709634a6fd8a9c0d19cb1410939bd4fc6987338600ceb99d204acbf2ea8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ee46008e166a6d64cea4b123b6d0aa62fff2dea0865fbe4b53eb0a7dad28f71d"
+    },
+    {
+      "path": "common/frontend-implementation-boundaries.md",
+      "source_sha256": "665b185308d43abcc965945da87428c9cc79657cbb042cd4370d5665241d3542",
+      "package_sha256": "009194b958494120ac92fbbc0770e184cf97c5042896a89b8bb590e1aa049580",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "32fcafa10649fabbf983a74349e3e649c04c561d5921abb54e61e313bb706109"
+    },
+    {
+      "path": "common/frontend-integration-boundaries.md",
+      "source_sha256": "2bce339972f9784e1e319e620999fbbd965aadc826b7588843822896e1901dbc",
+      "package_sha256": "d08ef67dab91188b1f649a8d1497ea847dc775398f20e77f490c2ceb2dd9914d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "757608d8b9f2932963acacce0536d7ecabf665a01eb7a9476616a74000668b7f"
+    },
+    {
+      "path": "common/goal-contract.md",
+      "source_sha256": "3601692c2df3b76fc3ee15ae5e9170f95b6253232116cebcfc2924e9f9166479",
+      "package_sha256": "8401659b6441794df42315617ad31f27304e976704d3c5aff57988aacb667fdc",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "710290d05bebb68c78260e68d56a15d0516ebbe94e58445d98fca5a81c96f44c"
+    },
+    {
+      "path": "common/host-instruction-migration-rules.md",
+      "source_sha256": "0cb7888cdae6773269c63b1ef99ba0b374eee6e28516a44baa170191bae877e2",
+      "package_sha256": "6d439ca437b02ac10a35a3951c0ca724014a1980c5d8a77e382ce2debb57e0fa",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "15e0893b98fc3736fee0027cf91f5837f005134fd0abb3f9becd164e90bc599f"
+    },
+    {
+      "path": "common/host-project-documentation-boundary.md",
+      "source_sha256": "bb5143f233507f867009c300308b1aaba71f6e29c79ca4687f13f45801247ce2",
+      "package_sha256": "0cd43ae284020cfaee317335fc51e9e5469e1ea6ab9e1eaad44dce4ec7192d09",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ed8759d56095b9867b06303e233db842dc3a7a8501e6813fbff4512d352ae54e"
+    },
+    {
+      "path": "common/icon-quality-rules.md",
+      "source_sha256": "ab2e845b71746167eaaf94e7d90d2e27d1561ab6e7be40e1266958f66e861e92",
+      "package_sha256": "db040eb7009247f2cdf64a4d265afc11862959954672bad37fe8ed313d4f5a0d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bde96c626b778616719bb4b9eee65e864850a0e0198083ebfde290fceb5a41e4"
+    },
+    {
+      "path": "common/independent-review-rules.md",
+      "source_sha256": "a22eeb7a8639b420490d042b14cdc30ac0f962217bb33abe465c879eaacdf16f",
+      "package_sha256": "7a7687c939ee2a52c6ac009790786e09b69a5c7c49311bf239bd6d4645bc34b1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "180ae5572bbbb6fec74313c305e426171da4faaa771a6a0a5ad0057354c09e82"
+    },
+    {
+      "path": "common/interface-copy-rules.md",
+      "source_sha256": "00040a9746a58d6afbc3e93155b7e6ed839ba36187d37f738b6d420ef906a48a",
+      "package_sha256": "a8517b810bd86fd1185a51bc48a30a48001dd3f61b957469164f9a307cb2012d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "a0d235922524199a67e20eba09b013f288f9bb071523507d44c9dcaf106e5316"
+    },
+    {
+      "path": "common/lightweight-routing-policy.md",
+      "source_sha256": "85fe280893dd8e0c4613f41697241008dcf673146634389057c881693837a160",
+      "package_sha256": "7aac60310dc88256c0b9d9e05a21c21d8d472291f933b05a02d849ddecc15e9d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9b35a7b77939a8ade637b50485bf06de0ef8e01fe16dd0eae7b33c6a64435b03"
+    },
+    {
+      "path": "common/lint-verification-rules.md",
+      "source_sha256": "83d570544264f5813bd68902bab5213d0ad68b7d1c11e28e1e4b30ce65e15a1c",
+      "package_sha256": "f95cb4cddd1f7443af6d3c87ebbece9ddba255e253eef5c95df5d8832943eb5c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "44f121023fcf4c8fcf841b67fb1b14c901e097378838f371f900b6bcf5dd335b"
+    },
+    {
+      "path": "common/mcp-availability-detection-rules.md",
+      "source_sha256": "78cd9a982d32cee05f88dec931bfe856f0ae84ac92a62de0040a737669ed1f7f",
+      "package_sha256": "fa3afe252190e2784ab74a4be158be52130a399ab86171bdb0065d7a64167b2f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "49f66379f596a13a2c7cb9a88b2854ecfdb53eadcb5aba77319d8db5e3662928"
+    },
+    {
+      "path": "common/mcp-installation-policy.md",
+      "source_sha256": "be10a505bc7a422de3df94302560015e38e23d361c330aa93cff56f08c156f2c",
+      "package_sha256": "34d50a203acbd5e747b6906a857f52447c3348fd4d91cc8ccaddfccec5432ff8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "88edffd3a280fd74219b4f7a1878db8b38bcc6bf937dffb8b67189fb7a09387d"
+    },
+    {
+      "path": "common/mobile-responsive-rules.md",
+      "source_sha256": "e560069edde0f30a07170f368c746ef07a3847a45322651c3dfeb8522c8cb4b8",
+      "package_sha256": "570cf457d8d4d1d35c765c3203113902b718b938c4d0dc570bbdb146719c34d6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "be85c6f86afdcc54fd43986f5777df9274210eb246149addd39a7a1eb589c71d"
+    },
+    {
+      "path": "common/motion-rules.md",
+      "source_sha256": "22534a1146966f9adc3df2ee0b70078509725601db3e862ca479bfbb6168b4fd",
+      "package_sha256": "4e00289463734552996b154201ed5cd9f322cdebdccab08183fcda2de0533c3f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "0b46823e0018e06c7b552aacd4b825ae96c1d78bd188dd9ab42d177dcd0338f6"
+    },
+    {
+      "path": "common/navigation-ux-rules.md",
+      "source_sha256": "d0669029b1c828e57d8b4162ebb51413aa005c04332853e47307a2add189f5d4",
+      "package_sha256": "4512d2b861f2a9a1cebb46b8d0f9060f82929bbc9b4c5f2a9cfd0489d02e3b1b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "04a4c5a19af864d29faf2d31b2f9ef2fe89489252c969a311f6a07de9b87c2d9"
+    },
+    {
+      "path": "common/performance-review-rules.md",
+      "source_sha256": "e107d619c3f9978483b952f83f7676a5f4cbef48f74db1f1d7897ab8201bb92c",
+      "package_sha256": "e05bba2569598a846687655325af9f07803babd1f6420b3a4495efdb4eee7290",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9c74481e49e6ecf1ba10d86849f7c03b8907ab5f1d536b8b03b9b6272b97f42b"
+    },
+    {
+      "path": "common/planning-analysis-rules.md",
+      "source_sha256": "ecd9108ddd6d79710ea70edecff4cac4469c3dcffee288fb7c83f88e5370a06d",
+      "package_sha256": "30d9d5ad3e158810a5cf611ae6fb086ebdca7ff981f99c20b52d3fe6a36935f6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2659e87380a3ef2a0ae88a49230c8f453289ebb5d6339a4b27cff30798fc644a"
+    },
+    {
+      "path": "common/planning-rules.md",
+      "source_sha256": "5e2f0364d3f50a1890a1840e13cbfd71c38c8f01619848321fdbc01203407db7",
+      "package_sha256": "37a041f3b3363a7f8df17418bfcadbcf93101d0b7e27170e0e0caf42beca197f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "4f53c25b0cd8e69f1a0491ca52320b2e3f4bc737910a47beea748a962e1c94e7"
+    },
+    {
+      "path": "common/policy-precedence.md",
+      "source_sha256": "8be3dcc8802361a4361b21c1e8803bcdc9eaf0b1fcbc24cf2ef358428b443406",
+      "package_sha256": "ee8fe18fa3a3c80dc29858527c663636159544157f432f4475e9b31a88c6f018",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8e3a523abf2293d0d9f87d071373db8147ff3220f4821f7faa78f3c7576fcfd9"
+    },
+    {
+      "path": "common/project-fact-provenance-rules.md",
+      "source_sha256": "7c2f2d7e9677936241104cf7a59675d38246c0eb45088ba8239f65bf91abe4a9",
+      "package_sha256": "0335ced93d29d0457bc6923bf3175a3edde8ec0751ed86ca7100762e1a2b136f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "72c72fe486bd903e1f99dd2606c768fac5e12f197561087de9a95dbc71565c52"
+    },
+    {
+      "path": "common/prompt-intent-routing-rules.md",
+      "source_sha256": "ae62c5d03dc3eeb5cf9675270dbc36d02a76d2bfa4dd6d4484ebf6093b43cf64",
+      "package_sha256": "c7a58f9a13d9419810978e16f0a5ddc1696091533f1b38b9e5a972b503b72213",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2a68b28dbc208ac6bed0a4e614b271f8dd076f2ba9114d2851446f1eefb9a736"
+    },
+    {
+      "path": "common/react-performance-rules.md",
+      "source_sha256": "fa220113822f9568930f003858ff87f85b6ad6244c85ff60b22f29fcdac29092",
+      "package_sha256": "bcd71082b5823c5218932ba6149fec47f51ec067e9238fe8c91aef8a50dbfb4d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "989ac4ec5cb87246de0f9cd853ab2b465274bbb12ece868888c9b00b13fabcb1"
+    },
+    {
+      "path": "common/readme-policy.md",
+      "source_sha256": "3c66f562fdb79b6177b3d455b548d65c6411d8273b7fb9e4ccdcda0fad4eabbe",
+      "package_sha256": "3abdbe4bb9804bea06e87729c66c5698ac4ca2115d967cd7fed9ecf4c0bbb0b8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "c915ea8898e722d2256fbe24925e1bfe5b3f33d1606f04e3f76da13678fa935a"
+    },
+    {
+      "path": "common/refactor-safety-rules.md",
+      "source_sha256": "551bf1a92f0554ec66007a15c61cb5141cf82b42b5236fe61281f767420ec21e",
+      "package_sha256": "12d08300ab793c4f9c8290a9a883ef987c9d3933a435b0c184ee994c27f0ca5d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f2ee542b5b9159105169cd6adf100b04893669719d7bca95cbf9d51d737c7b6b"
+    },
+    {
+      "path": "common/rendered-visual-verification-policy.md",
+      "source_sha256": "4f294053dd87d51db400f0a9a9614f0e5d024917909498b4e07cb51d9afaa23d",
+      "package_sha256": "d0eec3ca923d81c33108fc0eea2a82a82a03021aa8c1af649db895bdd7d2e4ac",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "37dd29367d1e30cd49e81d8dad5a51a3d70f9ff85c7fdc9fe78f5f94a7139919"
+    },
+    {
+      "path": "common/review-severity-model.md",
+      "source_sha256": "2314ee78eaec0ab138e56c61d2dceb750e84b9d46c0a14c475d6e7bf090d2c1b",
+      "package_sha256": "edec903ad2905d4d2154782a1d6310d200647bb6aae50e24d17c27b6b6452723",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "569914bc634f11552ed13cd14f8bfc932c3dbbceb314a552f1bda2cbe2968631"
+    },
+    {
+      "path": "common/routing-boundary-rules.md",
+      "source_sha256": "4a5f44d103ca504c60d940a31498b3e6def353a6609d077471d87bb3874cf3a6",
+      "package_sha256": "11b3f51e5a83ebaeeb99cb40123737cad9570240f5cbbeff80fd8d978f2c6858",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "78e2e897a20ab56444201b14a7c5f5b13b570da7240bbe230339d675b6fb95ff"
+    },
+    {
+      "path": "common/rule-audit-findings.md",
+      "source_sha256": "1224d9a8ec2f8cdaffdbfac073a1fde28b526af9b0396f8cc5587a6386c6cf11",
+      "package_sha256": "070ed8ee6e00298c46a54cebf2450a3520058d1d6f29e9871326d287f567fd4e",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e2513280f55adebce09b0680bea895b78e5ea3368eacbc4dca41a7adbea4399d"
+    },
+    {
+      "path": "common/runtime-policy-index.md",
+      "source_sha256": "92177bfbc2cb00bd94f070edf1c385d6e76a086aebcf3f71e29c24d957560849",
+      "package_sha256": "037fc581abe31924cda8c519b8f43ce1ca60b0388b61c9cd7f14f74aee297bdb",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "a57bae2d3eeeb90cd4421c8e57f81111b22247775fe39c421a3d1fe79f948cee"
+    },
+    {
+      "path": "common/security-review-rules.md",
+      "source_sha256": "640c1c6596710d39fe708fca5b1a5707fb850352788113892050bf5e8d50e52a",
+      "package_sha256": "82eb9a27b87fcba852b1859873a3cb298106422291b4ac1132a46715a415cd8c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "72a65dd89b73a0e79aa3074110951cc5c7cd67d2c7aec06b7420835e97da3626"
+    },
+    {
+      "path": "common/skill-applicability-policy.md",
+      "source_sha256": "186e8d4c82e55de27f358fc2b4ad72b316f06daf98827d22f7bb792d97738a59",
+      "package_sha256": "1d9b2e64ee457ec2ed1d9ff1d34e121eb69f50f71301a11f826ee58f0375dcb9",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "483b5dde35384b1a9c297542fd86954b43426bcd1e75b96471cfda19c91652e8"
+    },
+    {
+      "path": "common/smart-verification-budget.md",
+      "source_sha256": "c4605766fba49a435b348bc11b16a5910878dcc00a1589250a5ae7913881160e",
+      "package_sha256": "db55c11ea28a19b22fe9085dffc44212cdaf41b9cea4648675c895cf2f08215f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "26efb33905bd2f12bc199ccdc26ba0f9d4ac0758665951be219b0812f07eb20b"
+    },
+    {
+      "path": "common/state-ownership-rules.md",
+      "source_sha256": "c3497a0286d7361035800c6c63addf9fa6d42fc4d7c9680fbba303f30638fe5e",
+      "package_sha256": "7350f5b5a9b312a5012b3958541c3ca6db70121e89a66a2b9fbee6c9a6113fd4",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "052a7ade1068446d0ae2c864df36efe1b96f02f8478cb6173a5d930f8d98e466"
+    },
+    {
+      "path": "common/stop-criteria-rules.md",
+      "source_sha256": "5c48b0749dd2b5c13ec69f4b110c966511146f3c2df60179fc19935955295a7d",
+      "package_sha256": "5fa76e093f57ebe75aa7f75a9bc0a9425118786f7838f2a14658f793dc62b322",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2a7c7c956ee0cec141055966c550d9cedca67fe7f733063a0583757f1b587241"
+    },
+    {
+      "path": "common/subagent-handoff-rules.md",
+      "source_sha256": "242e6d08f2b27b9185fa774ac46c142c39aa34c3a8e635a02e042cfe4bff59e9",
+      "package_sha256": "c25865005ac74539b596e8d88db2e8a46c9599216b7cef58980197ddac09a54c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "db0d6a11a226b9dd292ea6a9fb5553e68270bab980d9012d76ad0d4d01b56c69"
+    },
+    {
+      "path": "common/target-stack-policy.md",
+      "source_sha256": "1ee37cde905646f461ea9d20d0bc3736c1d7c19d008cd77b885a14b360213294",
+      "package_sha256": "843b273a11e59ed9a6cb3baa55159c210edf6878661422221f0a546c48d841b1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b395bd725adc450697687ac24dbd9842c6008acd0b0906d037201b2239cee1e9"
+    },
+    {
+      "path": "common/test-policy.md",
+      "source_sha256": "a31da6638fa03531a41fbf2f1b903fc7ab24a218a792e9b1d495714e6fff7c0e",
+      "package_sha256": "e468a7356030ee7b5b95d9c4fc47a8316ec9aa14cad37666cebd72ed557aa3a3",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "87d19f5ac951a9d20855be481450687166b40aea98f85283cd7d3c2a20ce67fb"
+    },
+    {
+      "path": "common/token-budget-rules.md",
+      "source_sha256": "88934b5d3f1f6631446530c026c7dfa7408e7676c5dc82fee2272937e9dba989",
+      "package_sha256": "b5817c3ca62b59fb7aae2604f2d79c8aefca3bde6d3cf714654d62421629a20c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2443614e12ab1538e9e9b292fd2539481ce028c783f50083552060376d1e7cc0"
+    },
+    {
+      "path": "common/token-economy-rules.md",
+      "source_sha256": "101b923cc6b20b46b13a85d12a8549d9fc05b0758e42f1e8e9de66290e6bbf8f",
+      "package_sha256": "2d0abfec1e7c0c6d3ef58cf3630ae9ac15ad64e9b8c7d788f1cfdd7f7660fbc3",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "3d3e8b97000ba534924933c1d6335dfa646d04d41c751b7698f1d4faf7333026"
+    },
+    {
+      "path": "common/tool-capability-model.md",
+      "source_sha256": "e5aa0a39513dd5cf653706e272b12088b69d930d59f16739edf566a96234fd85",
+      "package_sha256": "cd9d42f056737185e7a2e3634e695ba2d3ad0f3da4931ec64315e15ef4ace68e",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "7aab3285ba7ce6b727ffc8ec4588287f3f4a8df8b234621399b00a10372fad20"
+    },
+    {
+      "path": "common/typescript-discipline.md",
+      "source_sha256": "6d85a8cfd4b8ef769ee7df4f62dfe7ccf833351ec41910557fc12281d9a468a0",
+      "package_sha256": "65c730fd0957a28d1fb0d8ca77a01941e01091c3ec09ebdeea8126a26fe28396",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "4b744c0f4097420fa130523452808d5eb6ed053b9e5f63ab022bb94f88da8cbf"
+    },
+    {
+      "path": "common/ui-ux-priority-checklist.md",
+      "source_sha256": "a7694e8b72b1e9d11ed7987310a2ae2aed0283654613906a31600f9a42fcacd5",
+      "package_sha256": "bc7b94f31ee7b82b9b74381f6f1502bf6cb826b2027564940960eeee7c9701eb",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "48bfce4f3343667b5b754faf891bae0d862d3204975c1dc389b0c36831a6d45c"
+    },
+    {
+      "path": "common/verification-loop-rules.md",
+      "source_sha256": "7ed5f0753b46cc528aee3bbfcecc0f13451bc1c04cd26b016eb70a7bd954bf75",
+      "package_sha256": "f25073da2e0f2ab35dd190cacddf7c659d0aa4cc8f068c46dcaa4d231d33b3d1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2eaa05c0d1033e7fd451cc3570f62f7fb1dbaf9edaf121a11fbb97127f627beb"
+    },
+    {
+      "path": "common/webdev-role-selection.md",
+      "source_sha256": "5cc402473985452fc48f21a614008f0f040e06e9133e20735bcc86c6e1f96684",
+      "package_sha256": "42bd59ace85ef215240b1d30ba62ac0bb7a77e564fe0a6c134f815e4cdac77b2",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "df4e82ec439f56791d0cddb9ddd01b00668b63cfdcd38f223bb18bb14e1eff91"
+    },
+    {
+      "path": "common/windows-shell-sandbox-rules.md",
+      "source_sha256": "503a5365bb5ef13b51d283c1a541f6ad01d9012fdde2f945e7545f03a2e2228e",
+      "package_sha256": "1fe4542bb3be23f0b46f4d0489c5525fddbe7e4a980d58fc733d8cca9fa9dd99",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ca1947a2b333f889fc952f2c0490835e27d76ba3fd1d8ef86f09fc999ea43fcd"
+    },
+    {
+      "path": "common/worktree-parallelism-rules.md",
+      "source_sha256": "f1ffd6d285184ef537e87373dc8468b229f2d32986062e3a4b8034999ade977e",
+      "package_sha256": "0b11d47488883fbc02d776345fefd32f5781be608a729eb3d7f1400975516833",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "42d8cc8774deaf441bff7a959e5bfda0c071781b2ad97cd1a6ee94396799e5e9"
+    },
+    {
+      "path": "profiles/react-typescript/PROFILE.md",
+      "source_sha256": "8f88738a4680437b5cf22c3d16ccc6d2695064c00950c46d77d1f26189a8199c",
+      "package_sha256": "4e088e67f217b7d97983bf02579566cc6ba7a0cfb7d2958a8fedbc448cf12199",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "03b3d5ed65f7dab357c796e44dbc1fe8aff929fb0557b123b713c6699cecbe45"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/agents/openai.yaml",
+      "source_sha256": "828892633198700f338a4cf8f12f98dd40ac2fcf810c041543de1f36a92f0760",
+      "package_sha256": "95021ccdf29d3bea2a99fb003089a0f0847c53fe99e7292f7d8a09d49b0776c3",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "828892633198700f338a4cf8f12f98dd40ac2fcf810c041543de1f36a92f0760"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/codex-native-skill-contract.md",
+      "source_sha256": "4d94fa240d1e67a704555381e8d4018857c99d9c6165b798fcc3f7c2df933c28",
+      "package_sha256": "c57a58e7ccfcaf5f932c5fe52c2abfd8cfe53b7260799f61ce6d50e23827eab3",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "45ff66e4920819e98de619c583565c23606a876b5d241f838687d26a14fe10c1"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/documentation-maintenance.md",
+      "source_sha256": "609048dd3015f2a4a7893be198e08828931ff5b59b9b9f9c105b372fad4cbda1",
+      "package_sha256": "bba1c4beb08582461c69c48f49bf9486e68d12a2f28748045528923828d7dc89",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b1faa0cc4c933ae5a9bf068daf94da317f970ba1e81a908ffa1c51f2df84528c"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/figma-derived-conventions.md",
+      "source_sha256": "4efb0be03d322df281785e85fe1db43ec07807d004bede3e806eee686cd43638",
+      "package_sha256": "4d6ec61d32b862c93d393e115cb2c1f23e4c3497a110185774f312bbce1cd04a",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e198bde548bbfe0a4127c47e952faed4cce2b19901e38249227122140fdb0edc"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/rule-audit-checklist.md",
+      "source_sha256": "90a35f408f4408a3e9ea770460f1e4d4eee4499357790d6b2df1e6d2b0a833fe",
+      "package_sha256": "93c5463180e5d25e214b471bafb3db1c351401850cc56663f69e2b92c2098bda",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "97177230222a07fdbf75792c2b4b622e3c299fff2dac68dba3dc09e31dac1fe1"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/rules-writing.md",
+      "source_sha256": "a9f7b3f77f00d445b2746e4f26cad5ad718740346cea6102cbf32f222d33d358",
+      "package_sha256": "282150123d380d40dcf70c141d4c85dd7ec3a12758a2400325c02f7812ceabb8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "4951343c22e20391e8bce8dc9611efcbdfb0dc0c9b6dd5d4f6cad64612dbb4f5"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/skill-design.md",
+      "source_sha256": "65a7b732eded01af102f1074cb02854af0946fa0c43bbbc6427f653d46c54271",
+      "package_sha256": "e0b7622f4f152acaa33453525fbccccc33a323b691b0a0ad8e03364e25257458",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8f08a0c80983ed3e4aa7141904cb4b47f33feaccd3e49cbcfd3de66c823c944e"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/skill-quality-rubric.md",
+      "source_sha256": "53f62992b39fd215a307d16658e1ad14949cd4ce211ff8e36d969058769ee904",
+      "package_sha256": "f74de3e7ca2ded483632ca621fb83d8c589158da299378d002bb18c51cc2893e",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "40e7fd8ae6b964d160264f9ed18a68ae08fa8113d5f8c8c5804439f62239e200"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/source-backed-prompting.md",
+      "source_sha256": "373982e33d7bb5701a9553f332e69e6e853c03349d87f25096eb7ec610984013",
+      "package_sha256": "d09fc84e857098f8c061920f2a42a8793c388ec756dbaa88b047c6bec66cee5a",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "3050693d28ab1eee4ac38df672d9c784d217e028706828ba068fab57edb1cc02"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/trigger-and-metadata.md",
+      "source_sha256": "5625919442186394d10d2cc7765555f7e25f992a9191eb8e621c3b59d6457c9e",
+      "package_sha256": "2b00f8891aca6c6e569c481893903ef166b99d2947299926708d60df7511fc3e",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e5b43c3d85dea545737866eeffac81811819df5f9efe98f29a354fd31d3dc2f1"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/references/validation-checklist.md",
+      "source_sha256": "4573d4481b6f5bb4a76f9954b915ba2293a3ceb61558fc869fb99828484ac995",
+      "package_sha256": "60e9f67fbcbcaf35b099e83efe80d738263cbfe6c01072bcb0b60a45852fe822",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "40a59cdf6fe03c3f584f3bcb31d8abd8ae89bc938a9ba701145f6f43605b9fe3"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/scripts/generate_openai_yaml.py",
+      "source_sha256": "e53b5eedefb8761dc7e6607cba79eb11407a1427851f4186fbf1b3c1b6b1cde8",
+      "package_sha256": "e53b5eedefb8761dc7e6607cba79eb11407a1427851f4186fbf1b3c1b6b1cde8",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "e53b5eedefb8761dc7e6607cba79eb11407a1427851f4186fbf1b3c1b6b1cde8"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/scripts/init_agent_skill.py",
+      "source_sha256": "f4560d97c6a2be4f3a704655fa858deaed10c780904091dcd9d679cfc3ad2d72",
+      "package_sha256": "f4560d97c6a2be4f3a704655fa858deaed10c780904091dcd9d679cfc3ad2d72",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "f4560d97c6a2be4f3a704655fa858deaed10c780904091dcd9d679cfc3ad2d72"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/scripts/skill_common.py",
+      "source_sha256": "dc843d13a542b183108a6d23bee2cac4e0fafc1f6b9909b4bbbdc9ccb58290d7",
+      "package_sha256": "dc843d13a542b183108a6d23bee2cac4e0fafc1f6b9909b4bbbdc9ccb58290d7",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "dc843d13a542b183108a6d23bee2cac4e0fafc1f6b9909b4bbbdc9ccb58290d7"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/scripts/validate_agent_skill.py",
+      "source_sha256": "e7a63c0a7a90d8f48aa426b116eecb06af2b5f739cce710360d0e1021b677795",
+      "package_sha256": "e7a63c0a7a90d8f48aa426b116eecb06af2b5f739cce710360d0e1021b677795",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "e7a63c0a7a90d8f48aa426b116eecb06af2b5f739cce710360d0e1021b677795"
+    },
+    {
+      "path": "skills/agent-rules-skill-author/SKILL.md",
+      "source_sha256": "b87b792ff859f6187c9de7635dfe825c5159ce4f64a4334393fa7f03500c9934",
+      "package_sha256": "975f0eff84ca0d908a04f889722b4b42ae5864a7d771ad2c45cfde3af7b216b0",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ea229fc12de34a2b2328f3f2d6becd376b4a30abff298ac7c43f208bfb221e56"
+    },
+    {
+      "path": "skills/agent-self-improvement/agents/openai.yaml",
+      "source_sha256": "c05850f745ad44cf2d7d4491c1559bae7f38d13164cd090f46b5507659a8a924",
+      "package_sha256": "979992029d953f596532d6e2ee1fb5532c1f152881191b6ab176f79cc16484ee",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "979992029d953f596532d6e2ee1fb5532c1f152881191b6ab176f79cc16484ee"
+    },
+    {
+      "path": "skills/agent-self-improvement/assets/behavior-cases.json",
+      "source_sha256": "6c1802194f0ab52c45c1ae66e5bf64ce5d4e980a39610b060182b50d3ec6ee43",
+      "package_sha256": "6c1802194f0ab52c45c1ae66e5bf64ce5d4e980a39610b060182b50d3ec6ee43",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "1a62ab232fa9cedeb1e1274cea52aaee79fe22e2ed091c8c6980a9849caec894"
+    },
+    {
+      "path": "skills/agent-self-improvement/assets/integrations/hook_bridge.py",
+      "source_sha256": "e67dd43c5cfc40513cb0f587cf17d51a8bf025482f5d0a3bbd1bbd494be6621b",
+      "package_sha256": "e67dd43c5cfc40513cb0f587cf17d51a8bf025482f5d0a3bbd1bbd494be6621b",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "e67dd43c5cfc40513cb0f587cf17d51a8bf025482f5d0a3bbd1bbd494be6621b"
+    },
+    {
+      "path": "skills/agent-self-improvement/assets/integrations/INTEGRATIONS.md",
+      "source_sha256": "a817050588fceec3ed18f5f94bc06a0e26f2be634e344242e1451addb43e5ec6",
+      "package_sha256": "bf3945d6ba85951ae43556a3fff57c341f4edb684569f9b7573193c5ed02bbeb",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bf3945d6ba85951ae43556a3fff57c341f4edb684569f9b7573193c5ed02bbeb"
+    },
+    {
+      "path": "skills/agent-self-improvement/assets/integrations/opencode/experience-recorder.js",
+      "source_sha256": "9e4799a2fb64e404db1deeef2aa035ac3c0e095db14785787c9b7c7557757497",
+      "package_sha256": "9e4799a2fb64e404db1deeef2aa035ac3c0e095db14785787c9b7c7557757497",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "9e4799a2fb64e404db1deeef2aa035ac3c0e095db14785787c9b7c7557757497"
+    },
+    {
+      "path": "skills/agent-self-improvement/assets/integrations/PREVIEW.md",
+      "source_sha256": "c1222f36ce868efd82bf9fe9a940044522d047db86265929388baa67c17b33ba",
+      "package_sha256": "e8769db33be5838a8a63770bf0d21ec1d7c576051d9b3f38515ce38394e0e796",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e8769db33be5838a8a63770bf0d21ec1d7c576051d9b3f38515ce38394e0e796"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/collection-contract.md",
+      "source_sha256": "4cb4395d14aa20763a276a16796ab040a96f3104add60364992fbd5ba9ccddf5",
+      "package_sha256": "3050242869fadaac33b401e01d60f49bf3130f3f27ca4c683f6721f0c3d3aa67",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "3050242869fadaac33b401e01d60f49bf3130f3f27ca4c683f6721f0c3d3aa67"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/langfuse-evidence.md",
+      "source_sha256": "4a95255c7f3bfbefd1d7340ebb388f002bc0e0e3e16cc2804a2d80f86c1dbfbd",
+      "package_sha256": "2414f703e6e78345d5536ebacea4b6657a5c466c52192a36722f02d72c91cc60",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2414f703e6e78345d5536ebacea4b6657a5c466c52192a36722f02d72c91cc60"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/learning-policy.md",
+      "source_sha256": "1b81097a07a1c74034d7e4e7d1c622d3359394a1a503d8162ed12eae3e800a61",
+      "package_sha256": "6bf193039d2e83a40ed2185a5a634aeeb200fbb67635ed6a4f1191d6c065ceea",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "6bf193039d2e83a40ed2185a5a634aeeb200fbb67635ed6a4f1191d6c065ceea"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/privacy-and-threat-model.md",
+      "source_sha256": "6df1617d30d26c050cbe601d11ab957d0d90fd1f0d2b7eabb932111e6aedeaa8",
+      "package_sha256": "ee7c6ef9dc41e49b92c51443c722dc97ba57b4a9079e84be154995bf21b69a96",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ee7c6ef9dc41e49b92c51443c722dc97ba57b4a9079e84be154995bf21b69a96"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/processing-contract.md",
+      "source_sha256": "fee20bb47725464b67beef0cfc598342ed785edaef524ec56b65c2491b002bee",
+      "package_sha256": "199af03dc92045fb66af52f50c5a236f5da3a58a7085017a61e3bfb53ed3b6ca",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "199af03dc92045fb66af52f50c5a236f5da3a58a7085017a61e3bfb53ed3b6ca"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/project-memory.md",
+      "source_sha256": "97e8392ccdba38b25a30566ee0e5764279a38942f0c5b7affaccd08651af73b0",
+      "package_sha256": "ed82d6a04d7528d0e47f57e5e79da14814e446df1266ecbd4d50092202771d94",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "609120b0fdb730640c06d9d42ddf43f7b8ef9feefed886443418e72e0bad5c12"
+    },
+    {
+      "path": "skills/agent-self-improvement/references/project-workflow.md",
+      "source_sha256": "dc2254b35ad292a657d0f350e8252e782d56ee5a41423d40623b53b952afb8e3",
+      "package_sha256": "145faca763c23898082df5f2ec5b6ea8f95b1a6e444d87b399e35c019d01324a",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "66c674ae51c9311dc7d46b64b3bc6146f2c9734012e6e46038c12240418a9c19"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/install_hooks.py",
+      "source_sha256": "2aa6dc87e4d21f1af2f8ba5ee932f2328f7b907dd26a57aca90cdcc8620a85ba",
+      "package_sha256": "2aa6dc87e4d21f1af2f8ba5ee932f2328f7b907dd26a57aca90cdcc8620a85ba",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "2aa6dc87e4d21f1af2f8ba5ee932f2328f7b907dd26a57aca90cdcc8620a85ba"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning.py",
+      "source_sha256": "a13f7f0386ff6fcbc8452de84fb243e06dc6ee89283f83548aca66af6212d6ba",
+      "package_sha256": "85cef7b91699064a3334631e95bd9fc6c40a359d5cd578db92376286bfedbf26",
+      "comparison": "documented-difference",
+      "basis": "Unified project state, legacy detection and curation-aware triage.",
+      "package_lf_sha256": "01563b49ce63ba11c737c860eacb126642ee73f6fcdf9e3835a8aeb738f41d14"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_behavior.py",
+      "source_sha256": "8c2f2c7245e25ac8b8604af9a4391fb720cc6f1a5f7dea699a0aa3ecd8cc891b",
+      "package_sha256": "8c2f2c7245e25ac8b8604af9a4391fb720cc6f1a5f7dea699a0aa3ecd8cc891b",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "8c2f2c7245e25ac8b8604af9a4391fb720cc6f1a5f7dea699a0aa3ecd8cc891b"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_benchmark.py",
+      "source_sha256": "4d05603f3ebc0ef8fcb9fa07e06e9de439e95c9a860bf3f8543e235aa69c0fac",
+      "package_sha256": "4d05603f3ebc0ef8fcb9fa07e06e9de439e95c9a860bf3f8543e235aa69c0fac",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "4d05603f3ebc0ef8fcb9fa07e06e9de439e95c9a860bf3f8543e235aa69c0fac"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_cycle.py",
+      "source_sha256": "9e4fed4792192db032795bf2b0e08b76ae4278a2108b1d8d93b0b213bec2c411",
+      "package_sha256": "2792739498dc26ceec7cb5f37e342eff9aca73118c1ad37274226fc28fdafa85",
+      "comparison": "documented-difference",
+      "basis": "Project-local initialization before proposals and noncreating status for absent stores.",
+      "package_lf_sha256": "f76406b9ba9d8740fa184cfcab0c60b5017f90b530ff1f24db67d3a3cff84995"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_exchange.py",
+      "source_sha256": "ccedf56c50a8caab919b1300ee157595ffd06629040fee7b84a08798b6863e54",
+      "package_sha256": "bf60ae110e376d755ee95f2e0329312b8ccf773c96e24c6360ae828c5696f55c",
+      "comparison": "documented-difference",
+      "basis": "Verified SQLite remote, conflict checks and explicit exchange gating.",
+      "package_lf_sha256": "922b60e866ad99080e5e2e89e368ea48a14c06f08983cd30967fcaf4e809b87b"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_memory.py",
+      "source_sha256": "cffcb865e0a7257c43a92825f55485d756ee0f9d42a5b21066b1f877518cd541",
+      "package_sha256": "ea86ab53a30f7b6754f21f8b1bc3b12acaf50bf4a8ae60dd36bbeda03ef2dfbf",
+      "comparison": "documented-difference",
+      "basis": "Stable context pages, safe initialization, canonical remote configuration and explicit finish-sync consent.",
+      "package_lf_sha256": "c82c5007e27e0e95d319364f4c2389033063de024ae740a340938bc1fd13b95b"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_processing.py",
+      "source_sha256": "0b8877e091d12a121d29e61873ef41b2473a554c912d0d87015183370522f272",
+      "package_sha256": "0b8877e091d12a121d29e61873ef41b2473a554c912d0d87015183370522f272",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "0b8877e091d12a121d29e61873ef41b2473a554c912d0d87015183370522f272"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_project.py",
+      "source_sha256": "7a8a11893d42b70846029db9b9091af07a23895f3d5ffff5385372c6a8ee70c8",
+      "package_sha256": "45c270fbc4fc8a4aac8726230999a6299ac626cbbb957edf0d1bb2a376da3a26",
+      "comparison": "documented-difference",
+      "basis": "Local-only defaults, explicit migration and preserved portable identity.",
+      "package_lf_sha256": "d2f5d29f9db02e02beaf55edd209b176da337eb00352e86267b19d7fe4945a7a"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_run.py",
+      "source_sha256": "c6adb46c3cdc0afa4fdd5a51f7b064e6a4e1e5aa57121847366575b589c00254",
+      "package_sha256": "8a17d3e26623b631a9d2e465d6c7bf3e9ded63a079d959a8908700addeb69426",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8a17d3e26623b631a9d2e465d6c7bf3e9ded63a079d959a8908700addeb69426"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_schedule.py",
+      "source_sha256": "103faad97e6db246c6930f8aadf4c144d54af6412f2cc4b2fd1ff17e40ed2d5d",
+      "package_sha256": "786705d750f39e02373eec0349852fb9990cbf6f34a645cb5990e330333ed1c6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f7d72c2781b2625279a728538e2c273fb8496b2563b42361dc65ff17e1797c6c"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_tagging.py",
+      "source_sha256": "ffcf40b322cbfae12002e536508e715b4db396b8a31d853951bae8c7c6347108",
+      "package_sha256": "e94076e004234499efbddc93fad441704c228ba21fe3689e45d3f34ca5c5802c",
+      "comparison": "documented-difference",
+      "basis": "Credential reuse/authentication, override checks, project toggles and current-probe readback.",
+      "package_lf_sha256": "ec503d04deefe4b1f8668d0a99768dd614be92482cd3d4137e23b64f1805acb7"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_telemetry.py",
+      "source_sha256": "d021ecea606d51fd01603e44cdf35c19a20f9c7196ebfdea4e696b468dea8350",
+      "package_sha256": "a383907290064853d7a0fb5c781fb4a004df5894da6b94aee7c555f6c49213ec",
+      "comparison": "documented-difference",
+      "basis": "Selected bounded event windows and filtered archive context.",
+      "package_lf_sha256": "94f742e17327c233fcdc50e0aaa5432460e5e12fbb2ef7ba4597f38d61a32f5a"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/learning_workflow.py",
+      "source_sha256": "4729b228827d76efe7c22a0251fa1207678ef0d2ef2393695a03c9b893f4e76b",
+      "package_sha256": "9510c4a88fe1448be0a092e2930d5b44c7abcbad943bbf8e833e04deb0e60c4e",
+      "comparison": "documented-difference",
+      "basis": "Incident-derived windows and explicit manual versus completion sync.",
+      "package_lf_sha256": "4d9e8860645ef25b6b6f91adf205e8adfec69fb450221589244e234c6f9d6303"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/smoke_windows.ps1",
+      "source_sha256": "ca67543c5926b94b7ed281f87ba38f39559019c991309635b6c4ff2e7bdb4d54",
+      "package_sha256": "ca67543c5926b94b7ed281f87ba38f39559019c991309635b6c4ff2e7bdb4d54",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "58c13a04dace3c51da744b39d84ba5104817d5c2798486f203d02b338487514e"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_hook_bridge.py",
+      "source_sha256": "ed7e3f636335fc2e3c99d473411e3bca649f14bd90050b9448e22c0bbe8ad04e",
+      "package_sha256": "f15fe2b59e009642bddeba86217dafe39777e5706435586b331db7ae3ca9b4ec",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "5adbdc6c4d1a8e37799777c3b53c0e92798e80c211a3858cba6f6bf20a94d1b7"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_install_hooks.py",
+      "source_sha256": "d0e190b0d152a50dc6f372390e3549d17ae7bcc59fdb839024a981d2e0790b86",
+      "package_sha256": "e26fb9fcaa694a39e9b65209ac8c3d95d92fc78a25be480e21e216a178fd3c8b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "004f99c50260c89d04781eb5f2cb6094f0e5d5d434ff10795a6acab5ea018e05"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning.py",
+      "source_sha256": "b6e4c58cb1d56c48858f997f447bcbd192cc757bed4d592f790a34ca8fbc62d0",
+      "package_sha256": "b6e4c58cb1d56c48858f997f447bcbd192cc757bed4d592f790a34ca8fbc62d0",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "b6e4c58cb1d56c48858f997f447bcbd192cc757bed4d592f790a34ca8fbc62d0"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_behavior.py",
+      "source_sha256": "0e0975273b2704b971c1554bf097aab66b5fdde1922f870c114a4c099e6255dc",
+      "package_sha256": "0e0975273b2704b971c1554bf097aab66b5fdde1922f870c114a4c099e6255dc",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "0e0975273b2704b971c1554bf097aab66b5fdde1922f870c114a4c099e6255dc"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_benchmark.py",
+      "source_sha256": "4350afd8cdb9949a21ec4af6f8aafc194969fdf7528d4975a91d58aab511bfea",
+      "package_sha256": "4350afd8cdb9949a21ec4af6f8aafc194969fdf7528d4975a91d58aab511bfea",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "8593b847a8cba08176daecb47b5d45cee4d8d3878ec07547b71c3108f5f4066a"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_closure.py",
+      "source_sha256": "b667026df382700f6f601b52512a05d21450cd48dcd92deb1d06f1573b0a5bee",
+      "package_sha256": "fc4cf2a4d7b7de363be651739a922751b9420e0d22d3a8dba506b6c33e676d59",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "c9d978cd831bea7acdfb73e463138fa05e4f0a3142519b887d3d73847a619c18"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_cycle.py",
+      "source_sha256": "b4670910df46d947d0d54daf9279f1e36c6248669cf3211f10f428ef1dfdb608",
+      "package_sha256": "c1661df7e6a5adee43f140e6f17b3995da21d355093906f3f8738ea9f789521d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "d8c8ddec3d3f7f8202344664eeade678df29370fd1f35f2de279a653cac55a3e"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_memory.py",
+      "source_sha256": "5bc4ed84ad94497318d418763bc8ca104df01d9a36c156921a1b30dd7dc3a940",
+      "package_sha256": "b9041ff71e8c5d363520ab54b07c982fdb9a324df925160f3a43bc5fbe7883a1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "1d20cf4208fcb15a59884ff23a355891906eac0d4be560bcfc8732c4cc062109"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_processing.py",
+      "source_sha256": "339feb14b46b1984064cd70f02c5851b364a0c0cc8b212b712bceb7f6d8f5c4c",
+      "package_sha256": "44a10953618a0a3588e0bb56385a9a68ee9ca5859a6de261e510671d49e1838d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "82af404c62863e9d2ef1c51c7922095d49e8640ce68c29d638b26ca2e8e344a8"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_project.py",
+      "source_sha256": "c3cf7646a12e7d3b21951a35f4aa1a4d50ef5e004edc6262105e0587c93699b1",
+      "package_sha256": "a0c9ad5e716284d65eadbbb2c76fb2568033fb3428764dace9734de6d880b1a6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ac1d9524cd40884ae217f07f05f71456a53279372f2b5da0878562aa74febeaa"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_tagging.py",
+      "source_sha256": "6540cdf66e49b67981bdff224803874282a712980c90ed14851c82b61f25d3d4",
+      "package_sha256": "722e7ff95fea95b23921d97bf23761ae9d468984f340a4512c2434cc9dd0577e",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "89215c6d2516eb8d054b3c7aba03666571b92b56edfdd18caaff6f22346bf1d4"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_telemetry.py",
+      "source_sha256": "790fe9a0d0014864901b2978115a1e295963b54ba878d929cba01aaccfa2b2d8",
+      "package_sha256": "c6cd5c44efec845234151fcb646fda7ebe753afbe1d6e9ee216a9c08dc9db611",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "5d4b80d345f1fd5c95866d13ae32727c16bc662613f677ac7251c7ee8992db45"
+    },
+    {
+      "path": "skills/agent-self-improvement/scripts/test_learning_workflow.py",
+      "source_sha256": "f1fd0a15b7beb912cbe26b74d54e35db9195d79b632c943915e623064400a543",
+      "package_sha256": "c6d1a58e501012cb61e5b5008a5b4f31fd5a9191cb2da975102ccb800d705f72",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "aeb93da1cd9c08342761acb28c1caff22c708a267d016eaea6b8881c21cb687f"
+    },
+    {
+      "path": "skills/agent-self-improvement/SKILL.md",
+      "source_sha256": "ed78a78f1ad51721c14382337aa00d63d8093b889d7ad0532034c0c15b647356",
+      "package_sha256": "8fe8541606a63a947b75282719078bb88d1ec7e5ee17f9703292708e304fcb0b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "690ad93c0762be1f00187b294d5bd6b5f22ee51b09a57c57cab1c843ede5438a"
+    },
+    {
+      "path": "skills/design-screenshot-spec/agents/openai.yaml",
+      "source_sha256": "4af28851176bcdae52a3bb518d083218025b3dff7b65428857ba830cbb59fc92",
+      "package_sha256": "9f3dbb13d6562bcce38c4643731e9462ca3bd1b6f775b27ab4543b26ea8b68d2",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "4af28851176bcdae52a3bb518d083218025b3dff7b65428857ba830cbb59fc92"
+    },
+    {
+      "path": "skills/design-screenshot-spec/references/design-source-inspection.md",
+      "source_sha256": "5cabc40b2eb410776230de8b5a2e55a05da3017189a3db66bbaae36bec5fec91",
+      "package_sha256": "c566a2978acbb1c9a5cbad847db1ae970ccf6c426401a2949889635ff0863d6c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "160822195c09aa8f6a43b60ba3f55ea697a6b1f8f8daf6e81032e743042fc2f3"
+    },
+    {
+      "path": "skills/design-screenshot-spec/references/effect-evidence.md",
+      "source_sha256": "a5340452c7b2e1b883a1f1a02da1d6c9860085df10e21a7326f8d0cfe3e62ecc",
+      "package_sha256": "b6cd5db7af9573f60be879d31382cfc890e4fb5d9c4a20eb1e3fce8e3ed96700",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "aaf995729bf76bb78c355f4ed14235f1230005db15bb28b62d71f265a138c036"
+    },
+    {
+      "path": "skills/design-screenshot-spec/references/product-behavior-review.md",
+      "source_sha256": "d800125b8846c433dc52862f10af9cdeb26245661daa37863e4cb13d8b714b63",
+      "package_sha256": "ecf6cc3d9f7322265e43391788b2aa5dfc11a1d0a1d27640d21584f433ef8d96",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b69906eb058a3258dd4684b2bf723ee3a15fb77debfaf9ca03ea1b93138082ff"
+    },
+    {
+      "path": "skills/design-screenshot-spec/references/spec-extraction-checklist.md",
+      "source_sha256": "84551843e1ec6fbb00f3a089a12942d9e18510ef6e2487850e75ba80bdbb6c0f",
+      "package_sha256": "f7df1e2babfab87d6feced09374862d1ff4f37d0734849a405942cbfbad7f85b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "293cab4af41035af98db7ba316f4d9f9b4448294b46d65d07e494fc1c3d97fe5"
+    },
+    {
+      "path": "skills/design-screenshot-spec/SKILL.md",
+      "source_sha256": "e6f5421ebb0740d8951318204e5fbcc8fac1098b57299909c59eddbbe05ae58a",
+      "package_sha256": "fafa60402ea1ecd23526f51d3dd2b1013fd8f9d457ebf5c9af760209683ad9e4",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "23faca51394f81d7f5e6a48c7581b939771c195e0d054df3e777308ec5267f93"
+    },
+    {
+      "path": "skills/execution-plan-manager/agents/openai.yaml",
+      "source_sha256": "33f28f07b3c2e7dff6ada1a1850fe115d84979dd18a62434b9dfdafd9bc285c1",
+      "package_sha256": "ccff19fa68ba6ef1195bd1d29edb7820b6862dfed7e4331ba169b0c029ee940b",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "33f28f07b3c2e7dff6ada1a1850fe115d84979dd18a62434b9dfdafd9bc285c1"
+    },
+    {
+      "path": "skills/execution-plan-manager/SKILL.md",
+      "source_sha256": "8666bafec76254b3ed9b593117e45f05c9a48c5bf93d6215c0b259b7335a1f15",
+      "package_sha256": "f54418a26381e3d04035cd1191dca24c2ef7dc67d108140387027a046906aee2",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "f9c8ef75538da8d00431be6f0cb43d612ceea39df7e6e745a0f0739491d7e279"
+    },
+    {
+      "path": "skills/frontend-architecture-planner/agents/openai.yaml",
+      "source_sha256": "62ae4bfe4b092759c31bb40a5270632afcea7eeca0bd61a690e821df4c29fe50",
+      "package_sha256": "489c90e8ee9449008cdf03e2014097f9bc79aeacc247e46244ed4ac002ee2843",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "62ae4bfe4b092759c31bb40a5270632afcea7eeca0bd61a690e821df4c29fe50"
+    },
+    {
+      "path": "skills/frontend-architecture-planner/SKILL.md",
+      "source_sha256": "f4c60f486f5dfdbd41aceb4e5056ed92641aa56dce8ea7e6f9574fe5d5bc205d",
+      "package_sha256": "509016bc41cda83bd8610cb2829b2bd103dd448ffa11287cb2c0c7c7f5b34ca8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "c70138275fa3c5a3579171ae71d667eca03f3d26280f98228c2494fda3b64be6"
+    },
+    {
+      "path": "skills/frontend-bugfix-debugger/agents/openai.yaml",
+      "source_sha256": "5386b09134fe025386f9cc8aaeca13e58f13aa8c1f246ea9e672df4cf41d32e0",
+      "package_sha256": "8af45d2ffd50f5fcf1983acba77c54709178da046f929273ed88da44a90fe8f3",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "5386b09134fe025386f9cc8aaeca13e58f13aa8c1f246ea9e672df4cf41d32e0"
+    },
+    {
+      "path": "skills/frontend-bugfix-debugger/SKILL.md",
+      "source_sha256": "547cb16e9608620db53d4bc585b37f8e965326504aa09081d5d76ddddfe0cf59",
+      "package_sha256": "2beb74d5718ba4c348694b72dc3a8ede335cae7e0e8fdf2e4285b2589e4f85ae",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "167275b7e43b114b9ba9b8e207f0a42111884d264b7ded6adb989873911f7f35"
+    },
+    {
+      "path": "skills/frontend-design-director/agents/openai.yaml",
+      "source_sha256": "8f8ca22ec6ee4d61277c651dc7cbc1806f4049df6c37413eaf93aee45580059d",
+      "package_sha256": "b01671f5283c4ab9c849bc7b0c6ca34b33e80b37319d462da8710a0f8c2d196d",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "8f8ca22ec6ee4d61277c651dc7cbc1806f4049df6c37413eaf93aee45580059d"
+    },
+    {
+      "path": "skills/frontend-design-director/references/design-direction-contract.md",
+      "source_sha256": "1ac4c782e7a35a6e1e0b2188af7302ca22742c2b265a9b8629bd43392273daa8",
+      "package_sha256": "34e7d7cb73bb6949f5f607af689b1978c0035e5ad3615bf8523186a199e02558",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "3ea545404e13a2d06fa14741b47d0627d8f975a54f43e9556cc8a73e90e73fcc"
+    },
+    {
+      "path": "skills/frontend-design-director/SKILL.md",
+      "source_sha256": "72b10e6dbadbd13353cb03f5950ef91bfe58db01a432f18a580cbdd36db46f06",
+      "package_sha256": "23015d0f78836b498b1b39217027c0f49de35cb7b94314b19b42727ae62e9adf",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "74717f232d6347764736bd2685fde70f496b42564502de334749ac65dcb0d695"
+    },
+    {
+      "path": "skills/frontend-design-intelligence/agents/openai.yaml",
+      "source_sha256": "3f7463d1c207299e32f3b72a178e07d7b50065f6dae323c363ddd48fe717f9f5",
+      "package_sha256": "a8b0f82f115ddf48c9e041ba83518249b850a579bb9ca3c1a35bad73f256192e",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "3f7463d1c207299e32f3b72a178e07d7b50065f6dae323c363ddd48fe717f9f5"
+    },
+    {
+      "path": "skills/frontend-design-intelligence/references/design-dials.md",
+      "source_sha256": "29e98f020ddc51e178fc41bc3998adeab891979d7663507b18793a0e1a8c5ba0",
+      "package_sha256": "9e68fafa4fc9f1b3f2f52a03d1b6bfcb62e05abba784d00caa9754b4f2efb58d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "84c43b1c444869aea2b343232d5931a7a67002475850aef5bfa407170416c63f"
+    },
+    {
+      "path": "skills/frontend-design-intelligence/references/product-anti-patterns.md",
+      "source_sha256": "c95bf99c18c5f3701141f7e987664b585c1dcc24fdc6fc7130a0530fe7ec0b61",
+      "package_sha256": "e6dae7b13501e4f01895a4bb4744b34967009efc83e616849487b2bc514c59d9",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ee7a6d23de69c605c8e1832ff1f353da081ec4a665ce57b8de4007b0ea4c593a"
+    },
+    {
+      "path": "skills/frontend-design-intelligence/references/product-pattern-matrix.md",
+      "source_sha256": "7672ebcb662c3bc5d14118b52582e880c23bae9fd73471fa5fd76227577e7b73",
+      "package_sha256": "0c0bbed2e2be56cb9a485f0e9eb2df6168ed062dcc294dfcc0fc9d5e266324bd",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ca6dd98cbe3b90238f87e383a60e8ca876a84e078f54f53ddc2e5c023f506896"
+    },
+    {
+      "path": "skills/frontend-design-intelligence/SKILL.md",
+      "source_sha256": "1f93453e309b239c28edf6d8e286f4bf7de3a94070020d31c446198aa13a0a6c",
+      "package_sha256": "83fdba3d9a2e2284c58db2b45398ef1647f18f2cd38807073ef08902f324832d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "7e548a176b249eb53d3f956e8f06f98526b29c1bb47ecbfe68fbe4a5d6ffcee9"
+    },
+    {
+      "path": "skills/frontend-layout-implementer/agents/openai.yaml",
+      "source_sha256": "e69723975a7cca7cdab63b499d36f5be5a95b00f98aff08c77f8e28893b698f4",
+      "package_sha256": "bac2e8a20f220337ae1349f1391342b80af6250a27826d68b19df28ebf4ee6ed",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "e69723975a7cca7cdab63b499d36f5be5a95b00f98aff08c77f8e28893b698f4"
+    },
+    {
+      "path": "skills/frontend-layout-implementer/references/implementation-rules.md",
+      "source_sha256": "ff7aac4d28a30ca37183c56032e1d339bbff2b5159fddf8aa26c8ce15d588f41",
+      "package_sha256": "3193df9b775d4daac56342fc7bda4e5afdc84e52a4234ab0f6fd3d91f2336707",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "3ac9026da1709e31b3d75c7061bceb71384dcd7ec91bf3486ff6f3e454d40197"
+    },
+    {
+      "path": "skills/frontend-layout-implementer/SKILL.md",
+      "source_sha256": "0dcfdcf3211311b6bce87bb89a2574e3c9badd4d6105e83d1a39dfb3eeb1ad5f",
+      "package_sha256": "fe886887241efc0265908fc0c9d1ccfa0c02644607c252ebe296dd7908982f86",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "dc21c4d9f4ee429d6156983f0f57998756e69d1b94bd2a370d0f383f5de40d61"
+    },
+    {
+      "path": "skills/frontend-linter-manager/agents/openai.yaml",
+      "source_sha256": "aa6849a47adfc3360eec37a63a3aca2ac6a6220945150bf8ebfd4fe07ee244e9",
+      "package_sha256": "84b523e59cea8a15a065257b6bbc24aa562f8c6ec71a21937bbd7f8f0eb9bc04",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "aa6849a47adfc3360eec37a63a3aca2ac6a6220945150bf8ebfd4fe07ee244e9"
+    },
+    {
+      "path": "skills/frontend-linter-manager/SKILL.md",
+      "source_sha256": "8cf36de63696099d5c89723da6c4d7663d25f9db76a206d2a9bef21c85799aba",
+      "package_sha256": "7ce4eaf5b0a889420f7b87924c3b29adac5734a25576c9cb3e33d75ccbde7c30",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e080bac909af62a8fffd8f340d19676ba2ebbadcd61f8699a2f88f25637d8a71"
+    },
+    {
+      "path": "skills/frontend-prototype-explorer/agents/openai.yaml",
+      "source_sha256": "0449850a22fa99b4820939a0e48c489f59d7d31003f7680635014202dc273aa4",
+      "package_sha256": "ecfe81efbced08aae09fbbde3b79d565fa0591d21cfe16b6a4ffd48355281950",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "0449850a22fa99b4820939a0e48c489f59d7d31003f7680635014202dc273aa4"
+    },
+    {
+      "path": "skills/frontend-prototype-explorer/SKILL.md",
+      "source_sha256": "587cbba7e58fe158189bdaffc91f5150021bbbf92f00aff2a0b570a31e3e6f04",
+      "package_sha256": "fc7044b9b41229e2579af7bcad016247054f58d795332f0927bb8ce71bda004f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "6ded7943d7ddd0f1078e5c1f7a72c144818ae517864de0c883014b921531f4f7"
+    },
+    {
+      "path": "skills/frontend-quality-reviewer/agents/openai.yaml",
+      "source_sha256": "562e8994f8f7df034ece2c0cfdb65b7f1ab036af26b4dc5bc42bc75d6ed3af23",
+      "package_sha256": "bdfbb4180b97adedfe194b9a3a8d5ba5bc7617cc8261fec7e61c1b8e5c1a53ed",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "562e8994f8f7df034ece2c0cfdb65b7f1ab036af26b4dc5bc42bc75d6ed3af23"
+    },
+    {
+      "path": "skills/frontend-quality-reviewer/references/review-handoffs.md",
+      "source_sha256": "b26427ff1d4723a801d55a67d4a8532e682ff0b3fcc606886270ac86ff245266",
+      "package_sha256": "150c87711f4520a1cd8e48b792a8a63000f9c99b832ade985bd78ce96a6f6180",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "0e85db2f09ce108db329200ba33a0db483b2bf994068f267a335dd1a49c49afb"
+    },
+    {
+      "path": "skills/frontend-quality-reviewer/scripts/review_package.py",
+      "source_sha256": "470ab57cbcf858ca003c29caadf85d9d7fd6ad005ab4ed25d877344f7c398af6",
+      "package_sha256": "470ab57cbcf858ca003c29caadf85d9d7fd6ad005ab4ed25d877344f7c398af6",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "470ab57cbcf858ca003c29caadf85d9d7fd6ad005ab4ed25d877344f7c398af6"
+    },
+    {
+      "path": "skills/frontend-quality-reviewer/SKILL.md",
+      "source_sha256": "f9ad8d23dec5c7a5ad1676191f788f2f8a0e12c8a0ca0bbeb44182d7fc0fe1d6",
+      "package_sha256": "52375e4829fcb2f5c814280539fedc9abb87d8739c0c31ed241a45fff4c33c49",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "84a184653305d329d7e8d456c2a34c43b59472fc05930a36681c739de89c6513"
+    },
+    {
+      "path": "skills/frontend-refactor-surgeon/agents/openai.yaml",
+      "source_sha256": "2edfd68ee828a1fe9fc91a4c9a9088608c00aefd36dd312a29ee19a567adc927",
+      "package_sha256": "e8d21fab089bfd7f70dcd529535148baba8671a6dd141aa9447a99e414dc168a",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "2edfd68ee828a1fe9fc91a4c9a9088608c00aefd36dd312a29ee19a567adc927"
+    },
+    {
+      "path": "skills/frontend-refactor-surgeon/SKILL.md",
+      "source_sha256": "e420f581af69d00b7ff8585621f70f7743ecf155bea4408141c580deae2aad49",
+      "package_sha256": "8670926b3223c9ab0007262ce7dc153568b5fbf4c8fb5f9afb79011fec013288",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "71db31a7a14e259e30e36adf8d850fb0e27030a52d0b3e09971d147b84a69da8"
+    },
+    {
+      "path": "skills/frontend-visual-qa/agents/openai.yaml",
+      "source_sha256": "efceb39312f09a4ff96201258457b56ed66b902175c4262c660611f3b60e00bf",
+      "package_sha256": "b1b2b58f2536a454a24c546d6b856aa9153fa2f921a0a6e513b58471496b48b0",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "efceb39312f09a4ff96201258457b56ed66b902175c4262c660611f3b60e00bf"
+    },
+    {
+      "path": "skills/frontend-visual-qa/references/visual-qa-checklist.md",
+      "source_sha256": "1eff9301137e1383d1964bc9caeb035e30e3f7af54f5b9b53f868aa04f9026ba",
+      "package_sha256": "7d20580088cdf2f3079991572ce2a089930ca6f1cbbb2b2a9c758dc2cf1ddc42",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "95feb5e2705a74934bc331da1d481965da1b81621e8f45af2c00cdeb3ccc5772"
+    },
+    {
+      "path": "skills/frontend-visual-qa/SKILL.md",
+      "source_sha256": "ff8153c9c3934032523f4ee6635cb56d8afc0d56612ae4e1d0850d932e8d9065",
+      "package_sha256": "b5e97e842bff270763743fe9b62b3aad62a3d61a531ac9e179cb23095c55758b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "a6fe28056960cdebf8409981c36a61591f7c46ad816e1085c1a028d913740c31"
+    },
+    {
+      "path": "skills/goal-planner/agents/openai.yaml",
+      "source_sha256": "acf5ff0ebbbe8357f07bd18ea5a5a066341256ca4c68d42796beeef7ee8937f6",
+      "package_sha256": "83feae7d771b1aeed9024bbc780cb881e3f78ed310f8cbcf0aee637320cfdea4",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "acf5ff0ebbbe8357f07bd18ea5a5a066341256ca4c68d42796beeef7ee8937f6"
+    },
+    {
+      "path": "skills/goal-planner/SKILL.md",
+      "source_sha256": "745fced6219e8da0235c9955475a0ae7016b0ed83e575a30f4d85bc4367c6905",
+      "package_sha256": "eeef45fbcb343d2efc6c5989194f2d38e7caf2f0d9969431b247ed23e14bf152",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "9eb06f1d71bd47226814db67194b110130afa08db0f76df750fcf823f4aad231"
+    },
+    {
+      "path": "skills/greenfield-project-builder/agents/openai.yaml",
+      "source_sha256": "d2161bc1b8d8fd6b8d80f651ec5ce9e63d12368934d713fb3831174194b73bab",
+      "package_sha256": "c8a1ced6a969ab0c0a1f8ecc5c2b7f686b37eb06dd221f35f2c0df5a8388024e",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "d2161bc1b8d8fd6b8d80f651ec5ce9e63d12368934d713fb3831174194b73bab"
+    },
+    {
+      "path": "skills/greenfield-project-builder/SKILL.md",
+      "source_sha256": "5c63d87d3da21afb67f99dba4c7dec64150acba06d90a5064d65a005499efbc8",
+      "package_sha256": "c89d0b9738263055106f2a86b22fb163fc5715f2d8248a69724c6bc75abacf90",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "7351cff3009c9b3abe6faa3bd6ae9dcbdafa7319f8368d92c652c8f8c9bb2cff"
+    },
+    {
+      "path": "skills/loop-workflow-planner/agents/openai.yaml",
+      "source_sha256": "3d7e0af0ee6ce8445ac4c144c240626b6812e55c41303ec2be621479420a7e18",
+      "package_sha256": "7cc5d19a45cbbe5f098374c277b62a07c89fa2b99e20620b70da9f13746b6806",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "3d7e0af0ee6ce8445ac4c144c240626b6812e55c41303ec2be621479420a7e18"
+    },
+    {
+      "path": "skills/loop-workflow-planner/SKILL.md",
+      "source_sha256": "e9d05e7b20aed61fd69dfa9cd22ba14ea888fc22424ab61250bb602ac5923c10",
+      "package_sha256": "47f0b2ff1f70439cd1a433f66328d3877af0e1bf05c5f16af99ffd8b8cadba1d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b5d88c725173fa85d7b2dffb7ad61925fae0c88a141ccef315daf67301a654ef"
+    },
+    {
+      "path": "skills/mcp-toolchain-manager/agents/openai.yaml",
+      "source_sha256": "5420cf4ff8554e21ac2ef584f4885aff03514bb556a8250a619d10cfce1caacc",
+      "package_sha256": "cbd9e5e772e58580d72cc89637c0c52fc7a561bb86b5fef7638b17bd5caaa4ae",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "5420cf4ff8554e21ac2ef584f4885aff03514bb556a8250a619d10cfce1caacc"
+    },
+    {
+      "path": "skills/mcp-toolchain-manager/SKILL.md",
+      "source_sha256": "a65f66cf9b7d94256f5305645161ffac4c37097edcaf7d1b73c67c33f797d309",
+      "package_sha256": "27c33448ff9f78c23f0e7251012612e76b4bd348f2bcc3f66ba190a434707787",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "25b1db417332121973265f0c263d9f5f7e656951b5da31dfb01b6d38a250518c"
+    },
+    {
+      "path": "skills/pattern-library-manager/agents/openai.yaml",
+      "source_sha256": "d4bfc402bb37bc71063bdc90f4c1405ff3253f0eefb55950a8a32f84e4238e5d",
+      "package_sha256": "83cbbbb568ac16442f3180c56d8da42c9efd5c12a12bb5d32e7d2fac8bac063b",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "d4bfc402bb37bc71063bdc90f4c1405ff3253f0eefb55950a8a32f84e4238e5d"
+    },
+    {
+      "path": "skills/pattern-library-manager/references/example-sourcing-policy.md",
+      "source_sha256": "2b25f289910beba1ffc526b98c78510ed7615f1b680b4b55c93b5f1f4ad1e741",
+      "package_sha256": "21101280211214c9a78d2598584df1165c07bdc19e713b9037ec18b7c2f0fbb4",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "cda3f5b892307b5d993a53c250d5240e54bc31a5ef723c34f6f51e7ed811af41"
+    },
+    {
+      "path": "skills/pattern-library-manager/references/pattern-entry-template.md",
+      "source_sha256": "be21bde7f12ce5c0be953eff3b094ee75fe0e82fcb23479bcbb6c021762abb51",
+      "package_sha256": "28c4dbe5c59d78e8a5003123117930fe618b058aae8ea42a232bf3da31e939be",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "935f210937023141e7cec82c90e6baea5035ef175a2d45973d0048db0ab71aef"
+    },
+    {
+      "path": "skills/pattern-library-manager/SKILL.md",
+      "source_sha256": "9569aa41014019788c4a1fef95848c1ab95845064314ec92236e573e2365b65d",
+      "package_sha256": "97be91e1b74749ab8afa8afa697abd56197c2c9ad2e4b17ae482087d586121ca",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "d69b3360de536bc1ccce9ea2603ac7132a7bb1c586e780ed715e906c1cac3cc1"
+    },
+    {
+      "path": "skills/project-context-adapter/agents/openai.yaml",
+      "source_sha256": "718a1437a7d1021c486e47ea92e361c498e24e2df278160bcf44575ac0cbd7db",
+      "package_sha256": "635c9ecf44f17644b7a650223f7f141eb853ccdd6e048e18d3862b919afd0f1a",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "718a1437a7d1021c486e47ea92e361c498e24e2df278160bcf44575ac0cbd7db"
+    },
+    {
+      "path": "skills/project-context-adapter/references/extraction-checklist.md",
+      "source_sha256": "9ef4b56a7aaa84f0f7198130511f076cc74555bc42135aeae260c8476cde76ae",
+      "package_sha256": "e023149912f1260f571097173bacca3169603e4af6ae6ef89563da00ae4fd57c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "14e50deeac6a5f52a3abb452d81584d4b29d4bf10e0dbee044fba27e00257330"
+    },
+    {
+      "path": "skills/project-context-adapter/references/sync-procedure.md",
+      "source_sha256": "a15a868d5bd864413d95307a75239cc7cd0935f5eb3c5dc7a59b6a138a84f361",
+      "package_sha256": "fda967529ac8cc3a9fd5edd30d780951eaa25b7c0eea1832f9dcc827831bd3b1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "2d62c174de8558677d27a915ae6f0f582775e5337c96019c09776e22d6e7786a"
+    },
+    {
+      "path": "skills/project-context-adapter/SKILL.md",
+      "source_sha256": "a2f973115f48c0c4c47d0cd35c6d0a7cff7e0a2cd0b6e02c4145501c811e3388",
+      "package_sha256": "9cd2a60ab1bf7f747a1e9a7dbc146cc1ef8589be168fdfb64bfefe8255dbd2ab",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b1fe9c6bda3ed241cba9e13b582f821a59fd8908a4502c5e190f5d0f7be60ea4"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/agents/openai.yaml",
+      "source_sha256": "b1820e3651e473ca3634930cfb872619941c915983eb5c96f32c4a5cd2d5e0c2",
+      "package_sha256": "97a90158dd6defef307cd38191a836011eec80bdf2d0f5d67b716783dffcdcf9",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "b1820e3651e473ca3634930cfb872619941c915983eb5c96f32c4a5cd2d5e0c2"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/references/adaptation-checklist.md",
+      "source_sha256": "ce897bedd80f1b8a48d702fe0d9892cf0f496961b3669e7bb7f7f2cd708c539c",
+      "package_sha256": "a3806a8c167149937aa02e714b6b86893825586c22e0bddd24b6fd4d63ad826f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "eb6af46885962f99eab860a4d11a262ee3f99c8860378a97d06f0771217e9502"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/references/claude-agent-bootstrap.md",
+      "source_sha256": "f9f99145663ac5118c9229c9dbf6bb67863422208f66ae3841b0234315332335",
+      "package_sha256": "f36fa000d65f2197ba5ed7caa1a49a7166dbb3b48f3291f80fbb9df6c9cfbd70",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bc3a78366bc8e172f71f6c3dbb88869dbf2598e97b52dfcacf528c64e8d2ce78"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/references/codex-model-bootstrap.md",
+      "source_sha256": "7935c95dffabd848ba9d6ea6585f113ee536d5b061fb89b6fedaac1d152ef4a0",
+      "package_sha256": "2cd85d064facfec6cab7a2823dcefa9e82e059619666dd16d22b5d5dd669a5a6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "bd05b28300f5c39e5de521b743d13a0bdd61d4f4f2c9a7fcef84314be6f89e11"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/references/installation-diagnostics.md",
+      "source_sha256": "cd02005142714a5c18312c58ca69e975b512f7b7abf29a6f6008640208fc735c",
+      "package_sha256": "e4ebb0d2b4e3d9fc967d9b84cc218f352afcd845b6f2207ad251e6cf2158adfa",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "fa7d0a8d6117a2e8d1cfe6b29be986ea0030ac510c5bcb428977d204e809f983"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/references/model-workload-matrix.md",
+      "source_sha256": "e627f58644f2229a601b097b443553434b72d5553249a91730988947b03e829b",
+      "package_sha256": "d648d6559c2d908ea32fcbfe83dc77ec8dce53fefa0a33284cb70141741f5afb",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "40669580d750b17c6deaf63b45b97fa4914a70420e9b65fd2416af8dc3038f8b"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/references/path-audit-checklist.md",
+      "source_sha256": "daf5141c883234a26262e1a0598e10ee4ab476dda9eeaefd926c428c01fe324c",
+      "package_sha256": "1a88d2b12870d82588f37415d77e5523370ddcf0e73dda3d3c6cd5298e07b1d8",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "35350d344972ac64190c6f0b72ea03b0c87d5293cbd84073baf7e77771973a6a"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/scripts/configure_gpt_agents.py",
+      "source_sha256": "dd86932eddbb16cada4afdc4393a637728e240e1466bb2cd1bb9380271ada9ea",
+      "package_sha256": "dd86932eddbb16cada4afdc4393a637728e240e1466bb2cd1bb9380271ada9ea",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "dd86932eddbb16cada4afdc4393a637728e240e1466bb2cd1bb9380271ada9ea"
+    },
+    {
+      "path": "skills/project-onboarding-adapter/SKILL.md",
+      "source_sha256": "1b7ce5d98af194b2a88a9a3d6fdd3e0c6098f2eb1095ad7e8a06272ea60457b1",
+      "package_sha256": "d296e05e6a0d1f1a69c1f57ec9ccab576ddd2595a551fc5aa78413d9ef319474",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "eb4f93a73039a361bf96e8c6365fde61b4457bdbbafaa8491f25a706d37aa407"
+    },
+    {
+      "path": "skills/webdev-feedback/agents/openai.yaml",
+      "source_sha256": "52958411412794c6dfc4ebb0ced519b1c98dd1b9cd7817b1ffb687b26c6a1f29",
+      "package_sha256": "99818db8f9b9223524c0eaee4353d59ab296459d141d40e89a25f6214902f76f",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "52958411412794c6dfc4ebb0ced519b1c98dd1b9cd7817b1ffb687b26c6a1f29"
+    },
+    {
+      "path": "skills/webdev-feedback/references/issue-publication.md",
+      "source_sha256": "1cddd700b92bb7fbd46415a5038f1319cd0abf7db1419a2586ac734c85dd1761",
+      "package_sha256": "087e68c4f789c28432260b7becb2c6249862eee825e16df580685fd97c53a483",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "fae81f7bfd658f6a04e7e067cadca0feddaccd8d7568745189308f7d478ce9e3"
+    },
+    {
+      "path": "skills/webdev-feedback/SKILL.md",
+      "source_sha256": "76b7c2309c928c081a1ae8af13b57ddaa67022ca451da706deb04249df4aefc3",
+      "package_sha256": "11b6ef87c40f754c022dd4d59f2db6884101fa96bd361ba387e1ba696779d846",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8ca82564063cb828261a4997bda12bbf84e4891115a4112a438d999b81d5f28a"
+    },
+    {
+      "path": "skills/webdev-kit-updater/agents/openai.yaml",
+      "source_sha256": "4a3a89e333f4de6b30ca72b88c91731ac80498f08d35548b9a6d395132ad760d",
+      "package_sha256": "847a3753855d211d756b4b7c8327bd1535f0f8b0de16f9644267f8f4da0ac6b8",
+      "comparison": "equivalent-content",
+      "basis": "STEM content with portable metadata/line endings",
+      "package_lf_sha256": "4a3a89e333f4de6b30ca72b88c91731ac80498f08d35548b9a6d395132ad760d"
+    },
+    {
+      "path": "skills/webdev-kit-updater/references/upgrade-procedure.md",
+      "source_sha256": "3643281e931dc6a2c9cf7487d9c542af2c4068249670630d8fc227fa1fad01c1",
+      "package_sha256": "714304ac605ea36e4ec549bb4c5177d99b6824b14074b95cade7d8e8ac95cdb6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "c9e6f10ac9862237e9b699badcc93dda14b22d138f4152adb7392ddd2cccb67f"
+    },
+    {
+      "path": "skills/webdev-kit-updater/SKILL.md",
+      "source_sha256": "4cf63b6089bd44bc133e3d537f622453923b502af8ae7a32a18ff7bef3953e4c",
+      "package_sha256": "d13457567d3003ea494eafdba2b2a0bda4c7f42df1d87ed7f4e8380bab3c41db",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ac44946823af4686f830fdc134560739a9408cf07ba1eee8c16a44215825bc3a"
+    },
+    {
+      "path": "templates/context-index.md",
+      "source_sha256": "1fdefdcf17b43a4a0c14a008b5cd78f899ee22f77446dc0d81f38299d238dc07",
+      "package_sha256": "3f6e8211e52caa63275c715d60166a75e1082afe7fd028a655ddb57ca3aefaa6",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b1949aeba2a86117afe502251fbf0fedef5208f8db8d9034b7e7e8833d82f31a"
+    },
+    {
+      "path": "templates/decision-log.md",
+      "source_sha256": "287361fdeeb198feb0d2225b1e4be44147d81e91a1a806a368acaff94dc76afe",
+      "package_sha256": "0a33e6ec47877f9626ae4be2be08ee5d22280081a54f58bcf97e32f83c880876",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "d5e7571ac02c4e900158811aa053c70702d8951ff97e84558e9e87169fc62207"
+    },
+    {
+      "path": "templates/design-direction-contract.md",
+      "source_sha256": "7e09f2bf427d3ccd3bebb0a50f6b370c6c41bed046051aa8b94c7d56006836ba",
+      "package_sha256": "4fec091c2a777207b53cfb4d621604cba5754797cf6856abc7c1c9a058ac1734",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e94960a5c2e1f46034df5024a22d1d6ae3bb14234ecbbed2b8cef5f8e587a40e"
+    },
+    {
+      "path": "templates/execution-plan.md",
+      "source_sha256": "d373977cd7b48bfb24425474acbe8e0a337613dc78a787a32d8f790efe5d5472",
+      "package_sha256": "5856a2492c3e757f95e79ff1a18a06ac26896783340421e7b039a4819b256952",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "54dbd6f5a5eed1efb7b090d125c441b7a7cbae45c412ca1296444de6400bbd7b"
+    },
+    {
+      "path": "templates/goal-contract.md",
+      "source_sha256": "f4cea5decbc23606fad50b75ba1def4d53b0fe6f64366efcdecf2d098f2c2006",
+      "package_sha256": "e1ff7393274d94a31da8e4e3ecfcc5d4c276b1f124791581fdb5c46be280a179",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "38d38162207b59a8635154ec1a951d05f38ff7e10bbadae2ff81a04e0738bc05"
+    },
+    {
+      "path": "templates/loop-memory.md",
+      "source_sha256": "104a7049a71e7d14c924cd5b5731a4d49efd96b06093bb78b70b7143fd610e43",
+      "package_sha256": "957d84275a4f2ebe54d774db3a6f74326c8b18967623607a81ec6c581d4a86ff",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "fa2a0354ba6974184b425a5648b0e4b6c8b88f8ff7173a800d82cf0e72655f50"
+    },
+    {
+      "path": "templates/loop-workflow-contract.md",
+      "source_sha256": "69a1b6a703b321fe74294fb5b55d1b10a7c36e9cabdbaac133719420f8f605ca",
+      "package_sha256": "ed6b7028d1f7223f903ed76f63c84861ba5811de0784428a7f86770f619bb3fc",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "e4332c062a486b0166e61f188d2da38694a128d99a274e2794ee9e53daaed0aa"
+    },
+    {
+      "path": "templates/progress-log.md",
+      "source_sha256": "8b1b9d8d11f3dce60f57295752527483a979319394483237ac8af6146314cba0",
+      "package_sha256": "a880a45faac0d453e466cdcb4a3984f82fdc30e41f282a8d3fe4fe42c452f473",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b32d5862b3f9a2fa541cddf8aee8595af3f40f470c253931336ccd97ea0b55c5"
+    },
+    {
+      "path": "templates/project/claude-agent-profile.md",
+      "source_sha256": "9a88093579fad342c67a7a55bef14893cb81cd625b8db1f7424b2598ea9cea5d",
+      "package_sha256": "549b06d297a158b8038efe7c35946a82947a847715b6f12f3998d597067f15e7",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "4f69dc1be7a1aa09144e3b3aa9179f379eb17f6bd98995626d728035ac2a5d29"
+    },
+    {
+      "path": "templates/project/client-profile.md",
+      "source_sha256": "c409ce92fe46448b23d175116dc842441b750ebc75f716c60a481f20029f65ec",
+      "package_sha256": "e602bb7b52c215820132505a6d4e5b7e9cc57f8a1fd86b2a5e830de3d27b167b",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "28ed278095194bb76d5bef6959f4238a869252181be22804d51e61d7a8c53302"
+    },
+    {
+      "path": "templates/project/design-system-feedback.md",
+      "source_sha256": "2400ab4f83e4f584b88f76c642536e91a2e332de9a01b8fc8c98deb522958849",
+      "package_sha256": "094bb41adcf651ebeb83ae14fa7796f06299cee032b27cfe035db3482f05be50",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8c917806ff8858e7614d447e10704b45ad4e78d65477ab5f6e60f67ec73edf61"
+    },
+    {
+      "path": "templates/project/design-system-pilot.md",
+      "source_sha256": "48049a8fb5ca6d18fa4416fcea5048948cc63ee86cf2af0db1da253685a4ae9c",
+      "package_sha256": "57aa9a08c13eb158881905846f93864d8018a7d5c0c199266379dda6a1656723",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "cbe5048190338fa74b44cee5491965edf547567e68eee7070af36cfd22aeaa5e"
+    },
+    {
+      "path": "templates/project/domain-glossary.md",
+      "source_sha256": "6d2733f483c2e9d4281f7acc7f1ac002402bae7f8f91bce58eaea5f57939a71c",
+      "package_sha256": "33dc35a0333b6a2a746116a10f7686c523fc79f37ece44cebfb2f2f3bdb31b7c",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ee6a918c9c2a02ae1c950672f9d3d78cfcc3d8c856c2cceadd8db5178e6e0441"
+    },
+    {
+      "path": "templates/project/instruction-migration.md",
+      "source_sha256": "e66e724082ff81005b051fc6cfc0fe8921d7f4cf92ca983dcf9ad6471b8758a0",
+      "package_sha256": "6c7561ffcf9823e4a1c097eb6556c59a59440660da9025cbfb2eb400c4104fbf",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "a5d376a0eddb1fcde232ffa94e776e8158169a76c6a2d24dfc29d62b5a09fc51"
+    },
+    {
+      "path": "templates/project/mcp-profile.md",
+      "source_sha256": "dfc557281c9ed7be6618211117011f4767b554c7379a27c6188cf280f61b91ec",
+      "package_sha256": "32abc2cdd1ef67b8e02e7f59358b016deaac5b75b96e176cf9a43415a5206d61",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "a394ac6abdc7a72aab328cd4c0a2dc7e275a138f4aea1adccf5bed502743f445"
+    },
+    {
+      "path": "templates/project/model-routing-profile.md",
+      "source_sha256": "268c35014b467050b3e3df5799d00524da3cb67964746d663242b8198ca08c58",
+      "package_sha256": "82e5238122f022eaa8f125829b2401187a9a7fb37e141e9acf69750223afa054",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "38fa5e66f0a7665ff536cdcf35fe94cfac9aa38cb296f0ba61dbd77e8e2d1852"
+    },
+    {
+      "path": "templates/project/verification-profile.md",
+      "source_sha256": "ced993ec23120750d65b7cf9b540a8793f18cb21362b4172b3df5be1b7f749d4",
+      "package_sha256": "a5f0c89cf679ce1870f7ff1270f6bc6f120b89ce95c273c9e37780a43901b989",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "35428499ab0b6d326a49d782696a2610fc0817e77ffc7529f8f0765ba1d1ed21"
+    },
+    {
+      "path": "templates/root-pointers/AGENTS.codex.md",
+      "source_sha256": "55f35e3b6fc24df4baf23739cc6ed9fb466f0432d6a317b0cf82964d1adf3bdd",
+      "package_sha256": "c49defa43eb5ced9476b7527c67bc95a4d85e13022e01447ee2dc64e49ec569d",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "8d44ba77558e0f4fc08f14d5c0e80f2c65eab3cf5920af7420490ba749378e14"
+    },
+    {
+      "path": "templates/root-pointers/AGENTS.cursor.md",
+      "source_sha256": "55f35e3b6fc24df4baf23739cc6ed9fb466f0432d6a317b0cf82964d1adf3bdd",
+      "package_sha256": "e845d61793b659c1200eaad37309ad0587ee8a1c955dc8a1d385c6a84ac0fe4f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "eae6e83b4390c769f43ac6e616b708a930345ce45f6353bfa54b303370bcd901"
+    },
+    {
+      "path": "templates/root-pointers/AGENTS.vs-code-codex.md",
+      "source_sha256": "ea97db800406acc2fb3c53d18eb339a8f42d10db0a578735261d628fbd13a4c7",
+      "package_sha256": "1ce56bb6b8204e62e1ebfd1427b0793a4cc38a4b25b6aa40f9fa5a55ea2d4ae5",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "cc24c231bcae9ce0215202e8615b74acbed7d503c7c7c4f3aaa4881091d4316a"
+    },
+    {
+      "path": "templates/root-pointers/CLAUDE.claude-code.md",
+      "source_sha256": "42f4c3ae5ba497e62d30fce5742c68f30e3e7647027205446d9fd469bfd00b84",
+      "package_sha256": "3ee2827b6bc1520254fed02bdb023b3051147722be520c99009953489d872055",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "b2e08dd89d526851452269be34b76dc1b9d6055ed70b4212bb87ca06ec25262a"
+    },
+    {
+      "path": "templates/subagent-report.md",
+      "source_sha256": "3bdf4d67e83abb37bf4ef5c5baa25b0b19a25be0172c20498730cb0f82105132",
+      "package_sha256": "ca3e7b24d5f3e203a1e112452603dcfd91c4e7424fcc385f97022deec3410ea9",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "59cf8f8f4da83a6e8daa7ad9b09ab1cc491aaa0e63b72c1af60fa93882dbb092"
+    },
+    {
+      "path": "templates/subagent-task.md",
+      "source_sha256": "c2228aaced8c3ad8bd1835b5000e1123cd6c3e0942eb1ddf5c3ef1e23d17e0e9",
+      "package_sha256": "5ba2878f4ae80eede8c0cfd0662ec95c11f9ccba0dc529bf6ea973667d4e46e1",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "d1efed2c2582104daf159100e4b3389c1e8fabdb8684001ae270900bf5d5b9c4"
+    },
+    {
+      "path": "templates/visual-memory.md",
+      "source_sha256": "85ab483dd7cfba4d0be1d1d9549b5fed08533da232bb00acfbf34d762479dad0",
+      "package_sha256": "cf5f431030e9be90fdf3bf53d58da36a2eabec64effbc911d80ff2395bd5c67f",
+      "comparison": "documented-difference",
+      "basis": "Approved runtime instructions/regression fixtures or technical portability; see 1.9.0-plan.md and diff.",
+      "package_lf_sha256": "ed33cd3e632a771501ca647cc421d51f5c9ac30be74d838fdbf98588af2ccc8f"
+    }
+  ]
+}

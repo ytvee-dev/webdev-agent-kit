@@ -73,11 +73,11 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None  # Never forward authorization to another host.
 
 
-def request_page(spec, start, end, cursor=None):
+def request_page(spec, start, end, cursor=None, *, authorization=None):
     base = spec["base_url"].rstrip("/")
     if urllib.parse.urlparse(base).scheme != "https":
         raise ValueError("Telemetry requires HTTPS")
-    auth = os.environ.get(spec["authorization_env"])
+    auth = authorization or os.environ.get(spec["authorization_env"])
     if not auth:
         raise RuntimeError("not_connected")
     filters = ([{"type": "arrayOptions", "column": "tags", "operator": "all of", "value": spec["required_tags"]}]
@@ -100,6 +100,91 @@ def request_page(spec, start, end, cursor=None):
         raise RuntimeError("http_" + str(exc.code)) from None
     except urllib.error.URLError:
         raise RuntimeError("network_unavailable") from None
+
+
+def normalize_windows(windows):
+    normalized = sorted({(timestamp(start), timestamp(end)) for start, end in windows})
+    result = []
+    for start, end in normalized:
+        if start >= end:
+            raise ValueError('Invalid telemetry interval')
+        if result and start <= result[-1][1]:
+            result[-1] = (result[-1][0], max(end, result[-1][1]))
+        else:
+            result.append((start, end))
+    return result
+
+
+def export_selected(project, windows, fetch=request_page, now=None):
+    """Export only selected incident windows, with bounded resumable readback."""
+    config = read_config(project)
+    spec = config['telemetry']
+    state = Path(project).resolve() / '.agents/learning'
+    if not spec.get('enabled'):
+        return {'status': 'disabled', 'database_only': True}
+    if not (spec.get('required_tags') or (spec.get('project_metadata_key') and spec.get('project_metadata_value'))):
+        return {'status': 'project_mapping_unavailable', 'database_only': True}
+    ranges = normalize_windows(windows)
+    if not ranges:
+        return {'status': 'unmatched', 'database_only': True}
+    now = now or datetime.now(UTC)
+    floor = now - timedelta(days=min(30, spec.get('access_days', 30)))
+    pages, accepted, cached, missing = 0, 0, 0, 0
+    deadline = time.monotonic() + 120
+    status = 'complete'
+    with lock(state, state / 'telemetry'):
+        try:
+            for start, end in ranges:
+                if start < floor or end > now:
+                    missing += 1
+                start, end = max(start, floor), min(end, now)
+                if start >= end:
+                    continue
+                key = hashlib.sha256(json.dumps([config['project_id'], spec, start.isoformat(), end.isoformat()], sort_keys=True).encode()).hexdigest()
+                receipt = state / 'telemetry-windows' / (key + '.json')
+                saved = json.loads(receipt.read_text(encoding='utf-8')) if receipt.exists() else {}
+                if saved.get('complete'):
+                    cached += 1
+                    continue
+                cursor, seen = saved.get('cursor'), set()
+                while True:
+                    if pages >= min(1000, spec.get('max_pages', 100)):
+                        raise RuntimeError('page_budget_exhausted')
+                    if time.monotonic() >= deadline:
+                        raise RuntimeError('time_budget_exhausted')
+                    pages += 1
+                    response = fetch(spec, start.isoformat(), end.isoformat(), cursor)
+                    if not isinstance(response.get('data'), list) or not isinstance(response.get('meta'), dict):
+                        raise RuntimeError('invalid_response')
+                    for raw in response['data']:
+                        if not raw.get('startTime') or not raw.get('id') or not assess(raw, config)['project_match']:
+                            continue
+                        at = timestamp(raw['startTime'])
+                        if not start <= at < end:
+                            continue
+                        value = sanitize(raw)
+                        payload = dict(project_id=config['project_id'], observation=value, assessment=assess(value, config))
+                        digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+                        path = state / 'archive' / at.strftime('%Y-%m') / (digest + '.json')
+                        if not path.exists():
+                            write_json(path, payload)
+                        accepted += 1
+                    following = response['meta'].get('cursor')
+                    if following and (following == cursor or following in seen):
+                        raise RuntimeError('repeated_cursor')
+                    write_json(receipt, dict(complete=not following, cursor=following))
+                    if not following:
+                        break
+                    seen.add(following)
+                    cursor = following
+        except (RuntimeError, ValueError, OSError) as exc:
+            status = str(exc) if isinstance(exc, RuntimeError) else 'invalid_or_unavailable'
+    result = dict(status=status if status != 'complete' or accepted or cached else 'empty_unknown_reason',
+                  pages=pages, accepted=accepted, cached_windows=cached, unavailable_windows=missing,
+                  coverage_complete=status == 'complete' and not missing,
+                  database_only=not accepted and not cached)
+    write_json(state / 'telemetry-status.json', result)
+    return result
 
 
 def export(project, fetch=request_page, now=None):
@@ -188,7 +273,7 @@ def export(project, fetch=request_page, now=None):
         return result
 
 
-def prepare(project, run_id, months):
+def prepare(project, run_id, months, windows=None):
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", run_id) or any(not re.fullmatch(r"\d{4}-\d{2}", m) for m in months):
         raise ValueError("Invalid run ID or month")
     state = Path(project).resolve() / ".agents/learning"
@@ -198,6 +283,9 @@ def prepare(project, run_id, months):
         raise ValueError("Unsafe run directory")
     destination.mkdir(parents=True, exist_ok=True)
     rows = {}
+    ranges = normalize_windows(windows) if windows is not None else None
+    total_bytes = 0
+    truncated = False
     for month in sorted(set(months)):
         for path in sorted((state / "archive" / month).glob("*.json")):
             value = json.loads(path.read_text(encoding="utf-8"))
@@ -205,14 +293,24 @@ def prepare(project, run_id, months):
                 raise ValueError("Archive digest mismatch")
             if value["project_id"] != config["project_id"]:
                 raise ValueError("Wrong project archive")
-            _ = value["observation"]
+            observation = value["observation"]
+            if ranges is not None and (not observation.get('startTime') or not any(
+                    start <= timestamp(observation['startTime']) < end for start, end in ranges)):
+                continue
+            if not assess(observation, config)['project_match']:
+                continue
+            size = len(json.dumps(value, ensure_ascii=False).encode('utf-8'))
+            if total_bytes + size > 8 * 1024 * 1024:
+                truncated = True
+                continue
+            total_bytes += size
             # Preserve revisions; identical overlap records are one entry.
             rows[path.stem] = value
     cache = destination / "telemetry.jsonl"
     cache.write_text("".join(json.dumps(v, ensure_ascii=False) + "\n" for v in rows.values()), encoding="utf-8")
     write_json(destination / "telemetry-manifest.json", {"months": months, "entries": len(rows),
                "sha256": hashlib.sha256(cache.read_bytes()).hexdigest(), "durable_archive_ids": list(rows)})
-    return {"cache": str(cache), "entries": len(rows)}
+    return {"cache": str(cache), "entries": len(rows), "truncated": truncated}
 
 
 def cleanup(project, run_id):
