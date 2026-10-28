@@ -7,12 +7,18 @@ export const ExperienceRecorder = async ({ client, directory }) => {
 
   const python = process.env.AGENT_LEARNING_PYTHON || "python"
   const run = async (subcommand, payload) => {
+    let proc
+    let timer
     try {
-      const proc = Bun.spawn(
+      const encoded = payload === undefined ? null : JSON.stringify(payload)
+      const maxBytes = subcommand === "attach-data" ? 29 * 1024 * 1024 : 3 * 1024 * 1024
+      if (encoded && new TextEncoder().encode(encoded).byteLength > maxBytes) return null
+      proc = Bun.spawn(
         [python, script, subcommand, "--project", directory],
         { stdin: "pipe", stdout: "pipe", stderr: "ignore" },
       )
-      if (payload !== undefined) proc.stdin.write(JSON.stringify(payload))
+      timer = setTimeout(() => proc.kill(), 3000)
+      if (encoded !== null) proc.stdin.write(encoded)
       proc.stdin.end()
       const output = await new Response(proc.stdout).text()
       const exit = await proc.exited
@@ -20,6 +26,8 @@ export const ExperienceRecorder = async ({ client, directory }) => {
     } catch {
       // Recorder failures must never block the user's primary agent.
       return null
+    } finally {
+      if (timer) clearTimeout(timer)
     }
   }
 
@@ -69,7 +77,9 @@ export const ExperienceRecorder = async ({ client, directory }) => {
             message_id: String(info.id ?? part.id),
             part_id: String(part.id),
             kind,
-            content,
+            content: content.slice(0, 65536),
+            truncated: content.length > 65536,
+            timestamp: Number.isFinite(info.time?.created) ? new Date(info.time.created).toISOString() : undefined,
             skills: invoked,
             attachments: metadata,
           })

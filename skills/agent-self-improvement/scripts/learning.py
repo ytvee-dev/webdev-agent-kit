@@ -15,6 +15,8 @@ from contextlib import closing
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+from learning_state import check_owner, state_root
+
 MAX_EVENT_BYTES = 262144
 MAX_TEXT = 65536
 MAX_ATTACHMENT = 20 * 1024 * 1024
@@ -72,13 +74,15 @@ def default_root():
 
 def ensure_local_store(project, state, memory_id=None):
     project = Path(project).expanduser().resolve()
-    if Path(state).resolve() == project / ".agents/learning" and not (Path(state) / "project.json").is_file():
+    check_owner(project, state)
+    if not (Path(state) / "project.json").is_file() and not (Path(state) / "experience.sqlite3").exists():
         from learning_project import initialize
-        initialize(project, memory_id=memory_id)
+        initialize(project, memory_id=memory_id, state=state)
 
 
 def project_id(root):
-    descriptor = Path(root).expanduser().resolve() / ".agents/learning/project.json"
+    descriptor = state_root(root) / "project.json"
+    check_owner(root, descriptor.parent)
     if descriptor.is_file():
         identity = json.loads(descriptor.read_text(encoding="utf-8")).get("capture_project_id", "")
         if not re.fullmatch(r"[a-f0-9]{24}", identity):
@@ -112,6 +116,10 @@ def create_store(root):
             session_id TEXT NOT NULL, message_id TEXT NOT NULL, part_id TEXT NOT NULL,
             kind TEXT NOT NULL, timestamp TEXT NOT NULL, source_url TEXT,
             content TEXT NOT NULL, skills_json TEXT NOT NULL, attachments_json TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS event_metadata (
+            event_id TEXT PRIMARY KEY, received_at TEXT NOT NULL, source_timestamp TEXT,
+            id_quality TEXT NOT NULL, truncated INTEGER NOT NULL, content_missing INTEGER NOT NULL
         );
         CREATE INDEX IF NOT EXISTS idx_events_project ON events(project_id, timestamp);
         CREATE TABLE IF NOT EXISTS blobs (
@@ -158,7 +166,7 @@ def set_pause(conn, project, client, session, paused):
             "recording": opt_in(conn, project), "retroactive": False}
 
 
-def retain_raw(conn, project, days, apply=False):
+def retain_raw(conn, project, days, apply=False, processed_only=False):
     """Age-based maintenance only; never remove memory, blobs or privacy history."""
     if days < 1:
         raise ValueError("Retention days must be positive")
@@ -183,8 +191,10 @@ def retain_raw(conn, project, days, apply=False):
                             protect_all = True
                         else:
                             protected.update(r[0] for r in conn.execute("SELECT id FROM events WHERE project_id=? AND client=? AND session_id=?", (pid, client, session)))
-        selected, protected_count, invalid = [], 0, 0
-        for eid, stamp in conn.execute("SELECT id,timestamp FROM events WHERE project_id=?", (pid,)):
+        from learning_memory import curated_event_ids
+        processed = curated_event_ids(conn, project) if processed_only else None
+        selected, protected_count, invalid, reclaimable = [], 0, 0, 0
+        for eid, stamp, content_bytes in conn.execute("SELECT id,timestamp,length(CAST(content AS BLOB)) FROM events WHERE project_id=?", (pid,)):
             try:
                 date = datetime.fromisoformat(stamp)
                 if date.tzinfo is None:
@@ -193,14 +203,17 @@ def retain_raw(conn, project, days, apply=False):
                 invalid += 1
                 continue
             if date < cutoff:
-                if protect_all or eid in protected:
+                if protect_all or eid in protected or (processed is not None and eid not in processed):
                     protected_count += 1
                 else:
                     selected.append(eid)
+                    reclaimable += content_bytes
         if apply:
+            conn.executemany("DELETE FROM event_metadata WHERE event_id=?", [(eid,) for eid in selected])
             conn.executemany("DELETE FROM events WHERE project_id=? AND id=?", [(pid, eid) for eid in selected])
     return {"mode": "applied" if apply else "preview", "eligible": len(selected), "deleted": len(selected) if apply else 0,
-            "protected": protected_count, "invalid_timestamps": invalid, "days": days,
+            "estimated_content_bytes": reclaimable, "physical_shrink_guaranteed": False,
+            "processed_only": processed_only, "protected": protected_count, "invalid_timestamps": invalid, "days": days,
             "limitations": "Raw events only. Structured records, attachments, reports, backups and remote Git history remain. Missing provenance conservatively pins events."}
 
 
@@ -235,7 +248,7 @@ def normalize(event, project, client_override=None):
     if not isinstance(text, str):
         text = json.dumps(text, ensure_ascii=False)
     text = redact(text)
-    message = str(event.get("message_id") or hashlib.sha256(text.encode()).hexdigest())[:200]
+    message = str(event.get("message_id") or uuid.uuid4().hex)[:200]
     part = str(event.get("part_id") or "")[:200]
     skills = event.get("skills", [])
     if not isinstance(skills, list):
@@ -261,17 +274,29 @@ def normalize(event, project, client_override=None):
 
 def capture(conn, project, event, client_override=None):
     if not opt_in(conn, project):
+        from learning_health import capture_health
+        capture_health(project, "skipped", "disabled")
         return {"recorded": False, "reason": "collection_disabled"}
     if not isinstance(event, dict):
         raise ValueError("Event must be a JSON object")
     if session_paused(conn, project, str(client_override or event.get("client") or ""), str(event.get("session_id") or "")):
+        from learning_health import capture_health
+        capture_health(project, "skipped", "paused")
         return {"recorded": False, "reason": "session_paused"}
     record = normalize(event, project, client_override)
     cur = conn.execute(
         "INSERT OR IGNORE INTO events VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", record
     )
+    conn.execute("INSERT OR IGNORE INTO event_metadata VALUES (?,?,?,?,?,?)",
+                 (record[0], utc_now(), str(event.get('timestamp'))[:60] if event.get('timestamp') else None,
+                  'synthetic' if event.get('id_quality') == 'synthetic' or not event.get('message_id') else 'client',
+                  int(bool(event.get('truncated')) or len(str(event.get('content', ''))) > MAX_TEXT),
+                  int(bool(event.get('content_missing')) or 'content' not in event)))
     conn.commit()
-    return {"recorded": bool(cur.rowcount), "id": record[0], "duplicate": not bool(cur.rowcount)}
+    from learning_health import capture_health
+    diagnostic = capture_health(project, 'recorded' if cur.rowcount else 'duplicate')
+    return {"recorded": bool(cur.rowcount), "id": record[0], "duplicate": not bool(cur.rowcount),
+            "diagnostics": "written" if diagnostic else "unverified"}
 
 
 def ingest_file(conn, project, file):
@@ -409,9 +434,11 @@ def purge(conn, state, project, session=None):
         # Derived proposals are also cleared project-wide for a session purge.
         conn.execute("DELETE FROM learning_processing WHERE project_id=?", (pid,))
     if session:
+        conn.execute("DELETE FROM event_metadata WHERE event_id IN (SELECT id FROM events WHERE project_id=? AND session_id=?)", (pid, session))
         conn.execute("DELETE FROM events WHERE project_id=? AND session_id=?", (pid, session))
         conn.execute("DELETE FROM attachments WHERE project_id=? AND session_id=?", (pid, session))
     else:
+        conn.execute("DELETE FROM event_metadata WHERE event_id IN (SELECT id FROM events WHERE project_id=?)", (pid,))
         conn.execute("DELETE FROM events WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM attachments WHERE project_id=?", (pid,))
         conn.execute("DELETE FROM projects WHERE id=?", (pid,))
@@ -477,6 +504,7 @@ def main():
             cmd.add_argument("--reconsider", action="store_true", help="Explicitly include already curated events")
         if name == "retain":
             cmd.add_argument("--days", type=int, default=30)
+            cmd.add_argument("--processed-only", action="store_true")
             cmd.add_argument("--apply", action="store_true", help="Delete eligible raw events; default previews only")
         if name == "capture":
             cmd.add_argument("--client", help="Override event client when the hook supplies a common format")
@@ -491,6 +519,12 @@ def main():
     args = parser.parse_args()
     state = args.state.expanduser().resolve()
     from learning_memory import open_store
+    if args.command in {'capture', 'capture-batch', 'status'} and not (state / 'experience.sqlite3').is_file():
+        # Hooks/status must not initialize an unconfigured project as a side effect.
+        print(json.dumps({'recorded': False, 'recording': False, 'reason': 'unconfigured',
+                          'state': str(state), 'database': str(state / 'experience.sqlite3'),
+                          'capture_health': {'status': 'unverified'}}))
+        return
     if getattr(args, "project", None):
         ensure_local_store(args.project, state)
     conn = open_store(state)
@@ -502,15 +536,16 @@ def main():
         elif args.command in {"pause", "resume"}:
             result = set_pause(conn, args.project, args.client, args.session, args.command == "pause")
         elif args.command == "retain":
-            result = retain_raw(conn, args.project, args.days, args.apply)
+            result = retain_raw(conn, args.project, args.days, args.apply, args.processed_only)
         elif args.command == "status":
+            from learning_health import health_status
             pid = project_id(args.project)
             count = conn.execute("SELECT COUNT(*) FROM events WHERE project_id=?", (pid,)).fetchone()[0]
             attachments = conn.execute(
                 "SELECT COUNT(*) FROM attachments WHERE project_id=?", (pid,)
             ).fetchone()[0]
             result = {"project_id": pid, "recording": opt_in(conn, args.project),
-                      "state": str(state), "database": str(state / "experience.sqlite3"),
+                      "state": str(state), "database": str(state / "experience.sqlite3"), "capture_health": health_status(args.project),
                       "events": count, "attachments": attachments, "paused_sessions": [dict(client=r[0], session_id=r[1]) for r in conn.execute("SELECT client,session_id FROM capture_pauses WHERE project_id=?", (pid,))]}
         elif args.command == "sessions":
             pid = project_id(args.project)
@@ -556,5 +591,14 @@ if __name__ == "__main__":
     try:
         main()
     except (ValueError, OSError, PermissionError, sqlite3.Error, json.JSONDecodeError) as exc:
+        try:
+            diagnostic_parser = argparse.ArgumentParser(add_help=False)
+            diagnostic_parser.add_argument('--project')
+            diagnostic_args, _ = diagnostic_parser.parse_known_args()
+            if diagnostic_args.project and any(c in sys.argv for c in ('capture', 'capture-batch')):
+                from learning_health import capture_health
+                capture_health(diagnostic_args.project, 'error', 'storage' if isinstance(exc, sqlite3.Error) else 'invalid')
+        except (ValueError, OSError):
+            pass
         print(f"agent-learning: {exc}", file=sys.stderr)
         sys.exit(1)

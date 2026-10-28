@@ -46,7 +46,8 @@ SQLite `sync_repository`; it does not upload. For initialized local memory,
 legacy config. Conflicting old addresses block snapshots until explicitly
 reconfigured. Existing unconfirmed defaults are not consent.
 
-During full adaptation offer an optional private GitHub repository. If none is
+During full adaptation offer snapshots after each completed learning cycle to a
+user-selected private GitHub repository, or a remembered refusal. If none is
 supplied, stay local and do not block adaptation. Never hardcode an owner's repo.
 Use `bind --project ROOT` to create a persistent project ID. On another computer,
 use `bind --project ROOT --project-id EXISTING_ID`, after verifying project
@@ -81,10 +82,10 @@ independent support. Read existing records first and revise an existing claim
 rather than duplicate it. Missing earlier context stays unknown; ask only when
 the requested content cannot be identified. Never invent session metadata.
 
-Use `learning_memory.py --state ROOT/.agents/learning record --project ROOT
---file PRIVATE.json`, then `check` and `audit` with the same explicit state and
-project. Read back the saved record IDs before confirming success. The record
-command's local dirty marker does not authorize exchange: do not run sync,
+Use `learning_memory.py --state RESOLVED_STATE record --project ROOT
+--file PRIVATE.json`, then `check` and `audit` with the same resolved state and
+project. Never substitute the default path for an existing override. Read back the saved record IDs before confirming success. The record
+command does not create an exchange job: do not run sync,
 workflow finish, analysis or policy application. Remove the temporary payload
 when no longer needed. Confirm storage briefly with record IDs; do not claim the
 model was trained. Do not edit AGENTS, project rules or skills as a substitute.
@@ -321,3 +322,31 @@ before and after; unrelated historical counts are insufficient. A manually
 invoked bridge or unit test is only a synthetic check. One observed event verifies
 that event, not every handler. Zero events after setup is unverified, not proof
 of a broken hook. Do not generate sensitive prompts for a probe.
+
+## Snapshot Choice And Storage Pressure
+
+During adaptation disclose that accepting the private repository enables a
+structured snapshot and bounded upload after every completed learning cycle,
+including no-change outcomes. Use `configure --project ROOT --repository OWNER/REPO
+--sync-on-finish yes`. Address-only legacy setup is not consent. Preserve existing
+explicit choices. Decline with `configure --project ROOT --sync-on-finish no`;
+this disables automatic snapshot creation and delivery without deleting old data.
+
+Snapshots contain structured memory and processing history, not raw events,
+attachments, secrets or Langfuse archives. Manual `record` never snapshots or
+uploads. Explicit offline export remains available independently. Delivery errors
+leave a destination-bound queue for the next requested learning completion or an
+explicit retry; there is no background worker. A new repository does not inherit
+permission to receive the old queue.
+
+After every completed cycle inspect the returned storage report. Ask permission
+for cleanup when raw events reach 50,000 or SQLite plus WAL reaches 250 MiB.
+Report structured-record counts, attachment/archive/queue sizes separately.
+Configure project thresholds with `configure --project ROOT --event-limit N
+--database-limit-mib N`; positive values only. A threshold is not permission to
+delete or stop capture. Preview `learning.py retain --project ROOT --days 30
+--processed-only`; `--apply` requires explicit approval of that cleanup. Preserve
+all referenced evidence and structured history. A safe preview may have zero
+eligible events; explain this instead of weakening protection. Estimated payload
+bytes are not a promise that SQLite immediately shrinks. Refusal leaves data
+intact; recheck after the next learning cycle.

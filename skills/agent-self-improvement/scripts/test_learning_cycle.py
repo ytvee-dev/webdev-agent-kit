@@ -19,6 +19,9 @@ class LearningCycleSmoke(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.base = Path(self.temp.name)
         self.state = self.base / "state"
+        # Exercise the retained legacy standalone proposal path.
+        from learning_memory import open_store
+        open_store(self.state).close()
         self.project = self.base / "project"
         self.repo = self.base / "skill-pack"
         self.project.mkdir()

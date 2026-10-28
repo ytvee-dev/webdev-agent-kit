@@ -133,3 +133,21 @@ Manual GitHub push sends only missing record revisions; old packages are retaine
 Pull reads the complete set because later packages may refer to earlier records.
 A standalone offline export still contains full structured project history.
 Raw transcripts, attachments and session pauses are not exchanged.
+
+## Capture And Completion Controls
+
+Adaptation asks separately about local capture, Langfuse and private-repository
+snapshots. Accepting snapshots verifies the supplied private repository and enables
+one immutable structured-memory snapshot per completed learning cycle; refusing
+creates no automatic snapshots or delivery jobs. No raw transcripts, attachments
+or Langfuse archives are included. Failed delivery retries on the next requested
+learning completion or explicit sync, never in the background.
+
+All stages honor explicit `--state`, then `AGENT_LEARNING_STATE`, then the selected
+project's `.agents/learning`. Status exposes the database path and content-free
+capture diagnostics. Missing diagnostic evidence is not proof of working hooks.
+
+At completion, 50,000 raw events or 250 MiB SQLite plus WAL triggers a cleanup
+permission question. Counts and limits are per project; thresholds are configurable.
+Cleanup is preview-first, protects referenced evidence and never runs merely
+because a threshold was reached. Refusing cleanup preserves the data and capture.

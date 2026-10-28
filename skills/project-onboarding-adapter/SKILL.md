@@ -142,9 +142,11 @@ If capture intent is unresolved, explain the local collection scope and ask once
 otherwise honor the existing decision without repeated confirmation. Explicit
 capture setup already authorizes its documented local hooks; do not ask again.
 
-Offer optional private-repository experience storage only during adaptation.
-Only if the user supplies a repository, follow the memory reference to verify it
-and configure its local address. No repository means local-only operation.
+Offer optional structured snapshots to a user-selected private repository after
+each completed learning cycle. Explain that this choice enables bounded uploads,
+verify privacy/write access, then configure `--sync-on-finish yes`. Save refusal
+with `--sync-on-finish no`: no automatic snapshots or outbox entries. Keep local
+memory available. Existing address-only configuration requires a consent choice.
 Store decisions and separate setup/verification states in host-local
 `.agents/project/learning-profile.md`; link it from the approved host pointer for
 project-scoped recall. Recall never enables capture or sync. Report capture
@@ -153,7 +155,7 @@ but unobserved hooks as unverified. Never call the whole learning pipeline activ
 merely because recording is enabled or tests pass.
 
 An update alone preserves these decisions and does not reopen onboarding.
-Plan Mode only describes changes. Never upload automatically, alter native trust,
+Plan Mode only describes changes. Never upload during adaptation, alter native trust,
 install tooling without authority or embed a user's repository in the Kit.
 
 ## Codex Model Setup During Onboarding

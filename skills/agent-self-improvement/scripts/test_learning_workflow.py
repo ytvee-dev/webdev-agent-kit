@@ -121,7 +121,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(drain(self.project, lambda *args: {'private': False})['status'], 'pending_retry')
         job = next((self.state / 'outbox').glob('*.json'))
         write_json(job, {'path': '../../outside', 'sha256': 'x'})
-        self.assertEqual(drain(self.project, lambda *args: {'private': True})['status'], 'pending_retry')
+        self.assertEqual(drain(self.project, lambda *args: {'private': True})['status'], 'blocked_review')
         self.assertTrue(job.exists())
 
     def test_risk_and_empty_queue_do_not_train(self):

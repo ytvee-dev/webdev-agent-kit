@@ -10,6 +10,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from learning_project import read_config, write_json
+from learning_state import state_root
 from learning_telemetry import assess, request_page
 
 
@@ -31,7 +32,7 @@ def effective_connection(project, global_config=None):
 def connection_status(project, global_config=None):
     effective, conflicts = effective_connection(project, global_config)
     public, secret = effective.get('public_key', ''), effective.get('secret_key', '')
-    placeholders = ('...', 'PLACEHOLDER', 'YOUR_', 'ВАШ_', '<', '>')
+    placeholders = ('...', 'PLACEHOLDER', 'YOUR_', 'Р’РђРЁ_', '<', '>')
     ready = (isinstance(public, str) and isinstance(secret, str)
              and public.startswith('pk-lf-') and secret.startswith('sk-lf-')
              and len(public) > 12 and len(secret) > 12
@@ -68,7 +69,7 @@ def set_connection(project, enabled, approve=False, global_config=None, authenti
             set_connection(project, False, approve=True, global_config=global_config)
             config = read_config(project)
             config['telemetry']['connection_choice'] = 'pending_credentials'
-            write_json(project / '.agents/learning/project.json', config)
+            write_json(state_root(project) / 'project.json', config)
             raise ValueError('Authentication unavailable or failed; project tracing disabled') from None
         configure(project)
     path = project / '.codex/langfuse.json'
@@ -81,7 +82,7 @@ def set_connection(project, enabled, approve=False, global_config=None, authenti
         config['telemetry']['base_url'] = effective['base_url']
     config['telemetry']['connection_choice'] = 'connected' if enabled else 'declined'
     config['telemetry']['tag_validation'] = 'pending_readback' if enabled else 'disabled'
-    write_json(project / '.agents/learning/project.json', config)
+    write_json(state_root(project) / 'project.json', config)
     return {'status': 'configured_pending_readback' if enabled else 'disabled',
             'project_id': config['project_id']}
 
@@ -106,14 +107,14 @@ def configure(project):
     override = os.environ.get('LANGFUSE_CODEX_TAGS')
     if override:
         raise ValueError('LANGFUSE_CODEX_TAGS overrides project-local tags; resolve before setup')
-    backup = project / '.agents/learning/tracing-config.before.json'
+    backup = state_root(project) / 'tracing-config.before.json'
     if not backup.exists():
         write_json(backup, {'existed': path.exists(), 'config': old})
     write_json(path, dict(old, tags=expected))
     config['telemetry'].update(required_tags=['webdev-agent-kit', friendly],
                                stable_tag=identity, historical_tag=friendly,
                                tag_validation='configured_pending_readback')
-    write_json(project / '.agents/learning/project.json', config)
+    write_json(state_root(project) / 'project.json', config)
     if json.loads(path.read_text(encoding='utf-8'))['tags'] != expected:
         raise ValueError('Tag configuration readback failed')
     return {'status': 'configured_pending_readback', 'tags': expected,
@@ -128,7 +129,7 @@ def validate(project, fetch=request_page):
     # Strict stable-ID lookup. Friendly tags alone never certify the new installation.
     strict = dict(spec, required_tags=['webdev-agent-kit', 'project-id:' + config['project_id']],
                   fields='core,basic,trace_context')
-    probe_file = project / '.agents/learning/tag-probe.json'
+    probe_file = state_root(project) / 'tag-probe.json'
     probe = json.loads(probe_file.read_text(encoding='utf-8')) if probe_file.exists() else None
     cursor, seen, good, rejected = None, set(), [], 0
     exhausted = False
@@ -162,7 +163,7 @@ def validate(project, fetch=request_page):
     except (RuntimeError, OSError) as exc:
         result = {'status': 'unavailable', 'database_only': True,
                   'reason': str(exc) if isinstance(exc, RuntimeError) else type(exc).__name__}
-    write_json(project / '.agents/learning/tag-validation.json', result)
+    write_json(state_root(project) / 'tag-validation.json', result)
     return result
 
 
@@ -175,7 +176,7 @@ def probe(project, hook):
         raise ValueError('Tracing is explicitly disabled')
     session, turn = str(uuid.uuid4()), str(uuid.uuid4())
     now = datetime.now(UTC)
-    folder = project / '.agents/learning/runs/tag-validation'
+    folder = state_root(project) / 'runs/tag-validation'
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / (session + '.jsonl')
     events = [('session_meta', {'id': session, 'cwd': str(project), 'source': 'tag-validation'}),
@@ -192,7 +193,7 @@ def probe(project, hook):
                             text=True, capture_output=True, timeout=45, env=env)
     report = {'session_id': session, 'turn_id': turn, 'status': 'sent_pending_readback' if result.returncode == 0 else 'hook_failed',
               'synthetic': True, 'model_called': False, 'hook': str(hook)}
-    write_json(project / '.agents/learning/tag-probe.json', report)
+    write_json(state_root(project) / 'tag-probe.json', report)
     return report
 
 
@@ -202,6 +203,7 @@ if __name__ == '__main__':
     parser.add_argument('--project', required=True)
     parser.add_argument('--hook')
     parser.add_argument('--approve', action='store_true')
+    parser.add_argument("--state", type=Path)
     args = parser.parse_args()
     if args.command in {'enable', 'disable'}:
         result = set_connection(args.project, args.command == 'enable', args.approve)

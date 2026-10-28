@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import sqlite3
 import uuid
@@ -13,10 +14,14 @@ from pathlib import Path
 from learning import legacy_has_project, project_id
 from learning_memory import bind, open_store
 from learning_processing import connect, lock
+from learning_state import check_owner, state_root
 
 
 def read_config(project):
-    return json.loads((Path(project).resolve() / ".agents/learning/project.json").read_text(encoding="utf-8"))
+    config = check_owner(project, state_root(project))
+    if config is None:
+        raise ValueError("Project state is not initialized")
+    return config
 
 
 def write_json(path, value):
@@ -27,20 +32,21 @@ def write_json(path, value):
     os.replace(temporary, path)
 
 
-def initialize(project, legacy=None, remote=None, *, local_only=False, memory_id=None):
+def initialize(project, legacy=None, remote=None, *, local_only=False, memory_id=None, state=None):
     project = Path(project).resolve(strict=True)
-    target = project / ".agents/learning"
+    target = state_root(project, state)
     if (target / "project.json").exists():
-        return {"result": "already_initialized", "state": str(target), "config": read_config(project)}
+        return {"result": "already_initialized", "state": str(target), "config": check_owner(project, target)}
     if not legacy and legacy_has_project(project):
         raise ValueError("Legacy project memory exists; provide --legacy explicitly before initialization")
     if target.exists():
         raise ValueError("Partial state exists; inspect before migration")
     local_id = project_id(project)
-    stage = project / ".agents" / (".learning-migrate-" + uuid.uuid4().hex)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    stage = target.parent / (".learning-migrate-" + uuid.uuid4().hex)
     copied = {}
     source = Path(legacy).resolve() if legacy else None
-    with lock(project / ".agents/.learning-locks", project):
+    with lock(target.parent / ".learning-locks", project):
         if target.exists():
             raise ValueError("Project state was initialized concurrently")
         with closing(open_store(stage)) as out:
@@ -66,6 +72,9 @@ def initialize(project, legacy=None, remote=None, *, local_only=False, memory_id
                             for row in rows:
                                 out.execute(f"INSERT INTO {table} VALUES ({','.join('?' for _ in row)})", row)
                             copied[table] = len(rows)
+                        if "event_metadata" in tables:
+                            for row in old.execute("SELECT * FROM event_metadata WHERE event_id IN (SELECT id FROM events WHERE project_id=?)", (local_id,)):
+                                out.execute("INSERT INTO event_metadata VALUES (?,?,?,?,?,?)", row)
                         digests = [r[0] for r in out.execute("SELECT DISTINCT digest FROM attachments")]
                         for digest in digests:
                             row = old.execute("SELECT * FROM blobs WHERE digest=?", (digest,)).fetchone()
@@ -114,7 +123,8 @@ def initialize(project, legacy=None, remote=None, *, local_only=False, memory_id
             if out.execute("PRAGMA integrity_check").fetchone()[0] != "ok" or out.execute("PRAGMA foreign_key_check").fetchall():
                 raise ValueError("Migrated database integrity failed")
         config = {"schema_version": 1, "project_id": pid, "capture_project_id": local_id,
-            "name": project.name, "remote": remote, "remote_folder": project.name + "--" + pid,
+            "project_root": str(project), "snapshot_choice": "unresolved",
+            "name": project.name, "remote": remote, "remote_folder": (re.sub(r"[^A-Za-z0-9_.-]+", "-", project.name).strip(".-") or "project") + "--" + pid,
             "auto_sync": False, "telemetry": {"enabled": False, "base_url": "https://cloud.langfuse.com",
             "authorization_env": "LANGFUSE_MCP_AUTHORIZATION", "project_metadata_key": None,
             "project_metadata_value": None, "access_days": 30, "overlap_hours": 48,
@@ -137,12 +147,13 @@ def initialize(project, legacy=None, remote=None, *, local_only=False, memory_id
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
+    parser.add_argument("--state", type=Path)
     parser.add_argument("--legacy")
     parser.add_argument("--remote", help="Legacy address hint only; verify with memory configure before exchange")
     parser.add_argument("--local-only", action="store_true",
                         help="Create local memory without telemetry, remote sync or tracing configuration")
     args = parser.parse_args()
-    result = initialize(args.project, args.legacy, args.remote, local_only=args.local_only)
+    result = initialize(args.project, args.legacy, args.remote, local_only=args.local_only, state=args.state)
     # Existing configurations may contain private connection details.
     result.pop('config', None)
     print(json.dumps(result))

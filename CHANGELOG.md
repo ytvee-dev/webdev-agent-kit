@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/learning-capture-audit]]'
     - '[[docs/release/1.9.0-plan]]'
     - '[[docs/install/project-memory]]'
     - '[[docs/release/1.8.0-plan]]'
@@ -36,6 +37,30 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Content-free capture health, receipt/source timestamps and context-completeness
+  metadata; bounded hook input/execution and safe synthetic event IDs.
+- Completion storage-pressure reports: 50,000 raw events or 250 MiB SQLite plus
+  WAL prompts for cleanup approval; no automatic deletion or capture shutdown.
+- Audit of learning/storage/consent contradictions with regression and live-trial
+  evidence boundaries.
+
+### Changed
+
+- One selected learning store across capture, analysis, tracing helpers, snapshots
+  and recovery, including external paths persisted in installed hooks.
+- Adaptation offers structured-memory snapshots after each completed learning
+  cycle to a user-selected private repository. Refusal creates no automatic
+  snapshot or delivery job; manual recording remains independent.
+- Snapshot queues bind their destination, exclude Langfuse archives, preserve
+  per-run snapshot links and retry during the next requested learning completion
+  or explicit sync. Empty private repositories support verified first upload.
+- Unconfigured capture/status no longer creates empty state. Update protections
+  explicitly include alternate state paths. Referenced evidence remains protected.
+
+## 1.9.0 — 2026-10-29
 
 ### Added
 

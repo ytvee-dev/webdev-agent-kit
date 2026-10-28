@@ -76,7 +76,7 @@ install timers, background workers or unattended retries. Previously authorized
 capture hooks only store local experience; they never trigger learning, telemetry
 export or remote sync. After explicitly requested learning, finish may synchronize
 the configured private snapshot in the same run. Failure leaves pending work for
-an explicitly requested retry; it never schedules one.
+the next requested learning completion or explicit retry; it never schedules one.
 
 ## Workflow
 
@@ -86,7 +86,8 @@ state with `learning_project.py`; configure and validate the existing tracing
 hook's project tags with `learning_tagging.py configure/validate`. Never declare
 telemetry ready from configuration alone. Prepare selected event-window context with
 `learning_workflow.py begin`, complete per-record diagnosis and risk-based checks,
-then `finish` to verify receipts, snapshot, synchronize and remove temporary context.
+then `finish` to verify receipts, snapshot/synchronize when authorized, check storage
+pressure and remove temporary context.
 The legacy `maintenance` and `auto` commands are disabled. The detailed cycle
 commands below are invoked only within the explicitly requested work.
 
@@ -133,7 +134,7 @@ and the IDs/versions whose database usage markers were verified.
 
 ## Validation Gates
 
-No collection when off; no implicit global consent; no raw experience data in the Kit, public repository, PR or release; only authorized redacted project archives and structured snapshots in the private data repository; every record source traceable; repeat imports idempotent; arbitrary hook paths never read; attachments copied only by explicit approved import; no silent skill writes; no network calls in collector; no LLM inference inside hooks.
+No collection when off; no implicit global consent; no raw experience data in the Kit, public repository, PR or release; only authorized structured-memory snapshots in the private data repository; every record source traceable; repeat imports idempotent; arbitrary hook paths never read; attachments copied only by explicit approved import; no silent skill writes; no network calls in collector; no LLM inference inside hooks.
 
 ## Trigger Evals
 
@@ -143,7 +144,7 @@ Should not trigger: "Fix this CSS bug"; "Review the current PR"; "Summarize what
 
 ## Reference Map
 
-- `references/project-workflow.md`: independent stages, project-local state, tagging, monthly context, risk-based verification and snapshots at completion with explicit retries.
+- `references/project-workflow.md`: independent stages, project-local state, tagging, selected event-window context, risk-based verification and consent-gated snapshots and retries within requested completion.
 
 - `references/processing-contract.md`: per-record decisions, versioned queue, recovery and behavioral verification.
 - `references/langfuse-evidence.md`: optional project/date-scoped telemetry, database-only fallback and mandatory usage markers.

@@ -41,5 +41,5 @@ For the current project's installed copy, a verified direct requirement or a
 verified incident can justify a bounded local proposal; independent episodes are
 still required for reusable source-Kit policy. Preserve applicability and scope.
 Completion of explicitly requested learning may exchange authorized structured
-snapshots and redacted project telemetry as described in `project-workflow.md`. Proposal analysis never
+snapshots of structured memory and processing history as described in `project-workflow.md`. Proposal analysis never
 publishes source changes. Evaluate outcomes and regressions, not lexical compliance.

@@ -8,11 +8,11 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import UTC, datetime, timedelta
-from pathlib import Path
 
 from learning import redact
 from learning_processing import lock
 from learning_project import read_config, write_json
+from learning_state import state_root
 
 
 def timestamp(value):
@@ -119,7 +119,7 @@ def export_selected(project, windows, fetch=request_page, now=None):
     """Export only selected incident windows, with bounded resumable readback."""
     config = read_config(project)
     spec = config['telemetry']
-    state = Path(project).resolve() / '.agents/learning'
+    state = state_root(project)
     if not spec.get('enabled'):
         return {'status': 'disabled', 'database_only': True}
     if not (spec.get('required_tags') or (spec.get('project_metadata_key') and spec.get('project_metadata_value'))):
@@ -189,7 +189,7 @@ def export_selected(project, windows, fetch=request_page, now=None):
 
 def export(project, fetch=request_page, now=None):
     config = read_config(project)
-    state = Path(project).resolve() / ".agents/learning"
+    state = state_root(project)
     spec = config["telemetry"]
     if not spec.get("enabled") or not (spec.get("required_tags") or (spec.get("project_metadata_key") and spec.get("project_metadata_value"))):
         result = {"status": "project_mapping_unavailable", "database_only": True}
@@ -276,7 +276,7 @@ def export(project, fetch=request_page, now=None):
 def prepare(project, run_id, months, windows=None):
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", run_id) or any(not re.fullmatch(r"\d{4}-\d{2}", m) for m in months):
         raise ValueError("Invalid run ID or month")
-    state = Path(project).resolve() / ".agents/learning"
+    state = state_root(project)
     config = read_config(project)
     destination = state / "runs" / run_id
     if destination.resolve().parent != (state / "runs").resolve():
@@ -316,7 +316,7 @@ def prepare(project, run_id, months, windows=None):
 def cleanup(project, run_id):
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", run_id):
         raise ValueError("Invalid run ID")
-    state = Path(project).resolve() / ".agents/learning"
+    state = state_root(project)
     folder = state / "runs" / run_id
     if folder.resolve().parent != (state / "runs").resolve():
         raise ValueError("Unsafe run directory")

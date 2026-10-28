@@ -33,6 +33,8 @@ class BenchmarkTests(unittest.TestCase):
             project = root / "project"
             project.mkdir()
             state = root / "state"
+            from learning_memory import open_store
+            open_store(state).close()  # Existing legacy standalone store.
 
             def run(script, *arguments, data=None, expect=0):
                 proc = subprocess.run(
