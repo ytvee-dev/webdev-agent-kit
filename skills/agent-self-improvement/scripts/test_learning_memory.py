@@ -126,6 +126,22 @@ class ProjectMemoryTests(unittest.TestCase):
         context = session_context(self.conn, self.project, 'test', 'session')
         self.assertEqual(len(context['events']), 75)
         self.assertEqual(context['coverage'], 'unknown')
+        first = session_context(self.conn, self.project, 'test', 'session', limit=40)
+        second = session_context(self.conn, self.project, 'test', 'session', first['next_after_row'], limit=40)
+        self.assertTrue(first['has_more'])
+        self.assertFalse(second['has_more'])
+        self.assertEqual([e['id'] for e in first['events'] + second['events']],
+                         [e['id'] for e in context['events']])
+        original = 'Поправка: data:image/png;base64,' + 'A' * 6000 + ' конец ' + 'я' * 5000
+        capture(self.conn, self.project, dict(client='test', session_id='session', message_id='image', kind='user', content=original))
+        bounded = session_context(self.conn, self.project, 'test', 'session', context['events'][-1]['row_id'])
+        self.assertEqual(bounded['coverage'], 'partial')
+        self.assertTrue(bounded['events'][0]['inline_data_omitted'])
+        self.assertTrue(bounded['events'][0]['truncated'])
+        self.assertIn('Поправка: [INLINE_DATA_OMITTED]', bounded['events'][0]['content'])
+        self.assertNotIn('AAAA', bounded['events'][0]['content'])
+        self.assertLessEqual(len(bounded['events'][0]['content']), 4012)
+        self.assertEqual(self.conn.execute('SELECT content FROM events WHERE id=?', (bounded['events'][0]['id'],)).fetchone()[0], original)
         save_records(self.conn, self.pid, self.sample())
         self.assertNotIn('PRIVATE_RAW_TRANSCRIPT', json.dumps(package(self.conn, self.pid)))
         with self.assertRaises(ValueError):

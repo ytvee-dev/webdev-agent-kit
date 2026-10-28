@@ -56,9 +56,13 @@ adaptation or explicit user reconfiguration.
 ## Session Curation
 
 1. Use `context --project ROOT --client CLIENT --session ID --file PRIVATE.json`
-   to read every available recorded event in chronological order. The file is
-   local-only. For long sessions, read it in sequential bounded chunks with
-   overlap and retain decisions across chunks; never use only the last messages.
+   to read a local-only page in capture order, with original event timestamps.
+   Pages contain at most 100 events and 4000 characters per event. Follow
+   `next_after_row` using `--after-row ROW`; optionally lower `--limit`.
+   Retain decisions and exact source IDs across pages; never use only the last
+   messages. Inline data URLs are omitted and shortened text has `[TRUNCATED]`.
+   These pages report partial coverage. Originals remain in the private database;
+   inspect necessary source material separately before declaring complete coverage.
 2. Inspect the available conversation and split it into coherent task episodes.
    Preserve request, expected result, initial state, constraints, actions,
    corrections, decisions, result, actual checks and unresolved questions.

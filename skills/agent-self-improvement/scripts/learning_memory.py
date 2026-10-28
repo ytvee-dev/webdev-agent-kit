@@ -368,11 +368,27 @@ def write_json(file, value):
     path.chmod(0o600)
 
 
-def session_context(conn, project, client, session):
-    rows = conn.execute("SELECT id,kind,content,timestamp FROM events WHERE project_id=? AND client=? AND session_id=? ORDER BY timestamp,rowid", (project_id(project), client, session)).fetchall()
+def session_context(conn, project, client, session, after_row=0, limit=100):
+    if after_row < 0 or not 1 <= limit <= 100:
+        raise ValueError('Context requires after_row >= 0 and limit between 1 and 100')
+    rows = conn.execute("SELECT rowid,id,kind,content,timestamp FROM events WHERE project_id=? AND client=? AND session_id=? AND rowid>? ORDER BY rowid LIMIT ?", (project_id(project), client, session, after_row, limit + 1)).fetchall()
     if not rows:
         raise ValueError("No captured events for this project/client/session")
-    return {"client": client, "session_id": session, "coverage": "unknown", "limitations": "All available recorded events; host capture may be incomplete or truncated. Verify against available chat before claiming complete_available.", "events": [dict(id=r[0], kind=r[1], content=r[2], timestamp=r[3]) for r in rows]}
+    more = len(rows) > limit
+    events = []
+    for row, identifier, kind, content, at in rows[:limit]:
+        # Context is a bounded reading aid; the original database stays intact.
+        text, omitted = re.subn(r'data:[^\s,;]+(?:;[^\s,]*)?;base64,[A-Za-z0-9+/=\r\n]*',
+                               '[INLINE_DATA_OMITTED]', content, flags=re.IGNORECASE)
+        truncated = len(text) > 4000
+        text = text[:4000] + (' [TRUNCATED]' if truncated else '')
+        events.append(dict(row_id=row, id=identifier, kind=kind, content=text,
+                           timestamp=at, truncated=truncated, inline_data_omitted=bool(omitted)))
+    partial = more or after_row > 0 or any(e['truncated'] or e['inline_data_omitted'] for e in events)
+    return {'client': client, 'session_id': session, 'coverage': 'partial' if partial else 'unknown',
+            'limitations': 'Bounded context in capture order, at most 100 events and 4000 characters per event. Inline data omitted. Capture may be incomplete; review source evidence before claiming complete_available.',
+            'events': events, 'has_more': more,
+            'next_after_row': events[-1]['row_id'] if more else None}
 
 
 def evidence_issues(record):
@@ -574,6 +590,8 @@ def main():
         if name == "context":
             cmd.add_argument("--client", required=True)
             cmd.add_argument("--session", required=True)
+            cmd.add_argument("--after-row", type=int, default=0)
+            cmd.add_argument("--limit", type=int, default=100)
         if name == "recall":
             cmd.add_argument("--query", required=True)
             cmd.add_argument("--covered-by", action="append", default=[], help="Inspected installed policy ref@revision; omit to retain incorporated lessons")
@@ -590,9 +608,10 @@ def main():
             if args.command == "configure":
                 result = {"repository": configure(conn, pid, args.repository), "mode": "manual"}
             elif args.command == "context":
-                value = session_context(conn, args.project, args.client, args.session)
+                value = session_context(conn, args.project, args.client, args.session, args.after_row, args.limit)
                 write_json(args.file, value)
-                result = {"file": args.file, "events": len(value["events"]), "local_only": True}
+                result = {"file": args.file, "events": len(value["events"]), "local_only": True,
+                          "coverage": value['coverage'], "next_after_row": value['next_after_row']}
             elif args.command in {"record", "import"}:
                 value = read_json(args.file)
                 count = save_records(conn, pid, value) if args.command == "record" else import_package(conn, pid, value)

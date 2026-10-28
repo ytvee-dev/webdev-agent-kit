@@ -35,7 +35,8 @@ stage and activate; record state; verify and recover.
   version/commit evidence. Use the same target for old and new packages; a target
   switch is a separate migration. A shared plugin may affect other projects:
   disclose that and obtain scope approval before activating it.
-- Treat host `.agents/project/**`, custom skills, unrelated client rules,
+- Treat host `.agents/project/**`, `.agents/learning/**`, migration stages
+  `.agents/.learning-migrate-*`, learning locks, custom skills, unrelated client rules,
   configs, credentials, history, caches, and app files as protected. Vendor
   ownership comes from the pristine old target inventory, not directory names.
   Unknown files inside `.agents/skills/` are not disposable vendor files.

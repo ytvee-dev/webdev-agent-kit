@@ -94,7 +94,7 @@ class ProjectStateTests(unittest.TestCase):
                 patch("sys.argv", ["learning.py", "status", "--project", str(moved)]),
                 patch.dict("os.environ", {}, clear=True),
             ):
-                self.assertEqual(default_root(), moved / ".agents/learning")
+                self.assertEqual(default_root(), moved.resolve() / ".agents/learning")
 
     def test_partial_state_is_not_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:
