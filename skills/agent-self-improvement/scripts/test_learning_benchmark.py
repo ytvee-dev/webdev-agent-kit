@@ -50,7 +50,7 @@ class BenchmarkTests(unittest.TestCase):
             )
             offline = root / "proposal.json"
             offline.write_text(json.dumps({
-                "schema_version": 1, "changes": [{
+                "schema_version": 1, "decisions": [{"record_id": event["id"], "outcome": "pending", "reason": "Observed correction"}], "changes": [{
                     "path": "skills/sample/SKILL.md",
                     "find": "Verify evidence.",
                     "replace": "Verify evidence and report the check.",

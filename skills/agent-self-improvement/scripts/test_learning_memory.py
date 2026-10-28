@@ -55,6 +55,26 @@ class ProjectMemoryTests(unittest.TestCase):
     def sample(self):
         return [self.record(kind, kind) for kind in ('episode', 'evidence', 'finding', 'lesson')]
 
+    def test_explicit_feedback_records_requirement_without_editing_rules(self):
+        rules = self.project / 'AGENTS.md'
+        rules.write_text('Preserve existing project rules.\n', encoding='utf-8')
+        before = rules.read_bytes()
+        items = [self.record(kind, kind) for kind in ('episode', 'evidence', 'requirement')]
+        items[0]['payload'].update(task='Remember formatting correction',
+                                   feedback='Do not reformat unrelated lines; preserve code authorship.')
+        items[1]['payload'].update(source_type='user_requirement',
+                                   summary='Skip unrelated formatting changes.')
+        items[2]['payload'].update(statement='Do not reformat lines outside the requested fix.',
+                                   authority='user', applicability='Scoped project fixes',
+                                   evidence_ids=['evidence'])
+        with patch('subprocess.run', side_effect=AssertionError('No external work for a memory write')):
+            self.assertEqual(save_records(self.conn, self.pid, items), 3)
+            saved = records(self.conn, self.pid)
+            self.assertEqual({r['id'] for r in saved}, {'episode', 'evidence', 'requirement'})
+            self.assertEqual(save_records(self.conn, self.pid, items), 0)
+        self.assertEqual(rules.read_bytes(), before)
+        self.assertFalse((self.project / '.codex').exists())
+
     def test_roundtrip_idempotence_and_project_isolation(self):
         sample = self.sample()
         self.assertEqual(save_records(self.conn, self.pid, sample), 4)
@@ -108,9 +128,9 @@ class ProjectMemoryTests(unittest.TestCase):
         accepted['revision'] = 3
         accepted['payload'].update(finding_ids=[], applicability='Currency components', recheck_when='Currency formatter changes',
                                    last_verified_commit='a' * 40, acceptance_basis='explicit_requirement', acceptance_evidence_ids=['evidence'],
-                                   keywords=['валюта', 'форматирование'], incorporated_ref='rules/currency', incorporated_revision='r1')
+                                   keywords=['РІР°Р»СЋС‚Р°', 'С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ'], incorporated_ref='rules/currency', incorporated_revision='r1')
         save_records(self.conn, self.pid, [evidence, accepted])
-        self.assertEqual(len(recall(self.conn, self.pid, 'валюта форматирование')), 1)
+        self.assertEqual(len(recall(self.conn, self.pid, 'РІР°Р»СЋС‚Р° С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ')), 1)
         self.assertEqual(recall(self.conn, self.pid, 'instruction'), [])
         self.assertEqual(recall(self.conn, self.pid, 'currency', ['rules/currency@r1']), [])
         self.assertEqual(len(recall(self.conn, self.pid, 'currency', ['rules/currency@r2'])), 1)
@@ -202,7 +222,7 @@ class ProjectMemoryTests(unittest.TestCase):
         skill.parent.mkdir(parents=True)
         skill.write_text('---\nname: example\ndescription: example\n---\nCheck things.\n')
         proposal = self.root / 'proposal.json'
-        proposal.write_text(json.dumps({'schema_version': 1, 'changes': []}))
+        proposal.write_text(json.dumps({'schema_version': 1, 'changes': [], 'decisions': [{'record_id': r['id'], 'outcome': 'deferred', 'reason': 'Single episode; needs independent evidence', 'recheck_when': 'dependencies_changed'} for r in self.sample() if r['kind'] in {'lesson', 'requirement'}]}))
         result = propose(Namespace(repo=str(repo), project=str(self.project), state=str(self.state), engine=None, proposal_file=str(proposal), skill=[]))
         self.assertIn('proposal', result)
 

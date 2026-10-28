@@ -264,6 +264,17 @@ def build_canonical_target(target):
     if target == "cursor":
         build_cursor_project_target()
         return
+    if target == "kimi":
+        target_root = prepare_target_root(target)
+        copy_project_target_base(target_root, target, include_codex_metadata=False)
+        for skill in (target_root / "skills").glob("*/SKILL.md"):
+            text = skill.read_text(encoding="utf-8")
+            end = text.index("\n---\n", 4) + len("\n---\n")
+            prelude = "Read `${KIMI_SKILL_DIR}/../../AGENTS.md` and `${KIMI_SKILL_DIR}/../../adapters/kimi.md`; resolve bundle paths from `${KIMI_SKILL_DIR}/../..`, host facts from `.agents/project/`.\n\n"
+            skill.write_text(
+                text[:end] + prelude + text[end:].lstrip(), encoding="utf-8"
+            )
+        return
     raise ValueError(f"Unknown canonical target: {target}")
 
 

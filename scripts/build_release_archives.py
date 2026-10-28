@@ -16,6 +16,7 @@ RELEASE_TARGETS = (
     "codex",
     "claude-code",
     "cursor",
+    "kimi",
     "vs-code-codex",
     "vs-code-claude",
 )

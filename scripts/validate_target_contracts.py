@@ -7,7 +7,7 @@ from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "bundle-manifest.json"
-CANONICAL_TARGETS = {"claude-code", "codex", "cursor"}
+CANONICAL_TARGETS = {"claude-code", "codex", "cursor", "kimi"}
 TARGET_ALIASES = {
     "claude": "claude-code",
     "vs-code-claude": "claude-code",

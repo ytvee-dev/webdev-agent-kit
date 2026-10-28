@@ -32,6 +32,15 @@ Start with the cheapest path that can answer the user. Escalate only when target
 
 A narrow lookup must stay fast. A narrow bugfix must stay lightweight. A large ambiguous request must be planned before implementation.
 
+## Explicit Memory Requests
+
+Explicit requests to remember an incident, save feedback for learning or "запиши
+себе в базу" route to `agent-self-improvement` and its Manual Memory Writes flow.
+Use current-project SQLite memory, not project rules or a skill rewrite. Ask only
+for missing content when the available conversation cannot identify the lesson.
+Bare "remember" without a clear learning/experience context is not sufficient;
+an explicit request to edit project rules remains a rule-editing task.
+
 ## Question-First Gate
 
 When the user asks for options, tradeoffs, or approach before implementation, answer the question before editing files.

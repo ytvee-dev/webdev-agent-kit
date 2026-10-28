@@ -21,6 +21,30 @@ The Kit remembers project experience by saving records and retrieving relevant
 ones for later tasks. It does not train model weights. A correction can become a
 candidate lesson; a useful lesson can later become a checked project rule.
 
+## Project-local defaults and explicit choices
+
+New state lives at `<project>/.agents/learning`; capture, telemetry and exchange
+start off. `--state PATH` takes precedence over `AGENT_LEARNING_STATE`, then the
+selected project. Both `--project ROOT` and `--project=ROOT` work from any directory.
+If the old shared store contains this project's history, migrate explicitly with
+`learning_project.py --project ROOT --legacy STATE`; the source is preserved.
+Status prints the actual state/database path. Kit updates preserve this directory.
+
+Ask the agent to save a correction to its learning database. It records structured
+experience and reports IDs; it does not rewrite project rules or start analysis.
+For long captured sessions, follow `context --limit 200` and its `next_cursor` via
+`--cursor TOKEN`. `run` skips curated source IDs; `--reconsider` requests reanalysis.
+
+During adaptation, choose Langfuse connection or decline. The agent offers saved
+keys or opens the private credential file, waits, sets project tags and checks
+readback. Disable tracing for one project with an explicit agent request; other
+projects and local memory remain available. A stored choice survives updates.
+
+Verify a private sync destination with `learning_memory.py configure --project ROOT
+--repository OWNER/REPO`. Only add `--sync-on-finish yes` when completion-stage
+upload is wanted; `no` disables it. Address configuration alone never uploads.
+Conflicting legacy addresses must be resolved explicitly before snapshot exchange.
+
 ## Upgrade existing memory
 
 Upgrade the Kit on every computer that exchanges the same project memory before

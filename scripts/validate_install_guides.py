@@ -23,6 +23,7 @@ VSCODE_CODEX_VIDEO = (
     "v1784235091/vs-code-codex_ilqrde.mp4)"
 )
 GUIDE_CONTRACTS = {
+    "kimi": ("kimi.md", "Install WebDev Agent Kit for Kimi Code", None),
     "codex": (
         "codex.md",
         "Install WebDev Agent Kit for Codex",
@@ -50,6 +51,7 @@ GUIDE_CONTRACTS = {
     ),
 }
 GUIDE_REQUIRED_TERMS = {
+    "kimi": ("webdev-agent-kit-kimi.tar.gz", ".agents/skills", ".agents/project/"),
     "codex": (
         "webdev-agent-kit-codex.tar.gz",
         "/.agents/",
@@ -83,7 +85,7 @@ GUIDE_REQUIRED_TERMS = {
         "webdev-agent-kit@webdev-agent-kit",
     ),
 }
-VIDEO_TERMS = ("video", "видео")
+VIDEO_TERMS = ("video", "РІРёРґРµРѕ")
 
 
 def contains_video_term(text):
@@ -162,9 +164,9 @@ def validate():
             errors.append(f"{file_name}: release guide must not remain draft")
 
     for forbidden in (
-        "Codex — video guide",
-        "Claude Code — video guide",
-        "VS Code Claude — video guide",
+        "Codex вЂ” video guide",
+        "Claude Code вЂ” video guide",
+        "VS Code Claude вЂ” video guide",
     ):
         if forbidden in index:
             errors.append(
@@ -173,9 +175,9 @@ def validate():
 
     root_readme = (ROOT / "README.md").read_text(encoding="utf-8-sig")
     for forbidden in (
-        "[Codex — video",
-        "[Claude Code — video",
-        "[VS Code Claude — video",
+        "[Codex вЂ” video",
+        "[Claude Code вЂ” video",
+        "[VS Code Claude вЂ” video",
     ):
         if forbidden in root_readme:
             errors.append(f"README.md: forbidden video entry {forbidden!r}")

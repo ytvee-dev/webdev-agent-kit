@@ -1,7 +1,0 @@
-[Unit]
-Description=Opt-in WebDev experience triage (offline; no model calls)
-
-[Service]
-Type=oneshot
-# Replace both placeholders and explicitly enable the project before activating timer.
-ExecStart=/usr/bin/python3 /ABSOLUTE/PATH/TO/learning_cycle.py auto --project /ABSOLUTE/PROJECT/ROOT --repo /ABSOLUTE/SOURCE/SKILL/PACK --engine codex

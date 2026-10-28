@@ -114,12 +114,14 @@ def main():
     codex_plugin_code = run("validate_codex_plugin_target.py")
     claude_code = run("validate_claude_plugin_target.py")
     cursor_code = run("validate_cursor_target.py")
+    kimi_code = run("validate_kimi_target.py")
     archive_code = run("validate_release_archive.py", "--build-fixtures")
     sys.exit(
         codex_project_code
         or codex_plugin_code
         or claude_code
         or cursor_code
+        or kimi_code
         or archive_code
     )
 

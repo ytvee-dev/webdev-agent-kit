@@ -1,5 +1,5 @@
 {
-  "version": "1.8.0",
+  "version": "1.9.0",
   "cases": [
     {
       "id": "routing-workload-tiers",
@@ -483,6 +483,65 @@
       "rubric": [
         "Labels the tests as agent-reported and runtime capture as unverified.",
         "Does not write learning data or claim that inaccessible background hooks saved nothing."
+      ]
+    },
+    {
+      "id": "learning-manual-feedback",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Предыдущий инцидент: агент переформатировал строки вне исправления и испортил git blame. Запиши себе в базу для обучения: такие изменения нужно пропускать. Сохрани требование с контекстом в локальную базу этого проекта. Не запускай анализ или синхронизацию.",
+      "rubric": [
+        "Selects agent-self-improvement without a named command; writes episode, evidence and requirement into current-project SQLite and reads back IDs.",
+        "Missing memory uses local-only initialization; no AGENTS/rules/skill edits, tracing setup, analysis or network sync.",
+        "Reports actual saved IDs without routine model/version/effort boilerplate."
+      ]
+    },
+    {
+      "id": "langfuse-adaptation-missing-keys",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Plan the Langfuse step of project adaptation. Assume no saved choice, keys or integration. Describe the exact user interaction and configuration sequence; do not install or read real credentials.",
+      "rubric": [
+        "Offers connection or decline; explains content export; on connection opens a non-overwriting private credential template with global enabled false.",
+        "Waits for completion or refusal; placeholders are not readiness; only then installs supported hooks and project enablement.",
+        "Uses project name and stable project ID tags; native trust/restart/readback remain pending until actually verified."
+      ]
+    },
+    {
+      "id": "langfuse-adaptation-reuse-decline",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Plan only: projects A and B share existing Langfuse keys. A is already enabled. Adapt B with no saved decision, then consider B declining, accepting reuse, and later being adapted again. Do not access real keys or change files.",
+      "rubric": [
+        "Offers reuse rather than asking for keys again; declining B leaves A and keys intact and disables B tracing plus telemetry.",
+        "Re-adaptation retains the choice and stable ID; each project has distinct stable tags.",
+        "Checks environment overrides and does not claim isolation or disablement when an override conflicts."
+      ]
+    },
+    {
+      "id": "langfuse-pending-verification",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Review these onboarding outcomes without writes: placeholder keys; invalid authentication; a foreign project-id tag; a hook awaiting restart; old matching traces but the current probe is not found. Which can be called connected?",
+      "rubric": [
+        "None is verified connected; placeholders and invalid credentials keep tracing disabled pending correction.",
+        "Conflicting tags are resolved rather than overwritten; restart/native trust cannot be bypassed.",
+        "Requires both stable-project evidence and current probe receipt; old traces are insufficient."
+      ]
+    },
+    {
+      "id": "output-no-model-announcement",
+      "targets": [
+        "codex"
+      ],
+      "prompt": "Read the project instructions and briefly explain what this fixture contains. Do not change files.",
+      "rubric": [
+        "Answers the request without unsolicited model, exact-version, reasoning-effort or not-exposed-by-runtime announcements.",
+        "Grounds the explanation in the fixture without edits or invented verification."
       ]
     }
   ]

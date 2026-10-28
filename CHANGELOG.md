@@ -11,6 +11,7 @@ tags:
     - 'release-management'
 parent: []
 related:
+    - '[[docs/release/1.9.0-plan]]'
     - '[[docs/install/project-memory]]'
     - '[[docs/release/1.8.0-plan]]'
     - '[[docs/install/model-capability-guide]]'
@@ -35,6 +36,37 @@ All notable changes to WebDev Agent Kit should be recorded in this file.
 Use this changelog for source-bundle and distribution-target changes that affect routing, skills, rules, validation, packaging, security, or installation behavior.
 
 ## Unreleased
+
+### Added
+
+- Consolidated STEM learning workflows on the current Kit: scoped evidence,
+  diagnosis, risk-based evaluation, processing receipts, recovery and snapshots.
+  Full transferable-source inventory documents preservation and approved changes.
+- Optional Langfuse adaptation with credential reuse or an opened private key file,
+  explicit connection/decline, supported hooks, stable project tags and probe readback.
+- Natural-language memory writes with local storage, readback and no implicit
+  rule edits, analysis, capture, tracing or synchronization.
+- Kimi Code distribution, installation guide and archive validation.
+  Release publication includes both versioned and stable-name Kimi archives.
+
+### Changed
+
+- New project memory defaults to local storage with capture, telemetry and exchange
+  off and no preset remote. Existing choices and legacy history are preserved.
+- Project CLI/hook storage resolution is consistent across both project flag forms,
+  working directories and explicit overrides; migration remains project-scoped.
+- Triage skips exactly curated source events; explicit reconsideration is separate.
+  Long sessions use bounded stable pages instead of unbounded context exports.
+- Snapshot exchange uses the verified SQLite repository, rejects conflicting legacy
+  addresses and requires separate completion-stage consent. No background learning.
+- Learning telemetry queries selected event windows and reuses bounded cached data;
+  missing evidence falls back to the database without weakening acceptance criteria.
+- Routine model/version/effort boilerplate is omitted from user-facing responses.
+  Runtime/evaluation metadata stays intact. Local memory is protected during updates.
+- Source, behavior and real-service verification are reported separately; tests do
+  not claim model improvement or live client/account activation.
+
+## 1.8.0 — 2026-10-23
 
 ### Added
 

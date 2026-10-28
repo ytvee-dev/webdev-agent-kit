@@ -17,6 +17,7 @@ EXPECTED_ADAPTERS = {
     "claude-code": "adapters/claude-code.md",
     "codex": "adapters/codex.md",
     "cursor": "adapters/cursor.md",
+    "kimi": "adapters/kimi.md",
 }
 CLIENT_SPECIFIC_PATTERNS = (
     r"\bCodex\b",
@@ -37,6 +38,7 @@ CORE_HEADINGS = (
     "Output Economy",
 )
 ADAPTER_MARKERS = {
+    "kimi": (".agents/skills", "${KIMI_SKILL_DIR}", "Kimi"),
     "claude-code": (
         ".claude-plugin/plugin.json",
         "@.agents/AGENTS.md",

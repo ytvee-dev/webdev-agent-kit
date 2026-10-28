@@ -93,6 +93,13 @@ def compare_cases(cases, answers):
 
 
 def evaluate(args):
+    from learning_processing import lock
+    proposal = Path(args.proposal).expanduser().resolve(strict=True)
+    with lock(proposal.parent.parent, args.repo):
+        return evaluate_locked(args)
+
+
+def evaluate_locked(args):
     proposal_path = Path(args.proposal).expanduser().resolve(strict=True)
     proposal = read_json(proposal_path)
     repo = Path(args.repo).expanduser().resolve(strict=True)
@@ -105,8 +112,8 @@ def evaluate(args):
     edits = render_changes(proposal, repo)
     changes = {name: (old, new) for name, old, new in edits}
     applicable = [case for case in cases if case.get("skill") in changes]
-    if not applicable:
-        raise ValueError("No held-out cases for changed skills")
+    if {case.get("skill") for case in applicable} != set(changes):
+        raise ValueError("Every changed skill requires held-out cases")
     answers = {}
     replay = args.replay_responses is not None
     if replay:
@@ -133,8 +140,11 @@ def evaluate(args):
         "passed": passed,
         "synthetic": replay,
     }
-    proposal["checks"]["behavioral_tested"] = not replay
-    proposal["checks"]["behavioral_passed"] = passed and not replay
+    proposal["checks"]["textual_tested"] = True
+    proposal["checks"]["textual_passed"] = passed
+    # Hypothetical responses are never evidence of executed actions.
+    proposal["checks"]["behavioral_tested"] = False
+    proposal["checks"]["behavioral_passed"] = False
     write_json(proposal_path, proposal)
     return {
         "result": "passed" if passed else "failed",
