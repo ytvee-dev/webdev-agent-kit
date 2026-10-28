@@ -11,6 +11,7 @@ tags:
 parent:
     - '[[docs/README|WebDev Agent Kit Documentation]]'
 related:
+    - '[[docs/install/kimi|Kimi Code Installation]]'
     - '[[docs/install/opencode]]'
     - '[[docs/install/model-capability-guide]]'
     - '[[docs/install/roles]]'
@@ -25,7 +26,7 @@ depends_on: []
 
 # Installation Guides
 
-[← All documentation](../README.md)
+[в†ђ All documentation](../README.md)
 
 Choose the client you use to open your project:
 
@@ -51,8 +52,10 @@ is already installed, use [upgrade and rollback](upgrade.md).
 
 ## Video guides
 
-- [Cursor — text and video guide](cursor.md)
-- [VS Code Codex — text and video guide](vscode-codex.md)
+- [Cursor вЂ” text and video guide](cursor.md)
+- [VS Code Codex вЂ” text and video guide](vscode-codex.md)
 
 These pages are user guides, not runtime policy. Maintainers define package
 contents in `bundle-manifest.json` and check them with the archive validators.
+
+- [Kimi Code installation](kimi.md)

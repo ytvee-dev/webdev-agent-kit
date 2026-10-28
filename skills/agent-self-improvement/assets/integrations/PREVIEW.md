@@ -29,6 +29,6 @@ Explicit file import example:
 python /absolute/path/to/learning.py attach --project /path/to/project --client opencode --session session123 --file /approved/path/screenshot.png
 ```
 
-Use the operating-system scheduler if you want regular offline triage. The scheduled `learning_cycle.py auto` can invoke an authenticated Codex or OpenCode model to propose changes and run structural checks. It never applies changes automatically. Task-level baseline/candidate behavioral comparison is not implemented and remains a separate release gate.
+Learning requires an explicit user request. Scheduling and background maintenance are disabled; capture remains local and independent.
 
 Hook bridge invocations must pass `--client codex` or `--client claude-code`. If the host does not provide a stable message ID, the adapter creates a unique event ID; retries in this fallback mode may duplicate evidence and need review.

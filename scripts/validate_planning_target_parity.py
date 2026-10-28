@@ -17,6 +17,11 @@ CLAUDE_RUNTIME_PRELUDE = (
     "`${CLAUDE_SKILL_DIR}/../../adapters/claude-code.md`; resolve bundle paths "
     "from `${CLAUDE_SKILL_DIR}/../..`, host facts from `.agents/project/`."
 )
+KIMI_RUNTIME_PRELUDE = (
+    "Read `${KIMI_SKILL_DIR}/../../AGENTS.md` and "
+    "`${KIMI_SKILL_DIR}/../../adapters/kimi.md`; resolve bundle paths "
+    "from `${KIMI_SKILL_DIR}/../..`, host facts from `.agents/project/`."
+)
 PLANNING_COMMON = (
     "common/agent-loop-policy.md",
     "common/checkpoint-rules.md",
@@ -92,6 +97,16 @@ def generated_skill_body(path: Path, canonical: str, errors: list[str]) -> str:
     elif CLAUDE_RUNTIME_PRELUDE in portable_body:
         errors.append(
             f"{path.relative_to(ROOT)}: non-Claude target contains Claude prelude"
+        )
+    if canonical == "kimi":
+        prefix = f"{KIMI_RUNTIME_PRELUDE}\n\n"
+        if not portable_body.startswith(prefix):
+            errors.append(f"{path.relative_to(ROOT)}: Kimi runtime prelude is missing")
+            return portable_body
+        portable_body = portable_body[len(prefix) :]
+    elif KIMI_RUNTIME_PRELUDE in portable_body:
+        errors.append(
+            f"{path.relative_to(ROOT)}: non-Kimi target contains Kimi prelude"
         )
     return portable_body
 

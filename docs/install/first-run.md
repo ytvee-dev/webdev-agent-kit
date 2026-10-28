@@ -26,6 +26,7 @@ download, file layout and first session.
 | --- | --- | --- | --- |
 | `opencode` (installer) | `codex` portable skills | host `.agents/` and `.opencode/plugins/` | `opencode.json` instructions + native plugin |
 | `codex` | `codex` | host `.agents/` | host `AGENTS.md` pointer to `.agents/AGENTS.md` |
+| `kimi` | `kimi` | Project archive | `.agents/skills` |
 | `vs-code-codex` | `codex` | host `.agents/` | same Codex contract |
 | `cursor` | `cursor` | host `.agents/` and `.cursor/` | `.cursor/rules/webdev-agent-kit.mdc` |
 | `claude-code` | `claude-code` | external `webdev-agent-kit/` | native plugin and local marketplace |
@@ -78,7 +79,7 @@ and its use is approved; never create a pointer to a missing `.agents/AGENTS.md`
 - Exercised: a small task has an observed result and retained evidence.
 
 Check discovery in a fresh session, then ask a read-only question such as
-“Which existing command checks types, and what source proves that?”.
+вЂњWhich existing command checks types, and what source proves that?вЂќ.
 Installation and discovery alone do not establish agent quality or cross-client
 compatibility. Do not run an app merely to claim onboarding success.
 

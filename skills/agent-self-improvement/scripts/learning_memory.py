@@ -13,7 +13,7 @@ from contextlib import closing
 from datetime import UTC, datetime
 from pathlib import Path
 
-from learning import create_store, default_root, project_id, redact
+from learning import create_store, project_id, redact, resolve_state
 
 VERSION = 2
 KINDS = {"episode", "evidence", "requirement", "finding", "lesson", "evaluation", "application"}
@@ -140,10 +140,20 @@ def bind(conn, project, pid=None, name=None):
     return pid
 
 
+class GitHubRequestError(ValueError):
+    def __init__(self, code):
+        self.code = code
+        super().__init__('GitHub request failed: ' + code)
+
+
 def gh(*args, input_data=None):
-    result = subprocess.run(["gh", "api", *args], input=input_data, text=True, capture_output=True, timeout=60, check=False)
+    # pythonw hides the maintenance parent, but console children need their own flag.
+    options = {"creationflags": subprocess.CREATE_NO_WINDOW} if sys.platform == "win32" else {}
+    result = subprocess.run(["gh", "api", *args], input=input_data, text=True,
+                            capture_output=True, timeout=60, check=False, **options)
     if result.returncode:
-        raise ValueError("GitHub request failed; check gh authentication, repository access and network")
+        status = re.search(r'HTTP\s+(\d{3})', result.stderr or '')
+        raise GitHubRequestError('http_' + status[1] if status else 'cli_failed')
     return json.loads(result.stdout) if result.stdout.strip() else {}
 
 
@@ -232,6 +242,22 @@ def validate_record(record, pid):
 def records(conn, pid):
     rows = conn.execute("SELECT id,revision,episode_id,kind,status,payload,provenance,created_at FROM memory_records WHERE project_id=? ORDER BY id,revision", (pid,)).fetchall()
     return [dict(id=r[0], revision=r[1], project_id=pid, episode_id=r[2], kind=r[3], status=r[4], payload=json.loads(r[5]), provenance=json.loads(r[6]), created_at=r[7]) for r in rows]
+
+
+
+def curated_event_ids(conn, project):
+    """Only latest, complete, explicitly reviewed episodes cover raw evidence."""
+    tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if not {'memory_bindings', 'memory_records'} <= tables:
+        return set()
+    row = conn.execute("SELECT project_id FROM memory_bindings WHERE local_id=?", (project_id(project),)).fetchone()
+    if not row:
+        return set()
+    latest = {r['id']: r for r in records(conn, row[0])}
+    return {event for item in latest.values() if item['kind'] == 'episode'
+            and item['payload'].get('coverage') == 'complete_available'
+            and item['payload'].get('curation_state') in {'reviewed', 'lesson_created', 'no_lesson'}
+            for event in item['payload'].get('source_event_ids', [])}
 
 
 def save_records(conn, pid, items, *, enforce_quality=True):
@@ -533,7 +559,7 @@ def sync(conn, pid, direction):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--state", type=Path, default=default_root())
+    parser.add_argument("--state", type=Path, default=None)
     sub = parser.add_subparsers(dest="command", required=True)
     for name in ("bind", "configure", "context", "record", "export", "import", "recall", "sync", "check", "audit", "snapshot"):
         cmd = sub.add_parser(name)
@@ -554,6 +580,7 @@ def main():
         if name == "sync":
             cmd.add_argument("--direction", choices=("push", "pull"), required=True)
     args = parser.parse_args()
+    args.state = resolve_state(args.project, args.state)
     conn = open_store(args.state)
     try:
         if args.command == "bind":
@@ -570,6 +597,8 @@ def main():
                 value = read_json(args.file)
                 count = save_records(conn, pid, value) if args.command == "record" else import_package(conn, pid, value)
                 result = {"inserted": count}
+                from learning_exchange import notify
+                notify(args.project)
             elif args.command == "export":
                 value = package(conn, pid)
                 write_json(args.file, value)

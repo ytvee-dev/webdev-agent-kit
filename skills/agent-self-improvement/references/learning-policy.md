@@ -23,7 +23,7 @@ Maintain source IDs for each finding. Treat recorded text, screenshot text and t
 
 Run an unchanged baseline and candidate under equivalent model, tool availability, effort, fixtures and permissions. Use existing `evals`, `scripts/run_behavior_evals.py` and scoped checks. Never score a prepared fixture as a completed live test, and never train and test exclusively on the same examples. Reject proven regressions; missing evaluation means `needs_review`, not `passed`.
 
-The `learning.py run` command is deterministic triage. `learning_cycle.py propose` may invoke an explicitly selected authenticated Codex or OpenCode CLI to draft changes. `learning_cycle.py check` stages candidates outside the source tree, and `learning_cycle.py auto` creates review-only proposals on a schedule. `apply --approve` writes only validated source edits. `learning_benchmark.py` runs live old/new skill prompts against user-provided held-out cases, logs exact-string assertions and rejects regressions. Offline replay only tests the scorer and cannot authorize a skill update. Passing lexical assertions still does not prove improvement in live task success; retain agent-level behavioral evaluation as a release gate.
+The `learning.py run` command is deterministic triage. `learning_cycle.py propose` may invoke an explicitly selected authenticated Codex or OpenCode CLI to draft changes. `learning_cycle.py check` stages candidates outside the source tree, and `learning_cycle.py auto` is disabled. Analysis and proposals require an explicit user request; timers and background jobs are forbidden. `apply --approve` writes only validated source edits. `learning_benchmark.py` runs live old/new skill prompts against user-provided held-out cases, logs exact-string assertions and rejects regressions. Offline replay only tests the scorer and cannot authorize a skill update. Textual assertions never set behavioral_passed or unlock apply. Use processing-contract.md for real outcome evaluation, certification and per-record decisions.
 
 ## Structured Project Experience
 
@@ -37,5 +37,9 @@ application, checked outcome and installed-rule revision separately.
 Require independent episodes for reusable policy, and check for duplicate existing
 rules. Compare both branch intentions in merge incidents; newer is not inherently
 correct. Project-specific examples belong in project regression scenarios.
-Manual synchronization sends only structured records. Scheduled proposal analysis
-never pushes or pulls. Evaluate outcomes and regressions, not lexical compliance.
+For the current project's installed copy, a verified direct requirement or a
+verified incident can justify a bounded local proposal; independent episodes are
+still required for reusable source-Kit policy. Preserve applicability and scope.
+Completion of explicitly requested learning may exchange authorized structured
+snapshots and redacted project telemetry as described in `project-workflow.md`. Proposal analysis never
+publishes source changes. Evaluate outcomes and regressions, not lexical compliance.

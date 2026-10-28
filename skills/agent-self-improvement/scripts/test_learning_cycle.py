@@ -58,6 +58,7 @@ class LearningCycleSmoke(unittest.TestCase):
         proposal = self.base / "input.json"
         proposal.write_text(json.dumps({
             "schema_version": 1,
+            "decisions": [{"record_id": event_id, "outcome": "pending", "reason": "Observed correction"}],
             "changes": [{
                 "path": "skills/example/SKILL.md",
                 "find": "Always verify before reporting.",
@@ -72,6 +73,12 @@ class LearningCycleSmoke(unittest.TestCase):
         )
         path = result["proposal"]
         self.assertEqual(result["result"], "pending_validation")
+        duplicate = self.call(CLI, "propose", "--project", str(self.project),
+                              "--repo", str(self.repo), "--proposal-file", str(proposal))
+        self.assertEqual(duplicate["result"], "no_change")
+        receipts = self.call(CLI, "status", "--project", str(self.project))["records"]
+        self.assertEqual({r["outcome"] for r in receipts}, {"pending"})
+        self.assertTrue(all(r["used"] is False and r["used_at"] is None for r in receipts))
         self.call(CLI, "apply", "--repo", str(self.repo), "--proposal", path, expect=1)
         validation = self.call(
             CLI, "check", "--repo", str(self.repo), "--proposal", path,
@@ -85,34 +92,37 @@ class LearningCycleSmoke(unittest.TestCase):
         )
         self.assertEqual(result["result"], "applied")
         self.assertIn("affected functionality", self.skill.read_text())
+        receipts = self.call(CLI, "status", "--project", str(self.project))["records"]
+        self.assertEqual({r["outcome"] for r in receipts}, {"applied"})
+        self.assertTrue(all(r["used"] is True and r["used_at"] for r in receipts))
+        # The usage flag is persisted in SQLite, not invented by the status renderer.
+        import sqlite3
+        from contextlib import closing
+        with closing(sqlite3.connect(self.state / "experience.sqlite3")) as conn:
+            usage = [json.loads(row[0]) for row in conn.execute(
+                "SELECT details FROM learning_decisions WHERE outcome='applied'")]
+        self.assertTrue(usage and all(row["used"] is True and row["used_at"] for row in usage))
+        repeat = self.call(CLI, "propose", "--project", str(self.project),
+                           "--repo", str(self.repo), "--proposal-file", str(proposal))
+        self.assertEqual(repeat["result"], "no_change")
+        recovered = self.call(CLI, "apply", "--repo", str(self.repo),
+                              "--proposal", path, "--approve")
+        self.assertEqual(recovered["result"], "already_applied")
         # Project purge also removes derived training suggestions and diffs.
         self.call(STORE, "purge", "--project", str(self.project))
         self.assertFalse(Path(path).exists())
         self.assertFalse(Path(path).with_suffix(".diff").exists())
+        self.assertEqual(self.call(CLI, "status", "--project", str(self.project))["records"], [])
 
-    def test_scheduled_offline_cycle_skips_unchanged_evidence(self):
-        event_id = self.record()
-        source = self.base / "scheduled.json"
-        source.write_text(json.dumps({
-            "schema_version": 1,
-            "changes": [{
-                "path": "skills/example/SKILL.md",
-                "find": "Always verify before reporting.",
-                "replace": "Always verify the affected functionality before reporting.",
-                "evidence_ids": [event_id],
-            }],
-        }), encoding="utf-8")
-        first = self.call(
-            CLI, "auto", "--repo", str(self.repo),
-            "--project", str(self.project), "--proposal-file", str(source),
-        )
-        self.assertEqual(first["state"], "needs_review")
-        second = self.call(
-            CLI, "auto", "--repo", str(self.repo),
-            "--project", str(self.project), "--proposal-file", str(source),
-        )
-        self.assertEqual(second["result"], "no_change")
-        self.assertIn("No new evidence", second["reason"])
+    def test_automatic_cycle_rejected_without_side_effects(self):
+        from unittest.mock import patch
+
+        from learning_cycle import auto
+        with patch('learning_cycle.propose') as propose:
+            with self.assertRaisesRegex(ValueError, 'Automatic learning is disabled'):
+                auto(None)
+            propose.assert_not_called()
+
 
     def test_forged_proposal_cannot_write_outside_skill_directory(self):
         self.record()
@@ -166,6 +176,44 @@ class LearningCycleSmoke(unittest.TestCase):
             expect=1,
         )
         self.assertIn("evidence", result.stderr.lower())
+
+    def test_bounded_batch_preserves_remaining_work_and_rejects_old_change(self):
+        first = self.record()
+        second = self.call(STORE, "capture", "--project", str(self.project), payload=json.dumps({
+            "client": "codex", "session_id": "session-b", "message_id": "message-2",
+            "kind": "user_correction", "content": "Inspect resulting files."}))["id"]
+        source = self.base / "batch.json"
+        candidate = {"schema_version": 1, "changes": [{"path": "skills/example/SKILL.md",
+            "find": "Always verify before reporting.", "replace": "Always verify outcomes before reporting.",
+            "evidence_ids": [first]}], "decisions": [{"record_id": first, "outcome": "pending", "reason": "Observed correction"}]}
+        source.write_text(json.dumps(candidate), encoding="utf-8")
+        proposed = self.call(CLI, "propose", "--project", str(self.project), "--repo", str(self.repo),
+                             "--batch-size", "1", "--proposal-file", str(source))
+        self.call(CLI, "check", "--repo", str(self.repo), "--proposal", proposed["proposal"])
+        self.call(CLI, "apply", "--repo", str(self.repo), "--proposal", proposed["proposal"],
+                  "--approve", "--accept-unevaluated")
+        receipts = self.call(CLI, "status", "--project", str(self.project))["records"]
+        self.assertEqual({r["record_id"] for r in receipts}, {first})
+        # Fresh work must not be used as a trigger to re-propose an old lesson.
+        candidate["changes"][0].update(find="Always verify outcomes before reporting.", replace="Verify again.")
+        candidate["decisions"] = [{"record_id": second, "outcome": "pending", "reason": "New correction"}]
+        source.write_text(json.dumps(candidate), encoding="utf-8")
+        rejected = self.call(CLI, "propose", "--project", str(self.project), "--repo", str(self.repo),
+                             "--proposal-file", str(source), expect=1)
+        self.assertIn("evidence", rejected.stderr.lower())
+        candidate["changes"][0]["evidence_ids"] = [second]
+        source.write_text(json.dumps(candidate), encoding="utf-8")
+        next_proposal = self.call(CLI, "propose", "--project", str(self.project), "--repo", str(self.repo),
+                                 "--proposal-file", str(source))
+        self.assertEqual(next_proposal["result"], "pending_validation")
+        import sqlite3
+        from contextlib import closing
+        with closing(sqlite3.connect(self.state / "experience.sqlite3")) as conn, conn:
+            conn.execute("UPDATE events SET content='Evidence was corrected' WHERE id=?", (second,))
+        stale = self.call(CLI, "check", "--repo", str(self.repo),
+                          "--proposal", next_proposal["proposal"], expect=1)
+        self.assertIn("Supporting event changed", stale.stderr)
+        self.assertIn("Always verify outcomes", self.skill.read_text())
 
 
 if __name__ == "__main__":

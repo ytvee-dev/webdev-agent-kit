@@ -36,7 +36,7 @@ def build_notes(tag, require_content=False):
         f"# WebDev Agent Kit {tag}\n\n"
         f"{unreleased_body(require_content=require_content)}\n\n"
         "## Installation\n\n"
-        "Verify the selected archive against `SHA256SUMS`. Extract Codex and "
+        "Verify the selected archive against `SHA256SUMS`. Extract Codex, Kimi and "
         "Cursor archives from the project root; they create `.agents/` "
         "automatically. Extract Claude archives as the native "
         "`webdev-agent-kit/` plugin root. See `docs/install/README.md` for the "

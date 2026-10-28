@@ -63,7 +63,7 @@ python <path-to-learning.py> attach --project <root> --client opencode --session
 
 ## Scheduling
 
-The `learning.py run` command performs deterministic triage. For model-backed scheduled proposals, use `learning_cycle.py auto`, which never applies changes without approval. See the Windows scheduling example below.
+The `learning.py run` command performs deterministic triage. For explicitly requested proposals, use `learning_cycle.py propose`, followed by `check`. Never schedule these commands.
 
 ## Windows Codex: install without replacing existing hooks
 
@@ -86,13 +86,13 @@ Copy `opencode/experience-recorder.js` to `<project>\.opencode\plugins\experienc
 
 ## Run complete local cycle
 
-Use a **clone of the source Skill Pack** as `--repo`, not a generated `.agents` installation:
+For this project-local workflow, use the project root as `--repo` and the reviewed run returned by `begin`. Source-Kit transfer is separate:
 
 ```powershell
-$skill = "C:\path\to\webdev-agent-kit\skills\agent-self-improvement"
-$repo = "C:\path\to\webdev-agent-kit"
 $project = "C:\path\to\your-project"
-python "$skill\scripts\learning_cycle.py" auto --project "$project" --repo "$repo" --engine codex
+$skill = "$project\.agents\skills\agent-self-improvement"
+$repo = $project
+python "$skill\scripts\learning_cycle.py" propose --run "<reviewed-run-id>" --project "$project" --repo "$repo" --engine codex
 # Or: --engine opencode
 ```
 
@@ -131,11 +131,14 @@ Cases must be defined independently of the training examples. These lexical asse
 python "$skill\scripts\learning_cycle.py" apply --repo "$repo" --proposal "C:\path\to\proposal.json" --approve --accept-unevaluated
 ```
 
-Do not use the bypass for automatic scheduled jobs.
+The bypass never authorizes unattended execution.
 
-## Nightly Windows scheduling
+## Explicit invocation only
 
-In Task Scheduler create a task running your local `python.exe` with arguments `"C:\path\to\learning_cycle.py" auto --project "C:\path\to\project" --repo "C:\path\to\source-kit" --engine codex`. Choose the desired nightly trigger, run only under your user account, and keep saved credentials and output under your private profile. No scheduled task is created by the package. Repeated unchanged experience is skipped using a local checkpoint. Linux users can adapt the provided systemd timer/service templates.
+Do not create Windows tasks, systemd timers or background workers. Legacy `auto`
+and `maintenance` commands reject execution. Use `learning_schedule.py status`
+or `remove --project <root>` to inspect/remove an old project task. Local capture
+does not authorize learning or network maintenance.
 
 ## One-command local acceptance on Windows
 
@@ -144,7 +147,7 @@ From PowerShell after installing Python, without modifying live agents:
 ```powershell
 & "$skill\scripts\smoke_windows.ps1" -Project $project -Repo $repo
 # Only after explicit opt-in and reviewing stored experience:
-& "$skill\scripts\smoke_windows.ps1" -Project $project -Repo $repo -Engine codex -RunLive
+& "$skill\scripts\smoke_windows.ps1" -Project $project -Repo $repo -Engine codex -RunLive -RunId "<reviewed-run-id>"
 ```
 
 The first command uses synthetic test data and reports collection state. The second uses the selected installed Codex/OpenCode model to prepare a **review-only** proposal and may send your approved local evidence to its provider. Neither command applies changes.

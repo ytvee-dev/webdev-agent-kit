@@ -129,8 +129,8 @@ def validate() -> list[str]:
     targets = manifest.get("targets", {})
     aliases = manifest.get("target_aliases", {})
     all_targets = (*targets, *aliases)
-    if len(all_targets) != 6:
-        errors.append("planning smoke requires six generated runtime targets")
+    if len(all_targets) != 7:
+        errors.append("planning smoke requires seven generated runtime targets")
 
     for target in all_targets:
         canonical = aliases.get(target, target)
@@ -154,7 +154,7 @@ def main() -> None:
         for error in errors:
             print(error)
         sys.exit(1)
-    checks = len(SMOKE_CASES) * 6
+    checks = len(SMOKE_CASES) * 7
     print(f"Cross-client planning smoke checks passed: {checks} target cases.")
 
 

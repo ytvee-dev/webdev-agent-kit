@@ -11,6 +11,7 @@ tags:
     - 'docs/entrypoint'
 parent: []
 related:
+    - '[[adapters/kimi|Kimi Code Adapter]]'
     - '[[common/webdev-role-selection]]'
     - '[[common/codex-model-routing-policy]]'
     - '[[skills/frontend-prototype-explorer/SKILL|Frontend Prototype Explorer]]'

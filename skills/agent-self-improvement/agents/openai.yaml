@@ -1,6 +1,6 @@
 interface:
   display_name: "Agent Self Improvement"
-  short_description: "Project memory and manual experience exchange"
-  default_prompt: "Use $agent-self-improvement to curate project experience or manually synchronize structured memory; do not activate collection without my explicit consent."
+  short_description: "Project memory and verified instruction improvement"
+  default_prompt: "Use $agent-self-improvement for project-scoped instruction improvement and configured private snapshots; do not enable collection or synchronization without my authorization."
 policy:
   allow_implicit_invocation: false

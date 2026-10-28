@@ -108,9 +108,9 @@ class ProjectMemoryTests(unittest.TestCase):
         accepted['revision'] = 3
         accepted['payload'].update(finding_ids=[], applicability='Currency components', recheck_when='Currency formatter changes',
                                    last_verified_commit='a' * 40, acceptance_basis='explicit_requirement', acceptance_evidence_ids=['evidence'],
-                                   keywords=['валюта', 'форматирование'], incorporated_ref='rules/currency', incorporated_revision='r1')
+                                   keywords=['РІР°Р»СЋС‚Р°', 'С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ'], incorporated_ref='rules/currency', incorporated_revision='r1')
         save_records(self.conn, self.pid, [evidence, accepted])
-        self.assertEqual(len(recall(self.conn, self.pid, 'валюта форматирование')), 1)
+        self.assertEqual(len(recall(self.conn, self.pid, 'РІР°Р»СЋС‚Р° С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ')), 1)
         self.assertEqual(recall(self.conn, self.pid, 'instruction'), [])
         self.assertEqual(recall(self.conn, self.pid, 'currency', ['rules/currency@r1']), [])
         self.assertEqual(len(recall(self.conn, self.pid, 'currency', ['rules/currency@r2'])), 1)
@@ -202,7 +202,7 @@ class ProjectMemoryTests(unittest.TestCase):
         skill.parent.mkdir(parents=True)
         skill.write_text('---\nname: example\ndescription: example\n---\nCheck things.\n')
         proposal = self.root / 'proposal.json'
-        proposal.write_text(json.dumps({'schema_version': 1, 'changes': []}))
+        proposal.write_text(json.dumps({'schema_version': 1, 'changes': [], 'decisions': [{'record_id': r['id'], 'outcome': 'deferred', 'reason': 'Single episode; needs independent evidence', 'recheck_when': 'dependencies_changed'} for r in self.sample() if r['kind'] in {'lesson', 'requirement'}]}))
         result = propose(Namespace(repo=str(repo), project=str(self.project), state=str(self.state), engine=None, proposal_file=str(proposal), skill=[]))
         self.assertIn('proposal', result)
 
