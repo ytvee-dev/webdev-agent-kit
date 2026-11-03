@@ -53,6 +53,20 @@ Use supported native `UserPromptSubmit` and `PostToolUse` command hooks, pointin
 
 Copy `opencode/experience-recorder.js` into `.opencode/plugins/experience-recorder.js` and set `AGENT_LEARNING_SCRIPT` to the absolute path of `scripts/learning.py`. The plugin uses `session.idle` and the documented SDK `session.messages` method to capture text parts, tool-name metadata and file-part metadata. **Inline base64 `data:` file parts are copied with size limits; remote file references remain metadata-only.** Enable collection with `learning.py on --project <root>`; off immediately prevents new capture at CLI level. This is a preview and needs a real OpenCode compatibility test.
 
+## Kimi Code v2
+
+Use `scripts/install_kimi_hooks.py --project ROOT` to preview global Kimi TOML
+hooks filtered to one project, then `--approve` for authorized installation.
+It preserves unrelated configuration and creates a backup. Enable collection
+separately with `learning.py on --project ROOT`; remove with
+`install_kimi_hooks.py --project ROOT --remove --approve`. Restart the session.
+Only exposed event payloads are captured; missing assistant text is marked.
+
+Use `--engine kimi` for explicit proposals and held-out text benchmarks. The
+shared Kimi runner uses an isolated no-tools/no-subagents agent and retains the
+selected client model. Attachments are metadata-only. Live authentication,
+payloads and Windows compatibility need observed client verification.
+
 ## File bytes
 
 Where a client exposes only a link, path or file-part metadata, the attachment stays metadata-only. To save a user-supplied file, explicitly run:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Nonblocking Codex/Claude lifecycle event bridge; no transcript file access."""
+"""Nonblocking Codex/Claude/Kimi lifecycle event bridge; no transcript file access."""
 import argparse
 import json
 import subprocess
@@ -29,7 +29,7 @@ def normalize(event, client):
     elif name == "PostToolUse":
         kind = "tool"
         tool = str(event.get("tool_name") or "tool")[:160]
-        response = event.get("tool_response")
+        response = event.get("tool_output") if client == "kimi" else event.get("tool_response")
         raw = json.dumps(response, ensure_ascii=False) if response is not None else ""
         result = raw[:3000]
         if len(raw) > 3000:
@@ -40,7 +40,7 @@ def normalize(event, client):
         content = name
     if not isinstance(content, str):
         content = json.dumps(content, ensure_ascii=False)
-    identifier = event.get("tool_use_id") or event.get("message_id") or event.get("turn_id")
+    identifier = event.get("tool_call_id") or event.get("tool_use_id") or event.get("message_id") or event.get("turn_id")
     synthetic = not identifier
     if not identifier:
         identifier = event.get("message_id") or name + "-" + uuid.uuid4().hex
@@ -60,7 +60,8 @@ def normalize(event, client):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--state", type=Path)
-    parser.add_argument("--client", choices=("codex", "claude-code"), required=True)
+    parser.add_argument("--project", type=Path)
+    parser.add_argument("--client", choices=("codex", "claude-code", "kimi"), required=True)
     args = parser.parse_args()
     event_name = None
     project = None
@@ -70,6 +71,10 @@ def main():
             raise ValueError("oversize")
         payload = json.loads(raw_input.decode("utf-8"))
         event_name = payload.get("hook_event_name") if isinstance(payload, dict) else None
+        if args.project is not None:
+            cwd = payload.get("cwd") if isinstance(payload, dict) else None
+            if not isinstance(cwd, str) or Path(cwd).resolve() != args.project.resolve():
+                return
         entry = normalize(payload, args.client)
         if entry is None:
             return

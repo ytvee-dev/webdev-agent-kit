@@ -35,6 +35,9 @@ def run_answer(engine, task, instructions, timeout):
     )
     with tempfile.TemporaryDirectory(prefix="learning-benchmark-") as scratch:
         root = Path(scratch)
+        if engine == "kimi":
+            from kimi_runner import run_kimi
+            return run_kimi(prompt, timeout)
         if engine == "codex":
             outfile = root / "answer.txt"
             command = [
@@ -160,7 +163,7 @@ def main():
     parser.add_argument("--repo", required=True)
     parser.add_argument("--proposal", required=True)
     parser.add_argument("--cases", required=True)
-    parser.add_argument("--engine", choices=("codex", "opencode"))
+    parser.add_argument("--engine", choices=("codex", "opencode", "kimi"))
     parser.add_argument("--replay-responses")
     parser.add_argument("--timeout", type=int, default=240)
     args = parser.parse_args()

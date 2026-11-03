@@ -81,7 +81,7 @@ def validate(*, generated=False):
             directory = ROOT / "dist" / target / "agents"
             if canonical == "claude-code":
                 errors.extend(validate_agents(directory))
-            elif directory.exists():
+            elif canonical != "kimi" and directory.exists():
                 errors.append(f"dist/{target}: must not ship native Claude agents")
     return errors
 

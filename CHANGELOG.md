@@ -38,6 +38,15 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ## Unreleased
 
+### Kimi adaptation for 1.10.0
+
+- Add native Kimi plugin instructions and nine bounded subagent roles while
+  preserving project archive installation and all 23 skills.
+- Add opt-in project-filtered Kimi hook installation, backup and removal.
+- Add Kimi proposal and held-out benchmark execution with tool-free agents.
+- Document Kimi v2 requirements, installation modes, capture boundaries and
+  live acceptance checks. Live Kimi/Windows validation remains a release gate.
+
 ### Added
 
 - Content-free capture health, receipt/source timestamps and context-completeness

@@ -267,6 +267,25 @@ def build_canonical_target(target):
     if target == "kimi":
         target_root = prepare_target_root(target)
         copy_project_target_base(target_root, target, include_codex_metadata=False)
+        agents_root = target_root / "agents"
+        agents_root.mkdir()
+        for source in sorted((ROOT / "agents/claude-code").glob("*.md")):
+            metadata, body = split_frontmatter(source.read_text(encoding="utf-8"))
+            header = "---\n" + "\n".join(
+                key + ": " + metadata[key] for key in ("name", "description", "tools")
+            ) + "\nsubagents: []\n---\n\n"
+            body = body.replace("adapters/claude-code.md", "adapters/kimi.md")
+            body += "\nYour final message is the complete, self-contained handoff to the caller.\n"
+            (agents_root / source.name).write_text(header + body, encoding="utf-8")
+        plugin = {
+            "name": "webdev-agent-kit", "version": MANIFEST["version"],
+            "description": "Frontend workflows, project memory and bounded subagents",
+            "skills": "./skills/", "agents": "./agents/",
+            "systemPrompt": "Follow the host project's instructions. For WebDev work, load the matching WebDev skill before acting; its prelude locates the shared policy. Keep project facts in the host .agents/project. Learning capture, proposals and application require separate authorization. For delegation provide absolute bundle and host roots, scope, evidence and acceptance criteria. Never infer tool availability from configuration.",
+        }
+        (target_root / "kimi.plugin.json").write_text(
+            json.dumps(plugin, indent=2) + "\n", encoding="utf-8"
+        )
         for skill in (target_root / "skills").glob("*/SKILL.md"):
             text = skill.read_text(encoding="utf-8")
             end = text.index("\n---\n", 4) + len("\n---\n")

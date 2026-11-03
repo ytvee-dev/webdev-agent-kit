@@ -17,27 +17,26 @@ depends_on:
 
 # Kimi Code Adapter
 
-Use the portable runtime core and host instructions. This adapter targets Kimi
-Code CLI with project `.agents/skills` discovery, including K3 when available
-in the user's account. Preserve selected models, permissions and authentication.
+Target Kimi Code v2: `.agents/skills`, `${KIMI_SKILL_DIR}`, Markdown agents and
+native plugins. Preserve host instructions, model, authentication and permissions.
 
-Extract the Kimi project archive into the project root, preserving existing
-`.agents/project` and `.agents/learning` state. Start a fresh session and invoke
-`/skill:project-context-adapter` to verify skill discovery, references and tools.
-Each generated skill loads the policy through `${KIMI_SKILL_DIR}`. Do not replace
-an existing host AGENTS.md to activate this package.
+Project skills load policy through their prelude. For startup instructions,
+install the extracted `.agents` directory with `/plugins install ABSOLUTE_PATH`,
+then `/plugins reload`. Plugins are user-wide managed copies; reinstall after
+upgrades. Plugin skill names use `webdev-agent-kit:`. Avoid duplicate installations.
+Keep host facts/memory under the host `.agents/project` and `.agents/learning`.
 
-Use actually available filesystem, shell, browser and MCP capabilities. Subagents require verified availability and scoped handoffs. Do not reuse
-Codex/Claude configurations or install dependencies implicitly.
+Nine `wdk-*` roles require bounded handoffs with absolute bundle/host roots,
+evidence, owned paths and acceptance criteria. Nested delegation is disabled.
+Verify tools and delegation; retain single-agent fallback.
 
-Learning remains opt-in. Use portable Python memory commands and explicit canonical JSONL imports. This
-release does not install a Kimi capture hook or parse undocumented transcripts.
-Codex/OpenCode proposal runners are not evidence of a Kimi model evaluation;
-report an unavailable evaluator rather than claiming a live Kimi pass.
+Capture is opt-in: preview `install_kimi_hooks.py --project ROOT`, approve setup,
+then separately enable `learning.py on`. Missing assistant text stays marked;
+never read transcripts implicitly. Proposals and benchmarks accept `--engine kimi`
+with tools/subagents disabled. Attachments remain metadata-only.
 
-## Official References
+Follow the installation guide for commands and acceptance checks. Static checks
+do not establish live client behavior.
 
-- [Skills and project discovery](https://www.kimi.com/code/docs/en/kimi-code-cli/customization/skills.html)
-- [Agents and tool boundaries](https://www.kimi.com/code/docs/en/kimi-code-cli/customization/agents.html)
-
-Inspected 2026-10-28. Packaging checks do not prove live client behavior.
+[Official docs](https://www.kimi.com/code/docs/en/kimi-code-cli/customization/skills.html)
+inspected 2026-11-03.

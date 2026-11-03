@@ -38,11 +38,71 @@ using [upgrade and rollback](upgrade.md).
 5. Keep the selected model and permissions. K3 requires availability in the
    user's Kimi account; this package does not provision credentials or models.
 
-The adapter uses documented project skill discovery and `${KIMI_SKILL_DIR}`.
-Packaging checks do not prove live model behavior. Automatic Kimi capture and
-Kimi-specific learning evaluation are not included; use explicit canonical JSONL
-import and the portable memory CLI when requested. Existing Codex/OpenCode
-runners must not be reported as Kimi evaluation.
+## Activate at session start
+
+The archive supports project-local discovery directly. To also load WebDev
+instructions at session start through the native plugin system:
+
+```text
+/plugins install /absolute/path/to/project/.agents
+/plugins reload
+/skill:webdev-agent-kit:project-context-adapter
+```
+
+Kimi copies the plugin into its managed directory. Installation is user-wide;
+reinstall after updating the archive. Use one installation mode to avoid
+unintentional duplicate skills. Existing host AGENTS.md is never overwritten.
+Project facts and memory stay under the current project's `.agents` directory.
+The package includes nine native `wdk-*` roles with bounded tool access. Verify
+one real lookup/review handoff before treating delegation as operational.
+
+## Optional experience capture
+
+From the project root, replace `SKILL` below with the absolute installed path to
+`skills/agent-self-improvement` (the managed plugin copy when using plugin mode).
+Python 3.11 or newer is required for the TOML installer.
+
+```sh
+python SKILL/scripts/install_kimi_hooks.py --project .
+python SKILL/scripts/install_kimi_hooks.py --project . --approve
+python SKILL/scripts/learning.py on --project .
+```
+
+Installation preserves existing configuration, writes a backup on changes and
+filters the global hooks to this exact project. Use `--config PATH` for an
+explicit Kimi config. Restart the Kimi session after hook changes. To disable
+recording run `learning.py off --project .`; to remove these project's hooks
+run `install_kimi_hooks.py --project . --remove --approve`.
+Use TOML array-of-table declarations for hooks for existing nonempty hook arrays; inline arrays must
+be converted manually. On Windows use paths without shell metacharacters
+(`&`, `%`, `!`, parentheses and similar characters). Ordinary spaces are supported.
+Only exposed prompt/tool payloads are collected. Current Kimi Stop events do
+not contain the final assistant response; this remains marked missing. Missing assistant
+text is marked; transcripts and attachment bytes are not read automatically.
+
+## Proposals and evaluation
+
+After reviewing a project-memory run and its diagnosis:
+
+```sh
+python SKILL/scripts/learning_cycle.py propose --run RUN_ID --project . --repo . --engine kimi
+python SKILL/scripts/learning_benchmark.py --repo . --proposal PROPOSAL --cases CASES --engine kimi
+```
+
+Use an already installed and authenticated Kimi Code v2. No model credentials
+are created by the Kit. The evaluator has no tools or subagents and sends only
+the supplied text to the selected provider. Visual attachments remain metadata.
+Review the proposal, run independent held-out cases and explicitly approve
+application through the existing learning workflow. Text assertions do not
+replace real coding behavior checks.
+
+## Acceptance before publication
+
+Verify on an authenticated installation: skill and policy discovery, one
+read-only subagent, capture on/off and project isolation, a reviewed proposal,
+and baseline/candidate evaluation on the same model. Repeat the installer on
+Windows with paths containing spaces. Structural checks and synthetic payloads
+must never be described as a live Kimi pass.
 
 [Official skill documentation](https://www.kimi.com/code/docs/en/kimi-code-cli/customization/skills.html)
 

@@ -1,5 +1,7 @@
 """Validate the Kimi project artifact without claiming live client behavior."""
 
+import json
+
 from target_validation_common import (
     ROOT,
     validate_portable_skills,
@@ -24,6 +26,24 @@ def validate():
     for name in (".codex-plugin", ".claude-plugin", ".cursor"):
         if (target / name).exists():
             errors.append("Unexpected foreign client metadata: " + name)
+    manifest = json.loads((ROOT / "bundle-manifest.json").read_text(encoding="utf-8"))
+    plugin_path = target / "kimi.plugin.json"
+    if not plugin_path.is_file():
+        errors.append("Missing native Kimi plugin")
+    else:
+        plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+        if plugin.get("version") != manifest["version"] or not plugin.get("systemPrompt"):
+            errors.append("Invalid Kimi plugin version or startup instructions")
+    for role in manifest["claude_agents"]:
+        path = target / "agents" / (role + ".md")
+        if not path.is_file():
+            errors.append("Missing Kimi role: " + role)
+        else:
+            text = path.read_text(encoding="utf-8")
+            if "subagents: []" not in text or "adapters/kimi.md" not in text:
+                errors.append("Invalid Kimi role boundaries: " + role)
+            if "adapters/claude-code.md" in text or "model:" in text:
+                errors.append("Foreign Kimi role configuration: " + role)
     return errors
 
 

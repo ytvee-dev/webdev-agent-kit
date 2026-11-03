@@ -178,6 +178,9 @@ def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
             if result.returncode or not answer.exists():
                 raise ValueError("Codex CLI analysis failed; check client auth, sandbox and CLI version")
             output = answer.read_text(encoding="utf-8")
+        elif engine == "kimi":
+            from kimi_runner import run_kimi
+            output = run_kimi(prompt, timeout)
         elif engine == "opencode":
             env = os.environ.copy()
             env["OPENCODE_CONFIG_CONTENT"] = json.dumps({
@@ -224,7 +227,7 @@ def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
                         parts.append(part["text"])
             output = "".join(parts) if parts else result.stdout
         else:
-            raise ValueError("Select codex/opencode or supply an offline proposal")
+            raise ValueError("Select codex/opencode/kimi or supply an offline proposal")
     output = output.strip()
     if output.startswith("~~~") or output.startswith("~~~json"):
         output = output.split("\n", 1)[1].rsplit("~~~", 1)[0]
@@ -405,7 +408,7 @@ def propose_locked(args):
         raise ValueError("Selected evidence exceeds context budget; use a smaller --batch-size")
     if not args.engine and not args.proposal_file:
         return {"result": "needs_model", "events": len(items),
-                "hint": "Pass --engine codex/opencode or --proposal-file"}
+                "hint": "Pass --engine codex/opencode/kimi or --proposal-file"}
     attachments = []  # Structured analysis never forwards raw session attachments.
     from learning_processing import append
     append(state, receipt, "", {identifier: {"outcome": "analyzing", "reason": "Analysis attempt started"}
@@ -442,7 +445,7 @@ def propose_locked(args):
         response = model_suggestion(args.engine, prompt, args.timeout, attachments, state)
     else:
         return {"result": "needs_model", "events": len(items),
-                "hint": "Pass --engine codex/opencode or --proposal-file"}
+                "hint": "Pass --engine codex/opencode/kimi or --proposal-file"}
     target_scope = "project" if repo in {project, project / ".agents"} else "kit"
     changes = validate_candidate(response, skills, items, target_scope)
     decisions = validate_decisions(response, changes, pending)
@@ -874,7 +877,7 @@ def main():
     p.add_argument("--project", required=True)
     p.add_argument("--run", help="Required begin run for initialized project-local memory")
     p.add_argument("--repo", required=True)
-    p.add_argument("--engine", choices=("codex", "opencode"))
+    p.add_argument("--engine", choices=("codex", "opencode", "kimi"))
     p.add_argument("--skill", action="append", help="Target an exact skill directory name; repeatable")
     p.add_argument("--proposal-file")
     p.add_argument("--timeout", type=int, default=240)
@@ -883,7 +886,7 @@ def main():
     nightly = sub.add_parser("auto", help="Disabled legacy command; explicit user request required")
     nightly.add_argument("--project", required=True)
     nightly.add_argument("--repo", required=True)
-    nightly.add_argument("--engine", choices=("codex", "opencode"))
+    nightly.add_argument("--engine", choices=("codex", "opencode", "kimi"))
     nightly.add_argument("--skill", action="append", help="Target an exact skill directory name")
     nightly.add_argument("--proposal-file", help="Offline replay input")
     nightly.add_argument("--timeout", type=int, default=240)
