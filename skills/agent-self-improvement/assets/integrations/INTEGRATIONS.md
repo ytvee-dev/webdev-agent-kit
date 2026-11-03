@@ -60,11 +60,16 @@ hooks filtered to one project, then `--approve` for authorized installation.
 It preserves unrelated configuration and creates a backup. Enable collection
 separately with `learning.py on --project ROOT`; remove with
 `install_kimi_hooks.py --project ROOT --remove --approve`. Restart the session.
-Only exposed event payloads are captured; missing assistant text is marked.
+Capture handles text-only prompt parts, successful tools and PostToolUseFailure
+errors. Missing assistant text and potentially truncated output stay marked;
+Kimi caps successful tool output at 2000 characters. Image parts are excluded.
 
-Use `--engine kimi` for explicit proposals and held-out text benchmarks. The
-shared Kimi runner uses an isolated no-tools/no-subagents agent and retains the
-selected client model. Attachments are metadata-only. Live authentication,
+Use `--engine kimi --kimi-model ALIAS` for explicit proposals and held-out text
+benchmarks. Without an alias, the runner reads config.toml's default_model,
+which can differ from the active TUI selection. Both A/B arms pin that alias and
+reject configuration drift; provenance reports configured, not observed, identity.
+The runner uses an isolated no-tools/no-subagents agent. Attachments are
+metadata-only. Live authentication,
 payloads and Windows compatibility need observed client verification.
 
 ## File bytes

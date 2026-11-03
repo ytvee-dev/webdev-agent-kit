@@ -20,23 +20,23 @@ depends_on:
 Target Kimi Code v2: `.agents/skills`, `${KIMI_SKILL_DIR}`, Markdown agents and
 native plugins. Preserve host instructions, model, authentication and permissions.
 
-Project skills load policy through their prelude. For startup instructions,
-install the extracted `.agents` directory with `/plugins install ABSOLUTE_PATH`,
-then `/plugins reload`. Plugins are user-wide managed copies; reinstall after
-upgrades. Plugin skill names use `webdev-agent-kit:`. Avoid duplicate installations.
-Keep host facts/memory under the host `.agents/project` and `.agents/learning`.
+Project mode requires the managed `.kimi-code/AGENTS.md` pointer: preview
+`configure_kimi.py --project ROOT`, then approve within authorized onboarding.
+Kimi does not auto-read project `.agents/AGENTS.md`.
+Alternatively install a clean release staging directory as a user-wide plugin;
+never install a working project's `.agents`, which may contain private state.
+Reinstall clean payloads after upgrades. Avoid duplicate local/plugin runtimes.
+Plugin skill names use `webdev-agent-kit:`. Keep facts/memory in host
+`.agents/project` and `.agents/learning`.
 
-Nine `wdk-*` roles require bounded handoffs with absolute bundle/host roots,
+Nine `wdk-*` roles need bounded handoffs with absolute bundle/host roots,
 evidence, owned paths and acceptance criteria. Nested delegation is disabled.
-Verify tools and delegation; retain single-agent fallback.
+Model selection follows Kimi's secondary-model configuration, not role names.
+Verify delegation; retain single-agent fallback.
 
-Capture is opt-in: preview `install_kimi_hooks.py --project ROOT`, approve setup,
-then separately enable `learning.py on`. Missing assistant text stays marked;
-never read transcripts implicitly. Proposals and benchmarks accept `--engine kimi`
-with tools/subagents disabled. Attachments remain metadata-only.
+Capture is opt-in: preview `install_kimi_hooks.py`, approve setup, separately
+enable `learning.py on`. Missing/truncated content stays marked. Never read
+transcripts implicitly. Proposals/benchmarks accept `--engine kimi --kimi-model ALIAS`
+with tools/subagents disabled; attachments remain metadata-only.
 
-Follow the installation guide for commands and acceptance checks. Static checks
-do not establish live client behavior.
-
-[Official docs](https://www.kimi.com/code/docs/en/kimi-code-cli/customization/skills.html)
-inspected 2026-11-03.
+Follow the installation guide. Static checks do not establish live behavior.

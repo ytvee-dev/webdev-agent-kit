@@ -6,7 +6,6 @@ import json
 import os
 import re
 import shlex
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -24,11 +23,39 @@ def update(text, project, remove=False):
     end = "# END WEBDEV KIMI " + key
     if text.count(start) != text.count(end) or text.count(start) > 1:
         raise ValueError("Ambiguous WebDev hook markers")
+    original_hooks = parsed.get("hooks", [])
+    if not isinstance(original_hooks, list):
+        raise ValueError("Hooks must be an array")
+    owned = []
     if start in text:
-        before, tail = text.split(start, 1)
-        _, after = tail.split(end, 1)
-        text = before + after.removeprefix("\n")
+        # Only whole comment lines delimit generated content.
+        pattern = re.compile(r"(?m)^" + re.escape(start) + r"\n(.*?)^" + re.escape(end) + r"(?:\n|$)", re.S)
+        matches = list(pattern.finditer(text))
+        if len(matches) != 1:
+            raise ValueError("Ambiguous WebDev hook markers")
+        match = matches[0]
+        block = tomllib.loads(match.group(1))
+        owned = block.get("hooks", [])
+        if set(block) != {"hooks"} or not owned or any(
+            set(hook) != {"event", "command", "timeout"}
+            or "hook_bridge.py" not in hook["command"] for hook in owned
+        ):
+            raise ValueError("Managed hook block was customized; reconcile it manually")
+        text = text[:match.start()] + text[match.end():]
+    retained = list(original_hooks)
+    for hook in owned:
+        retained.remove(hook)
     if remove:
+        expected = dict(parsed)
+        if retained:
+            expected["hooks"] = retained
+        else:
+            expected.pop("hooks", None)
+        actual = tomllib.loads(text)
+        if actual.get("hooks") == []:
+            actual.pop("hooks")
+        if actual != expected:
+            raise ValueError("Removing hooks would change unrelated TOML; reconcile manually")
         return text
     bridge = Path(__file__).resolve().parents[1] / "assets/integrations/hook_bridge.py"
     args = [sys.executable, str(bridge), "--client", "kimi", "--project", str(project)]
@@ -36,13 +63,18 @@ def update(text, project, remove=False):
         raise ValueError("Windows hook paths must not contain cmd shell metacharacters; use a plain path")
     command = subprocess.list2cmdline(args) if os.name == "nt" else shlex.join(args)
     block = start + "\n"
-    for event in ("UserPromptSubmit", "PostToolUse", "Stop"):
+    for event in ("UserPromptSubmit", "PostToolUse", "PostToolUseFailure", "Stop"):
         block += '\n[[hooks]]\nevent = ' + json.dumps(event) + '\ncommand = ' + json.dumps(command) + '\ntimeout = 5\n'
     result = text.rstrip() + "\n\n" + block + end + "\n"
     try:
         tomllib.loads(result)
     except tomllib.TOMLDecodeError as exc:
         raise ValueError("Convert inline hooks arrays to [[hooks]] tables before installation; configuration was not changed") from exc
+    expected = dict(parsed)
+    added = tomllib.loads(block.removeprefix(start + "\n"))["hooks"]
+    expected["hooks"] = retained + added
+    if tomllib.loads(result) != expected:
+        raise ValueError("Updating hooks would change unrelated TOML; reconcile manually")
     return result
 
 
@@ -54,7 +86,7 @@ def main():
     parser.add_argument("--remove", action="store_true")
     args = parser.parse_args()
     project = args.project.expanduser().resolve(strict=True)
-    target = args.config or Path(os.environ.get("KIMI_CODE_HOME", str(Path.home() / ".kimi-code"))) / "config.toml"
+    target = args.config or Path((os.environ.get("KIMI_CODE_HOME") or str(Path.home() / ".kimi-code"))) / "config.toml"
     if target.is_symlink() or target.parent.is_symlink():
         raise ValueError("Config target cannot be a symlink")
     original = target.read_text(encoding="utf-8") if target.exists() else ""
@@ -63,10 +95,9 @@ def main():
     if args.approve and changed:
         target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists():
-            backup = target.with_suffix(".toml.bak")
-            if backup.is_symlink():
-                raise ValueError("Backup cannot be a symlink")
-            shutil.copy2(target, backup)
+            fd, _backup = tempfile.mkstemp(prefix="config.toml.wdk-backup-", dir=target.parent)
+            with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                stream.write(original)
         fd, temporary = tempfile.mkstemp(prefix=".wdk-kimi-", dir=target.parent)
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as stream:
@@ -77,7 +108,7 @@ def main():
     # Never print user configuration: it may contain provider credentials.
     print(json.dumps({"target": str(target), "project": str(project),
                       "changed": changed, "approved": args.approve,
-                      "events": ["UserPromptSubmit", "PostToolUse", "Stop"],
+                      "events": ["UserPromptSubmit", "PostToolUse", "PostToolUseFailure", "Stop"],
                       "capture": "Requires separate learning.py on opt-in"}))
 
 

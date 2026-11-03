@@ -20,21 +20,36 @@ def normalize(event, client):
     if not isinstance(session, str) or not isinstance(project, str):
         return None
     name = str(event.get("hook_event_name") or "event")
+    missing = False
+    truncated = False
     if name == "UserPromptSubmit":
         kind = "user"
         content = event.get("prompt") or ""
+        if client == "kimi" and isinstance(content, list):
+            content = "\n".join(part["text"] for part in content
+                                if isinstance(part, dict) and part.get("type") == "text"
+                                and isinstance(part.get("text"), str))
+        missing = not bool(content)
     elif name == "Stop":
         kind = "assistant"
         content = event.get("last_assistant_message") or "[Assistant text unavailable in hook payload]"
-    elif name == "PostToolUse":
+        missing = not bool(event.get("last_assistant_message"))
+    elif name in {"PostToolUse", "PostToolUseFailure"}:
         kind = "tool"
         tool = str(event.get("tool_name") or "tool")[:160]
         response = event.get("tool_output") if client == "kimi" else event.get("tool_response")
+        if name == "PostToolUseFailure":
+            response = event.get("error")
+        missing = response is None
         raw = json.dumps(response, ensure_ascii=False) if response is not None else ""
+        truncated = len(raw) > 3000 or (client == "kimi" and isinstance(response, str) and len(response) >= 2000)
         result = raw[:3000]
         if len(raw) > 3000:
             result += f"\n[TRUNCATED: retained 3000 of {len(raw)} characters]"
-        content = f"Tool: {tool}\nOutcome: {result}"
+        if client == "kimi" and truncated:
+            result += "\n[Tool output may be truncated by Kimi]"
+        status = "Failed" if name == "PostToolUseFailure" else "Outcome"
+        content = f"Tool: {tool}\n{status}: {result}"
     else:
         kind = "system_event"
         content = name
@@ -52,8 +67,8 @@ def normalize(event, client):
         "content": content,
         "timestamp": event.get("timestamp"),
         "id_quality": "synthetic" if synthetic else "client",
-        "truncated": name == "PostToolUse" and len(raw) > 3000,
-        "content_missing": name == "Stop" and not event.get("last_assistant_message"),
+        "truncated": truncated,
+        "content_missing": missing,
     }
 
 

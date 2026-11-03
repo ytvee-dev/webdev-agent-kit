@@ -12,7 +12,13 @@ from target_validation_common import (
 def validate():
     target = ROOT / "dist/kimi"
     errors = validate_runtime_exclusions(target, "dist/kimi")
-    for name in ("AGENTS.md", "adapters/kimi.md", "common/core/runtime-core-policy.md"):
+    for name in (
+        "AGENTS.md",
+        "adapters/kimi.md",
+        "common/core/runtime-core-policy.md",
+        "skills/project-onboarding-adapter/scripts/configure_kimi.py",
+        "skills/agent-self-improvement/scripts/kimi_runner.py",
+    ):
         if not (target / name).is_file():
             errors.append("Missing Kimi runtime file: " + name)
     errors.extend(

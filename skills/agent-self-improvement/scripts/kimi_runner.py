@@ -1,11 +1,36 @@
 """Kimi Code v2 text evaluation with no agent tools or delegated agents."""
+import hashlib
 import json
+import os
 import subprocess
 import tempfile
+import tomllib
 from pathlib import Path
 
 
-def run_kimi(prompt, timeout):
+def configuration(model=None):
+    path = Path((os.environ.get("KIMI_CODE_HOME") or str(Path.home() / ".kimi-code"))) / "config.toml"
+    raw = path.read_bytes() if path.exists() else b""
+    settings = tomllib.loads(raw.decode("utf-8"))
+    selected = model or settings.get("default_model")
+    if not isinstance(selected, str) or not selected.strip():
+        raise ValueError("Select --kimi-model using an alias from Kimi /model")
+    environment = {key: value for key, value in os.environ.items() if key.startswith("KIMI_MODEL_")}
+    return {"engine": "kimi", "model": selected, "effort": "client-configured",
+            "model_evidence": "configured alias, not provider-observed identity",
+            "config_path": str(path.resolve()),
+            "config_sha256": hashlib.sha256(raw).hexdigest(),
+            "model_env_sha256": hashlib.sha256(json.dumps(environment, sort_keys=True).encode()).hexdigest()}
+
+
+def verify_configuration(selected):
+    if configuration(selected["model"]) != selected:
+        raise ValueError("Kimi configuration changed during evaluation; rerun with a stable configuration")
+
+
+def run_kimi(prompt, timeout, selected=None):
+    selected = selected or configuration()
+    verify_configuration(selected)
     with tempfile.TemporaryDirectory(prefix="wdk-kimi-evaluation-") as folder:
         root = Path(folder)
         agent = root / "evaluator.md"
@@ -21,11 +46,14 @@ def run_kimi(prompt, timeout):
         )
         # Current Kimi -p takes a prompt argument, not stdin. Tool denial is
         # enforced by the agent profile; print mode otherwise auto-approves.
+        environment = os.environ.copy()
+        environment["KIMI_CODE_HOME"] = str(Path(selected["config_path"]).parent)
         result = subprocess.run(
-            ["kimi", "--agent-file", str(agent), "--output-format", "stream-json", "-p", "Complete the evaluation task in the supplied material."],
-            cwd=root, text=True, encoding="utf-8", capture_output=True,
-            timeout=timeout, check=False,
+            ["kimi", "--model", selected["model"], "--agent-file", str(agent), "--output-format", "stream-json", "-p", "Complete the evaluation task in the supplied material."],
+            cwd=root, env=environment, text=True, encoding="utf-8", capture_output=True,
+            timeout=timeout, check=False, stdin=subprocess.DEVNULL,
         )
+        verify_configuration(selected)
         if result.returncode:
             raise ValueError("Kimi evaluation failed; check installed CLI version and authentication")
         parts = []
@@ -33,6 +61,8 @@ def run_kimi(prompt, timeout):
             event = json.loads(line)
             if not isinstance(event, dict):
                 raise ValueError("Unexpected Kimi stream record")
+            if event.get("type") == "error" or event.get("role") == "tool":
+                raise ValueError("Kimi evaluator emitted an error or unexpected tool result")
             if event.get("role") == "assistant":
                 if event.get("tool_calls"):
                     raise ValueError("Kimi evaluator unexpectedly attempted tool use")

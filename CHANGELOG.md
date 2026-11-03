@@ -40,6 +40,12 @@ Use this changelog for source-bundle and distribution-target changes that affect
 
 ### Kimi adaptation for 1.10.0
 
+- Audit fix: merge a native project startup pointer and install plugins only
+  from clean release payloads, preserving private project state.
+- Capture Kimi text prompt parts and failed tools; mark missing/truncated output.
+- Pin the configured model across A/B arms and reject configuration drift.
+- Preserve unrelated TOML semantics and keep unique private setup backups.
+
 - Add native Kimi plugin instructions and nine bounded subagent roles while
   preserving project archive installation and all 23 skills.
 - Add opt-in project-filtered Kimi hook installation, backup and removal.
