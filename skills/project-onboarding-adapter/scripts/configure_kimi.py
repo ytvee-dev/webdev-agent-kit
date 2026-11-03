@@ -48,9 +48,12 @@ def main():
     if not root.is_dir():
         raise ValueError("Project must be a directory")
     if not args.remove and not all(
-        (root / ".agents" / name).is_file() for name in ("AGENTS.md", "adapters/kimi.md")
+        (root / ".agents" / name).is_file()
+        for name in ("AGENTS.md", "adapters/kimi.md")
     ):
-        raise ValueError("Extract the project Kimi archive before configuring its pointer")
+        raise ValueError(
+            "Extract the project Kimi archive before configuring its pointer"
+        )
     target = root / ".kimi-code/AGENTS.md"
     if target.is_symlink() or target.parent.is_symlink():
         raise ValueError("Kimi instruction target cannot be a symlink")
@@ -60,7 +63,9 @@ def main():
     if args.approve and changed:
         target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists():
-            fd, _backup = tempfile.mkstemp(prefix="AGENTS.md.wdk-backup-", dir=target.parent)
+            fd, _backup = tempfile.mkstemp(
+                prefix="AGENTS.md.wdk-backup-", dir=target.parent
+            )
             with os.fdopen(fd, "w", encoding="utf-8") as stream:
                 stream.write(original)
         fd, name = tempfile.mkstemp(prefix=".wdk-pointer-", dir=target.parent)
