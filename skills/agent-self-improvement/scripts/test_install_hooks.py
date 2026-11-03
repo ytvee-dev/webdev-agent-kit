@@ -94,7 +94,7 @@ class HookInstallerTests(unittest.TestCase):
             configured = pointer(original_pointer, root)
             self.assertEqual(pointer(configured, root), configured)
             self.assertEqual(pointer(configured, root, remove=True), original_pointer)
-            self.assertIn(str(root / ".agents/AGENTS.md"), configured)
+            self.assertIn(json.dumps(str(root / ".agents/AGENTS.md")), configured)
             with self.assertRaises(ValueError):
                 pointer(configured + "<!-- BEGIN WEBDEV KIMI -->\n", root)
 
