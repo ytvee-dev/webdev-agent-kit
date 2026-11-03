@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 def configuration(model=None):
-    path = Path((os.environ.get("KIMI_CODE_HOME") or str(Path.home() / ".kimi-code"))) / "config.toml"
+    path = Path(os.environ.get("KIMI_CODE_HOME") or str(Path.home() / ".kimi-code")) / "config.toml"
     raw = path.read_bytes() if path.exists() else b""
     settings = tomllib.loads(raw.decode("utf-8"))
     selected = model or settings.get("default_model")

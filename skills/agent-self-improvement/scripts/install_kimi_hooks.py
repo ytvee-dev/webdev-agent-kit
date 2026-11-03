@@ -86,7 +86,7 @@ def main():
     parser.add_argument("--remove", action="store_true")
     args = parser.parse_args()
     project = args.project.expanduser().resolve(strict=True)
-    target = args.config or Path((os.environ.get("KIMI_CODE_HOME") or str(Path.home() / ".kimi-code"))) / "config.toml"
+    target = args.config or Path(os.environ.get("KIMI_CODE_HOME") or str(Path.home() / ".kimi-code")) / "config.toml"
     if target.is_symlink() or target.parent.is_symlink():
         raise ValueError("Config target cannot be a symlink")
     original = target.read_text(encoding="utf-8") if target.exists() else ""
