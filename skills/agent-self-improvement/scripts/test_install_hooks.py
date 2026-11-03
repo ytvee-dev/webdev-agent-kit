@@ -73,6 +73,31 @@ class HookInstallerTests(unittest.TestCase):
             self.assertEqual(remaining["hooks"]["PostToolUse"][0]["matcher"], "Bash")
             self.assertEqual(remaining["hooks"]["Stop"], [])
 
+            import tomllib
+
+            from install_kimi_hooks import update
+            host = 'default_model = "host"\n[providers.example]\napi_key = "private"\n'
+            installed_kimi = update(host, root)
+            self.assertEqual(update(installed_kimi, root), installed_kimi)
+            self.assertEqual(tomllib.loads(update(installed_kimi, root, remove=True)), tomllib.loads(host))
+            self.assertEqual(len(tomllib.loads(installed_kimi)["hooks"]), 4)
+            other = update(installed_kimi, root / "other")
+            self.assertEqual(len(tomllib.loads(update(other, root, remove=True))["hooks"]), 4)
+            with self.assertRaises(ValueError):
+                update(installed_kimi + 'custom = "keep"\n', root, remove=True)
+            for empty in ('hooks = []\n', 'hooks = [\n]\n'):
+                self.assertEqual(len(tomllib.loads(update(empty + host, root))["hooks"]), 4)
+            import runpy
+            pointer_script = INSTALL.parents[2] / "project-onboarding-adapter/scripts/configure_kimi.py"
+            pointer = runpy.run_path(str(pointer_script))["update_pointer"]
+            original_pointer = "Keep host instructions.\n"
+            configured = pointer(original_pointer, root)
+            self.assertEqual(pointer(configured, root), configured)
+            self.assertEqual(pointer(configured, root, remove=True), original_pointer)
+            self.assertIn(json.dumps(str(root / ".agents/AGENTS.md")), configured)
+            with self.assertRaises(ValueError):
+                pointer(configured + "<!-- BEGIN WEBDEV KIMI -->\n", root)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -45,6 +45,40 @@ class HookBridgeTests(unittest.TestCase):
             self.assertFalse(list((state / 'outbox').glob('*.json')))
             self.assertFalse(list((state / 'runs').glob('*')))
             self.assertFalse(list((state / 'archive').glob('*/*.json')))
+            kimi_event = {"hook_event_name": "PostToolUse", "cwd": directory,
+                          "session_id": "kimi-capture", "tool_call_id": "native-id",
+                          "tool_name": "Read", "tool_output": "observed result"}
+            original([sys.executable, str(BRIDGE), "--client", "kimi", "--project", directory,
+                      "--state", str(state)], input=json.dumps(kimi_event), text=True, check=True)
+            with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:
+                row = conn.execute("SELECT message_id, content FROM events WHERE client='kimi'").fetchone()
+                self.assertEqual(row[0], "native-id")
+                self.assertIn("observed result", row[1])
+            normalize = runpy.run_path(str(BRIDGE))["normalize"]
+            base = {"cwd": directory, "session_id": "kimi-capture"}
+            prompt = normalize(dict(base, hook_event_name="UserPromptSubmit", prompt=[
+                {"type": "text", "text": "review this"},
+                {"type": "image_url", "image_url": "private-image-bytes"},
+            ]), "kimi")[1]
+            self.assertEqual(prompt["content"], "review this")
+            self.assertFalse(prompt["content_missing"])
+            self.assertTrue(normalize(dict(base, hook_event_name="Stop"), "kimi")[1]["content_missing"])
+            clipped = normalize(dict(kimi_event, tool_output="x" * 2000), "kimi")[1]
+            self.assertTrue(clipped["truncated"])
+            failed = dict(base, hook_event_name="PostToolUseFailure", tool_name="Bash",
+                          tool_call_id="failed-id", error={"message": "command failed"})
+            original([sys.executable, str(BRIDGE), "--client", "kimi", "--project", directory,
+                      "--state", str(state)], input=json.dumps(failed), text=True, check=True)
+            with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:
+                content = conn.execute("SELECT content FROM events WHERE message_id='failed-id'").fetchone()[0]
+                self.assertIn("Failed:", content)
+                self.assertIn("command failed", content)
+            kimi_event["cwd"] = str(project / "other")
+            original([sys.executable, str(BRIDGE), "--client", "kimi", "--project", directory,
+                      "--state", str(state)], input=json.dumps(kimi_event), text=True, check=True)
+            with closing(sqlite3.connect(state / 'experience.sqlite3')) as conn:
+                self.assertEqual(conn.execute("SELECT COUNT(*) FROM events WHERE client='kimi'").fetchone()[0], 2)
+
 
     def test_codex_stop_always_returns_json(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -26,7 +26,7 @@ def score(text, required, forbidden):
     }
 
 
-def run_answer(engine, task, instructions, timeout):
+def run_answer(engine, task, instructions, timeout, selected=None):
     prompt = (
         "Perform this hypothetical agent task as a concise response. "
         "Follow the skill's procedures; do not execute commands or edit files. "
@@ -35,6 +35,9 @@ def run_answer(engine, task, instructions, timeout):
     )
     with tempfile.TemporaryDirectory(prefix="learning-benchmark-") as scratch:
         root = Path(scratch)
+        if engine == "kimi":
+            from kimi_runner import run_kimi
+            return run_kimi(prompt, timeout, selected)
         if engine == "codex":
             outfile = root / "answer.txt"
             command = [
@@ -115,18 +118,22 @@ def evaluate_locked(args):
     if {case.get("skill") for case in applicable} != set(changes):
         raise ValueError("Every changed skill requires held-out cases")
     answers = {}
+    selected = None
     replay = args.replay_responses is not None
     if replay:
         answers = read_json(args.replay_responses)
     elif not args.engine:
         raise ValueError("Select a model engine or offline replay")
     else:
+        if args.engine == "kimi":
+            from kimi_runner import configuration
+            selected = configuration(getattr(args, "kimi_model", None))
         for case in applicable:
             old, new = changes[case["skill"]]
             task = case["task"]
             answers[case["id"]] = {
-                "baseline": run_answer(args.engine, task, old, args.timeout),
-                "candidate": run_answer(args.engine, task, new, args.timeout),
+                "baseline": run_answer(args.engine, task, old, args.timeout, selected),
+                "candidate": run_answer(args.engine, task, new, args.timeout, selected),
             }
     results = compare_cases(applicable, answers)
     regressions = [item["id"] for item in results if item["regression"]]
@@ -139,6 +146,7 @@ def evaluate_locked(args):
         "results": results,
         "passed": passed,
         "synthetic": replay,
+        "model_configuration": selected,
     }
     proposal["checks"]["textual_tested"] = True
     proposal["checks"]["textual_passed"] = passed
@@ -160,7 +168,8 @@ def main():
     parser.add_argument("--repo", required=True)
     parser.add_argument("--proposal", required=True)
     parser.add_argument("--cases", required=True)
-    parser.add_argument("--engine", choices=("codex", "opencode"))
+    parser.add_argument("--engine", choices=("codex", "opencode", "kimi"))
+    parser.add_argument("--kimi-model", help="Kimi model alias; defaults to config default_model")
     parser.add_argument("--replay-responses")
     parser.add_argument("--timeout", type=int, default=240)
     args = parser.parse_args()

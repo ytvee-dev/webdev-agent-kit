@@ -49,7 +49,7 @@ def processing_receipt(items, skills, project, repo):
     policy = Path(__file__).resolve().parent.parent / "references"
     dependencies = {str(p.name): hash_text(p.read_text(encoding="utf-8"))
                     for p in sorted(policy.glob("*.md"))}
-    for name in ("learning_cycle.py", "learning_processing.py", "learning_memory.py", "learning_workflow.py", "learning_telemetry.py", "learning_run.py"):
+    for name in ("learning_cycle.py", "learning_processing.py", "learning_memory.py", "learning_workflow.py", "learning_telemetry.py", "learning_run.py", "kimi_runner.py"):
         dependencies[name] = hash_text(Path(__file__).with_name(name).read_text(encoding="utf-8"))
     versions = {k: {"source": v["sha256"], "references": v.get("references", {})} for k, v in skills.items()}
     context_digest = digest(versions | dependencies)
@@ -161,7 +161,7 @@ def model_configuration(engine):
             "effort": settings.get("model_reasoning_effort", "unknown")}
 
 
-def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
+def model_suggestion(engine, prompt, timeout, attachments=(), state=None, selected=None):
     with tempfile.TemporaryDirectory(prefix="learning-analysis-") as folder:
         directory = Path(folder)
         if engine == "codex":
@@ -178,6 +178,9 @@ def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
             if result.returncode or not answer.exists():
                 raise ValueError("Codex CLI analysis failed; check client auth, sandbox and CLI version")
             output = answer.read_text(encoding="utf-8")
+        elif engine == "kimi":
+            from kimi_runner import run_kimi
+            output = run_kimi(prompt, timeout, selected)
         elif engine == "opencode":
             env = os.environ.copy()
             env["OPENCODE_CONFIG_CONTENT"] = json.dumps({
@@ -224,7 +227,7 @@ def model_suggestion(engine, prompt, timeout, attachments=(), state=None):
                         parts.append(part["text"])
             output = "".join(parts) if parts else result.stdout
         else:
-            raise ValueError("Select codex/opencode or supply an offline proposal")
+            raise ValueError("Select codex/opencode/kimi or supply an offline proposal")
     output = output.strip()
     if output.startswith("~~~") or output.startswith("~~~json"):
         output = output.split("\n", 1)[1].rsplit("~~~", 1)[0]
@@ -405,7 +408,7 @@ def propose_locked(args):
         raise ValueError("Selected evidence exceeds context budget; use a smaller --batch-size")
     if not args.engine and not args.proposal_file:
         return {"result": "needs_model", "events": len(items),
-                "hint": "Pass --engine codex/opencode or --proposal-file"}
+                "hint": "Pass --engine codex/opencode/kimi or --proposal-file"}
     attachments = []  # Structured analysis never forwards raw session attachments.
     from learning_processing import append
     append(state, receipt, "", {identifier: {"outcome": "analyzing", "reason": "Analysis attempt started"}
@@ -439,10 +442,14 @@ def propose_locked(args):
                    'Exactly one decision per NEW OR CHANGED ID. Cite each pending work ID in a change. '
                    'No-change requires a concrete existing rule or explanation. '
                    'Defer conflicts/weak evidence; preserve both positions. Unselected records are context only.')
-        response = model_suggestion(args.engine, prompt, args.timeout, attachments, state)
+        selected = None
+        if args.engine == "kimi":
+            from kimi_runner import configuration
+            selected = configuration(getattr(args, "kimi_model", None))
+        response = model_suggestion(args.engine, prompt, args.timeout, attachments, state, selected)
     else:
         return {"result": "needs_model", "events": len(items),
-                "hint": "Pass --engine codex/opencode or --proposal-file"}
+                "hint": "Pass --engine codex/opencode/kimi or --proposal-file"}
     target_scope = "project" if repo in {project, project / ".agents"} else "kit"
     changes = validate_candidate(response, skills, items, target_scope)
     decisions = validate_decisions(response, changes, pending)
@@ -453,7 +460,7 @@ def propose_locked(args):
                "state": "pending_validation" if changes else "no_change",
                "changes": changes, "checks": None, "processing": receipt,
                "processing_skills": list(skills), "decisions": decisions,
-               "provenance": dict(model_configuration(args.engine), timeout=getattr(args, "timeout", 240)),
+               "provenance": dict(selected if args.engine == "kimi" and not args.proposal_file else model_configuration(args.engine), timeout=getattr(args, "timeout", 240)),
                "work_items": [item for item in enriched if item["id"] in pending]}
     target = state / "proposals" / (identifier + ".json")
     from learning_workflow import verification_plan
@@ -874,7 +881,8 @@ def main():
     p.add_argument("--project", required=True)
     p.add_argument("--run", help="Required begin run for initialized project-local memory")
     p.add_argument("--repo", required=True)
-    p.add_argument("--engine", choices=("codex", "opencode"))
+    p.add_argument("--engine", choices=("codex", "opencode", "kimi"))
+    p.add_argument("--kimi-model", help="Kimi model alias; defaults to config default_model")
     p.add_argument("--skill", action="append", help="Target an exact skill directory name; repeatable")
     p.add_argument("--proposal-file")
     p.add_argument("--timeout", type=int, default=240)
@@ -883,7 +891,7 @@ def main():
     nightly = sub.add_parser("auto", help="Disabled legacy command; explicit user request required")
     nightly.add_argument("--project", required=True)
     nightly.add_argument("--repo", required=True)
-    nightly.add_argument("--engine", choices=("codex", "opencode"))
+    nightly.add_argument("--engine", choices=("codex", "opencode", "kimi"))
     nightly.add_argument("--skill", action="append", help="Target an exact skill directory name")
     nightly.add_argument("--proposal-file", help="Offline replay input")
     nightly.add_argument("--timeout", type=int, default=240)

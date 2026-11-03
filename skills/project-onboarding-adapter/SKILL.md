@@ -122,7 +122,7 @@ Read targeted README sections only when they help identify project intent, setup
 10. Read `tool-capabilities-manifest.json` for declared capability needs and cache required, available, missing, optional, approved, installed, skipped, or blocked capabilities in `project/mcp-profile.md`.
 11. Cache detected client target, native pointer, skill support, and MCP config locations in `project/client-profile.md`.
 12. In Plan Mode, return the plan and stop.
-13. In execution mode, update the approved pointer and local overlays; complete the matching Codex or Claude phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
+13. In execution mode, update the approved pointer and local overlays; complete the matching client phase below. Native plugins write host facts to host `.agents/project/`, never the installed plugin. Do not create dangling pointers or app code.
 
 ## Learning Setup During Adaptation
 
@@ -185,6 +185,18 @@ Preserve existing custom roles, global settings, permissions and the primary
 model. Full onboarding may exercise tiny read-only approved bindings; facts-only,
 no-model-change and Plan Mode requests do not run canaries or change settings.
 Do not run the Codex TOML helper or write host facts into the plugin cache.
+
+## Kimi Native Setup
+
+For Kimi Code v2, follow `docs/install/kimi.md`. In project mode, preview
+`scripts/configure_kimi.py --project ROOT` and apply its managed startup pointer
+within authorized execution. Keep existing `.kimi-code/AGENTS.md` instructions;
+never replace the file with the bundle policy. Plan Mode remains read-only.
+Plugin mode uses a clean release payload outside the host, never the working
+`.agents` directory. Preserve host facts/memory and avoid duplicate vendor roles.
+Verify one bounded read-only `wdk-*` handoff; model selection follows existing
+Kimi secondary-model configuration, not role names. Record configuration and
+observed runtime separately. Do not run Codex/Claude configuration helpers.
 
 ## Output Contract
 

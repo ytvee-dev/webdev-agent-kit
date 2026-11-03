@@ -23,6 +23,33 @@ class BenchmarkTests(unittest.TestCase):
         self.assertTrue(scores[0]["regression"])
         self.assertLess(scores[0]["candidate"]["passed"], scores[0]["baseline"]["passed"])
 
+        import os
+        from unittest.mock import patch
+
+        from kimi_runner import configuration, run_kimi
+        with tempfile.TemporaryDirectory() as folder:
+            config = Path(folder) / "config.toml"
+            config.write_text('default_model = "chosen"\n', encoding="utf-8")
+            evidence = 'literal ${KIMI_WORK_DIR} and $HOME ' + "x" * 200000
+            def simulate(command, **kwargs):
+                self.assertEqual(command[1:3], ["--model", "chosen"])
+                agent = Path(command[command.index("--agent-file") + 1]).read_text(encoding="utf-8")
+                self.assertIn("tools: []\nsubagents: []", agent)
+                self.assertNotIn("${KIMI_WORK_DIR}", agent)
+                self.assertEqual(json.loads(agent.splitlines()[-1]), evidence)
+                self.assertEqual(kwargs["stdin"], subprocess.DEVNULL)
+                self.assertEqual(kwargs["env"]["KIMI_CODE_HOME"], str(config.parent.resolve()))
+                return subprocess.CompletedProcess(command, 0, '{"role":"assistant","content":[{"type":"text","text":"verified"}]}\n', "")
+            with patch.dict(os.environ, {"KIMI_CODE_HOME": folder}), patch("kimi_runner.subprocess.run", side_effect=simulate):
+                selected = configuration()
+                self.assertEqual(run_kimi(evidence, 10, selected), "verified")
+                config.write_text('default_model = "changed"\n', encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "configuration changed"):
+                    run_kimi(evidence, 10, selected)
+            with patch.dict(os.environ, {"KIMI_CODE_HOME": folder}), patch("kimi_runner.subprocess.run", return_value=subprocess.CompletedProcess([], 0, '{"type":"error"}\n', "")):
+                with self.assertRaisesRegex(ValueError, "error"):
+                    run_kimi(evidence, 10)
+
     def test_offline_replay_never_unlocks_automatic_apply(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
