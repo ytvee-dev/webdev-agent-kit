@@ -274,7 +274,8 @@ def build_canonical_target(target):
             header = (
                 "---\n"
                 + "\n".join(
-                    key + ": " + metadata[key] for key in ("name", "description", "tools")
+                    key + ": " + metadata[key]
+                    for key in ("name", "description", "tools")
                 )
                 + "\nsubagents: []\n---\n\n"
             )

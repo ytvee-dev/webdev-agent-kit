@@ -32,7 +32,9 @@ def validate():
         errors.append("Missing native Kimi plugin")
     else:
         plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
-        if plugin.get("version") != manifest["version"] or not plugin.get("systemPrompt"):
+        if plugin.get("version") != manifest["version"] or not plugin.get(
+            "systemPrompt"
+        ):
             errors.append("Invalid Kimi plugin version or startup instructions")
     for role in manifest["claude_agents"]:
         path = target / "agents" / (role + ".md")
